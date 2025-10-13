@@ -1,27 +1,60 @@
 import { Button } from "@/components/ui/button";
 import { Instagram, Send } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const CTA = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
   return (
-    <section className="py-20 relative">
-      <div className="absolute inset-0 bg-gradient-cyber opacity-10" />
+    <section ref={ref} className="py-20 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 bg-gradient-cyber opacity-10 animate-gradient-shift" style={{ backgroundSize: '200% 200%' }} />
+      <div className="absolute inset-0 circuit-pattern opacity-5" />
+      
+      {/* Animated orbs */}
+      <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse-glow" />
+      <div className="absolute top-1/2 right-1/4 w-64 h-64 bg-secondary/20 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl mx-auto text-center space-y-8">
+        <div className={`max-w-3xl mx-auto text-center space-y-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl md:text-5xl font-bold">
-            <span className="gradient-text">Join the Community</span>
+            <span className="gradient-text inline-block bg-[length:200%_auto] animate-gradient-shift">
+              Join the Community
+            </span>
           </h2>
           
-          <p className="text-xl text-muted-foreground">
+          <p className={`text-xl text-muted-foreground transition-all duration-500`} style={{ transitionDelay: isVisible ? '0.2s' : '0s' }}>
             Stay updated with the latest in blue team cybersecurity. 
             Follow us on Instagram and join our Telegram channel for daily insights, 
             tips, and discussions.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center pt-4 transition-all duration-500`} style={{ transitionDelay: isVisible ? '0.4s' : '0s' }}>
             <Button 
               size="lg" 
-              className="bg-gradient-cyber hover:opacity-90 transition-opacity glow-cyan"
+              className="bg-gradient-cyber hover:opacity-90 transition-all duration-300 glow-cyan hover:scale-110 hover:glow-lime group"
               asChild
             >
               <a 
@@ -30,14 +63,14 @@ const CTA = () => {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
-                <Instagram className="w-5 h-5" />
+                <Instagram className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                 Instagram
               </a>
             </Button>
             
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-secondary to-primary hover:opacity-90 transition-opacity glow-lime"
+              className="bg-gradient-to-r from-secondary to-primary hover:opacity-90 transition-all duration-300 glow-lime hover:scale-110 hover:glow-cyan group"
               asChild
             >
               <a 
@@ -46,14 +79,14 @@ const CTA = () => {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
-                <Send className="w-5 h-5" />
+                <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 Telegram
               </a>
             </Button>
           </div>
           
-          <p className="text-sm text-muted-foreground pt-8">
-            🔒 Defending today, securing tomorrow
+          <p className={`text-sm text-muted-foreground pt-8 transition-all duration-500`} style={{ transitionDelay: isVisible ? '0.6s' : '0s' }}>
+            <span className="inline-block animate-pulse">🔒</span> Defending today, securing tomorrow
           </p>
         </div>
       </div>
