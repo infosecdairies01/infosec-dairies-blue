@@ -28,6 +28,16 @@ const Navbar = () => {
               Home
             </Link>
             <Link
+              to="/courses"
+              className={`text-sm font-medium transition-colors ${
+                isActive("/courses") 
+                  ? "text-[#7bff81]" 
+                  : "text-[#00ffc8] hover:text-[#7bff81]"
+              }`}
+            >
+              Courses
+            </Link>
+            <Link
               to="/labs"
               className={`text-sm font-medium transition-colors ${
                 isActive("/labs") 
