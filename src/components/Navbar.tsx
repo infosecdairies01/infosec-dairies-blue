@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import logo from "@/assets/infosecdairies-logo-full.png";
+import { Shield } from "lucide-react";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
@@ -12,7 +12,8 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 group">
-            <img src={logo} alt="InfosecDairies Logo" className="h-10 w-auto transition-all" />
+            <Shield className="h-6 w-6 text-[#00ffc8] group-hover:text-[#7bff81] transition-colors" />
+            <span className="font-bold text-lg text-[#00ffc8] group-hover:text-[#7bff81] transition-colors">InfosecDairies</span>
           </Link>
           
           <div className="flex items-center gap-8">
