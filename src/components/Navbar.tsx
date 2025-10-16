@@ -12,34 +12,34 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 group">
-            <Shield className="h-6 w-6 text-[#00ffc8] drop-shadow-[0_0_10px_rgba(0,255,200,0.6)] group-hover:drop-shadow-[0_0_15px_rgba(0,255,200,0.8)] transition-all" />
-            <span className="font-bold text-lg text-[#00ffc8] drop-shadow-[0_0_10px_rgba(0,255,200,0.6)] group-hover:drop-shadow-[0_0_15px_rgba(0,255,200,0.8)] transition-all">InfosecDairies</span>
+            <Shield className="h-6 w-6 text-[#00ffc8] group-hover:text-[#7bff81] transition-colors" />
+            <span className="font-bold text-lg text-[#00ffc8] group-hover:text-[#7bff81] transition-colors">InfosecDairies</span>
           </Link>
           
           <div className="flex items-center gap-8">
             <Link
               to="/"
-              className={`text-sm font-medium transition-all ${
+              className={`text-sm font-medium transition-colors ${
                 isActive("/") 
-                  ? "text-[#7bff81] drop-shadow-[0_0_15px_rgba(123,255,129,0.8)]" 
-                  : "text-[#00ffc8] drop-shadow-[0_0_10px_rgba(0,255,200,0.6)] hover:text-[#7bff81] hover:drop-shadow-[0_0_15px_rgba(123,255,129,0.8)]"
+                  ? "text-[#7bff81]" 
+                  : "text-[#00ffc8] hover:text-[#7bff81]"
               }`}
             >
               Home
             </Link>
             <Link
               to="/labs"
-              className={`text-sm font-medium transition-all ${
+              className={`text-sm font-medium transition-colors ${
                 isActive("/labs") 
-                  ? "text-[#7bff81] drop-shadow-[0_0_15px_rgba(123,255,129,0.8)]" 
-                  : "text-[#00ffc8] drop-shadow-[0_0_10px_rgba(0,255,200,0.6)] hover:text-[#7bff81] hover:drop-shadow-[0_0_15px_rgba(123,255,129,0.8)]"
+                  ? "text-[#7bff81]" 
+                  : "text-[#00ffc8] hover:text-[#7bff81]"
               }`}
             >
               Labs
             </Link>
             <Link
               to="/auth"
-              className="text-sm font-medium text-[#00ffc8] drop-shadow-[0_0_10px_rgba(0,255,200,0.6)] hover:text-[#7bff81] hover:drop-shadow-[0_0_15px_rgba(123,255,129,0.8)] transition-all"
+              className="text-sm font-medium text-[#00ffc8] hover:text-[#7bff81] transition-colors"
             >
               Login / Sign Up
             </Link>
