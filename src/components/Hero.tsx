@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Send, Shield, ChevronDown } from "lucide-react";
+import { Shield, ChevronDown } from "lucide-react";
 import logo from "@/assets/infosecdairies-logo.png";
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
@@ -40,18 +40,6 @@ const Hero = () => {
             Defending the digital frontier. Expert insights on blue team cybersecurity, 
             threat detection, and defensive strategies.
           </p>
-          
-          {/* CTA Buttons with hover animations */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8 animate-fade-up" style={{
-          animationDelay: '0.4s'
-        }}>
-            <Button size="lg" className="bg-gradient-cyber hover:opacity-90 transition-all duration-300 glow-cyan group hover:scale-105 hover:glow-lime" asChild>
-              <a href="https://t.me/infosecdairies" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                Join Telegram
-              </a>
-            </Button>
-          </div>
           
           {/* Animated Stats */}
           <div className="grid grid-cols-3 gap-8 pt-16 max-w-2xl mx-auto">
