@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Instagram, Send, Shield, ChevronDown } from "lucide-react";
+import { Send, Shield, ChevronDown } from "lucide-react";
 import logo from "@/assets/infosecdairies-logo.png";
 import FloatingParticles from "./FloatingParticles";
 import AnimatedCounter from "./AnimatedCounter";
@@ -46,13 +46,6 @@ const Hero = () => {
           animationDelay: '0.4s'
         }}>
             <Button size="lg" className="bg-gradient-cyber hover:opacity-90 transition-all duration-300 glow-cyan group hover:scale-105 hover:glow-lime" asChild>
-              <a href="https://instagram.com/infosecdairies" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                <Instagram className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                Follow on Instagram
-              </a>
-            </Button>
-            
-            <Button size="lg" variant="outline" className="border-primary hover:bg-primary/10 group hover:scale-105 transition-all duration-300 hover:border-secondary" asChild>
               <a href="https://t.me/infosecdairies" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                 <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 Join Telegram
