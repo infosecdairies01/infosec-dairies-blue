@@ -22,16 +22,6 @@ const Hero = () => {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iMTAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yOCAwTDAgMjVWNzVMMjggMTAwTDU2IDc1VjI1WiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmZmM4IiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=')] bg-[length:56px_100px]" />
       </div>
       
-      {/* Large glow effects */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px] animate-pulse-glow" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-lime-500/20 rounded-full blur-[120px] animate-pulse-glow" style={{
-      animationDelay: '1.5s'
-    }} />
-      <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/30 rounded-full blur-[100px] animate-float" />
-      
-      {/* Floating particles */}
-      <FloatingParticles />
-      
       {/* Vignette effect */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.7)_100%)]" />
       
