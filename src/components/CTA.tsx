@@ -33,10 +33,6 @@ const CTA = () => {
       <div className="absolute inset-0 bg-gradient-cyber opacity-10 animate-gradient-shift" style={{ backgroundSize: '200% 200%' }} />
       <div className="absolute inset-0 circuit-pattern opacity-5" />
       
-      {/* Animated orbs */}
-      <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse-glow" />
-      <div className="absolute top-1/2 right-1/4 w-64 h-64 bg-secondary/20 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
-      
       <div className="container mx-auto px-4 relative z-10">
         <div className={`max-w-3xl mx-auto text-center space-y-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl md:text-5xl font-bold">
