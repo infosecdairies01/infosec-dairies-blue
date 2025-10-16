@@ -1,4 +1,3 @@
-import { Shield } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 const Labs = () => {
@@ -13,10 +12,6 @@ const Labs = () => {
       
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
         <div className="text-center animate-fade-up">
-          <div className="mb-8 animate-pulse-glow">
-            <Shield className="h-24 w-24 mx-auto text-primary animate-float" />
-          </div>
-          
           <h1 className="text-6xl md:text-8xl font-bold mb-6 gradient-text animate-shimmer">
             Coming Soon
           </h1>
