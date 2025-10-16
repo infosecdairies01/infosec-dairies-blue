@@ -10,24 +10,30 @@ const Hero = () => {
       behavior: 'smooth'
     });
   };
-  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      {/* Animated grid background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Dark base with subtle gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-slate-950 to-black" />
       
-      {/* Glowing orbs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl animate-pulse-glow" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-lime-500/30 rounded-full blur-3xl animate-pulse-glow" style={{
-      animationDelay: '1s'
+      {/* Animated scanlines */}
+      <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,255,200,0.03)_50%)] bg-[length:100%_4px] animate-scan" />
+      
+      {/* Hexagon pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iMTAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yOCAwTDAgMjVWNzVMMjggMTAwTDU2IDc1VjI1WiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBmZmM4IiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=')] bg-[length:56px_100px]" />
+      </div>
+      
+      {/* Large glow effects */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px] animate-pulse-glow" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-lime-500/20 rounded-full blur-[120px] animate-pulse-glow" style={{
+      animationDelay: '1.5s'
     }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-3xl animate-pulse-glow" style={{
-      animationDelay: '0.5s'
-    }} />
+      <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/30 rounded-full blur-[100px] animate-float" />
       
       {/* Floating particles */}
       <FloatingParticles />
       
-      {/* Radial gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+      {/* Vignette effect */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.7)_100%)]" />
       
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto space-y-8">
