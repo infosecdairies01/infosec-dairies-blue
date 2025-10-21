@@ -5,43 +5,75 @@ const Courses = () => {
     <main className="min-h-screen bg-background">
       <Navbar />
       
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen overflow-hidden py-20">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background/50" />
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center space-y-8 py-20">
-            <div className="inline-flex items-center gap-3 mb-8">
-              <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center animate-pulse">
-                <span className="text-2xl">📚</span>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center animate-pulse animation-delay-200">
-                <span className="text-2xl">🎓</span>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center animate-pulse animation-delay-400">
-                <span className="text-2xl">💡</span>
-              </div>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center space-y-6 mb-16">
+              <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
+                Our Courses
+              </h1>
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+                Master cybersecurity with our comprehensive blue team training programs
+              </p>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
-              Courses Coming Soon
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
-              We're crafting comprehensive cybersecurity courses to help you master blue team operations and defensive security.
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-              <div className="p-6 rounded-lg border border-border bg-card/50 backdrop-blur">
-                <h3 className="text-lg font-semibold mb-2">Beginner Friendly</h3>
-                <p className="text-sm text-muted-foreground">Start from the basics and build a strong foundation</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-3xl">🛡️</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2">Security Operations Centre</h3>
+                    <p className="text-muted-foreground">
+                      Learn to detect, analyze, and respond to cybersecurity incidents in real-time. Master SOC workflows and security monitoring.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="p-6 rounded-lg border border-border bg-card/50 backdrop-blur">
-                <h3 className="text-lg font-semibold mb-2">Hands-On Labs</h3>
-                <p className="text-sm text-muted-foreground">Practice with real-world scenarios and exercises</p>
+
+              <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-3xl">📊</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2">Splunk Engineer</h3>
+                    <p className="text-muted-foreground">
+                      Become proficient in Splunk for security monitoring, log analysis, and creating powerful detection rules and dashboards.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="p-6 rounded-lg border border-border bg-card/50 backdrop-blur">
-                <h3 className="text-lg font-semibold mb-2">Expert Instruction</h3>
-                <p className="text-sm text-muted-foreground">Learn from experienced security professionals</p>
+
+              <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-3xl">🔍</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2">Digital Forensics</h3>
+                    <p className="text-muted-foreground">
+                      Investigate cybercrime and security incidents. Learn evidence collection, analysis techniques, and forensic methodologies.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-3xl">📋</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2">GRC</h3>
+                    <p className="text-muted-foreground">
+                      Master Governance, Risk, and Compliance frameworks. Learn to manage security policies, risk assessment, and regulatory compliance.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
