@@ -27,10 +27,9 @@ const Courses = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold mb-2">Security Operations Centre</h3>
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-muted-foreground">
                       Learn to detect, analyze, and respond to cybersecurity incidents in real-time. Master SOC workflows and security monitoring.
                     </p>
-                    <p className="text-2xl font-bold text-primary">₹10,000</p>
                   </div>
                 </div>
               </div>
@@ -42,10 +41,9 @@ const Courses = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold mb-2">Splunk Engineer</h3>
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-muted-foreground">
                       Become proficient in Splunk for security monitoring, log analysis, and creating powerful detection rules and dashboards.
                     </p>
-                    <p className="text-2xl font-bold text-primary">₹10,000</p>
                   </div>
                 </div>
               </div>
@@ -57,10 +55,9 @@ const Courses = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold mb-2">Digital Forensics</h3>
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-muted-foreground">
                       Investigate cybercrime and security incidents. Learn evidence collection, analysis techniques, and forensic methodologies.
                     </p>
-                    <p className="text-2xl font-bold text-primary">₹10,000</p>
                   </div>
                 </div>
               </div>
@@ -72,10 +69,9 @@ const Courses = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold mb-2">GRC</h3>
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-muted-foreground">
                       Master Governance, Risk, and Compliance frameworks. Learn to manage security policies, risk assessment, and regulatory compliance.
                     </p>
-                    <p className="text-2xl font-bold text-primary">₹10,000</p>
                   </div>
                 </div>
               </div>
