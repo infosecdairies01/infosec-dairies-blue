@@ -70,7 +70,7 @@ const CTA = () => {
               asChild
             >
               <a 
-                href="https://t.me/infosecdairies" 
+                href="https://t.me/infosecdairiess" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
