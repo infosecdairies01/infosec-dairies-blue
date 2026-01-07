@@ -19,59 +19,87 @@ const Courses = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-3xl">🛡️</span>
+            {/* Self Paced Section */}
+            <div className="mb-16">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span className="text-xl">📚</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground">Self Paced</h2>
+              </div>
+              <p className="text-muted-foreground mb-8 max-w-2xl">
+                Learn at your own pace with our comprehensive pre-recorded courses. Access anytime, anywhere.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">🛡️</span>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-2">Security Operations Centre</h3>
+                      <p className="text-muted-foreground">
+                        Learn to detect, analyze, and respond to cybersecurity incidents in real-time. Master SOC workflows and security monitoring.
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-2">Security Operations Centre</h3>
-                    <p className="text-muted-foreground">
-                      Learn to detect, analyze, and respond to cybersecurity incidents in real-time. Master SOC workflows and security monitoring.
-                    </p>
+                </div>
+
+                <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">📊</span>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-2">Splunk Engineer</h3>
+                      <p className="text-muted-foreground">
+                        Become proficient in Splunk for security monitoring, log analysis, and creating powerful detection rules and dashboards.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-3xl">📊</span>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-2">Splunk Engineer</h3>
-                    <p className="text-muted-foreground">
-                      Become proficient in Splunk for security monitoring, log analysis, and creating powerful detection rules and dashboards.
-                    </p>
+            {/* Live Training Section */}
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="h-10 w-10 rounded-full bg-secondary/20 flex items-center justify-center">
+                  <span className="text-xl">🎯</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground">Live Training</h2>
+              </div>
+              <p className="text-muted-foreground mb-8 max-w-2xl">
+                Interactive instructor-led sessions with real-time Q&A, hands-on labs, and personalized feedback.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-secondary/50 transition-all duration-300">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="h-14 w-14 rounded-lg bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">🔍</span>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-2">Digital Forensics</h3>
+                      <p className="text-muted-foreground">
+                        Investigate cybercrime and security incidents. Learn evidence collection, analysis techniques, and forensic methodologies.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-3xl">🔍</span>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-2">Digital Forensics</h3>
-                    <p className="text-muted-foreground">
-                      Investigate cybercrime and security incidents. Learn evidence collection, analysis techniques, and forensic methodologies.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-primary/50 transition-all duration-300">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="h-14 w-14 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-3xl">📋</span>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-2">GRC</h3>
-                    <p className="text-muted-foreground">
-                      Master Governance, Risk, and Compliance frameworks. Learn to manage security policies, risk assessment, and regulatory compliance.
-                    </p>
+                <div className="group p-8 rounded-lg border border-border bg-card/50 backdrop-blur hover:border-secondary/50 transition-all duration-300">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="h-14 w-14 rounded-lg bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">📋</span>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-2">GRC</h3>
+                      <p className="text-muted-foreground">
+                        Master Governance, Risk, and Compliance frameworks. Learn to manage security policies, risk assessment, and regulatory compliance.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
