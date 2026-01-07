@@ -25,16 +25,6 @@ const Navbar = () => {
               Home
             </Link>
             <Link
-              to="/about"
-              className={`text-sm font-medium transition-colors ${
-                isActive("/about") 
-                  ? "text-[#7bff81]" 
-                  : "text-[#00ffc8] hover:text-[#7bff81]"
-              }`}
-            >
-              About
-            </Link>
-            <Link
               to="/courses"
               className={`text-sm font-medium transition-colors ${
                 isActive("/courses") 
@@ -53,6 +43,16 @@ const Navbar = () => {
               }`}
             >
               Labs
+            </Link>
+            <Link
+              to="/about"
+              className={`text-sm font-medium transition-colors ${
+                isActive("/about") 
+                  ? "text-[#7bff81]" 
+                  : "text-[#00ffc8] hover:text-[#7bff81]"
+              }`}
+            >
+              About
             </Link>
             <Link
               to="/auth"
