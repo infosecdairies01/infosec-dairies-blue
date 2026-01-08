@@ -11,8 +11,8 @@ const Index = () => {
       <Navbar />
       <Hero />
       <Topics />
-      <WhyChooseUs />
       <LearningPath />
+      <WhyChooseUs />
       <CTA />
       
       <footer className="border-t border-border py-8">
