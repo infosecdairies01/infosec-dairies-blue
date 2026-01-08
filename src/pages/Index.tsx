@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Topics from "@/components/Topics";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import LearningPath from "@/components/LearningPath";
+import Certifications from "@/components/Certifications";
 import CTA from "@/components/CTA";
 
 const Index = () => {
@@ -13,6 +14,7 @@ const Index = () => {
       <Topics />
       <LearningPath />
       <WhyChooseUs />
+      <Certifications />
       <CTA />
       
       <footer className="border-t border-border py-8">
