@@ -1,17 +1,27 @@
 import { useEffect, useRef } from "react";
 
+import btl1Logo from "@/assets/certs/btl1.png";
+import comptiaSecurityLogo from "@/assets/certs/comptia-security.png";
+import comptiaCysaLogo from "@/assets/certs/comptia-cysa.png";
+import microsoftLogo from "@/assets/certs/microsoft-sc200.png";
+import splunkLogo from "@/assets/certs/splunk.png";
+import securityBlueTeamLogo from "@/assets/certs/securityblueteam.png";
+import letsDefendLogo from "@/assets/certs/letsdefend.svg";
+import eccouncilLogo from "@/assets/certs/eccouncil.png";
+import tryhackmeLogo from "@/assets/certs/tryhackme.png";
+import cyberdefendersLogo from "@/assets/certs/cyberdefenders.png";
+
 const certifications = [
-  { name: "BTL1", org: "Security Blue Team" },
-  { name: "BTL2", org: "Security Blue Team" },
-  { name: "CyberDefenders", org: "CyberDefenders" },
-  { name: "Security+", org: "CompTIA" },
-  { name: "CySA+", org: "CompTIA" },
-  { name: "SC-200", org: "Microsoft" },
-  { name: "Splunk", org: "Power User" },
-  { name: "CSA", org: "EC-Council" },
-  { name: "CND", org: "EC-Council" },
-  { name: "SOC Analyst", org: "LetsDefend" },
-  { name: "Blue Team", org: "TryHackMe" },
+  { name: "BTL1", logo: btl1Logo },
+  { name: "Security Blue Team", logo: securityBlueTeamLogo },
+  { name: "CompTIA Security+", logo: comptiaSecurityLogo },
+  { name: "CompTIA CySA+", logo: comptiaCysaLogo },
+  { name: "Microsoft SC-200", logo: microsoftLogo },
+  { name: "Splunk Power User", logo: splunkLogo },
+  { name: "EC-Council", logo: eccouncilLogo },
+  { name: "LetsDefend", logo: letsDefendLogo },
+  { name: "TryHackMe", logo: tryhackmeLogo },
+  { name: "CyberDefenders", logo: cyberdefendersLogo },
 ];
 
 const Certifications = () => {
@@ -59,23 +69,20 @@ const Certifications = () => {
 
         <div
           ref={scrollRef}
-          className="flex gap-12 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
+          className="flex gap-16 overflow-x-auto scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {/* Duplicate items for infinite scroll effect */}
           {[...certifications, ...certifications].map((cert, index) => (
             <div
               key={`${cert.name}-${index}`}
-              className="flex-shrink-0 flex flex-col items-center justify-center w-28 h-28 opacity-70 hover:opacity-100 transition-opacity duration-300"
+              className="flex-shrink-0 flex items-center justify-center h-20 opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
             >
-              <div className="w-16 h-16 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center mb-2">
-                <span className="text-xs font-bold text-primary tracking-tight text-center leading-tight px-1">
-                  {cert.name}
-                </span>
-              </div>
-              <span className="text-[10px] text-muted-foreground text-center whitespace-nowrap">
-                {cert.org}
-              </span>
+              <img
+                src={cert.logo}
+                alt={cert.name}
+                className="h-16 w-auto max-w-[140px] object-contain"
+              />
             </div>
           ))}
         </div>
