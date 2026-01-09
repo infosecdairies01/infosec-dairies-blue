@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           <Link to="/" className="group">
             <span className="font-bold text-lg text-[#00ffc8] group-hover:text-[#7bff81] transition-colors">InfosecDairies</span>
           </Link>
