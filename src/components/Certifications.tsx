@@ -76,7 +76,7 @@ const Certifications = () => {
           {[...certifications, ...certifications].map((cert, index) => (
             <div
               key={`${cert.name}-${index}`}
-              className="flex-shrink-0 flex items-center justify-center h-28 opacity-60 hover:opacity-100 hover:scale-110 transition-all duration-300"
+              className="flex-shrink-0 flex items-center justify-center h-28 hover:scale-110 transition-all duration-300"
             >
               <img
                 src={cert.logo}
