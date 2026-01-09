@@ -6,9 +6,10 @@ import comptiaSecurityLogo from "@/assets/certs/comptia-security.png";
 import comptiaCysaLogo from "@/assets/certs/comptia-cysa.png";
 import microsoftLogo from "@/assets/certs/microsoft-sc200.png";
 import splunkLogo from "@/assets/certs/splunk.png";
-import securityBlueTeamLogo from "@/assets/certs/securityblueteam.png";
 import eccouncilLogo from "@/assets/certs/eccouncil.png";
 import cyberdefendersLogo from "@/assets/certs/cyberdefenders.png";
+import cisspLogo from "@/assets/certs/cissp.png";
+import gcihLogo from "@/assets/certs/gcih.png";
 
 const certifications = [
   { name: "Blue Team Level 1", logo: btl1Logo },
@@ -18,8 +19,8 @@ const certifications = [
   { name: "CompTIA CySA+", logo: comptiaCysaLogo },
   { name: "CompTIA Security+", logo: comptiaSecurityLogo },
   { name: "Microsoft SC-200", logo: microsoftLogo },
-  { name: "CISSP (ISC²)", logo: securityBlueTeamLogo },
-  { name: "GCIH – GIAC", logo: securityBlueTeamLogo },
+  { name: "CISSP (ISC²)", logo: cisspLogo },
+  { name: "GCIH – GIAC", logo: gcihLogo },
   { name: "Splunk Enterprise Certified Admin", logo: splunkLogo },
 ];
 
