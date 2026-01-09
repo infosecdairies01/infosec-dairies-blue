@@ -4,14 +4,19 @@ import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
+import AccessRestrictionOverlay from "@/components/soc/AccessRestrictionOverlay";
 import { Bell, Search, User } from "lucide-react";
 
 const Labs = () => {
+  // TODO: Replace with actual permission check (e.g., from auth context or user roles)
+  const hasAccess = false;
+
   return (
-    <main className="min-h-screen bg-[#010409] flex flex-col">
+    <main className="min-h-screen bg-[#010409] flex flex-col relative">
       <Navbar />
       
-      <div className="flex flex-1 pt-20">
+      {/* Dashboard content with conditional blur */}
+      <div className={`flex flex-1 pt-20 transition-all duration-300 ${!hasAccess ? 'blur-md pointer-events-none select-none' : ''}`}>
         <SOCSidebar />
         
         <div className="flex-1 flex flex-col min-w-0">
@@ -61,6 +66,9 @@ const Labs = () => {
           </div>
         </div>
       </div>
+
+      {/* Access Restriction Overlay */}
+      <AccessRestrictionOverlay isRestricted={!hasAccess} />
     </main>
   );
 };
