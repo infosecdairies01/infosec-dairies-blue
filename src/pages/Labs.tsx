@@ -19,7 +19,7 @@ const Labs = () => {
             You don't have access to this page
           </h2>
           <p className="text-sm text-[#8b949e]">Please upgrade your plan or contact the
- administrator</p>
+administrator</p>
         </div>
       </div>
       
