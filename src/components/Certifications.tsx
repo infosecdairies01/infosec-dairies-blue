@@ -63,7 +63,7 @@ const Certifications = () => {
   return (
     <section className="py-16 bg-background border-t border-border/50">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 text-foreground">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 gradient-text">
           Certifications Earned by Our Learners & Trainers
         </h2>
 
