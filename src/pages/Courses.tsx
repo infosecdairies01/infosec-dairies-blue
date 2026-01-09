@@ -34,14 +34,24 @@ const Courses = () => {
 
   const liveCourses = [
     {
+      icon: "🛡️",
+      title: "SOC Analyst",
+      description: "Live instructor-led SOC training with real-time scenarios, hands-on labs, and direct mentorship from industry practitioners."
+    },
+    {
+      icon: "📊",
+      title: "Splunk Engineer",
+      description: "Master Splunk with live sessions covering deployment, configuration, SPL queries, dashboards, and enterprise security monitoring."
+    },
+    {
       icon: "🔍",
       title: "Digital Forensics",
-      description: "Investigate cybercrime and security incidents. Learn evidence collection, analysis techniques, and forensic methodologies."
+      description: "Investigate cybercrime with live guidance. Learn evidence collection, disk forensics, memory analysis, and chain of custody procedures."
     },
     {
       icon: "📋",
       title: "GRC",
-      description: "Master Governance, Risk, and Compliance frameworks. Learn to manage security policies, risk assessment, and regulatory compliance."
+      description: "Master Governance, Risk, and Compliance with live training on frameworks, policy development, audits, and regulatory requirements."
     }
   ];
 
