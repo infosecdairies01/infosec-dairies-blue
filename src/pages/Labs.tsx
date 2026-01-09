@@ -16,7 +16,7 @@ const Labs = () => {
       <Navbar />
       
       {/* Dashboard content with conditional blur */}
-      <div className={`flex flex-1 pt-20 transition-all duration-300 ${!hasAccess ? 'blur-md pointer-events-none select-none' : ''}`}>
+      <div className={`flex flex-1 pt-20 transition-all duration-300 ${!hasAccess ? 'blur-[2px] pointer-events-none select-none' : ''}`}>
         <SOCSidebar />
         
         <div className="flex-1 flex flex-col min-w-0">
