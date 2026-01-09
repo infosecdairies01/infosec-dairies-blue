@@ -89,26 +89,41 @@ const Courses = () => {
             </p>
             
             {/* Courses Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               {currentCourses.map((course, index) => (
                 <div 
                   key={index}
-                  className={`group p-8 rounded-lg border border-border bg-card/50 backdrop-blur transition-all duration-300 ${
-                    activeTab === "self-paced" 
-                      ? "hover:border-primary/50" 
-                      : "hover:border-secondary/50"
-                  }`}
+                  className="group relative bg-card rounded-2xl p-10 transition-all duration-500 hover:translate-y-[-8px] hover:shadow-2xl hover:shadow-primary/10"
                 >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className={`h-14 w-14 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      activeTab === "self-paced" ? "bg-primary/20" : "bg-secondary/20"
+                  {/* Subtle top accent line */}
+                  <div className={`absolute top-0 left-8 right-8 h-1 rounded-b-full ${
+                    activeTab === "self-paced" ? "bg-primary/60" : "bg-secondary/60"
+                  }`} />
+                  
+                  {/* Large centered icon */}
+                  <div className="flex justify-center mb-8">
+                    <div className={`h-24 w-24 rounded-2xl flex items-center justify-center ${
+                      activeTab === "self-paced" ? "bg-primary/10" : "bg-secondary/10"
                     }`}>
-                      <span className="text-3xl">{course.icon}</span>
+                      <span className="text-5xl">{course.icon}</span>
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-bold mb-2">{course.title}</h3>
-                      <p className="text-muted-foreground">{course.description}</p>
-                    </div>
+                  </div>
+                  
+                  {/* Content centered */}
+                  <div className="text-center space-y-4">
+                    <h3 className="text-2xl font-bold text-foreground">{course.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{course.description}</p>
+                  </div>
+                  
+                  {/* CTA Button */}
+                  <div className="mt-8 flex justify-center">
+                    <button className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                      activeTab === "self-paced"
+                        ? "bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground"
+                        : "bg-secondary/10 text-secondary hover:bg-secondary hover:text-secondary-foreground"
+                    }`}>
+                      Learn More
+                    </button>
                   </div>
                 </div>
               ))}
