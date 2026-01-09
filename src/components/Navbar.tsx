@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import logo from "@/assets/infosecdairies-logo.png";
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,7 +11,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="group">
-            <span className="font-bold text-lg text-[#00ffc8] group-hover:text-[#7bff81] transition-colors">InfosecDairies</span>
+            <img src={logo} alt="InfosecDairies" className="h-12 w-auto" />
           </Link>
           
           <div className="flex items-center gap-8">
