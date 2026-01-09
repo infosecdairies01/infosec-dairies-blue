@@ -1,4 +1,10 @@
 import { useEffect, useRef } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import btl1Logo from "@/assets/certs/btl1.png";
 import btl2Logo from "@/assets/certs/btl2.png";
@@ -71,18 +77,24 @@ const Certifications = () => {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {/* Duplicate items for infinite scroll effect */}
-          {[...certifications, ...certifications].map((cert, index) => (
-            <div
-              key={`${cert.name}-${index}`}
-              className="flex-shrink-0 flex items-center justify-center h-28 hover:scale-110 transition-all duration-300"
-            >
-              <img
-                src={cert.logo}
-                alt={cert.name}
-                className="h-24 md:h-28 w-auto max-w-[180px] object-contain drop-shadow-lg"
-              />
-            </div>
-          ))}
+          <TooltipProvider delayDuration={100}>
+            {[...certifications, ...certifications].map((cert, index) => (
+              <Tooltip key={`${cert.name}-${index}`}>
+                <TooltipTrigger asChild>
+                  <div className="flex-shrink-0 flex items-center justify-center h-28 hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <img
+                      src={cert.logo}
+                      alt={cert.name}
+                      className="h-24 md:h-28 w-auto max-w-[180px] object-contain drop-shadow-lg"
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className="bg-background border border-border text-foreground">
+                  <p className="font-medium">{cert.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </TooltipProvider>
         </div>
       </div>
     </section>
