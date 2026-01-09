@@ -4,14 +4,29 @@ import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, User, Lock } from "lucide-react";
 
 const Labs = () => {
   return (
     <main className="min-h-screen bg-[#010409] flex flex-col">
       <Navbar />
       
-      <div className="flex flex-1 pt-20">
+      {/* Access Restriction Overlay */}
+      <div className="fixed inset-0 top-20 z-40 flex items-center justify-center pointer-events-none">
+        <div className="text-center pointer-events-auto">
+          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#21262d]/80 border border-[#30363d] flex items-center justify-center backdrop-blur-sm">
+            <Lock className="w-10 h-10 text-[#8b949e]" />
+          </div>
+          <h2 className="text-xl font-bold text-[#c9d1d9] mb-2">
+            You don't have access to this page
+          </h2>
+          <p className="text-sm text-[#8b949e]">
+            Please upgrade your plan or contact the administrator.
+          </p>
+        </div>
+      </div>
+      
+      <div className="flex flex-1 pt-20 blur-[3px] pointer-events-none select-none overflow-auto">
         <SOCSidebar />
         
         <div className="flex-1 flex flex-col min-w-0">
