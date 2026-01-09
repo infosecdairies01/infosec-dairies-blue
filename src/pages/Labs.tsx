@@ -4,14 +4,17 @@ import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, User, Lock } from "lucide-react";
 
 const Labs = () => {
+  // Set to false to show access restriction overlay
+  const hasAccess = false;
+
   return (
-    <main className="min-h-screen bg-[#010409] flex flex-col">
+    <main className="min-h-screen bg-[#010409] flex flex-col relative">
       <Navbar />
       
-      <div className="flex flex-1">
+      <div className={`flex flex-1 ${!hasAccess ? 'blur-[8px] pointer-events-none select-none' : ''}`}>
         <SOCSidebar />
         
         <div className="flex-1 flex flex-col min-w-0">
@@ -61,6 +64,23 @@ const Labs = () => {
           </div>
         </div>
       </div>
+
+      {/* Access Restriction Overlay */}
+      {!hasAccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="text-center px-6">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#21262d] flex items-center justify-center">
+              <Lock className="w-8 h-8 text-[#8b949e]" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+              You don't have access to this page
+            </h2>
+            <p className="text-[#8b949e] text-sm md:text-base max-w-md mx-auto">
+              Please upgrade your plan or contact the administrator.
+            </p>
+          </div>
+        </div>
+      )}
     </main>
   );
 };
