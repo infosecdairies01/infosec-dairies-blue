@@ -40,10 +40,10 @@ const Hero = () => {
           {/* Tagline with staggered animation */}
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed animate-fade-up" style={{
           animationDelay: '0.2s'
-        }}>
-            Defending the digital frontier. Expert insights on blue team cybersecurity, 
-            threat detection, and defensive strategies.
-          </p>
+        }}>Hands-on Blue Team & SOC Training.
+Learn Detection, Threat Hunting, and Incident Response from Real Practitioners.
+
+        </p>
           
           {/* Animated Stats */}
           <div className="grid grid-cols-3 gap-8 pt-16 max-w-2xl mx-auto">
