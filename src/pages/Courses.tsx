@@ -1,32 +1,28 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
+import CourseCard from "@/components/CourseCard";
 
 const Courses = () => {
   const [activeTab, setActiveTab] = useState<"self-paced" | "live">("self-paced");
 
   const selfPacedCourses = [
     {
-      icon: "1️⃣",
       title: "Blue Team & SOC Fundamentals",
       description: "Build your foundation in Security Operations. Learn essential concepts, tools, and workflows for SOC Level 1 analysts."
     },
     {
-      icon: "2️⃣",
       title: "SOC Analyst Practical Training",
       description: "Advance your skills with hands-on SOC Level 2 training. Master alert triage, threat hunting, and advanced detection techniques."
     },
     {
-      icon: "3️⃣",
       title: "SIEM Fundamentals for Blue Team",
       description: "Master Security Information and Event Management. Learn to configure, monitor, and create detection rules in modern SIEM platforms."
     },
     {
-      icon: "4️⃣",
       title: "Log Analysis for SOC Analysts",
       description: "Develop expertise in parsing, correlating, and analyzing security logs to identify threats and investigate incidents effectively."
     },
     {
-      icon: "5️⃣",
       title: "Incident Response Fundamentals",
       description: "Learn the complete incident response lifecycle. Master containment, eradication, recovery, and post-incident analysis procedures."
     }
@@ -34,22 +30,18 @@ const Courses = () => {
 
   const liveCourses = [
     {
-      icon: "🛡️",
       title: "SOC Analyst",
       description: "Live instructor-led SOC training with real-time scenarios, hands-on labs, and direct mentorship from industry practitioners."
     },
     {
-      icon: "📊",
       title: "Splunk Engineer",
       description: "Master Splunk with live sessions covering deployment, configuration, SPL queries, dashboards, and enterprise security monitoring."
     },
     {
-      icon: "🔍",
       title: "Digital Forensics",
       description: "Investigate cybercrime with live guidance. Learn evidence collection, disk forensics, memory analysis, and chain of custody procedures."
     },
     {
-      icon: "📋",
       title: "GRC",
       description: "Master Governance, Risk, and Compliance with live training on frameworks, policy development, audits, and regulatory requirements."
     }
@@ -111,43 +103,14 @@ const Courses = () => {
             </p>
             
             {/* Courses Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {currentCourses.map((course, index) => (
-                <div 
+                <CourseCard
                   key={index}
-                  className="group relative bg-card rounded-2xl p-10 transition-all duration-500 hover:translate-y-[-8px] hover:shadow-2xl hover:shadow-primary/10"
-                >
-                  {/* Subtle top accent line */}
-                  <div className={`absolute top-0 left-8 right-8 h-1 rounded-b-full ${
-                    activeTab === "self-paced" ? "bg-primary/60" : "bg-secondary/60"
-                  }`} />
-                  
-                  {/* Large centered icon */}
-                  <div className="flex justify-center mb-8">
-                    <div className={`h-24 w-24 rounded-2xl flex items-center justify-center ${
-                      activeTab === "self-paced" ? "bg-primary/10" : "bg-secondary/10"
-                    }`}>
-                      <span className="text-5xl">{course.icon}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Content centered */}
-                  <div className="text-center space-y-4">
-                    <h3 className="text-2xl font-bold text-foreground">{course.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{course.description}</p>
-                  </div>
-                  
-                  {/* CTA Button */}
-                  <div className="mt-8 flex justify-center">
-                    <button className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                      activeTab === "self-paced"
-                        ? "bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground"
-                        : "bg-secondary/10 text-secondary hover:bg-secondary hover:text-secondary-foreground"
-                    }`}>
-                      Learn More
-                    </button>
-                  </div>
-                </div>
+                  title={course.title}
+                  description={course.description}
+                  index={index}
+                />
               ))}
             </div>
           </div>
