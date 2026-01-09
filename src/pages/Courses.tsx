@@ -42,9 +42,6 @@ const Courses = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-6xl mx-auto">
             <div className="text-center space-y-6 mb-12">
-              <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
-                Our Courses
-              </h1>
               <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
                 Master cybersecurity with our comprehensive blue team training programs
               </p>
