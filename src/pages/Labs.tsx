@@ -15,7 +15,7 @@ const Labs = () => {
       <div className="fixed inset-0 top-20 z-40 flex items-center justify-center pointer-events-none">
         <div className="text-center pointer-events-auto">
           <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#21262d]/80 border border-[#30363d] flex items-center justify-center backdrop-blur-sm">
-            <Lock className="w-10 h-10 text-[#8b949e]" />
+            <Lock className="w-10 h-10 text-red-500" />
           </div>
           <h2 className="text-xl font-bold text-[#c9d1d9] mb-2">
             You don't have access to this page
