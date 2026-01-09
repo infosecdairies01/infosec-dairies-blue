@@ -4,22 +4,18 @@ import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
-import { Bell, User, Lock } from "lucide-react";
+import { Bell, Search, User } from "lucide-react";
 
 const Labs = () => {
-  // Set to false to show access restriction overlay
-  const hasAccess = false;
-
   return (
-    <main className="min-h-screen bg-[#010409] flex flex-col relative">
-      {/* Navbar is outside the blur container */}
+    <main className="min-h-screen bg-[#010409] flex flex-col">
       <Navbar />
       
-      <div className={`flex flex-1 ${!hasAccess ? 'blur-[8px] pointer-events-none select-none' : ''}`}>
+      <div className="flex flex-1">
         <SOCSidebar />
         
         <div className="flex-1 flex flex-col min-w-0">
-          {/* Dashboard Sub-Header */}
+          {/* Dashboard Header */}
           <header className="bg-[#0d1117] border-b border-[#21262d] px-6 py-4 flex items-center justify-between">
             <div>
               <h1 className="text-xl font-semibold text-[#c9d1d9]">Security Dashboard</h1>
@@ -27,6 +23,15 @@ const Labs = () => {
             </div>
             
             <div className="flex items-center gap-4">
+              <div className="relative hidden md:block">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b949e]" />
+                <input
+                  type="text"
+                  placeholder="Search alerts..."
+                  className="bg-[#0d1117] border border-[#21262d] rounded-md pl-10 pr-4 py-2 text-sm text-[#c9d1d9] placeholder:text-[#8b949e] focus:outline-none focus:border-[#00ffc8] w-64"
+                />
+              </div>
+              
               <button className="relative p-2 text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
                 <Bell className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
@@ -56,23 +61,6 @@ const Labs = () => {
           </div>
         </div>
       </div>
-
-      {/* Access Restriction Overlay */}
-      {!hasAccess && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-auto">
-          <div className="text-center px-6">
-            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#21262d] flex items-center justify-center">
-              <Lock className="w-8 h-8 text-[#8b949e]" />
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-              You don't have access to this page
-            </h2>
-            <p className="text-[#8b949e] text-sm md:text-base max-w-md mx-auto">
-              Please upgrade your plan or contact the administrator.
-            </p>
-          </div>
-        </div>
-      )}
     </main>
   );
 };
