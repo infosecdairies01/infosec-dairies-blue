@@ -6,14 +6,29 @@ const Courses = () => {
 
   const selfPacedCourses = [
     {
-      icon: "🛡️",
-      title: "Security Operations Centre",
-      description: "Learn to detect, analyze, and respond to cybersecurity incidents in real-time. Master SOC workflows and security monitoring."
+      icon: "1️⃣",
+      title: "Blue Team & SOC Fundamentals",
+      description: "Build your foundation in Security Operations. Learn essential concepts, tools, and workflows for SOC Level 1 analysts."
     },
     {
-      icon: "📊",
-      title: "Splunk Engineer",
-      description: "Become proficient in Splunk for security monitoring, log analysis, and creating powerful detection rules and dashboards."
+      icon: "2️⃣",
+      title: "SOC Analyst Practical Training",
+      description: "Advance your skills with hands-on SOC Level 2 training. Master alert triage, threat hunting, and advanced detection techniques."
+    },
+    {
+      icon: "3️⃣",
+      title: "SIEM Fundamentals for Blue Team",
+      description: "Master Security Information and Event Management. Learn to configure, monitor, and create detection rules in modern SIEM platforms."
+    },
+    {
+      icon: "4️⃣",
+      title: "Log Analysis for SOC Analysts",
+      description: "Develop expertise in parsing, correlating, and analyzing security logs to identify threats and investigate incidents effectively."
+    },
+    {
+      icon: "5️⃣",
+      title: "Incident Response Fundamentals",
+      description: "Learn the complete incident response lifecycle. Master containment, eradication, recovery, and post-incident analysis procedures."
     }
   ];
 
