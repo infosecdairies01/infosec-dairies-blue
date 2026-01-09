@@ -9,11 +9,23 @@ interface CourseCardProps {
 const CourseCard = ({ title, description, index }: CourseCardProps) => {
   return (
     <div className="group relative">
-      {/* Card container with glassmorphism */}
-      <div className="relative overflow-hidden rounded-xl bg-card/40 backdrop-blur-md border border-border/50 p-8 transition-all duration-300 hover:border-primary/30 hover:translate-y-[-4px] hover:shadow-lg hover:shadow-primary/5">
+      {/* Soft outer glow on hover */}
+      <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-primary/20 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500" />
+      
+      {/* Card container with enhanced glassmorphism */}
+      <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-8 transition-all duration-500 ease-out group-hover:bg-card/35 group-hover:backdrop-blur-xl group-hover:translate-y-[-6px] group-hover:border-white/[0.12] shadow-lg shadow-black/20 group-hover:shadow-xl group-hover:shadow-primary/10">
+        
+        {/* Inner light reflection - top edge */}
+        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        
+        {/* Inner light reflection - left edge */}
+        <div className="absolute inset-y-0 left-0 w-[1px] bg-gradient-to-b from-white/15 via-white/5 to-transparent" />
+        
+        {/* Subtle inner teal glow */}
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
         
         {/* Left accent gradient line */}
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
         
         {/* Content - Left aligned */}
         <div className="pl-4 space-y-5">
