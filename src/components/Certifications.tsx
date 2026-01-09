@@ -1,16 +1,27 @@
 import { useEffect, useRef } from "react";
 
+import btl1Logo from "@/assets/certs/btl1.png";
+import btl2Logo from "@/assets/certs/btl2.png";
+import cyberdefendersLogo from "@/assets/certs/cyberdefenders.png";
+import eccouncilLogo from "@/assets/certs/eccouncil.png";
+import comptiaCysaLogo from "@/assets/certs/comptia-cysa.png";
+import comptiaSecurityLogo from "@/assets/certs/comptia-security.png";
+import microsoftLogo from "@/assets/certs/microsoft-sc200.png";
+import cisspLogo from "@/assets/certs/cissp.png";
+import gcihLogo from "@/assets/certs/gcih.png";
+import splunkLogo from "@/assets/certs/splunk.png";
+
 const certifications = [
-  { name: "Blue Team Level 1", abbr: "BTL1" },
-  { name: "Blue Team Level 2", abbr: "BTL2" },
-  { name: "CyberDefenders CCD", abbr: "CCD" },
-  { name: "EC-Council CEH", abbr: "CEH" },
-  { name: "CompTIA CySA+", abbr: "CySA+" },
-  { name: "CompTIA Security+", abbr: "Sec+" },
-  { name: "Microsoft SC-200", abbr: "SC-200" },
-  { name: "CISSP (ISC²)", abbr: "CISSP" },
-  { name: "GCIH – GIAC", abbr: "GCIH" },
-  { name: "Splunk Enterprise Certified Admin", abbr: "Splunk" },
+  { name: "Blue Team Level 1", logo: btl1Logo },
+  { name: "Blue Team Level 2", logo: btl2Logo },
+  { name: "CyberDefenders CCD", logo: cyberdefendersLogo },
+  { name: "EC-Council CEH", logo: eccouncilLogo },
+  { name: "CompTIA CySA+", logo: comptiaCysaLogo },
+  { name: "CompTIA Security+", logo: comptiaSecurityLogo },
+  { name: "Microsoft SC-200", logo: microsoftLogo },
+  { name: "CISSP (ISC²)", logo: cisspLogo },
+  { name: "GCIH – GIAC", logo: gcihLogo },
+  { name: "Splunk Enterprise Certified Admin", logo: splunkLogo },
 ];
 
 const Certifications = () => {
@@ -58,20 +69,20 @@ const Certifications = () => {
 
         <div
           ref={scrollRef}
-          className="flex gap-6 overflow-x-auto scrollbar-hide"
+          className="flex gap-12 overflow-x-auto scrollbar-hide items-center"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {/* Duplicate items for infinite scroll effect */}
           {[...certifications, ...certifications].map((cert, index) => (
             <div
               key={`${cert.name}-${index}`}
-              className="flex-shrink-0 group"
+              className="flex-shrink-0 flex items-center justify-center h-24 opacity-70 hover:opacity-100 transition-opacity duration-300"
             >
-              <div className="px-6 py-3 rounded border border-border/60 bg-card/30 hover:border-primary/50 hover:bg-card/50 transition-all duration-300">
-                <span className="text-sm font-mono font-semibold text-foreground/80 group-hover:text-primary transition-colors">
-                  {cert.abbr}
-                </span>
-              </div>
+              <img
+                src={cert.logo}
+                alt={cert.name}
+                className="h-20 w-auto max-w-[160px] object-contain"
+              />
             </div>
           ))}
         </div>
