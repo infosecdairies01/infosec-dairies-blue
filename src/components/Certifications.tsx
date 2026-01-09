@@ -69,19 +69,19 @@ const Certifications = () => {
 
         <div
           ref={scrollRef}
-          className="flex gap-12 overflow-x-auto scrollbar-hide items-center"
+          className="flex gap-16 md:gap-20 overflow-x-auto scrollbar-hide items-center py-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {/* Duplicate items for infinite scroll effect */}
           {[...certifications, ...certifications].map((cert, index) => (
             <div
               key={`${cert.name}-${index}`}
-              className="flex-shrink-0 flex items-center justify-center h-24 opacity-70 hover:opacity-100 transition-opacity duration-300"
+              className="flex-shrink-0 flex items-center justify-center h-28 opacity-60 hover:opacity-100 hover:scale-110 transition-all duration-300"
             >
               <img
                 src={cert.logo}
                 alt={cert.name}
-                className="h-20 w-auto max-w-[160px] object-contain"
+                className="h-24 md:h-28 w-auto max-w-[180px] object-contain drop-shadow-lg"
               />
             </div>
           ))}
