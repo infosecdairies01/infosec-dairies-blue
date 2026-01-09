@@ -8,58 +8,63 @@ import { Bell, Search, User } from "lucide-react";
 
 const Labs = () => {
   return (
-    <main className="min-h-screen bg-[#010409] flex flex-col">
-      <Navbar />
-      
-      <div className="flex flex-1">
-        <SOCSidebar />
+    <main className="min-h-screen bg-[#010409] flex flex-col relative">
+      {/* Blurred Background Content */}
+      <div className="flex flex-col flex-1 blur-[3px] pointer-events-none select-none">
+        <Navbar />
         
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Dashboard Header */}
-          <header className="bg-[#0d1117] border-b border-[#21262d] px-6 py-4 flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-semibold text-[#c9d1d9]">Security Dashboard</h1>
-              <p className="text-sm text-[#8b949e]">Real-time threat monitoring and analysis</p>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b949e]" />
-                <input
-                  type="text"
-                  placeholder="Search alerts..."
-                  className="bg-[#0d1117] border border-[#21262d] rounded-md pl-10 pr-4 py-2 text-sm text-[#c9d1d9] placeholder:text-[#8b949e] focus:outline-none focus:border-[#00ffc8] w-64"
-                />
-              </div>
-              
-              <button className="relative p-2 text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-              </button>
-              
-              <button className="w-8 h-8 bg-[#21262d] rounded-full flex items-center justify-center text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
-                <User className="w-4 h-4" />
-              </button>
-            </div>
-          </header>
+        <div className="flex flex-1">
+          <SOCSidebar />
           
-          {/* Dashboard Content */}
-          <div className="flex-1 p-6 overflow-auto">
-            <div className="space-y-6">
-              {/* Alert Summary Cards */}
-              <AlertSummaryCards />
-              
-              {/* Charts Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <AlertsChart />
-                <TopSourcesChart />
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* Dashboard Header */}
+            <header className="bg-[#0d1117] border-b border-[#21262d] px-6 py-4 flex items-center justify-between">
+              <div>
+                <h1 className="text-xl font-semibold text-[#c9d1d9]">Security Dashboard</h1>
+                <p className="text-sm text-[#8b949e]">Real-time threat monitoring and analysis</p>
               </div>
               
-              {/* Recent Alerts Table */}
-              <RecentAlertsTable />
+              <div className="flex items-center gap-4">
+                <div className="relative hidden md:block">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b949e]" />
+                  <input
+                    type="text"
+                    placeholder="Search alerts..."
+                    className="bg-[#0d1117] border border-[#21262d] rounded-md pl-10 pr-4 py-2 text-sm text-[#c9d1d9] placeholder:text-[#8b949e] focus:outline-none focus:border-[#00ffc8] w-64"
+                  />
+                </div>
+                
+                <button className="relative p-2 text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
+                  <Bell className="w-5 h-5" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                </button>
+                
+                <button className="w-8 h-8 bg-[#21262d] rounded-full flex items-center justify-center text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
+                  <User className="w-4 h-4" />
+                </button>
+              </div>
+            </header>
+            
+            {/* Dashboard Content */}
+            <div className="flex-1 p-6 overflow-auto">
+              <div className="space-y-6">
+                <AlertSummaryCards />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <AlertsChart />
+                  <TopSourcesChart />
+                </div>
+                <RecentAlertsTable />
+              </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Access Restriction Overlay */}
+      <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-50">
+        <p className="text-lg md:text-xl font-medium text-white/90 tracking-wide">
+          You don't have access to this page
+        </p>
       </div>
     </main>
   );
