@@ -96,21 +96,6 @@ const SOCLabs = () => {
             </Link>
           </div>
         </div>
-
-        {/* Bottom Stats */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { value: "50+", label: "Lab Scenarios" },
-            { value: "1000+", label: "Alerts to Analyze" },
-            { value: "Real", label: "SIEM Dashboards" },
-            { value: "24/7", label: "Lab Access" }
-          ].map((stat, index) => (
-            <div key={index} className="text-center p-4 rounded-lg bg-card/30 border border-border/30">
-              <div className="text-2xl md:text-3xl font-bold gradient-text mb-1">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
