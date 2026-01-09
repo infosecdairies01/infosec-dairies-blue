@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react";
 import btl1Logo from "@/assets/certs/btl1.png";
 import btl2Logo from "@/assets/certs/btl2.png";
 import cyberdefendersLogo from "@/assets/certs/cyberdefenders.png";
-import eccouncilLogo from "@/assets/certs/eccouncil.png";
 import comptiaCysaLogo from "@/assets/certs/comptia-cysa.png";
 import comptiaSecurityLogo from "@/assets/certs/comptia-security.png";
 import microsoftLogo from "@/assets/certs/microsoft-sc200.png";
@@ -15,7 +14,6 @@ const certifications = [
   { name: "Blue Team Level 1", logo: btl1Logo },
   { name: "Blue Team Level 2", logo: btl2Logo },
   { name: "CyberDefenders CCD", logo: cyberdefendersLogo },
-  { name: "EC-Council CEH", logo: eccouncilLogo },
   { name: "CompTIA CySA+", logo: comptiaCysaLogo },
   { name: "CompTIA Security+", logo: comptiaSecurityLogo },
   { name: "Microsoft SC-200", logo: microsoftLogo },
