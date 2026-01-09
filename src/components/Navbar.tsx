@@ -33,7 +33,7 @@ const Navbar = () => {
                   : "text-[#00ffc8] hover:text-[#7bff81]"
               }`}
             >
-              Courses
+              Certifications
             </Link>
             <Link
               to="/labs"
