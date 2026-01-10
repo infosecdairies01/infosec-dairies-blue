@@ -1,33 +1,25 @@
 import { Shield, Terminal, Activity, Eye, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import socLabsHero from "@/assets/soc-labs-hero.jpg";
-
 const SOCLabs = () => {
-  const features = [
-    {
-      icon: Terminal,
-      title: "Real-Time Alert Triage",
-      description: "Analyze live security alerts just like a Tier 1 SOC analyst would in production environments."
-    },
-    {
-      icon: Activity,
-      title: "Threat Investigation",
-      description: "Deep dive into suspicious activities, correlate events, and build incident timelines."
-    },
-    {
-      icon: Eye,
-      title: "SIEM Mastery",
-      description: "Get hands-on experience with dashboards, queries, and detection rules used by top security teams."
-    },
-    {
-      icon: Shield,
-      title: "Incident Response",
-      description: "Practice containment, eradication, and recovery procedures in controlled scenarios."
-    }
-  ];
-
-  return (
-    <section className="py-20 relative overflow-hidden">
+  const features = [{
+    icon: Terminal,
+    title: "Real-Time Alert Triage",
+    description: "Analyze live security alerts just like a Tier 1 SOC analyst would in production environments."
+  }, {
+    icon: Activity,
+    title: "Threat Investigation",
+    description: "Deep dive into suspicious activities, correlate events, and build incident timelines."
+  }, {
+    icon: Eye,
+    title: "SIEM Mastery",
+    description: "Get hands-on experience with dashboards, queries, and detection rules used by top security teams."
+  }, {
+    icon: Shield,
+    title: "Incident Response",
+    description: "Practice containment, eradication, and recovery procedures in controlled scenarios."
+  }];
+  return <section className="py-20 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
       
@@ -51,11 +43,7 @@ const SOCLabs = () => {
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-secondary/50 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-500" />
             <div className="relative rounded-xl overflow-hidden border border-border">
-              <img 
-                src={socLabsHero} 
-                alt="SOC Labs Dashboard" 
-                className="w-full h-auto object-cover"
-              />
+              <img src={socLabsHero} alt="SOC Labs Dashboard" className="w-full h-auto object-cover" />
               {/* Overlay with stats */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background/95 to-transparent p-6">
                 <div className="flex items-center justify-between text-sm">
@@ -71,34 +59,22 @@ const SOCLabs = () => {
 
           {/* Features Grid */}
           <div className="space-y-6">
-            {features.map((feature, index) => (
-              <div 
-                key={index}
-                className="group flex gap-4 p-4 rounded-lg bg-card/50 border border-border/50 hover:border-primary/30 hover:bg-card transition-all duration-300"
-              >
-                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <feature.icon className="w-6 h-6 text-primary" />
-                </div>
+            {features.map((feature, index) => <div key={index} className="group flex gap-4 p-4 rounded-lg bg-card/50 border border-border/50 hover:border-primary/30 hover:bg-card transition-all duration-300">
+                
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </div>
-              </div>
-            ))}
+              </div>)}
 
             {/* CTA Button */}
-            <Link 
-              to="/labs"
-              className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors group"
-            >
+            <Link to="/labs" className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors group">
               Explore the Labs
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default SOCLabs;
