@@ -51,18 +51,12 @@ const Courses = () => {
             </div>
 
             {/* Tab Selection */}
-            <div className="flex justify-center gap-4 mb-12">
-              <button onClick={() => setActiveTab("self-paced")} className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 ${activeTab === "self-paced" ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25" : "bg-card/50 border border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"}`}>
-                <span className="flex items-center gap-3">
-                  
-                  Self Paced
-                </span>
+            <div className="flex justify-center gap-3 mb-12">
+              <button onClick={() => setActiveTab("self-paced")} className={`px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 ${activeTab === "self-paced" ? "bg-primary text-primary-foreground shadow-md shadow-primary/25" : "bg-card/50 border border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"}`}>
+                Self Paced
               </button>
-              <button onClick={() => setActiveTab("live")} className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 ${activeTab === "live" ? "bg-secondary text-secondary-foreground shadow-lg shadow-secondary/25" : "bg-card/50 border border-border text-muted-foreground hover:border-secondary/50 hover:text-foreground"}`}>
-                <span className="flex items-center gap-3">
-                  
-                  Live Training
-                </span>
+              <button onClick={() => setActiveTab("live")} className={`px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 ${activeTab === "live" ? "bg-secondary text-secondary-foreground shadow-md shadow-secondary/25" : "bg-card/50 border border-border text-muted-foreground hover:border-secondary/50 hover:text-foreground"}`}>
+                Live Training
               </button>
             </div>
 
