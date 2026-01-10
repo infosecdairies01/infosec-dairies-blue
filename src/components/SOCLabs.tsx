@@ -2,27 +2,33 @@ import { Shield, Terminal, Activity, Eye, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import socLabsHero from "@/assets/soc-labs-hero.jpg";
 const SOCLabs = () => {
-  const features = [{
-    icon: Terminal,
-    title: "Real-Time Alert Triage",
-    description: "Analyze live security alerts just like a Tier 1 SOC analyst would in production environments."
-  }, {
-    icon: Activity,
-    title: "Threat Investigation",
-    description: "Deep dive into suspicious activities, correlate events, and build incident timelines."
-  }, {
-    icon: Eye,
-    title: "SIEM Mastery",
-    description: "Get hands-on experience with dashboards, queries, and detection rules used by top security teams."
-  }, {
-    icon: Shield,
-    title: "Incident Response",
-    description: "Practice containment, eradication, and recovery procedures in controlled scenarios."
-  }];
-  return <section className="py-20 relative overflow-hidden">
+  const features = [
+    {
+      icon: Terminal,
+      title: "Real-Time Alert Triage",
+      description: "Analyze live security alerts just like a SOC analyst would in production environments.",
+    },
+    {
+      icon: Activity,
+      title: "Threat Investigation",
+      description: "Deep dive into suspicious activities, correlate events, and build incident timelines.",
+    },
+    {
+      icon: Eye,
+      title: "SIEM Mastery",
+      description: "Get hands-on experience with dashboards, queries, and detection rules used by top security teams.",
+    },
+    {
+      icon: Shield,
+      title: "Incident Response",
+      description: "Practice containment, eradication, and recovery procedures in controlled scenarios.",
+    },
+  ];
+  return (
+    <section className="py-20 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -33,8 +39,8 @@ const SOCLabs = () => {
             Step Into a <span className="gradient-text">Real SOC Environment</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Stop watching. Start defending. Our practical labs simulate the exact workflows 
-            used by Security Operations Centers worldwide.
+            Stop watching. Start defending. Our practical labs simulate the exact workflows used by Security Operations
+            Centers worldwide.
           </p>
         </div>
 
@@ -59,22 +65,30 @@ const SOCLabs = () => {
 
           {/* Features Grid */}
           <div className="space-y-6">
-            {features.map((feature, index) => <div key={index} className="group flex gap-4 p-4 rounded-lg bg-card/50 border border-border/50 hover:border-primary/30 hover:bg-card transition-all duration-300">
-                
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="group flex gap-4 p-4 rounded-lg bg-card/50 border border-border/50 hover:border-primary/30 hover:bg-card transition-all duration-300"
+              >
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </div>
-              </div>)}
+              </div>
+            ))}
 
             {/* CTA Button */}
-            <Link to="/labs" className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors group">
+            <Link
+              to="/labs"
+              className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors group"
+            >
               Explore the Labs
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
 export default SOCLabs;
