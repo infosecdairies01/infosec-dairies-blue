@@ -44,6 +44,10 @@ const Courses = () => {
     {
       title: "GRC",
       description: "Master Governance, Risk, and Compliance with live training on frameworks, policy development, audits, and regulatory requirements."
+    },
+    {
+      title: "Bug Bounty",
+      description: "Learn to discover and report security vulnerabilities in live sessions. Master reconnaissance, web app testing, and responsible disclosure."
     }
   ];
 
