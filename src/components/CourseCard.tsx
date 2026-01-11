@@ -4,9 +4,16 @@ interface CourseCardProps {
   title: string;
   description: string;
   index: number;
+  difficulty?: "easy" | "medium" | "hard";
 }
 
-const CourseCard = ({ title, description, index }: CourseCardProps) => {
+const difficultyStyles = {
+  easy: "bg-green-500/15 text-green-400 border-green-500/25",
+  medium: "bg-yellow-500/15 text-yellow-400 border-yellow-500/25",
+  hard: "bg-red-500/15 text-red-400 border-red-500/25",
+};
+
+const CourseCard = ({ title, description, index, difficulty }: CourseCardProps) => {
   return (
     <div className="group relative">
       {/* Soft outer glow on hover */}
@@ -14,6 +21,13 @@ const CourseCard = ({ title, description, index }: CourseCardProps) => {
       
       {/* Card container with enhanced glassmorphism */}
       <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-8 transition-all duration-500 ease-out group-hover:bg-card/35 group-hover:backdrop-blur-xl group-hover:translate-y-[-6px] group-hover:border-white/[0.12] shadow-lg shadow-black/20 group-hover:shadow-xl group-hover:shadow-primary/10 h-full min-h-[280px] flex flex-col">
+        
+        {/* Difficulty badge - top right */}
+        {difficulty && (
+          <span className={`absolute top-4 right-4 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider rounded-full border ${difficultyStyles[difficulty]}`}>
+            {difficulty}
+          </span>
+        )}
         
         {/* Inner light reflection - top edge */}
         <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
