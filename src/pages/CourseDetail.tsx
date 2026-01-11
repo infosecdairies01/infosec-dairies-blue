@@ -171,13 +171,22 @@ const CourseDetail = () => {
 
               {/* Right - Course Info Card */}
               <div className="lg:col-span-1">
-                <div className="rounded-xl bg-card/40 border border-border/40 p-6 shadow-sm">
-                  <div className="space-y-4">
+                <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-6 shadow-lg shadow-black/20">
+                  {/* Inner light reflection - top edge */}
+                  <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                  {/* Inner light reflection - left edge */}
+                  <div className="absolute inset-y-0 left-0 w-[1px] bg-gradient-to-b from-white/15 via-white/5 to-transparent" />
+                  {/* Subtle inner teal glow */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
+                  {/* Left accent gradient line */}
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
+                  
+                  <div className="relative pl-3 space-y-4">
                     <h3 className="text-lg font-semibold text-foreground">Course Info</h3>
                     
                     <div className="flex items-center gap-3">
                       <span className="text-muted-foreground">Difficulty:</span>
-                      <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-card border border-border text-foreground">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-card/50 border border-white/[0.08] text-foreground">
                         Beginner
                       </span>
                     </div>
@@ -264,9 +273,15 @@ const CourseDetail = () => {
                     open={openModules.includes(module.id)}
                     onOpenChange={() => toggleModule(module.id)}
                   >
-                    <div className="rounded-xl bg-card/30 border border-border/30 overflow-hidden shadow-sm">
+                    <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] shadow-lg shadow-black/20">
+                      {/* Inner light reflection - top edge */}
+                      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                      {/* Subtle inner teal glow */}
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
+                      {/* Left accent gradient line */}
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
                       {/* Module Header */}
-                      <CollapsibleTrigger className="w-full px-6 py-4 flex items-center justify-between hover:bg-muted/20 transition-colors">
+                      <CollapsibleTrigger className="relative w-full px-6 py-4 pl-7 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
                         <div className="flex items-center gap-3">
                           <span className="text-base font-semibold text-foreground">
                             {module.id}. {module.title}
@@ -286,11 +301,11 @@ const CourseDetail = () => {
 
                       {/* Lessons */}
                       <CollapsibleContent>
-                        <div className="border-t border-border/30">
+                        <div className="border-t border-white/[0.06]">
                           {module.lessons.map((lesson) => (
                             <div
                               key={lesson.id}
-                              className="px-6 py-4 flex items-center justify-between border-b border-border/20 last:border-b-0 hover:bg-muted/10 transition-colors"
+                              className="px-6 py-4 pl-7 flex items-center justify-between border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors"
                             >
                               <div className="flex items-start gap-3">
                                 <span className="mt-0.5">
@@ -334,44 +349,62 @@ const CourseDetail = () => {
                 ))}
 
                 {activeTab === "quizzes" && (
-                  <div className="rounded-xl bg-card/30 border border-border/30 p-8 shadow-sm">
-                    <div className="flex items-center gap-3 mb-6">
-                      <FileQuestion className="w-6 h-6 text-primary" />
-                      <h3 className="text-lg font-semibold text-foreground">Module Quizzes</h3>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="p-4 rounded-lg bg-muted/20 border border-border/30 flex items-center justify-between">
-                        <div>
-                          <span className="text-foreground">Module 5 Quiz: IR Basics</span>
-                          <p className="text-xs text-muted-foreground mt-1">10 questions • 15 minutes</p>
+                  <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-8 shadow-lg shadow-black/20">
+                    {/* Inner light reflection - top edge */}
+                    <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                    {/* Subtle inner teal glow */}
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
+                    {/* Left accent gradient line */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
+                    
+                    <div className="relative pl-3">
+                      <div className="flex items-center gap-3 mb-6">
+                        <FileQuestion className="w-6 h-6 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground">Module Quizzes</h3>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between">
+                          <div>
+                            <span className="text-foreground">Module 5 Quiz: IR Basics</span>
+                            <p className="text-xs text-muted-foreground mt-1">10 questions • 15 minutes</p>
+                          </div>
+                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+                            <Lock className="w-3 h-3" />
+                            Locked
+                          </span>
                         </div>
-                        <span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
-                          <Lock className="w-3 h-3" />
-                          Locked
-                        </span>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {activeTab === "resources" && (
-                  <div className="rounded-xl bg-card/30 border border-border/30 p-8 shadow-sm">
-                    <div className="flex items-center gap-3 mb-6">
-                      <FolderOpen className="w-6 h-6 text-primary" />
-                      <h3 className="text-lg font-semibold text-foreground">Course Resources</h3>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
-                        <span className="text-foreground">SOC Analyst Cheat Sheet (PDF)</span>
-                        <p className="text-xs text-muted-foreground mt-1">Quick reference guide for common SOC tasks</p>
+                  <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-8 shadow-lg shadow-black/20">
+                    {/* Inner light reflection - top edge */}
+                    <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                    {/* Subtle inner teal glow */}
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
+                    {/* Left accent gradient line */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
+                    
+                    <div className="relative pl-3">
+                      <div className="flex items-center gap-3 mb-6">
+                        <FolderOpen className="w-6 h-6 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground">Course Resources</h3>
                       </div>
-                      <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
-                        <span className="text-foreground">Log Analysis Templates</span>
-                        <p className="text-xs text-muted-foreground mt-1">Ready-to-use templates for log parsing</p>
-                      </div>
-                      <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
-                        <span className="text-foreground">SIEM Query Examples</span>
-                        <p className="text-xs text-muted-foreground mt-1">Common SIEM queries for threat detection</p>
+                      <div className="space-y-3">
+                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06]">
+                          <span className="text-foreground">SOC Analyst Cheat Sheet (PDF)</span>
+                          <p className="text-xs text-muted-foreground mt-1">Quick reference guide for common SOC tasks</p>
+                        </div>
+                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06]">
+                          <span className="text-foreground">Log Analysis Templates</span>
+                          <p className="text-xs text-muted-foreground mt-1">Ready-to-use templates for log parsing</p>
+                        </div>
+                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06]">
+                          <span className="text-foreground">SIEM Query Examples</span>
+                          <p className="text-xs text-muted-foreground mt-1">Common SIEM queries for threat detection</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -380,9 +413,16 @@ const CourseDetail = () => {
 
               {/* CTA Card */}
               <div className="lg:col-span-1">
-              <div className="sticky top-28">
-                  <div className="rounded-xl bg-card/30 border border-border/30 p-6 shadow-sm">
-                    <button className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-primary/90 text-background font-semibold hover:bg-primary transition-colors group">
+                <div className="sticky top-28">
+                  <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-6 shadow-lg shadow-black/20">
+                    {/* Inner light reflection - top edge */}
+                    <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                    {/* Subtle inner teal glow */}
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
+                    {/* Left accent gradient line */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
+                    
+                    <button className="relative w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-primary/90 text-background font-semibold hover:bg-primary transition-colors group">
                       <span>Continue Course</span>
                       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
