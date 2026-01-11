@@ -1,10 +1,12 @@
 import { Shield } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface CourseCardProps {
   title: string;
   description: string;
   index: number;
   difficulty?: "easy" | "medium" | "hard";
+  courseId?: string;
 }
 
 const difficultyStyles = {
@@ -13,9 +15,11 @@ const difficultyStyles = {
   hard: "bg-red-500/15 text-red-400 border-red-500/25",
 };
 
-const CourseCard = ({ title, description, index, difficulty }: CourseCardProps) => {
+const CourseCard = ({ title, description, index, difficulty, courseId }: CourseCardProps) => {
+  const linkTo = courseId ? `/courses/${courseId}` : "/courses/soc-fundamentals";
+  
   return (
-    <div className="group relative">
+    <Link to={linkTo} className="group relative block">
       {/* Soft outer glow on hover */}
       <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-primary/20 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500" />
       
@@ -59,7 +63,7 @@ const CourseCard = ({ title, description, index, difficulty }: CourseCardProps) 
           </p>
           
           {/* CTA */}
-          <button className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 mt-5">
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 mt-5">
             Explore Course
             <svg 
               className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" 
@@ -69,10 +73,10 @@ const CourseCard = ({ title, description, index, difficulty }: CourseCardProps) 
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </button>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
