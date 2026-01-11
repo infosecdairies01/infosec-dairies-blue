@@ -20,6 +20,7 @@ export interface Course {
   description: string;
   difficulty: "easy" | "medium" | "hard";
   duration: string;
+  bgImage: string;
   modules: Module[];
 }
 
@@ -31,6 +32,7 @@ export const courses: Course[] = [
     description: "Build your foundation as a Level 1 SOC analyst and step into the world of cybersecurity defense. This course covers the essential skills, tools, and workflows you need to detect and respond to threats effectively.",
     difficulty: "easy",
     duration: "8 hours",
+    bgImage: "soc-course-bg.jpg",
     modules: [
       {
         id: "1",
@@ -92,6 +94,7 @@ export const courses: Course[] = [
     description: "Start your journey into log analysis. Learn to read, parse, and understand security logs from various sources including Windows, Linux, and network devices.",
     difficulty: "easy",
     duration: "6 hours",
+    bgImage: "courses/log-analysis-bg.jpg",
     modules: [
       {
         id: "1",
@@ -145,6 +148,7 @@ export const courses: Course[] = [
     description: "Master Security Information and Event Management basics. Learn to navigate and understand modern SIEM platforms, create queries, and build dashboards.",
     difficulty: "easy",
     duration: "7 hours",
+    bgImage: "courses/siem-fundamentals-bg.jpg",
     modules: [
       {
         id: "1",
@@ -185,6 +189,7 @@ export const courses: Course[] = [
     description: "Advance your skills with hands-on SOC Level 2 training. Master alert triage, threat hunting, and advanced detection techniques used by professional analysts.",
     difficulty: "medium",
     duration: "12 hours",
+    bgImage: "courses/soc-analyst-practical-bg.jpg",
     modules: [
       {
         id: "1",
@@ -238,6 +243,7 @@ export const courses: Course[] = [
     description: "Learn the complete incident response lifecycle. Master containment, eradication, recovery, and post-incident analysis procedures used by IR professionals.",
     difficulty: "medium",
     duration: "10 hours",
+    bgImage: "courses/incident-response-bg.jpg",
     modules: [
       {
         id: "1",
@@ -291,6 +297,7 @@ export const courses: Course[] = [
     description: "Proactively search for threats in your environment. Learn hypothesis-driven hunting, IOC analysis, and threat intelligence integration techniques.",
     difficulty: "hard",
     duration: "14 hours",
+    bgImage: "courses/threat-hunting-bg.jpg",
     modules: [
       {
         id: "1",
@@ -334,6 +341,7 @@ export const courses: Course[] = [
     description: "Build custom detection rules and analytics. Master SIGMA rules, YARA signatures, and detection-as-code methodologies for modern SOC environments.",
     difficulty: "hard",
     duration: "16 hours",
+    bgImage: "courses/detection-engineering-bg.jpg",
     modules: [
       {
         id: "1",
@@ -387,6 +395,7 @@ export const courses: Course[] = [
     description: "Analyze malicious software safely. Learn static and dynamic analysis, sandboxing, and reverse engineering basics for security professionals.",
     difficulty: "hard",
     duration: "18 hours",
+    bgImage: "courses/malware-analysis-bg.jpg",
     modules: [
       {
         id: "1",

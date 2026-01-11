@@ -1,11 +1,31 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Shield, ChevronLeft, ChevronDown, Lock, CheckCircle, BookOpen, FileQuestion, FolderOpen, ArrowRight } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import socCourseBg from "@/assets/soc-course-bg.jpg";
 import { getCourseById } from "@/data/courses";
+
+// Import all course background images
+import socFundamentalsBg from "@/assets/soc-course-bg.jpg";
+import logAnalysisBg from "@/assets/courses/log-analysis-bg.jpg";
+import siemFundamentalsBg from "@/assets/courses/siem-fundamentals-bg.jpg";
+import socAnalystPracticalBg from "@/assets/courses/soc-analyst-practical-bg.jpg";
+import incidentResponseBg from "@/assets/courses/incident-response-bg.jpg";
+import threatHuntingBg from "@/assets/courses/threat-hunting-bg.jpg";
+import detectionEngineeringBg from "@/assets/courses/detection-engineering-bg.jpg";
+import malwareAnalysisBg from "@/assets/courses/malware-analysis-bg.jpg";
+
+const courseBackgrounds: Record<string, string> = {
+  "soc-fundamentals": socFundamentalsBg,
+  "log-analysis": logAnalysisBg,
+  "siem-fundamentals": siemFundamentalsBg,
+  "soc-analyst-practical": socAnalystPracticalBg,
+  "incident-response": incidentResponseBg,
+  "threat-hunting": threatHuntingBg,
+  "detection-engineering": detectionEngineeringBg,
+  "malware-analysis": malwareAnalysisBg,
+};
 
 const difficultyLabels = {
   easy: "Beginner",
@@ -19,6 +39,14 @@ const CourseDetail = () => {
   
   const [activeTab, setActiveTab] = useState<"modules" | "quizzes" | "resources">("modules");
   const [openModules, setOpenModules] = useState<string[]>(["1", "2"]);
+
+  // Get course-specific background image
+  const courseBgImage = useMemo(() => {
+    if (courseId && courseBackgrounds[courseId]) {
+      return courseBackgrounds[courseId];
+    }
+    return socFundamentalsBg;
+  }, [courseId]);
 
   // Redirect to courses page if course not found
   if (!course) {
@@ -44,13 +72,13 @@ const CourseDetail = () => {
     <main className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero Section with SOC Background - confined to header area */}
+      {/* Hero Section with Course Background - confined to header area */}
       <div className="relative pt-20">
-        {/* SOC Background - only for hero, subtle atmospheric */}
+        {/* Course-specific Background - only for hero, subtle atmospheric */}
         <div className="absolute inset-0 h-[420px] overflow-hidden">
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
-            style={{ backgroundImage: `url(${socCourseBg})` }}
+            style={{ backgroundImage: `url(${courseBgImage})` }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/85 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/30 to-background/60" />
