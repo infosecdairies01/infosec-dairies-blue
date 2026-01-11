@@ -100,14 +100,16 @@ const CourseDetail = () => {
 
       {/* Hero Section with SOC Background - confined to header area */}
       <div className="relative pt-20">
-        {/* SOC Background - only for hero */}
+        {/* SOC Background - only for hero, subtle atmospheric */}
         <div className="absolute inset-0 h-[420px] overflow-hidden">
           <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25"
             style={{ backgroundImage: `url(${socCourseBg})` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/85 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/30 to-background/60" />
+          {/* Extra dark overlay behind text area */}
+          <div className="absolute inset-0 bg-background/40" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10 py-8">
@@ -169,7 +171,7 @@ const CourseDetail = () => {
 
               {/* Right - Course Info Card */}
               <div className="lg:col-span-1">
-                <div className="rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 p-6">
+                <div className="rounded-xl bg-card/40 border border-border/40 p-6 shadow-sm">
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold text-foreground">Course Info</h3>
                     
@@ -262,7 +264,7 @@ const CourseDetail = () => {
                     open={openModules.includes(module.id)}
                     onOpenChange={() => toggleModule(module.id)}
                   >
-                    <div className="rounded-xl bg-card/40 border border-border/40 overflow-hidden">
+                    <div className="rounded-xl bg-card/30 border border-border/30 overflow-hidden shadow-sm">
                       {/* Module Header */}
                       <CollapsibleTrigger className="w-full px-6 py-4 flex items-center justify-between hover:bg-muted/20 transition-colors">
                         <div className="flex items-center gap-3">
@@ -332,7 +334,7 @@ const CourseDetail = () => {
                 ))}
 
                 {activeTab === "quizzes" && (
-                  <div className="rounded-xl bg-card/40 border border-border/40 p-8">
+                  <div className="rounded-xl bg-card/30 border border-border/30 p-8 shadow-sm">
                     <div className="flex items-center gap-3 mb-6">
                       <FileQuestion className="w-6 h-6 text-primary" />
                       <h3 className="text-lg font-semibold text-foreground">Module Quizzes</h3>
@@ -353,7 +355,7 @@ const CourseDetail = () => {
                 )}
 
                 {activeTab === "resources" && (
-                  <div className="rounded-xl bg-card/40 border border-border/40 p-8">
+                  <div className="rounded-xl bg-card/30 border border-border/30 p-8 shadow-sm">
                     <div className="flex items-center gap-3 mb-6">
                       <FolderOpen className="w-6 h-6 text-primary" />
                       <h3 className="text-lg font-semibold text-foreground">Course Resources</h3>
@@ -378,9 +380,9 @@ const CourseDetail = () => {
 
               {/* CTA Card */}
               <div className="lg:col-span-1">
-                <div className="sticky top-28">
-                  <div className="rounded-xl bg-card/50 border border-primary/20 p-6">
-                    <button className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-primary text-background font-semibold hover:bg-primary/90 transition-colors group">
+              <div className="sticky top-28">
+                  <div className="rounded-xl bg-card/30 border border-border/30 p-6 shadow-sm">
+                    <button className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-primary/90 text-background font-semibold hover:bg-primary transition-colors group">
                       <span>Continue Course</span>
                       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
