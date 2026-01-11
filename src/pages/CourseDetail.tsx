@@ -273,13 +273,15 @@ const CourseDetail = () => {
                     open={openModules.includes(module.id)}
                     onOpenChange={() => toggleModule(module.id)}
                   >
-                    <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] shadow-lg shadow-black/20">
+                    <div className="group relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] shadow-lg shadow-black/20 transition-all duration-500 ease-out hover:bg-card/35 hover:translate-y-[-2px] hover:border-white/[0.12] hover:shadow-xl hover:shadow-primary/10">
+                      {/* Soft outer glow on hover */}
+                      <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-primary/20 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 pointer-events-none" />
                       {/* Inner light reflection - top edge */}
                       <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                       {/* Subtle inner teal glow */}
                       <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
                       {/* Left accent gradient line */}
-                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
                       {/* Module Header */}
                       <CollapsibleTrigger className="relative w-full px-6 py-4 pl-7 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
                         <div className="flex items-center gap-3">
