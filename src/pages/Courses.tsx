@@ -3,44 +3,46 @@ import Navbar from "@/components/Navbar";
 import CourseCard from "@/components/CourseCard";
 const Courses = () => {
   const [activeTab, setActiveTab] = useState<"self-paced" | "live">("self-paced");
-  const easyCourses = [
+  const selfPacedCourses = [
     {
       title: "Blue Team & SOC Fundamentals",
-      description: "Build your foundation in Security Operations. Learn essential concepts, tools, and workflows for SOC Level 1 analysts."
+      description: "Build your foundation in Security Operations. Learn essential concepts, tools, and workflows for SOC Level 1 analysts.",
+      difficulty: "easy" as const
     },
     {
       title: "Log Analysis for Beginners",
-      description: "Start your journey into log analysis. Learn to read, parse, and understand security logs from various sources."
+      description: "Start your journey into log analysis. Learn to read, parse, and understand security logs from various sources.",
+      difficulty: "easy" as const
     },
     {
       title: "SIEM Fundamentals",
-      description: "Master Security Information and Event Management basics. Learn to navigate and understand modern SIEM platforms."
-    }
-  ];
-
-  const mediumCourses = [
+      description: "Master Security Information and Event Management basics. Learn to navigate and understand modern SIEM platforms.",
+      difficulty: "easy" as const
+    },
     {
       title: "SOC Analyst Practical Training",
-      description: "Advance your skills with hands-on SOC Level 2 training. Master alert triage, threat hunting, and advanced detection techniques."
+      description: "Advance your skills with hands-on SOC Level 2 training. Master alert triage, threat hunting, and advanced detection techniques.",
+      difficulty: "medium" as const
     },
     {
       title: "Incident Response Fundamentals",
-      description: "Learn the complete incident response lifecycle. Master containment, eradication, recovery, and post-incident analysis procedures."
-    }
-  ];
-
-  const hardCourses = [
+      description: "Learn the complete incident response lifecycle. Master containment, eradication, recovery, and post-incident analysis procedures.",
+      difficulty: "medium" as const
+    },
     {
       title: "Threat Hunting Fundamentals",
-      description: "Proactively search for threats in your environment. Learn hypothesis-driven hunting, IOC analysis, and threat intelligence integration."
+      description: "Proactively search for threats in your environment. Learn hypothesis-driven hunting, IOC analysis, and threat intelligence integration.",
+      difficulty: "hard" as const
     },
     {
       title: "Detection Engineering Basics",
-      description: "Build custom detection rules and analytics. Master SIGMA rules, YARA signatures, and detection-as-code methodologies."
+      description: "Build custom detection rules and analytics. Master SIGMA rules, YARA signatures, and detection-as-code methodologies.",
+      difficulty: "hard" as const
     },
     {
       title: "Malware Analysis Fundamentals",
-      description: "Analyze malicious software safely. Learn static and dynamic analysis, sandboxing, and reverse engineering basics."
+      description: "Analyze malicious software safely. Learn static and dynamic analysis, sandboxing, and reverse engineering basics.",
+      difficulty: "hard" as const
     }
   ];
 
@@ -96,61 +98,17 @@ const Courses = () => {
               {activeTab === "self-paced" ? "Learn at your own pace with our comprehensive pre-recorded courses. Access anytime, anywhere." : "Interactive instructor-led sessions with real-time Q&A, hands-on labs, and personalized feedback."}
             </p>
             
-            {/* Courses Content */}
-            {activeTab === "self-paced" ? (
-              <div className="space-y-12">
-                {/* Easy Level */}
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">
-                      Easy
-                    </span>
-                    <div className="flex-1 h-px bg-gradient-to-r from-green-500/30 to-transparent" />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {easyCourses.map((course, index) => (
-                      <CourseCard key={index} title={course.title} description={course.description} index={index} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Medium Level */}
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-sm font-medium border border-yellow-500/30">
-                      Medium
-                    </span>
-                    <div className="flex-1 h-px bg-gradient-to-r from-yellow-500/30 to-transparent" />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {mediumCourses.map((course, index) => (
-                      <CourseCard key={index} title={course.title} description={course.description} index={index} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Hard Level */}
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-sm font-medium border border-red-500/30">
-                      Hard
-                    </span>
-                    <div className="flex-1 h-px bg-gradient-to-r from-red-500/30 to-transparent" />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {hardCourses.map((course, index) => (
-                      <CourseCard key={index} title={course.title} description={course.description} index={index} />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {liveCourses.map((course, index) => (
-                  <CourseCard key={index} title={course.title} description={course.description} index={index} />
-                ))}
-              </div>
-            )}
+            {/* Courses Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {activeTab === "self-paced" 
+                ? selfPacedCourses.map((course, index) => (
+                    <CourseCard key={index} title={course.title} description={course.description} index={index} difficulty={course.difficulty} />
+                  ))
+                : liveCourses.map((course, index) => (
+                    <CourseCard key={index} title={course.title} description={course.description} index={index} />
+                  ))
+              }
+            </div>
           </div>
         </div>
       </section>
