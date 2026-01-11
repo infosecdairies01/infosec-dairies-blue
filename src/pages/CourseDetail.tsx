@@ -1,83 +1,29 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, Navigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Shield, ChevronLeft, ChevronDown, Lock, CheckCircle, BookOpen, FileQuestion, FolderOpen, ArrowRight } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import socCourseBg from "@/assets/soc-course-bg.jpg";
+import { getCourseById } from "@/data/courses";
 
-interface Lesson {
-  id: string;
-  title: string;
-  description?: string;
-  status: "completed" | "unlocked" | "locked";
-}
-
-interface Module {
-  id: string;
-  title: string;
-  badge?: string;
-  badgeColor?: string;
-  lessons: Lesson[];
-}
-
-const courseModules: Module[] = [
-  {
-    id: "1",
-    title: "Introduction to Security Operations",
-    badge: "Commet",
-    badgeColor: "bg-primary/20 text-primary border-primary/30",
-    lessons: [
-      { id: "1.1", title: "Welcome to the SOC", description: "Introductory overview of SOC roles and responsibilities.", status: "completed" },
-      { id: "1.2", title: "Cyber Threat Landscape", status: "locked" },
-      { id: "1.3", title: "Key SOC Concepts", status: "locked" },
-    ],
-  },
-  {
-    id: "2",
-    title: "Log Analysis Essentials",
-    badge: "Lab",
-    badgeColor: "bg-secondary/20 text-secondary border-secondary/30",
-    lessons: [
-      { id: "2.1", title: "Basics of Log Analysis", status: "locked" },
-      { id: "2.2", title: "Identifying Suspicious Activity", status: "locked" },
-    ],
-  },
-  {
-    id: "3",
-    title: "SIEM Fundamentals",
-    badge: "Lab",
-    badgeColor: "bg-secondary/20 text-secondary border-secondary/30",
-    lessons: [
-      { id: "3.1", title: "What is a SIEM?", status: "locked" },
-      { id: "3.2", title: "SIEM Navigation Basics", status: "locked" },
-      { id: "3.3", title: "Creating Simple Queries", status: "locked" },
-    ],
-  },
-  {
-    id: "4",
-    title: "Alert Handling & Triage",
-    lessons: [
-      { id: "4.1", title: "Understanding Alerts", status: "locked" },
-      { id: "4.2", title: "Alert Triage Process", status: "locked" },
-    ],
-  },
-  {
-    id: "5",
-    title: "Incident Response Basics",
-    badge: "Quiz",
-    badgeColor: "bg-orange-500/20 text-orange-400 border-orange-500/30",
-    lessons: [
-      { id: "5.1", title: "IR Fundamentals", status: "locked" },
-      { id: "5.2", title: "Basic Incident Response Steps", status: "locked" },
-      { id: "5.3", title: "Module Quiz: IR Basics", status: "locked" },
-    ],
-  },
-];
+const difficultyLabels = {
+  easy: "Beginner",
+  medium: "Intermediate", 
+  hard: "Advanced",
+};
 
 const CourseDetail = () => {
+  const { courseId } = useParams<{ courseId: string }>();
+  const course = getCourseById(courseId || "");
+  
   const [activeTab, setActiveTab] = useState<"modules" | "quizzes" | "resources">("modules");
   const [openModules, setOpenModules] = useState<string[]>(["1", "2"]);
+
+  // Redirect to courses page if course not found
+  if (!course) {
+    return <Navigate to="/courses" replace />;
+  }
 
   const toggleModule = (moduleId: string) => {
     setOpenModules(prev =>
@@ -87,8 +33,8 @@ const CourseDetail = () => {
     );
   };
 
-  const totalLessons = courseModules.reduce((acc, m) => acc + m.lessons.length, 0);
-  const completedLessons = courseModules.reduce(
+  const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
+  const completedLessons = course.modules.reduce(
     (acc, m) => acc + m.lessons.filter(l => l.status === "completed").length,
     0
   );
@@ -123,7 +69,7 @@ const CourseDetail = () => {
               <ChevronLeft className="w-4 h-4" />
               <span>Courses</span>
               <span className="text-muted-foreground/50">&gt;</span>
-              <span className="text-foreground">SOC Level 1</span>
+              <span className="text-foreground">{course.shortTitle}</span>
             </Link>
 
             {/* Header Section */}
@@ -137,19 +83,17 @@ const CourseDetail = () => {
                   </div>
                   <div>
                     <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-                      Blue Team & SOC Fundamentals
+                      {course.title}
                     </h1>
                     <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-primary/15 text-primary border border-primary/25">
-                      Beginner
+                      {difficultyLabels[course.difficulty]}
                     </span>
                   </div>
                 </div>
 
                 {/* Description */}
                 <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl">
-                  Build your foundation as a Level 1 SOC analyst and step into the world of 
-                  cybersecurity defense. This course covers the essential skills, tools, 
-                  and workflows you need to detect and respond to threats effectively.
+                  {course.description}
                 </p>
 
                 {/* Outcomes */}
@@ -187,13 +131,13 @@ const CourseDetail = () => {
                     <div className="flex items-center gap-3">
                       <span className="text-muted-foreground">Difficulty:</span>
                       <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-card/50 border border-white/[0.08] text-foreground">
-                        Beginner
+                        {difficultyLabels[course.difficulty]}
                       </span>
                     </div>
                     
                     <div className="flex items-center gap-3">
                       <span className="text-muted-foreground">Duration:</span>
-                      <span className="text-primary font-medium">8 hours</span>
+                      <span className="text-primary font-medium">{course.duration}</span>
                     </div>
                     
                     <div className="flex items-center gap-2 text-muted-foreground">
@@ -267,7 +211,7 @@ const CourseDetail = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Modules List */}
               <div className="lg:col-span-2 space-y-3">
-                {activeTab === "modules" && courseModules.map((module) => (
+                {activeTab === "modules" && course.modules.map((module) => (
                   <Collapsible
                     key={module.id}
                     open={openModules.includes(module.id)}

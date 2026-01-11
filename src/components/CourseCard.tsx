@@ -16,7 +16,7 @@ const difficultyStyles = {
 };
 
 const CourseCard = ({ title, description, index, difficulty, courseId }: CourseCardProps) => {
-  const linkTo = courseId ? `/courses/${courseId}` : "/courses/soc-fundamentals";
+  const linkTo = courseId ? `/courses/${courseId}` : "/courses";
   
   return (
     <Link to={linkTo} className="group relative block">
