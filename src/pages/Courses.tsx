@@ -89,6 +89,7 @@ const Courses = () => {
                       index={index} 
                       difficulty={course.difficulty}
                       courseId={course.courseId}
+                      thumbnail={course.thumbnail}
                     />
                   ))
                 : liveCourses.map((course, index) => (

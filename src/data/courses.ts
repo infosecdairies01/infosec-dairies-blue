@@ -455,5 +455,6 @@ export const getCourseCardData = () => {
     title: course.title,
     description: course.description,
     difficulty: course.difficulty,
+    thumbnail: course.bgImage,
   }));
 };
