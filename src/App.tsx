@@ -11,6 +11,7 @@ import QuizPage from "./pages/QuizPage";
 import Labs from "./pages/Labs";
 import Auth from "./pages/Auth";
 import About from "./pages/About";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/courses/:courseId/lesson/:lessonId" element={<LessonViewer />} />
           <Route path="/courses/:courseId/quiz/:quizId" element={<QuizPage />} />
           <Route path="/labs" element={<Labs />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
