@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Link, useParams, Navigate } from "react-router-dom";
+import { Link, useParams, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Shield, ChevronLeft, ChevronDown, Lock, CheckCircle, BookOpen, FileQuestion, FolderOpen, ArrowRight, Clock, FileText, Link as LinkIcon, Download, ExternalLink } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
@@ -35,6 +35,7 @@ const difficultyLabels = {
 
 const CourseDetail = () => {
   const { courseId } = useParams<{ courseId: string }>();
+  const navigate = useNavigate();
   const course = getCourseById(courseId || "");
   
   const [activeTab, setActiveTab] = useState<"modules" | "quizzes" | "resources">("modules");
@@ -279,7 +280,8 @@ const CourseDetail = () => {
                           {module.lessons.map((lesson) => (
                             <div
                               key={lesson.id}
-                              className="px-6 py-4 pl-7 flex items-center justify-between border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors"
+                              onClick={() => lesson.status !== "locked" && navigate(`/courses/${courseId}/lesson/${lesson.id}`)}
+                              className={`px-6 py-4 pl-7 flex items-center justify-between border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors ${lesson.status !== "locked" ? "cursor-pointer" : ""}`}
                             >
                               <div className="flex items-start gap-3">
                                 <span className="mt-0.5">
