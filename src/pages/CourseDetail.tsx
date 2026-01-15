@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
-import { Shield, ChevronLeft, ChevronDown, Lock, CheckCircle, BookOpen, FileQuestion, FolderOpen, ArrowRight } from "lucide-react";
+import { Shield, ChevronLeft, ChevronDown, Lock, CheckCircle, BookOpen, FileQuestion, FolderOpen, ArrowRight, Clock, FileText, Link as LinkIcon, Download, ExternalLink } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getCourseById } from "@/data/courses";
@@ -292,12 +292,20 @@ const CourseDetail = () => {
                                   )}
                                 </span>
                                 <div>
-                                  <span className="text-sm text-muted-foreground mr-2">{lesson.id}</span>
-                                  <span className={`text-sm ${lesson.status === "locked" ? "text-muted-foreground/60" : "text-foreground"}`}>
-                                    {lesson.title}
-                                  </span>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm text-muted-foreground mr-2">{lesson.id}</span>
+                                    <span className={`text-sm ${lesson.status === "locked" ? "text-muted-foreground/60" : "text-foreground"}`}>
+                                      {lesson.title}
+                                    </span>
+                                    {lesson.duration && (
+                                      <span className="text-xs text-muted-foreground/50 flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        {lesson.duration}
+                                      </span>
+                                    )}
+                                  </div>
                                   {lesson.description && (
-                                    <p className="text-xs text-muted-foreground/60 mt-1">{lesson.description}</p>
+                                    <p className="text-xs text-muted-foreground/60 mt-1 max-w-lg">{lesson.description}</p>
                                   )}
                                 </div>
                               </div>
@@ -334,19 +342,56 @@ const CourseDetail = () => {
                     <div className="relative pl-3">
                       <div className="flex items-center gap-3 mb-6">
                         <FileQuestion className="w-6 h-6 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground">Module Quizzes</h3>
+                        <h3 className="text-lg font-semibold text-foreground">Course Quizzes</h3>
+                        <span className="text-sm text-muted-foreground">({course.quizzes?.length || 0} assessments)</span>
                       </div>
                       <div className="space-y-3">
-                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between">
-                          <div>
-                            <span className="text-foreground">Module 5 Quiz: IR Basics</span>
-                            <p className="text-xs text-muted-foreground mt-1">10 questions • 15 minutes</p>
+                        {course.quizzes && course.quizzes.length > 0 ? (
+                          course.quizzes.map((quiz) => (
+                            <div key={quiz.id} className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-foreground font-medium">{quiz.title}</span>
+                                  {quiz.id === "q6" && (
+                                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                                      Final Exam
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-1">{quiz.description}</p>
+                                <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground/70">
+                                  <span className="flex items-center gap-1">
+                                    <FileQuestion className="w-3 h-3" />
+                                    {quiz.questionCount} questions
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="w-3 h-3" />
+                                    {quiz.duration}
+                                  </span>
+                                  <span>Pass: {quiz.passingScore}%</span>
+                                </div>
+                              </div>
+                              {quiz.status === "unlocked" ? (
+                                <button className="px-4 py-2 rounded-lg bg-primary/15 text-primary text-sm font-medium border border-primary/25 hover:bg-primary/25 transition-colors">
+                                  Start Quiz
+                                </button>
+                              ) : quiz.status === "completed" ? (
+                                <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary/15 text-primary border border-primary/25">
+                                  Completed
+                                </span>
+                              ) : (
+                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+                                  <Lock className="w-3 h-3" />
+                                  Locked
+                                </span>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06] text-center">
+                            <p className="text-muted-foreground">No quizzes available for this course yet.</p>
                           </div>
-                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
-                            <Lock className="w-3 h-3" />
-                            Locked
-                          </span>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -365,21 +410,74 @@ const CourseDetail = () => {
                       <div className="flex items-center gap-3 mb-6">
                         <FolderOpen className="w-6 h-6 text-primary" />
                         <h3 className="text-lg font-semibold text-foreground">Course Resources</h3>
+                        <span className="text-sm text-muted-foreground">({course.resources?.length || 0} resources)</span>
                       </div>
-                      <div className="space-y-3">
-                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06]">
-                          <span className="text-foreground">SOC Analyst Cheat Sheet (PDF)</span>
-                          <p className="text-xs text-muted-foreground mt-1">Quick reference guide for common SOC tasks</p>
+                      
+                      {course.resources && course.resources.length > 0 ? (
+                        <div className="grid gap-3">
+                          {/* Downloadable Resources */}
+                          <div className="space-y-3">
+                            <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                              <Download className="w-4 h-4" />
+                              Downloadable Materials
+                            </h4>
+                            {course.resources.filter(r => r.type !== "link").map((resource) => (
+                              <div key={resource.id} className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors group cursor-pointer">
+                                <div className="flex items-start gap-3">
+                                  <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                                    {resource.type === "pdf" && <FileText className="w-5 h-5 text-primary" />}
+                                    {resource.type === "cheatsheet" && <FileText className="w-5 h-5 text-secondary" />}
+                                    {resource.type === "template" && <FileText className="w-5 h-5 text-orange-400" />}
+                                    {resource.type === "tool" && <FileText className="w-5 h-5 text-blue-400" />}
+                                  </div>
+                                  <div>
+                                    <span className="text-foreground font-medium">{resource.title}</span>
+                                    <p className="text-xs text-muted-foreground mt-1">{resource.description}</p>
+                                    <span className="inline-block mt-2 px-2 py-0.5 rounded text-xs bg-muted/30 text-muted-foreground capitalize">
+                                      {resource.type}
+                                    </span>
+                                  </div>
+                                </div>
+                                <Download className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                              </div>
+                            ))}
+                          </div>
+                          
+                          {/* External Links */}
+                          {course.resources.filter(r => r.type === "link").length > 0 && (
+                            <div className="space-y-3 mt-4">
+                              <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                                <ExternalLink className="w-4 h-4" />
+                                Useful Links & Tools
+                              </h4>
+                              {course.resources.filter(r => r.type === "link").map((resource) => (
+                                <a 
+                                  key={resource.id} 
+                                  href={resource.url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 hover:border-primary/30 transition-colors group block"
+                                >
+                                  <div className="flex items-start gap-3">
+                                    <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                                      <LinkIcon className="w-5 h-5 text-blue-400" />
+                                    </div>
+                                    <div>
+                                      <span className="text-foreground font-medium group-hover:text-primary transition-colors">{resource.title}</span>
+                                      <p className="text-xs text-muted-foreground mt-1">{resource.description}</p>
+                                    </div>
+                                  </div>
+                                  <ExternalLink className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                </a>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06]">
-                          <span className="text-foreground">Log Analysis Templates</span>
-                          <p className="text-xs text-muted-foreground mt-1">Ready-to-use templates for log parsing</p>
+                      ) : (
+                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06] text-center">
+                          <p className="text-muted-foreground">No resources available for this course yet.</p>
                         </div>
-                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06]">
-                          <span className="text-foreground">SIEM Query Examples</span>
-                          <p className="text-xs text-muted-foreground mt-1">Common SIEM queries for threat detection</p>
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 )}
