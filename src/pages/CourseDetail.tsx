@@ -350,7 +350,10 @@ const CourseDetail = () => {
                       <div className="space-y-3">
                         {course.quizzes && course.quizzes.length > 0 ? (
                           course.quizzes.map((quiz) => (
-                            <div key={quiz.id} className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors">
+                            <div 
+                              key={quiz.id} 
+                              className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors"
+                            >
                               <div className="flex-1">
                                 <div className="flex items-center gap-2">
                                   <span className="text-foreground font-medium">{quiz.title}</span>
@@ -374,7 +377,10 @@ const CourseDetail = () => {
                                 </div>
                               </div>
                               {quiz.status === "unlocked" ? (
-                                <button className="px-4 py-2 rounded-lg bg-primary/15 text-primary text-sm font-medium border border-primary/25 hover:bg-primary/25 transition-colors">
+                                <button 
+                                  onClick={() => navigate(`/courses/${courseId}/quiz/${quiz.id}`)}
+                                  className="px-4 py-2 rounded-lg bg-primary/15 text-primary text-sm font-medium border border-primary/25 hover:bg-primary/25 transition-colors"
+                                >
                                   Start Quiz
                                 </button>
                               ) : quiz.status === "completed" ? (
