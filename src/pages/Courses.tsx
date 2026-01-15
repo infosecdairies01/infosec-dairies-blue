@@ -2,34 +2,13 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import CourseCard from "@/components/CourseCard";
 import { getCourseCardData } from "@/data/courses";
+import { getLiveCourseCardData } from "@/data/liveCourses";
 
 const Courses = () => {
   const [activeTab, setActiveTab] = useState<"self-paced" | "live">("self-paced");
   
   const selfPacedCourses = getCourseCardData();
-
-  const liveCourses = [
-    {
-      title: "SOC Analyst",
-      description: "Live instructor-led SOC training with real-time scenarios, hands-on labs, and direct mentorship from industry practitioners."
-    },
-    {
-      title: "Splunk Engineer",
-      description: "Master Splunk with live sessions covering deployment, configuration, SPL queries, dashboards, and enterprise security monitoring."
-    },
-    {
-      title: "Digital Forensics",
-      description: "Investigate cybercrime with live guidance. Learn evidence collection, disk forensics, memory analysis, and chain of custody procedures."
-    },
-    {
-      title: "GRC",
-      description: "Master Governance, Risk, and Compliance with live training on frameworks, policy development, audits, and regulatory requirements."
-    },
-    {
-      title: "Bug Bounty",
-      description: "Learn to discover and report security vulnerabilities in live sessions. Master reconnaissance, web app testing, and responsible disclosure."
-    }
-  ];
+  const liveCourses = getLiveCourseCardData();
 
   return (
     <main className="min-h-screen bg-background">
@@ -94,10 +73,12 @@ const Courses = () => {
                   ))
                 : liveCourses.map((course, index) => (
                     <CourseCard 
-                      key={index} 
+                      key={course.id} 
                       title={course.title} 
                       description={course.description} 
-                      index={index} 
+                      index={index}
+                      courseId={course.id}
+                      isLiveCourse={true}
                     />
                   ))
               }
