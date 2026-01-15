@@ -18,6 +18,7 @@ interface CourseCardProps {
   difficulty?: "easy" | "medium" | "hard";
   courseId?: string;
   thumbnail?: string;
+  isLiveCourse?: boolean;
 }
 
 const difficultyStyles = {
@@ -38,8 +39,10 @@ const thumbnailMap: Record<string, string> = {
   "courses/malware-analysis-bg.jpg": malwareAnalysisBg,
 };
 
-const CourseCard = ({ title, description, index, difficulty, courseId, thumbnail }: CourseCardProps) => {
-  const linkTo = courseId ? `/courses/${courseId}` : "/courses";
+const CourseCard = ({ title, description, index, difficulty, courseId, thumbnail, isLiveCourse }: CourseCardProps) => {
+  const linkTo = courseId 
+    ? (isLiveCourse ? `/live-courses/${courseId}` : `/courses/${courseId}`) 
+    : "/courses";
   const thumbnailSrc = thumbnail ? thumbnailMap[thumbnail] : null;
   
   return (
