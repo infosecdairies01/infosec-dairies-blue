@@ -646,6 +646,942 @@ export const quizzes: QuizData[] = [
         explanation: "The 'last' command shows a list of last logged-in users by reading /var/log/wtmp."
       }
     ]
+  },
+  {
+    quizId: "q4",
+    courseId: "soc-fundamentals",
+    title: "SIEM & Alert Triage Quiz",
+    description: "Test your knowledge of SIEM operations, search queries, and alert triage processes.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      {
+        id: "q4-1",
+        question: "What is the primary purpose of a SIEM?",
+        options: [
+          "To replace antivirus software",
+          "To aggregate logs and provide centralized security monitoring",
+          "To block network traffic",
+          "To manage employee passwords"
+        ],
+        correctAnswer: 1,
+        explanation: "SIEM aggregates logs from multiple sources, correlates events, and provides centralized security monitoring and alerting."
+      },
+      {
+        id: "q4-2",
+        question: "What is a correlation rule in SIEM?",
+        options: [
+          "A rule that deletes old logs",
+          "Logic that identifies patterns across multiple events to detect threats",
+          "A rule for password complexity",
+          "A backup procedure"
+        ],
+        correctAnswer: 1,
+        explanation: "Correlation rules analyze multiple events together to identify attack patterns that single events wouldn't reveal."
+      },
+      {
+        id: "q4-3",
+        question: "What is the first step in the alert triage process?",
+        options: [
+          "Immediately escalate to management",
+          "Delete the alert",
+          "Understand what triggered the alert",
+          "Reset user passwords"
+        ],
+        correctAnswer: 2,
+        explanation: "The first step is to understand what triggered the alert by reading the alert details, checking the detection rule, and gathering initial context."
+      },
+      {
+        id: "q4-4",
+        question: "What does a 'false positive' mean in alert triage?",
+        options: [
+          "A missed attack",
+          "An alert triggered by benign activity",
+          "A confirmed security incident",
+          "A system malfunction"
+        ],
+        correctAnswer: 1,
+        explanation: "A false positive is an alert that fired on benign activity - it looks suspicious but is actually legitimate behavior."
+      },
+      {
+        id: "q4-5",
+        question: "What should you do after determining an alert is a true positive?",
+        options: [
+          "Close the ticket immediately",
+          "Document findings and initiate response/escalation",
+          "Delete the logs",
+          "Ignore it until the next shift"
+        ],
+        correctAnswer: 1,
+        explanation: "After confirming a true positive, document your findings thoroughly and initiate the appropriate response or escalation."
+      },
+      {
+        id: "q4-6",
+        question: "Which SIEM search operator is used to filter results?",
+        options: [
+          "DELETE",
+          "WHERE or search filters",
+          "BACKUP",
+          "RESTART"
+        ],
+        correctAnswer: 1,
+        explanation: "WHERE clauses and search filters are used to narrow down results to specific criteria in SIEM queries."
+      },
+      {
+        id: "q4-7",
+        question: "What is 'enrichment' in the context of alert triage?",
+        options: [
+          "Deleting unnecessary data",
+          "Adding context and intelligence to alerts for better decision-making",
+          "Compressing log files",
+          "Creating backup copies"
+        ],
+        correctAnswer: 1,
+        explanation: "Enrichment adds context like threat intelligence, asset information, and user details to help analysts make better decisions."
+      },
+      {
+        id: "q4-8",
+        question: "When should you immediately escalate an alert?",
+        options: [
+          "For every alert received",
+          "Only on Mondays",
+          "When you detect active malware, ransomware, or data exfiltration",
+          "Never - handle everything yourself"
+        ],
+        correctAnswer: 2,
+        explanation: "Immediate escalation is required for confirmed active threats like ransomware, data exfiltration, or compromised privileged accounts."
+      },
+      {
+        id: "q4-9",
+        question: "What is alert fatigue?",
+        options: [
+          "Physical tiredness from work",
+          "Decreased vigilance due to overwhelming volume of alerts",
+          "A type of malware",
+          "Network congestion"
+        ],
+        correctAnswer: 1,
+        explanation: "Alert fatigue occurs when analysts become desensitized due to high volumes of alerts, potentially causing them to miss real threats."
+      },
+      {
+        id: "q4-10",
+        question: "What information should be included in alert documentation?",
+        options: [
+          "Only the alert title",
+          "Analyst's personal opinions only",
+          "Timeline, findings, evidence, verdict, and actions taken",
+          "Just the date and time"
+        ],
+        correctAnswer: 2,
+        explanation: "Complete documentation includes timeline, investigation steps, findings, evidence collected, verdict, and actions taken."
+      }
+    ]
+  },
+  {
+    quizId: "q5",
+    courseId: "soc-fundamentals",
+    title: "Threat Intelligence Quiz",
+    description: "Evaluate your understanding of threat intelligence, IOCs, and OSINT techniques.",
+    passingScore: 75,
+    timeLimit: 20,
+    questions: [
+      {
+        id: "q5-1",
+        question: "What are the four types of threat intelligence?",
+        options: [
+          "Red, Blue, Green, Yellow",
+          "Strategic, Tactical, Operational, Technical",
+          "Primary, Secondary, Tertiary, Quaternary",
+          "Internal, External, Public, Private"
+        ],
+        correctAnswer: 1,
+        explanation: "The four types are Strategic (high-level trends), Tactical (TTPs), Operational (campaign details), and Technical (IOCs)."
+      },
+      {
+        id: "q5-2",
+        question: "What does IOC stand for?",
+        options: [
+          "Internal Operations Center",
+          "Indicator of Compromise",
+          "Internet of Computers",
+          "Intrusion of Command"
+        ],
+        correctAnswer: 1,
+        explanation: "IOC stands for Indicator of Compromise - forensic artifacts that identify potentially malicious activity."
+      },
+      {
+        id: "q5-3",
+        question: "According to the Pyramid of Pain, which IOC type is hardest for attackers to change?",
+        options: [
+          "Hash values",
+          "IP addresses",
+          "TTPs (Tactics, Techniques, Procedures)",
+          "Domain names"
+        ],
+        correctAnswer: 2,
+        explanation: "TTPs are at the top of the Pyramid of Pain - they represent how attackers operate and are hardest to change."
+      },
+      {
+        id: "q5-4",
+        question: "What is OSINT?",
+        options: [
+          "Operating System Intelligence",
+          "Open Source Intelligence - publicly available information",
+          "Offensive Security Integration",
+          "Online System Integration"
+        ],
+        correctAnswer: 1,
+        explanation: "OSINT (Open Source Intelligence) refers to intelligence gathered from publicly available sources."
+      },
+      {
+        id: "q5-5",
+        question: "Which platform is commonly used for file hash and URL analysis?",
+        options: [
+          "Microsoft Word",
+          "VirusTotal",
+          "Photoshop",
+          "Excel"
+        ],
+        correctAnswer: 1,
+        explanation: "VirusTotal is a widely used platform for analyzing files, URLs, IPs, and domains against multiple security engines."
+      },
+      {
+        id: "q5-6",
+        question: "What is a TIP (Threat Intelligence Platform)?",
+        options: [
+          "A gratuity calculator",
+          "A platform that aggregates and operationalizes threat data",
+          "A typing improvement program",
+          "A network scanner"
+        ],
+        correctAnswer: 1,
+        explanation: "A TIP aggregates, normalizes, enriches, and helps operationalize threat intelligence from multiple sources."
+      },
+      {
+        id: "q5-7",
+        question: "What is a red flag when analyzing a domain?",
+        options: [
+          "It's been registered for 10 years",
+          "It was recently registered and uses privacy protection",
+          "It has valid SSL certificates",
+          "It's hosted by a major cloud provider"
+        ],
+        correctAnswer: 1,
+        explanation: "Recently registered domains with privacy protection are often suspicious, especially if they mimic legitimate brands."
+      },
+      {
+        id: "q5-8",
+        question: "What hash algorithm is the current standard for file identification?",
+        options: [
+          "MD5",
+          "SHA1",
+          "SHA256",
+          "CRC32"
+        ],
+        correctAnswer: 2,
+        explanation: "SHA256 is the current standard - MD5 and SHA1 are being phased out due to collision vulnerabilities."
+      },
+      {
+        id: "q5-9",
+        question: "What is pivoting in threat intelligence?",
+        options: [
+          "Rotating your chair",
+          "Moving from one indicator to discover related indicators",
+          "Deleting old data",
+          "Changing passwords"
+        ],
+        correctAnswer: 1,
+        explanation: "Pivoting means using one indicator (like an IP) to find related indicators (domains, hashes) and uncover the full threat picture."
+      },
+      {
+        id: "q5-10",
+        question: "What is AbuseIPDB used for?",
+        options: [
+          "Managing IP addresses",
+          "Checking IP reputation and abuse reports",
+          "Assigning IP addresses",
+          "Creating VPNs"
+        ],
+        correctAnswer: 1,
+        explanation: "AbuseIPDB is a community-driven database for checking and reporting malicious IP addresses."
+      },
+      {
+        id: "q5-11",
+        question: "Which type of threat intelligence is consumed by executives?",
+        options: [
+          "Technical",
+          "Tactical",
+          "Strategic",
+          "Operational"
+        ],
+        correctAnswer: 2,
+        explanation: "Strategic intelligence provides high-level trends and risk assessments intended for executive and management consumption."
+      },
+      {
+        id: "q5-12",
+        question: "What is a DGA (Domain Generation Algorithm)?",
+        options: [
+          "A method to create legitimate websites",
+          "Malware technique that generates random domain names for C2",
+          "A domain registration service",
+          "A security certification"
+        ],
+        correctAnswer: 1,
+        explanation: "DGA is used by malware to generate random-looking domain names for command and control, making blocking difficult."
+      }
+    ]
+  },
+  {
+    quizId: "q6",
+    courseId: "soc-fundamentals",
+    title: "Incident Response Quiz",
+    description: "Test your knowledge of the incident response lifecycle, containment, and documentation.",
+    passingScore: 75,
+    timeLimit: 25,
+    questions: [
+      {
+        id: "q6-1",
+        question: "What are the four phases of the NIST Incident Response lifecycle?",
+        options: [
+          "Plan, Do, Check, Act",
+          "Preparation, Detection & Analysis, Containment/Eradication/Recovery, Post-Incident",
+          "Alert, Investigate, Close, Report",
+          "Identify, Protect, Detect, Respond"
+        ],
+        correctAnswer: 1,
+        explanation: "NIST defines four phases: Preparation, Detection & Analysis, Containment/Eradication/Recovery, and Post-Incident Activity."
+      },
+      {
+        id: "q6-2",
+        question: "What is the purpose of the containment phase?",
+        options: [
+          "To delete all evidence",
+          "To stop the attack from spreading while preserving evidence",
+          "To notify the press",
+          "To ignore the incident"
+        ],
+        correctAnswer: 1,
+        explanation: "Containment stops the attack from spreading to other systems while preserving evidence for investigation."
+      },
+      {
+        id: "q6-3",
+        question: "Which severity level requires immediate response for active ransomware?",
+        options: [
+          "Low",
+          "Medium",
+          "High",
+          "Critical"
+        ],
+        correctAnswer: 3,
+        explanation: "Active ransomware encryption is a Critical (Severity 1) incident requiring immediate, all-hands response."
+      },
+      {
+        id: "q6-4",
+        question: "What is the first containment action for a compromised user account?",
+        options: [
+          "Delete the account",
+          "Reset password and terminate active sessions",
+          "Send an email to the user",
+          "Wait for management approval"
+        ],
+        correctAnswer: 1,
+        explanation: "For account compromise, immediately reset the password and terminate all active sessions to prevent further unauthorized access."
+      },
+      {
+        id: "q6-5",
+        question: "What should you NOT do when ransomware is detected?",
+        options: [
+          "Isolate affected systems immediately",
+          "Immediately reboot the infected machine",
+          "Preserve ransom notes and file samples",
+          "Alert the IR team"
+        ],
+        correctAnswer: 1,
+        explanation: "Don't reboot - it may trigger more encryption or destroy volatile evidence. Focus on isolation and preservation first."
+      },
+      {
+        id: "q6-6",
+        question: "What is the purpose of a post-incident review?",
+        options: [
+          "To assign blame",
+          "To learn and improve processes for future incidents",
+          "To delete incident records",
+          "To award bonuses"
+        ],
+        correctAnswer: 1,
+        explanation: "Post-incident reviews focus on lessons learned and process improvement, not blame, to prevent similar incidents."
+      },
+      {
+        id: "q6-7",
+        question: "What is an incident playbook?",
+        options: [
+          "A children's game",
+          "A standardized procedure for responding to specific incident types",
+          "A list of employee contacts",
+          "A software application"
+        ],
+        correctAnswer: 1,
+        explanation: "Playbooks provide standardized, step-by-step procedures for responding to common incident types like phishing or malware."
+      },
+      {
+        id: "q6-8",
+        question: "What should be included in incident documentation?",
+        options: [
+          "Only the incident title",
+          "Timeline, affected systems, actions taken, and evidence collected",
+          "Personal opinions about the attacker",
+          "Just the close date"
+        ],
+        correctAnswer: 1,
+        explanation: "Documentation should include timeline, affected systems/users, all actions taken, evidence collected, and findings."
+      },
+      {
+        id: "q6-9",
+        question: "When responding to phishing with credential entry, what must you check for?",
+        options: [
+          "Only reset the password",
+          "Email forwarding rules and account activity since compromise",
+          "The user's vacation schedule",
+          "Nothing else is needed"
+        ],
+        correctAnswer: 1,
+        explanation: "Always check for malicious email forwarding rules and review all account activity since the compromise occurred."
+      },
+      {
+        id: "q6-10",
+        question: "What is 'eradication' in incident response?",
+        options: [
+          "Deleting all company data",
+          "Removing malware, patching vulnerabilities, and resetting credentials",
+          "Firing employees",
+          "Shutting down the company"
+        ],
+        correctAnswer: 1,
+        explanation: "Eradication involves removing malware, patching vulnerabilities, resetting compromised credentials, and cleaning affected systems."
+      },
+      {
+        id: "q6-11",
+        question: "What is the 'chain of custody' in incident response?",
+        options: [
+          "The order of incident responders",
+          "Documentation tracking who handled evidence and when",
+          "The management hierarchy",
+          "A type of malware"
+        ],
+        correctAnswer: 1,
+        explanation: "Chain of custody documents who collected, handled, and stored evidence, ensuring its integrity for potential legal proceedings."
+      },
+      {
+        id: "q6-12",
+        question: "How should severity be adjusted based on affected systems?",
+        options: [
+          "All systems are equal",
+          "Increase severity for critical assets like domain controllers",
+          "Decrease severity for servers",
+          "Severity is never changed"
+        ],
+        correctAnswer: 1,
+        explanation: "Critical assets like domain controllers, databases with sensitive data, and executive systems warrant increased severity."
+      }
+    ]
+  },
+  {
+    quizId: "q7",
+    courseId: "soc-fundamentals",
+    title: "EDR & Endpoint Security Quiz",
+    description: "Test your understanding of EDR technology, alerts, and process analysis.",
+    passingScore: 75,
+    timeLimit: 20,
+    questions: [
+      {
+        id: "q7-1",
+        question: "What is the main advantage of EDR over traditional antivirus?",
+        options: [
+          "It's cheaper",
+          "Behavioral detection and rich telemetry for investigation",
+          "It doesn't require installation",
+          "It only works on Macs"
+        ],
+        correctAnswer: 1,
+        explanation: "EDR provides behavioral detection (not just signatures) and rich telemetry including process, file, network, and registry data."
+      },
+      {
+        id: "q7-2",
+        question: "What does a process tree show in EDR?",
+        options: [
+          "A list of files",
+          "Parent-child relationships between processes",
+          "Network topology",
+          "User permissions"
+        ],
+        correctAnswer: 1,
+        explanation: "Process trees show parent-child relationships, revealing how processes spawned each other - essential for understanding attack chains."
+      },
+      {
+        id: "q7-3",
+        question: "Which scenario is suspicious in a process tree?",
+        options: [
+          "Chrome spawning Chrome processes",
+          "Word or Excel spawning PowerShell or cmd.exe",
+          "Explorer launching Notepad",
+          "Services.exe starting a Windows service"
+        ],
+        correctAnswer: 1,
+        explanation: "Office applications (Word, Excel) spawning scripting engines (PowerShell, cmd) is a classic malware delivery indicator."
+      },
+      {
+        id: "q7-4",
+        question: "What type of EDR response action isolates a host?",
+        options: [
+          "Process termination",
+          "Network containment/isolation",
+          "File deletion",
+          "User logout"
+        ],
+        correctAnswer: 1,
+        explanation: "Network containment/isolation blocks all network traffic except EDR communication, containing the threat."
+      },
+      {
+        id: "q7-5",
+        question: "What does T1059.001 represent in MITRE ATT&CK?",
+        options: [
+          "A ticket number",
+          "PowerShell execution technique",
+          "A user account",
+          "A file hash"
+        ],
+        correctAnswer: 1,
+        explanation: "T1059.001 is the MITRE ATT&CK technique ID for PowerShell execution under the Command and Scripting Interpreter tactic."
+      },
+      {
+        id: "q7-6",
+        question: "What should you check when analyzing a suspicious process?",
+        options: [
+          "Only the process name",
+          "Command line arguments, parent process, file location, and network connections",
+          "Just the timestamp",
+          "The user's email"
+        ],
+        correctAnswer: 1,
+        explanation: "Analyze command line arguments, parent process legitimacy, file location, digital signature, and network connections."
+      },
+      {
+        id: "q7-7",
+        question: "What is a LOLBAS/LOLBIN?",
+        options: [
+          "A type of malware",
+          "Legitimate system binaries abused for malicious purposes",
+          "A security certification",
+          "A logging format"
+        ],
+        correctAnswer: 1,
+        explanation: "LOLBAS (Living Off The Land Binaries and Scripts) are legitimate system tools like certutil or mshta abused by attackers."
+      },
+      {
+        id: "q7-8",
+        question: "Which PowerShell flag combination is commonly used for evasion?",
+        options: [
+          "-Help",
+          "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass",
+          "-Version",
+          "-Update"
+        ],
+        correctAnswer: 1,
+        explanation: "These flags hide the window, bypass security policies, and avoid loading profiles - classic evasion techniques."
+      },
+      {
+        id: "q7-9",
+        question: "What does LSASS access typically indicate?",
+        options: [
+          "Normal Windows operation only",
+          "Potential credential dumping attack",
+          "Antivirus update",
+          "System shutdown"
+        ],
+        correctAnswer: 1,
+        explanation: "Unusual access to LSASS (Local Security Authority Subsystem Service) often indicates credential dumping like Mimikatz."
+      },
+      {
+        id: "q7-10",
+        question: "What telemetry type shows registry persistence?",
+        options: [
+          "Network telemetry",
+          "Registry telemetry",
+          "File telemetry only",
+          "User telemetry"
+        ],
+        correctAnswer: 1,
+        explanation: "Registry telemetry captures modifications to registry keys, including those used for persistence like Run keys."
+      },
+      {
+        id: "q7-11",
+        question: "What is the purpose of the EDR confidence score?",
+        options: [
+          "User satisfaction rating",
+          "How likely the detection represents actual malicious activity",
+          "Network speed measurement",
+          "Storage capacity"
+        ],
+        correctAnswer: 1,
+        explanation: "Confidence score indicates how likely the detection represents actual malicious activity based on the detection logic."
+      },
+      {
+        id: "q7-12",
+        question: "After containing a threat via EDR, what should you do?",
+        options: [
+          "Delete all logs",
+          "Collect evidence and document the investigation",
+          "Immediately reimage the system",
+          "Nothing - job is done"
+        ],
+        correctAnswer: 1,
+        explanation: "After containment, collect evidence (memory, files, logs), document your investigation, and coordinate further response."
+      }
+    ]
+  },
+  {
+    quizId: "q8",
+    courseId: "soc-fundamentals",
+    title: "Network Security Quiz",
+    description: "Test your knowledge of network security monitoring, IDS/IPS, and traffic analysis.",
+    passingScore: 70,
+    timeLimit: 25,
+    questions: [
+      {
+        id: "q8-1",
+        question: "What is the difference between IDS and IPS?",
+        options: [
+          "They are the same thing",
+          "IDS only alerts; IPS can block traffic",
+          "IPS only alerts; IDS can block traffic",
+          "Neither can detect threats"
+        ],
+        correctAnswer: 1,
+        explanation: "IDS (Detection System) monitors and alerts passively; IPS (Prevention System) sits inline and can actively block traffic."
+      },
+      {
+        id: "q8-2",
+        question: "What port does SMB use?",
+        options: [
+          "80",
+          "443",
+          "445",
+          "22"
+        ],
+        correctAnswer: 2,
+        explanation: "SMB (Server Message Block) uses port 445 and is commonly used in lateral movement attacks."
+      },
+      {
+        id: "q8-3",
+        question: "What is beaconing in network traffic?",
+        options: [
+          "Normal web browsing",
+          "Regular-interval callbacks from malware to C2 servers",
+          "Email sending",
+          "File downloads"
+        ],
+        correctAnswer: 1,
+        explanation: "Beaconing is regular-interval communication from infected hosts to command and control servers, a key malware indicator."
+      },
+      {
+        id: "q8-4",
+        question: "What is DNS tunneling used for?",
+        options: [
+          "Faster DNS resolution",
+          "Data exfiltration or C2 communication via DNS queries",
+          "Improving network speed",
+          "Email delivery"
+        ],
+        correctAnswer: 1,
+        explanation: "DNS tunneling encodes data in DNS queries/responses to bypass security controls for exfiltration or C2 communication."
+      },
+      {
+        id: "q8-5",
+        question: "What does a high volume of NXDomain responses indicate?",
+        options: [
+          "Normal DNS activity",
+          "Potential DGA (Domain Generation Algorithm) malware",
+          "Excellent network health",
+          "Fast internet connection"
+        ],
+        correctAnswer: 1,
+        explanation: "High NXDomain (non-existent domain) responses may indicate DGA malware trying to reach algorithmically generated domains."
+      },
+      {
+        id: "q8-6",
+        question: "What is NetFlow used for?",
+        options: [
+          "Replacing firewalls",
+          "Capturing connection metadata for traffic analysis",
+          "Blocking malware",
+          "Managing users"
+        ],
+        correctAnswer: 1,
+        explanation: "NetFlow captures connection metadata (IPs, ports, bytes, timing) for traffic analysis without storing full packet content."
+      },
+      {
+        id: "q8-7",
+        question: "What network pattern indicates port scanning?",
+        options: [
+          "Normal web traffic",
+          "Single source connecting to many destinations on multiple ports",
+          "Large file downloads",
+          "Email traffic"
+        ],
+        correctAnswer: 1,
+        explanation: "Port scanning shows a single source systematically connecting to many targets across multiple ports for reconnaissance."
+      },
+      {
+        id: "q8-8",
+        question: "What is the purpose of network segmentation?",
+        options: [
+          "To slow down the network",
+          "To limit lateral movement between zones",
+          "To increase attack surface",
+          "To remove firewalls"
+        ],
+        correctAnswer: 1,
+        explanation: "Network segmentation limits lateral movement by separating network zones with access controls between them."
+      },
+      {
+        id: "q8-9",
+        question: "Which protocol is commonly abused for C2 because it's rarely blocked?",
+        options: [
+          "FTP",
+          "DNS or HTTPS",
+          "Telnet",
+          "SMTP"
+        ],
+        correctAnswer: 1,
+        explanation: "DNS and HTTPS are commonly abused for C2 because they're rarely blocked and can blend with legitimate traffic."
+      },
+      {
+        id: "q8-10",
+        question: "What does a SYN flood attack target?",
+        options: [
+          "User passwords",
+          "Server resources by sending many SYN packets without completing handshakes",
+          "DNS records",
+          "Email servers only"
+        ],
+        correctAnswer: 1,
+        explanation: "SYN flood attacks exhaust server resources by sending many SYN packets without completing TCP handshakes."
+      },
+      {
+        id: "q8-11",
+        question: "What is signature-based detection's main limitation?",
+        options: [
+          "It's too accurate",
+          "It cannot detect unknown or new attacks",
+          "It works too fast",
+          "It's too cheap"
+        ],
+        correctAnswer: 1,
+        explanation: "Signature-based detection only identifies known attacks with existing signatures; it cannot detect zero-day or novel attacks."
+      },
+      {
+        id: "q8-12",
+        question: "What should you check when investigating a suspicious external connection?",
+        options: [
+          "Only the destination IP",
+          "IP reputation, domain age, traffic patterns, and related alerts",
+          "Just the timestamp",
+          "The user's lunch schedule"
+        ],
+        correctAnswer: 1,
+        explanation: "Investigate IP/domain reputation, when it was registered, traffic patterns, related alerts, and whether it's expected behavior."
+      },
+      {
+        id: "q8-13",
+        question: "What is WMI commonly used for in lateral movement?",
+        options: [
+          "Web browsing",
+          "Remote process execution on Windows systems",
+          "Email delivery",
+          "File compression"
+        ],
+        correctAnswer: 1,
+        explanation: "WMI (Windows Management Instrumentation) is commonly abused for remote process execution during lateral movement."
+      },
+      {
+        id: "q8-14",
+        question: "Which port is used for RDP?",
+        options: [
+          "22",
+          "443",
+          "3389",
+          "8080"
+        ],
+        correctAnswer: 2,
+        explanation: "RDP (Remote Desktop Protocol) uses port 3389 and is frequently targeted for unauthorized remote access."
+      },
+      {
+        id: "q8-15",
+        question: "What indicates potential data exfiltration in network traffic?",
+        options: [
+          "Normal browsing patterns",
+          "Large outbound transfers to unknown destinations, especially after hours",
+          "Inbound email traffic",
+          "Software updates"
+        ],
+        correctAnswer: 1,
+        explanation: "Large outbound data transfers to unknown destinations, especially outside business hours, may indicate data exfiltration."
+      }
+    ]
+  },
+  {
+    quizId: "q9",
+    courseId: "soc-fundamentals",
+    title: "SOC Best Practices Quiz",
+    description: "Final assessment covering investigation skills, career development, and analyst wellness.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      {
+        id: "q9-1",
+        question: "What is the recommended investigation approach?",
+        options: [
+          "Jump to conclusions immediately",
+          "Observe, hypothesize, test, and conclude",
+          "Guess and move on",
+          "Only escalate everything"
+        ],
+        correctAnswer: 1,
+        explanation: "A systematic approach: observe the evidence, form hypotheses, test them with additional data, then conclude based on findings."
+      },
+      {
+        id: "q9-2",
+        question: "What is 'confirmation bias' in investigations?",
+        options: [
+          "Confirming alerts correctly",
+          "Seeking only evidence that supports your initial theory",
+          "Good documentation practice",
+          "A type of malware"
+        ],
+        correctAnswer: 1,
+        explanation: "Confirmation bias is seeking only evidence supporting your initial theory. Counter it by actively looking for contradicting data."
+      },
+      {
+        id: "q9-3",
+        question: "What is alert fatigue?",
+        options: [
+          "Being tired at work",
+          "Decreased vigilance due to overwhelming alert volume",
+          "A type of attack",
+          "Slow network connections"
+        ],
+        correctAnswer: 1,
+        explanation: "Alert fatigue occurs when analysts become desensitized to alerts due to high volumes, potentially missing real threats."
+      },
+      {
+        id: "q9-4",
+        question: "What is a key sign of analyst burnout?",
+        options: [
+          "Excitement about work",
+          "Chronic fatigue, cynicism, and decreased performance",
+          "Asking many questions",
+          "Taking notes"
+        ],
+        correctAnswer: 1,
+        explanation: "Burnout signs include chronic fatigue, cynicism about work, feeling ineffective, and decreased performance."
+      },
+      {
+        id: "q9-5",
+        question: "What is 'pivoting' in an investigation?",
+        options: [
+          "Changing careers",
+          "Moving from one indicator to discover related indicators",
+          "Rotating your chair",
+          "Closing tickets"
+        ],
+        correctAnswer: 1,
+        explanation: "Pivoting means using one indicator to find related ones - like finding domains that resolve to a suspicious IP."
+      },
+      {
+        id: "q9-6",
+        question: "What is the recommended certification for entry-level SOC analysts?",
+        options: [
+          "CISSP",
+          "CompTIA Security+ or BTL1",
+          "PhD in Computer Science",
+          "No certification needed"
+        ],
+        correctAnswer: 1,
+        explanation: "CompTIA Security+ or Blue Team Level 1 (BTL1) are excellent entry-level certifications for aspiring SOC analysts."
+      },
+      {
+        id: "q9-7",
+        question: "What should you do during work breaks?",
+        options: [
+          "Continue monitoring alerts",
+          "Step away from screens and take actual breaks",
+          "Skip breaks to handle more alerts",
+          "Work on personal projects"
+        ],
+        correctAnswer: 1,
+        explanation: "Taking actual breaks away from screens is essential for preventing burnout and maintaining effectiveness."
+      },
+      {
+        id: "q9-8",
+        question: "What makes good investigation notes?",
+        options: [
+          "Brief with no details",
+          "Timestamped entries with observations, actions, and reasoning",
+          "Only the final conclusion",
+          "Personal opinions only"
+        ],
+        correctAnswer: 1,
+        explanation: "Good notes include timestamps, detailed observations, actions taken, reasoning, and evidence references."
+      },
+      {
+        id: "q9-9",
+        question: "What is the typical L1 to L2 analyst progression timeline?",
+        options: [
+          "1 week",
+          "2-4 years",
+          "10+ years",
+          "Never possible"
+        ],
+        correctAnswer: 1,
+        explanation: "Typically, analysts progress from L1 to L2 over 2-4 years as they develop deeper investigation and response skills."
+      },
+      {
+        id: "q9-10",
+        question: "What is essential for continuous learning in cybersecurity?",
+        options: [
+          "Only formal training",
+          "Combination of hands-on practice, certifications, and staying current with threats",
+          "Just reading news",
+          "Nothing - skills don't change"
+        ],
+        correctAnswer: 1,
+        explanation: "Continuous learning requires hands-on practice, certifications, reading threat intel, and staying current with evolving threats."
+      },
+      {
+        id: "q9-11",
+        question: "Which platform provides free SOC analyst practice labs?",
+        options: [
+          "Microsoft Word",
+          "TryHackMe or LetsDefend",
+          "Facebook",
+          "YouTube only"
+        ],
+        correctAnswer: 1,
+        explanation: "TryHackMe and LetsDefend offer free (and paid) SOC analyst training paths with hands-on labs and challenges."
+      },
+      {
+        id: "q9-12",
+        question: "What should you do if you're experiencing burnout symptoms?",
+        options: [
+          "Ignore them and work harder",
+          "Seek support from EAP, mental health professionals, or trusted colleagues",
+          "Quit immediately",
+          "Hide the symptoms"
+        ],
+        correctAnswer: 1,
+        explanation: "Seeking support is a sign of strength. Use EAP programs, mental health resources, or trusted colleagues when needed."
+      }
+    ]
   }
 ];
 
