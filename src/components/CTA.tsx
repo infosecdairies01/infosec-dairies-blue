@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
+import { Send, Linkedin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const CTA = () => {
@@ -47,7 +47,7 @@ const CTA = () => {
             tips, and discussions.
           </p>
           
-          <div className={`flex justify-center items-center pt-4 transition-all duration-500`} style={{ transitionDelay: isVisible ? '0.4s' : '0s' }}>
+          <div className={`flex justify-center items-center gap-4 pt-4 transition-all duration-500`} style={{ transitionDelay: isVisible ? '0.4s' : '0s' }}>
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-secondary to-primary hover:opacity-90 transition-all duration-300 glow-lime hover:scale-110 hover:glow-cyan group"
@@ -61,6 +61,21 @@ const CTA = () => {
               >
                 <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 Telegram
+              </a>
+            </Button>
+            <Button 
+              size="lg" 
+              className="bg-[#0077B5] hover:bg-[#0077B5]/90 transition-all duration-300 hover:scale-110 group"
+              asChild
+            >
+              <a 
+                href="https://www.linkedin.com/company/infosecdairies" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Linkedin className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                LinkedIn
               </a>
             </Button>
           </div>
