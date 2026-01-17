@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import CourseCard from "@/components/CourseCard";
 import { getCourseCardData } from "@/data/courses";
 import { getLiveCourseCardData } from "@/data/liveCourses";
@@ -87,12 +88,7 @@ const Courses = () => {
         </div>
       </section>
       
-      <footer className="border-t border-border py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} InfosecDairies. All rights reserved.</p>
-          <p className="mt-2">Blue Team Cybersecurity Education &amp; Insights</p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 };

@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Phone, Clock, Users, Calendar, ChevronRight, CheckCircle2, BookOpen, Target, GraduationCap, Send } from "lucide-react";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { getLiveCourseById } from "@/data/liveCourses";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -290,13 +291,7 @@ const LiveCourseDetail = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} InfosecDairies. All rights reserved.</p>
-          <p className="mt-2">Blue Team Cybersecurity Education & Insights</p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 };

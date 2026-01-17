@@ -6,6 +6,7 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import LearningPath from "@/components/LearningPath";
 import Certifications from "@/components/Certifications";
 import CTA from "@/components/CTA";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -19,12 +20,7 @@ const Index = () => {
       <Certifications />
       <CTA />
       
-      <footer className="border-t border-border py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} InfosecDairies. All rights reserved.</p>
-          <p className="mt-2">Blue Team Cybersecurity Education &amp; Insights</p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 };
