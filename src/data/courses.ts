@@ -58,8 +58,6 @@ export const courses: Course[] = [
       {
         id: "1",
         title: "Introduction to Security Operations",
-        badge: "Foundation",
-        badgeColor: "bg-primary/20 text-primary border-primary/30",
         lessons: [
           { 
             id: "1.1", 
