@@ -92,8 +92,6 @@ export const courses: Course[] = [
       {
         id: "2",
         title: "Cyber Threat Landscape",
-        badge: "Theory",
-        badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
         lessons: [
           { 
             id: "2.1", 
