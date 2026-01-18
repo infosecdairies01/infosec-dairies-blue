@@ -126,8 +126,6 @@ export const courses: Course[] = [
       {
         id: "3",
         title: "Log Analysis Fundamentals",
-        badge: "Lab",
-        badgeColor: "bg-secondary/20 text-secondary border-secondary/30",
         lessons: [
           { 
             id: "3.1", 
@@ -169,8 +167,6 @@ export const courses: Course[] = [
       {
         id: "4",
         title: "SIEM Fundamentals",
-        badge: "Lab",
-        badgeColor: "bg-secondary/20 text-secondary border-secondary/30",
         lessons: [
           { 
             id: "4.1", 
@@ -212,8 +208,6 @@ export const courses: Course[] = [
       {
         id: "5",
         title: "Alert Triage & Analysis",
-        badge: "Core",
-        badgeColor: "bg-orange-500/20 text-orange-400 border-orange-500/30",
         lessons: [
           { 
             id: "5.1", 
@@ -255,8 +249,6 @@ export const courses: Course[] = [
       {
         id: "6",
         title: "Threat Intelligence Basics",
-        badge: "Theory",
-        badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
         lessons: [
           { 
             id: "6.1", 
@@ -291,8 +283,6 @@ export const courses: Course[] = [
       {
         id: "7",
         title: "Incident Response Introduction",
-        badge: "Lab",
-        badgeColor: "bg-secondary/20 text-secondary border-secondary/30",
         lessons: [
           { 
             id: "7.1", 
@@ -334,8 +324,6 @@ export const courses: Course[] = [
       {
         id: "8",
         title: "Endpoint Detection & Response",
-        badge: "Lab",
-        badgeColor: "bg-secondary/20 text-secondary border-secondary/30",
         lessons: [
           { 
             id: "8.1", 
@@ -370,8 +358,6 @@ export const courses: Course[] = [
       {
         id: "9",
         title: "Network Security Monitoring",
-        badge: "Theory",
-        badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
         lessons: [
           { 
             id: "9.1", 
@@ -406,8 +392,6 @@ export const courses: Course[] = [
       {
         id: "10",
         title: "SOC Analyst Best Practices",
-        badge: "Final",
-        badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
         lessons: [
           { 
             id: "10.1", 
