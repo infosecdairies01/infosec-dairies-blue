@@ -15,7 +15,6 @@ import incidentResponseBg from "@/assets/courses/incident-response-bg.jpg";
 import threatHuntingBg from "@/assets/courses/threat-hunting-bg.jpg";
 import detectionEngineeringBg from "@/assets/courses/detection-engineering-bg.jpg";
 import malwareAnalysisBg from "@/assets/courses/malware-analysis-bg.jpg";
-
 const courseBackgrounds: Record<string, string> = {
   "soc-fundamentals": socFundamentalsBg,
   "log-analysis": logAnalysisBg,
@@ -24,20 +23,21 @@ const courseBackgrounds: Record<string, string> = {
   "incident-response": incidentResponseBg,
   "threat-hunting": threatHuntingBg,
   "detection-engineering": detectionEngineeringBg,
-  "malware-analysis": malwareAnalysisBg,
+  "malware-analysis": malwareAnalysisBg
 };
-
 const difficultyLabels = {
   easy: "Beginner",
-  medium: "Intermediate", 
-  hard: "Advanced",
+  medium: "Intermediate",
+  hard: "Advanced"
 };
-
 const CourseDetail = () => {
-  const { courseId } = useParams<{ courseId: string }>();
+  const {
+    courseId
+  } = useParams<{
+    courseId: string;
+  }>();
   const navigate = useNavigate();
   const course = getCourseById(courseId || "");
-  
   const [activeTab, setActiveTab] = useState<"modules" | "quizzes" | "resources">("modules");
   const [openModules, setOpenModules] = useState<string[]>(["1", "2"]);
 
@@ -53,34 +53,22 @@ const CourseDetail = () => {
   if (!course) {
     return <Navigate to="/courses" replace />;
   }
-
   const toggleModule = (moduleId: string) => {
-    setOpenModules(prev =>
-      prev.includes(moduleId)
-        ? prev.filter(id => id !== moduleId)
-        : [...prev, moduleId]
-    );
+    setOpenModules(prev => prev.includes(moduleId) ? prev.filter(id => id !== moduleId) : [...prev, moduleId]);
   };
-
   const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
-  const completedLessons = course.modules.reduce(
-    (acc, m) => acc + m.lessons.filter(l => l.status === "completed").length,
-    0
-  );
-  const progressPercent = Math.round((completedLessons / totalLessons) * 100);
-
-  return (
-    <main className="min-h-screen bg-background">
+  const completedLessons = course.modules.reduce((acc, m) => acc + m.lessons.filter(l => l.status === "completed").length, 0);
+  const progressPercent = Math.round(completedLessons / totalLessons * 100);
+  return <main className="min-h-screen bg-background">
       <Navbar />
 
       {/* Hero Section with Course Background - confined to header area */}
       <div className="relative pt-20">
         {/* Course-specific Background - only for hero, subtle atmospheric */}
         <div className="absolute inset-0 h-[420px] overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
-            style={{ backgroundImage: `url(${courseBgImage})` }}
-          />
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50" style={{
+          backgroundImage: `url(${courseBgImage})`
+        }} />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/85 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/30 to-background/60" />
           {/* Extra dark overlay behind text area */}
@@ -91,10 +79,7 @@ const CourseDetail = () => {
           <div className="max-w-6xl mx-auto">
             
             {/* Breadcrumb */}
-            <Link 
-              to="/courses" 
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8"
-            >
+            <Link to="/courses" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8">
               <ChevronLeft className="w-4 h-4" />
               <span>Courses</span>
               <span className="text-muted-foreground/50">&gt;</span>
@@ -193,34 +178,13 @@ const CourseDetail = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
               {/* Tabs */}
               <div className="flex gap-2">
-                <button
-                  onClick={() => setActiveTab("modules")}
-                  className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeTab === "modules"
-                      ? "bg-primary/15 text-primary border border-primary/25"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
-                  }`}
-                >
+                <button onClick={() => setActiveTab("modules")} className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === "modules" ? "bg-primary/15 text-primary border border-primary/25" : "text-muted-foreground hover:text-foreground hover:bg-muted/30"}`}>
                   Modules
                 </button>
-                <button
-                  onClick={() => setActiveTab("quizzes")}
-                  className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeTab === "quizzes"
-                      ? "bg-primary/15 text-primary border border-primary/25"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
-                  }`}
-                >
+                <button onClick={() => setActiveTab("quizzes")} className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === "quizzes" ? "bg-primary/15 text-primary border border-primary/25" : "text-muted-foreground hover:text-foreground hover:bg-muted/30"}`}>
                   Quizzes
                 </button>
-                <button
-                  onClick={() => setActiveTab("resources")}
-                  className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeTab === "resources"
-                      ? "bg-primary/15 text-primary border border-primary/25"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
-                  }`}
-                >
+                <button onClick={() => setActiveTab("resources")} className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === "resources" ? "bg-primary/15 text-primary border border-primary/25" : "text-muted-foreground hover:text-foreground hover:bg-muted/30"}`}>
                   Resources
                 </button>
               </div>
@@ -240,12 +204,7 @@ const CourseDetail = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Modules List */}
               <div className="lg:col-span-2 space-y-3">
-                {activeTab === "modules" && course.modules.map((module) => (
-                  <Collapsible
-                    key={module.id}
-                    open={openModules.includes(module.id)}
-                    onOpenChange={() => toggleModule(module.id)}
-                  >
+                {activeTab === "modules" && course.modules.map(module => <Collapsible key={module.id} open={openModules.includes(module.id)} onOpenChange={() => toggleModule(module.id)}>
                     <div className="group relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] shadow-lg shadow-black/20 transition-all duration-500 ease-out hover:bg-card/35 hover:translate-y-[-2px] hover:border-white/[0.12] hover:shadow-xl hover:shadow-primary/10">
                       {/* Soft outer glow on hover */}
                       <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-primary/20 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 pointer-events-none" />
@@ -261,37 +220,18 @@ const CourseDetail = () => {
                           <span className="text-base font-semibold text-foreground">
                             {module.id}. {module.title}
                           </span>
-                          {module.badge && (
-                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${module.badgeColor}`}>
-                              {module.badge}
-                            </span>
-                          )}
+                          {module.badge}
                         </div>
-                        <ChevronDown 
-                          className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${
-                            openModules.includes(module.id) ? "rotate-180" : ""
-                          }`} 
-                        />
+                        <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${openModules.includes(module.id) ? "rotate-180" : ""}`} />
                       </CollapsibleTrigger>
 
                       {/* Lessons */}
                       <CollapsibleContent>
                         <div className="border-t border-white/[0.06]">
-                          {module.lessons.map((lesson) => (
-                            <div
-                              key={lesson.id}
-                              onClick={() => lesson.status !== "locked" && navigate(`/courses/${courseId}/lesson/${lesson.id}`)}
-                              className={`px-6 py-4 pl-7 flex items-center justify-between border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors ${lesson.status !== "locked" ? "cursor-pointer" : ""}`}
-                            >
+                          {module.lessons.map(lesson => <div key={lesson.id} onClick={() => lesson.status !== "locked" && navigate(`/courses/${courseId}/lesson/${lesson.id}`)} className={`px-6 py-4 pl-7 flex items-center justify-between border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors ${lesson.status !== "locked" ? "cursor-pointer" : ""}`}>
                               <div className="flex items-start gap-3">
                                 <span className="mt-0.5">
-                                  {lesson.status === "completed" ? (
-                                    <CheckCircle className="w-4 h-4 text-primary" />
-                                  ) : lesson.status === "locked" ? (
-                                    <Lock className="w-4 h-4 text-muted-foreground/40" />
-                                  ) : (
-                                    <ChevronDown className="w-4 h-4 text-primary" />
-                                  )}
+                                  {lesson.status === "completed" ? <CheckCircle className="w-4 h-4 text-primary" /> : lesson.status === "locked" ? <Lock className="w-4 h-4 text-muted-foreground/40" /> : <ChevronDown className="w-4 h-4 text-primary" />}
                                 </span>
                                 <div>
                                   <div className="flex items-center gap-2">
@@ -299,41 +239,30 @@ const CourseDetail = () => {
                                     <span className={`text-sm ${lesson.status === "locked" ? "text-muted-foreground/60" : "text-foreground"}`}>
                                       {lesson.title}
                                     </span>
-                                    {lesson.duration && (
-                                      <span className="text-xs text-muted-foreground/50 flex items-center gap-1">
+                                    {lesson.duration && <span className="text-xs text-muted-foreground/50 flex items-center gap-1">
                                         <Clock className="w-3 h-3" />
                                         {lesson.duration}
-                                      </span>
-                                    )}
+                                      </span>}
                                   </div>
-                                  {lesson.description && (
-                                    <p className="text-xs text-muted-foreground/60 mt-1 max-w-lg">{lesson.description}</p>
-                                  )}
+                                  {lesson.description && <p className="text-xs text-muted-foreground/60 mt-1 max-w-lg">{lesson.description}</p>}
                                 </div>
                               </div>
 
                               {/* Status Badge */}
-                              {lesson.status === "completed" && (
-                                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary/15 text-primary border border-primary/25">
+                              {lesson.status === "completed" && <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary/15 text-primary border border-primary/25">
                                   Completed
-                                </span>
-                              )}
-                              {lesson.status === "locked" && (
-                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+                                </span>}
+                              {lesson.status === "locked" && <span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
                                   <Lock className="w-3 h-3" />
                                   Locked
-                                </span>
-                              )}
-                            </div>
-                          ))}
+                                </span>}
+                            </div>)}
                         </div>
                       </CollapsibleContent>
                     </div>
-                  </Collapsible>
-                ))}
+                  </Collapsible>)}
 
-                {activeTab === "quizzes" && (
-                  <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-8 shadow-lg shadow-black/20">
+                {activeTab === "quizzes" && <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-8 shadow-lg shadow-black/20">
                     {/* Inner light reflection - top edge */}
                     <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                     {/* Subtle inner teal glow */}
@@ -348,20 +277,13 @@ const CourseDetail = () => {
                         <span className="text-sm text-muted-foreground">({course.quizzes?.length || 0} assessments)</span>
                       </div>
                       <div className="space-y-3">
-                        {course.quizzes && course.quizzes.length > 0 ? (
-                          course.quizzes.map((quiz) => (
-                            <div 
-                              key={quiz.id} 
-                              className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors"
-                            >
+                        {course.quizzes && course.quizzes.length > 0 ? course.quizzes.map(quiz => <div key={quiz.id} className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors">
                               <div className="flex-1">
                                 <div className="flex items-center gap-2">
                                   <span className="text-foreground font-medium">{quiz.title}</span>
-                                  {quiz.id === "q6" && (
-                                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                                  {quiz.id === "q6" && <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-400 border border-orange-500/30">
                                       Final Exam
-                                    </span>
-                                  )}
+                                    </span>}
                                 </div>
                                 <p className="text-xs text-muted-foreground mt-1">{quiz.description}</p>
                                 <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground/70">
@@ -376,37 +298,22 @@ const CourseDetail = () => {
                                   <span>Pass: {quiz.passingScore}%</span>
                                 </div>
                               </div>
-                              {quiz.status === "unlocked" ? (
-                                <button 
-                                  onClick={() => navigate(`/courses/${courseId}/quiz/${quiz.id}`)}
-                                  className="px-4 py-2 rounded-lg bg-primary/15 text-primary text-sm font-medium border border-primary/25 hover:bg-primary/25 transition-colors"
-                                >
+                              {quiz.status === "unlocked" ? <button onClick={() => navigate(`/courses/${courseId}/quiz/${quiz.id}`)} className="px-4 py-2 rounded-lg bg-primary/15 text-primary text-sm font-medium border border-primary/25 hover:bg-primary/25 transition-colors">
                                   Start Quiz
-                                </button>
-                              ) : quiz.status === "completed" ? (
-                                <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary/15 text-primary border border-primary/25">
+                                </button> : quiz.status === "completed" ? <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary/15 text-primary border border-primary/25">
                                   Completed
-                                </span>
-                              ) : (
-                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+                                </span> : <span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
                                   <Lock className="w-3 h-3" />
                                   Locked
-                                </span>
-                              )}
-                            </div>
-                          ))
-                        ) : (
-                          <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06] text-center">
+                                </span>}
+                            </div>) : <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06] text-center">
                             <p className="text-muted-foreground">No quizzes available for this course yet.</p>
-                          </div>
-                        )}
+                          </div>}
                       </div>
                     </div>
-                  </div>
-                )}
+                  </div>}
 
-                {activeTab === "resources" && (
-                  <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-8 shadow-lg shadow-black/20">
+                {activeTab === "resources" && <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-8 shadow-lg shadow-black/20">
                     {/* Inner light reflection - top edge */}
                     <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                     {/* Subtle inner teal glow */}
@@ -421,16 +328,14 @@ const CourseDetail = () => {
                         <span className="text-sm text-muted-foreground">({course.resources?.length || 0} resources)</span>
                       </div>
                       
-                      {course.resources && course.resources.length > 0 ? (
-                        <div className="grid gap-3">
+                      {course.resources && course.resources.length > 0 ? <div className="grid gap-3">
                           {/* Downloadable Resources */}
                           <div className="space-y-3">
                             <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                               <Download className="w-4 h-4" />
                               Downloadable Materials
                             </h4>
-                            {course.resources.filter(r => r.type !== "link").map((resource) => (
-                              <div key={resource.id} className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors group cursor-pointer">
+                            {course.resources.filter(r => r.type !== "link").map(resource => <div key={resource.id} className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors group cursor-pointer">
                                 <div className="flex items-start gap-3">
                                   <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
                                     {resource.type === "pdf" && <FileText className="w-5 h-5 text-primary" />}
@@ -447,25 +352,16 @@ const CourseDetail = () => {
                                   </div>
                                 </div>
                                 <Download className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                              </div>
-                            ))}
+                              </div>)}
                           </div>
                           
                           {/* External Links */}
-                          {course.resources.filter(r => r.type === "link").length > 0 && (
-                            <div className="space-y-3 mt-4">
+                          {course.resources.filter(r => r.type === "link").length > 0 && <div className="space-y-3 mt-4">
                               <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                                 <ExternalLink className="w-4 h-4" />
                                 Useful Links & Tools
                               </h4>
-                              {course.resources.filter(r => r.type === "link").map((resource) => (
-                                <a 
-                                  key={resource.id} 
-                                  href={resource.url} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 hover:border-primary/30 transition-colors group block"
-                                >
+                              {course.resources.filter(r => r.type === "link").map(resource => <a key={resource.id} href={resource.url} target="_blank" rel="noopener noreferrer" className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 hover:border-primary/30 transition-colors group block">
                                   <div className="flex items-start gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
                                       <LinkIcon className="w-5 h-5 text-blue-400" />
@@ -476,19 +372,13 @@ const CourseDetail = () => {
                                     </div>
                                   </div>
                                   <ExternalLink className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                                </a>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06] text-center">
+                                </a>)}
+                            </div>}
+                        </div> : <div className="p-4 rounded-lg bg-card/30 border border-white/[0.06] text-center">
                           <p className="text-muted-foreground">No resources available for this course yet.</p>
-                        </div>
-                      )}
+                        </div>}
                     </div>
-                  </div>
-                )}
+                  </div>}
               </div>
 
               {/* CTA Card */}
@@ -514,8 +404,6 @@ const CourseDetail = () => {
           </div>
         </div>
       </section>
-    </main>
-  );
+    </main>;
 };
-
 export default CourseDetail;
