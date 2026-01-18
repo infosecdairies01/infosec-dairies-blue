@@ -239,10 +239,6 @@ const CourseDetail = () => {
                                     <span className={`text-sm ${lesson.status === "locked" ? "text-muted-foreground/60" : "text-foreground"}`}>
                                       {lesson.title}
                                     </span>
-                                    {lesson.duration && <span className="text-xs text-muted-foreground/50 flex items-center gap-1">
-                                        <Clock className="w-3 h-3" />
-                                        {lesson.duration}
-                                      </span>}
                                   </div>
                                   {lesson.description && <p className="text-xs text-muted-foreground/60 mt-1 max-w-lg">{lesson.description}</p>}
                                 </div>
