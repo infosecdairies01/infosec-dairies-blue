@@ -92,7 +92,9 @@ const CourseDetail = () => {
               <div className="lg:col-span-2 space-y-6">
                 {/* Title Row */}
                 <div className="flex items-start gap-4">
-                  
+                  <div className="w-14 h-14 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-7 h-7 text-primary" />
+                  </div>
                   <div>
                     <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
                       {course.title}
@@ -237,9 +239,12 @@ const CourseDetail = () => {
                                     <span className={`text-sm ${lesson.status === "locked" ? "text-muted-foreground/60" : "text-foreground"}`}>
                                       {lesson.title}
                                     </span>
-                                    {lesson.duration}
+                                    {lesson.duration && <span className="text-xs text-muted-foreground/50 flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        {lesson.duration}
+                                      </span>}
                                   </div>
-                                  {lesson.description}
+                                  {lesson.description && <p className="text-xs text-muted-foreground/60 mt-1 max-w-lg">{lesson.description}</p>}
                                 </div>
                               </div>
 
