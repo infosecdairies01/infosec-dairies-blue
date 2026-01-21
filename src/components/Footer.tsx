@@ -1,4 +1,5 @@
 import { Send, Linkedin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -24,6 +25,19 @@ const Footer = () => {
             >
               <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-[#0077B5] transition-colors" />
             </a>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <Link to="/privacy" className="hover:text-primary transition-colors">
+              Privacy Policy
+            </Link>
+            <span>|</span>
+            <Link to="/terms" className="hover:text-primary transition-colors">
+              Terms of Service
+            </Link>
+            <span>|</span>
+            <Link to="/disclaimer" className="hover:text-primary transition-colors">
+              Disclaimer
+            </Link>
           </div>
           <div className="text-center text-sm text-muted-foreground">
             <p>&copy; {new Date().getFullYear()} InfosecDairies. All rights reserved.</p>
