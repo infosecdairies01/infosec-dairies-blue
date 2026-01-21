@@ -6,102 +6,97 @@ const TermsOfService = () => {
     <main className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-4 pt-32 pb-16">
-        <h1 className="text-4xl font-bold text-foreground mb-8">Terms of Service</h1>
-        <div className="prose prose-invert max-w-none space-y-6 text-muted-foreground">
-          <p className="text-sm">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-          
+        <h1 className="text-4xl font-bold text-foreground mb-2">📜 Terms of Service – InfoSec Dairies</h1>
+        <p className="text-sm text-muted-foreground mb-8">Last Updated: 21-01-2026</p>
+        
+        <div className="prose prose-invert max-w-none space-y-8 text-muted-foreground">
+          <p className="text-lg">
+            By accessing or using InfoSec Dairies, you agree to these Terms of Service.
+          </p>
+
           <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">1. Acceptance of Terms</h2>
-            <p>
-              By accessing and using InfosecDairies, you accept and agree to be bound by these Terms of Service. 
-              If you do not agree to these terms, please do not use our services.
-            </p>
+            <h2 className="text-2xl font-semibold text-foreground">1. Purpose of the Platform</h2>
+            <p>InfoSec Dairies provides:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Cybersecurity learning content</li>
+              <li>Simulated SOC labs</li>
+              <li>Educational training environments</li>
+            </ul>
+            <p className="text-primary font-medium mt-2">👉 This platform is strictly for educational purposes only.</p>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">2. Description of Services</h2>
-            <p>
-              InfosecDairies provides cybersecurity education and training services, including but not limited to:
-            </p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Online courses and tutorials on blue team cybersecurity</li>
-              <li>Interactive labs and hands-on exercises</li>
-              <li>Quizzes and assessments</li>
-              <li>Certification preparation materials</li>
-              <li>Community access and resources</li>
+            <h2 className="text-2xl font-semibold text-foreground">2. User Responsibilities</h2>
+            <p>By using this platform, you agree that:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>You will not misuse the knowledge gained</li>
+              <li>You will not attempt real-world hacking or exploitation</li>
+              <li>You will not attack real systems using lab knowledge</li>
+              <li>You will not share your account with others</li>
+            </ul>
+            <p className="mt-2 font-medium text-destructive">Violation may result in account suspension or termination.</p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold text-foreground">3. Lab Environment Rules</h2>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Labs use pre-recorded and simulated data</li>
+              <li>No live attacks are conducted</li>
+              <li>No real malware is used</li>
+              <li>Actions taken in labs are for learning only</li>
+            </ul>
+            <p className="mt-2">InfoSec Dairies is not responsible for misuse of skills outside the platform.</p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold text-foreground">4. Intellectual Property</h2>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>All lab content, dashboards, explanations, and designs belong to InfoSec Dairies</li>
+              <li>You may not copy, redistribute, or resell any content</li>
+              <li>Certificates are for personal use only</li>
             </ul>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">3. User Accounts</h2>
-            <p>To access certain features, you may need to create an account. You agree to:</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Provide accurate and complete information</li>
-              <li>Maintain the security of your account credentials</li>
-              <li>Notify us immediately of any unauthorized access</li>
-              <li>Be responsible for all activities under your account</li>
+            <h2 className="text-2xl font-semibold text-foreground">5. Payments & Refunds (If Applicable)</h2>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Paid access is subject to the Refund Policy</li>
+              <li>Refunds may not be available after lab access is granted</li>
+              <li>Certificate issuance may void refund eligibility</li>
             </ul>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">4. Acceptable Use</h2>
-            <p>You agree not to:</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Use our services for any illegal or unauthorized purpose</li>
-              <li>Share your account credentials with others</li>
-              <li>Redistribute, copy, or resell course materials without permission</li>
-              <li>Attempt to hack, disrupt, or damage our services</li>
-              <li>Use knowledge gained for malicious purposes</li>
-              <li>Harass, abuse, or harm other users</li>
-              <li>Upload malicious content or malware</li>
+            <h2 className="text-2xl font-semibold text-foreground">6. Account Termination</h2>
+            <p>We reserve the right to:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Suspend or terminate accounts</li>
+              <li>Restrict access without notice</li>
             </ul>
-          </section>
-
-          <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">5. Intellectual Property</h2>
-            <p>
-              All content on InfosecDairies, including courses, materials, logos, and trademarks, is owned by 
-              InfosecDairies or its content creators and is protected by intellectual property laws. You may not 
-              reproduce, distribute, or create derivative works without our express written consent.
-            </p>
-          </section>
-
-          <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">6. Educational Purpose</h2>
-            <p>
-              All cybersecurity techniques, tools, and knowledge shared on this platform are intended for 
-              educational and defensive purposes only. Users must:
-            </p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Only practice skills in authorized environments</li>
-              <li>Follow responsible disclosure practices</li>
-              <li>Comply with all applicable laws and regulations</li>
-              <li>Use knowledge ethically and professionally</li>
-            </ul>
+            <p className="mt-2">If terms are violated or misuse is detected.</p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold text-foreground">7. Limitation of Liability</h2>
+            <p>InfoSec Dairies is not liable for:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Any illegal activity done using learned skills</li>
+              <li>Any damage caused by misuse of information</li>
+              <li>Losses arising from reliance on lab outcomes</li>
+            </ul>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold text-foreground">8. Changes to Terms</h2>
             <p>
-              InfosecDairies is provided "as is" without warranties of any kind. We are not liable for any 
-              damages arising from your use of our services, including but not limited to direct, indirect, 
-              incidental, or consequential damages.
+              We may update these Terms at any time. Continued use means acceptance of updated terms.
             </p>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">8. Modifications</h2>
+            <h2 className="text-2xl font-semibold text-foreground">9. Contact Information</h2>
             <p>
-              We reserve the right to modify these terms at any time. Continued use of our services after 
-              changes constitutes acceptance of the new terms.
-            </p>
-          </section>
-
-          <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">9. Contact</h2>
-            <p>
-              For questions about these Terms of Service, please contact us through our Telegram channel 
-              or LinkedIn profile.
+              📧 <a href="mailto:support@infosecdairies.com" className="text-primary hover:underline">support@infosecdairies.com</a>
             </p>
           </section>
         </div>
