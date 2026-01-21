@@ -41,7 +41,6 @@ const Footer = () => {
           </div>
           <div className="text-center text-sm text-muted-foreground">
             <p>&copy; {new Date().getFullYear()} InfosecDairies. All rights reserved.</p>
-            <p className="mt-1">Blue Team Cybersecurity Education &amp; Insights</p>
           </div>
         </div>
       </div>
