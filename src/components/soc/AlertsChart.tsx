@@ -12,42 +12,42 @@ const data = [
 
 const AlertsChart = () => {
   return (
-    <div className="bg-[#0d1117] border border-[#21262d] rounded-lg p-4">
-      <h3 className="text-sm font-medium text-[#c9d1d9] mb-4">Alerts Over Time (24h)</h3>
+    <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
+      <h3 className="text-sm font-medium text-foreground mb-4">Alerts Over Time (24h)</h3>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
             <defs>
               <linearGradient id="alertGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#00ffc8" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#00ffc8" stopOpacity={0} />
+                <stop offset="5%" stopColor="hsl(186, 100%, 42%)" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="hsl(186, 100%, 42%)" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#21262d" />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 30%, 18%)" />
             <XAxis 
               dataKey="time" 
-              stroke="#8b949e" 
+              stroke="hsl(180, 20%, 65%)" 
               fontSize={11}
               tickLine={false}
             />
             <YAxis 
-              stroke="#8b949e" 
+              stroke="hsl(180, 20%, 65%)" 
               fontSize={11}
               tickLine={false}
               axisLine={false}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#161b22",
-                border: "1px solid #30363d",
+                backgroundColor: "hsl(220, 35%, 8%)",
+                border: "1px solid hsl(220, 30%, 18%)",
                 borderRadius: "6px",
-                color: "#c9d1d9",
+                color: "hsl(180, 100%, 95%)",
               }}
             />
             <Area
               type="monotone"
               dataKey="alerts"
-              stroke="#00ffc8"
+              stroke="hsl(186, 100%, 42%)"
               strokeWidth={2}
               fill="url(#alertGradient)"
             />
