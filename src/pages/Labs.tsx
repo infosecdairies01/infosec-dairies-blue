@@ -10,7 +10,7 @@ const Labs = () => {
       <Navbar />
       
       <div className="flex flex-1 pt-20 overflow-auto">
-        <SOCSidebar />
+        <SOCSidebar activeItem="Dashboard" />
         
         <div className="flex-1 flex flex-col min-w-0">
           {/* Dashboard Header */}
