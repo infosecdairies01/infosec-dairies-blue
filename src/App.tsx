@@ -10,6 +10,7 @@ import LiveCourseDetail from "./pages/LiveCourseDetail";
 import LessonViewer from "./pages/LessonViewer";
 import QuizPage from "./pages/QuizPage";
 import Labs from "./pages/Labs";
+import Alerts from "./pages/Alerts";
 import Auth from "./pages/Auth";
 import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/courses/:courseId/lesson/:lessonId" element={<LessonViewer />} />
           <Route path="/courses/:courseId/quiz/:quizId" element={<QuizPage />} />
           <Route path="/labs" element={<Labs />} />
+          <Route path="/labs/alerts" element={<Alerts />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
