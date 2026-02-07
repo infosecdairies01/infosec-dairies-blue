@@ -8,18 +8,24 @@ const data = [
   { source: "172.16.0.88", count: 65 },
 ];
 
-const colors = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6"];
+const colors = [
+  "hsl(0, 84%, 60%)",      // destructive red
+  "hsl(25, 95%, 53%)",     // orange
+  "hsl(48, 96%, 53%)",     // yellow
+  "hsl(84, 81%, 44%)",     // secondary green
+  "hsl(186, 100%, 42%)",   // primary cyan
+];
 
 const TopSourcesChart = () => {
   return (
-    <div className="bg-[#0d1117] border border-[#21262d] rounded-lg p-4">
-      <h3 className="text-sm font-medium text-[#c9d1d9] mb-4">Top Alert Sources</h3>
+    <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
+      <h3 className="text-sm font-medium text-foreground mb-4">Top Alert Sources</h3>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical">
             <XAxis 
               type="number" 
-              stroke="#8b949e" 
+              stroke="hsl(180, 20%, 65%)" 
               fontSize={11}
               tickLine={false}
               axisLine={false}
@@ -27,7 +33,7 @@ const TopSourcesChart = () => {
             <YAxis
               type="category"
               dataKey="source"
-              stroke="#8b949e"
+              stroke="hsl(180, 20%, 65%)"
               fontSize={11}
               tickLine={false}
               axisLine={false}
@@ -35,10 +41,10 @@ const TopSourcesChart = () => {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#161b22",
-                border: "1px solid #30363d",
+                backgroundColor: "hsl(220, 35%, 8%)",
+                border: "1px solid hsl(220, 30%, 18%)",
                 borderRadius: "6px",
-                color: "#c9d1d9",
+                color: "hsl(180, 100%, 95%)",
               }}
             />
             <Bar dataKey="count" radius={[0, 4, 4, 0]}>

@@ -1,37 +1,44 @@
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import SOCSidebar from "@/components/soc/SOCSidebar";
 import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
 import { Bell, Search, User } from "lucide-react";
+
 const Labs = () => {
-  return <main className="min-h-screen bg-[#010409] flex flex-col">
+  return (
+    <main className="min-h-screen bg-background flex flex-col">
       <Navbar />
       
-      <div className="flex flex-1 pt-20 overflow-auto">
+      <div className="flex flex-1 pt-20 overflow-hidden">
         <SOCSidebar activeItem="Dashboard" />
         
         <div className="flex-1 flex flex-col min-w-0">
           {/* Dashboard Header */}
-          <header className="bg-[#0d1117] border-b border-[#21262d] px-6 py-4 flex items-center justify-between">
+          <header className="bg-card border-b border-border px-6 py-4 flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-semibold text-[#c9d1d9]">Security Dashboard</h1>
-              <p className="text-sm text-[#8b949e]">Real-time threat monitoring and analysis</p>
+              <h1 className="text-xl font-semibold text-foreground">Security Dashboard</h1>
+              <p className="text-sm text-muted-foreground">Real-time threat monitoring and analysis</p>
             </div>
             
             <div className="flex items-center gap-4">
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b949e]" />
-                <input type="text" placeholder="Search alerts..." className="bg-[#0d1117] border border-[#21262d] rounded-md pl-10 pr-4 py-2 text-sm text-[#c9d1d9] placeholder:text-[#8b949e] focus:outline-none focus:border-[#00ffc8] w-64" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input 
+                  type="text" 
+                  placeholder="Search alerts..." 
+                  className="bg-background border border-border rounded-md pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-colors" 
+                />
               </div>
               
-              <button className="relative p-2 text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
+              <button className="relative p-2 text-muted-foreground hover:text-foreground transition-colors">
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
               </button>
               
-              <button className="w-8 h-8 bg-[#21262d] rounded-full flex items-center justify-center text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
+              <button className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
                 <User className="w-4 h-4" />
               </button>
             </div>
@@ -55,6 +62,8 @@ const Labs = () => {
           </div>
         </div>
       </div>
-    </main>;
+    </main>
+  );
 };
+
 export default Labs;

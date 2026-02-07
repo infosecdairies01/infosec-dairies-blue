@@ -165,30 +165,30 @@ const alertsData: Alert[] = [
 const getSeverityStyles = (severity: string) => {
   switch (severity) {
     case "Critical":
-      return "bg-red-500/20 text-red-400 border-red-500/30";
+      return "bg-destructive/20 text-destructive border-destructive/30";
     case "High":
       return "bg-orange-500/20 text-orange-400 border-orange-500/30";
     case "Medium":
       return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
     case "Low":
-      return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      return "bg-primary/20 text-primary border-primary/30";
     default:
-      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+      return "bg-muted text-muted-foreground border-border";
   }
 };
 
 const getStatusStyles = (status: string) => {
   switch (status) {
     case "Open":
-      return "bg-red-500/10 text-red-400 border-red-500/20";
+      return "bg-destructive/10 text-destructive border-destructive/20";
     case "Investigating":
       return "bg-yellow-500/10 text-yellow-400 border-yellow-500/20";
     case "Resolved":
-      return "bg-green-500/10 text-green-400 border-green-500/20";
+      return "bg-secondary/10 text-secondary border-secondary/20";
     case "Closed":
-      return "bg-gray-500/10 text-gray-400 border-gray-500/20";
+      return "bg-muted text-muted-foreground border-border";
     default:
-      return "bg-gray-500/10 text-[#8b949e] border-gray-500/20";
+      return "bg-muted text-muted-foreground border-border";
   }
 };
 
@@ -231,38 +231,38 @@ const Alerts = () => {
   };
 
   return (
-    <main className="min-h-screen bg-[#010409] flex flex-col">
+    <main className="min-h-screen bg-background flex flex-col">
       <Navbar />
       
-      <div className="flex flex-1 pt-20 overflow-auto">
+      <div className="flex flex-1 pt-20 overflow-hidden">
         <SOCSidebar activeItem="Alerts" />
         
         <div className="flex-1 flex flex-col min-w-0">
           {/* Header */}
-          <header className="bg-[#0d1117] border-b border-[#21262d] px-6 py-4 flex items-center justify-between">
+          <header className="bg-card border-b border-border px-6 py-4 flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-semibold text-[#c9d1d9]">Security Alerts</h1>
-              <p className="text-sm text-[#8b949e]">Monitor and investigate security events</p>
+              <h1 className="text-xl font-semibold text-foreground">Security Alerts</h1>
+              <p className="text-sm text-muted-foreground">Monitor and investigate security events</p>
             </div>
             
             <div className="flex items-center gap-4">
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b949e]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input 
                   type="text" 
                   placeholder="Search alerts..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-[#0d1117] border border-[#21262d] rounded-md pl-10 pr-4 py-2 text-sm text-[#c9d1d9] placeholder:text-[#8b949e] focus:outline-none focus:border-[#00ffc8] w-64" 
+                  className="bg-background border border-border rounded-md pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-colors" 
                 />
               </div>
               
-              <button className="relative p-2 text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
+              <button className="relative p-2 text-muted-foreground hover:text-foreground transition-colors">
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
               </button>
               
-              <button className="w-8 h-8 bg-[#21262d] rounded-full flex items-center justify-center text-[#8b949e] hover:text-[#c9d1d9] transition-colors">
+              <button className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
                 <User className="w-4 h-4" />
               </button>
             </div>
@@ -272,55 +272,55 @@ const Alerts = () => {
           <div className="flex-1 p-6 overflow-auto">
             {/* Stats Bar */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-              <div className="bg-[#0d1117] border border-[#21262d] rounded-lg p-4">
+              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8b949e] uppercase tracking-wide">Open</span>
-                  <AlertTriangle className="w-4 h-4 text-red-400" />
+                  <span className="text-xs text-muted-foreground uppercase tracking-wide">Open</span>
+                  <AlertTriangle className="w-4 h-4 text-destructive" />
                 </div>
-                <p className="text-2xl font-bold text-red-400 mt-1">{alertCounts.open}</p>
+                <p className="text-2xl font-bold text-destructive mt-1">{alertCounts.open}</p>
               </div>
-              <div className="bg-[#0d1117] border border-[#21262d] rounded-lg p-4">
+              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8b949e] uppercase tracking-wide">Critical</span>
-                  <div className="w-2 h-2 bg-red-500 rounded-full" />
+                  <span className="text-xs text-muted-foreground uppercase tracking-wide">Critical</span>
+                  <div className="w-2 h-2 bg-destructive rounded-full" />
                 </div>
-                <p className="text-2xl font-bold text-[#c9d1d9] mt-1">{alertCounts.critical}</p>
+                <p className="text-2xl font-bold text-foreground mt-1">{alertCounts.critical}</p>
               </div>
-              <div className="bg-[#0d1117] border border-[#21262d] rounded-lg p-4">
+              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8b949e] uppercase tracking-wide">High</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wide">High</span>
                   <div className="w-2 h-2 bg-orange-500 rounded-full" />
                 </div>
-                <p className="text-2xl font-bold text-[#c9d1d9] mt-1">{alertCounts.high}</p>
+                <p className="text-2xl font-bold text-foreground mt-1">{alertCounts.high}</p>
               </div>
-              <div className="bg-[#0d1117] border border-[#21262d] rounded-lg p-4">
+              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8b949e] uppercase tracking-wide">Medium</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wide">Medium</span>
                   <div className="w-2 h-2 bg-yellow-500 rounded-full" />
                 </div>
-                <p className="text-2xl font-bold text-[#c9d1d9] mt-1">{alertCounts.medium}</p>
+                <p className="text-2xl font-bold text-foreground mt-1">{alertCounts.medium}</p>
               </div>
-              <div className="bg-[#0d1117] border border-[#21262d] rounded-lg p-4">
+              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8b949e] uppercase tracking-wide">Low</span>
-                  <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                  <span className="text-xs text-muted-foreground uppercase tracking-wide">Low</span>
+                  <div className="w-2 h-2 bg-primary rounded-full" />
                 </div>
-                <p className="text-2xl font-bold text-[#c9d1d9] mt-1">{alertCounts.low}</p>
+                <p className="text-2xl font-bold text-foreground mt-1">{alertCounts.low}</p>
               </div>
             </div>
 
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
               <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-[#8b949e]" />
-                <span className="text-sm text-[#8b949e]">Filters:</span>
+                <Filter className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Filters:</span>
               </div>
               
               <div className="relative">
                 <select 
                   value={selectedSeverity}
                   onChange={(e) => setSelectedSeverity(e.target.value)}
-                  className="appearance-none bg-[#0d1117] border border-[#21262d] rounded-md px-3 py-1.5 pr-8 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#00ffc8] cursor-pointer"
+                  className="appearance-none bg-card border border-border rounded-md px-3 py-1.5 pr-8 text-sm text-foreground focus:outline-none focus:border-primary cursor-pointer"
                 >
                   <option value="all">All Severities</option>
                   <option value="Critical">Critical</option>
@@ -328,14 +328,14 @@ const Alerts = () => {
                   <option value="Medium">Medium</option>
                   <option value="Low">Low</option>
                 </select>
-                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b949e] pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               </div>
 
               <div className="relative">
                 <select 
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="appearance-none bg-[#0d1117] border border-[#21262d] rounded-md px-3 py-1.5 pr-8 text-sm text-[#c9d1d9] focus:outline-none focus:border-[#00ffc8] cursor-pointer"
+                  className="appearance-none bg-card border border-border rounded-md px-3 py-1.5 pr-8 text-sm text-foreground focus:outline-none focus:border-primary cursor-pointer"
                 >
                   <option value="all">All Statuses</option>
                   <option value="Open">Open</option>
@@ -343,10 +343,10 @@ const Alerts = () => {
                   <option value="Resolved">Resolved</option>
                   <option value="Closed">Closed</option>
                 </select>
-                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b949e] pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               </div>
 
-              <span className="text-sm text-[#8b949e] ml-auto">
+              <span className="text-sm text-muted-foreground ml-auto">
                 Showing {filteredAlerts.length} of {alertsData.length} alerts
               </span>
             </div>
@@ -358,16 +358,16 @@ const Alerts = () => {
                 return (
                   <div 
                     key={alert.id}
-                    className="bg-[#0d1117] border border-[#21262d] rounded-lg p-4 hover:border-[#30363d] transition-all duration-200 cursor-pointer group"
+                    className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-all duration-200 cursor-pointer group"
                   >
                     <div className="flex items-start gap-4">
                       {/* Severity Indicator */}
                       <div className={cn(
                         "w-1 h-full min-h-[80px] rounded-full shrink-0",
-                        alert.severity === "Critical" && "bg-red-500",
+                        alert.severity === "Critical" && "bg-destructive",
                         alert.severity === "High" && "bg-orange-500",
                         alert.severity === "Medium" && "bg-yellow-500",
-                        alert.severity === "Low" && "bg-blue-500",
+                        alert.severity === "Low" && "bg-primary",
                       )} />
                       
                       {/* Alert Content */}
@@ -375,7 +375,7 @@ const Alerts = () => {
                         <div className="flex items-start justify-between gap-4 mb-2">
                           <div>
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs font-mono text-[#8b949e]">{alert.id}</span>
+                              <span className="text-xs font-mono text-muted-foreground">{alert.id}</span>
                               <span className={cn(
                                 "text-xs px-2 py-0.5 rounded border",
                                 getSeverityStyles(alert.severity)
@@ -389,32 +389,32 @@ const Alerts = () => {
                                 {alert.status}
                               </span>
                             </div>
-                            <h3 className="text-[#c9d1d9] font-medium group-hover:text-[#00ffc8] transition-colors">
+                            <h3 className="text-foreground font-medium group-hover:text-primary transition-colors">
                               {alert.name}
                             </h3>
                           </div>
                           
                           <div className="flex items-center gap-2 shrink-0">
-                            <button className="p-1.5 text-[#8b949e] hover:text-[#c9d1d9] hover:bg-[#21262d] rounded transition-colors opacity-0 group-hover:opacity-100">
+                            <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors opacity-0 group-hover:opacity-100">
                               <Eye className="w-4 h-4" />
                             </button>
-                            <button className="p-1.5 text-[#8b949e] hover:text-green-400 hover:bg-[#21262d] rounded transition-colors opacity-0 group-hover:opacity-100">
+                            <button className="p-1.5 text-muted-foreground hover:text-secondary hover:bg-muted rounded transition-colors opacity-0 group-hover:opacity-100">
                               <CheckCircle className="w-4 h-4" />
                             </button>
-                            <button className="p-1.5 text-[#8b949e] hover:text-red-400 hover:bg-[#21262d] rounded transition-colors opacity-0 group-hover:opacity-100">
+                            <button className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-muted rounded transition-colors opacity-0 group-hover:opacity-100">
                               <XCircle className="w-4 h-4" />
                             </button>
-                            <button className="p-1.5 text-[#8b949e] hover:text-[#c9d1d9] hover:bg-[#21262d] rounded transition-colors">
+                            <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors">
                               <MoreHorizontal className="w-4 h-4" />
                             </button>
                           </div>
                         </div>
                         
-                        <p className="text-sm text-[#8b949e] mb-3 line-clamp-2">
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                           {alert.description}
                         </p>
                         
-                        <div className="flex flex-wrap items-center gap-4 text-xs text-[#8b949e]">
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                           <div className="flex items-center gap-1.5">
                             <Clock className="w-3.5 h-3.5" />
                             <span>{alert.date} at {alert.time}</span>
@@ -443,9 +443,9 @@ const Alerts = () => {
 
             {filteredAlerts.length === 0 && (
               <div className="text-center py-12">
-                <AlertTriangle className="w-12 h-12 text-[#30363d] mx-auto mb-4" />
-                <h3 className="text-[#c9d1d9] font-medium mb-1">No alerts found</h3>
-                <p className="text-sm text-[#8b949e]">Try adjusting your filters or search query</p>
+                <AlertTriangle className="w-12 h-12 text-muted mx-auto mb-4" />
+                <h3 className="text-foreground font-medium mb-1">No alerts found</h3>
+                <p className="text-sm text-muted-foreground">Try adjusting your filters or search query</p>
               </div>
             )}
           </div>
