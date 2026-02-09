@@ -11076,6 +11076,6396 @@ Document all IOCs:
         "Suggest detection improvements"
       ]
     }
+  },
+
+  // ============================================
+  // SIEM FUNDAMENTALS COURSE CONTENT
+  // ============================================
+
+  // Module 1: Introduction to SIEM
+  {
+    id: "1.1",
+    courseId: "siem-fundamentals",
+    title: "What is SIEM?",
+    content: `
+# What is SIEM?
+
+**Security Information and Event Management (SIEM)** is the cornerstone technology of modern Security Operations Centers. It provides centralized visibility, threat detection, and incident response capabilities.
+
+## SIEM Definition
+
+SIEM combines two technologies:
+
+| Component | Function |
+|-----------|----------|
+| **SIM** (Security Information Management) | Long-term storage, analysis, and reporting of log data |
+| **SEM** (Security Event Management) | Real-time monitoring, correlation, and alerting |
+
+> "SIEM is like having a security camera system that not only records everything but also automatically alerts you when something suspicious happens."
+
+## Why Organizations Need SIEM
+
+### 1. Centralized Visibility
+\`\`\`
+┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+│  Endpoints  │   │   Network   │   │    Cloud    │
+│    Logs     │   │    Logs     │   │    Logs     │
+└──────┬──────┘   └──────┬──────┘   └──────┬──────┘
+       │                 │                 │
+       └────────────┬────┴─────────────────┘
+                    ▼
+            ┌──────────────┐
+            │     SIEM     │
+            │  (Single     │
+            │   Pane of    │
+            │   Glass)     │
+            └──────────────┘
+\`\`\`
+
+### 2. Threat Detection
+- Real-time correlation of events across sources
+- Detection of attack patterns and anomalies
+- Automated alerting on suspicious activity
+
+### 3. Compliance & Audit
+- Log retention for regulatory requirements
+- Audit trail for security events
+- Compliance reporting (PCI-DSS, HIPAA, SOX)
+
+### 4. Incident Investigation
+- Historical search across all data sources
+- Timeline reconstruction
+- Evidence preservation
+
+## Core SIEM Capabilities
+
+### Data Collection
+- Ingest logs from hundreds of sources
+- Support multiple log formats
+- Real-time and batch collection
+
+### Normalization & Parsing
+\`\`\`
+Raw Log:
+Oct 15 09:23:45 webserver sshd[12345]: Failed password for root from 192.168.1.100
+
+Normalized Fields:
+├── timestamp: 2024-10-15T09:23:45
+├── source: webserver
+├── service: sshd
+├── action: Failed password
+├── user: root
+└── src_ip: 192.168.1.100
+\`\`\`
+
+### Correlation & Detection
+- Connect related events across sources
+- Apply detection rules and logic
+- Generate security alerts
+
+### Search & Investigation
+- Fast searching across terabytes of data
+- Filtering and aggregation
+- Pivot between related events
+
+### Dashboards & Reporting
+- Visual representation of security posture
+- Real-time metrics and trends
+- Scheduled and on-demand reports
+
+## SIEM in the SOC Workflow
+
+\`\`\`
+        ┌─────────────────────────────────────────┐
+        │              SOC ANALYST                │
+        └─────────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│                         SIEM                            │
+├─────────────────────────────────────────────────────────┤
+│  Alert Queue  │  Search  │  Dashboards  │  Reports     │
+└─────────────────────────────────────────────────────────┘
+        ▲               ▲               ▲
+        │               │               │
+   ┌────┴────┐    ┌────┴────┐    ┌────┴────┐
+   │   EDR   │    │Firewall │    │  Cloud  │
+   └─────────┘    └─────────┘    └─────────┘
+\`\`\`
+
+## What SIEM Is NOT
+
+❌ **Not a replacement for other security tools** - SIEM aggregates and correlates, but needs EDR, firewalls, etc.
+
+❌ **Not plug-and-play** - Requires configuration, tuning, and maintenance
+
+❌ **Not a magic bullet** - Effectiveness depends on data quality and analyst skills
+
+❌ **Not just for large enterprises** - Cloud SIEMs make it accessible to smaller organizations
+    `,
+    keyTakeaways: [
+      "SIEM combines security information and event management into one platform",
+      "Core capabilities: collection, normalization, correlation, search, and dashboards",
+      "SIEM provides centralized visibility across all security data sources",
+      "It's essential for threat detection, compliance, and incident investigation",
+      "SIEM requires proper configuration and skilled analysts to be effective"
+    ],
+    additionalResources: [
+      { title: "Gartner SIEM Magic Quadrant", type: "article" },
+      { title: "SANS SIEM Guide", type: "documentation" }
+    ]
+  },
+  {
+    id: "1.2",
+    courseId: "siem-fundamentals",
+    title: "SIEM Architecture & Components",
+    content: `
+# SIEM Architecture & Components
+
+Understanding SIEM architecture helps you troubleshoot issues, optimize performance, and get the most out of your security platform.
+
+## High-Level Architecture
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────────┐
+│                          SIEM PLATFORM                              │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌─────────────┐   ┌─────────────┐   ┌─────────────────────────┐  │
+│  │   Search    │   │  Dashboard  │   │     Alert Manager       │  │
+│  │    Head     │   │   Server    │   │                         │  │
+│  └──────┬──────┘   └──────┬──────┘   └───────────┬─────────────┘  │
+│         │                 │                       │                │
+│         └────────────┬────┴───────────────────────┘                │
+│                      ▼                                             │
+│         ┌───────────────────────────┐                              │
+│         │      Indexer Cluster      │                              │
+│         │   (Storage & Search)      │                              │
+│         └─────────────┬─────────────┘                              │
+│                       ▲                                            │
+├───────────────────────┼────────────────────────────────────────────┤
+│                       │                                            │
+│  ┌─────────────┐  ┌───┴─────────┐  ┌─────────────┐               │
+│  │  Collector  │  │  Collector  │  │  Collector  │               │
+│  │  (Agent)    │  │  (Syslog)   │  │   (API)     │               │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘               │
+│         │                │                │                        │
+└─────────┼────────────────┼────────────────┼────────────────────────┘
+          ▼                ▼                ▼
+    ┌──────────┐    ┌──────────┐    ┌──────────┐
+    │ Endpoints│    │ Network  │    │  Cloud   │
+    │          │    │ Devices  │    │ Services │
+    └──────────┘    └──────────┘    └──────────┘
+\`\`\`
+
+## Core Components
+
+### 1. Data Collectors
+
+**Purpose:** Gather logs from various sources and forward to the SIEM.
+
+#### Types of Collectors:
+
+| Type | Description | Use Case |
+|------|-------------|----------|
+| **Agent/Forwarder** | Software installed on endpoints | Windows/Linux servers, workstations |
+| **Syslog Receiver** | Network listener for syslog | Firewalls, routers, Linux servers |
+| **API Collector** | Pulls data via REST APIs | Cloud services, SaaS applications |
+| **Database Connector** | Queries databases directly | Legacy applications, custom systems |
+| **File Monitor** | Watches directories for new files | Batch log files, exports |
+
+#### Agent Example (Splunk Universal Forwarder):
+\`\`\`ini
+# inputs.conf - What to collect
+[monitor://C:\\Windows\\System32\\winevt\\Logs\\Security.evtx]
+disabled = false
+sourcetype = WinEventLog:Security
+
+# outputs.conf - Where to send
+[tcpout:indexer_cluster]
+server = indexer1:9997, indexer2:9997
+\`\`\`
+
+### 2. Parsing & Normalization Engine
+
+**Purpose:** Transform raw logs into structured, searchable data.
+
+\`\`\`
+BEFORE (Raw):
+<134>Oct 15 14:23:45 fw01 %ASA-6-302013: Built outbound TCP connection 12345 for outside:93.184.216.34/443 (93.184.216.34/443) to inside:10.0.0.50/52341
+
+AFTER (Normalized):
+{
+  "timestamp": "2024-10-15T14:23:45.000Z",
+  "host": "fw01",
+  "vendor": "Cisco",
+  "product": "ASA",
+  "action": "Built",
+  "direction": "outbound",
+  "protocol": "TCP",
+  "src_ip": "10.0.0.50",
+  "src_port": 52341,
+  "dst_ip": "93.184.216.34",
+  "dst_port": 443,
+  "connection_id": 12345
+}
+\`\`\`
+
+### 3. Indexer / Storage Layer
+
+**Purpose:** Store and index data for fast retrieval.
+
+#### Storage Tiers:
+\`\`\`
+┌─────────────────────────────────────────────────────┐
+│  HOT   │ Recent data (0-7 days)    │ Fast SSD     │
+├────────┼────────────────────────────┼──────────────┤
+│  WARM  │ Older data (7-30 days)    │ Standard SSD │
+├────────┼────────────────────────────┼──────────────┤
+│  COLD  │ Archive (30-365 days)     │ HDD/Object   │
+├────────┼────────────────────────────┼──────────────┤
+│ FROZEN │ Long-term (1+ years)      │ Glacier/Tape │
+└────────┴────────────────────────────┴──────────────┘
+\`\`\`
+
+### 4. Search Head / Query Engine
+
+**Purpose:** Execute searches, run reports, and serve the user interface.
+
+- Distributes queries across indexers
+- Aggregates results
+- Applies access controls
+- Caches frequent queries
+
+### 5. Correlation Engine
+
+**Purpose:** Detect patterns across multiple events and generate alerts.
+
+\`\`\`
+Event 1: Failed login (user: admin, src: 192.168.1.100)
+         +
+Event 2: Failed login (user: admin, src: 192.168.1.100)
+         +
+Event 3: Failed login (user: admin, src: 192.168.1.100)
+         +
+Event 4: Successful login (user: admin, src: 192.168.1.100)
+         =
+ALERT: Brute Force Attack Detected - 3 failures then success
+\`\`\`
+
+### 6. Alert Manager
+
+**Purpose:** Handle alert generation, routing, and notification.
+
+- Severity classification
+- Deduplication
+- Notification routing (email, SMS, SOAR)
+- Alert lifecycle management
+
+## Data Flow
+
+\`\`\`
+1. COLLECTION  →  2. TRANSPORT  →  3. PARSING  →  4. INDEXING  →  5. SEARCH
+     ▼                  ▼              ▼              ▼             ▼
+ Agents/Syslog    Encrypted TCP    Extract Fields   Store Data    Execute
+  gather logs     send to SIEM     & Normalize      in Index      Queries
+\`\`\`
+
+## Scalability Considerations
+
+| Data Volume | Architecture |
+|-------------|--------------|
+| < 50 GB/day | Single server |
+| 50-500 GB/day | Clustered indexers |
+| 500+ GB/day | Distributed, multi-site |
+
+## Cloud vs On-Premises
+
+| Aspect | Cloud SIEM | On-Premises |
+|--------|------------|-------------|
+| Deployment | Minutes | Weeks/Months |
+| Scalability | Automatic | Manual |
+| Maintenance | Vendor managed | Self-managed |
+| Data location | Vendor's cloud | Your data center |
+| Cost model | Subscription | Capital expense |
+    `,
+    keyTakeaways: [
+      "SIEM consists of collectors, parsers, indexers, search heads, and correlation engines",
+      "Data flows from collection through parsing, indexing, and finally search",
+      "Storage tiers (hot/warm/cold) balance performance with cost",
+      "Scalability depends on data volume and search requirements",
+      "Cloud SIEMs offer faster deployment but less control over data"
+    ]
+  },
+  {
+    id: "1.3",
+    courseId: "siem-fundamentals",
+    title: "Popular SIEM Platforms Overview",
+    content: `
+# Popular SIEM Platforms Overview
+
+Understanding the major SIEM platforms helps you adapt your skills across different environments. Let's explore the leaders in the market.
+
+## Market Landscape
+
+\`\`\`
+                    SIEM Market Leaders
+    ┌─────────────────────────────────────────────┐
+    │           │  Completeness of Vision  →      │
+    │           │                                 │
+    │  Leaders  │  ● Splunk                       │
+    │     ▲     │  ● Microsoft Sentinel           │
+    │     │     │  ● IBM QRadar                   │
+    │  Ability  │                                 │
+    │    to     │  Challengers                    │
+    │  Execute  │  ● Elastic SIEM                 │
+    │     │     │  ● Sumo Logic                   │
+    │     │     │  ● LogRhythm                    │
+    │     ▼     │                                 │
+    │ Niche     │  ● Graylog                      │
+    │ Players   │  ● Wazuh (Open Source)          │
+    └─────────────────────────────────────────────┘
+\`\`\`
+
+## Splunk
+
+**The industry standard for log management and SIEM.**
+
+### Key Characteristics:
+- Most powerful and flexible search language (SPL)
+- Massive ecosystem of apps and integrations
+- Excellent for both security and IT operations
+- Premium pricing
+
+### Search Example (SPL):
+\`\`\`spl
+index=security sourcetype=WinEventLog:Security EventCode=4625
+| stats count by src_ip, user
+| where count > 5
+| sort -count
+\`\`\`
+
+### Splunk Products:
+| Product | Purpose |
+|---------|---------|
+| Splunk Enterprise | On-premises SIEM |
+| Splunk Cloud | Cloud-hosted SIEM |
+| Splunk Enterprise Security | Advanced security features |
+| Splunk SOAR | Security orchestration |
+
+### Pros & Cons:
+✅ Best-in-class search and analytics
+✅ Huge community and resources
+✅ Highly customizable
+❌ Expensive licensing
+❌ Complex to master
+
+---
+
+## Microsoft Sentinel
+
+**Cloud-native SIEM built on Azure.**
+
+### Key Characteristics:
+- Native Azure integration
+- AI/ML-powered detection
+- Built-in SOAR capabilities
+- Pay-per-GB pricing
+
+### Search Example (KQL):
+\`\`\`kusto
+SecurityEvent
+| where EventID == 4625
+| summarize FailedLogins = count() by SourceIP, Account
+| where FailedLogins > 5
+| order by FailedLogins desc
+\`\`\`
+
+### Sentinel Features:
+- **Data Connectors**: 100+ built-in integrations
+- **Analytics Rules**: Pre-built and custom detection
+- **Workbooks**: Interactive dashboards
+- **Playbooks**: Automated response (Logic Apps)
+- **Hunting**: Proactive threat hunting queries
+
+### Pros & Cons:
+✅ Excellent for Microsoft environments
+✅ No infrastructure to manage
+✅ Growing rapidly in features
+❌ Requires Azure expertise
+❌ Costs can grow unexpectedly
+
+---
+
+## IBM QRadar
+
+**Enterprise-grade SIEM with strong compliance features.**
+
+### Key Characteristics:
+- Strong out-of-the-box detection rules
+- Excellent for regulated industries
+- Network flow analysis included
+- Traditional enterprise deployment
+
+### Search Example (AQL):
+\`\`\`sql
+SELECT sourceip, username, COUNT(*) as attempts
+FROM events
+WHERE eventid = 4625
+GROUP BY sourceip, username
+HAVING COUNT(*) > 5
+ORDER BY attempts DESC
+\`\`\`
+
+### QRadar Components:
+- **Console**: Management interface
+- **Event Processor**: Log processing
+- **Flow Processor**: Network traffic analysis
+- **Data Node**: Storage
+- **QRadar Advisor with Watson**: AI assistance
+
+### Pros & Cons:
+✅ Comprehensive compliance reporting
+✅ Strong network analysis
+✅ Good support for legacy systems
+❌ Dated user interface
+❌ Complex licensing
+
+---
+
+## Elastic SIEM (Elastic Security)
+
+**Open-source based SIEM on the ELK stack.**
+
+### Key Characteristics:
+- Built on Elasticsearch, Logstash, Kibana
+- Open-source core with commercial features
+- Highly scalable
+- Strong for custom use cases
+
+### Search Example (Lucene/EQL):
+\`\`\`
+event.code:4625 AND agent.type:winlogbeat
+| stats count() by source.ip, user.name
+\`\`\`
+
+### Elastic Security Features:
+- **SIEM app**: Alert triage and investigation
+- **Detections**: Pre-built rules (Elastic rules)
+- **Timeline**: Visual investigation
+- **Cases**: Incident management
+- **Endpoint Security**: EDR capabilities
+
+### Pros & Cons:
+✅ Open source core
+✅ Extremely flexible
+✅ Massive community
+❌ Requires more expertise to deploy
+❌ Security features less mature
+
+---
+
+## Google Chronicle (SecOps)
+
+**Google-scale security analytics.**
+
+### Key Characteristics:
+- Petabyte-scale search
+- Fixed pricing (unlimited data)
+- Built on Google infrastructure
+- Modern, fast interface
+
+### Unified Data Model (UDM):
+\`\`\`yaml
+metadata:
+  event_timestamp: "2024-10-15T14:23:45Z"
+  event_type: USER_LOGIN
+principal:
+  ip: "192.168.1.100"
+  user: 
+    userid: "admin"
+target:
+  ip: "10.0.0.5"
+security_result:
+  action: BLOCK
+\`\`\`
+
+### Pros & Cons:
+✅ Incredible search speed
+✅ Predictable pricing
+✅ Growing detection content
+❌ Smaller ecosystem
+❌ Requires Google Cloud familiarity
+
+---
+
+## Comparison Summary
+
+| Feature | Splunk | Sentinel | QRadar | Elastic | Chronicle |
+|---------|--------|----------|--------|---------|-----------|
+| Deployment | Both | Cloud | On-prem | Both | Cloud |
+| Query Language | SPL | KQL | AQL | Lucene | YARA-L |
+| Learning Curve | High | Medium | High | High | Medium |
+| Cost | $$$$$ | $$$ | $$$$ | $$ | $$$ |
+| Best For | Large enterprises | Microsoft shops | Compliance | Custom/flexible | Google shops |
+
+## Skills That Transfer
+
+Regardless of platform, these skills transfer:
+- Understanding log sources and formats
+- Writing search queries (syntax differs)
+- Building correlation rules
+- Dashboard design principles
+- Alert triage methodology
+    `,
+    keyTakeaways: [
+      "Splunk is the industry leader with the most powerful search language (SPL)",
+      "Microsoft Sentinel is cloud-native and integrates well with Azure/M365",
+      "IBM QRadar excels in compliance and regulated industries",
+      "Elastic SIEM offers flexibility with open-source foundations",
+      "Core SIEM skills transfer across platforms despite syntax differences"
+    ],
+    additionalResources: [
+      { title: "Splunk Fundamentals 1 (Free)", type: "documentation", url: "https://www.splunk.com/en_us/training/courses/splunk-fundamentals-1.html" },
+      { title: "Microsoft Sentinel Training", type: "documentation", url: "https://learn.microsoft.com/en-us/training/paths/security-ops-sentinel/" }
+    ]
+  },
+  {
+    id: "1.4",
+    courseId: "siem-fundamentals",
+    title: "SIEM Use Cases in Security",
+    content: `
+# SIEM Use Cases in Security
+
+SIEM platforms serve multiple critical functions in security operations. Understanding these use cases helps you maximize the value of your SIEM investment.
+
+## Primary Use Cases
+
+### 1. Threat Detection
+
+The core security function - identifying malicious activity in real-time.
+
+\`\`\`
+                    Threat Detection Flow
+    ┌─────────────────────────────────────────────────┐
+    │                                                 │
+    │   Logs  →  Correlation  →  Detection  →  Alert │
+    │              Rules         Logic        Queue  │
+    │                                                 │
+    └─────────────────────────────────────────────────┘
+\`\`\`
+
+#### Common Detection Scenarios:
+
+| Threat Type | What SIEM Detects |
+|-------------|-------------------|
+| **Brute Force** | Multiple failed logins followed by success |
+| **Lateral Movement** | Unusual authentication across systems |
+| **Data Exfiltration** | Large outbound data transfers |
+| **Malware C2** | Connections to known bad IPs/domains |
+| **Privilege Escalation** | Unauthorized admin account creation |
+| **Insider Threat** | After-hours access to sensitive data |
+
+#### Detection Rule Example:
+\`\`\`
+Rule: Brute Force Attack
+Condition: 
+  - EventID = 4625 (Failed Login)
+  - Count > 10 within 5 minutes
+  - Same source IP
+  - Followed by EventID 4624 (Success)
+Action:
+  - Generate HIGH severity alert
+  - Include source IP, target user, timeline
+\`\`\`
+
+### 2. Incident Investigation
+
+When alerts fire, SIEM provides the data and tools to investigate.
+
+#### Investigation Workflow:
+\`\`\`
+1. Alert Received
+       ↓
+2. Pivot to Related Events
+       ↓
+3. Expand Timeline (before/after)
+       ↓
+4. Check Other Affected Systems
+       ↓
+5. Identify Root Cause
+       ↓
+6. Document Findings
+\`\`\`
+
+#### Investigation Query Examples:
+
+**Find all activity from suspicious IP:**
+\`\`\`
+src_ip="192.168.1.100" OR dst_ip="192.168.1.100"
+| sort _time
+| table _time, src_ip, dst_ip, action, user, app
+\`\`\`
+
+**Timeline around an event:**
+\`\`\`
+host="infected-host" earliest=-1h latest=+1h
+| sort _time
+| table _time, sourcetype, message
+\`\`\`
+
+### 3. Compliance & Audit
+
+Meeting regulatory requirements for log retention and monitoring.
+
+#### Common Compliance Standards:
+
+| Standard | Log Requirements |
+|----------|------------------|
+| **PCI-DSS** | 1 year retention, access monitoring |
+| **HIPAA** | 6 years, access to PHI tracking |
+| **SOX** | Financial system access auditing |
+| **GDPR** | Data access logging, breach detection |
+| **NIST 800-53** | Comprehensive logging requirements |
+
+#### Compliance Reports:
+- User access activity reports
+- Privileged account usage
+- Failed authentication attempts
+- Changes to sensitive data
+- Security configuration changes
+
+### 4. Security Monitoring & Dashboards
+
+Real-time visibility into security posture.
+
+\`\`\`
+┌───────────────────────────────────────────────────────────────┐
+│                    SOC DASHBOARD                              │
+├───────────────────┬───────────────────┬───────────────────────┤
+│  ALERTS TODAY     │  TOP SOURCES      │  THREAT MAP           │
+│  ┌────┐ ┌────┐   │  1. Firewall      │  ┌─────────────────┐  │
+│  │ 45 │ │ 12 │   │  2. EDR           │  │ 🔴    🔴        │  │
+│  │Crit│ │High│   │  3. Windows       │  │    🔴      🔴   │  │
+│  └────┘ └────┘   │  4. Linux         │  └─────────────────┘  │
+├───────────────────┴───────────────────┴───────────────────────┤
+│                    ALERT TREND (24H)                          │
+│  100│                    ___                                  │
+│   75│            ___/\\_/   \\                                 │
+│   50│    ___/\\_/           \\___                             │
+│   25│___/                        \\___                        │
+│    0└────────────────────────────────                         │
+└───────────────────────────────────────────────────────────────┘
+\`\`\`
+
+#### Key Metrics to Monitor:
+- Alerts by severity over time
+- Top alerting sources
+- Top attacked users/hosts
+- Geographic origin of threats
+- Mean time to detect (MTTD)
+
+### 5. Threat Hunting
+
+Proactive searching for threats that evade detection.
+
+#### Hunting Hypothesis Example:
+> "Attackers may be using encoded PowerShell commands to evade detection"
+
+#### Hunting Query:
+\`\`\`
+sourcetype=WinEventLog:Security EventCode=4688
+CommandLine="*powershell*" CommandLine="*-enc*"
+| table _time, host, user, CommandLine
+\`\`\`
+
+### 6. Forensics & Evidence Collection
+
+Supporting investigations with preserved, searchable data.
+
+#### Forensic Capabilities:
+- **Timeline reconstruction**: See exact sequence of events
+- **Evidence preservation**: Immutable log storage
+- **Chain of custody**: Audit trail for data access
+- **Export capabilities**: Extract data for legal proceedings
+
+### 7. Operational Intelligence
+
+Beyond security - using logs for IT operations.
+
+| Use Case | Example |
+|----------|---------|
+| Application monitoring | Error rates, response times |
+| Infrastructure health | Server performance, disk space |
+| Change management | Configuration changes tracking |
+| Capacity planning | Usage trends over time |
+
+## Real-World Scenario
+
+**Scenario: Ransomware Investigation**
+
+\`\`\`
+Day 1: Analyst notices unusual encryption activity alert
+        ↓
+Query SIEM: Find all file operations on affected host
+        ↓
+Discovery: Malicious process encrypting files since 2am
+        ↓
+Pivot: Find how the process started
+        ↓
+Discovery: Phishing email delivered malicious attachment at 1:45am
+        ↓
+Expand: Search for all recipients of same email
+        ↓
+Result: 5 other users received email, 2 clicked - contain immediately
+        ↓
+Report: Complete timeline from initial access to detection
+\`\`\`
+
+## Measuring SIEM Value
+
+| Metric | Target | How SIEM Helps |
+|--------|--------|----------------|
+| MTTD | < 1 hour | Automated detection |
+| MTTR | < 4 hours | Investigation tools |
+| Dwell time | Minimize | Proactive hunting |
+| False positive rate | < 10% | Rule tuning |
+    `,
+    keyTakeaways: [
+      "SIEM serves multiple purposes: detection, investigation, compliance, and hunting",
+      "Threat detection uses correlation rules to identify malicious patterns",
+      "Investigation capabilities let analysts pivot and expand from initial alerts",
+      "Compliance requires specific log retention and reporting features",
+      "Dashboards provide real-time visibility into security posture"
+    ]
+  },
+
+  // Module 2: Data Ingestion & Management
+  {
+    id: "2.1",
+    courseId: "siem-fundamentals",
+    title: "Log Collection Methods",
+    content: `
+# Log Collection Methods
+
+Getting data into your SIEM is the foundation of security visibility. Let's explore the various methods for collecting logs.
+
+## Collection Architecture Overview
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                        SIEM PLATFORM                            │
+│                                                                 │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                    Data Receivers                         │  │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────────┐ │  │
+│  │  │ Agent   │  │ Syslog  │  │  HTTP   │  │ Cloud       │ │  │
+│  │  │Receiver │  │Receiver │  │  API    │  │ Connectors  │ │  │
+│  │  └────┬────┘  └────┬────┘  └────┬────┘  └──────┬──────┘ │  │
+│  └───────┼───────────┼───────────┼───────────────┼─────────┘  │
+└──────────┼───────────┼───────────┼───────────────┼────────────┘
+           │           │           │               │
+           ▼           ▼           ▼               ▼
+    ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐
+    │ Installed│ │ Network  │ │   REST   │ │    Cloud     │
+    │  Agents  │ │ Devices  │ │   APIs   │ │   Services   │
+    └──────────┘ └──────────┘ └──────────┘ └──────────────┘
+\`\`\`
+
+## 1. Agent-Based Collection
+
+**Agents are software installed on endpoints that forward logs to SIEM.**
+
+### How It Works:
+\`\`\`
+┌─────────────────────────────┐
+│        Endpoint             │
+│  ┌───────────────────────┐  │
+│  │   Application Logs    │  │
+│  │   Security Events     │  │
+│  │   System Logs         │  │
+│  └───────────┬───────────┘  │
+│              │              │
+│  ┌───────────▼───────────┐  │
+│  │    Forwarder Agent    │  │
+│  │  - Monitors files     │  │
+│  │  - Buffers data       │  │
+│  │  - Compresses/Encrypts│  │
+│  └───────────┬───────────┘  │
+└──────────────┼──────────────┘
+               │ TCP/TLS
+               ▼
+        ┌────────────┐
+        │    SIEM    │
+        └────────────┘
+\`\`\`
+
+### Common Agent Types:
+
+| Agent | Platform | Used For |
+|-------|----------|----------|
+| Splunk Universal Forwarder | All | Splunk deployments |
+| Winlogbeat | Windows | Elastic SIEM |
+| Filebeat | All | Elastic SIEM |
+| Microsoft Monitoring Agent | Windows | Sentinel |
+| Wazuh Agent | All | Wazuh/OSSEC |
+
+### Agent Configuration Example (Splunk UF):
+\`\`\`ini
+# inputs.conf
+[WinEventLog://Security]
+disabled = 0
+index = security
+
+[WinEventLog://System]
+disabled = 0
+index = windows
+
+[monitor://C:\\logs\\app\\*.log]
+sourcetype = custom_app
+index = applications
+\`\`\`
+
+### Pros & Cons:
+✅ Real-time collection
+✅ Works across firewalls
+✅ Reliable buffering
+❌ Requires installation/maintenance
+❌ Resource usage on endpoints
+
+---
+
+## 2. Syslog Collection
+
+**The traditional method for network devices and Unix/Linux systems.**
+
+### Syslog Basics:
+\`\`\`
+┌────────────────────────────────────────────────────────────┐
+│ Priority  Timestamp           Host      Message           │
+│ <134>     Oct 15 14:23:45     fw01      Connection denied │
+└────────────────────────────────────────────────────────────┘
+
+Priority = Facility * 8 + Severity
+134 = 16 (local0) * 8 + 6 (info)
+\`\`\`
+
+### Syslog Severity Levels:
+
+| Level | Keyword | Description |
+|-------|---------|-------------|
+| 0 | Emergency | System unusable |
+| 1 | Alert | Immediate action required |
+| 2 | Critical | Critical conditions |
+| 3 | Error | Error conditions |
+| 4 | Warning | Warning conditions |
+| 5 | Notice | Normal but significant |
+| 6 | Info | Informational |
+| 7 | Debug | Debug messages |
+
+### Syslog Protocols:
+
+| Protocol | Port | Features |
+|----------|------|----------|
+| UDP | 514 | Fast, unreliable, no encryption |
+| TCP | 514/6514 | Reliable, flow control |
+| TLS (syslog-ng) | 6514 | Encrypted, secure |
+
+### Configuring Syslog Sources:
+
+**Cisco ASA:**
+\`\`\`
+logging enable
+logging host inside 10.0.0.100
+logging trap informational
+logging facility local0
+\`\`\`
+
+**Linux rsyslog:**
+\`\`\`bash
+# /etc/rsyslog.conf
+*.* @@10.0.0.100:514   # TCP
+*.* @10.0.0.100:514    # UDP
+\`\`\`
+
+---
+
+## 3. API-Based Collection
+
+**Pull logs from cloud services and applications via REST APIs.**
+
+### Common API Sources:
+
+| Service | API Type | Data Available |
+|---------|----------|----------------|
+| Office 365 | Management Activity API | User activity, admin actions |
+| AWS CloudTrail | S3/SQS | API calls, resource changes |
+| Okta | System Log API | Authentication, user events |
+| GitHub | Audit Log API | Repository actions, access |
+| Salesforce | Event Monitoring | User activity, queries |
+
+### API Collection Flow:
+\`\`\`
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│   Cloud     │      │   SIEM      │      │   SIEM      │
+│   Service   │ ←──  │  Collector  │ ──→  │  Indexer    │
+│             │ API  │             │      │             │
+└─────────────┘ Pull └─────────────┘      └─────────────┘
+\`\`\`
+
+### API Collection Example (Python):
+\`\`\`python
+import requests
+import json
+
+# Pull logs from API
+response = requests.get(
+    "https://api.service.com/logs",
+    headers={"Authorization": "Bearer TOKEN"},
+    params={"startTime": "2024-10-15T00:00:00Z"}
+)
+
+logs = response.json()
+
+# Forward to SIEM
+for log in logs:
+    send_to_siem(log)
+\`\`\`
+
+---
+
+## 4. File-Based Collection
+
+**Monitor directories for new log files or batch imports.**
+
+### Use Cases:
+- Legacy applications that write to files
+- Batch exports from systems
+- Historical log imports
+- Compliance archives
+
+### Configuration Example:
+\`\`\`ini
+[monitor://var/log/application/]
+sourcetype = legacy_app
+index = applications
+whitelist = \\.log$
+crcSalt = <SOURCE>
+\`\`\`
+
+---
+
+## 5. Database Collection
+
+**Query databases directly for audit logs.**
+
+### Common Database Sources:
+- SQL Server audit logs
+- Oracle audit trail
+- MySQL audit plugin
+- PostgreSQL logging
+
+### Collection Method:
+\`\`\`sql
+-- Periodic query to collect new events
+SELECT * FROM audit_log 
+WHERE timestamp > @last_collection_time
+ORDER BY timestamp
+\`\`\`
+
+---
+
+## 6. Cloud-Native Connectors
+
+**Pre-built integrations for cloud services.**
+
+### Microsoft Sentinel Connectors:
+\`\`\`
+Azure Active Directory ────→ ┐
+Microsoft 365 ─────────────→ │
+Azure Security Center ─────→ ├──→ SENTINEL
+AWS CloudTrail ────────────→ │
+Okta ──────────────────────→ │
+\`\`\`
+
+---
+
+## Choosing Collection Methods
+
+| Factor | Best Method |
+|--------|-------------|
+| Endpoints | Agent-based |
+| Network devices | Syslog |
+| Cloud SaaS | API/Connectors |
+| Legacy apps | File monitoring |
+| Real-time need | Agent or Syslog |
+| Low overhead | Syslog or API |
+    `,
+    keyTakeaways: [
+      "Agent-based collection is best for endpoints requiring real-time forwarding",
+      "Syslog is the standard for network devices and Unix/Linux systems",
+      "API collection is essential for cloud services and SaaS applications",
+      "Choose collection method based on source type, reliability needs, and overhead",
+      "Modern SIEMs support multiple collection methods simultaneously"
+    ]
+  },
+  {
+    id: "2.2",
+    courseId: "siem-fundamentals",
+    title: "Data Normalization & Parsing",
+    content: `
+# Data Normalization & Parsing
+
+Raw logs come in thousands of formats. Normalization transforms them into structured, searchable data with consistent field names.
+
+## Why Normalization Matters
+
+\`\`\`
+WITHOUT NORMALIZATION:
+─────────────────────
+Log 1 (Windows): src_ip, user_name, event_id
+Log 2 (Linux):   source, username, type
+Log 3 (Firewall): srcaddr, usr, action
+
+WITH NORMALIZATION:
+──────────────────
+All Sources: src_ip, user, event_type
+\`\`\`
+
+### Benefits:
+- **Unified search**: One query searches all data
+- **Correlation**: Connect events across sources
+- **Dashboards**: Consistent visualizations
+- **Detection rules**: Write once, apply everywhere
+
+## The Parsing Process
+
+\`\`\`
+    Raw Log
+       │
+       ▼
+┌─────────────────┐
+│  Event Breaking │  Split log stream into individual events
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│   Timestamping  │  Extract and normalize timestamps
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ Field Extraction│  Parse out key-value pairs
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│  Normalization  │  Map to common data model
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│   Enrichment    │  Add context (geo, threat intel)
+└────────┬────────┘
+         ▼
+    Indexed Event
+\`\`\`
+
+## Field Extraction Techniques
+
+### 1. Regular Expressions (Regex)
+
+\`\`\`
+Raw Log:
+Oct 15 14:23:45 server sshd[12345]: Failed password for root from 192.168.1.100 port 22
+
+Regex Pattern:
+^(\\w+ \\d+ [\\d:]+) (\\S+) sshd\\[(\\d+)\\]: (\\w+ \\w+) for (\\S+) from ([\\d.]+)
+
+Extracted Fields:
+timestamp = "Oct 15 14:23:45"
+host = "server"
+pid = "12345"
+action = "Failed password"
+user = "root"
+src_ip = "192.168.1.100"
+\`\`\`
+
+### 2. Key-Value Extraction
+
+\`\`\`
+Raw Log:
+action=DENY src=192.168.1.100 dst=10.0.0.5 port=443 proto=TCP
+
+Automatic Extraction:
+action = "DENY"
+src = "192.168.1.100"
+dst = "10.0.0.5"
+port = "443"
+proto = "TCP"
+\`\`\`
+
+### 3. JSON Parsing
+
+\`\`\`json
+{
+  "timestamp": "2024-10-15T14:23:45Z",
+  "source": {"ip": "192.168.1.100", "port": 54321},
+  "destination": {"ip": "10.0.0.5", "port": 443},
+  "action": "blocked"
+}
+
+Extracted:
+timestamp = "2024-10-15T14:23:45Z"
+source.ip = "192.168.1.100"
+source.port = 54321
+destination.ip = "10.0.0.5"
+destination.port = 443
+action = "blocked"
+\`\`\`
+
+### 4. Delimited Parsing (CSV, TSV)
+
+\`\`\`
+Raw: 2024-10-15,192.168.1.100,admin,LOGIN,SUCCESS
+
+Headers: date,src_ip,user,action,result
+
+Fields:
+date = "2024-10-15"
+src_ip = "192.168.1.100"
+user = "admin"
+action = "LOGIN"
+result = "SUCCESS"
+\`\`\`
+
+## Common Data Model (CDM)
+
+A standard schema that all logs map to, enabling unified search.
+
+### Example CDM Fields:
+
+| Category | Standard Fields |
+|----------|-----------------|
+| **Time** | timestamp, event_time |
+| **Source** | src_ip, src_port, src_host, src_user |
+| **Destination** | dst_ip, dst_port, dst_host |
+| **Identity** | user, user_id, email |
+| **Action** | action, result, status |
+| **Application** | app, service, process |
+| **Threat** | threat_category, severity, signature |
+
+### CDM Mapping Example:
+
+\`\`\`
+Source: Windows Security Event 4625
+
+Original Fields          →    CDM Fields
+─────────────────────────────────────────
+TimeCreated              →    timestamp
+IpAddress                →    src_ip
+TargetUserName           →    user
+WorkstationName          →    src_host
+EventID                  →    event_code
+"Logon Failure"          →    action = "failed_login"
+\`\`\`
+
+## Timestamp Normalization
+
+Timestamps come in many formats - normalize to ISO 8601.
+
+\`\`\`
+Input Formats:
+─────────────
+Oct 15 14:23:45
+15/10/2024 14:23:45
+2024-10-15T14:23:45Z
+1697378625 (epoch)
+2024-10-15 02:23:45 PM
+
+Output (ISO 8601):
+──────────────────
+2024-10-15T14:23:45.000Z
+\`\`\`
+
+### Timezone Handling:
+\`\`\`
+Local time: 2024-10-15 09:23:45 EST
+UTC:        2024-10-15T14:23:45Z
+
+Always store in UTC, display in local timezone
+\`\`\`
+
+## Enrichment
+
+Adding context to raw events.
+
+### Common Enrichments:
+
+| Field | Enrichment | Source |
+|-------|------------|--------|
+| src_ip | Country, ASN, ISP | GeoIP database |
+| src_ip | Threat score | Threat intelligence |
+| user | Department, manager | HR/LDAP lookup |
+| hash | Malware family | VirusTotal |
+| hostname | Asset criticality | CMDB |
+
+### Enrichment Example:
+\`\`\`
+Original Event:
+{
+  "src_ip": "203.0.113.50",
+  "action": "denied"
+}
+
+After Enrichment:
+{
+  "src_ip": "203.0.113.50",
+  "action": "denied",
+  "src_country": "Russia",
+  "src_asn": "AS12345",
+  "threat_intel": {
+    "is_known_bad": true,
+    "category": "malware_c2",
+    "confidence": 95
+  }
+}
+\`\`\`
+
+## Parsing Best Practices
+
+### 1. Use Built-in Parsers First
+Most SIEMs have pre-built parsers for common sources.
+
+### 2. Test Thoroughly
+Validate parsing against sample logs before production.
+
+### 3. Handle Edge Cases
+\`\`\`
+What if field is missing?
+What if value contains delimiter?
+What if format changes?
+\`\`\`
+
+### 4. Document Custom Parsers
+Future you will thank present you.
+
+### 5. Monitor Parse Failures
+\`\`\`
+Alert: 15% of Windows events failed parsing
+Cause: New EventID format not recognized
+Action: Update parser configuration
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Normalization transforms raw logs into structured, searchable data",
+      "Common Data Models enable unified search across all sources",
+      "Field extraction uses regex, key-value, JSON, and delimiter parsing",
+      "Timestamps should be normalized to UTC in ISO 8601 format",
+      "Enrichment adds valuable context like geo-location and threat intel"
+    ]
+  },
+  {
+    id: "2.3",
+    courseId: "siem-fundamentals",
+    title: "Data Sources & Indexing",
+    content: `
+# Data Sources & Indexing
+
+Properly organizing your data sources and indexes is critical for search performance, access control, and data management.
+
+## Understanding Data Sources
+
+### Source Types / Log Types
+
+Each unique log format is assigned a **source type** (or log type) that tells the SIEM how to parse it.
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│                    SOURCE TYPES                         │
+├─────────────────┬───────────────────────────────────────┤
+│ WinEventLog     │ Windows Security, System, Application │
+│ syslog          │ Network devices, Linux                │
+│ aws:cloudtrail  │ AWS API activity                      │
+│ pan:traffic     │ Palo Alto firewall logs               │
+│ access_combined │ Apache/Nginx web logs                 │
+└─────────────────┴───────────────────────────────────────┘
+\`\`\`
+
+### Common Enterprise Data Sources:
+
+| Category | Sources | Security Value |
+|----------|---------|----------------|
+| **Endpoints** | Windows Events, Sysmon, EDR | User activity, process execution |
+| **Network** | Firewalls, IDS/IPS, Proxy | Traffic patterns, blocked threats |
+| **Identity** | AD, Okta, Azure AD | Authentication, access changes |
+| **Cloud** | AWS, Azure, GCP | API activity, resource changes |
+| **Email** | Exchange, O365, Gmail | Phishing, data exfiltration |
+| **Applications** | Web servers, databases | Application-layer attacks |
+
+## Index Architecture
+
+**Indexes** are logical containers that organize and store your data.
+
+\`\`\`
+                    SIEM INDEXES
+    ┌───────────────────────────────────────┐
+    │                                       │
+    │  ┌─────────────┐  ┌─────────────┐    │
+    │  │  security   │  │  network    │    │
+    │  │  index      │  │  index      │    │
+    │  ├─────────────┤  ├─────────────┤    │
+    │  │ WinEvents   │  │ Firewall    │    │
+    │  │ Auth Logs   │  │ IDS/IPS     │    │
+    │  │ EDR Data    │  │ Proxy       │    │
+    │  └─────────────┘  └─────────────┘    │
+    │                                       │
+    │  ┌─────────────┐  ┌─────────────┐    │
+    │  │  cloud      │  │ application │    │
+    │  │  index      │  │  index      │    │
+    │  ├─────────────┤  ├─────────────┤    │
+    │  │ AWS CT      │  │ Web Logs    │    │
+    │  │ Azure       │  │ Database    │    │
+    │  │ GCP         │  │ Custom Apps │    │
+    │  └─────────────┘  └─────────────┘    │
+    │                                       │
+    └───────────────────────────────────────┘
+\`\`\`
+
+### Index Design Strategies:
+
+| Strategy | Indexes | Best For |
+|----------|---------|----------|
+| **By Security Domain** | security, network, cloud | Access control by team |
+| **By Source** | windows, linux, firewall | Source-specific retention |
+| **By Compliance** | pci, hipaa, sox | Regulatory requirements |
+| **By Business Unit** | hr, finance, engineering | Organizational separation |
+
+### Index Naming Conventions:
+
+\`\`\`
+<environment>_<domain>_<detail>
+
+Examples:
+prod_security_windows
+prod_security_linux
+prod_network_firewall
+prod_cloud_aws
+dev_application_web
+\`\`\`
+
+## How Indexing Works
+
+\`\`\`
+1. Raw Event Arrives
+        │
+        ▼
+2. Parse & Extract Fields
+        │
+        ▼
+3. Assign to Index
+        │
+        ▼
+4. Create Inverted Index
+   ┌─────────────────────────────────────────┐
+   │ Term         │ Document IDs             │
+   │──────────────│──────────────────────────│
+   │ "failed"     │ [1, 5, 12, 89, 234]     │
+   │ "admin"      │ [1, 3, 12, 56]          │
+   │ "192.168.1.1"│ [1, 2, 3, 4, 5]         │
+   └─────────────────────────────────────────┘
+        │
+        ▼
+5. Store in Time-Based Buckets
+   [Oct 15 00:00 - Oct 15 06:00] → bucket_1
+   [Oct 15 06:00 - Oct 15 12:00] → bucket_2
+   [Oct 15 12:00 - Oct 15 18:00] → bucket_3
+\`\`\`
+
+### Search Flow:
+\`\`\`
+Query: index=security user=admin action=failed
+
+1. Identify index: security
+2. Check inverted index for terms
+3. Find document IDs matching ALL terms
+4. Retrieve and return matching events
+\`\`\`
+
+## Index Configuration
+
+### Creating an Index (Splunk):
+\`\`\`ini
+# indexes.conf
+[security]
+homePath = $SPLUNK_DB/security/db
+coldPath = $SPLUNK_DB/security/colddb
+thawedPath = $SPLUNK_DB/security/thaweddb
+maxDataSize = auto_high_volume
+frozenTimePeriodInSecs = 31536000  # 1 year
+\`\`\`
+
+### Routing Data to Indexes:
+\`\`\`ini
+# inputs.conf (on forwarder)
+[WinEventLog://Security]
+index = security
+sourcetype = WinEventLog:Security
+
+# transforms.conf (routing rules)
+[route_firewall]
+REGEX = firewall
+DEST_KEY = _MetaData:Index
+FORMAT = network
+\`\`\`
+
+## Access Control
+
+Limit who can search which indexes.
+
+\`\`\`
+┌─────────────────────────────────────────────┐
+│                 ROLE: SOC_L1                │
+├─────────────────────────────────────────────┤
+│ Allowed Indexes:                            │
+│   ✓ security                                │
+│   ✓ network                                 │
+│   ✗ hr_sensitive                           │
+│   ✗ financial                              │
+└─────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────┐
+│               ROLE: SOC_Manager             │
+├─────────────────────────────────────────────┤
+│ Allowed Indexes:                            │
+│   ✓ ALL                                     │
+└─────────────────────────────────────────────┘
+\`\`\`
+
+## Best Practices
+
+### 1. Don't Over-Index
+Too many small indexes hurt performance.
+
+### 2. Plan for Growth
+\`\`\`
+Today:  50 GB/day
+Year 1: 100 GB/day (2x)
+Year 2: 200 GB/day (4x)
+\`\`\`
+
+### 3. Set Retention Per Index
+\`\`\`
+security:     365 days (compliance)
+application:  90 days
+debug:        7 days
+\`\`\`
+
+### 4. Monitor Index Health
+- Size and growth rate
+- Search performance
+- Ingestion latency
+    `,
+    keyTakeaways: [
+      "Source types define how the SIEM parses each log format",
+      "Indexes organize data for access control, retention, and performance",
+      "Inverted indexes enable fast text-based searching",
+      "Plan index strategy based on security domains, compliance, and access needs",
+      "Monitor index health for size, performance, and ingestion rates"
+    ]
+  },
+  {
+    id: "2.4",
+    courseId: "siem-fundamentals",
+    title: "Data Retention & Storage",
+    content: `
+# Data Retention & Storage
+
+Managing how long you keep data and where you store it is crucial for compliance, cost management, and performance.
+
+## Retention Requirements
+
+### Compliance-Driven Retention:
+
+| Regulation | Minimum Retention | Data Types |
+|------------|-------------------|------------|
+| **PCI-DSS** | 1 year (3 months online) | Cardholder data access |
+| **HIPAA** | 6 years | PHI access logs |
+| **SOX** | 7 years | Financial system access |
+| **GDPR** | Varies | Personal data processing |
+| **NIST 800-53** | 3+ years recommended | Security events |
+| **Internal Policy** | Varies | All security data |
+
+### Security-Driven Retention:
+
+| Use Case | Minimum Retention | Reason |
+|----------|-------------------|--------|
+| Threat hunting | 90+ days | APT dwell time averages 200+ days |
+| Incident investigation | 1 year | Need historical context |
+| Baseline analysis | 1 year | Year-over-year comparison |
+| Forensics | As long as possible | Unknown future needs |
+
+## Storage Tiers
+
+\`\`\`
+                    STORAGE TIERS
+    ────────────────────────────────────────────────
+    
+    ┌─────────────────────────────────────────────┐
+    │  HOT STORAGE                                │
+    │  ─────────────                              │
+    │  Age: 0-7 days                              │
+    │  Media: Fast SSD/NVMe                       │
+    │  Performance: Real-time search              │
+    │  Cost: $$$$                                 │
+    └─────────────────────────────────────────────┘
+                        │
+                        ▼
+    ┌─────────────────────────────────────────────┐
+    │  WARM STORAGE                               │
+    │  ────────────                               │
+    │  Age: 7-30 days                             │
+    │  Media: Standard SSD                        │
+    │  Performance: Fast search                   │
+    │  Cost: $$$                                  │
+    └─────────────────────────────────────────────┘
+                        │
+                        ▼
+    ┌─────────────────────────────────────────────┐
+    │  COLD STORAGE                               │
+    │  ────────────                               │
+    │  Age: 30-365 days                           │
+    │  Media: HDD / Object storage                │
+    │  Performance: Slower search                 │
+    │  Cost: $$                                   │
+    └─────────────────────────────────────────────┘
+                        │
+                        ▼
+    ┌─────────────────────────────────────────────┐
+    │  FROZEN / ARCHIVE                           │
+    │  ────────────────                           │
+    │  Age: 1+ years                              │
+    │  Media: S3 Glacier / Tape                   │
+    │  Performance: Hours to restore              │
+    │  Cost: $                                    │
+    └─────────────────────────────────────────────┘
+\`\`\`
+
+## Data Lifecycle Management
+
+\`\`\`
+Event Created
+      │
+      ▼
+┌─────────────┐
+│ HOT (0-7d)  │ ─── Real-time alerts, active investigation
+└─────────────┘
+      │ Age out
+      ▼
+┌─────────────┐
+│ WARM (7-30d)│ ─── Recent hunting, trend analysis
+└─────────────┘
+      │ Age out
+      ▼
+┌─────────────┐
+│COLD (30-365)│ ─── Historical investigation, compliance
+└─────────────┘
+      │ Age out
+      ▼
+┌─────────────┐
+│ FROZEN (1y+)│ ─── Long-term compliance, legal hold
+└─────────────┘
+      │ Age out
+      ▼
+   DELETED
+\`\`\`
+
+## Cost Optimization
+
+### Storage Cost Comparison:
+
+| Tier | Cost per GB/month | 1 TB/day for 1 year |
+|------|-------------------|---------------------|
+| Hot (SSD) | $0.20 | $73,000 |
+| Warm (HDD) | $0.05 | $18,250 |
+| Cold (S3) | $0.02 | $7,300 |
+| Frozen (Glacier) | $0.004 | $1,460 |
+
+### Cost Reduction Strategies:
+
+1. **Tier Appropriately**
+   - Not everything needs hot storage
+   - Move data to cold/frozen as it ages
+
+2. **Filter at Ingestion**
+\`\`\`
+DO ingest: Security events, auth logs, network flows
+DON'T ingest: Debug logs, health checks, noise
+\`\`\`
+
+3. **Summarize Old Data**
+   - Keep aggregated metrics
+   - Delete raw events after summary
+
+4. **Use Compression**
+   - Typically 5-10x compression ratio
+   - 1 TB raw → 100-200 GB stored
+
+## Retention Configuration
+
+### Splunk Example:
+\`\`\`ini
+# indexes.conf
+[security]
+# Hot storage
+homePath = $SPLUNK_DB/security/db
+maxDataSize = auto_high_volume
+
+# Warm storage  
+coldPath = $SPLUNK_DB/security/colddb
+
+# Frozen (archive)
+coldToFrozenDir = /archive/security
+
+# Retention
+frozenTimePeriodInSecs = 31536000   # 365 days
+\`\`\`
+
+### Elastic Example:
+\`\`\`json
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": { "max_age": "7d" }
+        }
+      },
+      "warm": {
+        "min_age": "7d",
+        "actions": {
+          "shrink": { "number_of_shards": 1 }
+        }
+      },
+      "cold": {
+        "min_age": "30d",
+        "actions": {
+          "freeze": {}
+        }
+      },
+      "delete": {
+        "min_age": "365d"
+      }
+    }
+  }
+}
+\`\`\`
+
+## Legal Hold
+
+When litigation or investigation requires data preservation:
+
+\`\`\`
+NORMAL LIFECYCLE:
+Event → Hot → Warm → Cold → Frozen → DELETE
+
+LEGAL HOLD APPLIED:
+Event → Hot → Warm → Cold → Frozen → PRESERVED INDEFINITELY
+                                              │
+                                              └── Until hold released
+\`\`\`
+
+## Monitoring Storage
+
+### Key Metrics:
+
+| Metric | Purpose | Alert Threshold |
+|--------|---------|-----------------|
+| Daily ingestion rate | Capacity planning | > 20% increase |
+| Storage utilization | Prevent outages | > 80% full |
+| Retention compliance | Audit readiness | Data older than policy |
+| Search latency | Performance | > 30 seconds |
+
+### Dashboard Example:
+\`\`\`
+┌─────────────────────────────────────────────────┐
+│              STORAGE DASHBOARD                  │
+├─────────────────┬───────────────────────────────┤
+│ Daily Ingestion │ 156 GB/day (+5% from last wk) │
+├─────────────────┼───────────────────────────────┤
+│ Total Storage   │ 45 TB / 100 TB (45%)          │
+├─────────────────┼───────────────────────────────┤
+│ Oldest Data     │ 364 days (within policy)      │
+├─────────────────┼───────────────────────────────┤
+│ Search Latency  │ 2.3 seconds (avg)             │
+└─────────────────┴───────────────────────────────┘
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Retention requirements are driven by compliance regulations and security needs",
+      "Storage tiers (hot/warm/cold/frozen) balance performance with cost",
+      "Data lifecycle management automates transitions between tiers",
+      "Filter unnecessary data at ingestion to reduce costs",
+      "Legal holds can override normal retention for litigation or investigations"
+    ]
+  },
+
+  // Module 3: Search & Query Fundamentals
+  {
+    id: "3.1",
+    courseId: "siem-fundamentals",
+    title: "Basic Search Syntax",
+    content: `
+# Basic Search Syntax
+
+Learning to search effectively is the most important SIEM skill. This lesson covers the fundamentals that apply across platforms.
+
+## Search Philosophy
+
+> "Start broad, then narrow down. Cast a wide net first, then filter."
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│                   SEARCH APPROACH                       │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│   BROAD                                    SPECIFIC     │
+│   ────────────────────────────────────→               │
+│                                                         │
+│   "all events"  →  "security"  →  "login"  →  "failed" │
+│                                                         │
+│   1M events    →   100K      →    10K    →     500    │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Basic Keyword Search
+
+### Simple Term Search:
+\`\`\`
+failed
+└── Finds all events containing "failed"
+
+login
+└── Finds all events containing "login"
+\`\`\`
+
+### Multiple Terms (AND):
+\`\`\`
+failed login
+└── Finds events containing BOTH "failed" AND "login"
+
+error database connection
+└── Finds events with all three terms
+\`\`\`
+
+### Phrase Search (Exact Match):
+\`\`\`
+"failed login"
+└── Finds exact phrase "failed login"
+
+"connection refused"
+└── Finds exact phrase "connection refused"
+\`\`\`
+
+## Field-Based Search
+
+Most powerful approach - search specific fields.
+
+### Basic Field Search:
+\`\`\`
+user=admin
+└── Events where user field equals "admin"
+
+src_ip=192.168.1.100
+└── Events from this source IP
+
+action=denied
+└── Events where action is "denied"
+\`\`\`
+
+### Combining Fields:
+\`\`\`
+user=admin action=login
+└── Login events for admin user
+
+src_ip=192.168.1.100 dst_port=22
+└── SSH connections from this IP
+\`\`\`
+
+## Boolean Operators
+
+### AND (default in most SIEMs):
+\`\`\`
+user=admin AND action=failed
+or simply:
+user=admin action=failed
+\`\`\`
+
+### OR:
+\`\`\`
+action=failed OR action=denied
+└── Events that are either failed OR denied
+
+user=admin OR user=root
+└── Events for either admin OR root user
+\`\`\`
+
+### NOT:
+\`\`\`
+action=login NOT user=service_account
+└── Login events excluding service accounts
+
+error NOT debug
+└── Errors excluding debug messages
+\`\`\`
+
+### Combining Operators:
+\`\`\`
+(user=admin OR user=root) AND action=failed
+└── Failed actions by admin OR root
+
+action=login AND (status=failed OR status=error)
+└── Failed or error login attempts
+\`\`\`
+
+## Comparison Operators
+
+### Numeric Comparisons:
+\`\`\`
+bytes > 1000000
+└── Events with more than 1MB of data
+
+duration < 5
+└── Events shorter than 5 seconds
+
+port >= 1024
+└── Ports 1024 and above
+\`\`\`
+
+### String Comparisons:
+\`\`\`
+user!=admin
+└── Events where user is NOT admin
+
+action IN (login, logout, failed)
+└── Events with any of these actions
+\`\`\`
+
+## Wildcards
+
+### Asterisk (*) - Multiple Characters:
+\`\`\`
+user=admin*
+└── admin, administrator, admin_backup
+
+src_ip=192.168.*
+└── Any IP starting with 192.168.
+
+*.exe
+└── Any .exe file
+\`\`\`
+
+### Question Mark (?) - Single Character:
+\`\`\`
+user=admin?
+└── admin1, admin2, admins
+
+host=web0?.company.com
+└── web01.company.com, web02.company.com
+\`\`\`
+
+## Search Examples by Use Case
+
+### Finding Failed Logins:
+\`\`\`
+EventCode=4625
+or
+action=failed login
+\`\`\`
+
+### Finding Outbound Connections:
+\`\`\`
+direction=outbound dst_port=443
+\`\`\`
+
+### Finding Admin Activity:
+\`\`\`
+user=*admin* OR user=root
+\`\`\`
+
+### Finding Errors:
+\`\`\`
+severity=error OR severity=critical
+\`\`\`
+
+### Finding Specific IP:
+\`\`\`
+src_ip=192.168.1.100 OR dst_ip=192.168.1.100
+\`\`\`
+
+## Platform-Specific Syntax
+
+| Concept | Splunk (SPL) | Sentinel (KQL) | Elastic |
+|---------|--------------|----------------|---------|
+| Field equals | user=admin | user == "admin" | user: "admin" |
+| Contains | user=*admin* | user contains "admin" | user: *admin* |
+| Not equals | user!=admin | user != "admin" | NOT user: "admin" |
+| Greater than | bytes>1000 | bytes > 1000 | bytes: >1000 |
+| OR | OR | or | OR |
+| AND | AND (default) | and | AND (default) |
+
+## Best Practices
+
+### 1. Start with Index/Table
+\`\`\`
+index=security user=admin
+└── Much faster than searching everywhere
+\`\`\`
+
+### 2. Use Time Filters
+\`\`\`
+Last 24 hours instead of "all time"
+└── Dramatically faster searches
+\`\`\`
+
+### 3. Be Specific
+\`\`\`
+Good: src_ip=192.168.1.100 action=login
+Bad:  192.168
+\`\`\`
+
+### 4. Use Fields Over Keywords
+\`\`\`
+Good: user=admin
+Bad:  admin (searches entire event)
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Start broad and narrow down progressively",
+      "Field-based searches are more precise than keyword searches",
+      "Boolean operators (AND, OR, NOT) combine conditions",
+      "Wildcards (*) enable pattern matching",
+      "Always specify index and time range for faster searches"
+    ],
+    practicalExercise: {
+      title: "Basic Search Practice",
+      description: "Practice writing basic SIEM queries for common scenarios.",
+      steps: [
+        "Write a query to find all failed login attempts",
+        "Write a query to find activity from a specific IP address",
+        "Write a query combining multiple conditions with AND/OR",
+        "Use wildcards to find all admin-related users"
+      ]
+    }
+  },
+  {
+    id: "3.2",
+    courseId: "siem-fundamentals",
+    title: "Filtering & Field Extraction",
+    content: `
+# Filtering & Field Extraction
+
+Narrowing down search results and extracting relevant information is essential for efficient investigation.
+
+## Filtering Techniques
+
+### Basic Filters:
+\`\`\`
+index=security
+| where action="failed"
+| where user!="service_account"
+\`\`\`
+
+### Filtering by Time:
+\`\`\`
+earliest=-24h       # Last 24 hours
+earliest=-7d        # Last 7 days
+earliest="10/15/2024:00:00:00"
+latest="10/15/2024:23:59:59"
+\`\`\`
+
+### Filtering by Field Value:
+\`\`\`
+# Include specific values
+| where severity IN ("high", "critical")
+
+# Exclude values
+| where user NOT IN ("svc_backup", "svc_monitor")
+
+# Numeric filters
+| where bytes > 1000000
+| where duration < 60
+\`\`\`
+
+### Pattern Matching:
+\`\`\`
+# Starts with
+| where user LIKE "admin%"
+
+# Contains
+| where message LIKE "%error%"
+
+# Regex
+| where match(user, "^admin[0-9]+$")
+\`\`\`
+
+## Field Extraction
+
+### Displaying Specific Fields (Table):
+\`\`\`
+index=security action=login
+| table _time, user, src_ip, action, result
+
+Output:
+┌────────────────────┬─────────┬───────────────┬────────┬─────────┐
+│ _time              │ user    │ src_ip        │ action │ result  │
+├────────────────────┼─────────┼───────────────┼────────┼─────────┤
+│ 10/15/24 14:23:45  │ admin   │ 192.168.1.100 │ login  │ success │
+│ 10/15/24 14:25:12  │ jsmith  │ 192.168.1.101 │ login  │ failed  │
+└────────────────────┴─────────┴───────────────┴────────┴─────────┘
+\`\`\`
+
+### Selecting Fields:
+\`\`\`
+# Splunk
+| fields _time, user, src_ip, action
+
+# KQL (Sentinel)
+| project TimeGenerated, Account, SourceIP, Activity
+
+# Elastic
+"_source": ["@timestamp", "user.name", "source.ip"]
+\`\`\`
+
+### Removing Fields:
+\`\`\`
+| fields - _raw, _indextime, host
+
+# Remove internal/noisy fields
+\`\`\`
+
+## Renaming Fields
+
+Make output more readable:
+\`\`\`
+| rename src_ip AS "Source IP"
+| rename user AS "Username"
+| rename _time AS "Timestamp"
+
+Output:
+┌────────────────────┬──────────┬───────────────┐
+│ Timestamp          │ Username │ Source IP     │
+├────────────────────┼──────────┼───────────────┤
+│ 10/15/24 14:23:45  │ admin    │ 192.168.1.100 │
+└────────────────────┴──────────┴───────────────┘
+\`\`\`
+
+## Creating Calculated Fields
+
+### String Manipulation:
+\`\`\`
+# Extract domain from email
+| eval domain = mvindex(split(email, "@"), 1)
+
+# Combine fields
+| eval full_name = first_name . " " . last_name
+
+# Convert to lowercase
+| eval user_lower = lower(user)
+\`\`\`
+
+### Numeric Calculations:
+\`\`\`
+# Convert bytes to MB
+| eval mb = bytes / 1024 / 1024
+
+# Calculate duration
+| eval duration_sec = (end_time - start_time)
+
+# Round numbers
+| eval mb_rounded = round(bytes/1048576, 2)
+\`\`\`
+
+### Conditional Fields:
+\`\`\`
+# Create severity label
+| eval severity_label = case(
+    severity >= 8, "Critical",
+    severity >= 5, "High",
+    severity >= 3, "Medium",
+    true(), "Low"
+  )
+
+# Tag internal vs external
+| eval network_type = if(cidrmatch("10.0.0.0/8", src_ip), "internal", "external")
+\`\`\`
+
+## Extracting from Raw Events
+
+When fields aren't parsed automatically:
+
+### Regex Extraction:
+\`\`\`
+# Extract IP from message
+| rex field=message "from (?<extracted_ip>\\d+\\.\\d+\\.\\d+\\.\\d+)"
+
+# Extract username
+| rex field=message "user[=:]\\s*(?<extracted_user>\\w+)"
+
+# Extract multiple fields
+| rex field=message "src=(?<src_ip>[\\d.]+).*dst=(?<dst_ip>[\\d.]+)"
+\`\`\`
+
+### Key-Value Extraction:
+\`\`\`
+Raw log: action=login user=admin result=success src=192.168.1.1
+
+| extract kvdelim="=" pairdelim=" "
+
+Extracted:
+action = login
+user = admin
+result = success
+src = 192.168.1.1
+\`\`\`
+
+## Sorting Results
+
+\`\`\`
+# Sort by time (newest first)
+| sort -_time
+
+# Sort by time (oldest first)
+| sort +_time
+| sort _time
+
+# Sort by count descending
+| sort -count
+
+# Multiple sort fields
+| sort -severity, +_time
+\`\`\`
+
+## Limiting Results
+
+\`\`\`
+# First 10 results
+| head 10
+
+# Last 10 results
+| tail 10
+
+# Limit to specific count
+| limit 100
+\`\`\`
+
+## Deduplication
+
+Remove duplicate events:
+\`\`\`
+# Keep first occurrence per user
+| dedup user
+
+# Keep latest per IP
+| dedup src_ip sortby -_time
+
+# Dedup on multiple fields
+| dedup user, src_ip
+\`\`\`
+
+## Complete Example
+
+\`\`\`
+index=security sourcetype=WinEventLog:Security EventCode=4625
+earliest=-24h
+| where user!="SYSTEM" AND user!="$"
+| rex field=message "Logon Type:\\s+(?<logon_type>\\d+)"
+| eval logon_type_name = case(
+    logon_type="2", "Interactive",
+    logon_type="3", "Network",
+    logon_type="10", "Remote",
+    true(), "Other"
+  )
+| table _time, user, src_ip, logon_type_name
+| rename user AS "Username", src_ip AS "Source IP"
+| sort -_time
+| head 100
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Use WHERE clauses to filter results after the initial search",
+      "TABLE and FIELDS commands control which fields are displayed",
+      "EVAL creates calculated fields for analysis",
+      "REX extracts data from unstructured text using regex",
+      "SORT, DEDUP, and HEAD/TAIL organize and limit results"
+    ]
+  },
+  {
+    id: "3.3",
+    courseId: "siem-fundamentals",
+    title: "Time Range & Wildcards",
+    content: `
+# Time Range & Wildcards
+
+Mastering time-based searching and pattern matching dramatically improves your investigation efficiency.
+
+## Time Range Fundamentals
+
+### Why Time Matters:
+\`\`\`
+Search "all time" for "error"  →  10 minutes, 5M results
+Search "last 1 hour" for "error"  →  2 seconds, 500 results
+\`\`\`
+
+### Relative Time:
+\`\`\`
+┌─────────────────────────────────────────────────┐
+│           RELATIVE TIME SYNTAX                  │
+├──────────────┬──────────────────────────────────┤
+│ -15m         │ Last 15 minutes                  │
+│ -1h          │ Last 1 hour                      │
+│ -4h          │ Last 4 hours                     │
+│ -24h or -1d  │ Last 24 hours / 1 day           │
+│ -7d          │ Last 7 days                      │
+│ -30d         │ Last 30 days                     │
+│ -1mon        │ Last month                       │
+│ -1y          │ Last year                        │
+└──────────────┴──────────────────────────────────┘
+\`\`\`
+
+### Time Modifiers:
+\`\`\`
+# Snap to time boundaries
+-1d@d          # Yesterday at midnight
+-1w@w          # Start of last week
+-1mon@mon      # Start of last month
+
+# Example: Get all of yesterday
+earliest=-1d@d latest=@d
+\`\`\`
+
+### Absolute Time:
+\`\`\`
+# Specific date/time range
+earliest="10/15/2024:00:00:00" latest="10/15/2024:23:59:59"
+
+# ISO format
+earliest="2024-10-15T00:00:00Z" latest="2024-10-15T23:59:59Z"
+\`\`\`
+
+### Time Around an Event:
+\`\`\`
+# Investigation: What happened around 14:30?
+earliest="10/15/2024:14:00:00" latest="10/15/2024:15:00:00"
+
+# 30 minutes before and after
+earliest=-30m@m latest=+30m@m  (relative to now)
+\`\`\`
+
+## Time-Based Analysis
+
+### Bucketing by Time:
+\`\`\`
+# Count events per hour
+| timechart span=1h count
+
+# Count events per day
+| timechart span=1d count
+
+# Events per 15 minutes
+| timechart span=15m count by action
+\`\`\`
+
+### Time Comparisons:
+\`\`\`
+# Compare to yesterday
+| timechart span=1h count
+| eval yesterday = ... 
+
+# Week over week
+| timechart span=1d count
+| append [search ... earliest=-14d latest=-7d]
+\`\`\`
+
+## Wildcard Patterns
+
+### Asterisk (*) - Zero or More Characters:
+\`\`\`
+┌─────────────────────────────────────────────────┐
+│ Pattern        │ Matches                        │
+├────────────────┼────────────────────────────────┤
+│ admin*         │ admin, administrator, admins   │
+│ *admin         │ sysadmin, localadmin           │
+│ *admin*        │ admin, sysadmin, administrator │
+│ 192.168.1.*    │ 192.168.1.0 to 192.168.1.255  │
+│ *.exe          │ cmd.exe, powershell.exe        │
+│ web*.log       │ web01.log, webserver.log       │
+└────────────────┴────────────────────────────────┘
+\`\`\`
+
+### Question Mark (?) - Exactly One Character:
+\`\`\`
+┌─────────────────────────────────────────────────┐
+│ Pattern        │ Matches                        │
+├────────────────┼────────────────────────────────┤
+│ admin?         │ admin1, admins (NOT admin)     │
+│ web0?          │ web01, web02 (NOT web1, web10) │
+│ user???        │ user001, userABC               │
+└────────────────┴────────────────────────────────┘
+\`\`\`
+
+### Combining Wildcards:
+\`\`\`
+# Match admin1, admin2, etc. and administrator
+admin*
+
+# Match web servers in specific range
+web0[1-5].company.com
+
+# Complex patterns
+*-prod-*.log
+\`\`\`
+
+## Wildcard Use Cases
+
+### Finding User Variants:
+\`\`\`
+user=admin* OR user=*admin
+
+Matches: admin, admin1, administrator, sysadmin, localadmin
+\`\`\`
+
+### Finding Service Accounts:
+\`\`\`
+user=svc_* OR user=service_*
+
+Matches: svc_backup, svc_sql, service_account
+\`\`\`
+
+### Finding Hosts:
+\`\`\`
+host=dc* OR host=*-dc-*
+
+Matches: dc01, dc02, ny-dc-01, la-dc-02
+\`\`\`
+
+### Finding File Types:
+\`\`\`
+file=*.exe OR file=*.dll OR file=*.ps1
+
+Matches: malware.exe, helper.dll, script.ps1
+\`\`\`
+
+### Finding IP Ranges:
+\`\`\`
+src_ip=192.168.*
+
+Matches: 192.168.0.1 through 192.168.255.255
+
+# More specific
+src_ip=192.168.1.*
+
+Matches: 192.168.1.0 through 192.168.1.255
+\`\`\`
+
+## CIDR Notation for IPs
+
+More precise than wildcards:
+\`\`\`
+# Using CIDR matching
+| where cidrmatch("192.168.0.0/16", src_ip)
+
+# Match internal networks
+| where cidrmatch("10.0.0.0/8", src_ip) OR 
+        cidrmatch("172.16.0.0/12", src_ip) OR
+        cidrmatch("192.168.0.0/16", src_ip)
+\`\`\`
+
+## Performance Considerations
+
+### Wildcards Impact Performance:
+\`\`\`
+FAST:   user=admin                 (exact match)
+SLOWER: user=admin*                (prefix, uses index)
+SLOW:   user=*admin                (suffix, full scan)
+SLOWEST: user=*admin*              (contains, full scan)
+\`\`\`
+
+### Optimize With Leading Terms:
+\`\`\`
+# Bad (slow):
+*admin*
+
+# Better (faster):
+index=security user=*admin*
+
+# Best (fastest):
+index=security sourcetype=WinEventLog user=*admin*
+\`\`\`
+
+## Common Time/Wildcard Queries
+
+### Failed Logins (Last 24h):
+\`\`\`
+index=security action=failed earliest=-24h
+| where user!="*$"
+| stats count by user
+\`\`\`
+
+### Admin Activity (Last Week):
+\`\`\`
+index=security user=*admin* earliest=-7d
+| timechart span=1d count by action
+\`\`\`
+
+### After-Hours Activity:
+\`\`\`
+index=security
+| where date_hour<8 OR date_hour>18
+| stats count by user, host
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Always specify time ranges to improve search performance",
+      "Relative time syntax (-1h, -7d) is convenient for recurring searches",
+      "Asterisk (*) matches zero or more characters",
+      "Question mark (?) matches exactly one character",
+      "Leading wildcards (*admin) are slower than trailing wildcards (admin*)"
+    ]
+  },
+  {
+    id: "3.4",
+    courseId: "siem-fundamentals",
+    title: "Hands-On: Basic Search Lab",
+    content: `
+# Hands-On: Basic Search Lab
+
+Practice fundamental SIEM search techniques with realistic scenarios.
+
+## Lab Environment
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    LAB NETWORK                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌──────────────┐        ┌──────────────┐                  │
+│  │  DC01        │        │  WEB01       │                  │
+│  │  10.0.0.10   │        │  10.0.0.20   │                  │
+│  │  (Domain     │        │  (Web        │                  │
+│  │   Controller)│        │   Server)    │                  │
+│  └──────────────┘        └──────────────┘                  │
+│                                                             │
+│  ┌──────────────┐        ┌──────────────┐                  │
+│  │  WKS001-010  │        │  Firewall    │                  │
+│  │  10.0.1.x    │        │  10.0.0.1    │                  │
+│  │  (Workstations)       │              │                  │
+│  └──────────────┘        └──────────────┘                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Available Data:
+
+| Index | Source Types | Contents |
+|-------|--------------|----------|
+| windows | WinEventLog:Security | Auth events, process creation |
+| network | firewall_traffic | Allow/deny decisions |
+| web | access_combined | Web server access logs |
+
+---
+
+## Exercise 1: Basic Keyword Search
+
+**Scenario:** Find all events mentioning "password"
+
+### Your Query:
+\`\`\`
+index=windows password
+\`\`\`
+
+### Expected Result:
+Events containing the word "password" - failed logins, password changes, etc.
+
+### Refinement:
+\`\`\`
+index=windows password earliest=-24h
+| stats count by EventCode
+\`\`\`
+
+---
+
+## Exercise 2: Field-Based Search
+
+**Scenario:** Find all failed login attempts
+
+### Your Query:
+\`\`\`
+index=windows EventCode=4625
+\`\`\`
+
+### Expand to see details:
+\`\`\`
+index=windows EventCode=4625
+| table _time, host, user, src_ip, FailureReason
+\`\`\`
+
+### Count by user:
+\`\`\`
+index=windows EventCode=4625
+| stats count by user
+| sort -count
+\`\`\`
+
+---
+
+## Exercise 3: Boolean Operators
+
+**Scenario:** Find successful logins by admin users
+
+### Your Query:
+\`\`\`
+index=windows EventCode=4624 (user=admin OR user=administrator)
+\`\`\`
+
+### Alternative (wildcard):
+\`\`\`
+index=windows EventCode=4624 user=admin*
+\`\`\`
+
+### Exclude service accounts:
+\`\`\`
+index=windows EventCode=4624 user=admin* NOT user=*$
+\`\`\`
+
+---
+
+## Exercise 4: Time-Based Search
+
+**Scenario:** Find all events from yesterday
+
+### Your Query:
+\`\`\`
+index=windows earliest=-1d@d latest=@d
+| stats count by EventCode
+\`\`\`
+
+### Specific time window:
+\`\`\`
+index=windows earliest="10/15/2024:08:00:00" latest="10/15/2024:17:00:00"
+\`\`\`
+
+---
+
+## Exercise 5: Wildcard Search
+
+**Scenario:** Find all activity from workstations
+
+### Your Query:
+\`\`\`
+index=windows host=WKS*
+| stats count by host
+\`\`\`
+
+### Find PowerShell activity:
+\`\`\`
+index=windows process_name="*powershell*"
+| table _time, host, user, CommandLine
+\`\`\`
+
+---
+
+## Exercise 6: Firewall Log Analysis
+
+**Scenario:** Find all denied connections
+
+### Your Query:
+\`\`\`
+index=network action=denied
+| table _time, src_ip, dst_ip, dst_port, protocol
+\`\`\`
+
+### Top denied sources:
+\`\`\`
+index=network action=denied
+| stats count by src_ip
+| sort -count
+| head 10
+\`\`\`
+
+---
+
+## Exercise 7: Web Server Investigation
+
+**Scenario:** Find all 404 errors
+
+### Your Query:
+\`\`\`
+index=web status=404
+| table _time, clientip, uri, status
+\`\`\`
+
+### Look for scanning behavior:
+\`\`\`
+index=web status=404
+| stats count by clientip
+| where count > 50
+| sort -count
+\`\`\`
+
+---
+
+## Exercise 8: Correlation Challenge
+
+**Scenario:** Find IPs with both failed logins AND firewall blocks
+
+### Step 1: Find failed login sources
+\`\`\`
+index=windows EventCode=4625
+| stats count as login_failures by src_ip
+\`\`\`
+
+### Step 2: Find blocked IPs
+\`\`\`
+index=network action=denied
+| stats count as fw_blocks by src_ip
+\`\`\`
+
+### Step 3: Combine (subsearch)
+\`\`\`
+index=windows EventCode=4625
+| stats count as login_failures by src_ip
+| join src_ip [
+    search index=network action=denied
+    | stats count as fw_blocks by src_ip
+  ]
+| table src_ip, login_failures, fw_blocks
+\`\`\`
+
+---
+
+## Exercise 9: Building Investigation Timeline
+
+**Scenario:** A suspicious IP 192.168.1.100 was identified. Build a timeline.
+
+\`\`\`
+(index=windows OR index=network OR index=web) 
+  (src_ip=192.168.1.100 OR dst_ip=192.168.1.100 OR clientip=192.168.1.100)
+| sort _time
+| table _time, index, sourcetype, src_ip, dst_ip, user, action
+\`\`\`
+
+---
+
+## Lab Answers Summary
+
+| Exercise | Key Concept |
+|----------|-------------|
+| 1 | Keyword search + time filter |
+| 2 | Field-based search with EventCode |
+| 3 | Boolean operators (AND, OR, NOT) |
+| 4 | Relative and absolute time ranges |
+| 5 | Wildcards for pattern matching |
+| 6 | Stats and top-N analysis |
+| 7 | Web log status code analysis |
+| 8 | Cross-index correlation |
+| 9 | Timeline reconstruction |
+
+## Skills Checklist
+
+- [ ] Use keyword and field-based searches
+- [ ] Apply time ranges effectively
+- [ ] Combine conditions with Boolean operators
+- [ ] Use wildcards for pattern matching
+- [ ] Create summary statistics
+- [ ] Build investigation timelines
+    `,
+    keyTakeaways: [
+      "Field-based searches are more precise than keyword searches",
+      "Time filters dramatically improve search performance",
+      "Boolean operators allow complex condition combinations",
+      "Stats commands aggregate data for analysis",
+      "Timeline reconstruction helps understand attack sequences"
+    ],
+    practicalExercise: {
+      title: "Independent Practice",
+      description: "Apply what you've learned to your own SIEM environment.",
+      steps: [
+        "Find all authentication failures in the last 24 hours",
+        "Identify the top 10 source IPs for denied firewall connections",
+        "Create a timeline for a specific user's activity",
+        "Find all PowerShell execution events on servers"
+      ]
+    }
+  },
+
+  // Module 4: Advanced Query Techniques
+  {
+    id: "4.1",
+    courseId: "siem-fundamentals",
+    title: "Aggregation & Statistics",
+    content: `
+# Aggregation & Statistics
+
+Aggregation commands transform raw events into meaningful summaries, enabling pattern detection and trend analysis.
+
+## The Stats Command
+
+The most important aggregation command - groups and calculates.
+
+### Basic Count:
+\`\`\`
+index=security EventCode=4625
+| stats count
+\`\`\`
+Output: Total number of failed logins
+
+### Count by Field:
+\`\`\`
+index=security EventCode=4625
+| stats count by user
+\`\`\`
+Output:
+| user | count |
+|------|-------|
+| admin | 45 |
+| jsmith | 12 |
+| service | 3 |
+
+### Multiple Aggregations:
+\`\`\`
+index=network
+| stats count, sum(bytes) as total_bytes, avg(bytes) as avg_bytes by src_ip
+\`\`\`
+
+## Common Aggregation Functions
+
+\`\`\`
+┌───────────────────────────────────────────────────────────────────┐
+│                   AGGREGATION FUNCTIONS                           │
+├───────────────┬───────────────────────────────────────────────────┤
+│ count         │ Number of events                                  │
+│ dc(field)     │ Distinct count - unique values                    │
+│ sum(field)    │ Sum of numeric values                             │
+│ avg(field)    │ Average of numeric values                         │
+│ min(field)    │ Minimum value                                     │
+│ max(field)    │ Maximum value                                     │
+│ range(field)  │ Difference between max and min                    │
+│ stdev(field)  │ Standard deviation                                │
+│ first(field)  │ First value (chronologically)                     │
+│ last(field)   │ Last value (chronologically)                      │
+│ values(field) │ List of all values                                │
+│ list(field)   │ List including duplicates                         │
+└───────────────┴───────────────────────────────────────────────────┘
+\`\`\`
+
+### Examples:
+
+**Distinct Count:**
+\`\`\`
+index=security EventCode=4624
+| stats dc(src_ip) as unique_sources by user
+\`\`\`
+"How many unique IPs did each user log in from?"
+
+**First and Last:**
+\`\`\`
+index=security user=admin
+| stats first(_time) as first_seen, last(_time) as last_seen
+\`\`\`
+"When was admin first and last active?"
+
+**Values List:**
+\`\`\`
+index=security EventCode=4624
+| stats values(src_ip) as source_ips by user
+\`\`\`
+"What IPs has each user logged in from?"
+
+## Time-Based Aggregation (Timechart)
+
+Creates time-series data for trending.
+
+### Basic Timechart:
+\`\`\`
+index=security EventCode=4625
+| timechart count
+\`\`\`
+
+### With Time Span:
+\`\`\`
+| timechart span=1h count              # Hourly
+| timechart span=1d count              # Daily
+| timechart span=15m count             # 15-minute intervals
+\`\`\`
+
+### Split by Field:
+\`\`\`
+index=security EventCode=4625
+| timechart span=1h count by user
+\`\`\`
+Output: Time series with separate lines per user
+
+### Multiple Functions:
+\`\`\`
+index=network
+| timechart span=1h sum(bytes) as total_traffic, avg(bytes) as avg_per_event
+\`\`\`
+
+## Top/Rare Commands
+
+### Find Top Values:
+\`\`\`
+index=security EventCode=4625
+| top user
+\`\`\`
+Output: Top 10 users by failed login count (with count and percent)
+
+### Customize Top:
+\`\`\`
+| top 20 user                    # Top 20
+| top user showperc=false        # Without percentage
+| top user countfield="failures" # Rename count field
+\`\`\`
+
+### Find Rare Values:
+\`\`\`
+index=security EventCode=4624
+| rare src_ip
+\`\`\`
+"Which source IPs have the fewest logins?" (possible anomalies)
+
+## Grouping & Pivoting
+
+### Group by Multiple Fields:
+\`\`\`
+index=security EventCode=4625
+| stats count by user, src_ip
+| sort -count
+\`\`\`
+
+### Pivot Table (chart):
+\`\`\`
+index=network
+| chart count over src_ip by action
+\`\`\`
+Output:
+| src_ip | allowed | denied |
+|--------|---------|--------|
+| 10.0.0.1 | 1500 | 23 |
+| 10.0.0.2 | 2300 | 156 |
+
+## Security Analytics Use Cases
+
+### Brute Force Detection:
+\`\`\`
+index=security EventCode=4625
+| stats count by src_ip, user
+| where count > 10
+| sort -count
+\`\`\`
+
+### Data Exfiltration Detection:
+\`\`\`
+index=network direction=outbound
+| stats sum(bytes) as total_bytes by src_ip
+| eval GB = round(total_bytes/1073741824, 2)
+| where GB > 1
+| sort -GB
+\`\`\`
+
+### Unusual Login Hours:
+\`\`\`
+index=security EventCode=4624
+| eval hour = strftime(_time, "%H")
+| where hour < 6 OR hour > 20
+| stats count by user
+| sort -count
+\`\`\`
+
+### Account Enumeration:
+\`\`\`
+index=security EventCode=4625
+| stats dc(user) as users_tried by src_ip
+| where users_tried > 5
+| sort -users_tried
+\`\`\`
+
+### Login Geo Anomaly:
+\`\`\`
+index=security EventCode=4624
+| iplocation src_ip
+| stats values(Country) as countries, dc(Country) as country_count by user
+| where country_count > 1
+\`\`\`
+
+## Eventstats: In-Line Statistics
+
+Add statistics while keeping original events:
+\`\`\`
+index=security EventCode=4625
+| eventstats count as total_failures
+| eventstats count as user_failures by user
+| eval pct_of_total = round((user_failures/total_failures)*100, 2)
+\`\`\`
+
+## Streamstats: Running Statistics
+
+Calculate running/cumulative values:
+\`\`\`
+index=security EventCode=4625
+| sort _time
+| streamstats count as running_count
+| streamstats count as failures_last_hour window=60
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Stats command aggregates events with count, sum, avg, and more",
+      "Timechart creates time-series data for trend analysis",
+      "Top and rare commands quickly identify common/uncommon values",
+      "Group by multiple fields for detailed breakdowns",
+      "Aggregation is essential for detecting patterns like brute force attacks"
+    ]
+  },
+  {
+    id: "4.2",
+    courseId: "siem-fundamentals",
+    title: "Joins & Lookups",
+    content: `
+# Joins & Lookups
+
+Combining data from multiple sources enables richer analysis and context enrichment.
+
+## Lookup Tables
+
+Lookups add context from static reference data.
+
+### Common Lookup Examples:
+
+| Lookup Table | Key | Values |
+|--------------|-----|--------|
+| asset_info | hostname | owner, department, criticality |
+| user_directory | username | full_name, department, manager |
+| threat_intel | ip_address | threat_score, category |
+| geo_data | ip_address | country, city, latitude, longitude |
+
+### Creating a Lookup:
+\`\`\`csv
+# assets.csv
+hostname,owner,department,criticality
+DC01,it_team,IT,critical
+WEB01,web_team,Engineering,high
+WKS001,jsmith,Sales,low
+\`\`\`
+
+### Using a Lookup:
+\`\`\`
+index=security
+| lookup asset_info hostname OUTPUT owner, department, criticality
+| table _time, hostname, owner, department, criticality, action
+\`\`\`
+
+### Before Lookup:
+| hostname | action |
+|----------|--------|
+| DC01 | login |
+| WEB01 | error |
+
+### After Lookup:
+| hostname | owner | department | criticality | action |
+|----------|-------|------------|-------------|--------|
+| DC01 | it_team | IT | critical | login |
+| WEB01 | web_team | Engineering | high | error |
+
+## Automatic Lookups
+
+Configure lookups to run automatically:
+\`\`\`ini
+# transforms.conf
+[asset_lookup]
+filename = assets.csv
+\`\`\`
+
+\`\`\`ini
+# props.conf
+[WinEventLog:Security]
+LOOKUP-assets = asset_lookup hostname OUTPUT owner department criticality
+\`\`\`
+
+## Threat Intelligence Lookups
+
+Enrich with threat intel:
+\`\`\`
+index=network
+| lookup threat_intel ip_address as dst_ip OUTPUT threat_score, threat_category
+| where threat_score > 50
+| table _time, src_ip, dst_ip, threat_category, threat_score
+\`\`\`
+
+## GeoIP Lookups
+
+Add geographic context:
+\`\`\`
+index=security EventCode=4624
+| iplocation src_ip
+| stats count by Country, City
+| sort -count
+\`\`\`
+
+Built-in iplocation adds: Country, Region, City, lat, lon
+
+## Join Command
+
+Combine results from two searches.
+
+### Basic Join:
+\`\`\`
+index=security EventCode=4625
+| stats count as failures by user
+| join user [
+    search index=security EventCode=4624
+    | stats count as successes by user
+  ]
+| table user, failures, successes
+\`\`\`
+
+### Join Types:
+
+| Type | Behavior |
+|------|----------|
+| inner (default) | Only matching records |
+| left | All from left + matching right |
+| outer | All from both sides |
+
+### Left Join Example:
+\`\`\`
+index=security EventCode=4624
+| stats count as logins by user
+| join type=left user [
+    search index=security EventCode=4625
+    | stats count as failures by user
+  ]
+| fillnull failures value=0
+\`\`\`
+
+## Subsearch
+
+Use results of one search in another.
+
+### Basic Subsearch:
+\`\`\`
+index=security [
+    search index=network action=denied
+    | stats count by src_ip
+    | where count > 100
+    | fields src_ip
+  ]
+| stats count by user
+\`\`\`
+"Find auth events from IPs with >100 firewall blocks"
+
+### Subsearch for Values:
+\`\`\`
+index=security EventCode=4624 [
+    search index=security EventCode=4625
+    | stats count by src_ip
+    | where count > 10
+    | table src_ip
+  ]
+\`\`\`
+"Find successful logins from IPs with failed logins"
+
+## Append Command
+
+Combine results from multiple searches.
+
+### Basic Append:
+\`\`\`
+index=security EventCode=4625
+| stats count as failed_logins
+| append [
+    search index=security EventCode=4624
+    | stats count as successful_logins
+  ]
+\`\`\`
+
+### Appendcols (Add Columns):
+\`\`\`
+index=security EventCode=4625 earliest=-1d
+| stats count as today
+| appendcols [
+    search index=security EventCode=4625 earliest=-2d latest=-1d
+    | stats count as yesterday
+  ]
+| eval change = today - yesterday
+\`\`\`
+
+## Multi-Index Correlation
+
+Combine data across indexes:
+\`\`\`
+# Find IPs blocked by firewall that also appear in auth logs
+index=network action=denied
+| stats count as fw_blocks by src_ip
+| join src_ip [
+    search index=security
+    | stats count as auth_events, dc(user) as users by src_ip
+  ]
+| table src_ip, fw_blocks, auth_events, users
+| sort -fw_blocks
+\`\`\`
+
+## Real-World Example: IOC Hunt
+
+\`\`\`
+# Lookup for known bad IPs
+| inputlookup threat_iocs.csv
+| rename ip as ioc_ip
+| join type=inner ioc_ip [
+    search index=network earliest=-7d
+    | stats count, values(dst_port) as ports by dst_ip
+    | rename dst_ip as ioc_ip
+  ]
+| table ioc_ip, threat_category, count, ports
+\`\`\`
+
+## Performance Tips
+
+1. **Lookups are faster than joins** - Use when possible
+2. **Limit subsearch results** - Add | head 1000
+3. **Use fields command** - Return only needed fields
+4. **Time-bound both searches** - Don't leave searches open-ended
+    `,
+    keyTakeaways: [
+      "Lookups add context from static reference tables",
+      "GeoIP lookups add geographic information to IP addresses",
+      "Joins combine results from two different searches",
+      "Subsearches use results of one search to filter another",
+      "Lookups are generally faster and preferred over joins"
+    ]
+  },
+  {
+    id: "4.3",
+    courseId: "siem-fundamentals",
+    title: "Subsearches & Transactions",
+    content: `
+# Subsearches & Transactions
+
+Advanced techniques for complex queries and grouping related events.
+
+## Subsearch Deep Dive
+
+A subsearch runs first, then its results are used in the outer search.
+
+### How Subsearches Work:
+\`\`\`
+                    SUBSEARCH EXECUTION
+    ┌─────────────────────────────────────────────────┐
+    │                                                 │
+    │  1. Inner search runs first                     │
+    │     [search index=threats | fields bad_ip]     │
+    │                ↓                                │
+    │  2. Results become filter                       │
+    │     (src_ip=1.2.3.4 OR src_ip=5.6.7.8)        │
+    │                ↓                                │
+    │  3. Outer search runs with filter              │
+    │     index=network (src_ip=1.2.3.4 OR ...)     │
+    │                                                 │
+    └─────────────────────────────────────────────────┘
+\`\`\`
+
+### Subsearch Syntax:
+\`\`\`
+index=security [ search index=alerts severity=critical | fields src_ip ]
+       │                            │
+       │                            └── Subsearch (runs first)
+       └── Outer search (uses subsearch results)
+\`\`\`
+
+### Format Options:
+\`\`\`
+# Default format (OR)
+[search ... | fields user]
+→ (user=admin OR user=jsmith OR user=root)
+
+# Return specific number of results
+[search ... | fields user | head 50]
+
+# Format with quotes for fields with spaces
+[search ... | fields user | format]
+\`\`\`
+
+## Subsearch Use Cases
+
+### Threat Hunting with IOCs:
+\`\`\`
+index=network [
+    | inputlookup threat_intel.csv
+    | fields ip
+    | rename ip as dst_ip
+  ]
+| table _time, src_ip, dst_ip, dst_port, bytes
+\`\`\`
+
+### Find Related Activity:
+\`\`\`
+# Find all activity from users who had failed logins
+index=security [
+    search index=security EventCode=4625
+    | stats count by user
+    | where count > 5
+    | fields user
+  ]
+| timechart count by EventCode
+\`\`\`
+
+### Correlated Alerts:
+\`\`\`
+# Find network activity from hosts with malware alerts
+index=network [
+    search index=alerts category=malware
+    | dedup host
+    | fields host
+    | rename host as src_host
+  ]
+| stats sum(bytes) as total_bytes by dst_ip
+| sort -total_bytes
+\`\`\`
+
+## Transactions
+
+Group related events into single transactions.
+
+### Why Transactions?
+\`\`\`
+INDIVIDUAL EVENTS:
+─────────────────
+10:00:01 - Session start (user=admin, session_id=123)
+10:00:15 - File access (session_id=123)
+10:00:30 - File access (session_id=123)
+10:00:45 - File access (session_id=123)
+10:01:00 - Session end (session_id=123)
+
+AS TRANSACTION:
+───────────────
+Duration: 59 seconds
+Events: 5
+session_id: 123
+user: admin
+\`\`\`
+
+### Basic Transaction:
+\`\`\`
+index=security
+| transaction session_id
+| table session_id, duration, eventcount
+\`\`\`
+
+### Transaction with Start/End:
+\`\`\`
+index=security
+| transaction session_id startswith="Session start" endswith="Session end"
+| table session_id, user, duration, eventcount
+\`\`\`
+
+### Transaction with Time Constraints:
+\`\`\`
+index=security
+| transaction user maxspan=1h maxpause=5m
+| table user, duration, eventcount
+\`\`\`
+
+| Option | Description |
+|--------|-------------|
+| maxspan | Maximum duration of transaction |
+| maxpause | Maximum gap between events |
+| startswith | Event that starts transaction |
+| endswith | Event that ends transaction |
+
+## Session Analysis
+
+### Web Session Tracking:
+\`\`\`
+index=web
+| transaction clientip maxspan=30m maxpause=5m
+| eval session_duration = duration
+| stats avg(session_duration) as avg_session, avg(eventcount) as avg_pages by clientip
+\`\`\`
+
+### Login Session Analysis:
+\`\`\`
+index=security sourcetype=WinEventLog
+| transaction user maxspan=8h startswith=(EventCode=4624) endswith=(EventCode=4634)
+| table user, src_ip, duration, eventcount
+| eval duration_hours = round(duration/3600, 2)
+\`\`\`
+
+## Stats vs Transaction
+
+| Aspect | Stats | Transaction |
+|--------|-------|-------------|
+| Speed | Fast | Slower |
+| Memory | Low | High |
+| Use case | Aggregation | Grouping events |
+| Output | Summary row | Combined event |
+
+### When to Use:
+- **Stats**: Counting, summing, averaging
+- **Transaction**: Seeing all events together, calculating duration
+
+## Alternative to Transaction: Stats with List
+
+Often faster than transaction:
+\`\`\`
+index=security
+| stats min(_time) as start, max(_time) as end, 
+        count, values(action) as actions by session_id
+| eval duration = end - start
+\`\`\`
+
+## Complex Example: Attack Chain Detection
+
+\`\`\`
+# Group attack phases by source IP
+index=security
+| eval attack_phase = case(
+    EventCode=4625, "1_recon",
+    EventCode=4624 AND LogonType=10, "2_access",
+    EventCode=4688 AND process="powershell*", "3_execution",
+    EventCode=4720, "4_persistence"
+  )
+| where isnotnull(attack_phase)
+| transaction src_ip maxspan=1h
+| where eventcount >= 3
+| search attack_phase=*4_persistence*
+| table src_ip, duration, eventcount, attack_phase
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Subsearches run first and their results filter the outer search",
+      "Transactions group related events into single records",
+      "Use startswith/endswith to define transaction boundaries",
+      "maxspan and maxpause control transaction time limits",
+      "Stats is often faster than transaction for simple aggregations"
+    ]
+  },
+  {
+    id: "4.4",
+    courseId: "siem-fundamentals",
+    title: "Hands-On: Advanced Query Lab",
+    content: `
+# Hands-On: Advanced Query Lab
+
+Apply advanced query techniques to investigate a simulated security incident.
+
+## Scenario: Investigating Suspicious Activity
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    INCIDENT BRIEFING                            │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Alert: Unusual outbound data transfer detected                 │
+│  Time: October 15, 2024 14:00-16:00 UTC                        │
+│  Source: Server WEBSRV01 (10.0.0.25)                           │
+│  Destination: 45.33.32.156 (external)                          │
+│  Volume: 2.5 GB transferred                                     │
+│                                                                 │
+│  Your task: Investigate the incident using advanced queries     │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Exercise 1: Traffic Analysis (Stats)
+
+**Task:** Analyze the network traffic from the suspicious server.
+
+\`\`\`
+index=network src_ip=10.0.0.25 earliest="10/15/2024:14:00:00" latest="10/15/2024:16:00:00"
+| stats sum(bytes) as total_bytes, count, dc(dst_ip) as unique_destinations by dst_ip
+| eval MB = round(total_bytes/1048576, 2)
+| sort -MB
+| head 10
+\`\`\`
+
+**Questions to answer:**
+- What was the top destination by data volume?
+- How many unique destinations received data?
+- Is this transfer volume normal?
+
+---
+
+## Exercise 2: Threat Intel Lookup
+
+**Task:** Check if destination IPs are known threats.
+
+\`\`\`
+index=network src_ip=10.0.0.25 earliest="10/15/2024:14:00:00" latest="10/15/2024:16:00:00"
+| stats sum(bytes) as bytes by dst_ip
+| lookup threat_intel ip as dst_ip OUTPUT threat_score, threat_category
+| where isnotnull(threat_score)
+| table dst_ip, bytes, threat_score, threat_category
+| sort -threat_score
+\`\`\`
+
+**Alternative with GeoIP:**
+\`\`\`
+index=network src_ip=10.0.0.25
+| iplocation dst_ip
+| stats sum(bytes) as bytes, values(Country) as country by dst_ip
+| sort -bytes
+\`\`\`
+
+---
+
+## Exercise 3: Timeline (Timechart)
+
+**Task:** Visualize the data transfer pattern over time.
+
+\`\`\`
+index=network src_ip=10.0.0.25 dst_ip=45.33.32.156
+earliest="10/15/2024:00:00:00" latest="10/15/2024:23:59:59"
+| timechart span=15m sum(bytes) as bytes
+| eval MB = round(bytes/1048576, 2)
+\`\`\`
+
+**Questions:**
+- When did the transfer start?
+- Was it continuous or in bursts?
+- When did it peak?
+
+---
+
+## Exercise 4: Correlated Events (Join)
+
+**Task:** Find authentication events related to this server.
+
+\`\`\`
+index=security host=WEBSRV01
+earliest="10/15/2024:00:00:00" latest="10/15/2024:23:59:59"
+| stats count by EventCode, user
+| join EventCode [
+    | makeresults
+    | eval EventCode=4624, EventDesc="Successful login"
+    | append [| makeresults | eval EventCode=4625, EventDesc="Failed login"]
+    | append [| makeresults | eval EventCode=4688, EventDesc="Process created"]
+    | append [| makeresults | eval EventCode=4720, EventDesc="User created"]
+    | fields EventCode, EventDesc
+  ]
+| table EventCode, EventDesc, user, count
+| sort EventCode
+\`\`\`
+
+---
+
+## Exercise 5: Subsearch for Suspicious Users
+
+**Task:** Find users who logged into the server before the data transfer.
+
+\`\`\`
+index=security [
+    search index=security host=WEBSRV01 EventCode=4624
+    earliest="10/15/2024:12:00:00" latest="10/15/2024:14:30:00"
+    | dedup user
+    | fields user
+  ]
+| stats count by user, host, EventCode
+| sort -count
+\`\`\`
+
+---
+
+## Exercise 6: Process Execution Analysis
+
+**Task:** Identify what processes were running during the transfer.
+
+\`\`\`
+index=security host=WEBSRV01 EventCode=4688
+earliest="10/15/2024:13:30:00" latest="10/15/2024:16:30:00"
+| stats count by process_name, user
+| sort -count
+\`\`\`
+
+**Look for suspicious processes:**
+\`\`\`
+index=security host=WEBSRV01 EventCode=4688
+| where match(process_name, "(?i)(powershell|cmd|wscript|cscript|certutil|bitsadmin)")
+| table _time, user, process_name, CommandLine
+| sort _time
+\`\`\`
+
+---
+
+## Exercise 7: Session Analysis (Transaction)
+
+**Task:** Group the suspicious user's activity into sessions.
+
+\`\`\`
+index=security host=WEBSRV01 user=suspect_user
+earliest="10/15/2024:00:00:00" latest="10/15/2024:23:59:59"
+| transaction user host maxspan=2h maxpause=30m
+| table _time, user, host, duration, eventcount
+| eval duration_min = round(duration/60, 1)
+\`\`\`
+
+---
+
+## Exercise 8: Attack Chain Detection
+
+**Task:** Identify potential attack phases.
+
+\`\`\`
+index=security host=WEBSRV01
+earliest="10/15/2024:00:00:00" latest="10/15/2024:23:59:59"
+| eval phase = case(
+    EventCode=4625, "1_Recon_FailedLogin",
+    EventCode=4624, "2_Access_Login",
+    EventCode=4688 AND match(CommandLine, "(?i)whoami|net user|ipconfig"), "3_Discovery",
+    EventCode=4688 AND match(CommandLine, "(?i)powershell.*download|certutil.*url|bitsadmin"), "4_Staging",
+    EventCode=4688 AND match(CommandLine, "(?i)7z|rar|zip"), "5_Collection"
+  )
+| where isnotnull(phase)
+| table _time, user, phase, CommandLine
+| sort _time
+\`\`\`
+
+---
+
+## Exercise 9: Final Report Query
+
+**Task:** Create a summary for the incident report.
+
+\`\`\`
+| stats count as placeholder
+| eval incident_id = "INC-2024-1015-001"
+| eval summary = "Data exfiltration from WEBSRV01"
+| join type=left [
+    search index=network src_ip=10.0.0.25 dst_ip=45.33.32.156
+    | stats sum(bytes) as bytes_transferred, min(_time) as first_seen, max(_time) as last_seen
+  ]
+| join type=left [
+    search index=security host=WEBSRV01 EventCode=4624
+    | stats values(user) as users_logged_in
+  ]
+| table incident_id, summary, bytes_transferred, first_seen, last_seen, users_logged_in
+\`\`\`
+
+---
+
+## Investigation Summary
+
+Complete this based on your findings:
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                   INVESTIGATION SUMMARY                         │
+├─────────────────────────────────────────────────────────────────┤
+│ Affected Host: _______________                                  │
+│ Data Transferred: ____________ MB                               │
+│ Destination IP: ______________                                  │
+│ Threat Intel Match: Yes / No                                    │
+│ Suspicious User(s): __________                                  │
+│ Attack Timeline:                                                │
+│   - Initial Access: _________                                   │
+│   - Data Staging: ___________                                   │
+│   - Exfiltration: ___________                                   │
+│ Recommended Actions:                                            │
+│   1. ________________________                                   │
+│   2. ________________________                                   │
+│   3. ________________________                                   │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Use stats with sum/count for traffic volume analysis",
+      "Lookups add threat intel and geo context to investigations",
+      "Timecharts reveal patterns in data over time",
+      "Joins and subsearches correlate data across sources",
+      "Transactions help identify attack chains and sessions"
+    ]
+  },
+
+  // Module 5: Dashboards & Visualization
+  {
+    id: "5.1",
+    courseId: "siem-fundamentals",
+    title: "Dashboard Fundamentals",
+    content: `
+# Dashboard Fundamentals
+
+Dashboards transform complex data into actionable visualizations for security monitoring and reporting.
+
+## Purpose of Security Dashboards
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                  DASHBOARD VALUE                                │
+├───────────────────┬─────────────────────────────────────────────┤
+│ At-a-Glance View  │ See security posture in seconds            │
+│ Pattern Detection │ Spot trends and anomalies visually          │
+│ Real-Time Alerts  │ Monitor active threats                      │
+│ Metrics Tracking  │ Track KPIs like MTTD/MTTR                  │
+│ Executive Reports │ Communicate status to leadership            │
+└───────────────────┴─────────────────────────────────────────────┘
+\`\`\`
+
+## Dashboard Types
+
+### 1. Operational Dashboards
+Real-time monitoring for SOC analysts.
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    SOC OPERATIONAL VIEW                         │
+├─────────────────┬─────────────────┬─────────────────────────────┤
+│  ALERTS TODAY   │  QUEUE STATUS   │  CRITICAL SYSTEMS           │
+│  ┌────┐ ┌────┐ │  Open: 45       │  ● DC01: OK                 │
+│  │ 12 │ │ 34 │ │  In Progress: 8 │  ● WEB01: 2 Alerts          │
+│  │Crit│ │High│ │  Pending: 12    │  ● DB01: OK                 │
+│  └────┘ └────┘ │                 │                             │
+├─────────────────┴─────────────────┴─────────────────────────────┤
+│                    ALERT TREND (24H)                            │
+│  ▁▂▃▄▅▆▇█▇▆▅▄▃▂▁▁▂▃▄▅▆▇█                                       │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+### 2. Tactical Dashboards
+Deep-dive for specific use cases.
+
+Examples: Threat Hunting, Malware Analysis, User Behavior
+
+### 3. Strategic Dashboards
+Executive-level metrics and trends.
+
+Examples: Monthly Security Report, Compliance Status, Risk Posture
+
+## Dashboard Components
+
+### Single Value Panels
+\`\`\`
+┌──────────────────┐
+│       45         │
+│   Open Alerts    │
+│   ▲ 12% vs avg   │
+└──────────────────┘
+
+Query:
+index=alerts status=open
+| stats count
+\`\`\`
+
+### Time Series Charts
+\`\`\`
+Query:
+index=security EventCode=4625
+| timechart span=1h count as "Failed Logins"
+\`\`\`
+
+### Tables
+\`\`\`
+Query:
+index=alerts severity=critical status=open
+| table _time, alert_name, host, user, status
+| sort -_time
+| head 10
+\`\`\`
+
+### Pie/Donut Charts
+\`\`\`
+Query:
+index=alerts
+| stats count by severity
+\`\`\`
+
+### Bar Charts
+\`\`\`
+Query:
+index=security EventCode=4625
+| top 10 user
+\`\`\`
+
+## Dashboard Layout Best Practices
+
+### Visual Hierarchy:
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│  1. MOST CRITICAL - Top/Left                                    │
+│     Single values, current alerts, system status                │
+├─────────────────────────────────────────────────────────────────┤
+│  2. TRENDS - Middle                                             │
+│     Time series, patterns over time                             │
+├─────────────────────────────────────────────────────────────────┤
+│  3. DETAILS - Bottom                                            │
+│     Tables with drill-down capability                           │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+### Design Principles:
+1. **5-Second Rule**: Key info visible in 5 seconds
+2. **Less is More**: Don't overcrowd
+3. **Consistent Colors**: Red=bad, Green=good
+4. **Logical Grouping**: Related panels together
+5. **Clear Labels**: No abbreviations without context
+
+## Creating a Basic Dashboard
+
+### Step 1: Identify Purpose
+- Who will use it?
+- What questions should it answer?
+- How often will they view it?
+
+### Step 2: Select Key Metrics
+\`\`\`
+SOC Operational Dashboard:
+□ Total alerts (by severity)
+□ Alert trend (24h/7d)
+□ Top alerting hosts
+□ Top attack types
+□ Open vs closed alerts
+□ MTTD/MTTR metrics
+\`\`\`
+
+### Step 3: Build Queries
+\`\`\`
+# Total Critical Alerts
+index=alerts severity=critical status=open | stats count
+
+# Alert Trend
+index=alerts | timechart span=1h count by severity
+
+# Top Hosts
+index=alerts | top 10 host
+\`\`\`
+
+### Step 4: Design Layout
+\`\`\`
+Row 1: Single values (Critical, High, Medium, Low)
+Row 2: Time series trend chart
+Row 3: Top hosts (bar) | Top attack types (pie)
+Row 4: Recent critical alerts (table)
+\`\`\`
+
+### Step 5: Add Interactivity
+- Time picker
+- Drill-down to searches
+- Filter dropdowns
+
+## Dashboard Refresh Settings
+
+| Dashboard Type | Refresh Rate |
+|----------------|--------------|
+| Real-time ops | 30 seconds - 1 minute |
+| Tactical | 5 minutes |
+| Executive | 15-30 minutes or manual |
+
+## Common Dashboard Mistakes
+
+❌ Too many panels (>15)
+❌ Inconsistent color meaning
+❌ No time context
+❌ Missing drilldowns
+❌ Slow queries causing timeouts
+❌ Cryptic panel titles
+    `,
+    keyTakeaways: [
+      "Dashboards provide at-a-glance security visibility",
+      "Operational dashboards need real-time data; executive dashboards show trends",
+      "Follow visual hierarchy: critical info at top-left",
+      "Apply the 5-second rule for key information visibility",
+      "Include drill-down capability for investigation"
+    ]
+  },
+  {
+    id: "5.2",
+    courseId: "siem-fundamentals",
+    title: "Visualization Types",
+    content: `
+# Visualization Types
+
+Choosing the right visualization makes data meaningful and actionable.
+
+## When to Use Each Chart Type
+
+\`\`\`
+┌────────────────────────────────────────────────────────────────┐
+│                 VISUALIZATION SELECTION GUIDE                   │
+├──────────────────┬─────────────────────────────────────────────┤
+│ Show a trend     │ Line chart, Area chart                      │
+│ Compare values   │ Bar chart, Column chart                     │
+│ Show composition │ Pie chart, Donut chart, Stacked bar        │
+│ Show distribution│ Histogram, Box plot                         │
+│ Show relationship│ Scatter plot                                │
+│ Show geography   │ Map, Choropleth                             │
+│ Show single KPI  │ Single value, Gauge                         │
+│ Show details     │ Table                                       │
+└──────────────────┴─────────────────────────────────────────────┘
+\`\`\`
+
+## Line Charts
+
+**Best for:** Time-series data, trends over time
+
+\`\`\`
+        Failed Logins (24h)
+   100│          ╱╲
+    75│    ╱╲   ╱  ╲    ╱╲
+    50│   ╱  ╲ ╱    ╲  ╱  ╲
+    25│  ╱    ╲      ╲╱    ╲
+     0└────────────────────────
+      00:00  06:00  12:00  18:00
+\`\`\`
+
+**Query:**
+\`\`\`
+index=security EventCode=4625
+| timechart span=1h count
+\`\`\`
+
+**Use when:**
+- Showing data over time
+- Comparing multiple series
+- Identifying patterns/anomalies
+
+## Bar Charts
+
+**Best for:** Comparing categories, rankings
+
+\`\`\`
+     Top 5 Attacked Users
+     
+     admin    ████████████████ 156
+     jsmith   █████████ 89
+     root     ███████ 67
+     service  ████ 45
+     guest    ██ 23
+\`\`\`
+
+**Query:**
+\`\`\`
+index=security EventCode=4625
+| top 5 user
+\`\`\`
+
+**Use when:**
+- Ranking items (top N)
+- Comparing across categories
+- Showing distribution by type
+
+## Pie/Donut Charts
+
+**Best for:** Part-to-whole relationships
+
+\`\`\`
+       Alert Severity
+       
+        ╭────────╮
+       ╱ Critical ╲
+      │    12%     │
+      │ ╭───────╮ │
+      │ │ High  │ │
+      │ │  28%  │ │
+      │ ╰───────╯ │
+       ╲ Med 35% ╱
+        ╲Low 25%╱
+         ╰──────╯
+\`\`\`
+
+**Query:**
+\`\`\`
+index=alerts
+| stats count by severity
+\`\`\`
+
+**Limitations:**
+- Max 5-7 slices
+- Don't use for time series
+- Hard to compare similar values
+
+## Tables
+
+**Best for:** Detailed data, drill-down
+
+\`\`\`
+┌───────────────────┬──────────┬─────────────┬──────────┐
+│ Time              │ Host     │ User        │ Action   │
+├───────────────────┼──────────┼─────────────┼──────────┤
+│ 10/15 14:23:45    │ DC01     │ admin       │ login    │
+│ 10/15 14:25:12    │ WEB01    │ jsmith      │ failed   │
+│ 10/15 14:26:33    │ DC01     │ service     │ login    │
+└───────────────────┴──────────┴─────────────┴──────────┘
+\`\`\`
+
+**Best practices:**
+- Limit columns (5-7 max)
+- Sort meaningfully
+- Add pagination
+- Enable row highlighting
+
+## Single Value Panels
+
+**Best for:** Key metrics, current status
+
+\`\`\`
+┌────────────────────┐  ┌────────────────────┐
+│        45          │  │        3.2h        │
+│   Critical Alerts  │  │    Avg MTTR        │
+│   ▲ 15% vs avg     │  │   ▼ 12% vs last wk │
+└────────────────────┘  └────────────────────┘
+\`\`\`
+
+**Features:**
+- Trend indicators (up/down)
+- Color coding (red/yellow/green)
+- Sparkline for mini trend
+
+## Area Charts
+
+**Best for:** Volume over time, stacked categories
+
+\`\`\`
+        Traffic by Type
+     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+    ▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒
+   ░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░░
+  ░░░░░░░░░░░░░░░░░░░░░░░░░░
+  
+  ░ = HTTP  ▒ = HTTPS  ▓ = DNS
+\`\`\`
+
+**Query:**
+\`\`\`
+index=network
+| timechart span=1h sum(bytes) by protocol
+\`\`\`
+
+## Geographic Maps
+
+**Best for:** Location-based threats
+
+\`\`\`
+     Attack Origin Map
+     
+    ┌────────────────────────┐
+    │  ●                 ●   │
+    │     ●     ●           │
+    │  ●●●●        ●  ●     │
+    │        ●              │
+    └────────────────────────┘
+    
+    ● = Attack source (size = volume)
+\`\`\`
+
+**Query:**
+\`\`\`
+index=security EventCode=4625
+| iplocation src_ip
+| geostats count by Country
+\`\`\`
+
+## Heatmaps
+
+**Best for:** Activity by two dimensions
+
+\`\`\`
+        Login Activity by Hour/Day
+        
+        Mon Tue Wed Thu Fri Sat Sun
+    00  ░░░ ░░░ ░░░ ░░░ ░░░ ░░░ ░░░
+    06  ▒▒▒ ▒▒▒ ▒▒▒ ▒▒▒ ▒▒▒ ░░░ ░░░
+    09  ▓▓▓ ▓▓▓ ▓▓▓ ▓▓▓ ▓▓▓ ░░░ ░░░
+    12  ▓▓▓ ▓▓▓ ▓▓▓ ▓▓▓ ▓▓▓ ░░░ ░░░
+    18  ▒▒▒ ▒▒▒ ▒▒▒ ▒▒▒ ▒▒▒ ░░░ ░░░
+    21  ░░░ ░░░ ░░░ ░░░ ░░░ ░░░ ░░░
+\`\`\`
+
+**Use for:**
+- Time-based patterns
+- User behavior analysis
+- Resource utilization
+
+## Gauge/Meter
+
+**Best for:** Progress toward goal, thresholds
+
+\`\`\`
+      SLA Compliance
+      
+         ╭───────╮
+        ╱    ▲    ╲
+       │   92%    │
+        ╲  ✓OK   ╱
+         ╰───────╯
+      
+      0%   50%   100%
+      ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+\`\`\`
+
+## Color Usage
+
+\`\`\`
+┌──────────────────────────────────────────────┐
+│              COLOR MEANING                   │
+├────────────┬─────────────────────────────────┤
+│ Red        │ Critical, blocked, failed       │
+│ Orange     │ Warning, needs attention        │
+│ Yellow     │ Caution, elevated               │
+│ Green      │ Success, healthy, allowed       │
+│ Blue       │ Information, neutral            │
+│ Gray       │ Unknown, N/A                    │
+└────────────┴─────────────────────────────────┘
+\`\`\`
+
+**Consistency is key!** Red always means the same thing.
+    `,
+    keyTakeaways: [
+      "Line charts show trends; bar charts compare categories",
+      "Pie charts work best with 5-7 categories showing parts of a whole",
+      "Tables provide detail; single values highlight KPIs",
+      "Geographic maps visualize attack origins",
+      "Use consistent color coding across all dashboards"
+    ]
+  },
+  {
+    id: "5.3",
+    courseId: "siem-fundamentals",
+    title: "Interactive Dashboards",
+    content: `
+# Interactive Dashboards
+
+Transform static dashboards into powerful investigation tools with interactivity.
+
+## Types of Interactivity
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    DASHBOARD INTERACTIVITY                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐        │
+│  │ Time Picker │    │  Dropdown   │    │  Text Input │        │
+│  │             │    │  Filters    │    │   Search    │        │
+│  └─────────────┘    └─────────────┘    └─────────────┘        │
+│                           │                                     │
+│                           ▼                                     │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │                    All Panels Update                     │  │
+│  └─────────────────────────────────────────────────────────┘  │
+│                           │                                     │
+│                           ▼                                     │
+│  ┌─────────────┐    ┌─────────────┐                           │
+│  │  Drilldown  │    │   Tokens    │                           │
+│  │   (click)   │    │   Passed    │                           │
+│  └─────────────┘    └─────────────┘                           │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Time Picker
+
+Global time range for all panels.
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│ Time Range: [Last 24 hours ▼]  From: [        ] To: [    ] │
+│                                                             │
+│ Presets: Last 15m | Last 1h | Last 4h | Last 24h | Last 7d │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+### Implementation:
+\`\`\`xml
+<input type="time" token="time">
+  <label>Time Range</label>
+  <default>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </default>
+</input>
+
+<!-- Panel uses token -->
+<search>
+  <query>index=security earliest=$time.earliest$ latest=$time.latest$</query>
+</search>
+\`\`\`
+
+## Dropdown Filters
+
+Filter by categories like severity, host, user.
+
+\`\`\`
+┌──────────────────────────────────────────────────────────────┐
+│ Severity: [All ▼]    Host: [All ▼]    User: [All ▼]         │
+│           ┌────────┐                                         │
+│           │ All    │                                         │
+│           │ Critical│                                        │
+│           │ High   │                                         │
+│           │ Medium │                                         │
+│           │ Low    │                                         │
+│           └────────┘                                         │
+└──────────────────────────────────────────────────────────────┘
+\`\`\`
+
+### Static Dropdown:
+\`\`\`xml
+<input type="dropdown" token="severity">
+  <label>Severity</label>
+  <choice value="*">All</choice>
+  <choice value="critical">Critical</choice>
+  <choice value="high">High</choice>
+  <choice value="medium">Medium</choice>
+  <choice value="low">Low</choice>
+  <default>*</default>
+</input>
+\`\`\`
+
+### Dynamic Dropdown (from search):
+\`\`\`xml
+<input type="dropdown" token="host">
+  <label>Host</label>
+  <search>
+    <query>| inputlookup hosts.csv | table host</query>
+  </search>
+  <fieldForLabel>host</fieldForLabel>
+  <fieldForValue>host</fieldForValue>
+  <choice value="*">All Hosts</choice>
+  <default>*</default>
+</input>
+\`\`\`
+
+## Text Input
+
+Free-form search within dashboard.
+
+\`\`\`
+┌─────────────────────────────────────────────────┐
+│ Search: [admin*                    ] [Search]  │
+└─────────────────────────────────────────────────┘
+\`\`\`
+
+### Implementation:
+\`\`\`xml
+<input type="text" token="search_term">
+  <label>Search User</label>
+  <default>*</default>
+</input>
+
+<search>
+  <query>index=security user=$search_term$ | stats count by user</query>
+</search>
+\`\`\`
+
+## Drilldowns
+
+Click panels to investigate further.
+
+### Types of Drilldowns:
+
+1. **Navigate to search:**
+\`\`\`xml
+<drilldown>
+  <link target="_blank">
+    /app/search/search?q=index=security user=$click.value$
+  </link>
+</drilldown>
+\`\`\`
+
+2. **Set token (filter other panels):**
+\`\`\`xml
+<drilldown>
+  <set token="selected_user">$click.value$</set>
+</drilldown>
+\`\`\`
+
+3. **Link to another dashboard:**
+\`\`\`xml
+<drilldown>
+  <link target="_blank">
+    /app/security/user_investigation?user=$click.value$
+  </link>
+</drilldown>
+\`\`\`
+
+### Drilldown Variables:
+
+| Variable | Description |
+|----------|-------------|
+| $click.value$ | Clicked cell value |
+| $click.name$ | Field name |
+| $row.field_name$ | Value from specific column |
+| $earliest$ | Start of time range |
+| $latest$ | End of time range |
+
+## Token Flow
+
+\`\`\`
+User clicks "admin" in chart
+         │
+         ▼
+Token set: selected_user = "admin"
+         │
+         ▼
+All panels with $selected_user$ update
+         │
+    ┌────┴────┬────────────┐
+    ▼         ▼            ▼
+ Panel 1   Panel 2     Panel 3
+ Updates   Updates     Updates
+\`\`\`
+
+## Multi-Select
+
+Allow selecting multiple values.
+
+\`\`\`
+┌─────────────────────────────────────┐
+│ Hosts: [Select hosts        ▼]     │
+│        ┌──────────────────────┐    │
+│        │ [✓] DC01             │    │
+│        │ [✓] WEB01            │    │
+│        │ [ ] WEB02            │    │
+│        │ [✓] DB01             │    │
+│        └──────────────────────┘    │
+└─────────────────────────────────────┘
+\`\`\`
+
+### Implementation:
+\`\`\`xml
+<input type="multiselect" token="hosts">
+  <label>Hosts</label>
+  <valuePrefix>host=</valuePrefix>
+  <valueSuffix></valueSuffix>
+  <delimiter> OR </delimiter>
+  <choice value="*">All</choice>
+  <search>
+    <query>| inputlookup hosts.csv | table host</query>
+  </search>
+</input>
+
+<!-- Results in: (host=DC01 OR host=WEB01 OR host=DB01) -->
+\`\`\`
+
+## Conditional Visibility
+
+Show/hide panels based on selections.
+
+\`\`\`xml
+<panel depends="$show_details$">
+  <!-- Only shows when show_details token is set -->
+</panel>
+
+<panel rejects="$hide_panel$">
+  <!-- Hidden when hide_panel token is set -->
+</panel>
+\`\`\`
+
+## Best Practices
+
+1. **Sensible Defaults**: Dashboard should work without input
+2. **Clear Labels**: Users know what each filter does
+3. **Logical Drilldowns**: Click action is intuitive
+4. **Consistent Tokens**: Same naming across dashboards
+5. **Performance**: Limit dropdown options, use efficient queries
+    `,
+    keyTakeaways: [
+      "Time pickers allow users to adjust the analysis window",
+      "Dropdown filters narrow focus to specific hosts, users, or severities",
+      "Drilldowns enable click-to-investigate workflows",
+      "Tokens pass values between inputs and panels",
+      "Interactive dashboards transform monitoring into investigation"
+    ]
+  },
+  {
+    id: "5.4",
+    courseId: "siem-fundamentals",
+    title: "Hands-On: Build a SOC Dashboard",
+    content: `
+# Hands-On: Build a SOC Dashboard
+
+Create a functional Security Operations dashboard from scratch.
+
+## Dashboard Requirements
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    SOC DASHBOARD SPEC                           │
+├─────────────────────────────────────────────────────────────────┤
+│ Purpose: Real-time monitoring for L1 SOC analysts               │
+│ Refresh: Every 60 seconds                                       │
+│ Time Range: Default last 24 hours, selectable                   │
+│ Filters: Severity, Host                                         │
+│                                                                 │
+│ Required Panels:                                                │
+│ 1. Alert counts by severity (single values)                    │
+│ 2. Alert trend over time (line chart)                          │
+│ 3. Top alerting hosts (bar chart)                              │
+│ 4. Alert types breakdown (pie chart)                           │
+│ 5. Recent critical alerts (table with drilldown)               │
+│ 6. Geographic attack origins (map)                             │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Dashboard Layout
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│ [Time: Last 24h ▼]  [Severity: All ▼]  [Host: All ▼]           │
+├───────────────┬───────────────┬───────────────┬─────────────────┤
+│   CRITICAL    │     HIGH      │    MEDIUM     │      LOW        │
+│      12       │      34       │      89       │      156        │
+│   ▲ 3 vs avg  │   ▼ 2 vs avg  │   ─ normal    │   ─ normal      │
+├───────────────┴───────────────┴───────────────┴─────────────────┤
+│                    ALERT TREND (24H)                            │
+│  ▁▂▃▄▅▆▇█▇▆▅▄▃▂▁▁▂▃▄▅▆▇█▇▆▅▄▃▂▁▁▂▃▄▅▆▇█                        │
+├─────────────────────────────────┬───────────────────────────────┤
+│       TOP HOSTS                 │      ALERT TYPES              │
+│       ████████ DC01             │         ╭────────╮            │
+│       ██████ WEB01              │        ╱ Malware ╲            │
+│       ████ DB01                 │       │  Auth     │           │
+│       ███ WKS001                │        ╲ Network ╱            │
+├─────────────────────────────────┴───────────────────────────────┤
+│                    RECENT CRITICAL ALERTS                       │
+│ Time        │ Host   │ Alert          │ User    │ Status        │
+│ 14:23:45    │ DC01   │ Brute Force    │ admin   │ Open          │
+│ 14:15:30    │ WEB01  │ SQL Injection  │ -       │ In Progress   │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Step 1: Create Input Filters
+
+### Time Picker:
+\`\`\`xml
+<input type="time" token="time" searchWhenChanged="true">
+  <label>Time Range</label>
+  <default>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </default>
+</input>
+\`\`\`
+
+### Severity Filter:
+\`\`\`xml
+<input type="dropdown" token="severity" searchWhenChanged="true">
+  <label>Severity</label>
+  <choice value="*">All Severities</choice>
+  <choice value="critical">Critical</choice>
+  <choice value="high">High</choice>
+  <choice value="medium">Medium</choice>
+  <choice value="low">Low</choice>
+  <default>*</default>
+</input>
+\`\`\`
+
+---
+
+## Step 2: Single Value Panels
+
+### Critical Alerts:
+\`\`\`
+index=alerts severity=critical
+earliest=$time.earliest$ latest=$time.latest$
+| stats count
+\`\`\`
+
+### With Trend Indicator:
+\`\`\`
+index=alerts severity=critical
+| stats count as current
+| appendcols [
+    search index=alerts severity=critical earliest=-48h latest=-24h
+    | stats count as previous
+  ]
+| eval change = current - previous
+| eval trend = if(change > 0, "▲", if(change < 0, "▼", "─"))
+\`\`\`
+
+---
+
+## Step 3: Alert Trend Chart
+
+\`\`\`
+index=alerts severity=$severity$
+earliest=$time.earliest$ latest=$time.latest$
+| timechart span=1h count by severity
+\`\`\`
+
+**Visualization Settings:**
+- Chart type: Line
+- Stack mode: Stacked
+- Legend: Bottom
+
+---
+
+## Step 4: Top Hosts Bar Chart
+
+\`\`\`
+index=alerts severity=$severity$
+earliest=$time.earliest$ latest=$time.latest$
+| stats count by host
+| sort -count
+| head 10
+\`\`\`
+
+**Add Drilldown:**
+\`\`\`xml
+<drilldown>
+  <set token="selected_host">$click.value$</set>
+</drilldown>
+\`\`\`
+
+---
+
+## Step 5: Alert Types Pie Chart
+
+\`\`\`
+index=alerts severity=$severity$
+earliest=$time.earliest$ latest=$time.latest$
+| stats count by alert_category
+| sort -count
+\`\`\`
+
+---
+
+## Step 6: Recent Critical Alerts Table
+
+\`\`\`
+index=alerts severity=critical status!=closed
+earliest=$time.earliest$ latest=$time.latest$
+| table _time, host, alert_name, user, src_ip, status
+| sort -_time
+| head 20
+\`\`\`
+
+**Add Drilldown to Search:**
+\`\`\`xml
+<drilldown>
+  <link target="_blank">
+    /app/search/search?q=index=alerts alert_id=$row.alert_id$
+  </link>
+</drilldown>
+\`\`\`
+
+---
+
+## Step 7: Geographic Map
+
+\`\`\`
+index=alerts src_ip=*
+earliest=$time.earliest$ latest=$time.latest$
+| iplocation src_ip
+| geostats count by Country
+\`\`\`
+
+---
+
+## Complete Dashboard XML
+
+\`\`\`xml
+<dashboard version="1.1">
+  <label>SOC Operations Dashboard</label>
+  <description>Real-time security monitoring</description>
+  
+  <fieldset submitButton="false" autoRun="true">
+    <!-- Time picker, severity, host dropdowns -->
+  </fieldset>
+  
+  <row>
+    <!-- Single value panels: Critical, High, Medium, Low -->
+  </row>
+  
+  <row>
+    <panel>
+      <!-- Alert trend timechart -->
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <!-- Top hosts bar chart -->
+    </panel>
+    <panel>
+      <!-- Alert types pie chart -->
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <!-- Recent critical alerts table -->
+    </panel>
+  </row>
+</dashboard>
+\`\`\`
+
+---
+
+## Testing Checklist
+
+- [ ] Dashboard loads without errors
+- [ ] Time picker updates all panels
+- [ ] Severity filter works correctly
+- [ ] Drilldowns navigate to correct searches
+- [ ] Refresh rate is set (60 seconds)
+- [ ] Colors are consistent (red=critical, etc.)
+- [ ] Table pagination works
+- [ ] Dashboard performs well (<5 second load)
+    `,
+    keyTakeaways: [
+      "Plan dashboard layout before building",
+      "Use tokens to connect inputs to panels",
+      "Single values highlight key metrics",
+      "Add drilldowns for investigation workflows",
+      "Test all interactive elements before deployment"
+    ]
+  },
+
+  // Module 6: Alerts & Correlation Rules
+  {
+    id: "6.1",
+    courseId: "siem-fundamentals",
+    title: "Understanding SIEM Alerts",
+    content: `
+# Understanding SIEM Alerts
+
+Alerts are the primary output of a SIEM - they notify analysts of potential security issues requiring investigation.
+
+## Alert Lifecycle
+
+\`\`\`
+       ┌──────────┐
+       │  Event   │  Raw log enters SIEM
+       │  Ingested│
+       └────┬─────┘
+            │
+            ▼
+       ┌──────────┐
+       │ Detection│  Rule evaluates event
+       │   Rule   │
+       └────┬─────┘
+            │ Match?
+      ┌─────┴─────┐
+      │           │
+      No         Yes
+      │           │
+      ▼           ▼
+   (discard)  ┌──────────┐
+              │  Alert   │  Alert created
+              │ Generated│
+              └────┬─────┘
+                   │
+                   ▼
+              ┌──────────┐
+              │ Queue &  │  Analyst reviews
+              │  Triage  │
+              └────┬─────┘
+                   │
+           ┌───────┼───────┐
+           ▼       ▼       ▼
+        False   True    Escalate
+        Pos     Pos     
+           │       │       │
+           ▼       ▼       ▼
+        Close  Remediate  L2/IR
+\`\`\`
+
+## Alert Components
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│ ALERT: Brute Force Attack Detected                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│ ID:          ALT-2024-10-15-00451                              │
+│ Severity:    HIGH                                               │
+│ Status:      Open                                               │
+│ Created:     2024-10-15 14:23:45 UTC                           │
+│                                                                 │
+│ Source IP:   192.168.1.100                                      │
+│ Target:      DC01                                               │
+│ User:        admin                                              │
+│                                                                 │
+│ Description: 50 failed login attempts in 5 minutes followed    │
+│              by successful authentication                       │
+│                                                                 │
+│ MITRE ATT&CK: T1110.001 - Brute Force: Password Guessing       │
+│                                                                 │
+│ Evidence:                                                       │
+│   - 50 EventID 4625 (Failed Login)                             │
+│   - 1 EventID 4624 (Successful Login)                          │
+│   - Source: 192.168.1.100                                      │
+│                                                                 │
+│ Recommended Actions:                                            │
+│   1. Verify if login was legitimate                            │
+│   2. Check for lateral movement from admin account             │
+│   3. Consider blocking source IP                               │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Severity Levels
+
+\`\`\`
+┌──────────────────────────────────────────────────────────────────┐
+│                    SEVERITY CLASSIFICATION                       │
+├────────────┬──────────┬──────────────────────────────────────────┤
+│ CRITICAL   │ Respond  │ Active compromise, data breach in        │
+│ (P1)       │ in 15min │ progress, ransomware execution           │
+├────────────┼──────────┼──────────────────────────────────────────┤
+│ HIGH       │ Respond  │ Successful exploitation, credential      │
+│ (P2)       │ in 1 hour│ theft, malware execution                 │
+├────────────┼──────────┼──────────────────────────────────────────┤
+│ MEDIUM     │ Respond  │ Reconnaissance, policy violations,       │
+│ (P3)       │ in 4 hour│ suspicious but not confirmed malicious   │
+├────────────┼──────────┼──────────────────────────────────────────┤
+│ LOW        │ Respond  │ Informational, minor policy violations,  │
+│ (P4)       │ next day │ low-risk anomalies                       │
+└────────────┴──────────┴──────────────────────────────────────────┘
+\`\`\`
+
+## Alert States
+
+\`\`\`
+┌────────┐     ┌──────────────┐     ┌──────────────┐
+│  New   │ ──► │ In Progress  │ ──► │   Closed     │
+│        │     │              │     │              │
+└────────┘     └──────────────┘     └──────────────┘
+    │                │                     │
+    │                │                     ├── True Positive
+    │                │                     ├── False Positive
+    │                │                     ├── Benign
+    │                ▼                     └── Duplicate
+    │          ┌──────────────┐
+    └────────► │  Escalated   │
+               │              │
+               └──────────────┘
+\`\`\`
+
+## Alert Fatigue
+
+**The Problem:**
+\`\`\`
+Too Many Alerts
+      ↓
+Analysts Overwhelmed
+      ↓
+Alerts Ignored
+      ↓
+Real Threats Missed
+\`\`\`
+
+### Causes:
+- Overly broad detection rules
+- Poor tuning
+- Duplicate alerts
+- Low-value alerts
+- No correlation (1 incident = 100 alerts)
+
+### Solutions:
+| Problem | Solution |
+|---------|----------|
+| Too many false positives | Tune rules, add exceptions |
+| Duplicate alerts | Aggregate similar alerts |
+| Low-value alerts | Adjust severity or disable |
+| No context | Add enrichment |
+| Alert storms | Implement throttling |
+
+## Key Alert Metrics
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    ALERT METRICS                                │
+├───────────────┬─────────────────────────────────────────────────┤
+│ Volume        │ Total alerts per day/week                       │
+│ By Severity   │ Critical: 10, High: 50, Medium: 200, Low: 500   │
+│ FP Rate       │ % of alerts that are false positives           │
+│ MTTD          │ Mean time from event to alert                   │
+│ MTTR          │ Mean time from alert to resolution              │
+│ Closure Rate  │ % of alerts closed per day                      │
+│ Escalation %  │ % of alerts escalated to L2/IR                  │
+└───────────────┴─────────────────────────────────────────────────┘
+\`\`\`
+
+### Target Benchmarks:
+| Metric | Good | Needs Improvement |
+|--------|------|-------------------|
+| FP Rate | < 20% | > 40% |
+| MTTD | < 1 hour | > 4 hours |
+| MTTR | < 4 hours | > 24 hours |
+| Daily volume per analyst | < 50 | > 100 |
+    `,
+    keyTakeaways: [
+      "Alerts are generated when detection rules match incoming events",
+      "Severity levels (Critical/High/Medium/Low) determine response priority",
+      "Alert fatigue from too many false positives leads to missed threats",
+      "Key metrics: FP rate, MTTD, MTTR, and alert volume per analyst",
+      "Proper tuning is essential to maintain effective alerting"
+    ]
+  },
+  {
+    id: "6.2",
+    courseId: "siem-fundamentals",
+    title: "Creating Detection Rules",
+    content: `
+# Creating Detection Rules
+
+Detection rules are the logic that transforms raw events into actionable security alerts.
+
+## Rule Components
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    DETECTION RULE STRUCTURE                     │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  METADATA                                                       │
+│  ├── Name: Brute Force Attack Detection                        │
+│  ├── Description: Detects multiple failed logins...            │
+│  ├── Severity: High                                             │
+│  ├── MITRE ATT&CK: T1110.001                                   │
+│  └── Author: SOC Team                                           │
+│                                                                 │
+│  LOGIC                                                          │
+│  ├── Data Source: Windows Security Events                      │
+│  ├── Condition: EventCode=4625 AND count > 10 in 5min         │
+│  └── Grouping: By source IP and target user                    │
+│                                                                 │
+│  OUTPUT                                                         │
+│  ├── Alert Title: Brute Force - $src_ip$ → $user$             │
+│  ├── Fields: src_ip, user, count, first_time, last_time       │
+│  └── Actions: Email SOC, Create Ticket                         │
+│                                                                 │
+│  TUNING                                                         │
+│  ├── Exceptions: Exclude service accounts                      │
+│  └── Threshold: Adjust count based on environment              │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Rule Types
+
+### 1. Simple Match Rules
+Trigger on single event matching criteria.
+
+\`\`\`
+# Malware Detected
+EventCode=1116 AND source="Windows Defender"
+→ Alert immediately
+\`\`\`
+
+### 2. Threshold Rules
+Trigger when count exceeds limit.
+
+\`\`\`
+# Failed Logins
+EventCode=4625
+| stats count by src_ip, user
+| where count > 10
+→ Alert when threshold exceeded
+\`\`\`
+
+### 3. Correlation Rules
+Combine multiple event types.
+
+\`\`\`
+# Brute Force Success
+Failed logins (4625) > 5
+  FOLLOWED BY
+Successful login (4624)
+  WITHIN 10 minutes
+  FROM same source IP
+→ Alert on correlation
+\`\`\`
+
+### 4. Anomaly/Baseline Rules
+Detect deviation from normal.
+
+\`\`\`
+# Unusual Data Transfer
+Outbound bytes > (avg + 3*stdev)
+→ Alert on anomaly
+\`\`\`
+
+## Building a Detection Rule
+
+### Example: Detect Suspicious PowerShell
+
+**Step 1: Define Objective**
+\`\`\`
+Detect: Encoded PowerShell commands
+Why: Attackers use encoding to evade detection
+\`\`\`
+
+**Step 2: Identify Data Source**
+\`\`\`
+Source: Windows Event Logs
+EventCode: 4688 (Process Creation)
+Required: Command line logging enabled
+\`\`\`
+
+**Step 3: Write Detection Logic**
+\`\`\`
+index=windows EventCode=4688
+| where match(CommandLine, "(?i)powershell.*-enc")
+   OR match(CommandLine, "(?i)powershell.*-e\\s+[A-Za-z0-9+/=]{50,}")
+| table _time, host, user, CommandLine
+\`\`\`
+
+**Step 4: Add Context**
+\`\`\`
+| lookup asset_info host OUTPUT criticality, owner
+| lookup user_info user OUTPUT department
+| eval severity = case(
+    criticality="critical", "high",
+    criticality="high", "high",
+    true(), "medium"
+  )
+\`\`\`
+
+**Step 5: Configure Alert**
+\`\`\`
+Alert Name: Encoded PowerShell Execution
+Severity: $severity$
+Schedule: Real-time or every 5 minutes
+Actions: 
+  - Send email to soc@company.com
+  - Create ticket in ServiceNow
+\`\`\`
+
+## Correlation Rule Example
+
+\`\`\`
+# Lateral Movement Detection
+
+# Step 1: Find auth to multiple hosts
+index=security EventCode=4624 LogonType=3
+| stats dc(host) as hosts, values(host) as host_list by user, src_ip
+| where hosts > 5
+
+# Step 2: Check for rapid succession
+| join user [
+    search index=security EventCode=4624
+    | transaction user maxspan=30m
+    | where eventcount > 5
+  ]
+
+# Step 3: Alert
+| eval alert_name = "Possible Lateral Movement - " . user
+\`\`\`
+
+## MITRE ATT&CK Mapping
+
+Link rules to attack techniques:
+
+| Technique | Rule Example |
+|-----------|--------------|
+| T1110 Brute Force | Failed login threshold |
+| T1059.001 PowerShell | Encoded PowerShell detection |
+| T1078 Valid Accounts | Login from unusual location |
+| T1021 Remote Services | RDP from non-admin |
+| T1003 Credential Dumping | LSASS access detection |
+
+## Rule Documentation Template
+
+\`\`\`markdown
+# Rule: [Rule Name]
+
+## Overview
+- **ID**: RULE-001
+- **Author**: SOC Team
+- **Created**: 2024-10-15
+- **MITRE**: T1110.001
+
+## Description
+[What this rule detects and why it matters]
+
+## Data Sources
+- Windows Security Events (EventCode 4625, 4624)
+
+## Detection Logic
+\`\`\`
+[The actual query]
+\`\`\`
+
+## Tuning Guidance
+- Adjust threshold based on environment
+- Exclude: service accounts, known scanners
+
+## Response Playbook
+1. Verify if user is legitimate
+2. Check source IP reputation
+3. Look for successful login after failures
+4. Escalate if confirmed attack
+
+## False Positive Scenarios
+- Password resets
+- Account lockout testing
+- Misconfigured service accounts
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Detection rules match events against conditions to generate alerts",
+      "Types include: simple match, threshold, correlation, and anomaly",
+      "Map rules to MITRE ATT&CK for coverage visibility",
+      "Document rules with logic, tuning guidance, and response procedures",
+      "Balance detection sensitivity with false positive rate"
+    ]
+  },
+  {
+    id: "6.3",
+    courseId: "siem-fundamentals",
+    title: "Alert Tuning & Optimization",
+    content: `
+# Alert Tuning & Optimization
+
+Effective tuning reduces noise while maintaining detection coverage - the key to combating alert fatigue.
+
+## The Tuning Process
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    TUNING LIFECYCLE                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│    ┌──────────┐                                                 │
+│    │ Identify │  Which rules generate most false positives?    │
+│    │  Noisy   │                                                 │
+│    │  Rules   │                                                 │
+│    └────┬─────┘                                                 │
+│         │                                                       │
+│         ▼                                                       │
+│    ┌──────────┐                                                 │
+│    │ Analyze  │  Why are they false positives?                 │
+│    │  False   │  - Legitimate activity?                         │
+│    │Positives │  - Too broad logic?                            │
+│    └────┬─────┘                                                 │
+│         │                                                       │
+│         ▼                                                       │
+│    ┌──────────┐                                                 │
+│    │  Apply   │  Add exceptions, adjust thresholds             │
+│    │  Tuning  │                                                 │
+│    └────┬─────┘                                                 │
+│         │                                                       │
+│         ▼                                                       │
+│    ┌──────────┐                                                 │
+│    │ Validate │  Test that real threats still detected         │
+│    │          │                                                 │
+│    └────┬─────┘                                                 │
+│         │                                                       │
+│         ▼                                                       │
+│    ┌──────────┐                                                 │
+│    │ Monitor  │  Track FP rate improvement                     │
+│    │          │                                                 │
+│    └──────────┘                                                 │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Identifying Noisy Rules
+
+### Analysis Query:
+\`\`\`
+index=alerts
+| stats count, 
+        sum(eval(if(status="false_positive",1,0))) as fp_count 
+        by rule_name
+| eval fp_rate = round(fp_count/count*100, 1)
+| sort -fp_rate
+| where count > 10
+\`\`\`
+
+### Red Flags:
+| Indicator | Problem |
+|-----------|---------|
+| FP rate > 50% | Rule needs tuning |
+| 100s of alerts/day | Threshold too low |
+| All closed as FP | Consider disabling |
+| Analysts ignore | Credibility lost |
+
+## Tuning Techniques
+
+### 1. Add Exceptions (Allowlists)
+
+**Before:**
+\`\`\`
+EventCode=4625
+| stats count by src_ip, user
+| where count > 5
+\`\`\`
+
+**After:**
+\`\`\`
+EventCode=4625
+| stats count by src_ip, user
+| where count > 5
+| where NOT match(user, "^(svc_|service_)")
+| where NOT cidrmatch("10.0.0.0/8", src_ip)
+| lookup known_scanners ip as src_ip OUTPUT is_scanner
+| where is_scanner != "true"
+\`\`\`
+
+### 2. Adjust Thresholds
+
+\`\`\`
+# Too sensitive (noisy)
+where count > 5
+
+# More appropriate
+where count > 20
+
+# Environment-specific
+| eventstats avg(count) as baseline by user
+| where count > (baseline * 3)
+\`\`\`
+
+### 3. Add Time Constraints
+
+\`\`\`
+# Original: Alerts 24/7
+EventCode=4625
+
+# Tuned: Only alert during business hours for non-critical assets
+EventCode=4625
+| where (date_hour >= 8 AND date_hour <= 18) OR criticality="critical"
+\`\`\`
+
+### 4. Improve Correlation
+
+\`\`\`
+# Original: Alert on any failed logins
+EventCode=4625 | stats count by user | where count > 10
+
+# Tuned: Only alert if followed by success (actual attack)
+EventCode=4625 OR EventCode=4624
+| transaction src_ip, user maxspan=10m
+| where match(_raw, "4625.*4624")
+\`\`\`
+
+### 5. Adjust Severity
+
+\`\`\`
+| eval severity = case(
+    criticality="critical" AND count > 50, "critical",
+    criticality="critical" AND count > 20, "high",
+    criticality="high" AND count > 50, "high",
+    true(), "medium"
+  )
+\`\`\`
+
+## Building Exception Lists
+
+### Exception Categories:
+
+| Category | Examples |
+|----------|----------|
+| Service Accounts | svc_backup, service_sql |
+| Scanners | Vulnerability scanners, pentest tools |
+| Known IPs | Security tools, monitoring systems |
+| Scheduled Tasks | Backup jobs, maintenance windows |
+| Legitimate Apps | Approved admin tools |
+
+### Exception Management:
+\`\`\`
+# exceptions.csv
+exception_type,value,reason,added_by,added_date,expires
+user,svc_backup,Backup service,jsmith,2024-10-15,2025-10-15
+ip,10.0.0.50,Vulnerability scanner,security_team,2024-10-15,
+host,scanner01,Nessus server,security_team,2024-10-15,
+\`\`\`
+
+### Apply Exceptions:
+\`\`\`
+index=security EventCode=4625
+| lookup exceptions exception_type="user" value as user OUTPUT reason as exception_reason
+| where isnull(exception_reason)
+\`\`\`
+
+## Validation Testing
+
+### Ensure Real Threats Still Detected:
+
+\`\`\`
+# Test 1: Replay known attack
+| inputlookup known_attacks.csv
+| apply detection_rule
+→ Should generate alerts
+
+# Test 2: Red team simulation
+Conduct controlled attack simulation
+→ Verify detection
+
+# Test 3: Historical analysis
+| search index=alerts rule="Brute Force" status="true_positive"
+| apply new_tuning
+→ Should still match
+\`\`\`
+
+## Tuning Documentation
+
+\`\`\`markdown
+# Tuning Record
+
+**Rule**: Brute Force Detection
+**Date**: 2024-10-15
+**Tuned By**: jsmith
+
+## Problem
+FP rate: 65% (130/200 alerts)
+Cause: Service accounts triggering rule
+
+## Changes Made
+1. Added exception for svc_* accounts
+2. Raised threshold from 5 to 15
+3. Added correlation with successful login
+
+## Results
+- FP rate reduced to 12%
+- True positive detection maintained
+- Alert volume reduced 80%
+
+## Risks
+- May miss slow brute force (< 15 attempts)
+- Mitigation: Created separate low-threshold rule for critical assets
+\`\`\`
+
+## Metrics to Track
+
+\`\`\`
+Before Tuning:
+- Daily alerts: 500
+- FP rate: 60%
+- Analyst workload: 300 FP/day
+
+After Tuning:
+- Daily alerts: 150
+- FP rate: 15%
+- Analyst workload: 23 FP/day (92% reduction!)
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Identify noisy rules using FP rate analysis",
+      "Tuning techniques: exceptions, thresholds, time constraints, correlation",
+      "Maintain exception lists with expiration dates and approval",
+      "Always validate that tuning doesn't break detection of real threats",
+      "Document all tuning changes for audit and rollback"
+    ]
+  },
+  {
+    id: "6.4",
+    courseId: "siem-fundamentals",
+    title: "Alert Response Actions",
+    content: `
+# Alert Response Actions
+
+Configure what happens when alerts fire - from notifications to automated response.
+
+## Response Action Types
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    RESPONSE ACTIONS                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  NOTIFICATION                                                   │
+│  ├── Email                                                      │
+│  ├── SMS/Pager                                                  │
+│  ├── Slack/Teams                                                │
+│  └── PagerDuty/Opsgenie                                        │
+│                                                                 │
+│  TICKET CREATION                                                │
+│  ├── ServiceNow                                                 │
+│  ├── Jira                                                       │
+│  └── Internal ticketing                                         │
+│                                                                 │
+│  ENRICHMENT                                                     │
+│  ├── Threat intel lookup                                        │
+│  ├── Asset information                                          │
+│  └── User context                                               │
+│                                                                 │
+│  AUTOMATED RESPONSE (SOAR)                                      │
+│  ├── Block IP at firewall                                       │
+│  ├── Disable user account                                       │
+│  ├── Isolate endpoint                                           │
+│  └── Collect forensic data                                      │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Notification Routing
+
+### Severity-Based Routing:
+\`\`\`
+┌────────────────────────────────────────────────────────────────┐
+│ Severity │ Channels                    │ Timing              │
+├──────────┼─────────────────────────────┼─────────────────────┤
+│ Critical │ PagerDuty + SMS + Email     │ Immediate           │
+│ High     │ Slack #soc-alerts + Email   │ Immediate           │
+│ Medium   │ Email + Queue               │ Every 15 min digest │
+│ Low      │ Queue only                  │ Daily digest        │
+└──────────┴─────────────────────────────┴─────────────────────┘
+\`\`\`
+
+### Time-Based Routing:
+\`\`\`
+Business Hours (8AM-6PM):
+  → Slack channel, email
+
+After Hours:
+  Critical → PagerDuty (on-call)
+  High → Email to overnight team
+  Medium/Low → Queue for morning
+\`\`\`
+
+## Email Alert Format
+
+\`\`\`
+Subject: [CRITICAL] Brute Force Attack - DC01 - admin
+
+═══════════════════════════════════════════════════════
+SECURITY ALERT: Brute Force Attack Detected
+═══════════════════════════════════════════════════════
+
+Severity: CRITICAL
+Time: 2024-10-15 14:23:45 UTC
+Alert ID: ALT-2024-10-15-00451
+
+─────────────────────────────────────────────────────────
+SUMMARY
+─────────────────────────────────────────────────────────
+50 failed login attempts followed by successful login
+detected for user 'admin' from 192.168.1.100
+
+─────────────────────────────────────────────────────────
+DETAILS
+─────────────────────────────────────────────────────────
+Target Host: DC01 (10.0.0.10)
+Target User: admin
+Source IP: 192.168.1.100
+Failed Attempts: 50
+Time Window: 14:18:00 - 14:23:00
+
+─────────────────────────────────────────────────────────
+THREAT INTELLIGENCE
+─────────────────────────────────────────────────────────
+Source IP Reputation: No known threats
+GeoIP: Internal Network
+
+─────────────────────────────────────────────────────────
+RECOMMENDED ACTIONS
+─────────────────────────────────────────────────────────
+1. Verify if login was legitimate with admin
+2. Check for unusual admin activity post-login
+3. Consider temporary password reset
+
+─────────────────────────────────────────────────────────
+LINKS
+─────────────────────────────────────────────────────────
+[View in SIEM] | [Open Ticket] | [View Runbook]
+
+═══════════════════════════════════════════════════════
+\`\`\`
+
+## Ticket Creation
+
+### Auto-Created Ticket Fields:
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│ Field          │ Value                                          │
+├────────────────┼────────────────────────────────────────────────┤
+│ Title          │ [SECURITY] Brute Force - DC01                  │
+│ Category       │ Security Incident                              │
+│ Priority       │ High (mapped from severity)                    │
+│ Assigned To    │ SOC Queue                                      │
+│ Description    │ Alert details, evidence, recommended actions   │
+│ Attachments    │ Event export, screenshot                       │
+│ Related Alerts │ Link to SIEM alert                             │
+└────────────────┴────────────────────────────────────────────────┘
+\`\`\`
+
+## Alert Aggregation
+
+Prevent alert storms by grouping related alerts:
+
+\`\`\`
+Without Aggregation:
+────────────────────
+Alert 1: Malware on HOST001
+Alert 2: Malware on HOST002
+Alert 3: Malware on HOST003
+... (100 more alerts)
+
+With Aggregation:
+─────────────────
+Alert: Malware Outbreak - 103 hosts affected
+├── First seen: 14:00:00
+├── Last seen: 14:05:00
+├── Affected hosts: HOST001, HOST002, ... (103 total)
+└── Click to view all
+\`\`\`
+
+### Aggregation Configuration:
+\`\`\`
+Group alerts by: rule_name, src_ip
+Time window: 15 minutes
+Maximum alerts per group: 100
+Summary format: "$rule_name - $count hosts affected"
+\`\`\`
+
+## SOAR Integration
+
+Automated response playbooks:
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│              AUTOMATED RESPONSE PLAYBOOK                        │
+│              Brute Force Attack                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  1. ALERT RECEIVED                                              │
+│     ↓                                                           │
+│  2. ENRICH                                                      │
+│     ├── Lookup threat intel for source IP                      │
+│     ├── Get asset information for target                       │
+│     └── Get user details                                        │
+│     ↓                                                           │
+│  3. DECISION                                                    │
+│     Is source IP external AND target is critical asset?        │
+│         │                                                       │
+│     ┌───┴───┐                                                   │
+│    YES      NO                                                  │
+│     ↓       ↓                                                   │
+│  4a. AUTO   4b. QUEUE                                           │
+│  ├── Block   └── Add to                                         │
+│  │   IP         analyst                                         │
+│  ├── Reset      queue                                           │
+│  │   password                                                   │
+│  └── Create                                                     │
+│      ticket                                                     │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Response Action Best Practices
+
+### DO:
+✅ Test automated responses in controlled environment
+✅ Require approval for destructive actions
+✅ Log all automated actions
+✅ Include rollback procedures
+✅ Start with enrichment-only automation
+
+### DON'T:
+❌ Auto-block without human review
+❌ Auto-disable accounts without verification
+❌ Implement destructive automation without testing
+❌ Forget about false positive impact
+    `,
+    keyTakeaways: [
+      "Route alerts based on severity and time of day",
+      "Format notifications with clear, actionable information",
+      "Aggregate related alerts to prevent alert storms",
+      "Start SOAR automation with enrichment, not destructive actions",
+      "Always include rollback procedures for automated responses"
+    ]
+  },
+
+  // Module 7: Practical SIEM Operations
+  {
+    id: "7.1",
+    courseId: "siem-fundamentals",
+    title: "Alert Triage Workflow",
+    content: `
+# Alert Triage Workflow
+
+A systematic approach to processing alerts ensures consistency and efficiency in SOC operations.
+
+## The Triage Process
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    ALERT TRIAGE WORKFLOW                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  1. RECEIVE        Alert appears in queue                       │
+│        ↓                                                        │
+│  2. QUICK ASSESS   Read title, severity, source                 │
+│        ↓           (30 seconds)                                 │
+│  3. CONTEXT        Check related alerts, known FP              │
+│        ↓           (1-2 minutes)                                │
+│  4. INVESTIGATE    Query SIEM for details                      │
+│        ↓           (5-15 minutes)                               │
+│  5. DECIDE         TP/FP/Escalate                              │
+│        ↓                                                        │
+│  6. ACT            Close, escalate, or respond                 │
+│        ↓                                                        │
+│  7. DOCUMENT       Record findings                              │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Step 1: Receive & Prioritize
+
+### Priority Matrix:
+\`\`\`
+                     Asset Criticality
+                   Low      Medium     High
+              ┌─────────┬─────────┬─────────┐
+       High   │ Medium  │  High   │ Critical│
+    Severity  ├─────────┼─────────┼─────────┤
+       Medium │  Low    │ Medium  │  High   │
+              ├─────────┼─────────┼─────────┤
+       Low    │  Low    │  Low    │ Medium  │
+              └─────────┴─────────┴─────────┘
+\`\`\`
+
+### Queue Management:
+\`\`\`
+Morning Start:
+1. Check for overnight critical alerts
+2. Review alerts by priority (Critical → Low)
+3. Claim alerts before working them
+\`\`\`
+
+## Step 2: Quick Assessment (30 seconds)
+
+### Questions to Answer:
+- What type of alert is this?
+- What asset is affected?
+- What is the source?
+- Have I seen this before?
+
+### Quick Win Checks:
+\`\`\`
+□ Known false positive pattern?
+□ Scheduled maintenance window?
+□ Expected activity (pentest, scan)?
+□ Duplicate of existing ticket?
+□ Alert already being worked?
+\`\`\`
+
+## Step 3: Gather Context (1-2 minutes)
+
+### Context Sources:
+\`\`\`
+┌────────────────────────────────────────────────────────────────┐
+│ Source            │ Information                                │
+├───────────────────┼────────────────────────────────────────────┤
+│ Asset Database    │ Owner, criticality, purpose, location      │
+│ User Directory    │ Department, manager, role, last login      │
+│ Previous Alerts   │ Similar alerts on same asset/user          │
+│ Threat Intel      │ IP/domain reputation, known threats        │
+│ Change Management │ Recent changes to affected system          │
+│ Vulnerability DB  │ Known vulnerabilities on asset             │
+└───────────────────┴────────────────────────────────────────────┘
+\`\`\`
+
+### Context Queries:
+\`\`\`
+# Previous alerts on this asset
+index=alerts host=$affected_host$ earliest=-7d
+| stats count by rule_name
+
+# Previous alerts for this user
+index=alerts user=$affected_user$ earliest=-30d
+| table _time, rule_name, severity, status
+\`\`\`
+
+## Step 4: Investigate (5-15 minutes)
+
+### Investigation Questions:
+\`\`\`
+1. What exactly happened?
+   └── Review the raw events
+
+2. When did it happen?
+   └── Establish timeline
+
+3. What is the scope?
+   └── Are other assets/users affected?
+
+4. Is this malicious?
+   └── Evaluate intent and impact
+
+5. Is it ongoing?
+   └── Check for continued activity
+\`\`\`
+
+### Investigation Queries:
+\`\`\`
+# Timeline around the alert
+(index=security OR index=network) 
+  host=$affected_host$ 
+  earliest=-30m@m latest=+30m@m
+| sort _time
+| table _time, sourcetype, user, action, src_ip, dst_ip
+
+# Related network activity
+index=network (src_ip=$affected_ip$ OR dst_ip=$affected_ip$)
+  earliest=-1h
+| stats sum(bytes) as bytes, count by dst_ip, dst_port
+
+# User activity today
+index=security user=$affected_user$ earliest=-24h
+| stats count by host, EventCode
+\`\`\`
+
+## Step 5: Make Decision
+
+### Decision Framework:
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    DECISION TREE                                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Is this expected/authorized activity?                          │
+│        │                                                        │
+│    ┌───┴───┐                                                    │
+│   YES      NO                                                   │
+│    ↓       ↓                                                    │
+│  FALSE    Is there evidence of malicious intent?               │
+│  POSITIVE       │                                               │
+│              ┌──┴──┐                                            │
+│             YES    NO                                           │
+│              ↓      ↓                                           │
+│           TRUE   BENIGN                                         │
+│         POSITIVE (but investigate more)                         │
+│              ↓                                                  │
+│    Is this within L1 scope to handle?                          │
+│              │                                                  │
+│          ┌───┴───┐                                              │
+│         YES      NO                                             │
+│          ↓       ↓                                              │
+│       RESPOND  ESCALATE                                         │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Step 6: Take Action
+
+### Action Types:
+
+| Decision | Action |
+|----------|--------|
+| False Positive | Close with reason, consider tuning |
+| True Positive (L1) | Follow runbook, contain if needed |
+| True Positive (L2+) | Escalate with context |
+| Needs More Info | Add to watch list, continue monitoring |
+
+### Escalation Checklist:
+\`\`\`
+□ Clear summary of the alert
+□ Investigation findings
+□ Evidence collected
+□ Impact assessment
+□ Recommended next steps
+□ Contact information gathered
+\`\`\`
+
+## Step 7: Document
+
+### Ticket Documentation:
+\`\`\`markdown
+## Alert Summary
+- Alert: Brute Force Attack Detected
+- Time: 2024-10-15 14:23:45 UTC
+- Affected: DC01 (admin account)
+
+## Investigation Findings
+- 50 failed login attempts from 192.168.1.100
+- Followed by successful login at 14:23:45
+- Source is internal workstation WKS001
+- User jsmith assigned to WKS001
+
+## Evidence
+- Query: [link to saved search]
+- Screenshot: [attached]
+
+## Conclusion
+FALSE POSITIVE - User jsmith attempted multiple logins
+with wrong password, eventually succeeded.
+
+## Actions Taken
+- Verified with user via phone
+- Confirmed legitimate activity
+- No further action required
+
+## Recommendations
+- Consider user training on password management
+- Review account lockout policy
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Follow a consistent workflow: Receive → Assess → Context → Investigate → Decide → Act → Document",
+      "Quick assessment (30 sec) identifies obvious false positives",
+      "Gather context from asset DB, user directory, and previous alerts",
+      "Use a decision tree to systematically classify alerts",
+      "Thorough documentation enables learning and audit"
+    ]
+  },
+  {
+    id: "7.2",
+    courseId: "siem-fundamentals",
+    title: "Investigation Techniques",
+    content: `
+# Investigation Techniques
+
+Master the art of using SIEM to investigate security incidents effectively.
+
+## Investigation Methodology
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    INVESTIGATION PHASES                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  SCOPE     ──►  PIVOT     ──►  TIMELINE  ──►  CONCLUDE         │
+│  (What?)        (Expand)        (When?)        (What next?)     │
+│                                                                 │
+│  • Initial     • Related       • Sequence    • True Positive?  │
+│    alert         events          of events   • Impact?         │
+│  • Affected    • Connected     • Attack      • Containment?    │
+│    assets        systems         chain       • Escalation?     │
+│  • IOCs        • User          • Duration                      │
+│                  activity                                       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Pivoting Techniques
+
+### What is Pivoting?
+Starting from one data point and following connections to find related activity.
+
+\`\`\`
+        Alert: Malware on HOST001
+                    │
+         ┌─────────┴─────────┐
+         ▼                   ▼
+    User: jsmith         IP: 192.168.1.50
+         │                   │
+    ┌────┴────┐         ┌────┴────┐
+    ▼         ▼         ▼         ▼
+  Other     Email    Firewall   DNS
+  hosts    gateway    logs     queries
+  logged   activity   
+\`\`\`
+
+### Common Pivot Points:
+
+| Pivot From | Pivot To | Query Example |
+|------------|----------|---------------|
+| IP Address | All events | src_ip=X OR dst_ip=X |
+| Username | All actions | user=X |
+| Hostname | All logs | host=X |
+| Hash | Other hosts | file_hash=X |
+| Domain | All queries | query=*domain* |
+| Process | Parent/child | parent_process=X |
+
+### Pivot Query Examples:
+
+**From IP to Everything:**
+\`\`\`
+(index=security OR index=network OR index=web)
+  (src_ip=192.168.1.100 OR dst_ip=192.168.1.100 OR clientip=192.168.1.100)
+| table _time, index, sourcetype, action, user, host
+| sort _time
+\`\`\`
+
+**From User to All Activity:**
+\`\`\`
+index=* user=jsmith earliest=-24h
+| stats count by index, sourcetype, action
+| sort -count
+\`\`\`
+
+**From Hash to Affected Hosts:**
+\`\`\`
+index=endpoint file_hash="a1b2c3d4e5..."
+| stats count, values(file_path) as paths by host
+\`\`\`
+
+## Timeline Construction
+
+### Building a Timeline:
+\`\`\`
+index=* (host=victim_host OR user=affected_user OR src_ip=attacker_ip)
+  earliest=-24h latest=now
+| eval event_summary = sourcetype . " | " . action . " | " . coalesce(user, "-")
+| table _time, host, event_summary
+| sort _time
+\`\`\`
+
+### Visual Timeline:
+\`\`\`
+14:00:00 ─── Phishing email received (user: jsmith)
+    │
+14:05:00 ─── User clicks malicious link
+    │
+14:05:15 ─── Malware downloaded (hash: abc123...)
+    │
+14:05:30 ─── Process execution: evil.exe
+    │
+14:06:00 ─── Outbound connection to 45.33.32.156:443
+    │
+14:10:00 ─── Credential access: lsass.exe accessed
+    │
+14:15:00 ─── Lateral movement: RDP to DC01
+    │
+14:20:00 ─── Detection: Alert triggered
+\`\`\`
+
+## Attack Chain Analysis
+
+### Map to MITRE ATT&CK:
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    ATTACK CHAIN MAPPING                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Initial Access     │ T1566.002  │ Phishing link clicked       │
+│         ↓           │            │                              │
+│  Execution          │ T1204      │ evil.exe executed           │
+│         ↓           │            │                              │
+│  C2                 │ T1071.001  │ HTTPS beaconing             │
+│         ↓           │            │                              │
+│  Credential Access  │ T1003.001  │ LSASS memory dump           │
+│         ↓           │            │                              │
+│  Lateral Movement   │ T1021.001  │ RDP to DC01                 │
+│         ↓           │            │                              │
+│  DETECTED           │            │ Brute force alert           │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+## IOC Extraction
+
+### Types of IOCs:
+
+| Type | Example | Where to Find |
+|------|---------|---------------|
+| IP Address | 45.33.32.156 | Network logs, DNS |
+| Domain | evil.example.com | DNS, proxy logs |
+| URL | http://evil.com/malware.exe | Web logs, email |
+| Hash | abc123def456... | Endpoint logs, EDR |
+| File Name | evil.exe | Process logs |
+| Email | attacker@evil.com | Email logs |
+
+### IOC Extraction Query:
+\`\`\`
+index=* (host=victim_host OR user=affected_user)
+  earliest="2024-10-15T14:00:00" latest="2024-10-15T15:00:00"
+| eval ioc_type = case(
+    isnotnull(dst_ip) AND NOT cidrmatch("10.0.0.0/8", dst_ip), "IP",
+    isnotnull(query), "Domain",
+    isnotnull(file_hash), "Hash",
+    isnotnull(url), "URL",
+    true(), null()
+  )
+| where isnotnull(ioc_type)
+| stats count, values(host) as affected by ioc_type, coalesce(dst_ip, query, file_hash, url) as ioc_value
+| table ioc_type, ioc_value, count, affected
+\`\`\`
+
+## Scope Assessment
+
+### Determine Full Impact:
+\`\`\`
+# How many hosts contacted the C2?
+index=network dst_ip=45.33.32.156
+| stats dc(src_ip) as hosts, values(src_ip) as host_list
+
+# How many users have the malware hash?
+index=endpoint file_hash="abc123..."
+| stats dc(host) as hosts, dc(user) as users
+
+# What data was accessed?
+index=security user=compromised_user action=access
+| stats count by file_path
+\`\`\`
+
+## Documentation Template
+
+\`\`\`markdown
+# Investigation Report
+
+## Incident Overview
+- Incident ID: INC-2024-1015-001
+- Date: 2024-10-15
+- Analyst: [Your Name]
+
+## Executive Summary
+[2-3 sentence summary]
+
+## Timeline
+| Time | Event | Source |
+|------|-------|--------|
+| 14:00:00 | Phishing email | Email logs |
+| 14:05:00 | Malware execution | EDR |
+
+## IOCs
+| Type | Value | Context |
+|------|-------|---------|
+| IP | 45.33.32.156 | C2 server |
+| Hash | abc123... | Malware binary |
+
+## MITRE ATT&CK Mapping
+- T1566.002: Spearphishing Link
+- T1204: User Execution
+
+## Affected Assets
+- HOST001, HOST002
+
+## Recommendations
+1. Block C2 IP at firewall
+2. Run malware scan on affected hosts
+3. Reset user credentials
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Pivoting expands investigation from initial IOC to related activity",
+      "Timeline reconstruction reveals attack sequence and duration",
+      "Map findings to MITRE ATT&CK for structured analysis",
+      "Extract and document all IOCs for blocking and hunting",
+      "Assess scope to understand full impact of incident"
+    ]
+  },
+  {
+    id: "7.3",
+    courseId: "siem-fundamentals",
+    title: "SIEM Best Practices",
+    content: `
+# SIEM Best Practices
+
+Practical tips for effective daily SIEM usage and long-term success.
+
+## Daily Operations Best Practices
+
+### Start of Shift Routine:
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    SHIFT START CHECKLIST                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  □ Review shift handover notes                                  │
+│  □ Check for overnight critical alerts                          │
+│  □ Review SIEM health dashboards                                │
+│  □ Check threat intel updates                                   │
+│  □ Note any scheduled maintenance windows                       │
+│  □ Verify data sources are ingesting                           │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+### Data Source Monitoring:
+\`\`\`
+# Check ingestion health
+| tstats count WHERE index=* by index, sourcetype, _time span=1h
+| timechart span=1h count by sourcetype
+
+# Identify gaps
+| tstats latest(_time) as last_event by index
+| eval lag = now() - last_event
+| eval lag_minutes = round(lag/60)
+| where lag_minutes > 30
+| table index, lag_minutes
+\`\`\`
+
+## Search Efficiency
+
+### Query Optimization:
+\`\`\`
+SLOW (Don't Do):
+──────────────────
+* | search user=admin
+(Searches everything, then filters)
+
+FAST (Do This):
+──────────────────
+index=security user=admin
+(Filters at search time)
+\`\`\`
+
+### Performance Tips:
+
+| Tip | Why |
+|-----|-----|
+| Specify index | Limits search scope |
+| Specify time range | Reduces data scanned |
+| Use fields early | Filters before processing |
+| Avoid wildcards at start | *admin is slower than admin* |
+| Use stats over transaction | More memory efficient |
+| Limit results | head 1000 for testing |
+
+### Efficient Query Patterns:
+\`\`\`
+# Good: Specific index, sourcetype, and time
+index=security sourcetype=WinEventLog:Security EventCode=4625
+  earliest=-24h
+| stats count by user
+
+# Better: Add fields command to reduce data
+index=security sourcetype=WinEventLog:Security EventCode=4625
+  earliest=-24h
+| fields _time, user, src_ip
+| stats count by user
+
+# Best: Use tstats for indexed fields
+| tstats count WHERE index=security EventCode=4625 BY user
+\`\`\`
+
+## Saved Searches & Dashboards
+
+### Organize Searches:
+\`\`\`
+Naming Convention:
+[Team]_[Category]_[Description]
+
+Examples:
+SOC_Triage_Failed_Logins_Last24h
+SOC_Hunting_PowerShell_Encoded
+SOC_Report_Weekly_Alerts_Summary
+\`\`\`
+
+### Dashboard Organization:
+\`\`\`
+/dashboards
+  /operational
+    soc_overview
+    alert_queue
+    data_health
+  /tactical
+    threat_hunting
+    user_behavior
+    network_analysis
+  /executive
+    monthly_metrics
+    compliance_status
+\`\`\`
+
+## Alert Management
+
+### Alert Hygiene:
+\`\`\`
+Weekly:
+  □ Review top 10 noisy rules
+  □ Tune 2-3 rules with high FP rate
+  □ Document tuning changes
+
+Monthly:
+  □ Review disabled rules for re-enablement
+  □ Assess detection coverage gaps
+  □ Update exception lists
+\`\`\`
+
+### Alert Quality Metrics:
+\`\`\`
+# Track FP rate by rule
+index=alerts
+| stats count, 
+        sum(eval(if(status="false_positive",1,0))) as fp 
+        by rule_name
+| eval fp_rate = round(fp/count*100, 1)
+| where count > 20
+| sort -fp_rate
+| head 20
+\`\`\`
+
+## Documentation
+
+### Knowledge Base Structure:
+\`\`\`
+/knowledge-base
+  /alerts
+    [alert_name]_runbook.md
+  /investigations
+    template.md
+    common_queries.md
+  /data-sources
+    windows_events.md
+    firewall_logs.md
+  /tuning
+    exception_list.csv
+    tuning_log.md
+\`\`\`
+
+### Runbook Template:
+\`\`\`markdown
+# Alert: [Alert Name]
+
+## Overview
+[What this alert detects]
+
+## Severity
+[Critical/High/Medium/Low]
+
+## Initial Triage
+1. Check [specific field] for [expected value]
+2. Query [related data]
+3. Verify with [asset owner/user]
+
+## Investigation Queries
+\`\`\`
+[Useful queries]
+\`\`\`
+
+## Response Actions
+- If TP: [Actions]
+- If FP: [Actions to close]
+
+## Escalation Criteria
+Escalate to L2 if:
+- [Condition 1]
+- [Condition 2]
+
+## Common False Positives
+- [Known FP pattern 1]
+- [Known FP pattern 2]
+\`\`\`
+
+## Collaboration
+
+### Shift Handover Format:
+\`\`\`
+SHIFT HANDOVER - 2024-10-15 16:00
+
+CRITICAL ITEMS:
+- [Active incident INC-001 - waiting on user response]
+
+IN PROGRESS:
+- [Alert ALT-123 - jsmith investigating]
+
+WATCH ITEMS:
+- [Unusual traffic from 10.0.0.50 - monitoring]
+
+DATA ISSUES:
+- [Firewall logs delayed 30 min - ticket open]
+
+NOTES:
+- [Pentest scheduled tomorrow 09:00-17:00]
+\`\`\`
+
+## Continuous Improvement
+
+### Track Your Metrics:
+\`\`\`
+┌────────────────────────────────────────────────────────────────┐
+│ Metric              │ This Week │ Last Week │ Trend           │
+├─────────────────────┼───────────┼───────────┼─────────────────┤
+│ Total Alerts        │ 450       │ 520       │ ↓ 13% (good)    │
+│ FP Rate             │ 18%       │ 25%       │ ↓ 7% (good)     │
+│ Avg MTTD            │ 45 min    │ 52 min    │ ↓ 7 min (good)  │
+│ Avg MTTR            │ 3.2 hr    │ 3.5 hr    │ ↓ 0.3 hr (good) │
+│ Escalations         │ 12        │ 8         │ ↑ 4 (monitor)   │
+└─────────────────────┴───────────┴───────────┴─────────────────┘
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Start shifts with a structured checklist",
+      "Optimize queries with specific index, time, and field filters",
+      "Organize saved searches and dashboards with clear naming",
+      "Maintain runbooks for consistent alert handling",
+      "Track metrics to measure and improve SOC performance"
+    ]
+  },
+  {
+    id: "7.4",
+    courseId: "siem-fundamentals",
+    title: "Final Practical Challenge",
+    content: `
+# Final Practical Challenge
+
+Apply all your SIEM skills to investigate a complete security incident.
+
+## Scenario: The Breach
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                    INCIDENT BRIEFING                            │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  DATE: October 15, 2024                                         │
+│  TIME: 08:00 UTC - You arrive for your shift                    │
+│                                                                 │
+│  SITUATION:                                                     │
+│  The overnight team left a note about unusual activity.         │
+│  Multiple alerts fired between 02:00-04:00 but were marked      │
+│  as false positives due to a scheduled penetration test.        │
+│                                                                 │
+│  However, you've just learned the pentest was POSTPONED         │
+│  and didn't actually occur last night.                          │
+│                                                                 │
+│  YOUR MISSION:                                                  │
+│  Investigate the overnight activity and determine:              │
+│  1. Was there actually an intrusion?                           │
+│  2. What was the scope of the compromise?                      │
+│  3. What actions need to be taken?                             │
+│                                                                 │
+│  AVAILABLE DATA:                                                │
+│  - Windows Security Events (index=windows)                      │
+│  - Network/Firewall Logs (index=network)                       │
+│  - EDR/Endpoint Logs (index=endpoint)                          │
+│  - Alert History (index=alerts)                                │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Part 1: Alert Review
+
+### Task 1.1: Review Dismissed Alerts
+Find the alerts that were incorrectly closed as false positives.
+
+\`\`\`
+index=alerts status="false_positive" 
+  earliest="10/15/2024:02:00:00" latest="10/15/2024:04:00:00"
+| table _time, alert_name, severity, host, user, analyst_notes
+| sort _time
+\`\`\`
+
+**Questions:**
+- How many alerts were dismissed?
+- What types of alerts were they?
+- Do they follow a pattern?
+
+---
+
+## Part 2: Initial Reconnaissance
+
+### Task 2.1: Find the Entry Point
+Look for initial access indicators.
+
+\`\`\`
+index=windows EventCode IN (4624, 4625) 
+  earliest="10/15/2024:00:00:00" latest="10/15/2024:04:00:00"
+| stats count by EventCode, user, src_ip, LogonType
+| sort -count
+\`\`\`
+
+### Task 2.2: Identify the Attacker IP
+\`\`\`
+index=windows EventCode=4625 
+  earliest="10/15/2024:00:00:00" latest="10/15/2024:04:00:00"
+| stats count by src_ip
+| where count > 20
+\`\`\`
+
+**Document:**
+- Attacker IP: _______________
+- Targeted users: _______________
+- Entry method: _______________
+
+---
+
+## Part 3: Attack Timeline
+
+### Task 3.1: Build Complete Timeline
+\`\`\`
+(index=windows OR index=network OR index=endpoint)
+  src_ip=$ATTACKER_IP$ OR dst_ip=$ATTACKER_IP$ OR host=$COMPROMISED_HOST$
+  earliest="10/15/2024:00:00:00" latest="10/15/2024:06:00:00"
+| sort _time
+| table _time, index, host, user, action, src_ip, dst_ip, CommandLine
+\`\`\`
+
+### Task 3.2: Fill in the Attack Chain
+
+\`\`\`
+__:__:__ ─── Initial Access: _______________________
+    │
+__:__:__ ─── Execution: ____________________________
+    │
+__:__:__ ─── Persistence: __________________________
+    │
+__:__:__ ─── Discovery: ____________________________
+    │
+__:__:__ ─── Lateral Movement: _____________________
+    │
+__:__:__ ─── Collection: ___________________________
+    │
+__:__:__ ─── Exfiltration: _________________________
+\`\`\`
+
+---
+
+## Part 4: Scope Assessment
+
+### Task 4.1: Identify All Affected Hosts
+\`\`\`
+index=windows EventCode=4624 src_ip=$ATTACKER_IP$
+| stats count, values(LogonType) as logon_types by host
+| table host, count, logon_types
+\`\`\`
+
+### Task 4.2: Identify All Affected Users
+\`\`\`
+index=windows (EventCode=4624 OR EventCode=4625) src_ip=$ATTACKER_IP$
+| stats count by user
+| where NOT match(user, "\\$$")
+\`\`\`
+
+### Task 4.3: Check for Data Access
+\`\`\`
+index=windows EventCode=4663 host IN ($AFFECTED_HOSTS$)
+  earliest="10/15/2024:00:00:00" latest="10/15/2024:06:00:00"
+| stats count by ObjectName, user
+| sort -count
+| head 50
+\`\`\`
+
+**Document:**
+- Affected hosts: _______________
+- Compromised accounts: _______________
+- Data accessed: _______________
+
+---
+
+## Part 5: IOC Extraction
+
+### Task 5.1: Extract All IOCs
+\`\`\`
+(index=network OR index=endpoint) 
+  host IN ($AFFECTED_HOSTS$)
+  earliest="10/15/2024:00:00:00" latest="10/15/2024:06:00:00"
+| eval ioc_type = case(...)
+| stats values(*) as * by ioc_type
+\`\`\`
+
+### IOC Checklist:
+\`\`\`
+□ Attacker IP(s): _________________________
+□ C2 Domains: ____________________________
+□ Malware Hashes: ________________________
+□ Malicious Files: ________________________
+□ Created Accounts: _______________________
+□ Modified Registry: ______________________
+\`\`\`
+
+---
+
+## Part 6: Containment Actions
+
+### Immediate Actions Required:
+\`\`\`
+□ Block attacker IP at firewall
+□ Isolate affected endpoints
+□ Reset compromised credentials
+□ Disable created accounts
+□ Block malicious domains/IPs
+\`\`\`
+
+### Containment Queries:
+\`\`\`
+# Verify IP is blocked
+index=network action=denied dst_ip=$ATTACKER_IP$ earliest=-15m
+| stats count
+
+# Verify account disabled
+index=windows EventCode=4725 user=$COMPROMISED_USER$ earliest=-15m
+\`\`\`
+
+---
+
+## Part 7: Final Report
+
+### Complete the Investigation Report:
+
+\`\`\`
+═══════════════════════════════════════════════════════════════════
+SECURITY INCIDENT REPORT
+═══════════════════════════════════════════════════════════════════
+
+INCIDENT ID: INC-2024-1015-001
+DATE: October 15, 2024
+ANALYST: [Your Name]
+
+───────────────────────────────────────────────────────────────────
+EXECUTIVE SUMMARY
+───────────────────────────────────────────────────────────────────
+[2-3 sentence summary of what happened and impact]
+
+───────────────────────────────────────────────────────────────────
+TIMELINE
+───────────────────────────────────────────────────────────────────
+[Attack timeline with timestamps]
+
+───────────────────────────────────────────────────────────────────
+MITRE ATT&CK MAPPING
+───────────────────────────────────────────────────────────────────
+| Tactic           | Technique     | Evidence                     |
+|------------------|---------------|------------------------------|
+| Initial Access   | T1110         | Brute force on VPN           |
+| Execution        | T1059.001     | PowerShell execution         |
+| ...              | ...           | ...                          |
+
+───────────────────────────────────────────────────────────────────
+INDICATORS OF COMPROMISE
+───────────────────────────────────────────────────────────────────
+[Table of all IOCs]
+
+───────────────────────────────────────────────────────────────────
+AFFECTED ASSETS
+───────────────────────────────────────────────────────────────────
+[List of compromised systems and accounts]
+
+───────────────────────────────────────────────────────────────────
+ACTIONS TAKEN
+───────────────────────────────────────────────────────────────────
+[Containment actions completed]
+
+───────────────────────────────────────────────────────────────────
+RECOMMENDATIONS
+───────────────────────────────────────────────────────────────────
+1. [Immediate actions]
+2. [Short-term improvements]
+3. [Long-term security enhancements]
+
+───────────────────────────────────────────────────────────────────
+LESSONS LEARNED
+───────────────────────────────────────────────────────────────────
+- Alert was dismissed due to assumed pentest
+- Need verification process for maintenance windows
+- Recommend: Require written confirmation before dismissing alerts
+
+═══════════════════════════════════════════════════════════════════
+\`\`\`
+
+---
+
+## Evaluation Criteria
+
+| Area | Points | Your Score |
+|------|--------|------------|
+| Alert review completeness | 10 | ___ |
+| Timeline accuracy | 20 | ___ |
+| IOC extraction | 15 | ___ |
+| Scope assessment | 15 | ___ |
+| MITRE ATT&CK mapping | 10 | ___ |
+| Containment actions | 15 | ___ |
+| Report quality | 15 | ___ |
+| **TOTAL** | **100** | ___ |
+
+**Passing Score: 70+**
+
+Congratulations on completing the SIEM Fundamentals course! 🎉
+    `,
+    keyTakeaways: [
+      "Always verify maintenance windows before dismissing alerts",
+      "Follow a structured investigation methodology",
+      "Document findings thoroughly for incident reports",
+      "Map attacks to MITRE ATT&CK for comprehensive analysis",
+      "Immediate containment is critical to limit damage"
+    ],
+    practicalExercise: {
+      title: "Complete Investigation Challenge",
+      description: "Work through the entire investigation scenario using your SIEM skills.",
+      steps: [
+        "Review the dismissed alerts and identify the pattern",
+        "Build a complete timeline of the attack",
+        "Extract all IOCs for blocking",
+        "Document scope and affected assets",
+        "Write a professional incident report"
+      ]
+    }
   }
 ];
 
