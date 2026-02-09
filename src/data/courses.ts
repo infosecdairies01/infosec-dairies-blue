@@ -885,40 +885,347 @@ export const courses: Course[] = [
     id: "siem-fundamentals",
     title: "SIEM Fundamentals",
     shortTitle: "SIEM Basics",
-    description: "Master Security Information and Event Management basics. Learn to navigate and understand modern SIEM platforms, create queries, and build dashboards.",
+    description: "Master Security Information and Event Management basics. Learn to navigate and understand modern SIEM platforms, create queries, build dashboards, and respond to alerts effectively.",
     difficulty: "easy",
-    duration: "7 hours",
+    duration: "10 hours",
     bgImage: "courses/siem-fundamentals-bg.jpg",
     modules: [
       {
         id: "1",
-        title: "SIEM Overview",
-        badge: "Commet",
-        badgeColor: "bg-primary/20 text-primary border-primary/30",
+        title: "Introduction to SIEM",
         lessons: [
-          { id: "1.1", title: "What is SIEM?", description: "Introduction to SIEM technology and use cases.", status: "unlocked" },
-          { id: "1.2", title: "SIEM Architecture", status: "locked" },
-          { id: "1.3", title: "Popular SIEM Platforms", status: "locked" },
+          { 
+            id: "1.1", 
+            title: "What is SIEM?", 
+            description: "Understanding SIEM technology, its purpose, and how it fits into modern security operations.",
+            duration: "20 min",
+            status: "unlocked" 
+          },
+          { 
+            id: "1.2", 
+            title: "SIEM Architecture & Components", 
+            description: "Learn about data collectors, indexers, search heads, and the data flow in SIEM platforms.",
+            duration: "25 min",
+            status: "locked" 
+          },
+          { 
+            id: "1.3", 
+            title: "Popular SIEM Platforms Overview", 
+            description: "Compare Splunk, Microsoft Sentinel, Elastic SIEM, QRadar, and other major platforms.",
+            duration: "30 min",
+            status: "locked" 
+          },
+          { 
+            id: "1.4", 
+            title: "SIEM Use Cases in Security", 
+            description: "Real-world applications: threat detection, compliance, incident response, and forensics.",
+            duration: "20 min",
+            status: "locked" 
+          },
         ],
       },
       {
         id: "2",
-        title: "Data Ingestion",
+        title: "Data Ingestion & Management",
         lessons: [
-          { id: "2.1", title: "Log Collection Methods", status: "locked" },
-          { id: "2.2", title: "Data Normalization", status: "locked" },
+          { 
+            id: "2.1", 
+            title: "Log Collection Methods", 
+            description: "Agent-based vs agentless collection, syslog, API integrations, and forwarders.",
+            duration: "25 min",
+            status: "locked" 
+          },
+          { 
+            id: "2.2", 
+            title: "Data Normalization & Parsing", 
+            description: "Converting raw logs into structured, searchable data with field extraction.",
+            duration: "30 min",
+            status: "locked" 
+          },
+          { 
+            id: "2.3", 
+            title: "Data Sources & Indexing", 
+            description: "Understanding indexes, source types, and how data is organized for efficient searching.",
+            duration: "25 min",
+            status: "locked" 
+          },
+          { 
+            id: "2.4", 
+            title: "Data Retention & Storage", 
+            description: "Managing data lifecycle, hot/warm/cold storage tiers, and compliance requirements.",
+            duration: "20 min",
+            status: "locked" 
+          },
         ],
       },
       {
         id: "3",
-        title: "Query Basics",
-        badge: "Lab",
-        badgeColor: "bg-secondary/20 text-secondary border-secondary/30",
+        title: "Search & Query Fundamentals",
         lessons: [
-          { id: "3.1", title: "Search Fundamentals", status: "locked" },
-          { id: "3.2", title: "Filtering and Aggregation", status: "locked" },
-          { id: "3.3", title: "Building Dashboards", status: "locked" },
+          { 
+            id: "3.1", 
+            title: "Basic Search Syntax", 
+            description: "Writing your first SIEM queries, using keywords, and understanding search modes.",
+            duration: "30 min",
+            status: "locked" 
+          },
+          { 
+            id: "3.2", 
+            title: "Filtering & Field Extraction", 
+            description: "Narrowing results with filters, boolean operators, and extracting specific fields.",
+            duration: "35 min",
+            status: "locked" 
+          },
+          { 
+            id: "3.3", 
+            title: "Time Range & Wildcards", 
+            description: "Searching across time periods, using wildcards, and optimizing search performance.",
+            duration: "25 min",
+            status: "locked" 
+          },
+          { 
+            id: "3.4", 
+            title: "Hands-On: Basic Search Lab", 
+            description: "Practice writing queries to find specific security events in sample data.",
+            duration: "40 min",
+            status: "locked" 
+          },
         ],
+      },
+      {
+        id: "4",
+        title: "Advanced Query Techniques",
+        lessons: [
+          { 
+            id: "4.1", 
+            title: "Aggregation & Statistics", 
+            description: "Using stats, count, sum, avg, and other aggregation commands for analysis.",
+            duration: "30 min",
+            status: "locked" 
+          },
+          { 
+            id: "4.2", 
+            title: "Joins & Lookups", 
+            description: "Combining data from multiple sources and enriching events with lookup tables.",
+            duration: "35 min",
+            status: "locked" 
+          },
+          { 
+            id: "4.3", 
+            title: "Subsearches & Transactions", 
+            description: "Building complex queries with nested searches and grouping related events.",
+            duration: "30 min",
+            status: "locked" 
+          },
+          { 
+            id: "4.4", 
+            title: "Hands-On: Advanced Query Lab", 
+            description: "Create complex queries to investigate a simulated security incident.",
+            duration: "45 min",
+            status: "locked" 
+          },
+        ],
+      },
+      {
+        id: "5",
+        title: "Dashboards & Visualization",
+        lessons: [
+          { 
+            id: "5.1", 
+            title: "Dashboard Fundamentals", 
+            description: "Creating effective security dashboards with charts, tables, and single value panels.",
+            duration: "25 min",
+            status: "locked" 
+          },
+          { 
+            id: "5.2", 
+            title: "Visualization Types", 
+            description: "Choosing the right chart: line, bar, pie, heatmaps, and geographic maps.",
+            duration: "25 min",
+            status: "locked" 
+          },
+          { 
+            id: "5.3", 
+            title: "Interactive Dashboards", 
+            description: "Adding drill-downs, filters, time pickers, and dynamic inputs to dashboards.",
+            duration: "30 min",
+            status: "locked" 
+          },
+          { 
+            id: "5.4", 
+            title: "Hands-On: Build a SOC Dashboard", 
+            description: "Create a functional security operations dashboard from scratch.",
+            duration: "50 min",
+            status: "locked" 
+          },
+        ],
+      },
+      {
+        id: "6",
+        title: "Alerts & Correlation Rules",
+        lessons: [
+          { 
+            id: "6.1", 
+            title: "Understanding SIEM Alerts", 
+            description: "How alerts are generated, severity levels, and alert fatigue management.",
+            duration: "20 min",
+            status: "locked" 
+          },
+          { 
+            id: "6.2", 
+            title: "Creating Detection Rules", 
+            description: "Building correlation rules to detect suspicious patterns and behaviors.",
+            duration: "35 min",
+            status: "locked" 
+          },
+          { 
+            id: "6.3", 
+            title: "Alert Tuning & Optimization", 
+            description: "Reducing false positives and improving detection accuracy over time.",
+            duration: "30 min",
+            status: "locked" 
+          },
+          { 
+            id: "6.4", 
+            title: "Alert Response Actions", 
+            description: "Configuring notifications, automated responses, and escalation workflows.",
+            duration: "25 min",
+            status: "locked" 
+          },
+        ],
+      },
+      {
+        id: "7",
+        title: "Practical SIEM Operations",
+        lessons: [
+          { 
+            id: "7.1", 
+            title: "Alert Triage Workflow", 
+            description: "Step-by-step process for investigating and responding to SIEM alerts.",
+            duration: "30 min",
+            status: "locked" 
+          },
+          { 
+            id: "7.2", 
+            title: "Investigation Techniques", 
+            description: "Using SIEM to pivot, correlate, and build investigation timelines.",
+            duration: "35 min",
+            status: "locked" 
+          },
+          { 
+            id: "7.3", 
+            title: "SIEM Best Practices", 
+            description: "Tips for effective SIEM usage, query optimization, and daily operations.",
+            duration: "20 min",
+            status: "locked" 
+          },
+          { 
+            id: "7.4", 
+            title: "Final Practical Challenge", 
+            description: "Complete a full investigation scenario using all learned SIEM skills.",
+            duration: "60 min",
+            status: "locked" 
+          },
+        ],
+      },
+    ],
+    quizzes: [
+      {
+        id: "siem-q1",
+        title: "SIEM Fundamentals Quiz",
+        description: "Test your understanding of SIEM architecture, components, and basic concepts.",
+        questionCount: 15,
+        passingScore: 70,
+        duration: "15 min",
+        status: "unlocked",
+      },
+      {
+        id: "siem-q2",
+        title: "Data Ingestion Assessment",
+        description: "Evaluate your knowledge of log collection, normalization, and data management.",
+        questionCount: 15,
+        passingScore: 70,
+        duration: "15 min",
+        status: "locked",
+      },
+      {
+        id: "siem-q3",
+        title: "Search & Query Mastery",
+        description: "Practical quiz on writing SIEM queries and search techniques.",
+        questionCount: 20,
+        passingScore: 75,
+        duration: "25 min",
+        status: "locked",
+      },
+      {
+        id: "siem-q4",
+        title: "Dashboards & Alerts Quiz",
+        description: "Test your skills on visualization, dashboards, and alert configuration.",
+        questionCount: 15,
+        passingScore: 70,
+        duration: "15 min",
+        status: "locked",
+      },
+      {
+        id: "siem-q5",
+        title: "Final Certification Exam",
+        description: "Comprehensive exam covering all SIEM fundamentals modules. Required for certification.",
+        questionCount: 40,
+        passingScore: 80,
+        duration: "45 min",
+        status: "locked",
+      },
+    ],
+    resources: [
+      {
+        id: "siem-r1",
+        title: "SIEM Query Cheat Sheet",
+        description: "Quick reference for common SIEM search commands and syntax patterns.",
+        type: "cheatsheet",
+      },
+      {
+        id: "siem-r2",
+        title: "SPL (Splunk) Quick Reference",
+        description: "Essential Splunk Processing Language commands for security analysts.",
+        type: "cheatsheet",
+      },
+      {
+        id: "siem-r3",
+        title: "KQL (Sentinel) Quick Reference",
+        description: "Kusto Query Language basics for Microsoft Sentinel users.",
+        type: "cheatsheet",
+      },
+      {
+        id: "siem-r4",
+        title: "SIEM Dashboard Templates",
+        description: "Pre-built dashboard templates for common SOC monitoring use cases.",
+        type: "template",
+      },
+      {
+        id: "siem-r5",
+        title: "Alert Tuning Guide",
+        description: "Best practices for reducing false positives and optimizing detection rules.",
+        type: "pdf",
+      },
+      {
+        id: "siem-r6",
+        title: "SIEM Platform Comparison",
+        description: "Feature comparison of major SIEM platforms for informed decision-making.",
+        type: "pdf",
+      },
+      {
+        id: "siem-r7",
+        title: "Splunk Documentation",
+        description: "Official Splunk documentation and training resources.",
+        type: "link",
+        url: "https://docs.splunk.com/",
+      },
+      {
+        id: "siem-r8",
+        title: "Microsoft Sentinel Docs",
+        description: "Official Microsoft Sentinel documentation and learning paths.",
+        type: "link",
+        url: "https://learn.microsoft.com/en-us/azure/sentinel/",
       },
     ],
   },
