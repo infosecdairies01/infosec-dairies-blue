@@ -3463,6 +3463,787 @@ export const quizzes: QuizData[] = [
         explanation: "The most critical factor is skilled analysts who understand the environment, tune detection rules, and drive continuous improvement — technology alone is insufficient."
       }
     ]
+  },
+  // ===== Network Security Monitoring Course Quizzes =====
+  {
+    quizId: "nsm-q1",
+    courseId: "network-security-monitoring",
+    title: "NSM Foundations",
+    description: "Test your understanding of Network Security Monitoring principles, protocols, and sensor architecture.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "nsm-q1-1",
+        question: "What distinguishes Network Security Monitoring from traditional intrusion detection?",
+        options: [
+          "NSM only uses signature-based detection",
+          "NSM focuses on collection, detection, AND analysis of network data for situational awareness",
+          "NSM replaces the need for endpoint security entirely",
+          "NSM only monitors wireless networks"
+        ],
+        correctAnswer: 1,
+        explanation: "NSM goes beyond simple alerting by combining data collection, detection, and human-driven analysis to build comprehensive situational awareness of network activity."
+      },
+      {
+        id: "nsm-q1-2",
+        question: "During a TCP three-way handshake, what is the correct sequence of flags?",
+        options: [
+          "ACK → SYN → SYN-ACK",
+          "SYN → SYN-ACK → ACK",
+          "SYN → ACK → SYN-ACK",
+          "FIN → SYN → ACK"
+        ],
+        correctAnswer: 1,
+        explanation: "The TCP three-way handshake proceeds: client sends SYN, server responds with SYN-ACK, client completes with ACK — establishing a reliable connection."
+      },
+      {
+        id: "nsm-q1-3",
+        question: "Why is UDP significant from a security monitoring perspective?",
+        options: [
+          "UDP is always encrypted",
+          "UDP's connectionless nature makes it harder to track sessions and easier for attackers to spoof",
+          "UDP cannot be used for data exfiltration",
+          "UDP traffic is automatically blocked by firewalls"
+        ],
+        correctAnswer: 1,
+        explanation: "UDP is connectionless with no handshake, making it difficult to track sessions and easy for attackers to spoof source addresses — commonly abused in DNS amplification attacks and covert channels."
+      },
+      {
+        id: "nsm-q1-4",
+        question: "At which OSI layer does a network TAP operate to capture traffic?",
+        options: [
+          "Layer 7 – Application",
+          "Layer 4 – Transport",
+          "Layer 1 – Physical",
+          "Layer 3 – Network"
+        ],
+        correctAnswer: 2,
+        explanation: "Network TAPs operate at the Physical layer (Layer 1), creating an exact electrical or optical copy of all traffic passing through a link without introducing latency."
+      },
+      {
+        id: "nsm-q1-5",
+        question: "What is the primary disadvantage of using a SPAN/mirror port compared to a network TAP?",
+        options: [
+          "SPAN ports are more expensive than TAPs",
+          "SPAN ports can drop packets under heavy load and may miss full-duplex traffic",
+          "SPAN ports only capture Layer 2 traffic",
+          "SPAN ports require custom hardware"
+        ],
+        correctAnswer: 1,
+        explanation: "SPAN ports mirror traffic via the switch CPU, which can drop packets under load. They may also not capture Layer 1 errors, malformed frames, or full-duplex conversations accurately."
+      },
+      {
+        id: "nsm-q1-6",
+        question: "Which DNS record type maps a domain name to an IPv4 address?",
+        options: [
+          "MX record",
+          "CNAME record",
+          "A record",
+          "TXT record"
+        ],
+        correctAnswer: 2,
+        explanation: "The A (Address) record maps a domain name to an IPv4 address. AAAA records serve the same purpose for IPv6 addresses."
+      },
+      {
+        id: "nsm-q1-7",
+        question: "What is the purpose of the TTL field in an IP packet header from a defender's perspective?",
+        options: [
+          "It encrypts the packet payload",
+          "It limits the packet's lifetime and can reveal OS fingerprinting and routing anomalies",
+          "It specifies the packet's priority level",
+          "It determines the maximum segment size"
+        ],
+        correctAnswer: 1,
+        explanation: "TTL (Time to Live) limits how many hops a packet can traverse. Different operating systems set different initial TTL values, enabling passive OS fingerprinting. Unusual TTL values can also indicate tunneling or spoofing."
+      },
+      {
+        id: "nsm-q1-8",
+        question: "Which sensor placement strategy provides the broadest visibility of external threats?",
+        options: [
+          "Behind the internal firewall only",
+          "On individual endpoint machines",
+          "At the network perimeter between the external firewall and the internet",
+          "Only on the DMZ segment"
+        ],
+        correctAnswer: 2,
+        explanation: "Placing sensors at the network perimeter captures all inbound and outbound traffic before internal filtering, providing maximum visibility of external threat actor activity."
+      },
+      {
+        id: "nsm-q1-9",
+        question: "What does the term 'full content data' mean in NSM?",
+        options: [
+          "Only metadata about connections",
+          "Complete packet captures including headers and payloads",
+          "Firewall logs only",
+          "Summary statistics of network flows"
+        ],
+        correctAnswer: 1,
+        explanation: "Full content data refers to complete packet captures (PCAPs) that include all headers and payloads — the most detailed form of network evidence, essential for forensic analysis."
+      },
+      {
+        id: "nsm-q1-10",
+        question: "Which protocol typically uses port 443 and obscures payload content from network monitors?",
+        options: [
+          "HTTP",
+          "DNS",
+          "HTTPS/TLS",
+          "FTP"
+        ],
+        correctAnswer: 2,
+        explanation: "HTTPS uses TLS encryption on port 443, making payload inspection impossible without TLS interception. Attackers frequently use HTTPS for C2 to blend with legitimate traffic."
+      }
+    ]
+  },
+  {
+    quizId: "nsm-q2",
+    courseId: "network-security-monitoring",
+    title: "Packet Capture & Wireshark",
+    description: "Assess your skills in packet capture, Wireshark filters, and traffic analysis techniques.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      {
+        id: "nsm-q2-1",
+        question: "What is the difference between a Wireshark capture filter and a display filter?",
+        options: [
+          "They are identical in syntax and function",
+          "Capture filters use BPF syntax and limit what is recorded; display filters use Wireshark syntax and filter what is shown from already captured data",
+          "Display filters are applied before capture begins",
+          "Capture filters only work on wireless interfaces"
+        ],
+        correctAnswer: 1,
+        explanation: "Capture filters (BPF syntax, e.g., 'host 10.0.0.1') determine what packets are saved to disk. Display filters (Wireshark syntax, e.g., 'ip.addr == 10.0.0.1') filter the view of already-captured data."
+      },
+      {
+        id: "nsm-q2-2",
+        question: "Which Wireshark display filter shows only HTTP GET requests?",
+        options: [
+          "tcp.port == 80",
+          "http.request.method == \"GET\"",
+          "http contains GET",
+          "filter http get"
+        ],
+        correctAnswer: 1,
+        explanation: "The display filter 'http.request.method == \"GET\"' precisely targets HTTP GET requests by filtering on the parsed HTTP request method field."
+      },
+      {
+        id: "nsm-q2-3",
+        question: "When reconstructing a TCP stream in Wireshark, what feature do you use?",
+        options: [
+          "Edit → Preferences → TCP",
+          "Right-click a packet → Follow → TCP Stream",
+          "Statistics → Flow Graph",
+          "Analyze → Expert Info"
+        ],
+        correctAnswer: 1,
+        explanation: "Right-clicking a TCP packet and selecting Follow → TCP Stream reassembles the entire conversation between client and server, showing the data exchanged in order."
+      },
+      {
+        id: "nsm-q2-4",
+        question: "What does a high number of TCP RST packets from a single source IP likely indicate?",
+        options: [
+          "Normal web browsing activity",
+          "Port scanning or connection probing",
+          "Successful file transfers",
+          "DNS resolution activity"
+        ],
+        correctAnswer: 1,
+        explanation: "Large volumes of RST packets from one source typically indicate port scanning — the source is probing closed ports or services that reject the connection attempt."
+      },
+      {
+        id: "nsm-q2-5",
+        question: "Which indicator in DNS traffic suggests possible DNS tunneling?",
+        options: [
+          "Standard A record queries to well-known domains",
+          "Unusually long subdomain labels, high query volume to a single domain, and TXT record queries",
+          "PTR record lookups for internal IPs",
+          "SOA queries during zone transfers"
+        ],
+        correctAnswer: 1,
+        explanation: "DNS tunneling encodes data in subdomain labels (creating abnormally long queries), generates high query volumes, and often uses TXT records to carry larger response payloads."
+      },
+      {
+        id: "nsm-q2-6",
+        question: "What is the Wireshark display filter to show all packets from or to subnet 192.168.1.0/24?",
+        options: [
+          "ip.src == 192.168.1.0/24",
+          "ip.addr == 192.168.1.0/24",
+          "net 192.168.1.0/24",
+          "host 192.168.1.*"
+        ],
+        correctAnswer: 1,
+        explanation: "The display filter 'ip.addr == 192.168.1.0/24' matches any packet where either the source or destination IP falls within the specified CIDR range."
+      },
+      {
+        id: "nsm-q2-7",
+        question: "How can you extract files transferred over HTTP from a PCAP in Wireshark?",
+        options: [
+          "Edit → Find Packet → String",
+          "File → Export Objects → HTTP",
+          "Statistics → Endpoints",
+          "Analyze → Follow HTTP Stream"
+        ],
+        correctAnswer: 1,
+        explanation: "File → Export Objects → HTTP lists all files transferred over HTTP in the capture, allowing you to save them individually — critical for extracting malware samples or exfiltrated documents."
+      },
+      {
+        id: "nsm-q2-8",
+        question: "What does TCP retransmission indicate in a packet capture?",
+        options: [
+          "The connection is encrypted",
+          "Packet loss occurred and the sender is resending unacknowledged segments",
+          "The firewall is blocking traffic",
+          "The application is sending duplicate data intentionally"
+        ],
+        correctAnswer: 1,
+        explanation: "TCP retransmissions occur when the sender doesn't receive an ACK within the timeout period, indicating packet loss due to network congestion, faulty hardware, or potential interference."
+      },
+      {
+        id: "nsm-q2-9",
+        question: "Which BPF capture filter captures only traffic on port 53?",
+        options: [
+          "dns.port == 53",
+          "port 53",
+          "tcp.port == 53",
+          "filter port=53"
+        ],
+        correctAnswer: 1,
+        explanation: "The BPF capture filter 'port 53' captures both TCP and UDP traffic on port 53 (DNS). BPF syntax differs from Wireshark display filter syntax."
+      },
+      {
+        id: "nsm-q2-10",
+        question: "What suspicious pattern would you look for in HTTP traffic to detect a webshell?",
+        options: [
+          "Large image downloads",
+          "POST requests to unusual file paths with command-like parameters and small response sizes",
+          "Standard GET requests to the homepage",
+          "JavaScript file downloads"
+        ],
+        correctAnswer: 1,
+        explanation: "Webshells often manifest as POST requests to odd file paths (e.g., /uploads/shell.php) with command parameters (cmd=whoami), returning small text responses — distinct from normal web traffic patterns."
+      }
+    ]
+  },
+  {
+    quizId: "nsm-q3",
+    courseId: "network-security-monitoring",
+    title: "Suricata IDS/IPS",
+    description: "Evaluate your knowledge of Suricata rule writing, alert tuning, and intrusion detection concepts.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      {
+        id: "nsm-q3-1",
+        question: "What is the basic structure of a Suricata rule?",
+        options: [
+          "IF-THEN-ELSE conditional blocks",
+          "Action, Header (protocol/IPs/ports/direction), and Rule Options (in parentheses)",
+          "XML-formatted detection signatures",
+          "JSON objects with match criteria"
+        ],
+        correctAnswer: 1,
+        explanation: "Suricata rules follow: ACTION PROTOCOL SRC_IP SRC_PORT -> DST_IP DST_PORT (options;). For example: alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious UA\"; content:\"evil\"; sid:100001;)."
+      },
+      {
+        id: "nsm-q3-2",
+        question: "What does the 'content' keyword do in a Suricata rule?",
+        options: [
+          "Specifies the file type to inspect",
+          "Matches a specific byte pattern or string within the packet payload or header",
+          "Sets the logging output format",
+          "Defines the rule category"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'content' keyword performs pattern matching against packet data. It can match ASCII strings or hex byte sequences (e.g., content:|de ad be ef|;) and supports modifiers like nocase, depth, and offset."
+      },
+      {
+        id: "nsm-q3-3",
+        question: "What is the purpose of the 'flow' keyword in Suricata rules?",
+        options: [
+          "To measure network bandwidth",
+          "To specify the direction and state of the connection (established, to_server, to_client)",
+          "To count the number of packets in a session",
+          "To define flow chart diagrams"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'flow' keyword matches on TCP session state and direction. 'flow:established,to_server;' targets data sent from client to server on established connections, reducing false positives on handshake traffic."
+      },
+      {
+        id: "nsm-q3-4",
+        question: "How does the 'threshold' keyword help reduce alert fatigue?",
+        options: [
+          "It deletes alerts automatically after a set time",
+          "It limits alerting frequency, e.g., alerting once per source IP within a time window instead of per-packet",
+          "It increases the priority of all alerts",
+          "It disables alerts permanently"
+        ],
+        correctAnswer: 1,
+        explanation: "Thresholds control alert rate — 'threshold:type limit,track by_src,count 1,seconds 300;' fires only once per source IP every 5 minutes, preventing alert floods from repetitive activity."
+      },
+      {
+        id: "nsm-q3-5",
+        question: "What is the difference between Suricata running in IDS mode versus IPS mode?",
+        options: [
+          "There is no difference",
+          "IDS passively monitors and alerts; IPS is inline and can actively block or drop malicious traffic",
+          "IDS blocks traffic; IPS only monitors",
+          "IPS requires more rules than IDS"
+        ],
+        correctAnswer: 1,
+        explanation: "In IDS mode, Suricata passively copies and analyzes traffic. In IPS (inline) mode, traffic flows through Suricata, enabling 'drop' and 'reject' actions to block malicious packets in real time."
+      },
+      {
+        id: "nsm-q3-6",
+        question: "Which Suricata rule action would you use to silently discard a malicious packet in IPS mode?",
+        options: [
+          "alert",
+          "pass",
+          "drop",
+          "log"
+        ],
+        correctAnswer: 2,
+        explanation: "The 'drop' action silently discards the matching packet and generates an alert. 'reject' also sends a reset/ICMP unreachable to the sender. 'pass' whitelists the traffic."
+      },
+      {
+        id: "nsm-q3-7",
+        question: "What does the 'pcre' keyword allow you to do in Suricata rules?",
+        options: [
+          "Parse PCAP files directly",
+          "Use Perl Compatible Regular Expressions for complex pattern matching",
+          "Compress packet data",
+          "Convert packets to PDF format"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'pcre' keyword enables regex-based matching for complex patterns that simple content matches can't express, like variable-length strings or pattern alternatives."
+      },
+      {
+        id: "nsm-q3-8",
+        question: "What is a 'suppress' rule in Suricata used for?",
+        options: [
+          "To increase the severity of an alert",
+          "To prevent specific alerts from being generated for certain IPs or subnets without disabling the rule entirely",
+          "To encrypt alert output",
+          "To forward alerts to another system"
+        ],
+        correctAnswer: 1,
+        explanation: "Suppress rules silence alerts for specific track conditions (e.g., suppress gen_id 1, sig_id 2001, track by_src, ip 10.0.0.5) — useful for whitelisting known-good sources without disabling the detection globally."
+      },
+      {
+        id: "nsm-q3-9",
+        question: "What does the 'sid' keyword represent in a Suricata rule?",
+        options: [
+          "Session Identifier",
+          "Signature ID — a unique identifier for each rule",
+          "Source ID — identifying the traffic source",
+          "Security Impact Descriptor"
+        ],
+        correctAnswer: 1,
+        explanation: "SID (Signature ID) is a unique numeric identifier for each Suricata rule. Custom rules typically use SID values starting at 1000000 to avoid conflicts with community rulesets."
+      },
+      {
+        id: "nsm-q3-10",
+        question: "Which Suricata feature enables extraction and logging of TLS certificate metadata without decryption?",
+        options: [
+          "file-store module",
+          "TLS/SSL parser logging fields like tls.subject, tls.issuer, tls.ja3.hash",
+          "HTTP log module",
+          "DNS parser"
+        ],
+        correctAnswer: 1,
+        explanation: "Suricata's TLS parser extracts certificate metadata (subject, issuer, serial, JA3/JA3S fingerprints) from the handshake without requiring decryption — powerful for detecting suspicious certificates and known-bad TLS fingerprints."
+      }
+    ]
+  },
+  {
+    quizId: "nsm-q4",
+    courseId: "network-security-monitoring",
+    title: "Zeek Network Metadata",
+    description: "Test your proficiency with Zeek logs, UID correlation, and network metadata analysis.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      {
+        id: "nsm-q4-1",
+        question: "What makes Zeek fundamentally different from Suricata in its approach to network analysis?",
+        options: [
+          "Zeek is only a firewall",
+          "Zeek focuses on generating rich metadata logs about every connection rather than signature-based alerting",
+          "Zeek can only analyze offline PCAPs",
+          "Zeek replaces the need for packet capture"
+        ],
+        correctAnswer: 1,
+        explanation: "Zeek generates structured metadata logs (conn.log, dns.log, http.log, etc.) about all network activity. While it supports scripting-based detection, its primary strength is comprehensive network visibility through logs."
+      },
+      {
+        id: "nsm-q4-2",
+        question: "What is the 'uid' field in Zeek's conn.log used for?",
+        options: [
+          "User identification for authentication",
+          "A unique connection identifier that correlates entries across all Zeek log files for the same session",
+          "The Unix user running the Zeek process",
+          "A checksum of the packet payload"
+        ],
+        correctAnswer: 1,
+        explanation: "The UID is a unique string assigned to each connection. The same UID appears in conn.log, dns.log, http.log, files.log, etc., allowing analysts to trace all activity belonging to a single session."
+      },
+      {
+        id: "nsm-q4-3",
+        question: "In Zeek's conn.log, what does a connection with 'conn_state: S0' indicate?",
+        options: [
+          "A fully established and closed connection",
+          "A SYN was sent but no SYN-ACK was received — the connection attempt was unanswered",
+          "An established connection that was reset",
+          "A UDP connection with data exchange"
+        ],
+        correctAnswer: 1,
+        explanation: "S0 means a SYN was sent with no reply, indicating the target port is filtered, the host is unreachable, or a stealthy scan is in progress. Large volumes of S0 connections from one source strongly suggest port scanning."
+      },
+      {
+        id: "nsm-q4-4",
+        question: "Which Zeek log would you analyze to detect DNS tunneling?",
+        options: [
+          "conn.log",
+          "dns.log — looking for unusually long queries, high volume to single domains, and TXT responses",
+          "ssl.log",
+          "smtp.log"
+        ],
+        correctAnswer: 1,
+        explanation: "dns.log records all DNS queries and responses. DNS tunneling indicators in this log include abnormally long query strings, high query frequency to a single parent domain, and TXT record abuse."
+      },
+      {
+        id: "nsm-q4-5",
+        question: "What information does Zeek's ssl.log provide that is valuable for threat detection?",
+        options: [
+          "The decrypted content of HTTPS sessions",
+          "Certificate details, JA3/JA3S fingerprints, server name (SNI), and validation status",
+          "Only the source and destination IPs",
+          "Firewall rule match results"
+        ],
+        correctAnswer: 1,
+        explanation: "ssl.log records TLS handshake metadata: certificate subject/issuer, JA3/JA3S hashes, SNI values, and validation status — enabling detection of self-signed certs, expired certs, and known malicious TLS fingerprints."
+      },
+      {
+        id: "nsm-q4-6",
+        question: "How would you use Zeek logs to identify potential C2 beaconing?",
+        options: [
+          "Look for connections with large file downloads",
+          "Analyze conn.log for connections with regular time intervals, consistent byte sizes, and long durations to the same destination",
+          "Check smtp.log for outbound emails",
+          "Review notice.log for system errors"
+        ],
+        correctAnswer: 1,
+        explanation: "C2 beacons produce regular connection patterns visible in conn.log: consistent intervals between connections, similar request/response sizes, long session durations, and persistence to the same external IP."
+      },
+      {
+        id: "nsm-q4-7",
+        question: "What is the purpose of Zeek's files.log?",
+        options: [
+          "Logging filesystem changes on the Zeek server",
+          "Recording metadata about every file transferred over the network, including hashes and MIME types",
+          "Listing Zeek configuration files",
+          "Tracking log file rotation"
+        ],
+        correctAnswer: 1,
+        explanation: "files.log records metadata for every file transferred over monitored protocols: SHA256/MD5 hashes, MIME types, file sizes, source/destination, and extraction status — enabling malware detection via hash matching."
+      },
+      {
+        id: "nsm-q4-8",
+        question: "What does a Zeek 'notice' represent?",
+        options: [
+          "A system error in the Zeek process",
+          "A higher-level detection event generated by Zeek's analysis framework when policy-relevant activity is observed",
+          "A debug message for developers",
+          "A notification about Zeek software updates"
+        ],
+        correctAnswer: 1,
+        explanation: "Notices are Zeek's built-in detection mechanism — generated when the analysis framework identifies policy-relevant activity like SSL certificate issues, scan detection, or protocol violations."
+      },
+      {
+        id: "nsm-q4-9",
+        question: "Which Zeek command-line option reads a PCAP file for offline analysis?",
+        options: [
+          "zeek --live",
+          "zeek -r capture.pcap",
+          "zeek --import capture.pcap",
+          "zeek --offline capture.pcap"
+        ],
+        correctAnswer: 1,
+        explanation: "The '-r' flag reads a PCAP file for offline analysis: 'zeek -r capture.pcap' processes the file and generates all applicable log files — the same analysis as live monitoring."
+      },
+      {
+        id: "nsm-q4-10",
+        question: "What is a practical use case for Zeek scripting?",
+        options: [
+          "Replacing Suricata entirely",
+          "Creating custom log fields, triggering notices on specific conditions, or enriching data with external intelligence feeds",
+          "Compiling packet captures into video",
+          "Generating firewall rules automatically"
+        ],
+        correctAnswer: 1,
+        explanation: "Zeek scripts extend analysis capabilities: adding custom fields to logs, creating detection logic (e.g., alerting on connections to threat intel IPs), computing statistics, or extracting files matching specific criteria."
+      }
+    ]
+  },
+  {
+    quizId: "nsm-q5",
+    courseId: "network-security-monitoring",
+    title: "Network Attack Detection",
+    description: "Challenge your ability to detect reconnaissance, C2, lateral movement, and data exfiltration on the network.",
+    passingScore: 75,
+    timeLimit: 25,
+    questions: [
+      {
+        id: "nsm-q5-1",
+        question: "Which network behavior most strongly indicates a TCP SYN scan (half-open scan)?",
+        options: [
+          "Completed TCP handshakes followed by data transfer",
+          "SYN packets to many ports with RST responses and no completed handshakes",
+          "Large volumes of UDP traffic",
+          "ICMP echo requests to multiple hosts"
+        ],
+        correctAnswer: 1,
+        explanation: "A SYN scan sends SYN packets to target ports. Open ports reply SYN-ACK (scanner sends RST), closed ports reply RST. No handshakes complete — visible as many S0/REJ states in Zeek conn.log."
+      },
+      {
+        id: "nsm-q5-2",
+        question: "What is JA3 fingerprinting and why is it useful for detecting C2?",
+        options: [
+          "A technique to decrypt TLS traffic",
+          "An MD5 hash of specific TLS Client Hello parameters that uniquely identifies client applications regardless of IP or domain",
+          "A method to block all HTTPS traffic",
+          "A DNS-based threat intelligence feed"
+        ],
+        correctAnswer: 1,
+        explanation: "JA3 hashes the TLS version, cipher suites, extensions, and elliptic curves from the Client Hello. Malware families produce consistent JA3 fingerprints, enabling detection even when attackers rotate domains and IPs."
+      },
+      {
+        id: "nsm-q5-3",
+        question: "How does C2 beaconing typically appear in network traffic?",
+        options: [
+          "Random connections to many different destinations",
+          "Periodic connections at regular or near-regular intervals to the same destination with consistent packet sizes",
+          "One-time large file downloads",
+          "Inbound connections from multiple countries simultaneously"
+        ],
+        correctAnswer: 1,
+        explanation: "Beaconing produces a rhythmic pattern: connections at fixed intervals (with possible jitter), similar request/response sizes, to the same destination — distinguishable from human-driven traffic's irregular patterns."
+      },
+      {
+        id: "nsm-q5-4",
+        question: "Which network protocol is commonly abused for lateral movement using PsExec?",
+        options: [
+          "HTTP on port 80",
+          "SMB on port 445",
+          "DNS on port 53",
+          "SMTP on port 25"
+        ],
+        correctAnswer: 1,
+        explanation: "PsExec uses SMB (port 445) to copy an executable to the target's ADMIN$ share and create a remote service. Detecting SMB writes to ADMIN$ followed by service creation is a key lateral movement indicator."
+      },
+      {
+        id: "nsm-q5-5",
+        question: "What network-level indicator suggests RDP-based lateral movement?",
+        options: [
+          "HTTP POST requests between internal hosts",
+          "Internal-to-internal connections on port 3389, especially from hosts that don't normally initiate RDP",
+          "DNS queries for external domains",
+          "ICMP traffic between servers"
+        ],
+        correctAnswer: 1,
+        explanation: "RDP lateral movement appears as port 3389 connections between internal hosts. Baselines of normal RDP usage help identify anomalous sessions — especially from workstations to servers or unusual source hosts."
+      },
+      {
+        id: "nsm-q5-6",
+        question: "Which technique uses DNS queries to secretly extract data from a network?",
+        options: [
+          "DNS amplification attack",
+          "DNS exfiltration — encoding stolen data in subdomain labels of queries to attacker-controlled domains",
+          "DNS cache poisoning",
+          "DNS zone transfer"
+        ],
+        correctAnswer: 1,
+        explanation: "DNS exfiltration encodes data in subdomain queries (e.g., base64data.evil.com). Since DNS is rarely blocked, attackers can slowly extract data — detectable by monitoring query length, volume, and entropy."
+      },
+      {
+        id: "nsm-q5-7",
+        question: "What is a 'low and slow' exfiltration technique designed to evade?",
+        options: [
+          "Endpoint antivirus scans",
+          "Volume-based and rate-based network detection thresholds",
+          "Physical security controls",
+          "User authentication systems"
+        ],
+        correctAnswer: 1,
+        explanation: "Low-and-slow exfiltration sends small amounts of data over long periods to stay under volume thresholds and rate-based alerts. Detection requires baselining normal traffic patterns and looking for cumulative anomalies."
+      },
+      {
+        id: "nsm-q5-8",
+        question: "How can you detect pass-the-hash attacks on the network?",
+        options: [
+          "By monitoring HTTP headers",
+          "By detecting NTLM authentication over SMB/RPC where the same NTLM hash authenticates to multiple systems in a short timeframe",
+          "By checking DNS query patterns",
+          "By analyzing email attachments"
+        ],
+        correctAnswer: 1,
+        explanation: "Pass-the-hash uses stolen NTLM hashes for authentication. Network indicators include NTLM (not Kerberos) authentication, the same account authenticating to many systems rapidly, and type-3 NTLM messages without prior type-1/type-2."
+      },
+      {
+        id: "nsm-q5-9",
+        question: "Which of the following would indicate potential data staging before exfiltration?",
+        options: [
+          "Normal email traffic patterns",
+          "Unusual SMB file copy activity to a single internal host followed by large outbound transfers from that host",
+          "Standard software update downloads",
+          "Routine backup traffic to designated servers"
+        ],
+        correctAnswer: 1,
+        explanation: "Attackers often stage data by copying files from multiple internal sources to a single collection point, then exfiltrating from there — visible as unusual inbound SMB activity followed by anomalous outbound connections."
+      },
+      {
+        id: "nsm-q5-10",
+        question: "What makes ICMP tunneling difficult to detect without proper monitoring?",
+        options: [
+          "ICMP is always encrypted",
+          "ICMP echo requests/replies are common and often allowed through firewalls, but the data payload field can carry hidden communication",
+          "ICMP only works on internal networks",
+          "ICMP traffic is never logged by any tool"
+        ],
+        correctAnswer: 1,
+        explanation: "ICMP echo (ping) is universally allowed. Attackers embed data in the payload field. Detection requires inspecting ICMP payload sizes (abnormally large), content (non-standard patterns), and session frequency."
+      }
+    ]
+  },
+  {
+    quizId: "nsm-q6",
+    courseId: "network-security-monitoring",
+    title: "Practical NSM Operations",
+    description: "Final assessment on building NSM workflows, network forensics, and operational best practices.",
+    passingScore: 75,
+    timeLimit: 25,
+    questions: [
+      {
+        id: "nsm-q6-1",
+        question: "What is the recommended architecture for integrating Zeek and Suricata into a SIEM?",
+        options: [
+          "Run both tools on the SIEM server itself",
+          "Deploy both on sensors with a log shipper (e.g., Filebeat) forwarding to a centralized SIEM for correlation and alerting",
+          "Only use one tool at a time, never both",
+          "Store all data locally on each sensor without centralization"
+        ],
+        correctAnswer: 1,
+        explanation: "Best practice is sensor-based deployment with centralized analysis: Zeek and Suricata run on network sensors, Filebeat ships logs to a SIEM (e.g., Elastic/Splunk), enabling cross-source correlation and unified alerting."
+      },
+      {
+        id: "nsm-q6-2",
+        question: "When preserving network evidence for forensic investigation, which principle is most critical?",
+        options: [
+          "Immediately analyze all PCAPs on the production sensor",
+          "Maintain chain of custody with hashing, timestamps, and write-protected copies of original evidence",
+          "Delete old captures to save disk space",
+          "Share raw PCAPs via email to the legal team"
+        ],
+        correctAnswer: 1,
+        explanation: "Forensic integrity requires chain of custody: hash original PCAPs immediately (SHA256), record collection timestamps, work on copies only, document every access, and store originals on write-protected media."
+      },
+      {
+        id: "nsm-q6-3",
+        question: "How do you construct a network forensics timeline from Zeek logs?",
+        options: [
+          "Sort alerts by severity only",
+          "Correlate events across Zeek logs using timestamps and UIDs to build a chronological sequence of attacker actions",
+          "Only use conn.log and ignore other log types",
+          "Rely solely on firewall logs"
+        ],
+        correctAnswer: 1,
+        explanation: "Timeline construction uses Zeek's UID to link conn.log → dns.log → http.log → files.log entries for the same session, then orders all correlated events chronologically to reconstruct the attacker's progression."
+      },
+      {
+        id: "nsm-q6-4",
+        question: "What is the primary risk of running Suricata with outdated rule sets?",
+        options: [
+          "The system will crash",
+          "New attack techniques and malware variants will go undetected while only known-old threats are caught",
+          "Network performance will degrade",
+          "Log files will become corrupted"
+        ],
+        correctAnswer: 1,
+        explanation: "Outdated rules miss new CVE exploits, recent malware C2 patterns, and evolving TTPs. Best practice is automated daily rule updates (e.g., suricata-update) combined with custom rules for environment-specific threats."
+      },
+      {
+        id: "nsm-q6-5",
+        question: "Which metric best indicates the health and coverage of an NSM deployment?",
+        options: [
+          "Total number of alerts generated per day",
+          "Percentage of network segments with sensor coverage combined with mean time to detect simulated attacks",
+          "Number of Suricata rules loaded",
+          "Total PCAP storage consumed"
+        ],
+        correctAnswer: 1,
+        explanation: "Effective NSM metrics combine coverage (what percentage of network traffic is monitored) with detection effectiveness (how quickly simulated or red team attacks are identified) — not just raw alert volume."
+      },
+      {
+        id: "nsm-q6-6",
+        question: "What is the purpose of traffic baselining in NSM operations?",
+        options: [
+          "To throttle network bandwidth",
+          "To establish normal traffic patterns so that deviations indicating potential threats can be identified",
+          "To encrypt all network traffic",
+          "To reduce the number of network users"
+        ],
+        correctAnswer: 1,
+        explanation: "Baselining documents normal traffic patterns (volume, protocols, endpoints, time-of-day patterns). Deviations from baseline — such as new protocols, unusual hours, or unexpected destinations — signal potential threats."
+      },
+      {
+        id: "nsm-q6-7",
+        question: "During a multi-stage intrusion investigation, what should be your first step after receiving an alert?",
+        options: [
+          "Immediately block the source IP on the firewall",
+          "Pivot from the alert to collect full context: check Zeek logs for the connection UID, review related sessions, and determine scope before taking action",
+          "Delete the alert and wait for more",
+          "Restart the IDS sensor"
+        ],
+        correctAnswer: 1,
+        explanation: "Effective triage starts with context gathering: trace the alert's connection through Zeek logs, identify related sessions, check for lateral movement, and determine blast radius before containment actions."
+      },
+      {
+        id: "nsm-q6-8",
+        question: "What challenge does TLS encryption present for NSM, and how is it addressed?",
+        options: [
+          "TLS has no impact on monitoring capabilities",
+          "TLS prevents payload inspection; analysts compensate using metadata analysis (JA3, SNI, certificate info, connection patterns) and optional TLS inspection proxies",
+          "TLS makes all traffic invisible to sensors",
+          "TLS is only used on external traffic"
+        ],
+        correctAnswer: 1,
+        explanation: "TLS encrypts payloads but metadata remains visible: JA3 fingerprints, SNI values, certificate details, connection timing/sizes. Combined with optional TLS interception proxies at the perimeter, effective monitoring is maintained."
+      },
+      {
+        id: "nsm-q6-9",
+        question: "What is the recommended PCAP retention strategy for a production NSM environment?",
+        options: [
+          "Keep all PCAPs forever",
+          "Tiered retention: full PCAP for days/weeks on fast storage, Zeek metadata for months, alert-related PCAPs archived for years based on compliance requirements",
+          "Delete PCAPs immediately after analysis",
+          "Only keep PCAPs from weekdays"
+        ],
+        correctAnswer: 1,
+        explanation: "Tiered retention balances storage costs with investigative needs: short-term full PCAP on fast storage, medium-term Zeek metadata, and long-term archival of incident-related captures — aligned with regulatory requirements."
+      },
+      {
+        id: "nsm-q6-10",
+        question: "In a final capstone investigation, which approach demonstrates mature NSM analysis?",
+        options: [
+          "Responding to each alert individually without connecting them",
+          "Correlating alerts, Zeek metadata, and PCAP evidence across time to reconstruct the full attack chain from initial access through exfiltration",
+          "Focusing only on the most recent alert",
+          "Forwarding all alerts to management without analysis"
+        ],
+        correctAnswer: 1,
+        explanation: "Mature NSM analysis correlates all data sources: Suricata alerts identify suspicious events, Zeek logs provide session context and connection history, and PCAP provides packet-level proof — together revealing the complete attack narrative."
+      }
+    ]
   }
 ];
 
