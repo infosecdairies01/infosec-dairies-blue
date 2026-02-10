@@ -12,6 +12,7 @@ export interface Module {
   badge?: string;
   badgeColor?: string;
   lessons: Lesson[];
+  quizId?: string;
 }
 
 export interface Quiz {
@@ -58,6 +59,7 @@ export const courses: Course[] = [
       {
         id: "1",
         title: "Introduction to Security Operations",
+        quizId: "q1",
         lessons: [
           { 
             id: "1.1", 
@@ -92,6 +94,7 @@ export const courses: Course[] = [
       {
         id: "2",
         title: "Cyber Threat Landscape",
+        quizId: "q2",
         lessons: [
           { 
             id: "2.1", 
@@ -126,6 +129,7 @@ export const courses: Course[] = [
       {
         id: "3",
         title: "Log Analysis Fundamentals",
+        quizId: "q3",
         lessons: [
           { 
             id: "3.1", 
@@ -208,6 +212,7 @@ export const courses: Course[] = [
       {
         id: "5",
         title: "Alert Triage & Analysis",
+        quizId: "q4",
         lessons: [
           { 
             id: "5.1", 
@@ -283,6 +288,7 @@ export const courses: Course[] = [
       {
         id: "7",
         title: "Incident Response Introduction",
+        quizId: "q5",
         lessons: [
           { 
             id: "7.1", 
@@ -392,6 +398,7 @@ export const courses: Course[] = [
       {
         id: "10",
         title: "SOC Analyst Best Practices",
+        quizId: "q6",
         lessons: [
           { 
             id: "10.1", 
@@ -558,10 +565,11 @@ export const courses: Course[] = [
       {
         id: "1",
         title: "Introduction to Security Logs",
+        quizId: "la-q1",
         lessons: [
           { 
             id: "1.1", 
-            title: "What are Security Logs?", 
+            title: "What are Security Logs?",
             description: "Understanding what logs are, why they matter for security, and how they help detect threats.",
             duration: "15 min",
             status: "completed" 
@@ -592,6 +600,7 @@ export const courses: Course[] = [
       {
         id: "2",
         title: "Windows Event Logs",
+        quizId: "la-q2",
         lessons: [
           { 
             id: "2.1", 
@@ -640,6 +649,7 @@ export const courses: Course[] = [
       {
         id: "3",
         title: "Linux System Logs",
+        quizId: "la-q3",
         lessons: [
           { 
             id: "3.1", 
@@ -681,6 +691,7 @@ export const courses: Course[] = [
       {
         id: "4",
         title: "Network Device Logs",
+        quizId: "la-q4",
         lessons: [
           { 
             id: "4.1", 
@@ -749,6 +760,7 @@ export const courses: Course[] = [
       {
         id: "6",
         title: "Practical Log Analysis",
+        quizId: "la-q5",
         lessons: [
           { 
             id: "6.1", 
@@ -893,10 +905,11 @@ export const courses: Course[] = [
       {
         id: "1",
         title: "Introduction to SIEM",
+        quizId: "siem-q1",
         lessons: [
           { 
             id: "1.1", 
-            title: "What is SIEM?", 
+            title: "What is SIEM?",
             description: "Understanding SIEM technology, its purpose, and how it fits into modern security operations.",
             duration: "20 min",
             status: "unlocked" 
@@ -927,6 +940,7 @@ export const courses: Course[] = [
       {
         id: "2",
         title: "Data Ingestion & Management",
+        quizId: "siem-q2",
         lessons: [
           { 
             id: "2.1", 
@@ -995,6 +1009,7 @@ export const courses: Course[] = [
       {
         id: "4",
         title: "Advanced Query Techniques",
+        quizId: "siem-q3",
         lessons: [
           { 
             id: "4.1", 
@@ -1063,6 +1078,7 @@ export const courses: Course[] = [
       {
         id: "6",
         title: "Alerts & Correlation Rules",
+        quizId: "siem-q4",
         lessons: [
           { 
             id: "6.1", 
@@ -1097,6 +1113,7 @@ export const courses: Course[] = [
       {
         id: "7",
         title: "Practical SIEM Operations",
+        quizId: "siem-q5",
         lessons: [
           { 
             id: "7.1", 
