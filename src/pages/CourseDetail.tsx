@@ -19,7 +19,7 @@ const courseBackgrounds: Record<string, string> = {
   "soc-fundamentals": socFundamentalsBg,
   "log-analysis": logAnalysisBg,
   "siem-fundamentals": siemFundamentalsBg,
-  "soc-analyst-practical": socAnalystPracticalBg,
+  "network-security-monitoring": socAnalystPracticalBg,
   "incident-response": incidentResponseBg,
   "threat-hunting": threatHuntingBg,
   "detection-engineering": detectionEngineeringBg,
