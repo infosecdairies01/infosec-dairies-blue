@@ -2329,6 +2329,1140 @@ export const quizzes: QuizData[] = [
         explanation: "SIEMs provide centralized log collection, real-time correlation, alerting, dashboards, and long-term storage for efficient analysis."
       }
     ]
+  },
+
+  // ==========================================
+  // SIEM FUNDAMENTALS QUIZZES
+  // ==========================================
+  {
+    quizId: "siem-q1",
+    courseId: "siem-fundamentals",
+    title: "SIEM Fundamentals Quiz",
+    description: "Test your understanding of SIEM architecture, components, and basic concepts.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "siem-q1-1",
+        question: "What does SIEM stand for?",
+        options: [
+          "Security Intelligence and Event Monitoring",
+          "Security Information and Event Management",
+          "System Integration and Endpoint Management",
+          "Secure Infrastructure and Event Mapping"
+        ],
+        correctAnswer: 1,
+        explanation: "SIEM stands for Security Information and Event Management — a platform that combines log aggregation, real-time monitoring, correlation, and alerting."
+      },
+      {
+        id: "siem-q1-2",
+        question: "Which component of a SIEM is responsible for collecting and forwarding log data?",
+        options: [
+          "Search Head",
+          "Indexer",
+          "Forwarder / Data Collector",
+          "Dashboard Engine"
+        ],
+        correctAnswer: 2,
+        explanation: "Forwarders (or data collectors/agents) are deployed on endpoints and network devices to collect and send log data to the SIEM for processing."
+      },
+      {
+        id: "siem-q1-3",
+        question: "What is the primary purpose of a SIEM in a SOC?",
+        options: [
+          "Replace all other security tools",
+          "Centralize log collection, correlation, and alerting for threat detection",
+          "Manage employee access permissions",
+          "Automate patch management"
+        ],
+        correctAnswer: 1,
+        explanation: "A SIEM centralizes log data from across the environment, correlates events, and generates alerts to help SOC analysts detect and respond to threats."
+      },
+      {
+        id: "siem-q1-4",
+        question: "Which SIEM platform uses SPL (Search Processing Language)?",
+        options: [
+          "Microsoft Sentinel",
+          "IBM QRadar",
+          "Splunk",
+          "Elastic SIEM"
+        ],
+        correctAnswer: 2,
+        explanation: "Splunk uses SPL (Search Processing Language) as its query language for searching, filtering, and analyzing data."
+      },
+      {
+        id: "siem-q1-5",
+        question: "What query language does Microsoft Sentinel use?",
+        options: [
+          "SPL",
+          "SQL",
+          "KQL (Kusto Query Language)",
+          "AQL"
+        ],
+        correctAnswer: 2,
+        explanation: "Microsoft Sentinel uses KQL (Kusto Query Language) for querying data stored in Azure Log Analytics workspaces."
+      },
+      {
+        id: "siem-q1-6",
+        question: "What is the role of an indexer in a SIEM?",
+        options: [
+          "Sending alerts to analysts",
+          "Collecting logs from endpoints",
+          "Processing, indexing, and storing incoming data for fast searching",
+          "Displaying dashboards"
+        ],
+        correctAnswer: 2,
+        explanation: "The indexer receives data from forwarders, parses it, creates indexes for efficient searching, and stores it according to retention policies."
+      },
+      {
+        id: "siem-q1-7",
+        question: "Which of the following is NOT a common SIEM use case?",
+        options: [
+          "Threat detection and alerting",
+          "Compliance reporting",
+          "Application development",
+          "Incident investigation and forensics"
+        ],
+        correctAnswer: 2,
+        explanation: "Application development is not a SIEM use case. SIEMs are used for threat detection, compliance, incident response, and forensic investigations."
+      },
+      {
+        id: "siem-q1-8",
+        question: "What does 'correlation' mean in SIEM context?",
+        options: [
+          "Deleting duplicate logs",
+          "Linking related events from different sources to identify patterns or attacks",
+          "Compressing log files",
+          "Sending logs to a backup server"
+        ],
+        correctAnswer: 1,
+        explanation: "Correlation links related events from multiple data sources to identify attack patterns, suspicious behaviors, or security incidents."
+      },
+      {
+        id: "siem-q1-9",
+        question: "Which SIEM platform is cloud-native and built on Azure?",
+        options: [
+          "Splunk Enterprise",
+          "IBM QRadar",
+          "Microsoft Sentinel",
+          "ArcSight"
+        ],
+        correctAnswer: 2,
+        explanation: "Microsoft Sentinel is a cloud-native SIEM built on Azure, offering scalable log analytics, threat intelligence, and SOAR capabilities."
+      },
+      {
+        id: "siem-q1-10",
+        question: "What is EPS in SIEM licensing?",
+        options: [
+          "Encrypted Protocol Standard",
+          "Events Per Second — a measure of data ingestion rate",
+          "Endpoint Protection Suite",
+          "External Processing Server"
+        ],
+        correctAnswer: 1,
+        explanation: "EPS (Events Per Second) measures the rate of data ingestion and is commonly used in SIEM licensing models to determine capacity and cost."
+      },
+      {
+        id: "siem-q1-11",
+        question: "What is the search head responsible for in Splunk's architecture?",
+        options: [
+          "Collecting logs from endpoints",
+          "Storing raw data",
+          "Processing search queries and presenting results to users",
+          "Forwarding data between indexers"
+        ],
+        correctAnswer: 2,
+        explanation: "The search head handles search requests from users, distributes them to indexers, merges results, and presents them through the UI."
+      },
+      {
+        id: "siem-q1-12",
+        question: "Which query language does IBM QRadar use?",
+        options: [
+          "SPL",
+          "KQL",
+          "AQL (Ariel Query Language)",
+          "Lucene"
+        ],
+        correctAnswer: 2,
+        explanation: "IBM QRadar uses AQL (Ariel Query Language), a SQL-like language for querying its Ariel database of security events and flows."
+      },
+      {
+        id: "siem-q1-13",
+        question: "What advantage does a cloud-native SIEM offer over on-premises?",
+        options: [
+          "Lower data quality",
+          "No internet required",
+          "Elastic scalability and reduced infrastructure management",
+          "Faster local network speeds"
+        ],
+        correctAnswer: 2,
+        explanation: "Cloud-native SIEMs offer elastic scalability, reduced infrastructure overhead, automatic updates, and pay-as-you-go pricing models."
+      },
+      {
+        id: "siem-q1-14",
+        question: "What is 'log normalization'?",
+        options: [
+          "Deleting old logs",
+          "Converting logs from different sources into a common format",
+          "Encrypting log data",
+          "Backing up logs to tape"
+        ],
+        correctAnswer: 1,
+        explanation: "Log normalization converts logs from various formats and sources into a standardized schema so they can be consistently searched and correlated."
+      },
+      {
+        id: "siem-q1-15",
+        question: "Which open-source search engine powers Elastic SIEM?",
+        options: [
+          "Apache Solr",
+          "Elasticsearch",
+          "MongoDB",
+          "Redis"
+        ],
+        correctAnswer: 1,
+        explanation: "Elastic SIEM is built on Elasticsearch, an open-source distributed search and analytics engine optimized for log and event data."
+      }
+    ]
+  },
+  {
+    quizId: "siem-q2",
+    courseId: "siem-fundamentals",
+    title: "Data Ingestion Assessment",
+    description: "Evaluate your knowledge of log collection, normalization, and data management.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "siem-q2-1",
+        question: "What is the difference between agent-based and agentless log collection?",
+        options: [
+          "There is no difference",
+          "Agent-based installs software on the source; agentless pulls data remotely via protocols like Syslog or WMI",
+          "Agentless is always more reliable",
+          "Agent-based only works on Windows"
+        ],
+        correctAnswer: 1,
+        explanation: "Agent-based collection installs a lightweight forwarder on the source system, while agentless collection uses protocols like Syslog, WMI, or APIs to pull data remotely."
+      },
+      {
+        id: "siem-q2-2",
+        question: "What port does Syslog traditionally use?",
+        options: [
+          "TCP 80",
+          "UDP 514",
+          "TCP 443",
+          "UDP 161"
+        ],
+        correctAnswer: 1,
+        explanation: "Syslog traditionally uses UDP port 514 for sending log messages. Modern implementations often use TCP 514 or TCP 6514 (with TLS) for reliability."
+      },
+      {
+        id: "siem-q2-3",
+        question: "What is field extraction in SIEM data processing?",
+        options: [
+          "Deleting unnecessary fields from logs",
+          "Parsing raw log data to identify and label specific data elements like IP, username, and action",
+          "Exporting fields to a spreadsheet",
+          "Encrypting sensitive fields"
+        ],
+        correctAnswer: 1,
+        explanation: "Field extraction parses raw log data to identify and label key data elements like IP addresses, usernames, timestamps, and actions for structured searching."
+      },
+      {
+        id: "siem-q2-4",
+        question: "What is a 'source type' in Splunk?",
+        options: [
+          "The physical server generating logs",
+          "A category that defines the format and parsing rules for incoming data",
+          "The user who created the search",
+          "A type of dashboard"
+        ],
+        correctAnswer: 1,
+        explanation: "A source type in Splunk categorizes data by format, telling Splunk how to parse and extract fields from that specific log type."
+      },
+      {
+        id: "siem-q2-5",
+        question: "What is 'hot/warm/cold' storage in SIEM data management?",
+        options: [
+          "Temperature monitoring of servers",
+          "Tiered storage where recent data is fast-access and older data moves to slower, cheaper storage",
+          "Types of encryption",
+          "Network speed tiers"
+        ],
+        correctAnswer: 1,
+        explanation: "Hot/warm/cold storage tiers balance performance and cost: hot for recent, frequently accessed data; warm for less frequent; cold for archival and compliance."
+      },
+      {
+        id: "siem-q2-6",
+        question: "Why is timestamp normalization important in SIEM?",
+        options: [
+          "It makes logs look prettier",
+          "It ensures events from different time zones can be accurately correlated chronologically",
+          "It reduces storage costs",
+          "It speeds up network traffic"
+        ],
+        correctAnswer: 1,
+        explanation: "Timestamp normalization ensures events from systems in different time zones are aligned to a common reference (usually UTC) for accurate correlation."
+      },
+      {
+        id: "siem-q2-7",
+        question: "What is a Universal Forwarder in Splunk?",
+        options: [
+          "A full Splunk instance on every endpoint",
+          "A lightweight agent that collects and forwards data to indexers with minimal resource usage",
+          "A cloud-based storage service",
+          "A type of dashboard"
+        ],
+        correctAnswer: 1,
+        explanation: "A Universal Forwarder is a lightweight Splunk agent designed to collect and forward data to indexers while consuming minimal CPU and memory."
+      },
+      {
+        id: "siem-q2-8",
+        question: "What does CEF stand for in log formatting?",
+        options: [
+          "Common Encryption Framework",
+          "Central Event Filter",
+          "Common Event Format",
+          "Centralized Extraction Function"
+        ],
+        correctAnswer: 2,
+        explanation: "CEF (Common Event Format) is a standardized log format developed by ArcSight that provides a common structure for security event data across vendors."
+      },
+      {
+        id: "siem-q2-9",
+        question: "Which data collection method is best for cloud services like AWS or Azure?",
+        options: [
+          "Syslog over UDP",
+          "Physical serial connection",
+          "API-based integration",
+          "Manual log upload"
+        ],
+        correctAnswer: 2,
+        explanation: "API-based integration is ideal for cloud services, using REST APIs to pull logs from platforms like AWS CloudTrail, Azure Activity Logs, or Office 365."
+      },
+      {
+        id: "siem-q2-10",
+        question: "What is data enrichment in SIEM?",
+        options: [
+          "Compressing data for storage",
+          "Adding context to events such as geolocation, threat intelligence, or asset information",
+          "Deleting duplicate events",
+          "Converting data to JSON format"
+        ],
+        correctAnswer: 1,
+        explanation: "Data enrichment adds contextual information to raw events — like geolocation for IPs, threat intel scores, or asset criticality — improving analysis."
+      },
+      {
+        id: "siem-q2-11",
+        question: "What is the purpose of data retention policies in SIEM?",
+        options: [
+          "To keep all data forever",
+          "To define how long different types of data are stored based on compliance and operational needs",
+          "To delete data immediately after collection",
+          "To encrypt stored data"
+        ],
+        correctAnswer: 1,
+        explanation: "Retention policies define storage durations for different data types, balancing compliance requirements, operational needs, and storage costs."
+      },
+      {
+        id: "siem-q2-12",
+        question: "What protocol provides reliable, encrypted syslog delivery?",
+        options: [
+          "UDP Syslog",
+          "SNMP",
+          "Syslog over TLS (TCP 6514)",
+          "FTP"
+        ],
+        correctAnswer: 2,
+        explanation: "Syslog over TLS (typically on TCP port 6514) provides both reliable delivery (TCP) and encryption (TLS) for secure log transmission."
+      },
+      {
+        id: "siem-q2-13",
+        question: "What is an index in SIEM data storage?",
+        options: [
+          "A table of contents for documentation",
+          "A structured repository where processed and searchable event data is stored",
+          "A list of all SIEM users",
+          "A backup location"
+        ],
+        correctAnswer: 1,
+        explanation: "An index is a structured data store within the SIEM where processed events are organized and optimized for fast searching and retrieval."
+      },
+      {
+        id: "siem-q2-14",
+        question: "What happens if logs arrive at the SIEM with incorrect timestamps?",
+        options: [
+          "Nothing — the SIEM ignores timestamps",
+          "Events may be placed out of order, making correlation and investigation inaccurate",
+          "The SIEM automatically corrects all timestamps",
+          "Logs are automatically deleted"
+        ],
+        correctAnswer: 1,
+        explanation: "Incorrect timestamps cause events to appear in the wrong order, breaking correlation rules and making incident timelines unreliable."
+      },
+      {
+        id: "siem-q2-15",
+        question: "What is 'parsing' in the context of SIEM data ingestion?",
+        options: [
+          "Sending data to a backup server",
+          "Breaking raw log data into structured fields that can be searched and analyzed",
+          "Compressing log files",
+          "Deleting malformed logs"
+        ],
+        correctAnswer: 1,
+        explanation: "Parsing breaks raw, unstructured log data into structured, labeled fields (timestamp, source IP, action, etc.) for efficient querying."
+      }
+    ]
+  },
+  {
+    quizId: "siem-q3",
+    courseId: "siem-fundamentals",
+    title: "Search & Query Mastery",
+    description: "Practical quiz on writing SIEM queries and search techniques.",
+    passingScore: 75,
+    timeLimit: 25,
+    questions: [
+      {
+        id: "siem-q3-1",
+        question: "In SPL, what does the 'stats count by src_ip' command do?",
+        options: [
+          "Deletes events grouped by source IP",
+          "Counts the number of events for each unique source IP address",
+          "Sorts events alphabetically by source IP",
+          "Filters out all source IP fields"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'stats count by src_ip' command aggregates events, counting how many occurrences exist for each unique source IP address."
+      },
+      {
+        id: "siem-q3-2",
+        question: "What does the wildcard character '*' do in a SIEM search?",
+        options: [
+          "Deletes all matching results",
+          "Matches zero or more characters in a search term",
+          "Marks results as favorites",
+          "Exports results to CSV"
+        ],
+        correctAnswer: 1,
+        explanation: "The wildcard '*' matches zero or more characters, enabling partial matching. For example, 'fail*' matches 'failed', 'failure', 'failing', etc."
+      },
+      {
+        id: "siem-q3-3",
+        question: "In KQL, what does '| where TimeGenerated > ago(1h)' do?",
+        options: [
+          "Shows events from more than 1 hour ago only",
+          "Filters results to events from the last 1 hour",
+          "Deletes events older than 1 hour",
+          "Groups events by hour"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'where TimeGenerated > ago(1h)' filter returns only events generated within the last hour."
+      },
+      {
+        id: "siem-q3-4",
+        question: "What is the purpose of the 'table' command in SPL?",
+        options: [
+          "Creates a database table",
+          "Displays only the specified fields in a tabular format",
+          "Sorts data into tables by time",
+          "Joins two data sources"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'table' command in SPL displays results showing only the specified fields in a clean tabular format."
+      },
+      {
+        id: "siem-q3-5",
+        question: "How do you search for an exact phrase in most SIEM platforms?",
+        options: [
+          "Using parentheses: (exact phrase)",
+          "Using double quotes: \"exact phrase\"",
+          "Using brackets: [exact phrase]",
+          "Using asterisks: *exact phrase*"
+        ],
+        correctAnswer: 1,
+        explanation: "Double quotes are used across most SIEM platforms to search for exact phrases, ensuring the words appear together in that order."
+      },
+      {
+        id: "siem-q3-6",
+        question: "What does the SPL command 'dedup src_ip' do?",
+        options: [
+          "Duplicates all source IP events",
+          "Removes duplicate events, keeping only the first occurrence per unique source IP",
+          "Counts duplicate IPs",
+          "Sorts IPs in descending order"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'dedup' command removes duplicate events based on the specified field, keeping only the first occurrence of each unique value."
+      },
+      {
+        id: "siem-q3-7",
+        question: "In KQL, what does the 'summarize' operator do?",
+        options: [
+          "Displays a text summary of the query",
+          "Aggregates data using functions like count(), avg(), sum() grouped by specified fields",
+          "Summarizes the SIEM configuration",
+          "Compresses query results"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'summarize' operator in KQL performs aggregation, similar to SQL's GROUP BY."
+      },
+      {
+        id: "siem-q3-8",
+        question: "What is the Boolean operator to exclude results in SIEM searches?",
+        options: [
+          "AND",
+          "OR",
+          "NOT",
+          "XOR"
+        ],
+        correctAnswer: 2,
+        explanation: "The NOT operator excludes matching results from the search."
+      },
+      {
+        id: "siem-q3-9",
+        question: "What does 'earliest=-24h latest=now' specify in a Splunk search?",
+        options: [
+          "Delete data from the last 24 hours",
+          "The time range for the search: from 24 hours ago to the current time",
+          "Schedule a search to run every 24 hours",
+          "Limit results to 24 entries"
+        ],
+        correctAnswer: 1,
+        explanation: "These time modifiers set the search window from 24 hours ago to the present moment."
+      },
+      {
+        id: "siem-q3-10",
+        question: "What is the pipe character '|' used for in SIEM queries?",
+        options: [
+          "Indicating a comment in the query",
+          "Chaining commands, sending the output of one command as input to the next",
+          "Separating field names from values",
+          "Marking the end of a query"
+        ],
+        correctAnswer: 1,
+        explanation: "The pipe '|' chains commands together in a pipeline, where each command processes the output of the previous one."
+      },
+      {
+        id: "siem-q3-11",
+        question: "How would you search for failed login attempts from a specific subnet in SPL?",
+        options: [
+          "failed login src_ip=192.168.1.*",
+          "search failed AND login AND src_ip LIKE 192.168.1",
+          "index=security action=failure src_ip=192.168.1.0/24",
+          "Both A and C are valid approaches"
+        ],
+        correctAnswer: 3,
+        explanation: "Both wildcard matching (192.168.1.*) and CIDR notation (192.168.1.0/24) are valid approaches in SPL to search within a subnet."
+      },
+      {
+        id: "siem-q3-12",
+        question: "What does 'head 10' do in a SIEM query?",
+        options: [
+          "Shows the first 10 results from the search",
+          "Deletes the top 10 events",
+          "Creates 10 copies of each event",
+          "Runs the search 10 times"
+        ],
+        correctAnswer: 0,
+        explanation: "The 'head' command limits output to the first N results, useful for quickly viewing the most relevant events."
+      },
+      {
+        id: "siem-q3-13",
+        question: "In KQL, what does 'project' do?",
+        options: [
+          "Creates a new project in Sentinel",
+          "Selects specific columns to display in the output",
+          "Projects future trends",
+          "Archives the query"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'project' operator in KQL selects which columns to include in the output, similar to SELECT in SQL."
+      },
+      {
+        id: "siem-q3-14",
+        question: "What is a subsearch (or subquery) in SIEM?",
+        options: [
+          "A search that runs below the main search bar",
+          "A nested search whose results feed into the outer/main search",
+          "A search performed by a subordinate analyst",
+          "A backup copy of a search"
+        ],
+        correctAnswer: 1,
+        explanation: "A subsearch is a nested query that executes first, and its results are used as input for the outer search."
+      },
+      {
+        id: "siem-q3-15",
+        question: "What does the 'sort' command do in SPL?",
+        options: [
+          "Groups similar events together",
+          "Orders results by specified fields in ascending or descending order",
+          "Removes sorted data",
+          "Counts sorted fields"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'sort' command orders results by one or more fields. Use '-' prefix for descending order."
+      },
+      {
+        id: "siem-q3-16",
+        question: "How do you use a lookup table in Splunk?",
+        options: [
+          "By importing a CSV file into the dashboard",
+          "Using the 'lookup' command to enrich events with data from an external table",
+          "By manually typing reference data",
+          "Lookups are not supported in Splunk"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'lookup' command enriches search results by matching field values against an external lookup table."
+      },
+      {
+        id: "siem-q3-17",
+        question: "What is the 'transaction' command used for in SPL?",
+        options: [
+          "Processing financial transactions",
+          "Grouping related events into single transactions based on shared fields and time proximity",
+          "Creating database transactions",
+          "Logging purchase orders"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'transaction' command groups related events into single transactions based on shared fields and time windows."
+      },
+      {
+        id: "siem-q3-18",
+        question: "What is the advantage of using 'tstats' over regular 'stats' in Splunk?",
+        options: [
+          "There is no advantage",
+          "tstats is significantly faster because it searches indexed metadata rather than raw events",
+          "tstats provides more accurate results",
+          "tstats works only in cloud deployments"
+        ],
+        correctAnswer: 1,
+        explanation: "tstats queries indexed metadata (tsidx files) rather than raw events, making it significantly faster for large datasets."
+      },
+      {
+        id: "siem-q3-19",
+        question: "In KQL, what does 'extend' do?",
+        options: [
+          "Extends the query timeout",
+          "Creates a new calculated column based on an expression",
+          "Extends the data retention period",
+          "Increases the result limit"
+        ],
+        correctAnswer: 1,
+        explanation: "The 'extend' operator in KQL creates new calculated columns based on expressions."
+      },
+      {
+        id: "siem-q3-20",
+        question: "What is the best practice for optimizing SIEM search performance?",
+        options: [
+          "Always search all indexes without time filters",
+          "Use the narrowest time range, specific indexes, and filter early in the search pipeline",
+          "Use only wildcard searches for flexibility",
+          "Avoid using the pipe character"
+        ],
+        correctAnswer: 1,
+        explanation: "Optimize by specifying the narrowest time range, targeting specific indexes, and filtering early to reduce data processed by subsequent commands."
+      }
+    ]
+  },
+  {
+    quizId: "siem-q4",
+    courseId: "siem-fundamentals",
+    title: "Dashboards & Alerts Quiz",
+    description: "Test your skills on visualization, dashboards, and alert configuration.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "siem-q4-1",
+        question: "What is the primary purpose of a SOC dashboard?",
+        options: [
+          "To replace all other monitoring tools",
+          "To provide real-time visibility into security events, trends, and operational status",
+          "To store log data",
+          "To manage user accounts"
+        ],
+        correctAnswer: 1,
+        explanation: "SOC dashboards provide at-a-glance visibility into security posture, showing real-time event trends, alert status, and key metrics."
+      },
+      {
+        id: "siem-q4-2",
+        question: "Which visualization type is best for showing trends over time?",
+        options: [
+          "Pie chart",
+          "Single value panel",
+          "Line chart or area chart",
+          "Table"
+        ],
+        correctAnswer: 2,
+        explanation: "Line charts and area charts are ideal for showing how values change over time."
+      },
+      {
+        id: "siem-q4-3",
+        question: "What is a 'drilldown' in a SIEM dashboard?",
+        options: [
+          "A type of attack technique",
+          "Clicking a dashboard element to navigate to more detailed data or a new search",
+          "Drilling into physical hardware",
+          "Removing data from the dashboard"
+        ],
+        correctAnswer: 1,
+        explanation: "Drilldowns allow users to click on dashboard elements to navigate to detailed views or run more specific searches."
+      },
+      {
+        id: "siem-q4-4",
+        question: "What is alert fatigue?",
+        options: [
+          "When the SIEM runs out of storage",
+          "When analysts become desensitized due to excessive false positive alerts",
+          "When alerts stop being generated",
+          "When dashboard refreshes are too slow"
+        ],
+        correctAnswer: 1,
+        explanation: "Alert fatigue occurs when analysts are overwhelmed by too many alerts (especially false positives), causing them to miss genuine threats."
+      },
+      {
+        id: "siem-q4-5",
+        question: "What is a correlation rule in SIEM alerting?",
+        options: [
+          "A rule that correlates employee schedules",
+          "A detection rule that triggers when specific conditions across multiple events are met",
+          "A rule for organizing dashboard panels",
+          "A data backup policy"
+        ],
+        correctAnswer: 1,
+        explanation: "Correlation rules define conditions across multiple events that, when met together, trigger an alert."
+      },
+      {
+        id: "siem-q4-6",
+        question: "Which visualization is best for showing the proportion of alert types?",
+        options: [
+          "Line chart",
+          "Pie chart or donut chart",
+          "Scatter plot",
+          "Gauge"
+        ],
+        correctAnswer: 1,
+        explanation: "Pie and donut charts effectively show proportional distribution of alert categories or severity levels."
+      },
+      {
+        id: "siem-q4-7",
+        question: "What is a 'token' in Splunk dashboard context?",
+        options: [
+          "An authentication credential",
+          "A dynamic variable that allows user input to filter dashboard panels interactively",
+          "A physical security device",
+          "A type of alert"
+        ],
+        correctAnswer: 1,
+        explanation: "Dashboard tokens are dynamic variables populated by user inputs that filter data across multiple panels."
+      },
+      {
+        id: "siem-q4-8",
+        question: "What is the recommended approach to reduce false positives in SIEM alerts?",
+        options: [
+          "Disable all alerts",
+          "Regularly review and tune detection rules by adding exceptions and adjusting thresholds",
+          "Increase alert severity for all rules",
+          "Only use pre-built alerts without modification"
+        ],
+        correctAnswer: 1,
+        explanation: "Reducing false positives requires ongoing tuning: adding whitelists, adjusting thresholds, enriching with context, and reviewing performance metrics."
+      },
+      {
+        id: "siem-q4-9",
+        question: "What is a 'heatmap' useful for in security dashboards?",
+        options: [
+          "Monitoring server room temperature",
+          "Visualizing data density or activity patterns across two dimensions",
+          "Heating up cold storage data",
+          "Showing network cable layouts"
+        ],
+        correctAnswer: 1,
+        explanation: "Heatmaps visualize data density across two dimensions using color intensity, ideal for spotting anomalous activity patterns."
+      },
+      {
+        id: "siem-q4-10",
+        question: "What should a well-designed alert include?",
+        options: [
+          "Just the alert name",
+          "Severity, description, affected assets, recommended response actions, and relevant context",
+          "Only the raw log data",
+          "The analyst's personal notes"
+        ],
+        correctAnswer: 1,
+        explanation: "Effective alerts include severity level, clear description, affected assets, recommended investigation steps, and contextual information."
+      },
+      {
+        id: "siem-q4-11",
+        question: "What is a 'scheduled search' in SIEM alerting?",
+        options: [
+          "A search saved for personal reference",
+          "A search that runs automatically at defined intervals and triggers alerts when conditions are met",
+          "A search scheduled for deletion",
+          "A manual search run by an analyst"
+        ],
+        correctAnswer: 1,
+        explanation: "Scheduled searches run automatically at configured intervals, evaluating results against conditions to generate alerts."
+      },
+      {
+        id: "siem-q4-12",
+        question: "What is alert throttling?",
+        options: [
+          "Speeding up alert delivery",
+          "Limiting how frequently the same alert can fire within a time window to prevent flooding",
+          "Increasing alert severity",
+          "Disabling alerts permanently"
+        ],
+        correctAnswer: 1,
+        explanation: "Alert throttling prevents alert flooding by suppressing duplicate alerts within a defined time window."
+      },
+      {
+        id: "siem-q4-13",
+        question: "When should you use a geographic map visualization?",
+        options: [
+          "For all types of data",
+          "When displaying data with geographic context like source IPs or login locations",
+          "Only for internal network traffic",
+          "When showing CPU usage"
+        ],
+        correctAnswer: 1,
+        explanation: "Geographic maps are ideal for displaying location-based data such as attack origins or VPN login locations."
+      },
+      {
+        id: "siem-q4-14",
+        question: "What is a 'notable event' in Splunk Enterprise Security?",
+        options: [
+          "Any regular log event",
+          "A high-priority security event generated by correlation searches that requires investigation",
+          "A deleted event",
+          "A scheduled report"
+        ],
+        correctAnswer: 1,
+        explanation: "Notable events are security-significant events generated by correlation searches in Splunk ES, appearing in the incident review queue."
+      },
+      {
+        id: "siem-q4-15",
+        question: "What is the best practice for dashboard refresh intervals?",
+        options: [
+          "Refresh every second for real-time data",
+          "Balance between timely data and system performance — typically 1-5 minutes for operational dashboards",
+          "Never refresh — use static snapshots only",
+          "Refresh only when manually triggered"
+        ],
+        correctAnswer: 1,
+        explanation: "Dashboard refresh intervals should balance timeliness with performance. Operational SOC dashboards typically refresh every 1-5 minutes."
+      }
+    ]
+  },
+  {
+    quizId: "siem-q5",
+    courseId: "siem-fundamentals",
+    title: "Final Certification Exam",
+    description: "Comprehensive exam covering all SIEM fundamentals modules. Required for certification.",
+    passingScore: 80,
+    timeLimit: 45,
+    questions: [
+      {
+        id: "siem-q5-1",
+        question: "A SOC analyst notices 500 failed login attempts from a single IP within 10 minutes. What SIEM feature detected this?",
+        options: [
+          "Dashboard visualization",
+          "Correlation rule with threshold-based detection",
+          "Data normalization",
+          "Log retention policy"
+        ],
+        correctAnswer: 1,
+        explanation: "Threshold-based correlation rules detect when event counts exceed defined limits within a time window."
+      },
+      {
+        id: "siem-q5-2",
+        question: "Which SPL query would find the top 10 source IPs generating failed authentication events?",
+        options: [
+          "search failed auth | head 10",
+          "index=security action=failure | stats count by src_ip | sort -count | head 10",
+          "index=security | delete failed | top 10",
+          "search * | filter src_ip"
+        ],
+        correctAnswer: 1,
+        explanation: "This query searches security events for failures, counts per source IP, sorts descending, and limits to the top 10."
+      },
+      {
+        id: "siem-q5-3",
+        question: "What is the MITRE ATT&CK tactic that SIEM is most directly aligned to detect?",
+        options: [
+          "Resource Development",
+          "Reconnaissance",
+          "Multiple tactics across the kill chain via log correlation",
+          "Physical access attacks"
+        ],
+        correctAnswer: 2,
+        explanation: "SIEM can detect activities across multiple ATT&CK tactics by correlating logs from various sources."
+      },
+      {
+        id: "siem-q5-4",
+        question: "An analyst sees an 'Impossible Travel' alert — login from New York, then London 30 minutes later. What should they do first?",
+        options: [
+          "Immediately disable the user account",
+          "Ignore it — it's probably a VPN",
+          "Investigate by checking VPN/proxy usage, verifying with the user, and reviewing session details",
+          "Delete the alert"
+        ],
+        correctAnswer: 2,
+        explanation: "The analyst should investigate before acting: check for VPN/proxy usage, contact the user, and review session details."
+      },
+      {
+        id: "siem-q5-5",
+        question: "What is the difference between real-time and historical SIEM searches?",
+        options: [
+          "There is no difference",
+          "Real-time searches continuously monitor incoming events; historical searches query stored data",
+          "Historical searches are always faster",
+          "Real-time searches only work on dashboards"
+        ],
+        correctAnswer: 1,
+        explanation: "Real-time searches monitor events as they arrive; historical searches query already-indexed data for investigation."
+      },
+      {
+        id: "siem-q5-6",
+        question: "Which KQL query finds sign-in events from outside the United States in the last 24 hours?",
+        options: [
+          "SigninLogs | where Location != 'US'",
+          "SigninLogs | where TimeGenerated > ago(24h) | where LocationDetails.countryOrRegion != 'US'",
+          "search SigninLogs NOT US",
+          "SigninLogs | summarize by Location"
+        ],
+        correctAnswer: 1,
+        explanation: "This KQL query filters SigninLogs to the last 24 hours and excludes US-based sign-ins."
+      },
+      {
+        id: "siem-q5-7",
+        question: "What is 'lateral movement' and how can SIEM detect it?",
+        options: [
+          "Physical movement of servers; detected by cameras",
+          "Attackers moving between systems; detected by correlating authentication logs across hosts",
+          "Network cable rearrangement; detected by port monitoring",
+          "Staff relocations; detected by HR systems"
+        ],
+        correctAnswer: 1,
+        explanation: "Lateral movement is when attackers move between internal systems. SIEM detects it by correlating authentication events across hosts."
+      },
+      {
+        id: "siem-q5-8",
+        question: "You need a dashboard showing daily login trends, top failed IPs, and geographic distribution. Which visualizations?",
+        options: [
+          "Three pie charts",
+          "Line chart for trends, bar chart for top IPs, geographic map for distribution",
+          "Three tables",
+          "Three single-value panels"
+        ],
+        correctAnswer: 1,
+        explanation: "Use each visualization for its strength: line charts for trends, bar charts for rankings, and maps for geographic data."
+      },
+      {
+        id: "siem-q5-9",
+        question: "What is the purpose of a SIEM use case library?",
+        options: [
+          "A collection of books about SIEM",
+          "A documented catalog of detection rules mapped to threats, with queries and response procedures",
+          "A list of SIEM vendors",
+          "A software code repository"
+        ],
+        correctAnswer: 1,
+        explanation: "A use case library catalogs all detection rules with their purpose, associated threats, queries, and response procedures."
+      },
+      {
+        id: "siem-q5-10",
+        question: "What does 'data onboarding' involve in a SIEM project?",
+        options: [
+          "Training new employees",
+          "Identifying, collecting, normalizing, and validating new data sources for ingestion",
+          "Purchasing new hardware",
+          "Uninstalling old software"
+        ],
+        correctAnswer: 1,
+        explanation: "Data onboarding integrates new log sources: identifying data, configuring collection, defining parsing, and validating quality."
+      },
+      {
+        id: "siem-q5-11",
+        question: "An alert fires for 'PowerShell Download Cradle Detected'. What SPL query likely generated this?",
+        options: [
+          "index=security powershell",
+          "index=endpoint process_name=powershell.exe (commandline=*downloadstring* OR commandline=*invoke-webrequest*)",
+          "search powershell download",
+          "index=network http download"
+        ],
+        correctAnswer: 1,
+        explanation: "This query searches endpoint logs for PowerShell processes with download-related command-line arguments."
+      },
+      {
+        id: "siem-q5-12",
+        question: "What is the 'kill chain' approach to SIEM detection?",
+        options: [
+          "A method to delete old alerts",
+          "Creating detection rules aligned to each stage of an attack lifecycle",
+          "A chain of SIEM servers",
+          "Removing unused detection rules"
+        ],
+        correctAnswer: 1,
+        explanation: "The kill chain approach creates layered detection rules at each attack stage, increasing the chance of catching attackers."
+      },
+      {
+        id: "siem-q5-13",
+        question: "How should you handle a detection rule with a 90% false positive rate?",
+        options: [
+          "Keep it — 10% true positive is acceptable",
+          "Delete the rule entirely",
+          "Analyze false positives for patterns, refine the rule logic, add exceptions, and retest",
+          "Lower the severity and ignore it"
+        ],
+        correctAnswer: 2,
+        explanation: "Identify common FP patterns, refine query logic, add contextual conditions or exceptions, then retest to improve fidelity."
+      },
+      {
+        id: "siem-q5-14",
+        question: "What is 'pivoting' in SIEM investigation?",
+        options: [
+          "Rotating dashboard panels",
+          "Using a discovered indicator to search for related events and expand the investigation",
+          "Switching between SIEM platforms",
+          "Changing the search time range"
+        ],
+        correctAnswer: 1,
+        explanation: "Pivoting uses discovered artifacts as new search terms to find related events and uncover the full attack scope."
+      },
+      {
+        id: "siem-q5-15",
+        question: "What is the recommended approach for building a new detection rule?",
+        options: [
+          "Write it and immediately put it in production",
+          "Copy rules from the internet without modification",
+          "Develop, test against historical data, tune to reduce false positives, then deploy with monitoring",
+          "Only use vendor-provided rules"
+        ],
+        correctAnswer: 2,
+        explanation: "Best practice: develop, test against historical data, tune thresholds/exceptions, then deploy with ongoing monitoring."
+      },
+      {
+        id: "siem-q5-16",
+        question: "What is the difference between a 'saved search' and an 'alert' in SIEM?",
+        options: [
+          "They are the same thing",
+          "A saved search is a reusable query; an alert is a saved search that triggers notifications",
+          "Saved searches are faster",
+          "Alerts cannot be saved"
+        ],
+        correctAnswer: 1,
+        explanation: "A saved search is a stored query. An alert builds on a saved search by adding trigger conditions and notification actions."
+      },
+      {
+        id: "siem-q5-17",
+        question: "During an incident, what is the best SIEM approach to build a timeline?",
+        options: [
+          "Screenshot each alert individually",
+          "Use transaction grouping and time-sorted searches across relevant data sources",
+          "Only check the last hour of logs",
+          "Ask colleagues to remember what happened"
+        ],
+        correctAnswer: 1,
+        explanation: "Building timelines requires time-sorted, correlated searches across multiple data sources to reconstruct the complete event sequence."
+      },
+      {
+        id: "siem-q5-18",
+        question: "What metric measures the percentage of alerts that are actual security incidents?",
+        options: [
+          "EPS (Events Per Second)",
+          "True Positive Rate / Alert Fidelity",
+          "MTTR (Mean Time To Respond)",
+          "Data Ingestion Volume"
+        ],
+        correctAnswer: 1,
+        explanation: "True Positive Rate measures the percentage of alerts that represent real security incidents."
+      },
+      {
+        id: "siem-q5-19",
+        question: "What is the role of threat intelligence feeds in SIEM?",
+        options: [
+          "They replace the need for correlation rules",
+          "They provide external indicators for automatic matching against incoming events",
+          "They generate dashboards automatically",
+          "They manage user authentication"
+        ],
+        correctAnswer: 1,
+        explanation: "Threat intelligence feeds supply external IOCs that the SIEM matches against incoming events to detect known threats."
+      },
+      {
+        id: "siem-q5-20",
+        question: "You're investigating potential data exfiltration. Which SIEM data sources are most relevant?",
+        options: [
+          "Only email logs",
+          "Firewall/proxy logs, DLP alerts, endpoint logs, and DNS queries",
+          "Only authentication logs",
+          "Only SIEM configuration logs"
+        ],
+        correctAnswer: 1,
+        explanation: "Data exfiltration investigation requires correlating outbound traffic, DLP alerts, endpoint activity, and DNS queries."
+      },
+      {
+        id: "siem-q5-21",
+        question: "What is a 'detection gap' in SIEM operations?",
+        options: [
+          "A physical gap in the server rack",
+          "A threat scenario that the SIEM currently has no detection rule for",
+          "Time between dashboard refreshes",
+          "Network latency"
+        ],
+        correctAnswer: 1,
+        explanation: "A detection gap is a threat without detection coverage. Gap analysis against MITRE ATT&CK helps identify and prioritize new rules."
+      },
+      {
+        id: "siem-q5-22",
+        question: "What is the benefit of SIEM integration with SOAR?",
+        options: [
+          "SOAR replaces the SIEM entirely",
+          "SOAR automates response actions triggered by SIEM alerts, reducing response time",
+          "SOAR provides better data storage",
+          "SOAR improves SIEM search speed"
+        ],
+        correctAnswer: 1,
+        explanation: "SOAR automates repetitive response actions triggered by SIEM alerts, reducing MTTR and freeing analysts for complex investigations."
+      },
+      {
+        id: "siem-q5-23",
+        question: "What is 'log source health monitoring' in SIEM?",
+        options: [
+          "Monitoring the physical health of servers",
+          "Tracking whether expected log sources are actively sending data and alerting if ingestion stops",
+          "Running antivirus on log files",
+          "Checking log file formatting"
+        ],
+        correctAnswer: 1,
+        explanation: "Log source health monitoring tracks active ingestion and alerts when data stops flowing — missing logs create detection blind spots."
+      },
+      {
+        id: "siem-q5-24",
+        question: "Which represents the most mature SIEM deployment?",
+        options: [
+          "Collecting logs from one data source with no alerts",
+          "Collecting from multiple sources with vendor-default rules only",
+          "Comprehensive data sources, customized detection mapped to ATT&CK, automated response, continuous tuning",
+          "Using SIEM only for compliance reporting"
+        ],
+        correctAnswer: 2,
+        explanation: "A mature SIEM features comprehensive data coverage, customized detections, SOAR integration, and continuous improvement."
+      },
+      {
+        id: "siem-q5-25",
+        question: "What is the most critical factor for SIEM success in a SOC?",
+        options: [
+          "Having the most expensive SIEM platform",
+          "Skilled analysts who understand the data, tune rules, and continuously improve detection coverage",
+          "Ingesting the maximum amount of data possible",
+          "Using only automated responses without human review"
+        ],
+        correctAnswer: 1,
+        explanation: "The most critical factor is skilled analysts who understand the environment, tune detection rules, and drive continuous improvement — technology alone is insufficient."
+      }
+    ]
   }
 ];
 
