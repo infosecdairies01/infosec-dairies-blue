@@ -17466,7 +17466,2990 @@ Congratulations on completing the SIEM Fundamentals course! 🎉
         "Write a professional incident report"
       ]
     }
+  },
+  // ===== Network Security Monitoring Course =====
+  // Module 1: NSM Foundations
+  {
+    id: "1.1",
+    courseId: "network-security-monitoring",
+    title: "What is Network Security Monitoring?",
+    content: `
+# What is Network Security Monitoring?
+
+**Network Security Monitoring (NSM)** is the practice of collecting, analyzing, and escalating indications and warnings to detect and respond to intrusions on computer networks. Unlike traditional perimeter defenses that focus on prevention, NSM assumes that prevention will eventually fail and emphasizes **detection, response, and understanding** of threats.
+
+## The NSM Philosophy
+
+Richard Bejtlich, one of the pioneers of NSM, defined it with a simple principle:
+
+> "You cannot protect what you cannot see. You cannot detect what you do not understand."
+
+NSM is built on three pillars:
+
+1. **Collection** — Gathering network traffic data, session metadata, full packet captures, and statistical information
+2. **Detection** — Identifying events of interest through signatures, anomalies, and behavioral analysis
+3. **Analysis** — Investigating flagged events to determine scope, impact, and appropriate response
+
+## NSM vs. Traditional Security
+
+| Approach | Focus | Assumption |
+|----------|-------|------------|
+| Firewall / IPS | Prevention | Can block all threats |
+| NSM | Detection & Response | Prevention eventually fails |
+| EDR | Endpoint visibility | Threats manifest on hosts |
+| NSM + EDR | Full spectrum | Defense in depth |
+
+Traditional security tools like firewalls operate on a **deny-by-default** model — they block known-bad traffic. NSM flips this by **monitoring allowed traffic** to find threats that slipped through.
+
+## Types of NSM Data
+
+### Full Content Data
+Complete packet captures (PCAPs) that preserve every byte transmitted across the wire. This is the richest data source but requires significant storage.
+
+### Session Data
+Summaries of network conversations — source/destination IPs, ports, protocols, bytes transferred, and timestamps. Zeek's \`conn.log\` is a prime example.
+
+### Statistical Data
+Aggregated metrics such as traffic volume trends, protocol distribution, and top talkers. Useful for spotting anomalies at scale.
+
+### Alert Data
+Output from signature-based detection engines like Suricata or Snort, flagging traffic that matches known attack patterns.
+
+## How NSM Complements Endpoint Detection
+
+While EDR tools monitor what happens **on** a host, NSM watches what happens **between** hosts. Many attacks — lateral movement, C2 beaconing, data exfiltration — are visible on the network before they trigger endpoint alerts. Together, NSM and EDR provide full-spectrum visibility.
+
+## Real-World NSM in Action
+
+Consider a targeted attack where an employee opens a phishing document:
+
+1. **NSM detects** the initial outbound connection to the C2 server via unusual DNS queries
+2. **Session data** reveals periodic beaconing at 60-second intervals
+3. **Full packet capture** allows analysts to reconstruct the exact commands sent
+4. **Alert data** from Suricata flags the traffic against known threat intelligence
+
+Without NSM, the organization might only discover the breach weeks later during a routine audit.
+`,
+    keyTakeaways: [
+      "NSM focuses on detection and response, assuming prevention will eventually fail",
+      "Four data types: full content, session, statistical, and alert data",
+      "NSM complements endpoint detection by providing network-level visibility",
+      "Collection, detection, and analysis form the three pillars of NSM"
+    ],
+    practicalExercise: {
+      title: "Map Your NSM Data Sources",
+      description: "Identify the NSM data sources available in a typical enterprise environment.",
+      steps: [
+        "List all network segments in a hypothetical corporate environment (DMZ, internal, guest)",
+        "For each segment, identify what NSM data types could be collected",
+        "Determine optimal sensor placement for each segment",
+        "Document which tools would generate each data type (Zeek for session, Suricata for alerts, tcpdump for PCAP)"
+      ]
+    },
+    additionalResources: [
+      { title: "The Practice of Network Security Monitoring — Richard Bejtlich", type: "article" },
+      { title: "SANS NSM Reading Room", url: "https://www.sans.org/reading-room/", type: "documentation" }
+    ]
+  },
+  {
+    id: "1.2",
+    courseId: "network-security-monitoring",
+    title: "Network Protocols Deep Dive",
+    content: `
+# Network Protocols Deep Dive
+
+Understanding network protocols at a granular level is essential for any NSM analyst. Protocols define how devices communicate, and attackers routinely abuse protocol features or violate standards to evade detection.
+
+## TCP — The Reliable Workhorse
+
+### The Three-Way Handshake
+
+Every TCP connection begins with a predictable exchange:
+
+\`\`\`
+Client → Server:  SYN          (seq=1000)
+Server → Client:  SYN-ACK      (seq=2000, ack=1001)
+Client → Server:  ACK           (ack=2001)
+\`\`\`
+
+**Security relevance:** Incomplete handshakes (SYN without ACK) indicate port scanning. Half-open connections in large volumes suggest SYN flood attacks.
+
+### TCP Flags and Their Meaning
+
+| Flag | Name | Normal Use | Suspicious Use |
+|------|------|------------|----------------|
+| SYN | Synchronize | Connection initiation | Mass scanning |
+| ACK | Acknowledge | Data acknowledgment | ACK scans |
+| FIN | Finish | Graceful close | FIN scanning |
+| RST | Reset | Abrupt termination | Port closed response |
+| PSH | Push | Immediate delivery | Data exfiltration bursts |
+| URG | Urgent | Priority data | Rarely used legitimately |
+
+### Abnormal Flag Combinations
+
+Certain flag combinations should never appear in normal traffic:
+
+- **SYN+FIN** — Contradictory; used in OS fingerprinting (Nmap)
+- **No flags (NULL scan)** — Empty TCP header; evasion technique
+- **All flags (XMAS scan)** — Every flag set; reconnaissance technique
+
+## UDP — Fire and Forget
+
+UDP is connectionless — no handshake, no guaranteed delivery. This makes it harder to track from an NSM perspective.
+
+### Key UDP Protocols
+
+- **DNS (port 53)** — The most abused protocol for tunneling and exfiltration
+- **DHCP (ports 67-68)** — Rogue DHCP servers can redirect traffic
+- **NTP (port 123)** — Amplification attacks; Monlist abuse
+- **SNMP (port 161)** — Community strings often transmitted in cleartext
+
+## DNS — The Internet's Phone Book
+
+DNS is critical for NSM because almost every network activity begins with a DNS query.
+
+### Suspicious DNS Indicators
+
+1. **High entropy domain names** — \`a3x9kq2m.evil.com\` (potential DGA)
+2. **Unusually long subdomain labels** — base64-encoded data in DNS queries
+3. **TXT record queries at high volume** — DNS tunneling indicator
+4. **Queries to non-standard resolvers** — Bypassing corporate DNS
+
+### DNS Query Types
+
+\`\`\`
+A      → IPv4 address lookup
+AAAA   → IPv6 address lookup
+MX     → Mail exchange server
+TXT    → Text records (often abused for tunneling)
+CNAME  → Canonical name aliasing
+NS     → Nameserver delegation
+\`\`\`
+
+## HTTP/HTTPS — Web Communication
+
+### HTTP Methods to Monitor
+
+- **GET** — Standard page retrieval; watch for encoded payloads in URLs
+- **POST** — Data submission; common for C2 communication and exfiltration
+- **CONNECT** — Proxy tunneling; may bypass security controls
+- **PUT/DELETE** — File manipulation; often disabled but worth monitoring
+
+### Suspicious HTTP Patterns
+
+- User-Agent strings that don't match normal browser patterns
+- HTTP connections to IP addresses instead of hostnames
+- Abnormal Content-Length values or chunked encoding abuse
+- Frequent POST requests to a single endpoint at regular intervals
+
+## ICMP — Beyond Simple Ping
+
+ICMP carries diagnostic messages but is frequently weaponized:
+
+- **ICMP tunneling** — Hiding data in echo request/reply payloads
+- **Oversized ICMP packets** — Ping of Death or data exfiltration
+- **Unreachable messages** — Network mapping via responses
+`,
+    keyTakeaways: [
+      "TCP flag analysis reveals scanning, evasion, and attack patterns",
+      "DNS is the most commonly abused protocol for tunneling and exfiltration",
+      "HTTP method monitoring helps detect C2 and data theft",
+      "Understanding protocol norms is essential to spotting anomalies"
+    ],
+    practicalExercise: {
+      title: "Protocol Anomaly Identification",
+      description: "Analyze sample traffic logs and identify protocol violations.",
+      steps: [
+        "Open a sample PCAP in Wireshark and filter for TCP conversations",
+        "Identify any abnormal TCP flag combinations (SYN+FIN, NULL, XMAS)",
+        "Filter for DNS traffic and look for high-entropy domain names or TXT queries",
+        "Examine HTTP traffic for suspicious User-Agent strings or non-standard methods"
+      ]
+    }
+  },
+  {
+    id: "1.3",
+    courseId: "network-security-monitoring",
+    title: "The OSI Model for Defenders",
+    content: `
+# The OSI Model for Defenders
+
+The OSI (Open Systems Interconnection) model is more than a textbook diagram — for NSM analysts, it's a **framework for understanding where attacks occur and where detection is possible** at each layer.
+
+## Layer-by-Layer Security Analysis
+
+### Layer 1 — Physical
+**Attack surface:** Physical taps, rogue devices, cable interception
+**Detection:** Network access control (802.1X), rogue device detection, physical security monitoring
+
+### Layer 2 — Data Link
+**Attack surface:** ARP spoofing, MAC flooding, VLAN hopping, STP manipulation
+**Detection:** 
+- ARP table monitoring for duplicate IP-to-MAC mappings
+- Switch port security alerts
+- DHCP snooping logs
+
+**Example ARP Spoofing Detection:**
+\`\`\`
+# Normal ARP table
+192.168.1.1  →  aa:bb:cc:dd:ee:01  (gateway)
+
+# ARP spoofing detected
+192.168.1.1  →  ff:ff:ff:aa:bb:cc  (attacker's MAC)
+\`\`\`
+
+### Layer 3 — Network
+**Attack surface:** IP spoofing, ICMP abuse, routing attacks (BGP hijacking)
+**Detection:**
+- Source IP validation (BCP38/uRPF)
+- Geolocation anomalies — internal user connecting from unexpected countries
+- TTL analysis — sudden TTL changes may indicate man-in-the-middle
+
+### Layer 4 — Transport
+**Attack surface:** Port scanning, SYN floods, session hijacking
+**Detection:**
+- Connection state analysis (half-open connections)
+- Port scan detection via connection rate thresholds
+- Unusual port usage — known services on non-standard ports
+
+### Layer 5 — Session
+**Attack surface:** Session fixation, token theft, replay attacks
+**Detection:**
+- SSL/TLS certificate monitoring
+- Session duration anomalies
+- Re-authentication patterns
+
+### Layer 6 — Presentation
+**Attack surface:** Encoding attacks, SSL stripping, compression-based side channels (CRIME/BREACH)
+**Detection:**
+- Certificate pinning violations
+- Downgrade attack detection (SSLv3 fallback)
+- Compression oracle indicators
+
+### Layer 7 — Application
+**Attack surface:** SQL injection, XSS, command injection, API abuse
+**Detection:**
+- HTTP payload inspection
+- Application-layer protocol anomalies
+- Request pattern analysis (rate, structure, parameters)
+
+## Mapping Attacks to the OSI Model
+
+| Attack Type | Primary Layer | NSM Detection Method |
+|-------------|---------------|---------------------|
+| ARP Spoofing | Layer 2 | ARP table monitoring |
+| Port Scanning | Layer 4 | Connection rate analysis |
+| DNS Tunneling | Layer 7 | DNS query entropy analysis |
+| Man-in-the-Middle | Layer 3-5 | Certificate validation, TTL changes |
+| Data Exfiltration | Layer 4-7 | Volume anomalies, protocol tunneling |
+
+## Practical Implications for NSM Sensor Placement
+
+Different layers require different sensor types:
+- **Layers 2-3:** Network TAPs and SPAN ports capture raw frames
+- **Layer 4:** Flow data from routers (NetFlow/sFlow) provides session visibility
+- **Layers 5-7:** Deep packet inspection (DPI) and protocol-aware tools like Zeek
+`,
+    keyTakeaways: [
+      "Each OSI layer has unique attack surfaces and detection opportunities",
+      "NSM sensors must be placed strategically to cover multiple layers",
+      "Layer 2-3 attacks (ARP spoofing, IP spoofing) require different tools than Layer 7 attacks",
+      "Understanding the layer where an attack occurs guides the appropriate response"
+    ]
+  },
+  {
+    id: "1.4",
+    courseId: "network-security-monitoring",
+    title: "NSM Architecture & Sensor Placement",
+    content: `
+# NSM Architecture & Sensor Placement
+
+Effective NSM requires careful architectural planning. Where you place sensors, how you collect data, and your storage strategy determine whether you can detect sophisticated threats or miss them entirely.
+
+## Network Tap Points
+
+### SPAN/Mirror Ports
+A switch feature that copies traffic from one or more ports to a monitoring port.
+
+**Pros:** No additional hardware, easy to configure
+**Cons:** Can drop packets under heavy load, limited to one destination, may miss errors
+
+### Network TAPs (Test Access Points)
+Passive hardware devices inserted inline that copy traffic to a monitoring interface.
+
+**Pros:** Full-fidelity copies, fail-open capability, no packet loss
+**Cons:** Hardware cost, requires physical access, inline deployment
+
+### Aggregation TAPs
+Combine traffic from multiple links onto fewer monitoring ports, with filtering capabilities.
+
+\`\`\`
+          ┌─────────────────────┐
+Internet ─┤  Perimeter Firewall ├──── TAP ──→ Suricata (IDS)
+          └─────────────────────┘              Zeek (Metadata)
+                                               PCAP Storage
+
+          ┌─────────────────────┐
+Core SW  ─┤   Core Switch SPAN  ├──── TAP ──→ Zeek (Internal)
+          └─────────────────────┘              Flow Collector
+
+          ┌─────────────────────┐
+DMZ      ─┤    DMZ Switch       ├──── TAP ──→ Suricata + Zeek
+          └─────────────────────┘
+\`\`\`
+
+## Sensor Deployment Strategies
+
+### Perimeter Monitoring
+**Location:** Between the firewall and the internet router
+**Captures:** All inbound/outbound traffic
+**Use case:** Detecting external threats, C2 communications, data exfiltration
+
+### Internal Segment Monitoring
+**Location:** Core switch SPAN or inter-VLAN routing points
+**Captures:** East-west (lateral) traffic
+**Use case:** Detecting lateral movement, internal reconnaissance, insider threats
+
+### DMZ Monitoring
+**Location:** In front of and behind DMZ firewalls
+**Captures:** Traffic to/from public-facing services
+**Use case:** Web application attacks, server compromise detection
+
+### Cloud/Hybrid Monitoring
+**Location:** VPC flow logs, cloud-native TAP services
+**Captures:** Cloud workload traffic
+**Use case:** Cloud-specific threats, misconfigurations, shadow IT
+
+## Storage Architecture
+
+### Sizing Considerations
+
+| Data Type | Typical Volume | Retention |
+|-----------|---------------|-----------|
+| Full PCAP | 1-10 TB/day | 3-7 days |
+| Zeek logs | 10-100 GB/day | 30-90 days |
+| Suricata alerts | 1-10 GB/day | 90-365 days |
+| NetFlow | 5-50 GB/day | 30-90 days |
+
+### Storage Tiers
+1. **Hot storage** — SSDs for active analysis (current day)
+2. **Warm storage** — HDDs for recent history (past week)
+3. **Cold storage** — Compressed archives for compliance (months/years)
+
+## Deployment Checklist
+
+- [ ] Identify all network segments requiring monitoring
+- [ ] Determine appropriate tap/span points for each segment
+- [ ] Calculate bandwidth and storage requirements
+- [ ] Plan sensor hardware specifications (CPU, RAM, NIC, disk)
+- [ ] Establish log forwarding to centralized SIEM
+- [ ] Document network diagrams with sensor locations
+- [ ] Test failover and redundancy scenarios
+`,
+    keyTakeaways: [
+      "Network TAPs provide full-fidelity copies while SPAN ports may drop packets under load",
+      "Sensor placement must cover perimeter, internal segments, and DMZ",
+      "Storage architecture requires tiering — hot, warm, and cold — based on data type",
+      "East-west monitoring is crucial for detecting lateral movement"
+    ]
+  },
+
+  // Module 2: Packet Capture & Analysis
+  {
+    id: "2.1",
+    courseId: "network-security-monitoring",
+    title: "Introduction to Wireshark",
+    content: `
+# Introduction to Wireshark
+
+Wireshark is the world's most widely used network protocol analyzer. For NSM analysts, it's the microscope that lets you examine every byte crossing the wire.
+
+## The Wireshark Interface
+
+### Main Components
+1. **Packet List Pane** — Rows of captured packets with summary columns
+2. **Packet Details Pane** — Protocol tree showing decoded layers
+3. **Packet Bytes Pane** — Raw hexadecimal and ASCII view
+4. **Display Filter Bar** — Powerful filtering engine at the top
+
+### Essential Columns to Display
+- No. (packet number)
+- Time (relative or absolute)
+- Source / Destination IP
+- Protocol
+- Length
+- Info (protocol-specific summary)
+
+## Capture Filters vs. Display Filters
+
+**Capture Filters** (BPF syntax) — Applied **before** packets are recorded. Use when you need to limit capture volume.
+
+\`\`\`bash
+# Capture only HTTP traffic
+port 80
+
+# Capture traffic to/from a specific host
+host 192.168.1.100
+
+# Capture only TCP SYN packets
+tcp[tcpflags] & (tcp-syn) != 0
+
+# Exclude SSH traffic from capture
+not port 22
+\`\`\`
+
+**Display Filters** (Wireshark syntax) — Applied **after** capture to focus your view.
+
+\`\`\`bash
+# Show only HTTP requests
+http.request
+
+# Show DNS queries for a specific domain
+dns.qry.name contains "evil"
+
+# Show packets with TCP RST flag
+tcp.flags.reset == 1
+
+# Show traffic from a subnet
+ip.src == 10.0.0.0/8
+
+# Combine filters
+http.request.method == "POST" && ip.dst == 203.0.113.50
+\`\`\`
+
+## Key Wireshark Features for NSM
+
+### Follow TCP Stream
+Right-click a packet → Follow → TCP Stream to reconstruct the entire conversation in a readable format. This reveals:
+- HTTP request/response pairs
+- Login credentials in cleartext protocols
+- Command-and-control instructions
+- File transfers
+
+### Protocol Hierarchy
+Statistics → Protocol Hierarchy shows the distribution of protocols in the capture. Unusual protocols or unexpected proportions can indicate:
+- Tunneling (high DNS TXT traffic)
+- Unauthorized applications (BitTorrent on corporate network)
+- Beaconing (repetitive HTTP patterns)
+
+### Conversations View
+Statistics → Conversations groups traffic by endpoint pairs, showing:
+- Bytes transferred per conversation
+- Duration of each session
+- Relative data flow (upload vs. download asymmetry)
+
+### Expert Information
+Analyze → Expert Information highlights protocol violations, retransmissions, and anomalies that Wireshark automatically detects.
+
+## Performance Tips for Large PCAPs
+
+- Use **capture filters** to reduce file size at collection time
+- Split large captures with \`editcap\` before opening
+- Use **tshark** (CLI version) for automated analysis of large datasets
+- Disable name resolution for faster loading: Edit → Preferences → Name Resolution
+`,
+    keyTakeaways: [
+      "Capture filters (BPF) limit what's recorded; display filters refine what you see",
+      "Follow TCP Stream reconstructs full conversations for analysis",
+      "Protocol Hierarchy reveals unusual traffic patterns",
+      "tshark provides command-line analysis for large-scale PCAP processing"
+    ],
+    practicalExercise: {
+      title: "Wireshark Filter Mastery",
+      description: "Practice writing filters to isolate specific traffic patterns.",
+      steps: [
+        "Download a sample PCAP from malware-traffic-analysis.net",
+        "Use display filters to isolate all DNS queries",
+        "Follow a TCP stream to reconstruct an HTTP session",
+        "Use Statistics → Conversations to find the top talkers",
+        "Check Expert Information for any protocol anomalies"
+      ]
+    }
+  },
+  {
+    id: "2.2",
+    courseId: "network-security-monitoring",
+    title: "TCP Stream Analysis",
+    content: `
+# TCP Stream Analysis
+
+Understanding TCP streams is fundamental to NSM. Every file download, web request, email, and C2 command travels inside a TCP stream. Reconstructing and analyzing these streams reveals the actual content and intent of network communications.
+
+## TCP Connection Lifecycle
+
+### Establishment (Three-Way Handshake)
+\`\`\`
+[SYN]     → Client initiates, proposes sequence number
+[SYN-ACK] → Server acknowledges, proposes its own sequence number
+[ACK]     → Client confirms, connection established
+\`\`\`
+
+### Data Transfer
+Packets carry application data with sequence and acknowledgment numbers ensuring ordered, reliable delivery.
+
+### Termination
+\`\`\`
+[FIN-ACK] → Initiator signals it's done sending
+[ACK]     → Receiver acknowledges
+[FIN-ACK] → Receiver signals it's also done
+[ACK]     → Final acknowledgment
+\`\`\`
+
+## Analyzing TCP Streams in Wireshark
+
+### Stream Reconstruction
+Right-click any packet → Follow → TCP Stream
+
+Wireshark color-codes the stream:
+- **Red text** — Data sent by the client
+- **Blue text** — Data sent by the server
+
+### What to Look For
+
+**Cleartext credentials:**
+\`\`\`
+USER admin
+PASS P@ssw0rd123
+\`\`\`
+
+**HTTP command-and-control:**
+\`\`\`
+POST /beacon HTTP/1.1
+Host: c2server.evil.com
+Content-Type: application/octet-stream
+
+[encoded commands]
+\`\`\`
+
+**File transfers:**
+Look for magic bytes indicating file types:
+- \`PK\` → ZIP archive
+- \`MZ\` → Windows executable (PE)
+- \`%PDF\` → PDF document
+- \`\\x89PNG\` → PNG image
+
+## Identifying Retransmissions and Issues
+
+### TCP Retransmission
+When a sender doesn't receive an ACK within the expected timeout, it resends the packet. High retransmission rates may indicate:
+- Network congestion or packet loss
+- Firewall interference
+- Active interference (man-in-the-middle)
+
+### Duplicate ACKs
+Three or more duplicate ACKs trigger fast retransmission. This is normal TCP behavior but excessive occurrences suggest network problems.
+
+### Zero Window
+The receiver advertises a window size of zero, telling the sender to stop transmitting. Could indicate:
+- Overwhelmed application
+- Resource exhaustion attack
+- Legitimate server overload
+
+### RST (Reset) Analysis
+Unexpected RSTs may indicate:
+- Firewall blocking connections
+- Port not open on target
+- IPS intervention
+- Connection hijacking attempt
+
+## Session Reconstruction for Forensics
+
+### Extracting Files from TCP Streams
+In Wireshark: File → Export Objects → HTTP/SMB/TFTP
+
+This extracts files transferred during the capture, allowing you to:
+- Recover downloaded malware samples
+- Identify exfiltrated documents
+- Examine phishing payloads
+
+### Timeline Construction
+Order TCP streams chronologically to build a narrative:
+1. Initial connection to C2 domain
+2. Retrieval of secondary payload
+3. Lateral movement attempts
+4. Data staging and exfiltration
+`,
+    keyTakeaways: [
+      "TCP stream reconstruction reveals the actual content of network communications",
+      "Retransmissions and RSTs can indicate network interference or attacks",
+      "File magic bytes in streams help identify transferred file types",
+      "Chronological stream analysis builds forensic timelines"
+    ]
+  },
+  {
+    id: "2.3",
+    courseId: "network-security-monitoring",
+    title: "DNS Traffic Analysis",
+    content: `
+# DNS Traffic Analysis
+
+DNS is often called the "Rosetta Stone" of NSM because nearly every network action — legitimate or malicious — begins with a DNS query. Attackers exploit DNS because it's almost always allowed through firewalls and rarely inspected deeply.
+
+## Normal DNS Behavior Baseline
+
+Understanding what normal DNS looks like is critical for spotting abuse:
+
+- Queries typically go to **internal recursive resolvers** (not directly to the internet)
+- Most queries are **A** or **AAAA** records
+- Response sizes are usually **small** (< 512 bytes for UDP)
+- Query rates per host are typically **10-50 per minute** during active use
+
+## DNS Tunneling
+
+DNS tunneling encodes data within DNS queries and responses to create a covert communication channel.
+
+### How It Works
+\`\`\`
+# Outbound data (exfiltration)
+Query: dGhpcyBpcyBzZWNyZXQ.tunnel.evil.com  (base64 in subdomain)
+
+# Inbound data (C2 commands)  
+Response: TXT "execute payload stage2"
+\`\`\`
+
+### Detection Indicators
+1. **Unusually long subdomain labels** (>30 characters)
+2. **High entropy in subdomain strings** (random-looking characters)
+3. **Excessive TXT record queries** to a single domain
+4. **High query volume** to a single domain (>100 queries/hour)
+5. **Large DNS response sizes** (>512 bytes, especially TXT records)
+
+### Tools That Use DNS Tunneling
+- **iodine** — IP-over-DNS tunneling
+- **dnscat2** — Encrypted C2 over DNS
+- **Cobalt Strike** — DNS beacon mode
+
+## Domain Generation Algorithms (DGA)
+
+Malware uses DGAs to generate pseudo-random domain names, making C2 infrastructure harder to block.
+
+### DGA Characteristics
+\`\`\`
+# Example DGA domains
+xk3mq9f2.com
+a7bv2nx8.net
+p4cw6yt1.org
+\`\`\`
+
+### Detection Methods
+- **Entropy scoring** — DGA domains have higher character randomness than legitimate domains
+- **N-gram analysis** — Character frequency patterns differ from natural language
+- **NXDomain response rate** — DGA domains mostly fail resolution, generating many NXDomain responses
+- **Machine learning classifiers** — Trained on known DGA vs. legitimate domain datasets
+
+## DNS-Based Data Exfiltration
+
+### Subdomain Encoding
+\`\`\`
+# Stolen credit card encoded in DNS queries
+NDUzMi0xMjM0LTU2NzgtOTAxMg.exfil.attacker.com
+# Decoded: 4532-1234-5678-9012
+\`\`\`
+
+### Detection Strategy
+Monitor for:
+- Queries to domains with **no corresponding web content**
+- **Asymmetric query patterns** — many queries, few unique domains
+- Domains registered **recently** (< 30 days)
+- Traffic to **non-corporate DNS servers** (DNS over HTTPS/TLS to bypass monitoring)
+
+## Fast Flux DNS
+
+Attackers rapidly rotate IP addresses associated with a domain to evade IP-based blocking.
+
+### Indicators
+- **Very low TTL values** (< 300 seconds)
+- **Multiple A records** in a single response
+- **IP addresses in different /24 subnets** for the same domain
+- **IPs distributed across multiple countries**
+
+## Practical DNS Analysis with Zeek
+
+Zeek's \`dns.log\` provides structured DNS data perfect for analysis:
+\`\`\`
+# Fields: ts, uid, id.orig_h, id.resp_h, query, qtype, rcode, answers
+\`\`\`
+
+Key fields to analyze:
+- \`query\` — The domain being queried
+- \`qtype_name\` — Query type (A, TXT, MX, etc.)
+- \`rcode_name\` — Response code (NOERROR, NXDOMAIN, SERVFAIL)
+- \`answers\` — Resolved IP addresses
+`,
+    keyTakeaways: [
+      "DNS tunneling encodes data in subdomain labels and TXT records",
+      "DGA detection relies on entropy scoring and NXDomain analysis",
+      "DNS exfiltration is hard to block because DNS is allowed through most firewalls",
+      "Baselining normal DNS behavior is essential for anomaly detection"
+    ],
+    practicalExercise: {
+      title: "DNS Threat Detection Lab",
+      description: "Analyze DNS logs to identify tunneling and DGA activity.",
+      steps: [
+        "Calculate the entropy of subdomain strings in a DNS log sample",
+        "Identify domains with unusually high query volumes (>100/hour)",
+        "Find TXT record queries and evaluate their response sizes",
+        "Look for NXDomain clustering that may indicate DGA activity"
+      ]
+    }
+  },
+  {
+    id: "2.4",
+    courseId: "network-security-monitoring",
+    title: "HTTP/HTTPS Traffic Inspection",
+    content: `
+# HTTP/HTTPS Traffic Inspection
+
+HTTP remains one of the most important protocols for NSM because web traffic carries everything from legitimate browsing to C2 communications, payload delivery, and data exfiltration.
+
+## HTTP Request Analysis
+
+### Anatomy of an HTTP Request
+\`\`\`
+GET /updates/check?id=AB38F2 HTTP/1.1
+Host: cdn-update.legitimate-looking.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: application/json
+Cookie: session=a3f8c2d9e1b7
+Connection: keep-alive
+\`\`\`
+
+### Red Flags in HTTP Requests
+
+**Suspicious User-Agent Strings:**
+- Default library strings: \`python-requests/2.28\`, \`curl/7.84\`, \`Java/11.0.2\`
+- Empty User-Agent headers
+- Mismatched User-Agent (claims Chrome but uses HTTP/1.0)
+- Known malware families: \`MSIE 6.0\` in 2024 is highly suspicious
+
+**URL Indicators:**
+- Base64-encoded parameters: \`/page?data=dGVzdA==\`
+- Excessive URL length (>2000 characters)
+- Encoded shell commands in query strings
+- File extensions disguised in URLs (\`.php\` masquerading as \`.jpg\`)
+
+**HTTP Methods:**
+- \`CONNECT\` — May indicate proxy tunneling
+- \`PUT\`/\`DELETE\` — Webshell upload or manipulation
+- \`OPTIONS\` — Reconnaissance against web servers
+
+## HTTPS and TLS Inspection
+
+### The Encryption Challenge
+HTTPS encrypts the HTTP payload, making traditional content inspection impossible. However, NSM can still extract valuable metadata:
+
+### JA3/JA3S Fingerprinting
+JA3 creates a fingerprint of the TLS client hello message, uniquely identifying applications regardless of IP or domain.
+
+\`\`\`
+# Example JA3 hash
+JA3: e7d705a3286e19ea42f587b344ee6865
+
+# Known mapping
+Cobalt Strike Beacon: 72a589da586844d7f0818ce684948eea
+Metasploit Meterpreter: e35df3e00ca4ef31d42b34bebaa2f86e
+\`\`\`
+
+### Certificate Analysis
+Even with encrypted traffic, TLS certificates reveal:
+- **Subject/Issuer** — Self-signed certificates are suspicious
+- **Validity period** — Short-lived certificates from Let's Encrypt used by attackers
+- **Subject Alternative Names (SAN)** — Domains associated with the certificate
+- **Certificate chain** — Intermediate CA anomalies
+
+### Server Name Indication (SNI)
+The SNI field in the TLS ClientHello is sent in cleartext, revealing the intended destination domain even in encrypted traffic.
+
+## Detecting Web-Based Attacks
+
+### Web Shells
+Indicators in HTTP traffic:
+- POST requests to unusual file paths (\`/uploads/shell.php\`)
+- Small request, large response (executing commands)
+- Regular intervals suggesting automated access
+- Parameters containing system commands
+
+### Credential Harvesting
+- POST requests to domains mimicking legitimate login pages
+- Form data containing usernames and passwords in cleartext HTTP
+- Redirects from phishing pages to legitimate sites after submission
+
+### Drive-By Downloads
+- HTTP responses with executable content types (\`application/x-msdownload\`)
+- JavaScript heavily obfuscated with \`eval()\` chains
+- Iframe injections pointing to exploit kit landing pages
+
+## HTTP/2 and HTTP/3 Considerations
+
+Modern protocols introduce new challenges for NSM:
+- **HTTP/2** — Binary protocol with multiplexed streams; harder to inspect
+- **HTTP/3** — Uses QUIC over UDP; traditional TCP-based tools may miss it
+- **Encrypted ClientHello (ECH)** — Hides SNI, further reducing metadata visibility
+`,
+    keyTakeaways: [
+      "User-Agent analysis and URL inspection reveal malicious HTTP traffic",
+      "JA3 fingerprinting identifies applications even in encrypted traffic",
+      "TLS certificates and SNI provide metadata even when payloads are encrypted",
+      "HTTP/2 and HTTP/3 introduce new challenges for traditional NSM inspection"
+    ]
+  },
+  {
+    id: "2.5",
+    courseId: "network-security-monitoring",
+    title: "Hands-On: PCAP Analysis Lab",
+    content: `
+# Hands-On: PCAP Analysis Lab
+
+This lab walks you through investigating a realistic network intrusion captured in PCAP format. You'll apply the skills from previous lessons to identify the attack chain from initial compromise to data exfiltration.
+
+## Scenario
+
+Your organization's NSM sensors captured suspicious traffic on the corporate network over a 2-hour window. The security team flagged anomalous DNS activity and outbound HTTP connections to an unknown domain. Your task is to analyze the PCAP and reconstruct the attack timeline.
+
+## Lab Methodology
+
+### Step 1: Initial Overview
+
+Start with a high-level understanding of the capture:
+
+\`\`\`bash
+# Using tshark for quick statistics
+tshark -r suspicious.pcap -q -z conv,ip
+tshark -r suspicious.pcap -q -z endpoints,ip
+tshark -r suspicious.pcap -q -z io,stat,60
+\`\`\`
+
+**Questions to answer:**
+- How many unique IP addresses are in the capture?
+- What is the time span of the capture?
+- Which IP addresses generated the most traffic?
+
+### Step 2: Protocol Distribution
+
+\`\`\`bash
+tshark -r suspicious.pcap -q -z io,phs
+\`\`\`
+
+Check for:
+- Unusual protocol ratios (high DNS percentage may indicate tunneling)
+- Unexpected protocols (IRC, Tor, non-standard ports)
+- Encrypted vs. unencrypted traffic balance
+
+### Step 3: DNS Investigation
+
+\`\`\`bash
+# Extract all unique queried domains
+tshark -r suspicious.pcap -Y "dns.flags.response == 0" -T fields -e dns.qry.name | sort -u
+
+# Find domains with NXDomain responses
+tshark -r suspicious.pcap -Y "dns.flags.rcode == 3" -T fields -e dns.qry.name | sort | uniq -c | sort -rn
+\`\`\`
+
+**Look for:**
+- DGA-style domain names (high entropy, random characters)
+- Queries to newly registered domains
+- Abnormal TXT record queries
+
+### Step 4: HTTP Analysis
+
+\`\`\`bash
+# Extract HTTP requests
+tshark -r suspicious.pcap -Y "http.request" -T fields -e ip.src -e http.host -e http.request.uri -e http.user_agent
+
+# Export HTTP objects
+tshark -r suspicious.pcap --export-objects http,./exported_files/
+\`\`\`
+
+**Examine:**
+- Downloaded executables or scripts
+- POST requests with encoded data
+- Suspicious User-Agent strings
+
+### Step 5: Connection Pattern Analysis
+
+\`\`\`bash
+# Find long-duration connections (potential C2)
+tshark -r suspicious.pcap -q -z conv,tcp | sort -t '|' -k5 -rn | head -20
+
+# Find connections to non-standard ports
+tshark -r suspicious.pcap -Y "tcp.dstport > 1024 && tcp.dstport != 8080 && tcp.dstport != 8443" -T fields -e ip.dst -e tcp.dstport | sort -u
+\`\`\`
+
+### Step 6: Timeline Construction
+
+Build a chronological narrative:
+
+| Time | Source | Destination | Activity |
+|------|--------|-------------|----------|
+| T+0 | 10.0.1.50 | dns-server | DNS query for phishing domain |
+| T+2 | 10.0.1.50 | 203.0.113.10 | HTTP GET of malicious document |
+| T+5 | 10.0.1.50 | 198.51.100.25 | HTTPS C2 beacon initiated |
+| T+30 | 10.0.1.50 | 10.0.1.0/24 | Internal scanning begins |
+| T+90 | 10.0.1.50 | 198.51.100.25 | Large outbound data transfer |
+
+### Step 7: Indicator Extraction
+
+Document all Indicators of Compromise (IOCs):
+- Malicious IP addresses and domains
+- File hashes of downloaded malware
+- JA3 fingerprints
+- User-Agent strings
+- URL patterns
+
+## Report Template
+
+\`\`\`markdown
+## Incident Summary
+- **Date/Time:** [timestamp range]
+- **Affected Host:** [IP and hostname]
+- **Attack Type:** [classification]
+
+## Attack Chain
+1. Initial Access: [description]
+2. Execution: [description]
+3. C2 Communication: [description]
+4. Lateral Movement: [description]
+5. Exfiltration: [description]
+
+## Indicators of Compromise
+| Type | Value | Context |
+|------|-------|---------|
+
+## Recommendations
+1. [Immediate containment actions]
+2. [Detection rule improvements]
+3. [Long-term mitigations]
+\`\`\`
+`,
+    keyTakeaways: [
+      "Start PCAP analysis with a broad overview before diving into specifics",
+      "DNS and HTTP analysis often reveal the attack's initial stages",
+      "Timeline construction helps reconstruct the full attack chain",
+      "Documenting IOCs enables detection of similar future attacks"
+    ],
+    practicalExercise: {
+      title: "Full PCAP Investigation",
+      description: "Analyze a sample PCAP from start to finish using the methodology above.",
+      steps: [
+        "Download a challenge PCAP from malware-traffic-analysis.net",
+        "Run the initial statistics commands to get a capture overview",
+        "Investigate DNS queries for suspicious domains",
+        "Examine HTTP objects for malicious files",
+        "Build a complete timeline and write an incident summary"
+      ]
+    }
+  },
+
+  // Module 3: Intrusion Detection with Suricata
+  {
+    id: "3.1",
+    courseId: "network-security-monitoring",
+    title: "Suricata Architecture & Setup",
+    content: `
+# Suricata Architecture & Setup
+
+Suricata is a high-performance, open-source network threat detection engine capable of real-time intrusion detection (IDS), inline intrusion prevention (IPS), network security monitoring, and offline PCAP processing.
+
+## Suricata vs. Snort
+
+| Feature | Suricata | Snort |
+|---------|----------|-------|
+| Multi-threading | Native | Limited (Snort 3 improved) |
+| Protocol parsing | Built-in parsers | Preprocessors |
+| File extraction | Native | Plugin required |
+| Output formats | JSON (EVE) | Unified2, text |
+| Lua scripting | Supported | Supported (Snort 3) |
+| HTTP parsing | libhtp | HTTP Inspect |
+| Rule compatibility | Snort-compatible + extensions | Native |
+
+## Architecture Overview
+
+### Processing Pipeline
+\`\`\`
+Packet Capture (AF_PACKET/PF_RING/DPDK)
+    ↓
+Decode (Ethernet, IPv4/6, TCP, UDP)
+    ↓
+Stream Tracking (TCP reassembly)
+    ↓
+Application Layer Parsing (HTTP, DNS, TLS, SMB, etc.)
+    ↓
+Detection Engine (Rule matching)
+    ↓
+Output (EVE JSON, alerts, logs)
+\`\`\`
+
+### Multi-Threading Model
+Suricata distributes work across CPU cores:
+- **Receive threads** — Capture packets from NICs
+- **Detect threads** — Apply rules to packets/flows
+- **Output threads** — Write results to disk
+
+## Installation
+
+### Ubuntu/Debian
+\`\`\`bash
+sudo apt update
+sudo apt install suricata suricata-update
+
+# Verify installation
+suricata --build-info
+suricata -V
+\`\`\`
+
+### Initial Configuration
+
+The main configuration file is \`/etc/suricata/suricata.yaml\`:
+
+\`\`\`yaml
+# Define your network
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+# Capture settings
+af-packet:
+  - interface: eth0
+    threads: auto
+    cluster-type: cluster_flow
+
+# Output configuration
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - http
+        - dns
+        - tls
+        - files
+        - flow
+\`\`\`
+
+## Rule Management with suricata-update
+
+\`\`\`bash
+# Update rules from default sources
+sudo suricata-update
+
+# List available rule sources
+sudo suricata-update list-sources
+
+# Enable a specific source
+sudo suricata-update enable-source et/open
+
+# Test configuration
+sudo suricata -T -c /etc/suricata/suricata.yaml
+
+# Restart Suricata
+sudo systemctl restart suricata
+\`\`\`
+
+## Running Modes
+
+### Live Capture (IDS)
+\`\`\`bash
+sudo suricata -c /etc/suricata/suricata.yaml -i eth0
+\`\`\`
+
+### Offline PCAP Analysis
+\`\`\`bash
+sudo suricata -c /etc/suricata/suricata.yaml -r capture.pcap
+\`\`\`
+
+### Inline IPS Mode
+\`\`\`bash
+sudo suricata -c /etc/suricata/suricata.yaml --af-packet -D
+\`\`\`
+
+## EVE JSON Output
+
+Suricata's EVE (Extensible Event Format) produces structured JSON for each event:
+
+\`\`\`json
+{
+  "timestamp": "2024-01-15T10:30:45.123456",
+  "event_type": "alert",
+  "src_ip": "10.0.1.50",
+  "dest_ip": "203.0.113.10",
+  "alert": {
+    "signature_id": 2024897,
+    "signature": "ET MALWARE Win32/Emotet CnC Activity",
+    "severity": 1,
+    "category": "A Network Trojan was detected"
   }
+}
+\`\`\`
+`,
+    keyTakeaways: [
+      "Suricata provides multi-threaded IDS/IPS with native protocol parsing",
+      "HOME_NET configuration is critical — defines what Suricata considers 'internal'",
+      "EVE JSON output integrates seamlessly with SIEM platforms",
+      "suricata-update manages rule sources and keeps signatures current"
+    ]
+  },
+  {
+    id: "3.2",
+    courseId: "network-security-monitoring",
+    title: "Writing Suricata Rules",
+    content: `
+# Writing Suricata Rules
+
+Custom Suricata rules let you detect threats specific to your environment. Understanding rule syntax is essential for any NSM analyst — it transforms you from a consumer of generic signatures into a creator of targeted detections.
+
+## Rule Structure
+
+Every Suricata rule has two parts: the **header** and the **options**.
+
+\`\`\`
+action protocol src_ip src_port -> dst_ip dst_port (options;)
+\`\`\`
+
+### Header Components
+
+**Action:**
+- \`alert\` — Generate an alert
+- \`pass\` — Allow the traffic
+- \`drop\` — Block the traffic (IPS mode)
+- \`reject\` — Block and send RST/ICMP unreachable
+
+**Protocol:** \`tcp\`, \`udp\`, \`icmp\`, \`http\`, \`dns\`, \`tls\`, \`smb\`, \`ssh\`
+
+**Direction:**
+- \`->\` — Unidirectional (source to destination)
+- \`<>\` — Bidirectional
+
+## Essential Rule Keywords
+
+### Content Matching
+\`\`\`bash
+# Match exact byte sequence in payload
+alert http any any -> any any (msg:"Possible webshell"; content:"cmd.exe"; sid:1000001;)
+
+# Case-insensitive match
+alert http any any -> any any (content:"eval"; nocase; sid:1000002;)
+
+# Multiple content matches (AND logic)
+alert http any any -> any any (content:"POST"; content:"/upload.php"; sid:1000003;)
+
+# Negated content
+alert dns any any -> any any (content:!".internal.corp"; sid:1000004;)
+\`\`\`
+
+### HTTP-Specific Keywords
+\`\`\`bash
+# Match on HTTP URI
+alert http $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"Suspicious URL pattern";
+  http.uri; content:"/gate.php";
+  sid:1000010;
+)
+
+# Match on HTTP method
+alert http any any -> any any (
+  msg:"HTTP PUT detected";
+  http.method; content:"PUT";
+  sid:1000011;
+)
+
+# Match on User-Agent
+alert http $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"Python requests library";
+  http.user_agent; content:"python-requests";
+  sid:1000012;
+)
+
+# Match on HTTP header
+alert http any any -> any any (
+  msg:"Suspicious Content-Type";
+  http.header; content:"application/x-msdownload";
+  sid:1000013;
+)
+\`\`\`
+
+### DNS-Specific Keywords
+\`\`\`bash
+# Match DNS query
+alert dns $HOME_NET any -> any any (
+  msg:"DNS query for known malicious domain";
+  dns.query; content:"evil-c2.com";
+  sid:1000020;
+)
+\`\`\`
+
+### TLS-Specific Keywords
+\`\`\`bash
+# Match TLS SNI
+alert tls $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"TLS connection to suspicious domain";
+  tls.sni; content:"malware-cdn.com";
+  sid:1000030;
+)
+
+# Match JA3 fingerprint
+alert tls $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"Known Cobalt Strike JA3";
+  ja3.hash; content:"72a589da586844d7f0818ce684948eea";
+  sid:1000031;
+)
+\`\`\`
+
+### Flow Keywords
+\`\`\`bash
+# Only match on established connections from client to server
+alert http $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"Outbound POST to suspicious path";
+  flow:established,to_server;
+  http.method; content:"POST";
+  http.uri; content:"/beacon";
+  sid:1000040;
+)
+\`\`\`
+
+### Threshold and Rate Limiting
+\`\`\`bash
+# Alert only after 10 occurrences in 60 seconds
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+  msg:"Possible port scan detected";
+  flags:S;
+  threshold: type threshold, track by_src, count 10, seconds 60;
+  sid:1000050;
+)
+\`\`\`
+
+## Rule Best Practices
+
+1. **Always set \`flow:established\`** for TCP rules to avoid matching on incomplete handshakes
+2. **Use protocol-specific keywords** (\`http.uri\` instead of generic \`content\`) for performance
+3. **Order content matches** from most unique to least unique
+4. **Include descriptive \`msg\` fields** with enough context for analysts
+5. **Use \`classtype\` and \`metadata\`** for alert categorization
+6. **Test rules** against known-good PCAPs to verify no false positives
+`,
+    keyTakeaways: [
+      "Rules consist of a header (action, protocol, addresses) and options (detection logic)",
+      "Protocol-specific keywords (http.uri, dns.query, tls.sni) are more efficient than generic content matching",
+      "Flow keywords prevent false positives from incomplete connections",
+      "Thresholds control alert volume for noisy detections"
+    ],
+    practicalExercise: {
+      title: "Write Custom Detection Rules",
+      description: "Create Suricata rules for specific threat scenarios.",
+      steps: [
+        "Write a rule to detect HTTP POST requests to '/gate.php' or '/panel.php'",
+        "Create a DNS detection rule for queries containing '.onion.' in the domain",
+        "Write a TLS rule using JA3 fingerprinting for a known malware family",
+        "Add threshold logic to a port scan detection rule",
+        "Test your rules against a sample PCAP using suricata -r"
+      ]
+    }
+  },
+  {
+    id: "3.3",
+    courseId: "network-security-monitoring",
+    title: "Alert Management & Tuning",
+    content: `
+# Alert Management & Tuning
+
+Raw Suricata output can generate thousands of alerts per day, many of them false positives. Effective alert management separates actionable intelligence from noise, making the difference between a functional NSM program and alert fatigue.
+
+## Understanding Alert Volume
+
+A typical enterprise Suricata deployment may generate:
+- **10,000+ alerts/day** from default rulesets
+- **80-90% are informational** or false positives
+- **5-15% require review** for context
+- **1-5% are true positives** requiring action
+
+## Suppression
+
+Suppress rules silence specific alerts without disabling the detection entirely.
+
+\`\`\`yaml
+# suppress.yaml - Suppress alerts for known-good traffic
+
+# Suppress by source IP (known vulnerability scanner)
+suppress:
+  - gen-id: 1
+    sig-id: 2024897
+    track: by_src
+    ip: 10.0.5.50  # Internal vulnerability scanner
+
+# Suppress by destination (known CDN)
+  - gen-id: 1
+    sig-id: 2100498
+    track: by_dst
+    ip: 104.16.0.0/12  # Cloudflare range
+\`\`\`
+
+## Threshold Configuration
+
+### Types of Thresholds
+
+**Limit** — Alert only N times within a time window:
+\`\`\`
+threshold: type limit, track by_src, count 1, seconds 3600
+# Alert once per hour per source IP
+\`\`\`
+
+**Threshold** — Alert after N occurrences:
+\`\`\`
+threshold: type threshold, track by_src, count 50, seconds 60
+# Alert only if 50+ events in 60 seconds
+\`\`\`
+
+**Both** — Combination of limit and threshold:
+\`\`\`
+threshold: type both, track by_src, count 50, seconds 60
+# Alert once when 50 events occur in 60 seconds
+\`\`\`
+
+## Rule Categorization Strategy
+
+### Priority Tiers
+
+| Priority | Category | Examples | Response |
+|----------|----------|----------|----------|
+| 1 - Critical | Active exploitation | Webshell, C2, ransomware | Immediate investigation |
+| 2 - High | Suspicious activity | Unusual outbound, scanning | Investigate within 1 hour |
+| 3 - Medium | Policy violations | Unauthorized software, P2P | Review within 24 hours |
+| 4 - Low | Informational | Protocol anomalies | Batch review weekly |
+
+### Implementing Priorities
+\`\`\`bash
+alert http $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"HIGH - Possible C2 beacon detected";
+  priority:1;
+  classtype:trojan-activity;
+  ...
+)
+\`\`\`
+
+## False Positive Investigation Workflow
+
+1. **Review the alert details** — Source/dest IPs, payload, timestamps
+2. **Check the context** — Is the source a known server? Is the destination a CDN?
+3. **Validate the rule** — Does the rule logic match the actual threat?
+4. **Check PCAP** — Examine the full packet capture for the flagged traffic
+5. **Decision:**
+   - **True positive** → Escalate for incident response
+   - **False positive, fixable** → Tune the rule (add exceptions)
+   - **False positive, systematic** → Suppress for the specific source/destination
+   - **Benign true positive** → Policy decision (accept or block)
+
+## SIEM Integration
+
+Forward Suricata EVE JSON to your SIEM for correlation:
+
+\`\`\`yaml
+# suricata.yaml - Syslog output
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: syslog
+      identity: suricata
+      facility: local5
+      level: info
+\`\`\`
+
+Or use Filebeat to ship EVE JSON:
+\`\`\`yaml
+# filebeat.yml
+filebeat.inputs:
+  - type: log
+    paths:
+      - /var/log/suricata/eve.json
+    json.keys_under_root: true
+\`\`\`
+`,
+    keyTakeaways: [
+      "80-90% of raw alerts are typically false positives or informational",
+      "Suppression silences specific source/destination combinations without disabling rules",
+      "Threshold types (limit, threshold, both) control alert frequency",
+      "A structured triage workflow prevents alert fatigue"
+    ]
+  },
+  {
+    id: "3.4",
+    courseId: "network-security-monitoring",
+    title: "Hands-On: Custom Detection Rules",
+    content: `
+# Hands-On: Custom Detection Rules
+
+In this lab, you'll write, test, and refine Suricata rules to detect real attack patterns. Each scenario presents a threat you must detect using the rule syntax and keywords covered in previous lessons.
+
+## Scenario 1: Detecting a Web Shell
+
+**Threat:** An attacker has uploaded a PHP web shell to a compromised web server. The shell communicates via HTTP POST requests to \`/images/thumb.php\` with the parameter \`cmd=\`.
+
+**Write the rule:**
+\`\`\`bash
+alert http $EXTERNAL_NET any -> $HOME_NET any (
+  msg:"ATTACK - PHP Webshell Command Execution";
+  flow:established,to_server;
+  http.method; content:"POST";
+  http.uri; content:"/images/thumb.php";
+  http.request_body; content:"cmd=";
+  classtype:web-application-attack;
+  priority:1;
+  sid:3000001; rev:1;
+)
+\`\`\`
+
+**Testing:**
+\`\`\`bash
+# Create a test PCAP with the malicious pattern
+curl -X POST "http://target/images/thumb.php" -d "cmd=whoami" --proxy http://127.0.0.1:8080
+
+# Run Suricata against the capture
+suricata -r test_webshell.pcap -c /etc/suricata/suricata.yaml -l ./output/
+
+# Check results
+cat output/eve.json | jq 'select(.event_type=="alert")'
+\`\`\`
+
+## Scenario 2: Detecting DNS Exfiltration
+
+**Threat:** Malware on an internal host is encoding stolen data as base64 in DNS subdomain queries to \`exfil.attacker.com\`.
+
+\`\`\`bash
+alert dns $HOME_NET any -> any any (
+  msg:"EXFIL - Possible DNS data exfiltration";
+  dns.query; content:".exfil.attacker.com";
+  dns.query; pcre:"/^[a-zA-Z0-9+\\/=]{20,}\\./";
+  flow:to_server;
+  classtype:bad-unknown;
+  priority:1;
+  sid:3000010; rev:1;
+)
+\`\`\`
+
+## Scenario 3: Detecting Cobalt Strike Beacon
+
+**Threat:** A Cobalt Strike beacon communicates via HTTPS with a distinctive JA3 fingerprint and checkin path.
+
+\`\`\`bash
+# JA3-based detection
+alert tls $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"C2 - Cobalt Strike JA3 Fingerprint";
+  ja3.hash; content:"72a589da586844d7f0818ce684948eea";
+  flow:established,to_server;
+  classtype:trojan-activity;
+  priority:1;
+  sid:3000020; rev:1;
+)
+
+# HTTP-based detection (if decrypted)
+alert http $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"C2 - Cobalt Strike HTTP Beacon Checkin";
+  flow:established,to_server;
+  http.method; content:"GET";
+  http.uri; pcre:"/\\/[a-zA-Z]{4}$/";
+  http.header; content:"Cookie:";
+  http.cookie; pcre:"/^[a-zA-Z0-9+\\/]{60,}={0,2}$/";
+  classtype:trojan-activity;
+  priority:1;
+  sid:3000021; rev:1;
+)
+\`\`\`
+
+## Scenario 4: Detecting Internal Port Scanning
+
+**Threat:** An compromised host is scanning the internal network for open SMB ports.
+
+\`\`\`bash
+alert tcp $HOME_NET any -> $HOME_NET 445 (
+  msg:"RECON - Internal SMB port scan";
+  flags:S,12;
+  flow:to_server;
+  threshold: type both, track by_src, count 20, seconds 30;
+  classtype:attempted-recon;
+  priority:2;
+  sid:3000030; rev:1;
+)
+\`\`\`
+
+## Rule Testing Methodology
+
+1. **Positive test** — Confirm the rule fires on known-malicious traffic
+2. **Negative test** — Verify no alerts on known-good traffic
+3. **Performance test** — Measure rule impact on Suricata throughput
+4. **Edge cases** — Test with variations of the attack pattern
+
+\`\`\`bash
+# Run Suricata with your custom rules
+suricata -r test.pcap -S custom.rules -l ./results/
+
+# Count alerts by signature
+cat results/eve.json | jq -r 'select(.event_type=="alert") | .alert.signature' | sort | uniq -c | sort -rn
+
+# Check for performance impact
+suricata --engine-analysis -c /etc/suricata/suricata.yaml -S custom.rules
+\`\`\`
+`,
+    keyTakeaways: [
+      "Combine protocol-specific keywords for precise detection with minimal false positives",
+      "PCRE (regex) enables flexible pattern matching for encoded or variable data",
+      "Always test rules with both positive (malicious) and negative (benign) samples",
+      "Threshold rules are essential for detecting scanning and brute-force patterns"
+    ]
+  },
+
+  // Module 4: Network Metadata with Zeek
+  {
+    id: "4.1",
+    courseId: "network-security-monitoring",
+    title: "Introduction to Zeek",
+    content: `
+# Introduction to Zeek
+
+Zeek (formerly Bro) is a powerful network analysis framework that transforms raw traffic into structured, high-fidelity metadata logs. While Suricata excels at signature-based detection, Zeek focuses on **understanding network behavior** by creating detailed records of every connection, protocol transaction, and file transfer.
+
+## Zeek's Philosophy
+
+Zeek doesn't just look for known-bad patterns — it creates a comprehensive record of **everything happening on the network**, enabling analysts to ask questions about traffic that no one anticipated.
+
+> "The network doesn't lie. Every connection, every query, every file transfer leaves a trace in Zeek's logs."
+
+## Zeek vs. Suricata
+
+| Capability | Zeek | Suricata |
+|-----------|------|----------|
+| Primary focus | Metadata generation | Signature matching |
+| Detection model | Behavioral / anomaly | Signature-based |
+| Output | Structured logs (TSV/JSON) | EVE JSON alerts |
+| Customization | Zeek scripting language | Rule syntax |
+| File extraction | Native | Native |
+| Protocol parsing | Deep, extensible | Deep, rule-driven |
+| Best for | Hunting, forensics | Real-time alerting |
+
+## How Zeek Works
+
+### Processing Pipeline
+\`\`\`
+Raw Packets → Protocol Analysis → Event Generation → Script Execution → Log Output
+\`\`\`
+
+1. **Packet capture** — Zeek reads from a live interface or PCAP file
+2. **Protocol analysis** — Built-in analyzers parse HTTP, DNS, TLS, SMB, SSH, and 40+ protocols
+3. **Event generation** — Protocol events trigger Zeek's event engine
+4. **Script execution** — User and built-in scripts process events and generate log entries
+5. **Log output** — Structured logs written to disk in TSV or JSON format
+
+## Installation and Basic Usage
+
+### Installation
+\`\`\`bash
+# Ubuntu/Debian
+sudo apt install zeek
+
+# Or from source for latest version
+git clone --recursive https://github.com/zeek/zeek
+cd zeek && ./configure && make && sudo make install
+\`\`\`
+
+### Running Zeek
+
+**Live capture:**
+\`\`\`bash
+sudo zeek -i eth0
+\`\`\`
+
+**Offline PCAP analysis:**
+\`\`\`bash
+zeek -r suspicious.pcap
+\`\`\`
+
+**With specific scripts:**
+\`\`\`bash
+zeek -r capture.pcap local "Site::local_nets += { 10.0.0.0/8 }"
+\`\`\`
+
+### Default Output
+Running Zeek generates multiple log files in the current directory:
+\`\`\`
+conn.log    — Every network connection
+dns.log     — Every DNS transaction
+http.log    — Every HTTP request/response
+ssl.log     — Every TLS handshake
+files.log   — Every file observed on the network
+weird.log   — Protocol violations and anomalies
+notice.log  — Zeek-generated alerts
+\`\`\`
+
+## The Unique Identifier (UID)
+
+Every connection in Zeek gets a unique identifier that links related logs:
+
+\`\`\`
+conn.log:   uid=CYFva91FUpDMcMPCcd  (TCP connection to web server)
+http.log:   uid=CYFva91FUpDMcMPCcd  (HTTP GET request within that connection)
+files.log:  uid=CYFva91FUpDMcMPCcd  (File downloaded in that HTTP response)
+\`\`\`
+
+This UID correlation is one of Zeek's most powerful features — you can trace a file download back to the exact HTTP request and TCP connection that carried it.
+`,
+    keyTakeaways: [
+      "Zeek generates structured metadata logs for every network connection and protocol transaction",
+      "UIDs link related logs across conn, http, dns, files, and other log types",
+      "Zeek complements Suricata — metadata for hunting vs. signatures for alerting",
+      "The Zeek scripting language enables custom behavioral detections"
+    ]
+  },
+  {
+    id: "4.2",
+    courseId: "network-security-monitoring",
+    title: "Zeek Log Types",
+    content: `
+# Zeek Log Types
+
+Zeek produces dozens of log types, each capturing specific protocol or connection metadata. Mastering these logs is essential for effective threat hunting and forensic analysis.
+
+## conn.log — The Foundation
+
+Every network connection generates a \`conn.log\` entry. This is the most important log for NSM.
+
+### Key Fields
+\`\`\`
+ts          — Timestamp of first packet
+uid         — Unique connection identifier
+id.orig_h   — Source IP
+id.orig_p   — Source port
+id.resp_h   — Destination IP
+id.resp_p   — Destination port
+proto       — Protocol (tcp/udp/icmp)
+service     — Application protocol detected
+duration    — Connection duration
+orig_bytes  — Bytes sent by originator
+resp_bytes  — Bytes sent by responder
+conn_state  — Connection state code
+\`\`\`
+
+### Connection States
+| Code | Meaning | Security Relevance |
+|------|---------|-------------------|
+| SF | Normal completion | Expected |
+| S0 | SYN sent, no reply | Port scanning |
+| REJ | Connection rejected | Port closed |
+| S1 | SYN-ACK seen, no final ACK | Possible SYN scan |
+| RSTO | RST from originator | Aborted by client |
+| RSTR | RST from responder | Blocked by firewall |
+| OTH | No SYN seen | Mid-stream capture |
+
+### Hunting with conn.log
+\`\`\`bash
+# Find long-duration connections (potential C2 beacons)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p duration | awk '$5 > 3600'
+
+# Find large outbound transfers (exfiltration)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h orig_bytes | awk '$4 > 10000000' | sort -t$'\\t' -k4 -rn
+
+# Find connections with S0 state (scanning)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p conn_state | grep 'S0' | cut -f2 | sort | uniq -c | sort -rn
+\`\`\`
+
+## dns.log
+
+### Key Fields
+\`\`\`
+query       — Domain name queried
+qtype_name  — Query type (A, AAAA, TXT, MX)
+rcode_name  — Response code (NOERROR, NXDOMAIN)
+answers     — Resolved addresses
+TTLs        — Time-to-live values
+\`\`\`
+
+### Hunting with dns.log
+\`\`\`bash
+# Find domains with high query volume
+cat dns.log | zeek-cut query | sort | uniq -c | sort -rn | head -20
+
+# Find TXT record queries (tunneling indicator)
+cat dns.log | zeek-cut ts id.orig_h query qtype_name | grep 'TXT'
+
+# Find NXDomain responses (DGA indicator)
+cat dns.log | zeek-cut ts id.orig_h query rcode_name | grep 'NXDOMAIN' | cut -f2 | sort | uniq -c | sort -rn
+\`\`\`
+
+## http.log
+
+### Key Fields
+\`\`\`
+method          — HTTP method (GET, POST, PUT)
+host            — Host header value
+uri             — Request URI
+user_agent      — Client User-Agent string
+status_code     — Server response code
+response_body_len — Size of response body
+\`\`\`
+
+## ssl.log
+
+### Key Fields
+\`\`\`
+server_name     — SNI (Server Name Indication)
+subject         — Certificate subject
+issuer          — Certificate issuer
+ja3             — JA3 client fingerprint
+ja3s            — JA3S server fingerprint
+validation_status — Certificate validation result
+\`\`\`
+
+## files.log
+
+### Key Fields
+\`\`\`
+fuid            — File unique identifier
+source          — Protocol that carried the file
+mime_type       — File MIME type
+filename        — Observed filename
+md5/sha1/sha256 — File hashes
+total_bytes     — File size
+\`\`\`
+
+### Hunting with files.log
+\`\`\`bash
+# Find executable downloads
+cat files.log | zeek-cut ts source mime_type filename total_bytes | grep -i 'executable\\|x-dosexec'
+
+# Find large file transfers
+cat files.log | zeek-cut ts source filename total_bytes | awk '$4 > 50000000'
+\`\`\`
+
+## weird.log — Protocol Anomalies
+
+Zeek logs protocol violations and unexpected behaviors here. These "weirds" often indicate:
+- Evasion techniques
+- Misconfigured applications
+- Active exploitation attempts
+`,
+    keyTakeaways: [
+      "conn.log is the foundation — every connection is recorded with state, duration, and bytes",
+      "Connection state codes (S0, SF, REJ) quickly identify scanning and anomalies",
+      "zeek-cut is the essential tool for extracting and analyzing specific log fields",
+      "files.log captures hashes of every file transferred on the network"
+    ]
+  },
+  {
+    id: "4.3",
+    courseId: "network-security-monitoring",
+    title: "Threat Hunting with Zeek Logs",
+    content: `
+# Threat Hunting with Zeek Logs
+
+Zeek's structured logs are purpose-built for proactive threat hunting. Unlike alert-driven detection, hunting uses Zeek metadata to discover threats that no signature anticipated.
+
+## Hunting for C2 Beacons
+
+C2 beacons exhibit predictable patterns: regular intervals, consistent payload sizes, and communication to a small set of external IPs.
+
+### Beacon Detection Method
+\`\`\`bash
+# Step 1: Find hosts with many connections to single destinations
+cat conn.log | zeek-cut id.orig_h id.resp_h id.resp_p | sort | uniq -c | sort -rn | head -30
+
+# Step 2: Analyze connection timing for regularity
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p | \\
+  grep "10.0.1.50.*203.0.113.10" | \\
+  awk '{print $1}' | \\
+  awk 'NR>1{print $1-prev}{prev=$1}'
+# Regular intervals (e.g., 60.0, 60.1, 59.9) = beaconing
+\`\`\`
+
+### Beacon Characteristics
+| Indicator | Legitimate Traffic | C2 Beacon |
+|-----------|-------------------|-----------|
+| Timing | Variable | Regular (±1-2 sec) |
+| Payload size | Variable | Consistent |
+| Connection count | Varies | High over time |
+| Duration | Short bursts | Persistent |
+
+## Hunting for Lateral Movement
+
+### SMB/Windows Lateral Movement
+\`\`\`bash
+# Unusual SMB connections between workstations
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p service | \\
+  grep -E '\\s445\\s' | \\
+  grep -v "fileserver\\|dc01"  # Exclude known file servers
+
+# RDP connections from non-admin workstations
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p | \\
+  grep '\\s3389\\s' | \\
+  grep -v "admin-workstation"
+\`\`\`
+
+### Kerberoasting Indicators
+Look for unusual Kerberos ticket requests in \`kerberos.log\`:
+- Service tickets requested for service accounts
+- Requests from hosts that don't normally use those services
+- High volume of TGS requests from a single source
+
+## Hunting for Data Exfiltration
+
+### Volume-Based Detection
+\`\`\`bash
+# Find connections with asymmetric data transfer (upload >> download)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h orig_bytes resp_bytes | \\
+  awk '$4 > 1000000 && $4 > $5*10'  # Originator sent 10x more than received
+
+# Daily upload volume per host
+cat conn.log | zeek-cut ts id.orig_h orig_bytes | \\
+  awk '{split($1,a,"T"); date=a[1]; bytes[$2][date]+=$3} END {for(h in bytes) for(d in bytes[h]) print d, h, bytes[h][d]}' | \\
+  sort -k3 -rn
+\`\`\`
+
+### Protocol-Based Exfiltration
+\`\`\`bash
+# DNS exfiltration — high query length entropy
+cat dns.log | zeek-cut query | awk '{print length($1), $1}' | sort -rn | head -20
+
+# ICMP tunneling — large ICMP packets
+cat conn.log | zeek-cut ts id.orig_h id.resp_h proto orig_bytes | \\
+  grep 'icmp' | awk '$5 > 100'
+\`\`\`
+
+## Hunting for Reconnaissance
+
+\`\`\`bash
+# Horizontal port scanning — one source, many destinations, same port
+cat conn.log | zeek-cut id.orig_h id.resp_h id.resp_p conn_state | \\
+  grep 'S0\\|REJ' | \\
+  awk '{print $1, $3}' | sort | uniq -c | sort -rn | head -20
+
+# Vertical port scanning — one source, one destination, many ports
+cat conn.log | zeek-cut id.orig_h id.resp_h id.resp_p conn_state | \\
+  grep 'S0\\|REJ' | \\
+  awk '{key=$1" "$2; ports[key]++} END {for(k in ports) print ports[k], k}' | \\
+  sort -rn | head -20
+\`\`\`
+
+## Building a Hunting Playbook
+
+Document each hunt with:
+1. **Hypothesis** — What threat are you looking for?
+2. **Data sources** — Which Zeek logs are relevant?
+3. **Queries** — The specific commands to run
+4. **Indicators** — What constitutes a positive finding?
+5. **Response** — What action to take on a discovery
+`,
+    keyTakeaways: [
+      "Beacon detection relies on connection timing regularity and consistent payload sizes",
+      "Lateral movement hunting focuses on unusual internal-to-internal connections",
+      "Data exfiltration detection uses volume asymmetry and protocol tunneling indicators",
+      "Documenting hunts as playbooks ensures repeatable, systematic hunting"
+    ]
+  },
+  {
+    id: "4.4",
+    courseId: "network-security-monitoring",
+    title: "Zeek Scripting Basics",
+    content: `
+# Zeek Scripting Basics
+
+Zeek's scripting language transforms it from a passive logger into an active detection platform. Scripts let you create custom detections, enrich logs, and automate analysis that would require complex external tooling.
+
+## Zeek Script Structure
+
+Every Zeek script follows a pattern: define what events you care about, then specify what to do when those events occur.
+
+\`\`\`zeek
+# my_detection.zeek
+
+@load base/frameworks/notice
+
+module MyDetections;
+
+export {
+    redef enum Notice::Type += {
+        Suspicious_DNS_Query,
+    };
+}
+
+event dns_request(c: connection, msg: dns_msg, query: string, qtype: count, qclass: count)
+{
+    if ( |query| > 60 )
+    {
+        NOTICE([
+            $note = Suspicious_DNS_Query,
+            $conn = c,
+            $msg = fmt("Long DNS query detected: %s (%d chars)", query, |query|),
+            $identifier = cat(c$id$orig_h, query)
+        ]);
+    }
+}
+\`\`\`
+
+## Core Language Concepts
+
+### Variables and Types
+\`\`\`zeek
+local my_string: string = "hello";
+local my_count: count = 42;
+local my_addr: addr = 10.0.0.1;
+local my_subnet: subnet = 10.0.0.0/8;
+local my_port: port = 443/tcp;
+local my_bool: bool = T;
+local my_time: time = network_time();
+local my_interval: interval = 5min;
+\`\`\`
+
+### Sets and Tables
+\`\`\`zeek
+# A set of known C2 domains
+global c2_domains: set[string] = {
+    "evil-c2.com",
+    "malware-cdn.net",
+    "bad-actor.org"
+};
+
+# A table tracking connection counts per IP
+global conn_count: table[addr] of count = table() &default=0;
+
+# Check membership
+if ( query in c2_domains )
+    print fmt("C2 domain detected: %s", query);
+\`\`\`
+
+### Events
+\`\`\`zeek
+# Connection established
+event connection_established(c: connection)
+{
+    if ( c$id$resp_p == 4444/tcp )
+        print fmt("Connection to suspicious port 4444 from %s", c$id$orig_h);
+}
+
+# HTTP request observed
+event http_request(c: connection, method: string, original_URI: string,
+                   unescaped_URI: string, version: string)
+{
+    if ( method == "POST" && /upload/ in unescaped_URI )
+        print fmt("File upload detected: %s -> %s%s", c$id$orig_h, c$http$host, unescaped_URI);
+}
+
+# New connection
+event new_connection(c: connection)
+{
+    conn_count[c$id$orig_h] += 1;
+}
+\`\`\`
+
+## Practical Detection Scripts
+
+### Detect Connections to Non-Standard Ports
+\`\`\`zeek
+event connection_established(c: connection)
+{
+    local resp_port = c$id$resp_p;
+    local service = c$conn$service;
+
+    # HTTP on non-standard ports
+    if ( service == "http" && resp_port != 80/tcp && resp_port != 8080/tcp )
+    {
+        NOTICE([
+            $note = Suspicious_Activity,
+            $conn = c,
+            $msg = fmt("HTTP on non-standard port %s", resp_port)
+        ]);
+    }
+}
+\`\`\`
+
+### Track Failed DNS Lookups Per Host
+\`\`\`zeek
+global nxdomain_count: table[addr] of count = table() &default=0;
+
+event dns_message(c: connection, is_orig: bool, msg: dns_msg, len: count)
+{
+    if ( ! is_orig && msg$rcode == 3 )  # NXDOMAIN
+    {
+        nxdomain_count[c$id$orig_h] += 1;
+
+        if ( nxdomain_count[c$id$orig_h] == 50 )
+        {
+            NOTICE([
+                $note = Suspicious_DNS_Query,
+                $conn = c,
+                $msg = fmt("Host %s generated 50+ NXDomain responses (possible DGA)",
+                           c$id$orig_h)
+            ]);
+        }
+    }
+}
+\`\`\`
+
+### Loading Custom Scripts
+\`\`\`bash
+# Run with a specific script
+zeek -r capture.pcap my_detection.zeek
+
+# Add to local.zeek for persistent loading
+echo "@load ./my_detection.zeek" >> /opt/zeek/share/zeek/site/local.zeek
+\`\`\`
+`,
+    keyTakeaways: [
+      "Zeek scripts respond to network events to create custom detections",
+      "Sets and tables enable tracking state across connections (e.g., counting NXDomains per host)",
+      "The Notice framework generates structured alerts from script detections",
+      "Scripts can be loaded persistently via local.zeek or per-run with -r"
+    ]
+  },
+
+  // Module 5: Network Attack Detection
+  {
+    id: "5.1",
+    courseId: "network-security-monitoring",
+    title: "Detecting Reconnaissance",
+    content: `
+# Detecting Reconnaissance
+
+Reconnaissance is typically the first phase of any network intrusion. Attackers probe the network to discover live hosts, open ports, running services, and potential vulnerabilities. Detecting reconnaissance early gives defenders a chance to respond before exploitation occurs.
+
+## Types of Network Reconnaissance
+
+### Passive Reconnaissance
+The attacker gathers information without directly interacting with target systems:
+- DNS record lookups, WHOIS queries, certificate transparency logs
+- **NSM detection:** Difficult — traffic looks like normal DNS queries
+
+### Active Reconnaissance
+Direct interaction with target systems to enumerate services:
+- Port scanning, banner grabbing, vulnerability scanning
+- **NSM detection:** Highly detectable through connection patterns
+
+## Port Scan Detection
+
+### Horizontal Scanning
+One source scans the same port across many hosts.
+
+**Zeek detection:**
+\`\`\`bash
+# Find sources connecting to port 445 on >10 unique destinations
+cat conn.log | zeek-cut id.orig_h id.resp_h id.resp_p conn_state | \\
+  awk '$3=="445" && ($4=="S0" || $4=="REJ")' | \\
+  cut -f1,2 | sort -u | cut -f1 | uniq -c | sort -rn | awk '$1 > 10'
+\`\`\`
+
+**Suricata rule:**
+\`\`\`bash
+alert tcp $HOME_NET any -> $HOME_NET 445 (
+  msg:"RECON - Horizontal SMB scan";
+  flags:S,12;
+  threshold: type both, track by_src, count 10, seconds 30;
+  sid:4000001; rev:1;
+)
+\`\`\`
+
+### Vertical Scanning
+One source scans many ports on a single host.
+
+\`\`\`bash
+# Find source-destination pairs with >50 unique destination ports
+cat conn.log | zeek-cut id.orig_h id.resp_h id.resp_p conn_state | \\
+  awk '$4=="S0" || $4=="REJ"' | \\
+  awk '{key=$1" "$2; ports[key][$3]=1} END {for(k in ports) {c=0; for(p in ports[k]) c++; if(c>50) print c, k}}' | \\
+  sort -rn
+\`\`\`
+
+### Nmap Scan Type Signatures
+
+| Scan Type | TCP Flags | Zeek conn_state | Detection |
+|-----------|-----------|-----------------|-----------|
+| SYN scan | SYN only | S0 | Half-open connections |
+| Connect scan | Full handshake | SF (short duration) | Rapid short connections |
+| FIN scan | FIN only | OTH | Unusual flag combination |
+| XMAS scan | FIN+PSH+URG | OTH | Unusual flag combination |
+| NULL scan | No flags | OTH | Empty TCP header |
+| ACK scan | ACK only | OTH | Unsolicited ACK |
+
+## Service Enumeration Detection
+
+### Banner Grabbing
+Attackers connect to services and read the banner (version string).
+
+**Indicators:**
+- Very short connection durations (< 1 second)
+- Connection followed by immediate RST
+- Sequential port connections from the same source
+
+### Version Detection (Nmap -sV)
+Nmap sends protocol-specific probes to identify service versions.
+
+**Indicators:**
+- Unusual protocol data on standard ports
+- Multiple probe patterns from the same source
+- Zeek's \`weird.log\` entries for protocol violations
+
+## DNS Reconnaissance
+
+\`\`\`bash
+# Zone transfer attempts (AXFR)
+cat dns.log | zeek-cut ts id.orig_h query qtype_name | grep 'AXFR'
+
+# Reverse DNS sweeps
+cat dns.log | zeek-cut ts id.orig_h query qtype_name | grep 'PTR' | \\
+  cut -f2 | sort | uniq -c | sort -rn | head -10
+\`\`\`
+
+## Building a Reconnaissance Alerting Pipeline
+
+1. **Detect** — Zeek logs + Suricata rules identify scanning
+2. **Enrich** — Add context: is the source internal or external? Known scanner?
+3. **Correlate** — Link scanning to subsequent exploitation attempts
+4. **Alert** — Priority based on target sensitivity and scan aggressiveness
+5. **Respond** — Block source, investigate target for compromise indicators
+`,
+    keyTakeaways: [
+      "Port scans are detectable through connection state analysis (S0, REJ patterns)",
+      "Horizontal scans target one port across many hosts; vertical scans target many ports on one host",
+      "Nmap scan types produce distinctive TCP flag combinations visible in Zeek logs",
+      "Correlating reconnaissance with subsequent activity reveals full attack chains"
+    ]
+  },
+  {
+    id: "5.2",
+    courseId: "network-security-monitoring",
+    title: "Detecting Command & Control",
+    content: `
+# Detecting Command & Control
+
+Command and Control (C2) is the attacker's lifeline to compromised systems. Detecting C2 communication is one of the highest-value activities in NSM because it reveals active compromises before significant damage occurs.
+
+## C2 Communication Patterns
+
+### HTTP/HTTPS Beaconing
+The most common C2 method uses standard web protocols to blend in.
+
+**Detection indicators:**
+- **Regular timing intervals** — Connections every 30-300 seconds with low jitter
+- **Consistent data sizes** — Heartbeat packets have similar sizes
+- **Unusual User-Agent** — Mismatched or uncommon browser strings
+- **Static URI patterns** — Repeated access to same path
+
+\`\`\`bash
+# Find beaconing in conn.log — regular intervals to same destination
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p | \\
+  awk '$4=="443"' | \\
+  awk '{key=$2" "$3; times[key][NR]=$1} END {
+    for(k in times) {
+      n=0; for(i in times[k]) n++;
+      if(n > 20) print n, k
+    }
+  }' | sort -rn
+\`\`\`
+
+### DNS-Based C2
+Uses DNS queries and responses as the communication channel.
+
+**Detection:**
+\`\`\`bash
+# Hosts with >100 DNS queries to a single domain
+cat dns.log | zeek-cut id.orig_h query | \\
+  awk '{split($2,a,"."); domain=a[length(a)-1]"."a[length(a)]; print $1, domain}' | \\
+  sort | uniq -c | sort -rn | awk '$1 > 100'
+\`\`\`
+
+### Encrypted Channels
+- **Domain fronting** — C2 traffic appears to go to legitimate CDNs
+- **Custom encryption** — Non-standard TLS implementations
+- **Steganography** — Data hidden in images or other media
+
+### JA3 Fingerprint Detection
+\`\`\`bash
+# Find uncommon JA3 hashes (potential custom C2 clients)
+cat ssl.log | zeek-cut ja3 | sort | uniq -c | sort -n | head -20
+# Low-count JA3 hashes warrant investigation
+\`\`\`
+
+## C2 Framework Signatures
+
+### Cobalt Strike
+- Default beacon paths: \`/visit.js\`, \`/load\`, \`/__utm.gif\`, \`/pixel\`
+- Malleable C2 profiles change indicators but JA3 often persists
+- Named pipe default: \`\\\\\\\\.\\\pipe\\\msagent_##\`
+
+### Metasploit/Meterpreter
+- Default LHOST/LPORT patterns
+- Staged payload delivery over HTTP
+- Reverse TCP/HTTP/HTTPS handler connections
+
+### Sliver
+- mTLS, WireGuard, HTTP/S, DNS implant types
+- Unique TLS certificate patterns
+- HTTP C2 uses custom encoding
+
+## Detecting C2 Over Allowed Protocols
+
+Attackers choose protocols likely to pass through firewalls:
+
+| Protocol | Why Attackers Use It | Detection Method |
+|----------|---------------------|------------------|
+| HTTPS (443) | Always allowed | JA3, certificate analysis, beacon timing |
+| DNS (53) | Rarely blocked | Query volume, entropy, TXT record analysis |
+| HTTP (80/443) | Standard web | URI patterns, User-Agent, timing |
+| WebSocket | Persistent | Unusual upgrade patterns, long-lived connections |
+
+## Building a C2 Detection Pipeline
+
+1. **JA3 monitoring** — Alert on known-malicious or extremely rare fingerprints
+2. **Beacon analysis** — Statistical analysis of connection timing regularity
+3. **Certificate monitoring** — Flag self-signed, recently issued, or uncommon CAs
+4. **DNS analytics** — Entropy scoring, query volume, response size analysis
+5. **Connection duration** — Flag unusually long-lived HTTPS connections
+`,
+    keyTakeaways: [
+      "C2 beacons are detectable through timing regularity and consistent payload sizes",
+      "JA3 fingerprinting identifies C2 frameworks even in encrypted traffic",
+      "DNS-based C2 uses high query volumes and encoded subdomain labels",
+      "Multi-layered detection (JA3 + timing + certificates) reduces evasion success"
+    ]
+  },
+  {
+    id: "5.3",
+    courseId: "network-security-monitoring",
+    title: "Detecting Lateral Movement",
+    content: `
+# Detecting Lateral Movement
+
+Lateral movement is how attackers expand their foothold from a single compromised host to other systems on the network. From an NSM perspective, lateral movement is highly detectable because it generates **unusual internal-to-internal traffic patterns**.
+
+## Why Network Detection Matters
+
+Endpoint detection may miss lateral movement when:
+- The attacker uses legitimate admin tools (Living off the Land)
+- EDR is not deployed on all systems (servers, legacy systems)
+- The attacker disables endpoint agents
+
+The network sees **every** connection, making NSM an essential detection layer.
+
+## Common Lateral Movement Techniques
+
+### SMB-Based Movement
+
+**PsExec / Remote Service Creation:**
+\`\`\`bash
+# Detect SMB connections from workstations to workstations (unusual)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p service | \\
+  awk '$4=="445" && $5~/smb/' | \\
+  grep -v "fileserver\\|domain-controller"
+
+# Look for SMB followed by service creation in smb_mapping.log
+cat smb_mapping.log | zeek-cut ts id.orig_h path | grep 'ADMIN\\$\\|IPC\\$\\|C\\$'
+\`\`\`
+
+**Indicators:**
+- Workstation-to-workstation SMB connections
+- Access to ADMIN$ or C$ shares
+- Executable files written to remote shares
+
+### RDP Lateral Movement
+
+\`\`\`bash
+# Find RDP connections between non-server hosts
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p duration | \\
+  awk '$4=="3389"' | \\
+  grep -v "jump-server\\|admin-ws"
+
+# Flag RDP sessions with unusual durations
+# Very short = reconnaissance, very long = interactive session
+\`\`\`
+
+### WinRM / PowerShell Remoting
+\`\`\`bash
+# WinRM uses ports 5985 (HTTP) and 5986 (HTTPS)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p orig_bytes resp_bytes | \\
+  awk '$4=="5985" || $4=="5986"'
+\`\`\`
+
+### Pass-the-Hash / Pass-the-Ticket
+Network-visible indicators:
+- NTLM authentication to multiple hosts from a single source in rapid succession
+- Kerberos ticket requests for services the user doesn't normally access
+- Authentication from unexpected source IPs for known accounts
+
+## Detection Strategies
+
+### Baseline Normal Internal Traffic
+Create a whitelist of expected internal communication patterns:
+
+\`\`\`bash
+# Build a baseline of normal internal connections over 30 days
+cat conn.log | zeek-cut id.orig_h id.resp_h id.resp_p | \\
+  sort -u > baseline_internal_comms.txt
+
+# Compare current traffic against baseline
+cat today_conn.log | zeek-cut id.orig_h id.resp_h id.resp_p | \\
+  sort -u | comm -13 baseline_internal_comms.txt - > new_connections.txt
+\`\`\`
+
+### Detect Unusual Authentication Patterns
+\`\`\`bash
+# Source IPs authenticating to multiple systems within a short window
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p | \\
+  awk '$4=="445" || $4=="3389" || $4=="5985"' | \\
+  awk '{src=$2; targets[src][$3]=1} END {
+    for(s in targets) {
+      c=0; for(t in targets[s]) c++;
+      if(c > 5) print c, s
+    }
+  }' | sort -rn
+\`\`\`
+
+### Honeypot Integration
+Deploy internal honeypots on ports commonly targeted during lateral movement:
+- SMB (445), RDP (3389), SSH (22), WinRM (5985)
+- Any connection to these honeypots is suspicious by definition
+`,
+    keyTakeaways: [
+      "Lateral movement creates unusual internal-to-internal traffic that NSM detects well",
+      "Workstation-to-workstation SMB/RDP connections are high-confidence indicators",
+      "Baselining normal internal traffic patterns reveals anomalous connections",
+      "Honeypots on common lateral movement ports provide high-fidelity alerts"
+    ]
+  },
+  {
+    id: "5.4",
+    courseId: "network-security-monitoring",
+    title: "Detecting Data Exfiltration",
+    content: `
+# Detecting Data Exfiltration
+
+Data exfiltration is often the attacker's ultimate objective — extracting sensitive data from the target environment. NSM is uniquely positioned to detect exfiltration because **all data must traverse the network** to leave the organization.
+
+## Exfiltration Methods and Detection
+
+### Direct Transfer (HTTP/HTTPS/FTP)
+
+The simplest method: upload data directly to an external server.
+
+**Detection:**
+\`\`\`bash
+# Large outbound transfers (>50MB)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h orig_bytes resp_bytes | \\
+  awk '$4 > 52428800' | sort -t$'\\t' -k4 -rn
+
+# Asymmetric connections — upload >> download (ratio > 10:1)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h orig_bytes resp_bytes | \\
+  awk '$4 > 0 && $5 > 0 && $4/$5 > 10 && $4 > 1000000'
+
+# HTTP POST with large body sizes
+cat http.log | zeek-cut ts id.orig_h host method request_body_len | \\
+  awk '$4=="POST" && $5 > 1000000' | sort -t$'\\t' -k5 -rn
+\`\`\`
+
+### DNS Exfiltration
+
+Data encoded in DNS queries bypasses most firewalls.
+
+**Detection:**
+\`\`\`bash
+# Total bytes encoded in DNS queries per source host
+cat dns.log | zeek-cut id.orig_h query | \\
+  awk '{split($2,a,"."); total=0; for(i=1;i<length(a)-1;i++) total+=length(a[i]); bytes[$1]+=total} \\
+  END {for(h in bytes) print bytes[h], h}' | sort -rn | head -20
+
+# Queries with high subdomain entropy
+# (requires external entropy calculation tool)
+\`\`\`
+
+### ICMP Tunneling
+
+Data hidden in ICMP echo request/reply payloads.
+
+\`\`\`bash
+# ICMP packets with large payloads
+cat conn.log | zeek-cut ts id.orig_h id.resp_h proto orig_bytes | \\
+  awk '$4=="icmp" && $5 > 64'  # Normal ping is ~64 bytes
+
+# Sustained ICMP sessions
+cat conn.log | zeek-cut ts id.orig_h id.resp_h proto duration orig_pkts | \\
+  awk '$4=="icmp" && $5 > 60'  # ICMP "sessions" lasting >60 seconds
+\`\`\`
+
+### Cloud Storage Exfiltration
+
+Attackers upload data to legitimate cloud services (Dropbox, Google Drive, OneDrive).
+
+**Detection challenges:**
+- Traffic goes to legitimate domains and IPs
+- HTTPS encryption hides content
+
+**What you can detect:**
+\`\`\`bash
+# Large uploads to cloud storage domains
+cat ssl.log | zeek-cut ts id.orig_h server_name | \\
+  grep -iE 'dropbox|drive.google|onedrive|mega.nz|wetransfer'
+
+# Cross-reference with conn.log for volume
+cat conn.log | zeek-cut ts id.orig_h id.resp_h orig_bytes | \\
+  # Join with ssl.log SNI data for cloud storage destinations
+\`\`\`
+
+### Steganography
+
+Data hidden within images, audio, or video files.
+
+**Detection is extremely difficult but watch for:**
+- Large image files being uploaded (especially PNGs with high file sizes)
+- Regular upload of media files to external hosts
+- File sizes that don't match expected dimensions
+
+## Building an Exfiltration Detection Strategy
+
+### Volume Thresholds
+Set alerts for outbound data exceeding normal baselines:
+- Per-host daily upload volume
+- Per-destination upload volume
+- Per-protocol upload volume
+
+### Time-Based Analysis
+Exfiltration often occurs outside business hours:
+\`\`\`bash
+# Connections with large uploads during off-hours (22:00-06:00)
+cat conn.log | zeek-cut ts id.orig_h id.resp_h orig_bytes | \\
+  awk '{split($1,a,"T"); split(a[2],b,":"); hour=int(b[1]); \\
+  if((hour >= 22 || hour < 6) && $4 > 10000000) print}'
+\`\`\`
+
+### DLP Integration
+Network-based DLP can inspect content for:
+- Credit card numbers, SSNs, and PII patterns
+- Document classification markings
+- Source code patterns
+- Database dump formats
+`,
+    keyTakeaways: [
+      "All exfiltration traverses the network, making NSM an essential detection layer",
+      "Volume asymmetry (upload >> download) is the primary indicator for direct transfer",
+      "DNS exfiltration encodes data in subdomain labels and is detectable through query analysis",
+      "Cloud storage exfiltration is harder to detect but SSL SNI reveals destinations"
+    ]
+  },
+
+  // Module 6: Practical NSM Operations
+  {
+    id: "6.1",
+    courseId: "network-security-monitoring",
+    title: "Building an NSM Workflow",
+    content: `
+# Building an NSM Workflow
+
+An effective NSM program integrates multiple tools into a cohesive workflow where each component feeds into the next. This lesson covers how to build a production-grade monitoring pipeline from packet capture to SIEM alerting.
+
+## The NSM Tool Stack
+
+\`\`\`
+┌──────────────────────────────────────────────┐
+│              Network Traffic                 │
+└──────────────┬───────────────────────────────┘
+               │
+    ┌──────────┴──────────┐
+    ▼                     ▼
+┌─────────┐        ┌──────────┐
+│ Suricata│        │   Zeek   │
+│  (IDS)  │        │(Metadata)│
+└────┬────┘        └────┬─────┘
+     │                  │
+     ▼                  ▼
+┌─────────────────────────────┐
+│     Log Aggregation         │
+│   (Filebeat / Logstash)     │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│   SIEM / Analytics Platform │
+│  (Elastic, Splunk, etc.)    │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│  Dashboards & Alerting      │
+│  Investigation & Response   │
+└─────────────────────────────┘
+\`\`\`
+
+## Integration Architecture
+
+### Sensor Configuration
+
+**Suricata → Filebeat → Elasticsearch:**
+\`\`\`yaml
+# filebeat.yml for Suricata
+filebeat.inputs:
+  - type: log
+    paths: ["/var/log/suricata/eve.json"]
+    json.keys_under_root: true
+    json.add_error_key: true
+
+output.elasticsearch:
+  hosts: ["siem.internal:9200"]
+  index: "suricata-%{+yyyy.MM.dd}"
+\`\`\`
+
+**Zeek → Filebeat → Elasticsearch:**
+\`\`\`yaml
+# filebeat.yml for Zeek
+filebeat.inputs:
+  - type: log
+    paths: ["/opt/zeek/logs/current/*.log"]
+    exclude_files: ['.*.swp']
+
+  # For JSON format Zeek logs
+  - type: log
+    paths: ["/opt/zeek/logs/current/*.log"]
+    json.keys_under_root: true
+
+output.elasticsearch:
+  hosts: ["siem.internal:9200"]
+  index: "zeek-%{+yyyy.MM.dd}"
+\`\`\`
+
+### PCAP Storage
+\`\`\`bash
+# Continuous capture with stenographer
+stenographer --config /etc/stenographer/config
+
+# Or with tcpdump for simpler setups
+tcpdump -i eth0 -G 3600 -w '/pcap/capture_%Y%m%d_%H%M%S.pcap' -z gzip
+\`\`\`
+
+## Dashboard Design
+
+### SOC Overview Dashboard
+Essential panels:
+1. **Alert volume timeline** — Suricata alerts over time (line chart)
+2. **Top alert signatures** — Most frequent detections (bar chart)
+3. **Top talkers** — Hosts generating most traffic (table)
+4. **Geographic map** — External IP locations (map visualization)
+5. **Protocol distribution** — Traffic by protocol (pie chart)
+
+### Investigation Dashboard
+For deep-diving into specific incidents:
+1. **Connection timeline** — All connections for a specific host
+2. **DNS queries** — Domains queried by the host
+3. **HTTP activity** — Web requests with URLs and responses
+4. **File transfers** — Files observed in traffic
+5. **Alert correlation** — Suricata alerts for the same host/connection
+
+## Alert Correlation
+
+### Cross-Tool Correlation
+Combine Suricata alerts with Zeek metadata for context:
+
+\`\`\`
+Suricata Alert: "ET MALWARE Win32/Emotet CnC Activity"
+  → Source: 10.0.1.50 → Dest: 203.0.113.10:443
+
+Zeek conn.log: Connection uid=CxK3a2, duration=45min, 2.3MB transferred
+Zeek ssl.log:  Self-signed certificate, JA3=e35df3e00ca4ef31d42b34bebaa2f86e
+Zeek dns.log:  Host resolved suspicious-update.com → 203.0.113.10
+Zeek http.log: POST /beacon every 60 seconds
+\`\`\`
+
+This correlation provides the analyst with a complete picture from a single alert.
+
+## Automation Opportunities
+
+1. **Auto-enrichment** — Add threat intelligence context to alerts automatically
+2. **Ticket creation** — High-priority alerts automatically create investigation tickets
+3. **Blocking** — Critical detections trigger automated firewall rules
+4. **Reporting** — Daily/weekly NSM summary reports generated automatically
+`,
+    keyTakeaways: [
+      "A complete NSM pipeline integrates Suricata, Zeek, PCAP storage, and SIEM",
+      "Filebeat bridges NSM sensors to centralized analytics platforms",
+      "Cross-tool correlation (Suricata alerts + Zeek metadata) provides investigation context",
+      "Dashboards should serve both SOC overview and deep-dive investigation needs"
+    ]
+  },
+  {
+    id: "6.2",
+    courseId: "network-security-monitoring",
+    title: "Network Forensics Basics",
+    content: `
+# Network Forensics Basics
+
+Network forensics is the capture, recording, and analysis of network traffic for the purpose of discovering the source of security attacks or incidents. As an NSM analyst, you bridge real-time monitoring and forensic investigation.
+
+## Evidence Preservation
+
+### Chain of Custody for Network Evidence
+
+1. **Capture integrity** — Use write-once media or hash verification for PCAPs
+2. **Timestamps** — Ensure NTP synchronization across all sensors
+3. **Documentation** — Record who captured what, when, and how
+4. **Hashing** — SHA-256 hash of all PCAP files upon capture
+
+\`\`\`bash
+# Hash a PCAP for integrity verification
+sha256sum evidence_capture.pcap > evidence_capture.pcap.sha256
+
+# Verify later
+sha256sum -c evidence_capture.pcap.sha256
+\`\`\`
+
+### Legal Considerations
+- Capture only what your organization's policy permits
+- Understand data retention requirements (regulatory, legal hold)
+- Be aware of encryption laws in your jurisdiction
+- Document your authority to capture and analyze traffic
+
+## Timeline Construction
+
+### Building a Network Timeline
+
+A network forensics timeline reconstructs events chronologically:
+
+\`\`\`
+2024-01-15 09:15:03  DNS query: suspicious-update.com (10.0.1.50)
+2024-01-15 09:15:04  TCP connection: 10.0.1.50 → 203.0.113.10:443 (TLS)
+2024-01-15 09:15:05  File download: update.exe (SHA256: a1b2c3...)
+2024-01-15 09:20:00  New outbound: 10.0.1.50 → 198.51.100.25:8443 (C2)
+2024-01-15 09:25:00  SMB: 10.0.1.50 → 10.0.1.100:445 (lateral movement)
+2024-01-15 09:30:00  SMB: 10.0.1.50 → 10.0.1.101:445 (lateral movement)
+2024-01-15 10:00:00  Large transfer: 10.0.1.101 → 198.51.100.25 (500MB)
+\`\`\`
+
+### Tools for Timeline Construction
+\`\`\`bash
+# Zeek provides timestamps in all logs
+cat conn.log dns.log http.log ssl.log | \\
+  grep "10.0.1.50" | sort -t$'\\t' -k1
+
+# tshark for PCAP-level timelines
+tshark -r evidence.pcap -Y "ip.addr==10.0.1.50" \\
+  -T fields -e frame.time -e ip.src -e ip.dst -e tcp.dstport -e http.host
+\`\`\`
+
+## Artifact Extraction
+
+### Extracting Files from PCAPs
+\`\`\`bash
+# Wireshark: File → Export Objects → HTTP
+# tshark equivalent:
+tshark -r evidence.pcap --export-objects http,./extracted_files/
+
+# Zeek file extraction
+zeek -r evidence.pcap /opt/zeek/share/zeek/policy/frameworks/files/extract-all-files.zeek
+ls extract_files/
+\`\`\`
+
+### Extracting Credentials
+\`\`\`bash
+# Find cleartext credentials in HTTP traffic
+tshark -r evidence.pcap -Y "http.request.method==POST" \\
+  -T fields -e http.host -e http.request.uri -e http.file_data
+
+# Find FTP credentials
+tshark -r evidence.pcap -Y "ftp.request.command==USER || ftp.request.command==PASS" \\
+  -T fields -e ftp.request.command -e ftp.request.arg
+\`\`\`
+
+### Extracting DNS History
+\`\`\`bash
+# Complete DNS history for a compromised host
+tshark -r evidence.pcap -Y "dns && ip.src==10.0.1.50" \\
+  -T fields -e frame.time -e dns.qry.name -e dns.a | sort -u
+\`\`\`
+
+## Reporting
+
+### Forensic Report Structure
+
+1. **Executive Summary** — Non-technical overview (1 paragraph)
+2. **Scope** — What was analyzed, time range, data sources
+3. **Methodology** — Tools and techniques used
+4. **Findings** — Chronological account with evidence references
+5. **Indicators of Compromise** — IP addresses, domains, file hashes
+6. **Impact Assessment** — What data was accessed or stolen
+7. **Recommendations** — Remediation and prevention measures
+8. **Evidence Inventory** — List of all evidence files with hashes
+
+### Key Reporting Principles
+- Present facts, not opinions
+- Reference specific evidence for every claim
+- Include timestamps with timezone information
+- Use screenshots and log excerpts to support findings
+- Maintain objectivity throughout the report
+`,
+    keyTakeaways: [
+      "Chain of custody requires hashing, timestamps, and documentation of all evidence",
+      "Timeline construction from Zeek logs and PCAPs reveals the full attack narrative",
+      "File extraction from PCAPs preserves malware samples and stolen documents",
+      "Forensic reports must reference specific evidence for every claim"
+    ]
+  },
+  {
+    id: "6.3",
+    courseId: "network-security-monitoring",
+    title: "NSM Best Practices",
+    content: `
+# NSM Best Practices
+
+Running an effective NSM program requires more than just deploying tools. This lesson covers operational best practices that keep your monitoring infrastructure reliable, efficient, and actionable.
+
+## Sensor Maintenance
+
+### Health Monitoring
+Monitor your NSM sensors as diligently as you monitor the network:
+
+\`\`\`bash
+# Suricata stats in EVE JSON
+cat eve.json | jq 'select(.event_type=="stats") | .stats.capture'
+# Watch for: kernel_drops, errors
+
+# Zeek capture loss
+cat capture_loss.log | zeek-cut ts peer gaps acks percent_lost
+# Alert if percent_lost > 0.1%
+
+# Disk usage monitoring
+df -h /var/log/suricata /opt/zeek/logs /pcap
+# Alert at 80% capacity
+\`\`\`
+
+### Capacity Planning
+
+| Metric | Monitor | Action Threshold |
+|--------|---------|-----------------|
+| Packet drops | capture_loss, kernel stats | > 0.1% |
+| CPU utilization | per-core usage | > 80% sustained |
+| Disk I/O | write throughput | > 80% capacity |
+| Storage | available space | < 20% remaining |
+| Memory | RSS of Suricata/Zeek | > 80% of available |
+
+### Scheduled Maintenance Tasks
+
+**Daily:**
+- Review sensor health metrics
+- Check for capture drops
+- Verify log ingestion in SIEM
+
+**Weekly:**
+- Update Suricata rules (\`suricata-update\`)
+- Review top alerts for tuning opportunities
+- Check PCAP storage retention
+
+**Monthly:**
+- Review and update HOME_NET definitions
+- Audit suppression rules — remove stale entries
+- Test sensor failover procedures
+- Update Zeek scripts and packages
+
+## Rule Management
+
+### Rule Lifecycle
+
+\`\`\`
+New Rule → Testing → Staging → Production → Tuning → Retirement
+\`\`\`
+
+1. **New Rule** — Write or import from threat intelligence
+2. **Testing** — Validate against known-good and known-bad PCAPs
+3. **Staging** — Deploy to a non-alerting sensor for false positive assessment
+4. **Production** — Enable alerting with appropriate priority
+5. **Tuning** — Add suppressions and thresholds based on operational feedback
+6. **Retirement** — Disable rules no longer relevant to the threat landscape
+
+### Version Control for Rules
+\`\`\`bash
+# Store custom rules in Git
+git init /etc/suricata/custom-rules/
+git add *.rules
+git commit -m "Initial custom rule set"
+
+# Track changes over time
+git log --oneline
+git diff HEAD~1 custom.rules
+\`\`\`
+
+## Operational Efficiency
+
+### Alert Prioritization Matrix
+
+| Confidence | Impact | Priority | SLA |
+|------------|--------|----------|-----|
+| High | High | P1 — Critical | 15 min |
+| High | Low | P2 — High | 1 hour |
+| Low | High | P2 — High | 1 hour |
+| Low | Low | P3 — Medium | 24 hours |
+
+### Metrics to Track
+
+**Detection Effectiveness:**
+- True positive rate per rule category
+- Mean time from compromise to detection
+- Coverage against MITRE ATT&CK techniques
+
+**Operational Health:**
+- Alert volume trends (increasing = tuning needed)
+- Analyst throughput (alerts triaged per shift)
+- False positive ratio per rule
+
+### Knowledge Management
+- Maintain a wiki of investigated alerts with outcomes
+- Document false positive patterns for new analyst onboarding
+- Create runbooks for common alert types
+- Record lessons learned from each incident
+
+## Network Changes and NSM Impact
+
+When the network changes, NSM must adapt:
+- **New subnets** → Update HOME_NET, add sensor coverage
+- **Cloud migration** → Deploy cloud-native NSM (VPC flow logs, cloud TAPs)
+- **Encryption adoption** → Shift from content to metadata analysis
+- **New applications** → Update protocol parsers and baselines
+`,
+    keyTakeaways: [
+      "Sensor health monitoring prevents silent detection gaps from packet drops",
+      "Rule lifecycle management ensures detections stay relevant and accurate",
+      "Version-controlled rules enable change tracking and rollback",
+      "NSM must continuously adapt to network architecture changes"
+    ]
+  },
+  {
+    id: "6.4",
+    courseId: "network-security-monitoring",
+    title: "Final Practical Challenge",
+    content: `
+# Final Practical Challenge
+
+This capstone exercise simulates a real-world network intrusion investigation. You'll use everything learned throughout this course — Wireshark, Suricata, Zeek, and your analytical skills — to investigate a multi-stage attack from initial compromise to data exfiltration.
+
+## Scenario
+
+**Date:** Monday, 9:00 AM
+**Alert:** Your SIEM generates a P2 alert: "Suricata: ET MALWARE Possible CnC Activity — 10.0.1.50 → 203.0.113.10:443"
+
+The security team has provided you with:
+1. Full PCAP capture from the perimeter sensor (2-hour window)
+2. Zeek logs from the same time period
+3. Suricata EVE JSON alerts
+
+Your mission: Determine the full scope of the incident.
+
+## Investigation Phases
+
+### Phase 1: Alert Triage (15 minutes)
+
+**Objective:** Validate the alert and determine initial scope.
+
+\`\`\`bash
+# Review the triggering Suricata alert
+cat eve.json | jq 'select(.alert.signature_id==XXXXXX)' | head -5
+
+# Check Zeek conn.log for the flagged connection
+cat conn.log | zeek-cut ts uid id.orig_h id.resp_h id.resp_p duration orig_bytes resp_bytes | \\
+  grep "10.0.1.50.*203.0.113.10"
+
+# Check ssl.log for certificate and JA3 details
+cat ssl.log | zeek-cut ts id.orig_h server_name subject issuer ja3 | \\
+  grep "10.0.1.50"
+\`\`\`
+
+**Questions to answer:**
+- Is this a true positive or false positive?
+- When did the suspicious connection first appear?
+- What does the TLS certificate reveal?
+
+### Phase 2: Scope Assessment (20 minutes)
+
+**Objective:** Determine how the compromise occurred and what else is affected.
+
+\`\`\`bash
+# What happened BEFORE the C2 connection? Look at DNS and HTTP
+cat dns.log | zeek-cut ts id.orig_h query answers | \\
+  grep "10.0.1.50" | sort -t$'\\t' -k1
+
+cat http.log | zeek-cut ts id.orig_h host uri method status_code | \\
+  grep "10.0.1.50" | sort -t$'\\t' -k1
+
+# Were any files downloaded?
+cat files.log | zeek-cut ts source mime_type filename sha256 | \\
+  grep -E "exe|dll|ps1|bat|vbs"
+
+# Check for lateral movement
+cat conn.log | zeek-cut ts id.orig_h id.resp_h id.resp_p conn_state | \\
+  awk '$2=="10.0.1.50" && ($4=="445" || $4=="3389" || $4=="5985")'
+\`\`\`
+
+### Phase 3: Deep Packet Analysis (20 minutes)
+
+**Objective:** Extract IOCs and understand attacker actions.
+
+\`\`\`bash
+# Open the PCAP in Wireshark
+# Filter: ip.addr == 10.0.1.50 && ip.addr == 203.0.113.10
+
+# Extract any HTTP objects
+tshark -r perimeter.pcap --export-objects http,./extracted/
+
+# Follow interesting TCP streams
+# Look for: cleartext commands, encoded payloads, file transfers
+
+# Hash all extracted files
+sha256sum extracted/*
+\`\`\`
+
+### Phase 4: Impact Assessment (15 minutes)
+
+**Objective:** Determine what data was accessed or stolen.
+
+\`\`\`bash
+# Check for data exfiltration — large outbound transfers
+cat conn.log | zeek-cut ts id.orig_h id.resp_h orig_bytes | \\
+  awk '$2~/10\\.0\\.1/' | sort -t$'\\t' -k4 -rn | head -20
+
+# Check DNS for exfiltration indicators
+cat dns.log | zeek-cut id.orig_h query | \\
+  awk '{if(length($2)>50) print}' | head -20
+
+# Identify all compromised hosts
+cat conn.log | zeek-cut id.orig_h id.resp_h id.resp_p | \\
+  awk '($2=="203.0.113.10" || $2=="198.51.100.25") && ($3=="443" || $3=="8443")' | \\
+  cut -f1 | sort -u
+\`\`\`
+
+### Phase 5: Report Writing (20 minutes)
+
+**Deliverables:**
+1. **Executive Summary** — One paragraph for leadership
+2. **Attack Timeline** — Minute-by-minute reconstruction
+3. **IOC Table** — All IP addresses, domains, file hashes
+4. **Impact Statement** — What data was at risk or confirmed stolen
+5. **Recommendations** — Immediate actions and long-term improvements
+
+## Grading Criteria
+
+| Area | Points | Criteria |
+|------|--------|----------|
+| Alert validation | 15 | Correctly identified true/false positive |
+| Timeline accuracy | 25 | Complete, chronological attack narrative |
+| IOC extraction | 20 | All indicators identified and documented |
+| Tool proficiency | 20 | Effective use of Wireshark, Zeek, Suricata |
+| Report quality | 20 | Clear, evidence-based, actionable |
+
+## Congratulations!
+
+By completing this challenge, you've demonstrated the core skills of a Network Security Monitoring analyst:
+- Alert triage and validation
+- Multi-tool investigation
+- Network forensic analysis
+- Evidence-based reporting
+
+These skills form the foundation for advanced roles in incident response, threat hunting, and security engineering.
+`,
+    keyTakeaways: [
+      "Real investigations follow a structured methodology: triage → scope → analyze → assess → report",
+      "Multi-tool correlation (Suricata + Zeek + Wireshark) provides the complete picture",
+      "Timeline construction is the core deliverable of any network forensic investigation",
+      "Reports must be evidence-based with specific references to logs and artifacts"
+    ]
+  },
 ];
 
 export const getLessonContent = (courseId: string, lessonId: string): LessonContent | undefined => {
