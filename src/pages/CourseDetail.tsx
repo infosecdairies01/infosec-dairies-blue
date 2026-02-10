@@ -253,6 +253,19 @@ const CourseDetail = () => {
                                   Locked
                                 </span>}
                             </div>)}
+
+                          {/* Take Quiz Button */}
+                          {module.quizId && (
+                            <div className="px-6 py-4 pl-7 border-t border-white/[0.06]">
+                              <button
+                                onClick={() => navigate(`/courses/${courseId}/quiz/${module.quizId}`)}
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary/10 hover:bg-primary/20 border border-primary/25 text-primary text-sm font-medium transition-all duration-200"
+                              >
+                                <FileQuestion className="w-4 h-4" />
+                                Take Quiz — {course.quizzes?.find(q => q.id === module.quizId)?.title || "Module Quiz"}
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </CollapsibleContent>
                     </div>
