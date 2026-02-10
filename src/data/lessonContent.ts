@@ -20450,6 +20450,1548 @@ These skills form the foundation for advanced roles in incident response, threat
       "Reports must be evidence-based with specific references to logs and artifacts"
     ]
   },
+  // ==========================================
+  // Incident Response Fundamentals Course
+  // ==========================================
+
+  // Module 1: IR Foundations & Frameworks
+  {
+    id: "1.1",
+    courseId: "incident-response",
+    title: "What is Incident Response?",
+    content: `
+# What is Incident Response?
+
+**Incident Response (IR)** is the organized approach to addressing and managing the aftermath of a security breach or cyberattack. The goal is to handle the situation in a way that limits damage, reduces recovery time and costs, and prevents future occurrences.
+
+## Events vs. Incidents
+
+Understanding the distinction is critical:
+
+| Term | Definition | Example |
+|------|-----------|---------|
+| **Event** | Any observable occurrence in a system or network | A user logging in, a firewall blocking a packet |
+| **Adverse Event** | An event with negative consequences | A system crash, a failed login attempt |
+| **Security Incident** | A violation or imminent threat of violation of security policies | Unauthorized access, data exfiltration, ransomware execution |
+
+> Not every event is an incident, but every incident starts as an event.
+
+## Why IR Matters
+
+Organizations without a formal IR capability face:
+- **63% higher breach costs** (IBM Cost of a Data Breach Report)
+- **Extended dwell times** averaging 200+ days before detection
+- **Regulatory penalties** for non-compliance with breach notification laws
+- **Reputational damage** that can persist for years
+
+## The IR Mission
+
+The core objectives of incident response are:
+
+1. **Minimize Impact** — Contain the threat before it spreads
+2. **Preserve Evidence** — Maintain chain of custody for potential legal proceedings
+3. **Restore Operations** — Return systems to a known-good state
+4. **Prevent Recurrence** — Implement controls to stop similar attacks
+5. **Meet Compliance** — Fulfill regulatory and contractual obligations
+
+## Types of Security Incidents
+
+Common incident categories include:
+
+- **Malware Infections**: Ransomware, trojans, worms, cryptominers
+- **Unauthorized Access**: Credential theft, privilege escalation, insider threats
+- **Data Breaches**: Exfiltration of PII, PHI, financial data, trade secrets
+- **Denial of Service**: Volumetric DDoS, application-layer attacks
+- **Web Application Attacks**: SQL injection, XSS, API abuse
+- **Social Engineering**: Phishing, business email compromise (BEC)
+- **Supply Chain Compromise**: Third-party software or service provider breaches
+
+## IR in the Security Ecosystem
+
+Incident response doesn't exist in isolation. It integrates with:
+
+- **Security Operations Center (SOC)**: Provides 24/7 monitoring and initial triage
+- **Threat Intelligence**: Informs detection and contextualizes threats
+- **Digital Forensics**: Provides deep-dive analysis of compromised systems
+- **Risk Management**: Feeds incident data into risk assessments
+- **Legal & Compliance**: Ensures regulatory obligations are met
+`,
+    keyTakeaways: [
+      "An incident is a violation of security policies, distinct from routine events",
+      "Formal IR programs significantly reduce breach costs and recovery time",
+      "IR objectives span containment, evidence preservation, restoration, and prevention",
+      "Incident response integrates with SOC, forensics, threat intelligence, and compliance functions"
+    ],
+    practicalExercise: {
+      title: "Incident Classification Exercise",
+      description: "Practice classifying security events into the correct incident categories.",
+      steps: [
+        "Review a list of 10 sample security events (failed logins, malware alerts, data access logs)",
+        "Classify each as Event, Adverse Event, or Security Incident",
+        "For each incident, assign a category (malware, unauthorized access, data breach, etc.)",
+        "Justify your classification with specific indicators",
+        "Compare your results with the answer key and identify any misclassifications"
+      ]
+    }
+  },
+  {
+    id: "1.2",
+    courseId: "incident-response",
+    title: "NIST IR Lifecycle",
+    content: `
+# NIST Incident Response Lifecycle
+
+The **NIST SP 800-61 Rev. 2** (Computer Security Incident Handling Guide) defines the industry-standard framework for incident response, organized into four phases that operate as a continuous cycle.
+
+## The Four Phases
+
+### Phase 1: Preparation
+
+Preparation is everything you do *before* an incident occurs:
+
+- **Develop IR policies and procedures** — Define what constitutes an incident, escalation paths, and authority levels
+- **Build the IR team** — Recruit, train, and equip responders
+- **Deploy monitoring tools** — SIEM, EDR, NDR, and logging infrastructure
+- **Create communication templates** — Pre-approved notifications for stakeholders, legal, media
+- **Conduct training and exercises** — Tabletop exercises, red team/blue team drills
+- **Establish baselines** — Know what "normal" looks like in your environment
+
+### Phase 2: Detection & Analysis
+
+The most technically challenging phase:
+
+\`\`\`
+Alert Triage Flow:
+  Alert Generated → Initial Assessment → Categorize & Prioritize
+                                              ↓
+                              False Positive → Close & Tune
+                                              ↓
+                              True Positive  → Investigate → Declare Incident
+\`\`\`
+
+Key activities:
+- **Monitor alert sources**: SIEM, EDR, IDS/IPS, user reports, threat intel feeds
+- **Correlate indicators**: Link related events across multiple data sources
+- **Determine scope**: Identify affected systems, accounts, and data
+- **Document everything**: Timestamps, actions taken, evidence collected
+
+### Phase 3: Containment, Eradication & Recovery
+
+Three sub-phases working together:
+
+| Sub-Phase | Goal | Example Actions |
+|-----------|------|----------------|
+| **Containment** | Stop the bleeding | Network isolation, credential reset, firewall rules |
+| **Eradication** | Remove the threat | Malware removal, patch vulnerabilities, close backdoors |
+| **Recovery** | Restore operations | Rebuild systems, restore from backups, validate integrity |
+
+### Phase 4: Post-Incident Activity
+
+Often the most neglected but most valuable phase:
+
+- **Lessons learned meeting** within 2 weeks of incident closure
+- **Incident report** documenting timeline, findings, and recommendations
+- **Update procedures** based on gaps identified
+- **Share intelligence** with ISACs and trusted partners
+
+## The Continuous Cycle
+
+\`\`\`
+  Preparation → Detection & Analysis → Containment/Eradication/Recovery
+       ↑                                              ↓
+       ←←←←←←← Post-Incident Activity ←←←←←←←←←←←←←←
+\`\`\`
+
+Each incident feeds lessons back into the Preparation phase, creating a cycle of continuous improvement.
+`,
+    keyTakeaways: [
+      "NIST SP 800-61 defines four phases: Preparation, Detection & Analysis, Containment/Eradication/Recovery, Post-Incident",
+      "Preparation is the foundation — without it, the other phases fail",
+      "Detection & Analysis is the most technically challenging phase",
+      "Post-Incident Activity closes the loop by feeding lessons back into Preparation"
+    ]
+  },
+  {
+    id: "1.3",
+    courseId: "incident-response",
+    title: "SANS PICERL Framework",
+    content: `
+# SANS PICERL Framework
+
+The **SANS Institute** defines a six-phase incident response model known as **PICERL**: Preparation, Identification, Containment, Eradication, Recovery, and Lessons Learned.
+
+## PICERL vs. NIST
+
+| SANS PICERL | NIST SP 800-61 | Key Difference |
+|-------------|----------------|----------------|
+| Preparation | Preparation | Essentially identical |
+| Identification | Detection & Analysis | SANS emphasizes confirming the incident |
+| Containment | Containment | SANS treats it as a standalone phase |
+| Eradication | Eradication | SANS separates eradication from recovery |
+| Recovery | Recovery | SANS separates recovery from eradication |
+| Lessons Learned | Post-Incident Activity | SANS focuses specifically on lessons learned |
+
+## When to Use Each Framework
+
+- **NIST**: Better for organizations needing formal compliance documentation and government alignment
+- **SANS**: Better for practitioners who want a step-by-step operational checklist
+- **Reality**: Most IR teams use a hybrid approach, adapting elements from both
+
+## Deep Dive: The Identification Phase
+
+SANS places special emphasis on **Identification** — confirming whether an event is truly an incident:
+
+1. **Gather information** from multiple sources (alerts, logs, user reports)
+2. **Correlate and analyze** to determine if malicious activity occurred
+3. **Determine scope** — how many systems, users, and data sets are affected?
+4. **Assign severity** using a defined classification matrix
+5. **Formally declare** the incident and activate the IR plan
+
+## Other IR Frameworks
+
+Beyond NIST and SANS, other frameworks include:
+
+- **ISO 27035** — International standard for information security incident management
+- **CISA Incident Response Playbooks** — Federal government-specific guidance
+- **MITRE ATT&CK** — Not an IR framework but essential for understanding adversary TTPs during investigation
+- **VERIS** — Vocabulary for Event Recording and Incident Sharing (used in Verizon DBIR)
+`,
+    keyTakeaways: [
+      "PICERL stands for Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned",
+      "SANS separates containment, eradication, and recovery into distinct phases unlike NIST",
+      "Most teams use a hybrid of NIST and SANS adapted to their organization",
+      "The Identification phase emphasizes confirming an event is a true incident before activating the full IR plan"
+    ]
+  },
+  {
+    id: "1.4",
+    courseId: "incident-response",
+    title: "Building an IR Team",
+    content: `
+# Building an Incident Response Team
+
+An effective IR team is more than just technical analysts — it's a cross-functional group with defined roles, clear authority, and practiced coordination.
+
+## IR Team Models
+
+| Model | Description | Best For |
+|-------|-----------|----------|
+| **Central IR Team** | Single team handles all incidents | Small to medium organizations |
+| **Distributed IR Team** | IR leads coordinate with department-level responders | Large enterprises with multiple business units |
+| **Hybrid / Virtual Team** | Core IR team augmented by on-call specialists | Organizations with diverse technical environments |
+| **Outsourced / Retainer** | Third-party IR firm on retainer | Organizations without in-house expertise |
+
+## Core IR Roles
+
+### IR Manager / Lead
+- Owns the IR plan and program
+- Has authority to make containment decisions
+- Interfaces with executive leadership and legal
+
+### Incident Handlers / Analysts
+- Perform triage, investigation, and containment
+- Operate forensic tools and analyze artifacts
+- Document findings and maintain evidence chain of custody
+
+### Forensic Analysts
+- Deep-dive analysis of compromised systems
+- Memory forensics, disk forensics, malware analysis
+- Expert witness preparation for legal proceedings
+
+### Threat Intelligence Analyst
+- Provides context on threat actors and TTPs
+- Correlates incident indicators with known campaigns
+- Produces actionable intelligence for detection tuning
+
+## The RACI Matrix
+
+For every IR activity, define who is:
+
+- **R**esponsible — Does the work
+- **A**ccountable — Owns the outcome (only one per activity)
+- **C**onsulted — Provides input
+- **I**nformed — Kept in the loop
+
+## Cross-Functional Stakeholders
+
+IR teams must coordinate with:
+
+- **Legal / General Counsel** — Breach notification, privilege, regulatory compliance
+- **HR** — Insider threat investigations, employee termination procedures
+- **Communications / PR** — Media statements, customer notifications
+- **IT Operations** — System access, network changes, service restoration
+- **Executive Leadership** — Strategic decisions, resource allocation, risk acceptance
+`,
+    keyTakeaways: [
+      "IR teams can be central, distributed, hybrid, or outsourced depending on organizational needs",
+      "Core roles include IR Manager, Incident Handlers, Forensic Analysts, and Threat Intel Analysts",
+      "A RACI matrix clarifies responsibility and accountability for every IR activity",
+      "Cross-functional coordination with legal, HR, communications, IT, and executives is essential"
+    ]
+  },
+
+  // Module 2: Preparation & Readiness
+  {
+    id: "2.1",
+    courseId: "incident-response",
+    title: "IR Policy & Plan Development",
+    content: `
+# IR Policy & Plan Development
+
+A well-crafted IR plan is the blueprint that transforms chaos into coordinated action during a security incident.
+
+## IR Policy vs. IR Plan vs. Playbook
+
+| Document | Purpose | Audience | Update Frequency |
+|----------|---------|----------|-----------------|
+| **IR Policy** | High-level mandate establishing the IR program | Executive leadership | Annually |
+| **IR Plan** | Detailed procedures for incident handling | IR team, IT staff | Semi-annually |
+| **Playbooks** | Step-by-step guides for specific incident types | Analysts, handlers | Quarterly or after incidents |
+
+## Essential IR Plan Components
+
+### 1. Scope and Authority
+- Define what constitutes a reportable incident
+- Establish who can declare an incident
+- Define authority levels for containment actions (e.g., "IR Lead can isolate any system without VP approval")
+
+### 2. Severity Classification
+
+\`\`\`
+Severity Matrix:
+  SEV-1 (Critical): Active data exfiltration, ransomware spreading, complete service outage
+  SEV-2 (High):     Confirmed compromise of critical systems, credential theft at scale
+  SEV-3 (Medium):   Malware on isolated system, phishing with credential harvest
+  SEV-4 (Low):      Blocked attack attempts, policy violations, suspicious but unconfirmed
+\`\`\`
+
+### 3. Escalation Procedures
+- Define trigger criteria for each escalation level
+- Include on-call schedules and backup contacts
+- Specify SLAs for response times per severity level
+
+### 4. Playbooks
+
+Every organization should have playbooks for their most common incident types:
+
+- **Ransomware Response** — Isolate, assess encryption scope, backup evaluation, negotiation framework
+- **Business Email Compromise** — Account lockdown, financial transaction review, wire recall procedures
+- **Data Breach** — Scope assessment, notification triggers, regulatory timelines
+- **Insider Threat** — HR coordination, evidence preservation, legal review
+- **DDoS Attack** — ISP coordination, CDN activation, traffic scrubbing
+
+### 5. Documentation Templates
+- Incident tracking forms
+- Evidence collection checklists
+- Timeline templates
+- Final report outlines
+`,
+    keyTakeaways: [
+      "Policies mandate the IR program; plans detail procedures; playbooks provide step-by-step guides",
+      "Severity classification (SEV-1 through SEV-4) drives escalation and resource allocation",
+      "Every organization needs playbooks for their most common incident types",
+      "Authority levels must be explicitly defined so responders can act decisively during crises"
+    ]
+  },
+  {
+    id: "2.2",
+    courseId: "incident-response",
+    title: "Communication Plans",
+    content: `
+# Communication Plans
+
+Effective communication during an incident is as critical as the technical response. Poor communication leads to confusion, delayed decisions, and regulatory violations.
+
+## Communication Channels
+
+### Internal Communications
+- **War Room** — Dedicated physical or virtual space for IR team coordination
+- **Secure Chat** — Out-of-band communication (assume compromised systems may be monitored)
+- **Bridge Calls** — Scheduled check-ins with stakeholders during active incidents
+- **Status Dashboard** — Real-time incident status visible to authorized personnel
+
+### External Communications
+- **Regulatory Notifications** — GDPR (72 hours), HIPAA (60 days), state breach laws (varies)
+- **Law Enforcement** — FBI, CISA, local authorities when applicable
+- **Affected Parties** — Customers, employees, partners whose data was impacted
+- **Media / Public** — Press statements coordinated through PR/communications team
+
+## Notification Templates
+
+Pre-approved templates save critical time during incidents:
+
+\`\`\`
+INITIAL NOTIFICATION (Internal - Executive):
+Subject: [SEV-X] Security Incident - [Brief Description]
+
+Status: [Active/Contained/Resolved]
+Impact: [Systems/Data/Users affected]
+Current Actions: [What IR team is doing]
+Business Impact: [Service disruptions, risk assessment]
+Next Update: [Time of next scheduled update]
+\`\`\`
+
+## Communication Pitfalls
+
+- **Over-communicating technical details** to non-technical stakeholders
+- **Under-communicating** and leaving executives in the dark
+- **Using compromised channels** — if email is compromised, don't coordinate via email
+- **Making premature public statements** before scope is fully understood
+- **Failing to document** verbal communications and decisions
+
+## Legal Privilege Considerations
+
+Work with legal counsel to establish:
+- **Attorney-client privilege** for IR communications and reports
+- **Work product doctrine** protections for forensic analysis
+- Separate "privileged" and "factual" communication tracks
+`,
+    keyTakeaways: [
+      "Use out-of-band communication channels — assume compromised systems are monitored",
+      "Pre-approved notification templates save critical time during active incidents",
+      "Regulatory notification timelines vary: GDPR is 72 hours, HIPAA is 60 days",
+      "Work with legal to establish attorney-client privilege for IR communications"
+    ]
+  },
+  {
+    id: "2.3",
+    courseId: "incident-response",
+    title: "IR Toolkit & Jump Bag",
+    content: `
+# IR Toolkit & Jump Bag
+
+An IR "jump bag" is a pre-assembled kit of hardware and software tools ready for rapid deployment when an incident is declared.
+
+## Hardware Components
+
+| Item | Purpose |
+|------|---------|
+| **Forensic Laptop** | Clean system for analysis, not joined to corporate domain |
+| **Write Blockers** | Hardware devices that prevent modification of evidence drives |
+| **External Drives** | High-capacity storage for disk images and memory dumps |
+| **USB Drives** | Bootable drives with forensic distros (CAINE, SIFT, REMnux) |
+| **Network TAP** | Passive packet capture without disrupting traffic |
+| **Cables & Adapters** | Various SATA, USB, network cables and adapters |
+| **Camera** | Document physical evidence and hardware configurations |
+| **Evidence Bags** | Anti-static bags with tamper-evident seals |
+
+## Software Toolkit
+
+### Collection Tools
+- **FTK Imager** — Disk and memory imaging
+- **KAPE** — Rapid triage artifact collection
+- **Velociraptor** — Scalable endpoint investigation and collection
+- **WinPmem / LiME** — Memory acquisition for Windows and Linux
+
+### Analysis Tools
+- **Autopsy / Sleuth Kit** — Disk forensic analysis
+- **Volatility 3** — Memory forensic analysis
+- **Wireshark** — Network packet analysis
+- **Timeline Explorer** — CSV-based timeline analysis
+- **Chainsaw** — Rapid Windows event log analysis
+- **Hayabusa** — Windows event log fast forensics
+
+### Utility Tools
+- **CyberChef** — Data decoding and transformation
+- **VirusTotal** — File and URL reputation checking
+- **YARA** — Pattern matching for malware detection
+- **Sysinternals Suite** — Windows system utilities
+
+## Maintaining the Kit
+
+- **Monthly validation** — Ensure tools are updated and hardware is functional
+- **Quarterly exercises** — Practice deploying the kit in simulated scenarios
+- **Post-incident review** — Update the kit based on gaps identified during real incidents
+- **Version control** — Track tool versions and license expirations
+`,
+    keyTakeaways: [
+      "A jump bag contains pre-assembled hardware and software for rapid incident deployment",
+      "Write blockers and forensic laptops ensure evidence integrity",
+      "Key tools include FTK Imager, KAPE, Velociraptor, Volatility, and Chainsaw",
+      "The kit must be validated monthly and updated after every real incident"
+    ]
+  },
+  {
+    id: "2.4",
+    courseId: "incident-response",
+    title: "Tabletop Exercises",
+    content: `
+# Tabletop Exercises
+
+Tabletop exercises (TTX) are discussion-based simulations where IR team members walk through incident scenarios to test plans, identify gaps, and practice decision-making.
+
+## Types of Exercises
+
+| Type | Complexity | Participants | Duration |
+|------|-----------|-------------|----------|
+| **Tabletop** | Low | IR team + stakeholders | 2-4 hours |
+| **Functional** | Medium | IR team + IT operations | 4-8 hours |
+| **Full-Scale** | High | Entire organization | 1-3 days |
+
+## Designing a Tabletop Exercise
+
+### Step 1: Define Objectives
+- What do you want to test? (Communication? Escalation? Technical response?)
+- Which playbooks or procedures are being validated?
+- What decisions will participants need to make?
+
+### Step 2: Build the Scenario
+Create realistic injects that unfold over time:
+
+\`\`\`
+INJECT 1 (T+0 min): SOC receives alert — unusual outbound traffic from finance server
+INJECT 2 (T+15 min): EDR detects Cobalt Strike beacon on the same server
+INJECT 3 (T+30 min): Active Directory logs show service account creating new admin accounts
+INJECT 4 (T+45 min): Data exfiltration confirmed — 2GB uploaded to external cloud storage
+INJECT 5 (T+60 min): Ransomware note discovered on three file servers
+INJECT 6 (T+75 min): Media outlet contacts PR team about the breach
+\`\`\`
+
+### Step 3: Facilitate the Discussion
+- Present injects one at a time
+- Ask: "What would you do next? Who would you contact? What tools would you use?"
+- Challenge assumptions and probe for gaps
+- Track action items and decisions on a whiteboard
+
+### Step 4: After-Action Report
+- Document what went well and what needs improvement
+- Assign action items with owners and deadlines
+- Update IR plan and playbooks based on findings
+- Schedule the next exercise
+
+## Common Findings from TTX
+
+- Escalation paths are unclear or outdated
+- Contact lists have wrong phone numbers or departed employees
+- Teams disagree on who has authority to isolate systems
+- Legal notification timelines are not well understood
+- Backup restoration procedures haven't been tested recently
+`,
+    keyTakeaways: [
+      "Tabletop exercises test IR plans through discussion-based scenario simulations",
+      "Scenarios should unfold with timed injects that increase in severity",
+      "Common findings include outdated contact lists, unclear authority, and untested backups",
+      "After-action reports must include assigned action items with owners and deadlines"
+    ]
+  },
+
+  // Module 3: Detection & Analysis
+  {
+    id: "3.1",
+    courseId: "incident-response",
+    title: "Incident Detection Sources",
+    content: `
+# Incident Detection Sources
+
+Effective incident detection relies on multiple overlapping data sources. No single tool catches everything — defense in depth applies to detection as well.
+
+## Primary Detection Sources
+
+### SIEM (Security Information and Event Management)
+- Aggregates logs from across the enterprise
+- Correlation rules identify multi-step attack patterns
+- Examples: Splunk, Microsoft Sentinel, Elastic Security, QRadar
+
+### EDR (Endpoint Detection and Response)
+- Real-time monitoring of endpoint behavior
+- Detects process injection, credential dumping, lateral movement
+- Examples: CrowdStrike Falcon, Microsoft Defender for Endpoint, SentinelOne
+
+### NDR (Network Detection and Response)
+- Analyzes network traffic for anomalies and known threats
+- Detects C2 communication, data exfiltration, lateral movement
+- Examples: Zeek, Suricata, Darktrace, ExtraHop
+
+### User Reports
+- Phishing emails reported by employees
+- Suspicious activity observed by IT staff
+- Often the first detection source for BEC and social engineering
+
+### Threat Intelligence Feeds
+- IOC matching against known threat actor infrastructure
+- Vulnerability disclosures affecting your technology stack
+- Industry-specific threat advisories (ISACs, CISA)
+
+## Detection Quality Metrics
+
+| Metric | Description | Target |
+|--------|-----------|--------|
+| **True Positive Rate** | Percentage of real threats detected | > 95% |
+| **False Positive Rate** | Percentage of alerts that aren't real threats | < 20% |
+| **Mean Time to Detect (MTTD)** | Average time from compromise to detection | < 24 hours |
+| **Alert-to-Incident Ratio** | How many alerts result in declared incidents | Context-dependent |
+
+## The Detection Gap
+
+Many attacks exploit detection blind spots:
+- **Encrypted traffic** — Network tools can't inspect encrypted C2 without TLS inspection
+- **Living off the land** — Attacks using legitimate tools (PowerShell, WMI) blend into normal activity
+- **Cloud environments** — Traditional on-prem tools may not cover SaaS and IaaS
+- **Supply chain** — Compromised software updates bypass most detection controls
+`,
+    keyTakeaways: [
+      "Defense in depth applies to detection — use SIEM, EDR, NDR, and user reports together",
+      "MTTD (Mean Time to Detect) is a critical metric targeting less than 24 hours",
+      "Encrypted traffic, living-off-the-land techniques, and cloud environments create detection gaps",
+      "User reports are often the first detection source for phishing and social engineering attacks"
+    ]
+  },
+  {
+    id: "3.2",
+    courseId: "incident-response",
+    title: "Incident Triage & Prioritization",
+    content: `
+# Incident Triage & Prioritization
+
+Triage is the process of quickly assessing incoming alerts and incidents to determine their severity, scope, and required response level.
+
+## The Triage Process
+
+\`\`\`
+Alert Received → Validate → Classify → Prioritize → Assign → Investigate
+                    ↓
+              False Positive → Document → Close → Tune Detection
+\`\`\`
+
+## Severity Classification
+
+### Impact Assessment
+- **Confidentiality**: Was sensitive data accessed or exfiltrated?
+- **Integrity**: Were systems or data modified by the attacker?
+- **Availability**: Are business services disrupted?
+
+### Urgency Factors
+- Is the attack still active? (Active > historical)
+- Are critical assets affected? (Crown jewels > development servers)
+- Is lateral movement detected? (Spreading > isolated)
+- Are there regulatory implications? (PII/PHI > internal data)
+
+## Prioritization Matrix
+
+| Impact \\ Urgency | Critical | High | Medium | Low |
+|-------------------|----------|------|--------|-----|
+| **Critical** | SEV-1 | SEV-1 | SEV-2 | SEV-3 |
+| **High** | SEV-1 | SEV-2 | SEV-2 | SEV-3 |
+| **Medium** | SEV-2 | SEV-2 | SEV-3 | SEV-4 |
+| **Low** | SEV-3 | SEV-3 | SEV-4 | SEV-4 |
+
+## Response Time SLAs
+
+| Severity | Initial Response | Status Updates | Escalation |
+|----------|-----------------|---------------|------------|
+| SEV-1 | 15 minutes | Every 30 min | Immediate to CISO |
+| SEV-2 | 1 hour | Every 2 hours | Within 4 hours |
+| SEV-3 | 4 hours | Daily | As needed |
+| SEV-4 | Next business day | Weekly | N/A |
+
+## Common Triage Mistakes
+
+- **Alert fatigue** — Closing alerts without proper investigation due to volume
+- **Anchoring bias** — Assuming the first hypothesis is correct
+- **Scope underestimation** — Treating a multi-system compromise as an isolated event
+- **Severity inflation/deflation** — Not calibrating severity consistently
+`,
+    keyTakeaways: [
+      "Triage validates alerts, classifies severity, and determines resource allocation",
+      "Impact (CIA triad) and urgency together determine severity level",
+      "SEV-1 incidents require 15-minute initial response and continuous updates",
+      "Alert fatigue and anchoring bias are common triage pitfalls"
+    ]
+  },
+  {
+    id: "3.3",
+    courseId: "incident-response",
+    title: "Indicator Analysis",
+    content: `
+# Indicator Analysis
+
+Indicators of Compromise (IOCs) and Indicators of Attack (IOAs) are the evidence trail that attackers leave behind. Effective analysis connects these indicators to build a complete picture of an attack.
+
+## IOCs vs. IOAs
+
+| Type | Focus | Examples | Limitation |
+|------|-------|---------|------------|
+| **IOC** | What happened (artifacts) | Malicious IP, file hash, registry key | Reactive — detected after the fact |
+| **IOA** | How it's happening (behaviors) | Process injection pattern, credential dumping sequence | Harder to detect but more durable |
+
+## The Pyramid of Pain
+
+David Bianco's Pyramid of Pain ranks indicators by how difficult they are for attackers to change:
+
+\`\`\`
+         (Hardest to change)
+              TTPs
+           Tools
+         Network/Host Artifacts
+        Domain Names
+      IP Addresses
+    Hash Values
+  (Easiest to change)
+\`\`\`
+
+Focus your detection efforts higher on the pyramid for more resilient detections.
+
+## Correlation Techniques
+
+### Temporal Correlation
+- Group events by time window (e.g., all events within 5 minutes of the initial alert)
+- Build a timeline from earliest to latest indicator
+
+### Entity Correlation
+- Link events by common attributes: source IP, user account, hostname, process
+- Map lateral movement by following authentication events across systems
+
+### TTP Mapping
+- Map observed techniques to MITRE ATT&CK
+- Identify the attack stage: Initial Access → Execution → Persistence → ...
+
+## Building an Attack Timeline
+
+\`\`\`
+2024-01-15 08:32 — Phishing email delivered to user@company.com
+2024-01-15 08:45 — User clicks link, downloads malicious macro document
+2024-01-15 08:46 — Macro executes PowerShell, downloads Cobalt Strike stager
+2024-01-15 08:47 — Beacon established to 185.x.x.x:443
+2024-01-15 09:15 — Credential dump via LSASS access
+2024-01-15 09:30 — Lateral movement to DC01 via pass-the-hash
+2024-01-15 10:00 — Data staged in C:\\Windows\\Temp\\
+2024-01-15 10:15 — Exfiltration via HTTPS to cloud storage
+\`\`\`
+`,
+    keyTakeaways: [
+      "IOCs are artifacts left behind; IOAs are behavioral patterns detected during an attack",
+      "The Pyramid of Pain shows that detecting TTPs is most valuable but hardest to implement",
+      "Temporal and entity correlation connect individual indicators into a coherent attack narrative",
+      "Attack timelines are essential deliverables of the analysis phase"
+    ]
+  },
+  {
+    id: "3.4",
+    courseId: "incident-response",
+    title: "Root Cause Analysis Techniques",
+    content: `
+# Root Cause Analysis Techniques
+
+Root Cause Analysis (RCA) identifies the fundamental reason an incident occurred — not just the symptoms, but the underlying failures that allowed the attack to succeed.
+
+## The 5 Whys Method
+
+Start with the incident and ask "Why?" repeatedly until you reach the root cause:
+
+\`\`\`
+Incident: Ransomware encrypted 500 file shares
+
+Why 1: Ransomware executed on a domain controller
+Why 2: Attacker gained domain admin credentials
+Why 3: Attacker dumped credentials from an unpatched server
+Why 4: The server was missing a critical patch (CVE-2024-XXXX)
+Why 5: Patch management process excluded servers "too critical to reboot"
+
+Root Cause: Patch management policy had dangerous exceptions for critical servers
+\`\`\`
+
+## Fishbone (Ishikawa) Diagram
+
+Organizes contributing factors into categories:
+
+- **People**: Training gaps, social engineering susceptibility, insider threats
+- **Process**: Missing playbooks, unclear escalation, inadequate change management
+- **Technology**: Unpatched systems, missing EDR coverage, inadequate logging
+- **Environment**: Cloud misconfigurations, third-party access, remote work risks
+- **Policy**: Outdated policies, unenforced standards, exception abuse
+
+## Fault Tree Analysis
+
+A top-down approach that maps all possible paths to the incident:
+
+\`\`\`
+                    [Ransomware Incident]
+                    /                  \\
+          [Initial Access]      [Lateral Movement]
+          /           \\              /         \\
+   [Phishing]  [Exploit]    [Weak Creds]  [No Segmentation]
+\`\`\`
+
+## Contributing Factors vs. Root Causes
+
+Most incidents have multiple contributing factors but one or two root causes:
+
+- **Contributing Factor**: The user clicked a phishing link (human error always exists)
+- **Root Cause**: Email gateway didn't detect the malicious attachment (control failure)
+- **Contributing Factor**: EDR was in audit mode (didn't block execution)
+- **Root Cause**: EDR deployment was incomplete — only 60% of endpoints covered (process failure)
+
+The root cause is always a **systemic failure** — something the organization can fix to prevent recurrence.
+`,
+    keyTakeaways: [
+      "RCA identifies systemic failures, not just symptoms or individual mistakes",
+      "The 5 Whys method drills from the incident to the underlying organizational failure",
+      "Fishbone diagrams categorize contributing factors across People, Process, Technology, Environment, and Policy",
+      "Root causes are always systemic and fixable — individual human error is a contributing factor, not a root cause"
+    ]
+  },
+
+  // Module 4: Containment Strategies
+  {
+    id: "4.1",
+    courseId: "incident-response",
+    title: "Short-Term Containment",
+    content: `
+# Short-Term Containment
+
+Short-term containment focuses on **immediately stopping the attacker's ability to cause further damage** while preserving evidence for investigation.
+
+## Principles of Short-Term Containment
+
+1. **Speed over perfection** — A 90% effective containment now beats a 100% containment in an hour
+2. **Preserve evidence** — Contain without destroying forensic artifacts
+3. **Minimize disruption** — Balance security with business continuity where possible
+4. **Document everything** — Record every action taken, by whom, and when
+
+## Network-Level Containment
+
+### Firewall Rules
+- Block attacker IP addresses at the perimeter firewall
+- Deny outbound traffic from compromised systems to C2 infrastructure
+- Implement egress filtering to prevent data exfiltration
+
+### DNS Sinkhole
+- Redirect malicious domain resolutions to an internal sinkhole server
+- Captures connection attempts from other potentially infected systems
+- Provides visibility into the scope of compromise
+
+### VLAN Isolation
+- Move compromised systems to a quarantine VLAN
+- Maintain network connectivity for forensic investigation
+- Block all production traffic while allowing forensic access
+
+### Network Segmentation
+- Implement emergency micro-segmentation to limit lateral movement
+- Isolate critical assets (domain controllers, database servers)
+
+## Endpoint-Level Containment
+
+- **EDR isolation** — Use EDR tools to network-isolate endpoints while maintaining management connectivity
+- **Host-based firewall** — Block all inbound/outbound except forensic access
+- **Disable network adapters** — Last resort when EDR isolation isn't available
+- **Process termination** — Kill malicious processes (only after memory capture!)
+
+## Important Considerations
+
+> **Never power off a compromised system** unless absolutely necessary. You lose volatile memory, running processes, network connections, and potentially the only copy of decryption keys.
+
+- Capture memory before any containment action that might disrupt running processes
+- Document the system state before making changes
+- Coordinate timing of containment actions across multiple compromised systems
+`,
+    keyTakeaways: [
+      "Short-term containment prioritizes speed — stop the bleeding immediately",
+      "DNS sinkholes reveal additional compromised systems by capturing C2 connection attempts",
+      "Never power off a compromised system before capturing volatile memory",
+      "EDR isolation is preferred over physical disconnection as it maintains management access"
+    ]
+  },
+  {
+    id: "4.2",
+    courseId: "incident-response",
+    title: "Long-Term Containment",
+    content: `
+# Long-Term Containment
+
+Long-term containment implements sustainable controls that keep the attacker locked out while the organization prepares for eradication and recovery.
+
+## Credential Actions
+
+### Immediate Credential Response
+- **Reset passwords** for all compromised accounts
+- **Revoke tokens** and sessions (OAuth, SAML, API keys)
+- **Rotate service account** credentials
+- **Reset the KRBTGT account** twice (with 12+ hour gap) if Active Directory is compromised
+
+### Kerberos Golden Ticket Remediation
+\`\`\`
+If attacker has KRBTGT hash:
+  1. First KRBTGT reset → Invalidates current tickets
+  2. Wait 12+ hours (max ticket lifetime)
+  3. Second KRBTGT reset → Invalidates tickets created with old hash
+  4. Monitor for authentication failures indicating attacker attempts
+\`\`\`
+
+## System-Level Containment
+
+- **Patch exploited vulnerabilities** — Close the initial access vector
+- **Disable compromised services** — Turn off services the attacker is using
+- **Rebuild compromised systems** — Clean OS install from known-good media
+- **Enhanced monitoring** — Deploy additional logging and alerting on affected systems
+
+## Access Control Tightening
+
+- Implement emergency MFA requirements
+- Restrict VPN access to known-good devices
+- Disable remote access for compromised user accounts
+- Implement conditional access policies
+- Review and restrict third-party access
+
+## Coordination Challenges
+
+Long-term containment often reveals the **scope is larger than initially thought**:
+
+- Additional compromised systems discovered during investigation
+- Attacker has multiple persistence mechanisms
+- Backup C2 channels activate when primary is blocked
+- Attacker responds to containment actions with escalation
+
+The key is **coordinated containment** — plan all containment actions and execute them simultaneously to prevent the attacker from adapting.
+`,
+    keyTakeaways: [
+      "Long-term containment implements sustainable controls while preparing for eradication",
+      "KRBTGT must be reset twice with 12+ hours between resets for Golden Ticket remediation",
+      "Coordinated simultaneous containment prevents attackers from adapting to individual actions",
+      "Scope often expands during containment as additional compromised systems are discovered"
+    ]
+  },
+  {
+    id: "4.3",
+    courseId: "incident-response",
+    title: "Evidence Preservation",
+    content: `
+# Evidence Preservation
+
+Evidence preservation ensures that forensic artifacts maintain their integrity and admissibility throughout the investigation and any potential legal proceedings.
+
+## Order of Volatility
+
+Collect evidence in order from most volatile to least volatile:
+
+| Priority | Evidence Type | Volatility | Collection Method |
+|----------|-------------|-----------|-------------------|
+| 1 | **CPU registers, cache** | Nanoseconds | Specialized tools, rarely practical |
+| 2 | **Running memory (RAM)** | Lost on power-off | WinPmem, LiME, DumpIt |
+| 3 | **Network connections** | Lost on disconnect | netstat, ss, network capture |
+| 4 | **Running processes** | Lost on reboot | Process listing, handle enumeration |
+| 5 | **Disk contents** | Persistent but changeable | FTK Imager, dd, KAPE triage |
+| 6 | **Log files** | May rotate or be deleted | SIEM export, log forwarding |
+| 7 | **Backup media** | Persistent | Backup system retrieval |
+
+## Chain of Custody
+
+Every piece of evidence must have a documented chain of custody:
+
+\`\`\`
+Evidence Item: Memory dump from WORKSTATION-042
+  - Collected by: [Analyst Name] on 2024-01-15 at 14:32 UTC
+  - Tool used: WinPmem 4.0
+  - Hash (SHA-256): a3f8b2c1d4e5...
+  - Stored at: Evidence locker, Room 301, Shelf B-3
+  - Transferred to: [Forensic Lab] on 2024-01-16 at 09:00 UTC
+  - Received by: [Lab Analyst Name]
+\`\`\`
+
+## Forensic Imaging Best Practices
+
+- **Always use write blockers** when imaging physical drives
+- **Create bit-for-bit images** (not logical copies) when possible
+- **Hash before and after** — Verify source and image match (MD5 + SHA-256)
+- **Create working copies** — Never analyze the original evidence
+- **Document the process** — Screenshot every step, note any errors
+
+## Legal Considerations
+
+- Evidence may be needed for criminal prosecution, civil litigation, or regulatory proceedings
+- Improper handling can render evidence inadmissible
+- Work with legal counsel to determine preservation requirements
+- Consider **litigation hold** notices to prevent routine data destruction
+`,
+    keyTakeaways: [
+      "Collect evidence in order of volatility — memory first, backups last",
+      "Chain of custody documentation is required for every evidence item",
+      "Always use write blockers and verify hashes when creating forensic images",
+      "Improper evidence handling can render artifacts inadmissible in legal proceedings"
+    ]
+  },
+  {
+    id: "4.4",
+    courseId: "incident-response",
+    title: "Containment Decision Framework",
+    content: `
+# Containment Decision Framework
+
+Containment decisions involve difficult trade-offs between security and business continuity. A structured framework helps make these decisions consistently and defensibly.
+
+## The Containment Decision Matrix
+
+For each compromised system, evaluate:
+
+| Factor | Isolate Immediately | Monitor & Contain Later |
+|--------|-------------------|----------------------|
+| Active data exfiltration | ✅ | |
+| Ransomware spreading | ✅ | |
+| Revenue-critical system | | ✅ (with enhanced monitoring) |
+| Attacker is dormant | | ✅ (to gather intelligence) |
+| Safety-critical system (OT/ICS) | Case-by-case | Case-by-case |
+| Evidence at risk of destruction | ✅ (after memory capture) | |
+
+## Monitor vs. Isolate
+
+### When to Monitor (Controlled Burn)
+- The attacker appears dormant and not actively causing damage
+- You need more intelligence about scope and TTPs
+- Premature containment would tip off the attacker
+- You haven't identified all compromised systems yet
+
+### When to Isolate Immediately
+- Active data exfiltration is occurring
+- Ransomware or destructive malware is spreading
+- The attacker is escalating privileges or targeting crown jewels
+- Legal or regulatory requirements mandate immediate action
+
+## Business Impact Assessment
+
+Before major containment actions, quickly assess:
+
+1. **What breaks?** — Which business processes depend on this system?
+2. **For how long?** — How quickly can we restore or provide alternatives?
+3. **What's the cost?** — Revenue impact, contractual penalties, customer impact
+4. **What's the risk of NOT acting?** — Potential damage if we delay containment
+5. **Who decides?** — Does this require executive approval?
+
+## Documenting Containment Decisions
+
+Every containment decision should be documented:
+- **What** action was taken (or deliberately not taken)
+- **Why** the decision was made
+- **Who** authorized it
+- **When** it was executed
+- **What** the expected impact is
+- **What** monitoring is in place to assess effectiveness
+`,
+    keyTakeaways: [
+      "Containment decisions balance security urgency against business continuity impact",
+      "Active exfiltration and spreading ransomware always warrant immediate isolation",
+      "Sometimes monitoring is more valuable than immediate containment — if you need scope or intelligence",
+      "Every containment decision must be documented with who, what, when, why, and expected impact"
+    ]
+  },
+
+  // Module 5: Eradication & Recovery
+  {
+    id: "5.1",
+    courseId: "incident-response",
+    title: "Malware Removal & Cleanup",
+    content: `
+# Malware Removal & Cleanup
+
+Eradication ensures the attacker's presence is completely removed from the environment. Incomplete eradication leads to re-compromise, often within days.
+
+## Identifying All Persistence Mechanisms
+
+Before removal, you must find every way the attacker can return:
+
+### Common Persistence Techniques
+- **Registry Run Keys** — Auto-start entries in HKLM/HKCU Run keys
+- **Scheduled Tasks** — Tasks that execute malicious payloads on schedule or at login
+- **Services** — Malicious services configured for automatic startup
+- **WMI Event Subscriptions** — Fileless persistence using WMI event consumers
+- **DLL Hijacking** — Placing malicious DLLs in application search paths
+- **Startup Folder** — Shortcuts in user/system startup directories
+- **Boot/Logon Scripts** — GPO-deployed scripts that execute at boot or login
+
+### Advanced Persistence
+- **Webshells** — Backdoors embedded in web application files
+- **Backdoor accounts** — Newly created local or domain accounts
+- **Golden/Silver Tickets** — Forged Kerberos tickets (require KRBTGT/service account hash reset)
+- **SSH authorized_keys** — Added public keys for persistent SSH access
+- **Firmware implants** — Extremely rare but very difficult to detect/remove
+
+## Eradication Checklist
+
+\`\`\`
+□ Remove all identified malware files and artifacts
+□ Delete malicious scheduled tasks, services, and registry entries
+□ Remove unauthorized user accounts and SSH keys
+□ Reset all compromised credentials (including service accounts)
+□ Patch the vulnerability used for initial access
+□ Remove webshells and backdoors from web servers
+□ Clear browser-stored credentials on compromised systems
+□ Revoke compromised certificates and API keys
+□ Update firewall rules to block known attacker infrastructure
+□ Reset KRBTGT if domain compromise is confirmed
+\`\`\`
+
+## When to Rebuild vs. Clean
+
+| Scenario | Rebuild | Clean |
+|----------|---------|-------|
+| Rootkit or bootkit detected | ✅ | |
+| Domain controller compromised | ✅ | |
+| Extent of compromise unclear | ✅ | |
+| Simple malware, clear scope | | ✅ |
+| Compliance requires known-good state | ✅ | |
+
+> **When in doubt, rebuild.** The cost of re-compromise far exceeds the cost of rebuilding.
+`,
+    keyTakeaways: [
+      "Incomplete eradication leads to re-compromise — find every persistence mechanism before removal",
+      "Common persistence includes registry keys, scheduled tasks, services, WMI subscriptions, and webshells",
+      "When in doubt, rebuild from clean media rather than attempting to clean a compromised system",
+      "KRBTGT reset is required whenever Active Directory domain compromise is confirmed"
+    ]
+  },
+  {
+    id: "5.2",
+    courseId: "incident-response",
+    title: "System Restoration",
+    content: `
+# System Restoration
+
+System restoration returns compromised systems to a known-good operational state. This phase requires careful planning to avoid reintroducing vulnerabilities or malware.
+
+## Restoration Approaches
+
+### Option 1: Rebuild from Gold Image
+- Install OS from verified media or gold image
+- Apply all current patches before connecting to network
+- Install required applications from trusted sources
+- Restore user data from verified clean backups
+- **Best for**: Servers, workstations with standard configurations
+
+### Option 2: Restore from Backup
+- Identify the last known-clean backup (before compromise)
+- Verify backup integrity (hash verification, malware scan)
+- Restore to clean hardware or VM
+- Apply patches for the vulnerability that was exploited
+- **Best for**: Complex application servers, database servers
+
+### Option 3: Clean and Harden
+- Remove all malicious artifacts (only when scope is clearly limited)
+- Apply missing patches and security updates
+- Harden configuration based on CIS benchmarks
+- Deploy enhanced monitoring
+- **Best for**: Systems that cannot be rebuilt (legacy, specialized)
+
+## Pre-Restoration Checklist
+
+\`\`\`
+Before reconnecting any restored system to the network:
+  □ All patches applied (especially the exploited vulnerability)
+  □ EDR agent installed and reporting
+  □ Enhanced logging configured
+  □ Credentials rotated
+  □ Firewall rules updated
+  □ Backup configuration verified
+  □ System scanned for residual artifacts
+\`\`\`
+
+## Phased Restoration
+
+Don't restore everything at once. Use a phased approach:
+
+1. **Phase 1**: Core infrastructure (AD, DNS, DHCP)
+2. **Phase 2**: Critical business systems (email, ERP, databases)
+3. **Phase 3**: User workstations and productivity tools
+4. **Phase 4**: Non-critical systems and services
+
+Monitor each phase for signs of re-compromise before proceeding to the next.
+`,
+    keyTakeaways: [
+      "Always patch the exploited vulnerability before reconnecting restored systems to the network",
+      "Verify backup integrity and confirm the backup predates the compromise before restoring",
+      "Use phased restoration — core infrastructure first, non-critical systems last",
+      "Enhanced monitoring must be in place before any restored system goes back to production"
+    ]
+  },
+  {
+    id: "5.3",
+    courseId: "incident-response",
+    title: "Validation & Monitoring",
+    content: `
+# Validation & Monitoring
+
+After eradication and restoration, validation confirms the threat is truly eliminated and enhanced monitoring watches for signs of re-compromise.
+
+## Validation Activities
+
+### Technical Validation
+- **Full system scan** with updated signatures (EDR, AV, YARA rules)
+- **IOC sweep** across all systems using known indicators from the investigation
+- **Network monitoring** for any connections to attacker infrastructure
+- **Credential validation** — Confirm all compromised credentials have been rotated
+- **Persistence check** — Re-scan for scheduled tasks, services, registry entries, webshells
+
+### Process Validation
+- Verify all eradication checklist items are complete
+- Confirm all affected systems have been addressed
+- Validate that the initial access vector is closed
+- Test that containment controls are still effective
+
+## Enhanced Monitoring Plan
+
+Deploy heightened monitoring for a minimum of **30-90 days** after incident closure:
+
+| Monitoring Area | What to Watch For | Tool |
+|----------------|-------------------|------|
+| Network traffic | Connections to known-bad IPs/domains | NDR, firewall logs |
+| Endpoint behavior | Process anomalies on previously compromised hosts | EDR |
+| Authentication | Unusual login patterns, failed auth spikes | SIEM, AD logs |
+| Data movement | Large file transfers, cloud uploads | DLP, CASB |
+| Email | Phishing attempts targeting the same users | Email gateway |
+
+## Signs of Re-Compromise
+
+Immediately escalate if you observe:
+- Connections to previously blocked attacker infrastructure from new sources
+- New instances of the same malware family
+- Unauthorized account creation or privilege escalation
+- Unexpected outbound data transfers
+- The same vulnerability being exploited again (indicates incomplete patching)
+
+## Declaring Incident Closure
+
+An incident can be closed when:
+1. All systems are restored and validated
+2. Enhanced monitoring shows no signs of re-compromise for the agreed period
+3. All evidence has been preserved per retention requirements
+4. Post-incident report is complete
+5. Lessons learned meeting has been conducted
+`,
+    keyTakeaways: [
+      "Validation confirms eradication success through IOC sweeps, scans, and credential checks",
+      "Enhanced monitoring should continue for 30-90 days after incident closure",
+      "Signs of re-compromise include connections to blocked infrastructure from new sources",
+      "Incident closure requires validated systems, clean monitoring, preserved evidence, and completed reports"
+    ]
+  },
+  {
+    id: "5.4",
+    courseId: "incident-response",
+    title: "Business Resumption",
+    content: `
+# Business Resumption
+
+Business resumption bridges the gap between technical recovery and full operational normalcy. It focuses on restoring business processes, not just systems.
+
+## Resumption vs. Recovery
+
+| Aspect | Technical Recovery | Business Resumption |
+|--------|-------------------|-------------------|
+| **Focus** | Systems and infrastructure | Business processes and users |
+| **Owner** | IT / IR team | Business unit leaders |
+| **Metric** | Systems restored | Business functions operational |
+| **Complete when** | Systems are running | Users are productive |
+
+## Communication During Resumption
+
+### Internal Communication
+- Notify users when their systems/services are restored
+- Provide guidance on any changed procedures (new passwords, MFA, etc.)
+- Set expectations about enhanced monitoring and potential restrictions
+- Establish a help desk escalation path for resumption issues
+
+### External Communication
+- Update customers on service restoration status
+- Provide guidance on protective actions (password resets, fraud monitoring)
+- Fulfill regulatory notification requirements with status updates
+- Prepare public statements if the incident was disclosed
+
+## Common Resumption Challenges
+
+- **User confusion** — Changed passwords, new MFA requirements, altered workflows
+- **Application dependencies** — System A works but depends on System B which isn't restored
+- **Data gaps** — Transactions or data created during the incident may be lost or suspect
+- **Performance degradation** — Enhanced monitoring and security controls may slow systems
+- **Lingering fear** — Users and executives may be reluctant to trust restored systems
+
+## Resumption Checklist
+
+\`\`\`
+□ All critical business processes validated with business owners
+□ Users notified with clear instructions for accessing restored services
+□ Help desk briefed on expected call volume and common issues
+□ Temporary workarounds removed and normal processes restored
+□ Third-party connections re-established and verified
+□ Business continuity plan deactivated with formal handoff
+□ Enhanced monitoring confirmed operational
+□ Executive sign-off on return to normal operations
+\`\`\`
+`,
+    keyTakeaways: [
+      "Business resumption focuses on restoring business processes, not just systems",
+      "Users need clear communication about changed procedures (passwords, MFA, workflows)",
+      "Application dependencies can block resumption even when individual systems are recovered",
+      "Executive sign-off marks the formal transition from incident response to normal operations"
+    ]
+  },
+
+  // Module 6: Post-Incident Activities
+  {
+    id: "6.1",
+    courseId: "incident-response",
+    title: "Lessons Learned Meetings",
+    content: `
+# Lessons Learned Meetings
+
+The lessons learned meeting (also called a post-mortem or retrospective) is the most valuable activity in the entire IR lifecycle — yet it's the most frequently skipped.
+
+## Blameless Post-Mortems
+
+The meeting must be **blameless**. The goal is to improve systems and processes, not to punish individuals.
+
+### Ground Rules
+- Focus on **what happened**, not **who did it**
+- Assume everyone acted with the best information available at the time
+- Seek systemic improvements, not individual blame
+- Create psychological safety so people share openly
+- "How do we prevent this?" not "How did you let this happen?"
+
+## Meeting Structure
+
+### Participants
+- IR team members who handled the incident
+- IT operations staff involved in containment/recovery
+- Business stakeholders affected by the incident
+- Legal and compliance (if applicable)
+- Executive sponsor
+
+### Agenda (2-3 hours for major incidents)
+
+1. **Timeline Review** (30 min) — Walk through the incident chronologically
+2. **What Went Well** (20 min) — Celebrate effective responses
+3. **What Could Be Improved** (40 min) — Identify gaps and failures
+4. **Root Cause Discussion** (30 min) — Apply RCA techniques
+5. **Action Items** (30 min) — Assign specific improvements with owners and deadlines
+
+## Key Questions to Ask
+
+- When did we first detect the incident? Could we have detected it sooner?
+- Was the IR plan followed? Where did we deviate and why?
+- Did we have the right tools and access? What was missing?
+- How effective was our communication? Were the right people informed at the right time?
+- What would we do differently if this happened again tomorrow?
+- Are there similar risks that this incident revealed?
+
+## Action Item Tracking
+
+Every action item must have:
+- **Owner** — A single person responsible (not a team)
+- **Deadline** — A specific date, not "ASAP"
+- **Success criteria** — How do we know it's done?
+- **Priority** — Critical, high, medium, or low
+
+Track action items in a shared system and review progress in monthly security meetings.
+`,
+    keyTakeaways: [
+      "Lessons learned meetings must be blameless — focus on systemic improvements, not individual blame",
+      "Schedule the meeting within 2 weeks of incident closure while details are fresh",
+      "Every action item needs a single owner, specific deadline, and clear success criteria",
+      "Celebrating what went well is as important as identifying improvements"
+    ]
+  },
+  {
+    id: "6.2",
+    courseId: "incident-response",
+    title: "Incident Report Writing",
+    content: `
+# Incident Report Writing
+
+The incident report is the permanent record of what happened, what was done, and what should change. It serves multiple audiences and purposes.
+
+## Report Structure
+
+### 1. Executive Summary (1 page)
+- What happened in plain language
+- Business impact (financial, operational, reputational)
+- Key decisions made and outcomes
+- Top 3-5 recommendations
+
+### 2. Incident Overview
+- Date/time of detection and declaration
+- Severity level assigned
+- Systems, data, and users affected
+- Regulatory notification status
+
+### 3. Technical Timeline
+\`\`\`
+[Date/Time UTC] — [Event Description] — [Source/Evidence]
+2024-01-15 08:32 — Phishing email delivered — Email gateway logs
+2024-01-15 08:45 — User opened attachment — EDR telemetry
+2024-01-15 08:46 — Cobalt Strike beacon established — NDR alert
+...
+\`\`\`
+
+### 4. Analysis & Findings
+- Attack vector and initial access method
+- Attacker TTPs mapped to MITRE ATT&CK
+- Scope of compromise (systems, accounts, data)
+- Root cause analysis results
+
+### 5. Response Actions
+- Containment measures taken and their effectiveness
+- Eradication activities performed
+- Recovery and restoration steps
+- Evidence preserved and chain of custody
+
+### 6. Recommendations
+- Immediate actions (already taken or in progress)
+- Short-term improvements (30 days)
+- Long-term strategic changes (90+ days)
+- Resource requirements and budget estimates
+
+## Writing Tips
+
+- **Use UTC timestamps** consistently throughout
+- **Be precise** — "3 servers" not "several servers"
+- **Separate facts from analysis** — State what the evidence shows, then your interpretation
+- **Include evidence references** — "As shown in Exhibit A (memory dump hash: abc123...)"
+- **Write for multiple audiences** — Executive summary for leadership, technical details for responders
+`,
+    keyTakeaways: [
+      "Reports serve multiple audiences — executives need summaries, analysts need technical details",
+      "Use UTC timestamps and precise counts throughout the report",
+      "Separate observed facts from analytical conclusions",
+      "Recommendations should be categorized by timeframe: immediate, short-term, and long-term"
+    ]
+  },
+  {
+    id: "6.3",
+    courseId: "incident-response",
+    title: "Metrics & KPIs",
+    content: `
+# Metrics & KPIs for Incident Response
+
+Metrics transform incident response from a reactive cost center into a measurable, improvable security function.
+
+## Core IR Metrics
+
+### Time-Based Metrics
+
+| Metric | Definition | Industry Average | Target |
+|--------|-----------|-----------------|--------|
+| **MTTD** (Mean Time to Detect) | Time from compromise to detection | ~200 days | < 24 hours |
+| **MTTR** (Mean Time to Respond) | Time from detection to containment | ~70 days | < 4 hours |
+| **MTTC** (Mean Time to Contain) | Time from response start to full containment | Varies | < 24 hours |
+| **MTTE** (Mean Time to Eradicate) | Time from containment to complete eradication | Varies | < 1 week |
+| **Dwell Time** | Total time attacker was in the environment | ~200 days | < 7 days |
+
+### Volume Metrics
+- **Incidents per month/quarter** — Trend analysis over time
+- **Incidents by severity** — Distribution across SEV-1 through SEV-4
+- **Incidents by type** — Malware, phishing, unauthorized access, etc.
+- **Incidents by business unit** — Identify high-risk areas
+
+### Quality Metrics
+- **Re-compromise rate** — How often eradication fails and attacker returns
+- **Escalation accuracy** — Percentage of escalations that were true incidents
+- **Playbook adherence** — How often teams followed documented procedures
+- **Action item completion rate** — Percentage of post-incident improvements implemented
+
+## Building an IR Dashboard
+
+\`\`\`
+Monthly IR Dashboard:
+┌─────────────────────────────────────────────┐
+│ MTTD: 4.2 hrs ↓  │ MTTR: 2.1 hrs ↓       │
+│ Open Incidents: 3  │ Closed This Month: 12  │
+├─────────────────────────────────────────────┤
+│ Severity Distribution    │ Trend (6 months) │
+│ SEV-1: 1  SEV-2: 4      │  ↗ slightly up   │
+│ SEV-3: 18 SEV-4: 42     │  (volume)        │
+├─────────────────────────────────────────────┤
+│ Top Incident Types       │ Action Items     │
+│ 1. Phishing (35%)        │ Open: 8          │
+│ 2. Malware (25%)         │ Overdue: 2       │
+│ 3. Unauthorized Access   │ Completed: 15    │
+└─────────────────────────────────────────────┘
+\`\`\`
+
+## Using Metrics for Improvement
+
+- **Trending MTTD up?** → Invest in detection capabilities
+- **High re-compromise rate?** → Improve eradication thoroughness
+- **Low playbook adherence?** → Simplify playbooks or increase training
+- **Action items never completed?** → Executive sponsorship needed
+`,
+    keyTakeaways: [
+      "MTTD, MTTR, and dwell time are the three most critical time-based IR metrics",
+      "Industry average dwell time is ~200 days — high-performing teams target under 7 days",
+      "Re-compromise rate measures eradication effectiveness and is a critical quality metric",
+      "Metrics should drive specific improvement actions, not just fill dashboards"
+    ]
+  },
+  {
+    id: "6.4",
+    courseId: "incident-response",
+    title: "Continuous Improvement",
+    content: `
+# Continuous Improvement
+
+The incident response lifecycle is designed as a loop — every incident should make the organization more resilient against the next one.
+
+## The Improvement Cycle
+
+\`\`\`
+  Incident Occurs → Response → Lessons Learned → Improvements
+                                                       ↓
+  ← ← ← ← ← ← ← Better Preparation ← ← ← ← ← ← ←
+\`\`\`
+
+## Categories of Improvement
+
+### Detection Improvements
+- Create new SIEM correlation rules based on attack patterns observed
+- Tune existing rules to reduce false positives
+- Deploy additional logging on systems that lacked visibility
+- Add new threat intelligence feeds covering the attack type
+- Implement behavioral detections for TTPs encountered
+
+### Process Improvements
+- Update playbooks with lessons from the incident
+- Refine escalation procedures based on communication gaps
+- Improve evidence collection checklists
+- Update contact lists and on-call schedules
+- Revise severity classification criteria if they were misapplied
+
+### Technology Improvements
+- Deploy tools that were identified as missing during the incident
+- Expand EDR coverage to systems that lacked visibility
+- Implement network segmentation to limit future lateral movement
+- Enhance backup and recovery capabilities
+- Deploy additional hardening based on exploited weaknesses
+
+### People Improvements
+- Conduct targeted training on skill gaps identified during the incident
+- Run additional tabletop exercises with updated scenarios
+- Cross-train team members on tools and procedures they struggled with
+- Hire additional staff if the team was overwhelmed
+
+## Feeding the Preparation Phase
+
+Every improvement maps back to the Preparation phase:
+
+| Incident Finding | Improvement Action | Preparation Impact |
+|-----------------|-------------------|-------------------|
+| Phishing bypassed email gateway | Tune email filtering rules | Better detection |
+| KRBTGT compromise went undetected for weeks | Monitor KRBTGT usage anomalies | Faster detection |
+| Containment delayed by approval process | Pre-authorize IR Lead for emergency isolation | Faster response |
+| Backups were encrypted by ransomware | Implement immutable backup storage | Better recovery |
+| Lessons learned meeting never happened | Mandate post-incident review within 2 weeks | Better process |
+
+## Maturity Model
+
+Track your IR program maturity over time:
+
+1. **Initial** — Ad hoc response, no formal plan
+2. **Developing** — IR plan exists but inconsistently followed
+3. **Defined** — Documented procedures, trained team, regular exercises
+4. **Managed** — Metrics-driven, continuous improvement, integrated threat intel
+5. **Optimizing** — Automated response, predictive capabilities, industry leadership
+`,
+    keyTakeaways: [
+      "Every incident should make the organization more resilient through specific, tracked improvements",
+      "Improvements span four categories: detection, process, technology, and people",
+      "Each improvement maps directly back to strengthening the Preparation phase",
+      "IR maturity progresses from ad hoc (Initial) to automated and predictive (Optimizing)"
+    ]
+  },
 ];
 
 export const getLessonContent = (courseId: string, lessonId: string): LessonContent | undefined => {

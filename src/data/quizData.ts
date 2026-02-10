@@ -4244,6 +4244,129 @@ export const quizzes: QuizData[] = [
         explanation: "Mature NSM analysis correlates all data sources: Suricata alerts identify suspicious events, Zeek logs provide session context and connection history, and PCAP provides packet-level proof — together revealing the complete attack narrative."
       }
     ]
+  },
+  // ==========================================
+  // Incident Response Fundamentals Quizzes
+  // ==========================================
+  {
+    quizId: "ir-q1",
+    courseId: "incident-response",
+    title: "IR Foundations & Frameworks",
+    description: "Test your knowledge of incident response fundamentals, the NIST lifecycle, SANS PICERL, and IR team structure.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      { id: "ir-q1-1", question: "What distinguishes a security incident from a security event?", options: ["Incidents are always caused by external attackers", "An incident is a violation or imminent threat of violation of security policies", "Events are more severe than incidents", "Incidents only involve data loss"], correctAnswer: 1, explanation: "A security incident is defined as a violation or imminent threat of violation of security policies." },
+      { id: "ir-q1-2", question: "What are the four phases of the NIST SP 800-61 incident response lifecycle?", options: ["Identify, Protect, Detect, Respond", "Preparation, Detection & Analysis, Containment/Eradication/Recovery, Post-Incident Activity", "Prevention, Detection, Response, Recovery", "Assessment, Containment, Remediation, Reporting"], correctAnswer: 1, explanation: "NIST SP 800-61 defines four phases operating as a continuous improvement cycle." },
+      { id: "ir-q1-3", question: "How does SANS PICERL differ from NIST regarding containment, eradication, and recovery?", options: ["SANS combines all three into one phase", "SANS separates them into three distinct phases", "SANS skips eradication", "SANS only uses containment and recovery"], correctAnswer: 1, explanation: "SANS PICERL treats Containment, Eradication, and Recovery as three separate phases." },
+      { id: "ir-q1-4", question: "What does 'R' stand for in a RACI matrix?", options: ["Reporting", "Responsible", "Reviewing", "Recovering"], correctAnswer: 1, explanation: "R stands for Responsible — the person who does the work." },
+      { id: "ir-q1-5", question: "Which IR team model uses a core team augmented by on-call specialists?", options: ["Central IR Team", "Distributed IR Team", "Hybrid / Virtual Team", "Outsourced / Retainer"], correctAnswer: 2, explanation: "A Hybrid/Virtual Team maintains a core IR team augmented by on-call specialists from different departments." },
+      { id: "ir-q1-6", question: "What is the average dwell time reported by industry studies?", options: ["24 hours", "7 days", "30 days", "200+ days"], correctAnswer: 3, explanation: "Industry reports show average dwell times exceeding 200 days." },
+      { id: "ir-q1-7", question: "Which framework is NOT an IR framework but essential for understanding adversary TTPs?", options: ["NIST SP 800-61", "SANS PICERL", "ISO 27035", "MITRE ATT&CK"], correctAnswer: 3, explanation: "MITRE ATT&CK is a knowledge base of adversary TTPs, not an IR framework." },
+      { id: "ir-q1-8", question: "What is the primary purpose of the NIST Post-Incident Activity phase?", options: ["Prosecuting the attacker", "Feeding lessons back into Preparation for continuous improvement", "Restoring systems", "Notifying regulators"], correctAnswer: 1, explanation: "Post-Incident Activity closes the loop by feeding improvements back into Preparation." },
+      { id: "ir-q1-9", question: "Organizations without formal IR capability face approximately how much higher breach costs?", options: ["25%", "40%", "63%", "90%"], correctAnswer: 2, explanation: "Approximately 63% higher breach costs according to the IBM Cost of a Data Breach Report." },
+      { id: "ir-q1-10", question: "Which stakeholder handles breach notification and regulatory compliance?", options: ["HR", "IT Operations", "Legal / General Counsel", "Communications / PR"], correctAnswer: 2, explanation: "Legal/General Counsel handles breach notification, regulatory compliance, and privilege considerations." }
+    ]
+  },
+  {
+    quizId: "ir-q2",
+    courseId: "incident-response",
+    title: "Preparation & Readiness",
+    description: "Test your knowledge of IR planning, communication, toolkit preparation, and tabletop exercises.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      { id: "ir-q2-1", question: "What is the correct hierarchy of IR documentation?", options: ["Playbook → Plan → Policy", "Policy → Plan → Playbook", "Plan → Policy → Playbook", "Policy → Playbook → Plan"], correctAnswer: 1, explanation: "Policy (high-level) → Plan (detailed procedures) → Playbook (step-by-step guides)." },
+      { id: "ir-q2-2", question: "Why should IR teams use out-of-band communication during an incident?", options: ["To save money", "Because compromised systems may be monitored by the attacker", "To avoid documentation", "Because normal channels are too slow"], correctAnswer: 1, explanation: "Compromised systems may be monitored, so out-of-band channels prevent the attacker from observing IR coordination." },
+      { id: "ir-q2-3", question: "Under GDPR, what is the breach notification timeline?", options: ["24 hours", "48 hours", "72 hours", "7 days"], correctAnswer: 2, explanation: "GDPR Article 33 requires notification within 72 hours of becoming aware of a personal data breach." },
+      { id: "ir-q2-4", question: "What is the primary purpose of a write blocker?", options: ["Encrypt evidence", "Prevent modification of evidence drives during imaging", "Speed up imaging", "Compress forensic images"], correctAnswer: 1, explanation: "Write blockers prevent any write operations to evidence drives, maintaining integrity and admissibility." },
+      { id: "ir-q2-5", question: "In a tabletop exercise, what is an 'inject'?", options: ["A type of malware", "A timed scenario element introducing new information or escalation", "A technical attack tool", "A report document"], correctAnswer: 1, explanation: "Injects are timed scenario elements that introduce new information and force participants to adapt." },
+      { id: "ir-q2-6", question: "Which tool is designed for rapid triage artifact collection?", options: ["Wireshark", "KAPE", "Nmap", "Burp Suite"], correctAnswer: 1, explanation: "KAPE is specifically designed for rapid triage collection of forensic artifacts from endpoints." },
+      { id: "ir-q2-7", question: "How often should an IR jump bag be validated?", options: ["After incidents only", "Annually", "Monthly with quarterly exercises", "When new tools release"], correctAnswer: 2, explanation: "Monthly validation ensures tools are updated; quarterly exercises test deployment readiness." },
+      { id: "ir-q2-8", question: "A SEV-1 incident includes which of the following?", options: ["Policy violations", "Malware on isolated system", "Active data exfiltration or ransomware spreading", "Suspicious unconfirmed activity"], correctAnswer: 2, explanation: "SEV-1 covers active exfiltration, spreading ransomware, and complete service outages." },
+      { id: "ir-q2-9", question: "What is the most common finding from tabletop exercises?", options: ["Inadequate tools", "Unclear or outdated escalation paths", "Lack of certifications", "Insufficient budgets"], correctAnswer: 1, explanation: "Common findings include unclear escalation paths, outdated contacts, and disagreements about authority." },
+      { id: "ir-q2-10", question: "Why establish attorney-client privilege for IR communications?", options: ["To avoid documenting incidents", "To protect IR communications from legal discovery", "To bypass regulatory requirements", "To limit access to the IR plan"], correctAnswer: 1, explanation: "Privilege protects sensitive investigation details from being discoverable in litigation." }
+    ]
+  },
+  {
+    quizId: "ir-q3",
+    courseId: "incident-response",
+    title: "Detection & Analysis",
+    description: "Test your understanding of detection sources, triage, indicator analysis, and root cause analysis.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      { id: "ir-q3-1", question: "In the Pyramid of Pain, which indicator is HARDEST for attackers to change?", options: ["Hash values", "IP addresses", "Domain names", "TTPs"], correctAnswer: 3, explanation: "TTPs are fundamental to how attackers operate; changing them requires completely retooling." },
+      { id: "ir-q3-2", question: "What is the difference between an IOC and an IOA?", options: ["IOCs are behavioral; IOAs are artifacts", "IOCs are artifacts; IOAs are behavioral patterns during an attack", "IOAs are more specific", "No difference"], correctAnswer: 1, explanation: "IOCs are forensic artifacts left behind; IOAs are behavioral patterns detected during an attack." },
+      { id: "ir-q3-3", question: "What response time SLA is expected for SEV-1 initial response?", options: ["1 hour", "30 minutes", "15 minutes", "4 hours"], correctAnswer: 2, explanation: "SEV-1 requires 15-minute initial response with updates every 30 minutes." },
+      { id: "ir-q3-4", question: "The 5 Whys technique aims to identify:", options: ["The responsible individual", "The systemic failure that allowed the attack", "Five attack vectors", "Five mitigations"], correctAnswer: 1, explanation: "The 5 Whys drills from symptoms to the underlying systemic/organizational failure." },
+      { id: "ir-q3-5", question: "Which source often FIRST detects BEC attacks?", options: ["SIEM rules", "EDR", "User reports", "NDR tools"], correctAnswer: 2, explanation: "Users who receive suspicious emails often provide the first detection for BEC and social engineering." },
+      { id: "ir-q3-6", question: "What is 'anchoring bias' in incident triage?", options: ["Prioritizing specific data sources", "Assuming the first hypothesis is correct", "Only investigating during business hours", "Focusing only on high-severity alerts"], correctAnswer: 1, explanation: "Anchoring bias means interpreting all subsequent evidence to confirm the initial hypothesis." },
+      { id: "ir-q3-7", question: "In a fishbone diagram, 'missing EDR coverage' falls under which category?", options: ["People", "Process", "Technology", "Policy"], correctAnswer: 2, explanation: "Missing EDR coverage is a Technology contributing factor." },
+      { id: "ir-q3-8", question: "What is the target MTTD for a high-performing IR team?", options: ["< 1 hour", "< 24 hours", "< 7 days", "< 30 days"], correctAnswer: 1, explanation: "High-performing teams target MTTD under 24 hours vs. the industry average of ~200 days." },
+      { id: "ir-q3-9", question: "Which correlation technique groups events by time window?", options: ["Entity correlation", "TTP mapping", "Temporal correlation", "Behavioral correlation"], correctAnswer: 2, explanation: "Temporal correlation groups events by time window to build chronological attack timelines." },
+      { id: "ir-q3-10", question: "Impact assessment during triage evaluates which triad?", options: ["People, Process, Technology", "Confidentiality, Integrity, Availability", "Detection, Response, Recovery", "Risk, Threat, Vulnerability"], correctAnswer: 1, explanation: "Impact is assessed across the CIA triad: was data accessed (C), modified (I), or services disrupted (A)?" }
+    ]
+  },
+  {
+    quizId: "ir-q4",
+    courseId: "incident-response",
+    title: "Containment Strategies",
+    description: "Test your knowledge of containment, evidence preservation, and decision-making frameworks.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      { id: "ir-q4-1", question: "Why should you NEVER power off a compromised system before capturing memory?", options: ["It damages the hard drive", "You lose volatile evidence: RAM, processes, network connections", "The OS won't boot again", "It triggers attacker dead man switches"], correctAnswer: 1, explanation: "Powering off destroys volatile evidence including RAM, running processes, and network connections." },
+      { id: "ir-q4-2", question: "How many times must KRBTGT be reset to remediate Golden Ticket attacks?", options: ["Once", "Twice with 12+ hour gap", "Three times over 48 hours", "Depends on domain controllers"], correctAnswer: 1, explanation: "KRBTGT must be reset twice with 12+ hours between to invalidate tickets from both old and new hashes." },
+      { id: "ir-q4-3", question: "What is a DNS sinkhole used for during containment?", options: ["Speed up DNS for IR team", "Redirect malicious domains to reveal other infected systems", "Block all DNS traffic", "Encrypt DNS queries"], correctAnswer: 1, explanation: "DNS sinkholes redirect malicious domain resolutions, blocking C2 and revealing other infected systems." },
+      { id: "ir-q4-4", question: "In the order of volatility, which should be collected FIRST?", options: ["Disk contents", "Log files", "Running memory (RAM)", "Backup media"], correctAnswer: 2, explanation: "RAM is the most practically collectible volatile evidence and is lost on power-off." },
+      { id: "ir-q4-5", question: "When is monitoring preferred over immediate isolation?", options: ["When ransomware is spreading", "When the attacker is dormant and you need intelligence", "When data is being exfiltrated", "When legal requires immediate action"], correctAnswer: 1, explanation: "Monitoring is preferred when the attacker is dormant, allowing intelligence gathering about scope and TTPs." },
+      { id: "ir-q4-6", question: "Chain of custody documentation includes:", options: ["Only the hash value", "Collector, time, tool, storage location, and every transfer", "Only analyst name and date", "Only description and case number"], correctAnswer: 1, explanation: "Full chain of custody tracks collector, time, tool, hash, storage, and every subsequent transfer." },
+      { id: "ir-q4-7", question: "Why is coordinated simultaneous containment important?", options: ["It's faster", "It prevents attackers from adapting to individual containment actions", "It reduces tools needed", "It simplifies documentation"], correctAnswer: 1, explanation: "Sequential containment lets sophisticated attackers detect and adapt; simultaneous containment prevents this." },
+      { id: "ir-q4-8", question: "Which containment method maintains management connectivity while isolating endpoints?", options: ["Disabling NICs", "VLAN isolation", "EDR isolation", "Firewall blocking"], correctAnswer: 2, explanation: "EDR isolation blocks all network traffic except the EDR management connection." },
+      { id: "ir-q4-9", question: "Which hash algorithms should verify forensic images?", options: ["MD5 only", "SHA-1 only", "MD5 + SHA-256", "CRC32"], correctAnswer: 2, explanation: "Using both MD5 and SHA-256 provides stronger verification expected in legal contexts." },
+      { id: "ir-q4-10", question: "What should always happen before issuing a litigation hold?", options: ["Complete the investigation", "Notify law enforcement", "Consult legal counsel on preservation requirements", "Power off affected systems"], correctAnswer: 2, explanation: "Legal counsel determines preservation requirements before issuing holds to prevent routine data destruction." }
+    ]
+  },
+  {
+    quizId: "ir-q5",
+    courseId: "incident-response",
+    title: "Eradication & Recovery",
+    description: "Test your knowledge of malware removal, system restoration, validation, and business resumption.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      { id: "ir-q5-1", question: "When should you REBUILD rather than clean a system?", options: ["Only when outdated", "When rootkits are detected, DCs are compromised, or scope is unclear", "Only when malware is found", "Only for compliance"], correctAnswer: 1, explanation: "Rebuilding is required for rootkits, compromised DCs, or unclear scope — re-compromise risk is too high." },
+      { id: "ir-q5-2", question: "Which persistence mechanism achieves fileless execution via WMI?", options: ["Registry Run Keys", "Scheduled Tasks", "WMI Event Subscriptions", "DLL Hijacking"], correctAnswer: 2, explanation: "WMI Event Subscriptions create fileless persistence that traditional AV may not detect." },
+      { id: "ir-q5-3", question: "What is the correct phased restoration order?", options: ["Workstations → Critical → Core", "Core infrastructure → Critical business → Workstations → Non-critical", "All simultaneously", "Non-critical first"], correctAnswer: 1, explanation: "Start with core infrastructure (AD, DNS), then critical business systems, then workstations, then non-critical." },
+      { id: "ir-q5-4", question: "What must happen BEFORE reconnecting a restored system?", options: ["Notify users", "Patch vulnerabilities, install EDR, configure enhanced logging", "Complete the final report", "Hold lessons learned meeting"], correctAnswer: 1, explanation: "All patches, EDR, enhanced logging, credential rotation, and scanning must be done before reconnection." },
+      { id: "ir-q5-5", question: "How long should enhanced monitoring continue post-incident?", options: ["1 week", "2 weeks", "30-90 days", "6 months"], correctAnswer: 2, explanation: "30-90 days of enhanced monitoring allows detection of missed persistence or attacker re-entry." },
+      { id: "ir-q5-6", question: "What distinguishes business resumption from technical recovery?", options: ["No difference", "Recovery focuses on systems; resumption focuses on business processes and user productivity", "Resumption happens first", "Recovery is owned by business units"], correctAnswer: 1, explanation: "Systems running doesn't mean users are productive — resumption ensures business processes function." },
+      { id: "ir-q5-7", question: "Which re-compromise sign requires IMMEDIATE escalation?", options: ["Normal logins", "Connections to previously blocked attacker infrastructure from new sources", "More help desk tickets", "Slow performance"], correctAnswer: 1, explanation: "New sources connecting to blocked attacker infrastructure indicates missed persistence or new compromise." },
+      { id: "ir-q5-8", question: "When restoring from backup, what must NOT be skipped?", options: ["Restore the most recent backup", "Verify backup predates compromise and scan for malware", "Restore to original hardware", "Notify users first"], correctAnswer: 1, explanation: "Backups created after compromise may contain attacker persistence mechanisms." },
+      { id: "ir-q5-9", question: "What marks formal transition from IR to normal operations?", options: ["Systems restored", "Report published", "Executive sign-off", "Enhanced monitoring ends"], correctAnswer: 2, explanation: "Executive sign-off ensures leadership has reviewed the response and accepted residual risk." },
+      { id: "ir-q5-10", question: "A common business resumption challenge is:", options: ["Systems running too fast", "Application dependencies blocking processes even when individual systems work", "Too many IT staff", "Users adapting too quickly"], correctAnswer: 1, explanation: "Complex interdependencies between applications can prevent business processes from functioning." }
+    ]
+  },
+  {
+    quizId: "ir-q6",
+    courseId: "incident-response",
+    title: "Post-Incident Activities",
+    description: "Test your knowledge of lessons learned, report writing, metrics, and continuous improvement.",
+    passingScore: 70,
+    timeLimit: 20,
+    questions: [
+      { id: "ir-q6-1", question: "What is the fundamental principle of a blameless post-mortem?", options: ["No one is responsible", "Focus on systemic improvements, not individual blame", "Only managers attend", "No documentation"], correctAnswer: 1, explanation: "Blameless post-mortems create psychological safety by focusing on systems, not individuals." },
+      { id: "ir-q6-2", question: "When should lessons learned meetings be held?", options: ["24 hours", "Within 2 weeks", "1 month", "3 months"], correctAnswer: 1, explanation: "Within 2 weeks while details are fresh in participants' minds." },
+      { id: "ir-q6-3", question: "Every action item should include:", options: ["Only a description", "A single owner, specific deadline, and success criteria", "Budget and ROI", "CEO approval"], correctAnswer: 1, explanation: "Single owner, specific deadline, and clear success criteria ensure accountability." },
+      { id: "ir-q6-4", question: "Which metric measures total attacker presence time?", options: ["MTTD", "MTTR", "Dwell Time", "MTTE"], correctAnswer: 2, explanation: "Dwell time = total time from compromise to eradication. Target: < 7 days; average: ~200 days." },
+      { id: "ir-q6-5", question: "The Executive Summary of an incident report should contain:", options: ["Full IOC lists", "Plain-language summary, business impact, key decisions, top recommendations", "Only MITRE mapping", "Complete forensic methodology"], correctAnswer: 1, explanation: "Executive summaries are 1 page, written in plain language for leadership." },
+      { id: "ir-q6-6", question: "What does 're-compromise rate' measure?", options: ["New incident frequency", "How often eradication fails and the attacker returns", "Patch frequency", "False positive rate"], correctAnswer: 1, explanation: "High re-compromise rate indicates insufficient eradication thoroughness." },
+      { id: "ir-q6-7", question: "If MTTD is trending up, invest in:", options: ["More handlers", "Eradication tools", "Detection capabilities (SIEM, EDR, threat intel)", "Faster backups"], correctAnswer: 2, explanation: "Increasing MTTD means slower detection — invest in detection capabilities." },
+      { id: "ir-q6-8", question: "What timestamp format should incident reports use?", options: ["Analyst's local time", "UTC", "EST/EDT", "Affected system timezone"], correctAnswer: 1, explanation: "UTC prevents confusion when correlating events across systems and locations." },
+      { id: "ir-q6-9", question: "At which maturity level does IR become metrics-driven?", options: ["Developing (2)", "Defined (3)", "Managed (4)", "Optimizing (5)"], correctAnswer: 2, explanation: "Level 4 (Managed) features metrics-driven continuous improvement and integrated threat intel." },
+      { id: "ir-q6-10", question: "'Deploy EDR on uncovered systems' is which improvement category?", options: ["Detection", "Process", "Technology", "People"], correctAnswer: 2, explanation: "Deploying tools and expanding coverage falls under Technology improvements." }
+    ]
   }
 ];
 
