@@ -1258,6 +1258,7 @@ export const courses: Course[] = [
       {
         id: "1",
         title: "NSM Foundations",
+        quizId: "nsm-q1",
         lessons: [
           { id: "1.1", title: "What is Network Security Monitoring?", description: "Understanding NSM philosophy, goals, and how it complements endpoint detection.", status: "unlocked" },
           { id: "1.2", title: "Network Protocols Deep Dive", description: "TCP/IP, UDP, DNS, HTTP/S, and other protocols from a security perspective.", status: "locked" },
@@ -1268,6 +1269,7 @@ export const courses: Course[] = [
       {
         id: "2",
         title: "Packet Capture & Analysis",
+        quizId: "nsm-q2",
         lessons: [
           { id: "2.1", title: "Introduction to Wireshark", description: "Navigating the Wireshark interface, capture filters, and display filters.", status: "locked" },
           { id: "2.2", title: "TCP Stream Analysis", description: "Following TCP conversations, identifying retransmissions, and session reconstruction.", status: "locked" },
@@ -1279,6 +1281,7 @@ export const courses: Course[] = [
       {
         id: "3",
         title: "Intrusion Detection with Suricata",
+        quizId: "nsm-q3",
         lessons: [
           { id: "3.1", title: "Suricata Architecture & Setup", description: "Installing and configuring Suricata as an IDS/IPS engine.", status: "locked" },
           { id: "3.2", title: "Writing Suricata Rules", description: "Rule syntax, content matching, flow keywords, and protocol-specific options.", status: "locked" },
@@ -1289,6 +1292,7 @@ export const courses: Course[] = [
       {
         id: "4",
         title: "Network Metadata with Zeek",
+        quizId: "nsm-q4",
         lessons: [
           { id: "4.1", title: "Introduction to Zeek", description: "Understanding Zeek's role in NSM and its log-based approach to network analysis.", status: "locked" },
           { id: "4.2", title: "Zeek Log Types", description: "Exploring conn.log, dns.log, http.log, ssl.log, files.log, and other key logs.", status: "locked" },
@@ -1299,6 +1303,7 @@ export const courses: Course[] = [
       {
         id: "5",
         title: "Network Attack Detection",
+        quizId: "nsm-q5",
         lessons: [
           { id: "5.1", title: "Detecting Reconnaissance", description: "Identifying port scans, service enumeration, and network mapping attempts.", status: "locked" },
           { id: "5.2", title: "Detecting Command & Control", description: "Recognizing C2 beaconing patterns, encrypted channels, and covert communications.", status: "locked" },
@@ -1309,6 +1314,7 @@ export const courses: Course[] = [
       {
         id: "6",
         title: "Practical NSM Operations",
+        quizId: "nsm-q6",
         lessons: [
           { id: "6.1", title: "Building an NSM Workflow", description: "Integrating Zeek, Suricata, and SIEM for a complete monitoring pipeline.", status: "locked" },
           { id: "6.2", title: "Network Forensics Basics", description: "Evidence preservation, timeline construction, and reporting from network data.", status: "locked" },
