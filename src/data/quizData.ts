@@ -4487,6 +4487,127 @@ export const quizzes: QuizData[] = [
       { id: "th-q6-9", question: "What does 'MITRE ATT&CK coverage mapping' help hunters understand?", options: ["Network topology", "Which adversary techniques the organization can and cannot detect, revealing blind spots", "Employee skills", "Budget allocation"], correctAnswer: 1, explanation: "ATT&CK coverage mapping visualizes detection capabilities against known techniques, highlighting gaps to prioritize hunts." },
       { id: "th-q6-10", question: "What is the relationship between threat hunting and detection engineering?", options: ["They are unrelated", "Hunt findings feed detection engineering; detection gaps inform hunt priorities — a continuous cycle", "Hunting replaces detection", "Detection replaces hunting"], correctAnswer: 1, explanation: "Hunting and detection engineering form a virtuous cycle: hunts discover threats → detections are built → gaps inform new hunts." }
     ]
+  },
+  // ===================== Detection Engineering Basics =====================
+  {
+    quizId: "de-q1",
+    courseId: "detection-engineering",
+    title: "Detection Fundamentals",
+    description: "Test your understanding of detection philosophy, coverage models, and alert quality.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "de-q1-1", question: "What is the most durable type of detection on the detection spectrum?", options: ["Hash-based", "Signature-based", "Behavioral", "Anomaly-based"], correctAnswer: 3, explanation: "Anomaly-based detections using statistical baselines are the most durable, lasting years compared to hash-based detections that last hours." },
+      { id: "de-q1-2", question: "What is the 'assume breach' principle in detection engineering?", options: ["Assume all software has bugs", "Assume adversaries are already inside and validate controls through detection", "Assume breaches are unavoidable so don't invest in prevention", "Assume every alert is a breach"], correctAnswer: 1, explanation: "Assume breach means building detections that validate whether controls are working, not just blocking at the perimeter." },
+      { id: "de-q1-3", question: "What is a good target false positive rate for a high-fidelity detection?", options: ["<50%", "<30%", "<15%", "<5%"], correctAnswer: 3, explanation: "High-fidelity detections should have a FP rate below 5% — analysts must trust alerts to be actionable." },
+      { id: "de-q1-4", question: "What does 'detection as a product' mean?", options: ["Selling detections commercially", "Treating detections like software: requirements, testing, versioning, documentation, lifecycle management", "Only using commercial detection tools", "Detecting product defects"], correctAnswer: 1, explanation: "Detection as a product applies software engineering practices: requirements, testing, version control, and lifecycle management." },
+      { id: "de-q1-5", question: "Why are behavior-based detections preferred over IOC-based detections?", options: ["They are easier to write", "Behaviors are more durable — attackers change IOCs easily but changing TTPs is costly", "They have zero false positives", "They require less data"], correctAnswer: 1, explanation: "Behaviors (TTPs) sit at the top of the Pyramid of Pain — changing tradecraft is far more costly for adversaries than rotating IOCs." },
+      { id: "de-q1-6", question: "What is the primary cost of false positives in a SOC?", options: ["Storage costs", "Analyst fatigue leading to missed real threats", "Network bandwidth", "Licensing fees"], correctAnswer: 1, explanation: "False positives cause analyst fatigue and alert blindness, directly leading to missed real threats." },
+      { id: "de-q1-7", question: "What framework is most commonly used to map detection coverage?", options: ["NIST CSF", "MITRE ATT&CK", "ISO 27001", "CIS Controls"], correctAnswer: 1, explanation: "MITRE ATT&CK maps adversary techniques and is the standard framework for measuring detection coverage." },
+      { id: "de-q1-8", question: "What should you verify BEFORE writing any detection rule?", options: ["Budget approval", "That the required log source is enabled and ingested", "Manager approval", "That similar rules exist"], correctAnswer: 1, explanation: "No data = no detection. Always verify the log source is enabled, ingested into SIEM, and normalized before writing rules." },
+      { id: "de-q1-9", question: "What is the '5-day rule' for noisy detections?", options: ["Review all rules every 5 days", "If a rule fires >5 FPs/day for 5 consecutive days, disable it immediately", "Deploy rules for 5 days before production", "Write 5 rules per day"], correctAnswer: 1, explanation: "The 5-day rule prevents persistent noise: disable immediately and schedule a rewrite rather than letting noise accumulate." },
+      { id: "de-q1-10", question: "What is the detection engineering lifecycle order?", options: ["Deploy → Test → Design → Requirements", "Requirements → Design → Development → Testing → Deployment → Operations → Retirement", "Write → Deploy → Forget", "Test → Build → Ship"], correctAnswer: 1, explanation: "The full lifecycle is: Requirements → Design → Development → Testing → Deployment → Operations → Retirement." }
+    ]
+  },
+  {
+    quizId: "de-q2",
+    courseId: "detection-engineering",
+    title: "SIGMA Rules",
+    description: "Assess your knowledge of SIGMA syntax, modifiers, and rule conversion.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "de-q2-1", question: "What format are SIGMA rules written in?", options: ["JSON", "XML", "YAML", "TOML"], correctAnswer: 2, explanation: "SIGMA rules use YAML format, making them human-readable and version-control friendly." },
+      { id: "de-q2-2", question: "What is the purpose of the 'logsource' field in SIGMA?", options: ["Define the output format", "Specify what data to search (category + product)", "Set the rule severity", "Define the author"], correctAnswer: 1, explanation: "The logsource field abstracts the data source using category (process_creation) and product (windows), enabling vendor-neutral rules." },
+      { id: "de-q2-3", question: "What does the SIGMA modifier 'endswith' do?", options: ["Marks end of rule", "Matches values ending with the specified string", "Terminates processing", "Counts endings"], correctAnswer: 1, explanation: "The endswith modifier performs a suffix match — e.g., Image|endswith: '\\powershell.exe' matches any path ending with that string." },
+      { id: "de-q2-4", question: "How do you exclude false positives in a SIGMA rule?", options: ["Delete the rule", "Use a filter selection with 'not' in the condition", "Ignore them", "Email the SOC manager"], correctAnswer: 1, explanation: "Define a filter selection containing FP patterns, then use 'condition: selection and not filter' to exclude them." },
+      { id: "de-q2-5", question: "What tool converts SIGMA rules to SIEM-specific queries?", options: ["Wireshark", "pySigma / sigma-cli", "Nmap", "Volatility"], correctAnswer: 1, explanation: "pySigma (sigma-cli) converts SIGMA rules to Splunk SPL, Elastic KQL, Sentinel KQL, and other SIEM query languages." },
+      { id: "de-q2-6", question: "What does 'condition: 1 of selection*' mean?", options: ["Only the first selection", "Any selection matching the wildcard pattern triggers the rule", "Exactly one match required", "Select one field"], correctAnswer: 1, explanation: "'1 of selection*' means any selection whose name starts with 'selection' can trigger the rule — useful for multiple variants." },
+      { id: "de-q2-7", question: "What is a SIGMA processing pipeline?", options: ["A data backup process", "Field name translation between SIGMA and target SIEM", "A network protocol", "A CI/CD tool"], correctAnswer: 1, explanation: "Processing pipelines map SIGMA's generic field names to SIEM-specific fields (e.g., Image → process.executable in ECS)." },
+      { id: "de-q2-8", question: "How does SIGMA handle aggregation?", options: ["It cannot aggregate", "Using count(), sum() with timeframe in conditions", "Only in premium version", "Through external tools only"], correctAnswer: 1, explanation: "SIGMA supports aggregation functions like count() with timeframes — e.g., 'count(user) by src_ip > 10' in a 5m window." },
+      { id: "de-q2-9", question: "What does the 'tags' field in SIGMA typically contain?", options: ["HTML tags", "MITRE ATT&CK technique IDs", "File tags", "Network tags"], correctAnswer: 1, explanation: "Tags map to ATT&CK techniques (e.g., attack.t1059.001) and tactics (e.g., attack.execution) for coverage mapping." },
+      { id: "de-q2-10", question: "What is SigmaHQ?", options: ["A security company", "The official community repository with 2000+ SIGMA detection rules", "A SIEM product", "A certification body"], correctAnswer: 1, explanation: "SigmaHQ is the official open-source repository containing thousands of community-maintained SIGMA detection rules." }
+    ]
+  },
+  {
+    quizId: "de-q3",
+    courseId: "detection-engineering",
+    title: "YARA Signatures",
+    description: "Quiz on YARA rule structure, pattern matching, and conditions.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "de-q3-1", question: "What are the three main sections of a YARA rule?", options: ["Header, body, footer", "Meta, strings, condition", "Input, process, output", "Name, pattern, action"], correctAnswer: 1, explanation: "YARA rules consist of meta (metadata), strings (patterns to match), and condition (logic determining a match)." },
+      { id: "de-q3-2", question: "What does the YARA modifier 'wide' do?", options: ["Makes the rule apply to more files", "Matches UTF-16 encoded strings", "Increases scan width", "Broadens the condition"], correctAnswer: 1, explanation: "The 'wide' modifier matches UTF-16 encoded strings, which is how Windows often stores text internally." },
+      { id: "de-q3-3", question: "What does 'uint16(0) == 0x5A4D' check in a YARA condition?", options: ["File size", "Whether the file is a PE executable (MZ header)", "String count", "Network port"], correctAnswer: 1, explanation: "0x5A4D is the MZ magic number at offset 0, indicating a Windows PE executable file." },
+      { id: "de-q3-4", question: "What does the YARA 'xor' modifier do?", options: ["Encrypts the rule", "Automatically generates XOR-rotated variants of a string for matching", "Performs exclusive OR on results", "Disables the string"], correctAnswer: 1, explanation: "The xor modifier generates all (or specified range) XOR-rotated variants, detecting simple obfuscation automatically." },
+      { id: "de-q3-5", question: "What does high entropy (>7.5) in a PE section indicate?", options: ["Normal text content", "Packed or encrypted content", "Empty section", "Debug information"], correctAnswer: 1, explanation: "Entropy above 7.5 strongly indicates packed, encrypted, or compressed content — common in malware." },
+      { id: "de-q3-6", question: "Which YARA module is used to analyze PE file structure?", options: ["math", "pe", "elf", "hash"], correctAnswer: 1, explanation: "The pe module provides access to PE headers, sections, imports, exports, and signature information." },
+      { id: "de-q3-7", question: "What is the purpose of hex wildcards (??) in YARA strings?", options: ["Comment markers", "Match any byte value at that position", "Error indicators", "Section delimiters"], correctAnswer: 1, explanation: "Hex wildcards (??) match any byte, handling variable opcodes or data within otherwise fixed byte patterns." },
+      { id: "de-q3-8", question: "How should YARA rules be optimized for production scanning?", options: ["Use only regex patterns", "Use anchors, filesize filters, and avoid expensive regex", "Scan every file regardless of size", "Disable all modules"], correctAnswer: 1, explanation: "Optimized rules use 'at 0' anchors, filesize limits, and simple patterns to minimize scan time at scale." },
+      { id: "de-q3-9", question: "What does '#suspicious_api > 5' check in a YARA condition?", options: ["String length", "Whether the string 'suspicious_api' appears more than 5 times", "File offset", "Rule priority"], correctAnswer: 1, explanation: "The # operator counts string occurrences — #suspicious_api > 5 checks if the string appears more than 5 times." },
+      { id: "de-q3-10", question: "What is the recommended naming convention for YARA rules?", options: ["Random names", "APT_Group_Technique_Description.yar", "Sequential numbers", "Date-based only"], correctAnswer: 1, explanation: "Descriptive naming like APT_Group_Technique_Description.yar enables quick identification and organized rule management." }
+    ]
+  },
+  {
+    quizId: "de-q4",
+    courseId: "detection-engineering",
+    title: "Log Source Mastery",
+    description: "Test your knowledge of Windows, Linux, network, and cloud log sources.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "de-q4-1", question: "Which Windows Event ID indicates a successful logon?", options: ["4625", "4624", "4688", "4698"], correctAnswer: 1, explanation: "Event ID 4624 logs successful authentication events with logon type, source, and account details." },
+      { id: "de-q4-2", question: "Why is Sysmon essential for Windows detection?", options: ["It's built into Windows", "It provides detailed process creation, network, and registry logging beyond native auditing", "It replaces the event log service", "It only logs errors"], correctAnswer: 1, explanation: "Sysmon captures process command lines, hashes, network connections, and parent-child relationships that native auditing misses." },
+      { id: "de-q4-3", question: "Which Sysmon event ID detects DLL side-loading?", options: ["Sysmon 1", "Sysmon 3", "Sysmon 7 (Image Loaded)", "Sysmon 10"], correctAnswer: 2, explanation: "Sysmon Event ID 7 logs DLL/image loads with hash and signature information, enabling DLL side-loading detection." },
+      { id: "de-q4-4", question: "What Zeek log file captures DNS queries?", options: ["conn.log", "http.log", "dns.log", "ssl.log"], correctAnswer: 2, explanation: "Zeek's dns.log captures all DNS queries and responses with full detail for DNS-based threat detection." },
+      { id: "de-q4-5", question: "Which cloud log source records all AWS API calls?", options: ["VPC Flow Logs", "CloudWatch", "CloudTrail", "S3 Access Logs"], correctAnswer: 2, explanation: "AWS CloudTrail records every API call made in the AWS account, essential for cloud security detection." },
+      { id: "de-q4-6", question: "What is the purpose of log normalization?", options: ["Deleting duplicate logs", "Mapping diverse log formats to a common schema for consistent querying", "Compressing logs", "Encrypting logs"], correctAnswer: 1, explanation: "Normalization maps different field names (SourceIP, src_ip, srcaddr) to a common schema (source.ip) for cross-source correlation." },
+      { id: "de-q4-7", question: "What does ECS stand for in the context of log normalization?", options: ["Enterprise Control System", "Elastic Common Schema", "Event Classification Standard", "Endpoint Collection Service"], correctAnswer: 1, explanation: "ECS (Elastic Common Schema) provides standardized field names for consistent log normalization across sources." },
+      { id: "de-q4-8", question: "Which Linux log file records SSH authentication events?", options: ["/var/log/messages", "/var/log/auth.log", "/var/log/kern.log", "/var/log/boot.log"], correctAnswer: 1, explanation: "/var/log/auth.log (Debian/Ubuntu) or /var/log/secure (RHEL) records all authentication events including SSH." },
+      { id: "de-q4-9", question: "What type of cloud detection identifies logins from geographically impossible locations?", options: ["DDoS detection", "Impossible travel detection", "Brute force detection", "Data loss prevention"], correctAnswer: 1, explanation: "Impossible travel flags logins from distant locations in impossibly short timeframes, indicating credential compromise." },
+      { id: "de-q4-10", question: "What does log enrichment add to raw events?", options: ["More raw data", "Context: asset info, threat intel, GeoIP, user details", "Compression", "Encryption"], correctAnswer: 1, explanation: "Enrichment adds reputation, geolocation, asset criticality, and user context — transforming raw logs into actionable intelligence." }
+    ]
+  },
+  {
+    quizId: "de-q5",
+    courseId: "detection-engineering",
+    title: "Detection-as-Code",
+    description: "Assess your understanding of version control, CI/CD, and testing for detections.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "de-q5-1", question: "Why should detection rules be stored in Git?", options: ["Because it's trendy", "For history tracking, code review, rollback, and collaboration", "Because SIEM storage is unreliable", "To encrypt them"], correctAnswer: 1, explanation: "Git provides change history, pull request reviews, instant rollback, team collaboration, and CI/CD automation." },
+      { id: "de-q5-2", question: "What is Atomic Red Team?", options: ["A penetration testing company", "An open-source library of small, focused attack simulations mapped to ATT&CK", "A SIEM product", "A firewall rule set"], correctAnswer: 1, explanation: "Atomic Red Team provides pre-built, small attack tests for each ATT&CK technique to validate that detections fire correctly." },
+      { id: "de-q5-3", question: "What should a detection CI/CD pipeline include?", options: ["Only deployment", "Lint, validate, convert, test (TP + FP), stage, deploy, and monitor", "Only testing", "Only linting"], correctAnswer: 1, explanation: "A complete pipeline covers YAML linting, schema validation, SIEM conversion, TP/FP testing, staged deployment, and monitoring." },
+      { id: "de-q5-4", question: "What is a 'quality gate' in a detection pipeline?", options: ["A firewall rule", "A checkpoint that blocks deployment if criteria aren't met (e.g., missing tests)", "A SIEM license check", "An analyst approval form"], correctAnswer: 1, explanation: "Quality gates enforce standards: valid syntax, required fields, passing TP tests, and approved reviews before deployment." },
+      { id: "de-q5-5", question: "How often should critical detections be validated?", options: ["Annually", "Quarterly", "Monthly", "Daily"], correctAnswer: 3, explanation: "Critical detections (credential theft, ransomware) should be validated daily to ensure they still fire correctly." },
+      { id: "de-q5-6", question: "What is a True Negative (TN) test for a detection?", options: ["Testing when the rule fails", "Verifying legitimate activity doesn't trigger the detection", "Testing network connectivity", "Testing rule deletion"], correctAnswer: 1, explanation: "TN tests run benign activity similar to the attack pattern and verify the detection correctly stays silent." },
+      { id: "de-q5-7", question: "What is the benefit of Infrastructure as Code for SIEM?", options: ["Faster queries", "Repeatable deployment, disaster recovery, auditing, and environment consistency", "Lower licensing costs", "Better dashboards"], correctAnswer: 1, explanation: "IaC enables rebuilding entire SIEM configurations from code, audit trails, and consistent dev/staging/production environments." },
+      { id: "de-q5-8", question: "What branching strategy works best for detection rules?", options: ["No branches, commit to main", "Feature branches with pull requests merged to develop, then to main", "One branch per analyst", "Random branches"], correctAnswer: 1, explanation: "Feature branches (feature/detect-kerberoasting) with PR reviews ensure quality before merging to staging and production." },
+      { id: "de-q5-9", question: "What should happen automatically when a detection is deployed?", options: ["Nothing", "Notifications to SOC team, JIRA ticket for playbook update, coverage dashboard update", "Delete old rules", "Restart SIEM"], correctAnswer: 1, explanation: "Automated notifications keep the SOC informed, playbook tickets ensure documentation, and dashboards reflect current coverage." },
+      { id: "de-q5-10", question: "How does purple teaming relate to detection testing?", options: ["They are unrelated", "Red team executes techniques, blue team validates detections, gaps drive new detections", "Purple team replaces detection engineers", "Purple team only does compliance"], correctAnswer: 1, explanation: "Purple teaming directly validates detections: red executes, blue validates, gaps are identified, and new detections are built." }
+    ]
+  },
+  {
+    quizId: "de-q6",
+    courseId: "detection-engineering",
+    title: "Detection Operations",
+    description: "Quiz on tuning, metrics, coverage mapping, and detection lifecycle management.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "de-q6-1", question: "How long should a detection run in alert-only mode before production?", options: ["1 day", "1-2 weeks", "3 months", "No alert-only period needed"], correctAnswer: 1, explanation: "1-2 weeks in alert-only mode allows observation of FP patterns and tuning before enabling full alerting." },
+      { id: "de-q6-2", question: "What is 'detection decay'?", options: ["Rules getting slower", "Detections losing effectiveness over time due to environment changes and adversary evolution", "Storage degradation", "Network latency increase"], correctAnswer: 1, explanation: "Detection decay occurs as environments change, adversaries evolve, data sources drift, and configurations shift." },
+      { id: "de-q6-3", question: "What ATT&CK coverage percentage indicates a mature detection program?", options: ["10-20%", "20-30%", "50-70%", "100%"], correctAnswer: 2, explanation: "Mature programs achieve 50-70% coverage of priority techniques. 100% is unrealistic; 20-30% is average." },
+      { id: "de-q6-4", question: "What is the coverage scoring for 'IOC-based only, easily evaded'?", options: ["Score 0 (None)", "Score 1 (Minimal)", "Score 2 (Partial)", "Score 3 (Good)"], correctAnswer: 1, explanation: "Score 1 (Minimal) means only IOC-based detection exists — it's easily evaded and needs behavioral detection." },
+      { id: "de-q6-5", question: "When should a detection rule be retired?", options: ["Never", "When the technique is no longer relevant, replaced by better detection, or data source is deprecated", "After 30 days", "When the analyst who wrote it leaves"], correctAnswer: 1, explanation: "Retire when: technique irrelevant, better replacement exists, data source deprecated, or persistent FPs despite tuning." },
+      { id: "de-q6-6", question: "What is 'layered coverage' in detection engineering?", options: ["Multiple SIEM instances", "Multiple detections per technique using different data sources", "Layer 7 monitoring only", "Multiple analyst shifts"], correctAnswer: 1, explanation: "Layered coverage means having multiple detections for the same technique across different data sources — if one fails, others still detect." },
+      { id: "de-q6-7", question: "What is a healthy detection engineering velocity?", options: ["1 rule per year", "8-12 new rules shipped per month", "100 rules per day", "Only during incidents"], correctAnswer: 1, explanation: "8-12 new production detections per month, combined with 15-20 tuned and 2-5 retired, represents healthy velocity." },
+      { id: "de-q6-8", question: "What should a detection health check verify?", options: ["Only FP rate", "Still firing, still accurate, still needed, still performant, documentation current", "Only query syntax", "Only coverage mapping"], correctAnswer: 1, explanation: "Health checks verify five dimensions: firing (not broken), accurate (TP works), needed (relevant), performant (fast), documented (current)." },
+      { id: "de-q6-9", question: "How often should a full detection audit be performed?", options: ["Weekly", "Monthly", "Quarterly", "Annually"], correctAnswer: 3, explanation: "Full detection inventory audits should occur annually, while alert quality is reviewed weekly and coverage assessed quarterly." },
+      { id: "de-q6-10", question: "At which maturity level does a detection engineering program use CI/CD pipelines and testing?", options: ["Level 1 (Ad-hoc)", "Level 2 (Defined)", "Level 3 (Managed)", "Level 5 (Leading)"], correctAnswer: 2, explanation: "Level 3 (Managed) features CI/CD pipelines, automated testing, and metrics-driven detection engineering." }
+    ]
   }
 ];
 
