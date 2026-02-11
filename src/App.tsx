@@ -11,6 +11,10 @@ import LessonViewer from "./pages/LessonViewer";
 import QuizPage from "./pages/QuizPage";
 import Labs from "./pages/Labs";
 import Alerts from "./pages/Alerts";
+import Incidents from "./pages/Incidents";
+import Endpoints from "./pages/Endpoints";
+import ThreatIntel from "./pages/ThreatIntel";
+import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
@@ -37,6 +41,10 @@ const App = () => (
           <Route path="/courses/:courseId/quiz/:quizId" element={<QuizPage />} />
           <Route path="/labs" element={<Labs />} />
           <Route path="/labs/alerts" element={<Alerts />} />
+          <Route path="/labs/incidents" element={<Incidents />} />
+          <Route path="/labs/endpoints" element={<Endpoints />} />
+          <Route path="/labs/threat-intel" element={<ThreatIntel />} />
+          <Route path="/labs/settings" element={<Settings />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
