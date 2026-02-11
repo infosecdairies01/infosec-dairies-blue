@@ -1,23 +1,15 @@
-import { 
-  LayoutDashboard, 
-  AlertTriangle, 
-  FileWarning, 
-  ScrollText, 
-  Monitor, 
-  Shield, 
-  Settings 
-} from "lucide-react";
+import { Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/labs" },
-  { icon: AlertTriangle, label: "Alerts", href: "/labs/alerts" },
-  { icon: FileWarning, label: "Incidents", href: "/labs/incidents" },
-  { icon: ScrollText, label: "Logs", href: "/labs/logs" },
-  { icon: Monitor, label: "Endpoints", href: "/labs/endpoints" },
-  { icon: Shield, label: "Threat Intel", href: "/labs/threat-intel" },
-  { icon: Settings, label: "Settings", href: "/labs/settings" },
+  { label: "Dashboard", href: "/labs" },
+  { label: "Alerts", href: "/labs/alerts" },
+  { label: "Incidents", href: "/labs/incidents" },
+  { label: "Logs", href: "/labs/logs" },
+  { label: "Endpoints", href: "/labs/endpoints" },
+  { label: "Threat Intel", href: "/labs/threat-intel" },
+  { label: "Settings", href: "/labs/settings" },
 ];
 
 interface SOCSidebarProps {
@@ -47,8 +39,7 @@ const SOCSidebar = ({ activeItem = "Dashboard" }: SOCSidebarProps) => {
                   : "text-muted-foreground"
               )}
             >
-              <item.icon className="w-5 h-5 shrink-0 mx-auto lg:mx-0" />
-              <span className="hidden lg:inline">{item.label}</span>
+              <span className="text-center lg:text-left">{item.label}</span>
             </Link>
           );
         })}
