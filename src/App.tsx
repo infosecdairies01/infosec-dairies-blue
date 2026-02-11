@@ -10,6 +10,7 @@ import LiveCourseDetail from "./pages/LiveCourseDetail";
 import LessonViewer from "./pages/LessonViewer";
 import QuizPage from "./pages/QuizPage";
 import Labs from "./pages/Labs";
+import ResourceViewer from "./pages/ResourceViewer";
 import Alerts from "./pages/Alerts";
 import Incidents from "./pages/Incidents";
 import Endpoints from "./pages/Endpoints";
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/live-courses/:courseId" element={<LiveCourseDetail />} />
           <Route path="/courses/:courseId/lesson/:lessonId" element={<LessonViewer />} />
           <Route path="/courses/:courseId/quiz/:quizId" element={<QuizPage />} />
+          <Route path="/courses/:courseId/resource/:resourceId" element={<ResourceViewer />} />
           <Route path="/labs" element={<Labs />} />
           <Route path="/labs/alerts" element={<Alerts />} />
           <Route path="/labs/incidents" element={<Incidents />} />

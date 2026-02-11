@@ -344,7 +344,7 @@ const CourseDetail = () => {
                               <Download className="w-4 h-4" />
                               Downloadable Materials
                             </h4>
-                            {course.resources.filter(r => r.type !== "link").map(resource => <div key={resource.id} className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors group cursor-pointer">
+                            {course.resources.filter(r => r.type !== "link").map(resource => <Link key={resource.id} to={`/courses/${courseId}/resource/${resource.id}`} className="p-4 rounded-lg bg-card/30 border border-white/[0.06] flex items-center justify-between hover:bg-card/40 transition-colors group block">
                                 <div className="flex items-start gap-3">
                                   <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
                                     {resource.type === "pdf" && <FileText className="w-5 h-5 text-primary" />}
@@ -353,15 +353,15 @@ const CourseDetail = () => {
                                     {resource.type === "tool" && <FileText className="w-5 h-5 text-blue-400" />}
                                   </div>
                                   <div>
-                                    <span className="text-foreground font-medium">{resource.title}</span>
+                                    <span className="text-foreground font-medium group-hover:text-primary transition-colors">{resource.title}</span>
                                     <p className="text-xs text-muted-foreground mt-1">{resource.description}</p>
                                     <span className="inline-block mt-2 px-2 py-0.5 rounded text-xs bg-muted/30 text-muted-foreground capitalize">
                                       {resource.type}
                                     </span>
                                   </div>
                                 </div>
-                                <Download className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                              </div>)}
+                                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                              </Link>)}
                           </div>
                           
                           {/* External Links */}
