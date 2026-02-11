@@ -1323,6 +1323,14 @@ export const courses: Course[] = [
         ],
       },
     ],
+    quizzes: [
+      { id: "nsm-q1", title: "NSM Foundations Quiz", description: "Test your knowledge of NSM philosophy, network protocols, OSI model, and sensor placement.", questionCount: 10, passingScore: 70, duration: "15 min", status: "unlocked" },
+      { id: "nsm-q2", title: "Packet Capture & Analysis Quiz", description: "Assess your Wireshark skills, TCP stream analysis, DNS and HTTP traffic inspection.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "nsm-q3", title: "Intrusion Detection with Suricata Quiz", description: "Evaluate your understanding of Suricata architecture, rule writing, and alert tuning.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "nsm-q4", title: "Network Metadata with Zeek Quiz", description: "Test your knowledge of Zeek logs, threat hunting with metadata, and Zeek scripting.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "nsm-q5", title: "Network Attack Detection Quiz", description: "Assess your ability to detect reconnaissance, C2, lateral movement, and exfiltration.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "nsm-q6", title: "Practical NSM Operations Quiz", description: "Evaluate your understanding of NSM workflows, network forensics, and best practices.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+    ],
   },
   {
     id: "incident-response",
