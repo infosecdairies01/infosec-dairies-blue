@@ -1400,6 +1400,14 @@ export const courses: Course[] = [
         ],
       },
     ],
+    quizzes: [
+      { id: "ir-q1", title: "IR Foundations & Frameworks Quiz", description: "Test your knowledge of IR lifecycle models, NIST and SANS frameworks, and team structure.", questionCount: 10, passingScore: 70, duration: "15 min", status: "unlocked" },
+      { id: "ir-q2", title: "Preparation & Readiness Quiz", description: "Assess your understanding of IR policies, communication plans, toolkits, and tabletop exercises.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "ir-q3", title: "Detection & Analysis Quiz", description: "Evaluate your skills in incident detection, triage, indicator analysis, and root cause techniques.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "ir-q4", title: "Containment Strategies Quiz", description: "Test containment approaches including isolation, evidence preservation, and decision frameworks.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "ir-q5", title: "Eradication & Recovery Quiz", description: "Assess knowledge of malware removal, system restoration, validation, and business resumption.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "ir-q6", title: "Post-Incident Activities Quiz", description: "Evaluate understanding of lessons learned, report writing, IR metrics, and continuous improvement.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+    ],
   },
   {
     id: "threat-hunting",
