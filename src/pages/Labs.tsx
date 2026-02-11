@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import SOCSidebar from "@/components/soc/SOCSidebar";
 import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
@@ -17,7 +16,7 @@ const Labs = () => {
         
         <div className="flex-1 flex flex-col min-w-0">
           {/* Dashboard Header */}
-          <header className="bg-card border-b border-border px-6 py-4 flex items-center justify-between">
+          <header className="bg-card/25 backdrop-blur-lg border-b border-white/[0.08] px-6 py-4 flex items-center justify-between">
             <div>
               <h1 className="text-xl font-semibold text-foreground">Security Dashboard</h1>
               <p className="text-sm text-muted-foreground">Real-time threat monitoring and analysis</p>
@@ -29,7 +28,7 @@ const Labs = () => {
                 <input 
                   type="text" 
                   placeholder="Search alerts..." 
-                  className="bg-background border border-border rounded-md pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-colors" 
+                  className="bg-background/50 border border-white/[0.08] rounded-lg pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/25 w-64 transition-colors backdrop-blur-sm" 
                 />
               </div>
               
@@ -38,7 +37,7 @@ const Labs = () => {
                 <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
               </button>
               
-              <button className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
+              <button className="w-8 h-8 bg-primary/10 border border-primary/25 rounded-full flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
                 <User className="w-4 h-4" />
               </button>
             </div>
@@ -47,16 +46,13 @@ const Labs = () => {
           {/* Dashboard Content */}
           <div className="flex-1 p-6 overflow-auto">
             <div className="space-y-6">
-              {/* Alert Summary Cards */}
               <AlertSummaryCards />
               
-              {/* Charts Row */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <AlertsChart />
                 <TopSourcesChart />
               </div>
               
-              {/* Recent Alerts Table */}
               <RecentAlertsTable />
             </div>
           </div>
