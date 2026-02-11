@@ -26,9 +26,9 @@ interface SOCSidebarProps {
 
 const SOCSidebar = ({ activeItem = "Dashboard" }: SOCSidebarProps) => {
   return (
-    <aside className="w-16 lg:w-56 bg-card border-r border-border flex flex-col shrink-0">
-      <div className="p-4 border-b border-border">
-        <h2 className="hidden lg:block text-lg font-bold text-primary">SOC Labs</h2>
+    <aside className="w-16 lg:w-56 bg-card/25 backdrop-blur-lg border-r border-white/[0.08] flex flex-col shrink-0">
+      <div className="p-4 border-b border-white/[0.06]">
+        <h2 className="hidden lg:block text-lg font-bold gradient-text">SOC Labs</h2>
         <Shield className="lg:hidden w-8 h-8 text-primary mx-auto" />
       </div>
       
@@ -41,9 +41,9 @@ const SOCSidebar = ({ activeItem = "Dashboard" }: SOCSidebarProps) => {
               to={item.href}
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-3 text-sm transition-all duration-200",
-                "hover:bg-muted hover:text-primary",
+                "hover:bg-white/[0.04] hover:text-primary",
                 isActive 
-                  ? "bg-muted text-primary border-l-2 border-primary" 
+                  ? "bg-primary/10 text-primary border-l-2 border-primary" 
                   : "text-muted-foreground"
               )}
             >
@@ -54,7 +54,7 @@ const SOCSidebar = ({ activeItem = "Dashboard" }: SOCSidebarProps) => {
         })}
       </nav>
       
-      <div className="p-4 border-t border-border">
+      <div className="p-4 border-t border-white/[0.06]">
         <div className="hidden lg:flex items-center gap-2 text-xs text-muted-foreground">
           <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
           <span>System Online</span>

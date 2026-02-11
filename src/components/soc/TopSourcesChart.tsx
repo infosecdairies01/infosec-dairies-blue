@@ -18,42 +18,50 @@ const colors = [
 
 const TopSourcesChart = () => {
   return (
-    <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
-      <h3 className="text-sm font-medium text-foreground mb-4">Top Alert Sources</h3>
-      <div className="h-48">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical">
-            <XAxis 
-              type="number" 
-              stroke="hsl(180, 20%, 65%)" 
-              fontSize={11}
-              tickLine={false}
-              axisLine={false}
-            />
-            <YAxis
-              type="category"
-              dataKey="source"
-              stroke="hsl(180, 20%, 65%)"
-              fontSize={11}
-              tickLine={false}
-              axisLine={false}
-              width={100}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "hsl(220, 35%, 8%)",
-                border: "1px solid hsl(220, 30%, 18%)",
-                borderRadius: "6px",
-                color: "hsl(180, 100%, 95%)",
-              }}
-            />
-            <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-              {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index]} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+    <div className="group relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-4 shadow-lg shadow-black/20 hover:bg-card/35 hover:border-white/[0.12] transition-all duration-300">
+      {/* Inner light reflection */}
+      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
+      
+      <div className="relative pl-2">
+        <h3 className="text-sm font-medium text-foreground mb-4">Top Alert Sources</h3>
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} layout="vertical">
+              <XAxis 
+                type="number" 
+                stroke="hsl(180, 20%, 65%)" 
+                fontSize={11}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                type="category"
+                dataKey="source"
+                stroke="hsl(180, 20%, 65%)"
+                fontSize={11}
+                tickLine={false}
+                axisLine={false}
+                width={100}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(220, 35%, 8%)",
+                  border: "1px solid hsl(220, 30%, 18%)",
+                  borderRadius: "8px",
+                  color: "hsl(180, 100%, 95%)",
+                  backdropFilter: "blur(12px)",
+                }}
+              />
+              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+                {data.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={colors[index]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

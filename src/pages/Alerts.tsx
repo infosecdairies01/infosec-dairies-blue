@@ -239,7 +239,7 @@ const Alerts = () => {
         
         <div className="flex-1 flex flex-col min-w-0">
           {/* Header */}
-          <header className="bg-card border-b border-border px-6 py-4 flex items-center justify-between">
+          <header className="bg-card/25 backdrop-blur-lg border-b border-white/[0.08] px-6 py-4 flex items-center justify-between">
             <div>
               <h1 className="text-xl font-semibold text-foreground">Security Alerts</h1>
               <p className="text-sm text-muted-foreground">Monitor and investigate security events</p>
@@ -253,7 +253,7 @@ const Alerts = () => {
                   placeholder="Search alerts..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-background border border-border rounded-md pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-colors" 
+                  className="bg-background/50 border border-white/[0.08] rounded-lg pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/25 w-64 transition-colors backdrop-blur-sm" 
                 />
               </div>
               
@@ -262,7 +262,7 @@ const Alerts = () => {
                 <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
               </button>
               
-              <button className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
+              <button className="w-8 h-8 bg-primary/10 border border-primary/25 rounded-full flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
                 <User className="w-4 h-4" />
               </button>
             </div>
@@ -272,35 +272,35 @@ const Alerts = () => {
           <div className="flex-1 p-6 overflow-auto">
             {/* Stats Bar */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
+                <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-4 shadow-lg shadow-black/20 hover:bg-card/35 hover:border-white/[0.12] transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide">Open</span>
                   <AlertTriangle className="w-4 h-4 text-destructive" />
                 </div>
                 <p className="text-2xl font-bold text-destructive mt-1">{alertCounts.open}</p>
               </div>
-              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
+              <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-4 shadow-lg shadow-black/20 hover:bg-card/35 hover:border-white/[0.12] transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide">Critical</span>
                   <div className="w-2 h-2 bg-destructive rounded-full" />
                 </div>
                 <p className="text-2xl font-bold text-foreground mt-1">{alertCounts.critical}</p>
               </div>
-              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
+              <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-4 shadow-lg shadow-black/20 hover:bg-card/35 hover:border-white/[0.12] transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide">High</span>
                   <div className="w-2 h-2 bg-orange-500 rounded-full" />
                 </div>
                 <p className="text-2xl font-bold text-foreground mt-1">{alertCounts.high}</p>
               </div>
-              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
+              <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-4 shadow-lg shadow-black/20 hover:bg-card/35 hover:border-white/[0.12] transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide">Medium</span>
                   <div className="w-2 h-2 bg-yellow-500 rounded-full" />
                 </div>
                 <p className="text-2xl font-bold text-foreground mt-1">{alertCounts.medium}</p>
               </div>
-              <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
+              <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-4 shadow-lg shadow-black/20 hover:bg-card/35 hover:border-white/[0.12] transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide">Low</span>
                   <div className="w-2 h-2 bg-primary rounded-full" />
@@ -320,7 +320,7 @@ const Alerts = () => {
                 <select 
                   value={selectedSeverity}
                   onChange={(e) => setSelectedSeverity(e.target.value)}
-                  className="appearance-none bg-card border border-border rounded-md px-3 py-1.5 pr-8 text-sm text-foreground focus:outline-none focus:border-primary cursor-pointer"
+                  className="appearance-none bg-card/25 backdrop-blur-sm border border-white/[0.08] rounded-lg px-3 py-1.5 pr-8 text-sm text-foreground focus:outline-none focus:border-primary/50 cursor-pointer"
                 >
                   <option value="all">All Severities</option>
                   <option value="Critical">Critical</option>
@@ -335,7 +335,7 @@ const Alerts = () => {
                 <select 
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="appearance-none bg-card border border-border rounded-md px-3 py-1.5 pr-8 text-sm text-foreground focus:outline-none focus:border-primary cursor-pointer"
+                  className="appearance-none bg-card/25 backdrop-blur-sm border border-white/[0.08] rounded-lg px-3 py-1.5 pr-8 text-sm text-foreground focus:outline-none focus:border-primary/50 cursor-pointer"
                 >
                   <option value="all">All Statuses</option>
                   <option value="Open">Open</option>
@@ -358,7 +358,7 @@ const Alerts = () => {
                 return (
                   <div 
                     key={alert.id}
-                    className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-all duration-200 cursor-pointer group"
+                    className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-4 shadow-lg shadow-black/20 hover:bg-card/35 hover:border-white/[0.12] transition-all duration-300 cursor-pointer group"
                   >
                     <div className="flex items-start gap-4">
                       {/* Severity Indicator */}

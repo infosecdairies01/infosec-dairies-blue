@@ -41,45 +41,52 @@ const getStatusStyles = (status: string) => {
 
 const RecentAlertsTable = () => {
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-colors">
-      <div className="p-4 border-b border-border">
-        <h3 className="text-sm font-medium text-foreground">Recent Alerts</h3>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-border">
-              <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Time</th>
-              <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Alert Name</th>
-              <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Severity</th>
-              <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Source</th>
-              <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {alerts.map((alert, index) => (
-              <tr 
-                key={index}
-                className="border-b border-border hover:bg-muted/50 transition-colors cursor-pointer"
-              >
-                <td className="px-4 py-3 text-sm text-muted-foreground font-mono">{alert.time}</td>
-                <td className="px-4 py-3 text-sm text-foreground">{alert.name}</td>
-                <td className="px-4 py-3">
-                  <span className={cn(
-                    "text-xs px-2 py-1 rounded border",
-                    getSeverityStyles(alert.severity)
-                  )}>
-                    {alert.severity}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-sm text-muted-foreground font-mono">{alert.source}</td>
-                <td className={cn("px-4 py-3 text-sm font-medium", getStatusStyles(alert.status))}>
-                  {alert.status}
-                </td>
+    <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] shadow-lg shadow-black/20 hover:bg-card/35 hover:border-white/[0.12] transition-all duration-300">
+      {/* Inner light reflection */}
+      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.02] via-transparent to-secondary/[0.01] pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
+      
+      <div className="relative">
+        <div className="p-4 pl-5 border-b border-white/[0.06]">
+          <h3 className="text-sm font-medium text-foreground">Recent Alerts</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-white/[0.06]">
+                <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Time</th>
+                <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Alert Name</th>
+                <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Severity</th>
+                <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Source</th>
+                <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {alerts.map((alert, index) => (
+                <tr 
+                  key={index}
+                  className="border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors cursor-pointer"
+                >
+                  <td className="px-4 py-3 text-sm text-muted-foreground font-mono">{alert.time}</td>
+                  <td className="px-4 py-3 text-sm text-foreground">{alert.name}</td>
+                  <td className="px-4 py-3">
+                    <span className={cn(
+                      "text-xs px-2 py-1 rounded border",
+                      getSeverityStyles(alert.severity)
+                    )}>
+                      {alert.severity}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-muted-foreground font-mono">{alert.source}</td>
+                  <td className={cn("px-4 py-3 text-sm font-medium", getStatusStyles(alert.status))}>
+                    {alert.status}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
