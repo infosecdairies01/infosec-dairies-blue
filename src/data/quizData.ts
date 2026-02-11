@@ -4367,6 +4367,126 @@ export const quizzes: QuizData[] = [
       { id: "ir-q6-9", question: "At which maturity level does IR become metrics-driven?", options: ["Developing (2)", "Defined (3)", "Managed (4)", "Optimizing (5)"], correctAnswer: 2, explanation: "Level 4 (Managed) features metrics-driven continuous improvement and integrated threat intel." },
       { id: "ir-q6-10", question: "'Deploy EDR on uncovered systems' is which improvement category?", options: ["Detection", "Process", "Technology", "People"], correctAnswer: 2, explanation: "Deploying tools and expanding coverage falls under Technology improvements." }
     ]
+  },
+  {
+    quizId: "th-q1",
+    courseId: "threat-hunting",
+    title: "Hunting Methodology & Frameworks",
+    description: "Test your understanding of threat hunting methodology, the Hunting Maturity Model, and hypothesis-driven hunting.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "th-q1-1", question: "What is the primary difference between threat hunting and traditional detection?", options: ["Hunting uses automated alerts only", "Hunting is proactive and hypothesis-driven", "Hunting replaces SIEM entirely", "Hunting focuses on compliance"], correctAnswer: 1, explanation: "Threat hunting is proactive — analysts form hypotheses and actively search for threats rather than waiting for alerts." },
+      { id: "th-q1-2", question: "How many levels does the Hunting Maturity Model (HMM) define?", options: ["3", "4", "5", "6"], correctAnswer: 2, explanation: "The HMM defines 5 levels: HM0 (Initial), HM1 (Minimal), HM2 (Procedural), HM3 (Innovative), and HM4 (Leading)." },
+      { id: "th-q1-3", question: "At which HMM level does an organization begin routine data collection but lacks structured hunting?", options: ["HM0", "HM1", "HM2", "HM3"], correctAnswer: 1, explanation: "HM1 (Minimal) means the org collects data routinely but hunting is ad-hoc and relies on indicators." },
+      { id: "th-q1-4", question: "What is the first step of hypothesis-driven hunting?", options: ["Collect evidence", "Formulate a testable hypothesis", "Write a report", "Deploy a new tool"], correctAnswer: 1, explanation: "Hypothesis-driven hunting begins with a testable hypothesis based on threat intelligence, experience, or anomaly patterns." },
+      { id: "th-q1-5", question: "Which of the following is a characteristic of a good hunting hypothesis?", options: ["It is vague and broad", "It is testable and falsifiable", "It requires no data", "It is based on gut feeling alone"], correctAnswer: 1, explanation: "A good hypothesis is specific, testable, falsifiable, and grounded in threat intelligence or data patterns." },
+      { id: "th-q1-6", question: "What does 'TTP' stand for in the context of threat hunting?", options: ["Total Threat Prevention", "Tactics, Techniques, and Procedures", "Threat Tracking Protocol", "Triage, Test, and Publish"], correctAnswer: 1, explanation: "TTP stands for Tactics, Techniques, and Procedures — the behavioral patterns of adversaries mapped in frameworks like MITRE ATT&CK." },
+      { id: "th-q1-7", question: "Which hunting approach starts with known threat intelligence indicators?", options: ["Baseline hunting", "Intel-driven hunting", "Anomaly-based hunting", "Compliance hunting"], correctAnswer: 1, explanation: "Intel-driven hunting uses known IOCs, TTPs, or threat reports as starting points for investigation." },
+      { id: "th-q1-8", question: "What is 'baseline hunting'?", options: ["Hunting for the newest malware", "Establishing normal behavior and looking for deviations", "Using only signature-based detection", "Hunting during business hours only"], correctAnswer: 1, explanation: "Baseline hunting establishes what 'normal' looks like in an environment and then searches for anomalous deviations." },
+      { id: "th-q1-9", question: "At HM4 (Leading), what distinguishes the organization?", options: ["No automation", "Hunting is fully automated with no analysts", "Continuous hunting with custom tooling and automation feeding back into detection", "They outsource all hunting"], correctAnswer: 2, explanation: "HM4 organizations run continuous hunts with custom tooling and systematically convert findings into automated detections." },
+      { id: "th-q1-10", question: "Why should hunt findings be documented even when no threat is found?", options: ["To blame analysts", "To justify headcount", "To refine baselines, improve hypotheses, and demonstrate coverage", "Documentation is optional"], correctAnswer: 2, explanation: "Documenting all hunts — including negatives — refines baselines, improves future hypotheses, and demonstrates security coverage." }
+    ]
+  },
+  {
+    quizId: "th-q2",
+    courseId: "threat-hunting",
+    title: "Threat Intelligence for Hunters",
+    description: "Assess your knowledge of the Pyramid of Pain, IOC types, and intelligence-driven hunting.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "th-q2-1", question: "In David Bianco's Pyramid of Pain, which indicator is at the top (hardest for adversaries to change)?", options: ["Hash values", "IP addresses", "TTPs", "Domain names"], correctAnswer: 2, explanation: "TTPs sit at the top — changing behavior and tradecraft is far more costly for adversaries than rotating IPs or hashes." },
+      { id: "th-q2-2", question: "Which indicator type is at the bottom of the Pyramid of Pain (easiest for attackers to change)?", options: ["TTPs", "Tools", "Hash values", "Network artifacts"], correctAnswer: 2, explanation: "Hash values are trivial to change — a single-bit modification produces a completely different hash." },
+      { id: "th-q2-3", question: "What is a 'Diamond Model' used for in threat intelligence?", options: ["Pricing threat feeds", "Mapping relationships between adversary, capability, infrastructure, and victim", "Grading analyst performance", "Designing network architecture"], correctAnswer: 1, explanation: "The Diamond Model maps intrusion events across four vertices: adversary, capability, infrastructure, and victim." },
+      { id: "th-q2-4", question: "What type of IOC is 'c:\\users\\public\\malware.exe'?", options: ["Network indicator", "Host-based indicator (file path)", "Behavioral indicator", "Email indicator"], correctAnswer: 1, explanation: "File paths are host-based indicators — they point to specific artifacts on an endpoint." },
+      { id: "th-q2-5", question: "Why are IP-based IOCs considered low-value for long-term hunting?", options: ["They are too expensive", "Adversaries rotate IPs frequently and cheaply", "SIEM cannot ingest them", "They cause false negatives"], correctAnswer: 1, explanation: "IP addresses are cheap and easy for attackers to change, making them unreliable for sustained hunting." },
+      { id: "th-q2-6", question: "What is 'threat intelligence enrichment'?", options: ["Deleting old IOCs", "Adding context (reputation, geo, relationships) to raw indicators", "Encrypting threat feeds", "Sharing IOCs publicly"], correctAnswer: 1, explanation: "Enrichment adds context like reputation scores, geolocation, WHOIS data, and relationships to raw indicators." },
+      { id: "th-q2-7", question: "Which level of threat intelligence is most useful for SOC analysts and hunters?", options: ["Strategic", "Tactical/Operational", "Political", "Financial"], correctAnswer: 1, explanation: "Tactical and operational intelligence provides actionable IOCs, TTPs, and campaign details for day-to-day hunting." },
+      { id: "th-q2-8", question: "What is a YARA rule used for?", options: ["Network monitoring", "Pattern-based malware identification using string/byte patterns", "User authentication", "Log rotation"], correctAnswer: 1, explanation: "YARA rules identify malware by matching string patterns, byte sequences, and conditions within files." },
+      { id: "th-q2-9", question: "In the Pyramid of Pain, where do 'Tools' fall?", options: ["Bottom", "Middle-lower", "Middle-upper", "Top"], correctAnswer: 2, explanation: "Tools sit in the middle-upper region — replacing custom tooling is costly but not as hard as changing TTPs." },
+      { id: "th-q2-10", question: "What is 'indicator fatigue'?", options: ["Running out of storage", "Analysts overwhelmed by excessive low-quality IOCs reducing effectiveness", "Hardware failure", "Network congestion"], correctAnswer: 1, explanation: "Indicator fatigue occurs when analysts are overwhelmed by massive volumes of low-quality IOCs, reducing detection effectiveness." }
+    ]
+  },
+  {
+    quizId: "th-q3",
+    courseId: "threat-hunting",
+    title: "Techniques & Tradecraft",
+    description: "Quiz on adversary techniques including LOLBins, JA3 fingerprinting, and evasion methods.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "th-q3-1", question: "What are LOLBins?", options: ["A type of malware", "Legitimate OS binaries abused by attackers to execute malicious actions", "Logging libraries", "Linux-only tools"], correctAnswer: 1, explanation: "LOLBins (Living Off the Land Binaries) are legitimate system tools like PowerShell, certutil, and mshta abused by attackers." },
+      { id: "th-q3-2", question: "Which Windows binary is commonly abused to download files from the internet?", options: ["notepad.exe", "certutil.exe", "calc.exe", "explorer.exe"], correctAnswer: 1, explanation: "certutil.exe has a -urlcache flag that attackers abuse to download payloads from remote servers." },
+      { id: "th-q3-3", question: "What does JA3 fingerprinting identify?", options: ["User identity", "TLS client configuration to fingerprint applications", "File hashes", "Email headers"], correctAnswer: 1, explanation: "JA3 creates a hash of TLS client hello parameters, uniquely fingerprinting applications regardless of IP or domain." },
+      { id: "th-q3-4", question: "What is 'process hollowing'?", options: ["Deleting processes", "Replacing the code inside a legitimate process with malicious code", "Creating new user accounts", "Clearing event logs"], correctAnswer: 1, explanation: "Process hollowing creates a legitimate process in suspended state, replaces its memory with malicious code, then resumes it." },
+      { id: "th-q3-5", question: "Which MITRE ATT&CK tactic involves maintaining access after initial compromise?", options: ["Initial Access", "Persistence", "Exfiltration", "Reconnaissance"], correctAnswer: 1, explanation: "Persistence ensures the attacker maintains access across reboots, credential changes, or other disruptions." },
+      { id: "th-q3-6", question: "What is 'DLL side-loading'?", options: ["Installing DLLs normally", "Placing a malicious DLL where a legitimate program will load it", "Updating system DLLs", "Compiling DLLs"], correctAnswer: 1, explanation: "DLL side-loading exploits the DLL search order by placing a malicious DLL in a location searched before the legitimate one." },
+      { id: "th-q3-7", question: "What is the JA3S hash used for?", options: ["Client fingerprinting", "Server TLS configuration fingerprinting", "DNS resolution", "File integrity"], correctAnswer: 1, explanation: "JA3S fingerprints the server-side TLS hello response, complementing JA3 for full client-server profiling." },
+      { id: "th-q3-8", question: "Which technique involves running malicious code entirely in memory without touching disk?", options: ["Fileless malware / in-memory execution", "Disk encryption", "File compression", "Normal installation"], correctAnswer: 0, explanation: "Fileless attacks execute entirely in memory, evading traditional file-based antivirus and leaving minimal forensic artifacts." },
+      { id: "th-q3-9", question: "What Windows event log is most valuable for detecting LOLBin abuse?", options: ["Application log", "System log", "Sysmon (with process creation logging)", "Setup log"], correctAnswer: 2, explanation: "Sysmon provides detailed process creation, command-line, and parent-child relationship logging essential for LOLBin detection." },
+      { id: "th-q3-10", question: "What is 'timestomping'?", options: ["Changing system time zone", "Modifying file timestamps to blend in with legitimate files", "Setting up NTP", "Creating time-based alerts"], correctAnswer: 1, explanation: "Timestomping changes file creation/modification times to make malicious files appear as if they've existed longer, evading timeline analysis." }
+    ]
+  },
+  {
+    quizId: "th-q4",
+    courseId: "threat-hunting",
+    title: "Endpoint Hunting",
+    description: "Test your skills in hunting for threats on endpoints using process trees, autoruns, and memory analysis.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "th-q4-1", question: "What is the most important artifact to examine when hunting on endpoints?", options: ["Desktop wallpaper", "Process execution and parent-child relationships", "Screen resolution", "Installed fonts"], correctAnswer: 1, explanation: "Process trees reveal anomalous parent-child relationships, like Word spawning PowerShell, which indicate malicious activity." },
+      { id: "th-q4-2", question: "Which parent process spawning cmd.exe is suspicious?", options: ["explorer.exe", "services.exe", "winword.exe", "cmd.exe"], correctAnswer: 2, explanation: "Microsoft Word (winword.exe) spawning cmd.exe is highly suspicious — it suggests macro-based malware execution." },
+      { id: "th-q4-3", question: "What are 'autoruns' in the context of endpoint hunting?", options: ["Automatic software updates", "Persistence mechanisms that execute code at startup or login", "Automated scan schedules", "Auto-reply email rules"], correctAnswer: 1, explanation: "Autoruns are registry keys, startup folders, scheduled tasks, and services that execute automatically — common persistence locations." },
+      { id: "th-q4-4", question: "Which tool is commonly used to enumerate Windows autorun locations?", options: ["Wireshark", "Sysinternals Autoruns", "Nmap", "Burp Suite"], correctAnswer: 1, explanation: "Sysinternals Autoruns comprehensively lists all auto-starting locations in Windows for persistence analysis." },
+      { id: "th-q4-5", question: "What does an unsigned binary running from a temp directory suggest?", options: ["Normal software behavior", "Potential malware — legitimate software is usually signed and installed properly", "A system update", "A scheduled backup"], correctAnswer: 1, explanation: "Unsigned binaries in temp directories are a strong indicator of malware — legitimate software is typically signed and installed in standard locations." },
+      { id: "th-q4-6", question: "What is 'stack ranking' in endpoint hunting?", options: ["Ranking analysts", "Counting frequency of artifacts to find rare/anomalous ones", "Prioritizing patches", "Stacking network packets"], correctAnswer: 1, explanation: "Stack ranking counts how often specific values appear — rare values (process names, paths, hashes) are more likely malicious." },
+      { id: "th-q4-7", question: "Which Windows event ID logs process creation?", options: ["4624", "4688", "4720", "1102"], correctAnswer: 1, explanation: "Event ID 4688 logs process creation with details like process name, PID, and parent PID when auditing is enabled." },
+      { id: "th-q4-8", question: "What is a suspicious indicator in scheduled task hunting?", options: ["Tasks created by Group Policy", "Tasks running binaries from user-writable directories with encoded commands", "Tasks running Windows Update", "Tasks with Microsoft as publisher"], correctAnswer: 1, explanation: "Scheduled tasks executing from user-writable paths with encoded PowerShell commands are strong persistence indicators." },
+      { id: "th-q4-9", question: "What is 'memory forensics' useful for in hunting?", options: ["Increasing RAM", "Detecting fileless malware, injected code, and hidden processes", "Upgrading hardware", "Disk cleanup"], correctAnswer: 1, explanation: "Memory forensics captures running processes, injected code, network connections, and artifacts invisible to disk-based analysis." },
+      { id: "th-q4-10", question: "Which tool is widely used for memory forensics?", options: ["Excel", "Volatility", "Notepad", "Paint"], correctAnswer: 1, explanation: "Volatility is the industry-standard open-source framework for memory forensics, supporting process, network, and malware analysis." }
+    ]
+  },
+  {
+    quizId: "th-q5",
+    courseId: "threat-hunting",
+    title: "Network & Cloud Hunting",
+    description: "Assess your ability to hunt threats across network traffic and cloud environments.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "th-q5-1", question: "What is DNS beaconing?", options: ["Normal DNS resolution", "Malware periodically querying a C2 domain at regular intervals", "DNS server maintenance", "Updating DNS records"], correctAnswer: 1, explanation: "DNS beaconing is malware communicating with C2 via periodic DNS queries, often at suspiciously regular intervals." },
+      { id: "th-q5-2", question: "Which network artifact helps detect DNS tunneling?", options: ["Short DNS queries", "Unusually long DNS query names with high entropy", "Normal A record lookups", "DHCP leases"], correctAnswer: 1, explanation: "DNS tunneling encodes data in query names, resulting in unusually long, high-entropy subdomain strings." },
+      { id: "th-q5-3", question: "What is a 'long tail' analysis in network hunting?", options: ["Analyzing the longest cables", "Examining rare/infrequent connections that deviate from common patterns", "Studying network latency", "Measuring bandwidth"], correctAnswer: 1, explanation: "Long tail analysis focuses on rare connections — the uncommon destinations or patterns that are statistically anomalous and potentially malicious." },
+      { id: "th-q5-4", question: "Which protocol is commonly abused for data exfiltration due to being rarely inspected?", options: ["HTTP", "DNS", "SMTP", "All of the above"], correctAnswer: 3, explanation: "DNS, HTTP, HTTPS, and SMTP are all commonly abused — DNS is particularly stealthy since it's rarely blocked or deeply inspected." },
+      { id: "th-q5-5", question: "In cloud hunting, what is the most critical log source?", options: ["Application logs only", "Cloud provider audit/activity logs (CloudTrail, Azure Activity Log)", "Desktop event logs", "Print logs"], correctAnswer: 1, explanation: "Cloud audit logs (AWS CloudTrail, Azure Activity Log, GCP Audit Logs) record all API calls and are essential for cloud hunting." },
+      { id: "th-q5-6", question: "What does an unusually high volume of outbound traffic to a single IP suggest?", options: ["Normal backup", "Potential data exfiltration", "Software update", "Email delivery"], correctAnswer: 1, explanation: "Large outbound transfers to a single IP, especially outside business hours, are a strong exfiltration indicator." },
+      { id: "th-q5-7", question: "What is 'east-west traffic' in network hunting?", options: ["Traffic between continents", "Lateral movement traffic between internal systems", "North-south traffic", "Internet browsing"], correctAnswer: 1, explanation: "East-west traffic is internal lateral communication — hunting here reveals lateral movement after initial compromise." },
+      { id: "th-q5-8", question: "Which cloud-specific threat involves misconfigured storage buckets?", options: ["DDoS", "Data exposure through publicly accessible storage (S3, Blob)", "Phishing", "Brute force"], correctAnswer: 1, explanation: "Misconfigured cloud storage (open S3 buckets, Azure Blobs) is a major cloud threat causing data exposure." },
+      { id: "th-q5-9", question: "What is 'impossible travel' detection in cloud environments?", options: ["Detecting VPN usage", "Flagging logins from geographically distant locations in impossibly short timeframes", "Tracking flight bookings", "Monitoring travel expenses"], correctAnswer: 1, explanation: "Impossible travel flags when a user logs in from two distant locations faster than physically possible, indicating credential compromise." },
+      { id: "th-q5-10", question: "What network hunting technique examines TLS certificate anomalies?", options: ["Packet size analysis", "Certificate transparency log analysis and self-signed cert detection", "MAC address lookup", "VLAN hopping"], correctAnswer: 1, explanation: "Analyzing TLS certificates for self-signed certs, unusual issuers, or short validity periods helps detect C2 infrastructure." }
+    ]
+  },
+  {
+    quizId: "th-q6",
+    courseId: "threat-hunting",
+    title: "Hunt Operations & Reporting",
+    description: "Test your knowledge of hunt planning, automation, metrics, and reporting best practices.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      { id: "th-q6-1", question: "What should a hunt plan document include?", options: ["Only the hypothesis", "Hypothesis, data sources, techniques, tools, expected artifacts, and success criteria", "Just the analyst's name", "A list of all company assets"], correctAnswer: 1, explanation: "A complete hunt plan includes hypothesis, required data sources, analysis techniques, tools, expected artifacts, and success criteria." },
+      { id: "th-q6-2", question: "What is the main benefit of converting hunt findings into automated detections?", options: ["Reduces headcount", "Scales the hunt outcome so the same threat is automatically detected in the future", "Eliminates the need for hunting", "Saves storage"], correctAnswer: 1, explanation: "Converting hunts into detections means the threat is automatically caught going forward, multiplying the value of each hunt." },
+      { id: "th-q6-3", question: "Which tool/platform is commonly used for hunt automation and notebooks?", options: ["Microsoft Paint", "Jupyter Notebooks with MSTICPy", "Calculator", "Notepad"], correctAnswer: 1, explanation: "Jupyter Notebooks with MSTICPy provide reproducible, shareable hunt workflows with built-in security analysis capabilities." },
+      { id: "th-q6-4", question: "What is the 'detection gap' metric?", options: ["Time between alerts", "The difference between known threats and what the organization can actually detect", "Network latency", "Analyst shift gaps"], correctAnswer: 1, explanation: "Detection gap measures the difference between threats that exist and those the org can detect — hunting directly reduces this gap." },
+      { id: "th-q6-5", question: "What should a hunt report's executive summary contain?", options: ["Raw log data", "High-level findings, business impact, risk assessment, and recommended actions", "Only IOCs", "Tool configuration"], correctAnswer: 1, explanation: "Executive summaries provide leadership with findings, business impact, risk context, and clear recommended actions." },
+      { id: "th-q6-6", question: "How should hunt metrics demonstrate program value?", options: ["Count only hours worked", "Track hunts completed, findings discovered, detections created, and coverage improvements", "Report only failures", "Count emails sent"], correctAnswer: 1, explanation: "Effective metrics include hunts completed, unique findings, new detections created, MITRE coverage improvements, and mean time to detect." },
+      { id: "th-q6-7", question: "What is the purpose of a 'hunt backlog'?", options: ["Storing old data", "Maintaining a prioritized queue of hypotheses and hunt ideas for future execution", "Tracking employee PTO", "Archiving reports"], correctAnswer: 1, explanation: "A hunt backlog is a prioritized list of hypotheses and ideas, ensuring continuous hunting coverage aligned with threat landscape." },
+      { id: "th-q6-8", question: "When should IOCs discovered during a hunt be shared?", options: ["Never", "Immediately with the SOC/IR team and relevant threat intel sharing communities", "Only after 6 months", "Only internally"], correctAnswer: 1, explanation: "IOCs should be shared immediately with SOC/IR for blocking and with threat intel sharing communities (ISACs) for collective defense." },
+      { id: "th-q6-9", question: "What does 'MITRE ATT&CK coverage mapping' help hunters understand?", options: ["Network topology", "Which adversary techniques the organization can and cannot detect, revealing blind spots", "Employee skills", "Budget allocation"], correctAnswer: 1, explanation: "ATT&CK coverage mapping visualizes detection capabilities against known techniques, highlighting gaps to prioritize hunts." },
+      { id: "th-q6-10", question: "What is the relationship between threat hunting and detection engineering?", options: ["They are unrelated", "Hunt findings feed detection engineering; detection gaps inform hunt priorities — a continuous cycle", "Hunting replaces detection", "Detection replaces hunting"], correctAnswer: 1, explanation: "Hunting and detection engineering form a virtuous cycle: hunts discover threats → detections are built → gaps inform new hunts." }
+    ]
   }
 ];
 
