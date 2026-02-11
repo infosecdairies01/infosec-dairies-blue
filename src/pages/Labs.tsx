@@ -5,7 +5,7 @@ import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
 
-import SystemHealthPanel from "@/components/soc/SystemHealthPanel";
+import SeverityDonutChart from "@/components/soc/SeverityDonutChart";
 import ActiveInvestigations from "@/components/soc/ActiveInvestigations";
 import MitreHeatmap from "@/components/soc/MitreHeatmap";
 import { Bell, Search, User, RefreshCw, Clock } from "lucide-react";
@@ -78,7 +78,7 @@ const Labs = () => {
                   <ActiveInvestigations />
                 </div>
                 <div className="lg:col-span-1">
-                  <SystemHealthPanel />
+                  <SeverityDonutChart />
                 </div>
               </div>
               
