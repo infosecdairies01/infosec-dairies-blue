@@ -4,7 +4,7 @@ import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
-import SeverityDonutChart from "@/components/soc/SeverityDonutChart";
+
 import SystemHealthPanel from "@/components/soc/SystemHealthPanel";
 import ActiveInvestigations from "@/components/soc/ActiveInvestigations";
 import MitreHeatmap from "@/components/soc/MitreHeatmap";
@@ -64,12 +64,7 @@ const Labs = () => {
               <AlertSummaryCards />
               
               {/* Row 2: Trend Charts + Severity Donut */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                  <AlertsChart />
-                </div>
-                <SeverityDonutChart />
-              </div>
+              <AlertsChart />
 
               {/* Row 3: MITRE Heatmap */}
               <MitreHeatmap />
