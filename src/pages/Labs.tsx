@@ -4,7 +4,11 @@ import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
-import { Bell, Search, User } from "lucide-react";
+import SeverityDonutChart from "@/components/soc/SeverityDonutChart";
+import SystemHealthPanel from "@/components/soc/SystemHealthPanel";
+import ActiveInvestigations from "@/components/soc/ActiveInvestigations";
+import MitreHeatmap from "@/components/soc/MitreHeatmap";
+import { Bell, Search, User, RefreshCw, Clock } from "lucide-react";
 
 const Labs = () => {
   return (
@@ -19,20 +23,30 @@ const Labs = () => {
           <header className="bg-card/25 backdrop-blur-lg border-b border-white/[0.08] px-6 py-4 flex items-center justify-between">
             <div>
               <h1 className="text-xl font-semibold text-foreground">Security Dashboard</h1>
-              <p className="text-sm text-muted-foreground">Real-time threat monitoring and analysis</p>
+              <p className="text-sm text-muted-foreground flex items-center gap-2">
+                Real-time threat monitoring and analysis
+                <span className="flex items-center gap-1 text-[10px] text-primary/60">
+                  <Clock className="w-3 h-3" />
+                  Last updated: just now
+                </span>
+              </p>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="relative hidden md:block">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input 
                   type="text" 
-                  placeholder="Search alerts..." 
-                  className="bg-background/50 border border-white/[0.08] rounded-lg pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/25 w-64 transition-colors backdrop-blur-sm" 
+                  placeholder="Search alerts, IPs, IOCs..." 
+                  className="bg-background/50 border border-white/[0.08] rounded-lg pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/25 w-72 transition-colors backdrop-blur-sm" 
                 />
               </div>
               
-              <button className="relative p-2 text-muted-foreground hover:text-foreground transition-colors">
+              <button className="p-2 text-muted-foreground hover:text-primary transition-colors rounded-lg hover:bg-white/[0.04]" title="Refresh">
+                <RefreshCw className="w-4 h-4" />
+              </button>
+              
+              <button className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/[0.04]">
                 <Bell className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
               </button>
@@ -46,13 +60,34 @@ const Labs = () => {
           {/* Dashboard Content */}
           <div className="flex-1 p-6 overflow-auto">
             <div className="space-y-6">
+              {/* Row 1: Alert Summary Cards */}
               <AlertSummaryCards />
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <AlertsChart />
-                <TopSourcesChart />
+              {/* Row 2: Trend Charts + Severity Donut */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <AlertsChart />
+                </div>
+                <SeverityDonutChart />
+              </div>
+
+              {/* Row 3: MITRE Heatmap */}
+              <MitreHeatmap />
+              
+              {/* Row 4: Active Investigations + Top Sources + System Health */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-1">
+                  <TopSourcesChart />
+                </div>
+                <div className="lg:col-span-1">
+                  <ActiveInvestigations />
+                </div>
+                <div className="lg:col-span-1">
+                  <SystemHealthPanel />
+                </div>
               </div>
               
+              {/* Row 5: Recent Alerts Table */}
               <RecentAlertsTable />
             </div>
           </div>
