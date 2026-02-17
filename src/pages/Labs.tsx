@@ -4,10 +4,11 @@ import AlertSummaryCards from "@/components/soc/AlertSummaryCards";
 import AlertsChart from "@/components/soc/AlertsChart";
 import TopSourcesChart from "@/components/soc/TopSourcesChart";
 import RecentAlertsTable from "@/components/soc/RecentAlertsTable";
-
 import SeverityDonutChart from "@/components/soc/SeverityDonutChart";
 import ActiveInvestigations from "@/components/soc/ActiveInvestigations";
-import MitreHeatmap from "@/components/soc/MitreHeatmap";
+import MitreHeatmapInteractive from "@/components/soc/MitreHeatmapInteractive";
+import ThreatGeoMap from "@/components/soc/ThreatGeoMap";
+import LiveActivityFeed from "@/components/soc/LiveActivityFeed";
 import { Bell, Search, User, RefreshCw, Clock } from "lucide-react";
 
 const Labs = () => {
@@ -63,13 +64,23 @@ const Labs = () => {
               {/* Row 1: Alert Summary Cards */}
               <AlertSummaryCards />
               
-              {/* Row 2: Trend Charts + Severity Donut */}
-              <AlertsChart />
+              {/* Row 2: Trend Chart + Live Activity Feed */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <AlertsChart />
+                </div>
+                <div className="lg:col-span-1">
+                  <LiveActivityFeed />
+                </div>
+              </div>
 
-              {/* Row 3: MITRE Heatmap */}
-              <MitreHeatmap />
+              {/* Row 3: MITRE Heatmap (Interactive) */}
+              <MitreHeatmapInteractive />
+
+              {/* Row 4: Threat Geo Map */}
+              <ThreatGeoMap />
               
-              {/* Row 4: Active Investigations + Top Sources + System Health */}
+              {/* Row 5: Active Investigations + Top Sources + Severity */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-1">
                   <TopSourcesChart />
@@ -82,7 +93,7 @@ const Labs = () => {
                 </div>
               </div>
               
-              {/* Row 5: Recent Alerts Table */}
+              {/* Row 6: Recent Alerts Table */}
               <RecentAlertsTable />
             </div>
           </div>
