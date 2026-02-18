@@ -9,6 +9,7 @@ const navItems = [
   { label: "Logs", href: "/labs/logs" },
   { label: "Endpoints", href: "/labs/endpoints" },
   { label: "Threat Intel", href: "/labs/threat-intel" },
+  { label: "Email Security", href: "/labs/email-security" },
   { label: "Settings", href: "/labs/settings" },
 ];
 
