@@ -9,7 +9,7 @@ import ActiveInvestigations from "@/components/soc/ActiveInvestigations";
 import MitreHeatmapInteractive from "@/components/soc/MitreHeatmapInteractive";
 import ThreatGeoMap from "@/components/soc/ThreatGeoMap";
 import LiveActivityFeed from "@/components/soc/LiveActivityFeed";
-import EmailSecurityPanel from "@/components/soc/EmailSecurityPanel";
+
 import { Bell, Search, User, RefreshCw, Clock } from "lucide-react";
 
 const Labs = () => {
@@ -94,9 +94,6 @@ const Labs = () => {
                 </div>
               </div>
               
-              {/* Row 6: Email Security */}
-              <EmailSecurityPanel />
-
               {/* Row 7: Recent Alerts Table */}
               <RecentAlertsTable />
             </div>
