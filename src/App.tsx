@@ -15,6 +15,7 @@ import Alerts from "./pages/Alerts";
 import Incidents from "./pages/Incidents";
 import Endpoints from "./pages/Endpoints";
 import ThreatIntel from "./pages/ThreatIntel";
+import EmailSecurity from "./pages/EmailSecurity";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import About from "./pages/About";
@@ -46,6 +47,7 @@ const App = () => (
           <Route path="/labs/incidents" element={<Incidents />} />
           <Route path="/labs/endpoints" element={<Endpoints />} />
           <Route path="/labs/threat-intel" element={<ThreatIntel />} />
+          <Route path="/labs/email-security" element={<EmailSecurity />} />
           <Route path="/labs/settings" element={<Settings />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<Auth />} />
