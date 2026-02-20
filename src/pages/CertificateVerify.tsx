@@ -16,25 +16,25 @@ interface CertificateData {
 }
 
 const sampleCertificates: Record<string, CertificateData> = {
-  "ISD-2025-SOC-001": {
-    id: "ISD-2025-SOC-001",
+  "INFD-BSF-2026-001": {
+    id: "INFD-BSF-2026-001",
     recipientName: "Ahmed Al-Rashid",
     courseName: "Blue Team & SOC Fundamentals",
-    issueDate: "2025-08-15",
+    issueDate: "2026-01-15",
     status: "valid",
   },
-  "ISD-2025-IR-042": {
-    id: "ISD-2025-IR-042",
+  "INFD-SOC-2026-002": {
+    id: "INFD-SOC-2026-002",
     recipientName: "Sarah Mitchell",
+    courseName: "SOC Analyst Practical Course",
+    issueDate: "2026-02-10",
+    status: "valid",
+  },
+  "INFD-IR-2025-003": {
+    id: "INFD-IR-2025-003",
+    recipientName: "James Park",
     courseName: "Incident Response Fundamentals",
     issueDate: "2025-06-20",
-    status: "valid",
-  },
-  "ISD-2024-TH-018": {
-    id: "ISD-2024-TH-018",
-    recipientName: "James Park",
-    courseName: "Threat Hunting Fundamentals",
-    issueDate: "2024-11-03",
     status: "expired",
   },
 };
@@ -96,7 +96,7 @@ const CertificateVerify = () => {
                     if (searched) { setSearched(false); setResult(null); setNotFound(false); }
                   }}
                   onKeyDown={handleKeyDown}
-                  placeholder="e.g. ISD-2025-SOC-001"
+                  placeholder="e.g. INFD-BSF-2026-001"
                   className="bg-background/50 border-white/[0.1] text-foreground placeholder:text-muted-foreground"
                   maxLength={30}
                 />
