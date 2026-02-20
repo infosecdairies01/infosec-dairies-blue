@@ -23,6 +23,7 @@ import Dashboard from "./pages/Dashboard";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Disclaimer from "./pages/Disclaimer";
+import CertificateVerify from "./pages/CertificateVerify";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const App = () => (
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/disclaimer" element={<Disclaimer />} />
+          <Route path="/verify" element={<CertificateVerify />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
