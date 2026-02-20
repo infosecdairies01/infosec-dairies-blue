@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Shield, Search, CheckCircle, XCircle, ArrowLeft, Award, Calendar, User, BookOpen } from "lucide-react";
+import { Search, CheckCircle, XCircle, ArrowLeft, Award, Calendar, User, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -76,9 +76,6 @@ const CertificateVerify = () => {
           </Link>
 
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 border border-primary/20 mb-4">
-              <Shield className="w-8 h-8 text-primary" />
-            </div>
             <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-3">Certificate Verification</h1>
             <p className="text-muted-foreground max-w-md mx-auto">
               Enter a certificate ID to verify its authenticity and view details.
