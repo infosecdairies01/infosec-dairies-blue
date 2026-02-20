@@ -93,35 +93,38 @@ const About = () => {
               
               <div className="space-y-6 text-muted-foreground leading-relaxed relative z-10">
                 <p className={`text-lg transition-all duration-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '0.1s' }}>
-                  InfosecDairies was born from a simple observation: while offensive security gets the spotlight, 
-                  defensive security professionals are the unsung heroes keeping organizations safe 24/7. We 
-                  created this platform to give blue teamers the recognition and resources they deserve.
+                  InfosecDairies started with one belief — defenders deserve better training. While offensive security 
+                  dominates the spotlight, it's the blue teamers who keep organizations safe around the clock. We built 
+                  this platform to equip them with the skills, tools, and confidence to stay ahead of real-world threats.
                 </p>
                 
                 <p className={`text-lg transition-all duration-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '0.2s' }}>
-                  Our mission is to demystify complex security concepts and provide actionable 
-                  insights that can be applied in real-world scenarios. Whether you're a seasoned 
-                  security analyst or just starting your journey in cybersecurity, we've got you covered.
+                  From structured courses on SOC operations, threat hunting, and incident response to our 
+                  hands-on <span className="text-primary font-medium">SOC Practice Labs</span> — a fully simulated Security Operations Center — 
+                  everything here is designed around one goal: making you job-ready. Our labs let you investigate 
+                  real alerts, triage incidents, analyze email threats, explore threat intelligence, and work with 
+                  SIEM dashboards — just like you would in a live SOC environment.
                 </p>
 
                 <p className={`text-lg transition-all duration-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '0.3s' }}>
-                  What started as an Instagram page sharing daily security insights has grown into a 
-                  thriving Telegram community where defenders from around the world connect, learn, and 
-                  share their experiences. Every day, we're helping security professionals level up their skills.
+                  What began as an Instagram page sharing daily security insights has grown into a thriving 
+                  community of defenders across Telegram, learning and leveling up together. Whether you're 
+                  preparing for your first SOC analyst role or sharpening skills for certifications like BTL1, 
+                  CySA+, or SC-200 — InfosecDairies is your launchpad.
                 </p>
                 
                 <div className={`pt-6 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '0.4s' }}>
-                  <h3 className="text-xl font-semibold mb-4 gradient-text">What We Cover:</h3>
+                  <h3 className="text-xl font-semibold mb-4 gradient-text">What We Offer:</h3>
                   <ul className="space-y-3">
                     {[
-                      "Security Operations Center (SOC) best practices",
-                      "Threat hunting techniques and methodologies",
-                      "Digital forensics and incident analysis",
-                      "Security tool reviews and tutorials",
-                      "Industry news and threat intelligence",
-                      "SIEM configuration and log analysis",
-                      "Malware analysis fundamentals",
-                      "Incident response playbooks"
+                      "SOC Practice Labs — simulate real alert triage & incident response",
+                      "Self-paced courses on SIEM, log analysis, threat hunting & more",
+                      "Live training sessions with industry professionals",
+                      "Email security investigation & phishing analysis labs",
+                      "Threat intelligence feeds and endpoint monitoring simulations",
+                      "Malware analysis fundamentals & detection engineering",
+                      "Certification prep for BTL1, CySA+, SC-200, GCIH & more",
+                      "Active Telegram community for collaboration & support"
                     ].map((item, index) => (
                       <li 
                         key={index}
