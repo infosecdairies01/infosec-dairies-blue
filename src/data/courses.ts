@@ -1734,6 +1734,101 @@ export const courses: Course[] = [
       { id: "ma-r8", title: "Any.Run Interactive Sandbox", description: "Interactive online malware analysis sandbox with real-time monitoring.", type: "link", url: "https://any.run/" },
     ],
   },
+  {
+    id: "soc-analyst-path",
+    title: "SOC Analyst Learning Path",
+    shortTitle: "SOC Analyst Path",
+    description: "A structured career-ready program covering everything from foundational SOC skills to advanced threat analysis, incident handling, and reporting. Designed to prepare you for real-world SOC analyst roles.",
+    difficulty: "medium",
+    duration: "20 hours",
+    bgImage: "courses/soc-analyst-path-bg.jpg",
+    modules: [
+      {
+        id: "1",
+        title: "SOC Analyst Role & Environment",
+        quizId: "sap-q1",
+        lessons: [
+          { id: "1.1", title: "Day in the Life of a SOC Analyst", description: "Walk through a typical shift including alert triage, escalation, documentation, and shift handover.", duration: "20 min", status: "completed" },
+          { id: "1.2", title: "SOC Maturity Models", description: "Understand SOC maturity levels from reactive to proactive and how organizations evolve their security operations.", duration: "25 min", status: "unlocked" },
+          { id: "1.3", title: "Compliance & Regulatory Frameworks", description: "Overview of PCI-DSS, HIPAA, GDPR, and SOX requirements relevant to SOC operations.", duration: "20 min", status: "locked" },
+          { id: "1.4", title: "Building Your Analyst Toolkit", description: "Set up your personal investigation toolkit with essential free and commercial tools.", duration: "30 min", status: "locked" },
+        ],
+      },
+      {
+        id: "2",
+        title: "Network Traffic Analysis",
+        quizId: "sap-q2",
+        lessons: [
+          { id: "2.1", title: "TCP/IP Deep Dive for Analysts", description: "Master TCP flags, handshakes, sessions, and how attackers abuse protocol behavior.", duration: "30 min", status: "locked" },
+          { id: "2.2", title: "DNS Analysis & Threat Detection", description: "Detect DNS tunneling, DGA domains, fast-flux networks, and DNS-based C2 channels.", duration: "25 min", status: "locked" },
+          { id: "2.3", title: "HTTP/HTTPS Traffic Investigation", description: "Analyze web traffic for malicious payloads, beaconing patterns, and data exfiltration.", duration: "30 min", status: "locked" },
+          { id: "2.4", title: "Wireshark for SOC Analysts", description: "Practical packet capture analysis using display filters, stream following, and expert info.", duration: "35 min", status: "locked" },
+        ],
+      },
+      {
+        id: "3",
+        title: "SIEM Mastery",
+        quizId: "sap-q3",
+        lessons: [
+          { id: "3.1", title: "Advanced SIEM Queries", description: "Write complex search queries using regex, subsearches, lookups, and statistical functions.", duration: "35 min", status: "locked" },
+          { id: "3.2", title: "Correlation Rule Development", description: "Design multi-event correlation rules to detect attack chains and reduce false positives.", duration: "30 min", status: "locked" },
+          { id: "3.3", title: "Dashboard Creation & Visualization", description: "Build actionable SOC dashboards that surface critical alerts and trends.", duration: "25 min", status: "locked" },
+          { id: "3.4", title: "Log Source Onboarding", description: "Integrate new data sources, normalize fields, and validate event parsing.", duration: "25 min", status: "locked" },
+        ],
+      },
+      {
+        id: "4",
+        title: "Endpoint Investigation",
+        quizId: "sap-q4",
+        lessons: [
+          { id: "4.1", title: "Process Forensics on Windows", description: "Analyze running processes, DLL injection, process hollowing, and living-off-the-land binaries.", duration: "30 min", status: "locked" },
+          { id: "4.2", title: "Registry & Persistence Analysis", description: "Identify persistence mechanisms via Run keys, scheduled tasks, services, and WMI subscriptions.", duration: "25 min", status: "locked" },
+          { id: "4.3", title: "Linux Endpoint Forensics", description: "Investigate suspicious processes, network connections, cron jobs, and shell history on Linux.", duration: "25 min", status: "locked" },
+          { id: "4.4", title: "Memory Analysis Fundamentals", description: "Use Volatility to analyze memory dumps for hidden processes, injected code, and network artifacts.", duration: "35 min", status: "locked" },
+        ],
+      },
+      {
+        id: "5",
+        title: "Phishing & Email Analysis",
+        quizId: "sap-q5",
+        lessons: [
+          { id: "5.1", title: "Email Header Analysis", description: "Parse email headers to trace message origin, identify spoofing, and verify SPF/DKIM/DMARC.", duration: "25 min", status: "locked" },
+          { id: "5.2", title: "Malicious Attachment Analysis", description: "Safely examine Office macros, PDFs, ISO files, and archive-based payloads.", duration: "30 min", status: "locked" },
+          { id: "5.3", title: "URL & Domain Investigation", description: "Investigate suspicious links using URLScan, VirusTotal, WHOIS, and passive DNS.", duration: "25 min", status: "locked" },
+          { id: "5.4", title: "Phishing Response Playbook", description: "End-to-end phishing incident handling: detection, containment, eradication, and reporting.", duration: "30 min", status: "locked" },
+        ],
+      },
+      {
+        id: "6",
+        title: "Incident Handling & Reporting",
+        quizId: "sap-q6",
+        lessons: [
+          { id: "6.1", title: "Incident Severity Classification", description: "Apply consistent severity scoring using asset criticality, impact, and threat intelligence context.", duration: "20 min", status: "locked" },
+          { id: "6.2", title: "Evidence Collection & Chain of Custody", description: "Preserve digital evidence with proper hashing, storage, and documentation for legal admissibility.", duration: "25 min", status: "locked" },
+          { id: "6.3", title: "Writing Effective Incident Reports", description: "Structure professional reports with executive summary, timeline, technical findings, and recommendations.", duration: "25 min", status: "locked" },
+          { id: "6.4", title: "Post-Incident Review & Lessons Learned", description: "Conduct blameless retrospectives to improve detection, response, and prevention capabilities.", duration: "20 min", status: "locked" },
+        ],
+      },
+    ],
+    quizzes: [
+      { id: "sap-q1", title: "SOC Analyst Foundations Quiz", description: "Test your understanding of the SOC analyst role, maturity models, and compliance frameworks.", questionCount: 15, passingScore: 70, duration: "20 min", status: "unlocked" },
+      { id: "sap-q2", title: "Network Traffic Analysis Quiz", description: "Evaluate your skills in TCP/IP analysis, DNS threats, and packet inspection.", questionCount: 15, passingScore: 75, duration: "20 min", status: "locked" },
+      { id: "sap-q3", title: "SIEM Mastery Assessment", description: "Test your SIEM query writing, correlation rules, and dashboard skills.", questionCount: 15, passingScore: 75, duration: "25 min", status: "locked" },
+      { id: "sap-q4", title: "Endpoint Investigation Quiz", description: "Assess your endpoint forensics knowledge on Windows and Linux systems.", questionCount: 15, passingScore: 70, duration: "20 min", status: "locked" },
+      { id: "sap-q5", title: "Phishing & Email Analysis Quiz", description: "Validate your email header analysis and phishing response skills.", questionCount: 15, passingScore: 75, duration: "20 min", status: "locked" },
+      { id: "sap-q6", title: "Incident Handling Final Exam", description: "Comprehensive exam covering incident handling, reporting, and evidence management.", questionCount: 25, passingScore: 80, duration: "35 min", status: "locked" },
+    ],
+    resources: [
+      { id: "sap-r1", title: "SOC Analyst Investigation Playbook", description: "Step-by-step investigation guides for common alert types and scenarios.", type: "template" },
+      { id: "sap-r2", title: "Network Protocol Cheat Sheet", description: "Quick reference for TCP flags, HTTP methods, DNS record types, and common ports.", type: "cheatsheet" },
+      { id: "sap-r3", title: "SIEM Query Reference Guide", description: "Common search patterns, regex examples, and statistical queries for SOC investigations.", type: "cheatsheet" },
+      { id: "sap-r4", title: "Windows Forensics Quick Reference", description: "Key registry paths, event IDs, persistence locations, and artifact locations.", type: "cheatsheet" },
+      { id: "sap-r5", title: "Email Analysis Toolkit Guide", description: "Tools and techniques for dissecting suspicious emails and extracting IOCs.", type: "pdf" },
+      { id: "sap-r6", title: "Incident Report Template", description: "Professional incident report template with sections for timeline, impact, and remediation.", type: "template" },
+      { id: "sap-r7", title: "CyberChef", description: "Web-based tool for encoding, decoding, and data transformation during investigations.", type: "link", url: "https://gchq.github.io/CyberChef/" },
+      { id: "sap-r8", title: "URLScan.io", description: "Free service for scanning and analyzing suspicious URLs and websites.", type: "link", url: "https://urlscan.io/" },
+    ],
+  },
 ];
 
 export const getCourseById = (id: string): Course | undefined => {

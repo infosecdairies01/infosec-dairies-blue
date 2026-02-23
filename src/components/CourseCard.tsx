@@ -10,6 +10,7 @@ import incidentResponseBg from "@/assets/courses/incident-response-bg.jpg";
 import threatHuntingBg from "@/assets/courses/threat-hunting-bg.jpg";
 import detectionEngineeringBg from "@/assets/courses/detection-engineering-bg.jpg";
 import malwareAnalysisBg from "@/assets/courses/malware-analysis-bg.jpg";
+import socAnalystPathBg from "@/assets/courses/soc-analyst-path-bg.jpg";
 
 interface CourseCardProps {
   title: string;
@@ -37,6 +38,7 @@ const thumbnailMap: Record<string, string> = {
   "courses/threat-hunting-bg.jpg": threatHuntingBg,
   "courses/detection-engineering-bg.jpg": detectionEngineeringBg,
   "courses/malware-analysis-bg.jpg": malwareAnalysisBg,
+  "courses/soc-analyst-path-bg.jpg": socAnalystPathBg,
 };
 
 const CourseCard = ({ title, description, index, difficulty, courseId, thumbnail, isLiveCourse }: CourseCardProps) => {

@@ -4045,6 +4045,269 @@ _[Description of what happens when executed]_
 **Classification:** _[TLP:WHITE / GREEN / AMBER / RED]_
 `,
   },
+  // SOC ANALYST LEARNING PATH RESOURCES
+  {
+    id: "sap-r1",
+    courseId: "soc-analyst-path",
+    title: "SOC Analyst Investigation Playbook",
+    type: "template",
+    content: `
+## SOC Analyst Investigation Playbook
+
+### Phishing Alert
+1. Review alert (sender, subject, recipients)
+2. Extract headers, check SPF/DKIM/DMARC
+3. Defang and scan URLs (URLScan, VT)
+4. Hash and sandbox attachments
+5. Check proxy logs for clicks
+6. Block sender/URLs, purge emails
+7. Reset credentials if compromised
+8. Monitor affected accounts 72h
+
+### Malware Alert
+1. Review EDR/AV alert details
+2. Hash file, check VT
+3. Determine malware family and C2
+4. Isolate endpoint
+5. Block C2 at firewall
+6. Remove malware and persistence
+7. Monitor for reinfection 30 days
+
+### Suspicious Login
+1. Review login details and source IP
+2. Check GeoIP for impossible travel
+3. Review failed attempts before success
+4. Contact user to verify
+5. If unauthorized: reset, revoke, enable MFA
+6. Monitor 72 hours
+`,
+  },
+  {
+    id: "sap-r2",
+    courseId: "soc-analyst-path",
+    title: "Network Protocol Cheat Sheet",
+    type: "cheatsheet",
+    content: `
+## Network Protocol Quick Reference
+
+### Common Ports
+| Port | Service | Security Notes |
+|------|---------|----------------|
+| 22 | SSH | Brute force target |
+| 25 | SMTP | Email relay/spoofing |
+| 53 | DNS | Tunneling, DGA |
+| 80/443 | HTTP/S | Web attacks, C2 |
+| 445 | SMB | Lateral movement |
+| 3389 | RDP | Brute force, lateral |
+
+### TCP Flags
+| Flag | Hex | Description |
+|------|-----|-------------|
+| SYN | 0x02 | Initiate connection |
+| ACK | 0x10 | Confirm receipt |
+| FIN | 0x01 | Graceful close |
+| RST | 0x04 | Abort connection |
+| PSH | 0x08 | Immediate delivery |
+
+### DNS Record Types
+| Type | Purpose | Abuse |
+|------|---------|-------|
+| A/AAAA | IP address | Malicious resolution |
+| TXT | Text data | Tunneling, C2 |
+| MX | Mail server | Phishing infra |
+| NS | Nameserver | DNS hijacking |
+
+### HTTP Status Codes
+| Code | Meaning | Security Context |
+|------|---------|------------------|
+| 200 | OK | Successful request |
+| 301/302 | Redirect | Open redirect abuse |
+| 403 | Forbidden | Access control working |
+| 404 | Not Found | Directory brute force |
+| 500 | Server Error | Possible injection |
+`,
+  },
+  {
+    id: "sap-r3",
+    courseId: "soc-analyst-path",
+    title: "SIEM Query Reference Guide",
+    type: "cheatsheet",
+    content: `
+## SIEM Query Reference
+
+### Basic Patterns
+\`\`\`
+source_ip="10.0.0.5" AND action="blocked"
+process_name="cmd*"
+NOT source_ip IN ("10.0.0.0/8")
+\`\`\`
+
+### Detection Queries
+
+**Brute Force:**
+\`\`\`
+event_type="failed_login" | stats count by user, source_ip | where count > 5
+\`\`\`
+
+**Lateral Movement (RDP):**
+\`\`\`
+event_id=4624 logon_type=10 | stats dc(dest_host) as targets by source_ip | where targets > 3
+\`\`\`
+
+**Data Exfiltration:**
+\`\`\`
+event_type="proxy" | stats sum(bytes_out) as upload by source_ip, dest | where upload > 100MB
+\`\`\`
+
+**Suspicious Process:**
+\`\`\`
+parent IN ("winword.exe","excel.exe") AND process IN ("cmd.exe","powershell.exe")
+\`\`\`
+
+**DNS Tunneling:**
+\`\`\`
+dns | eval len=len(subdomain) | where len > 30 | stats count by domain | where count > 100
+\`\`\`
+`,
+  },
+  {
+    id: "sap-r4",
+    courseId: "soc-analyst-path",
+    title: "Windows Forensics Quick Reference",
+    type: "cheatsheet",
+    content: `
+## Windows Forensics Quick Reference
+
+### Critical Event IDs
+| ID | Description | Alert On |
+|----|-------------|----------|
+| 4624 | Successful logon | Type 10 from unusual source |
+| 4625 | Failed logon | > 5 in 10 min |
+| 4688 | Process creation | Suspicious parent-child |
+| 4720 | Account created | Unexpected accounts |
+| 4728/4732 | Group change | Privilege escalation |
+| 7045 | Service installed | Persistence/malware |
+| 1102 | Audit log cleared | Evidence destruction |
+
+### Persistence Locations
+- Run keys: HKLM/HKCU\\...\\CurrentVersion\\Run
+- Scheduled tasks: C:\\Windows\\System32\\Tasks\\
+- Services: HKLM\\SYSTEM\\CurrentControlSet\\Services\\
+- Startup folders
+- WMI subscriptions: root/subscription
+
+### LOLBins to Monitor
+| Binary | Suspicious Usage |
+|--------|-----------------|
+| certutil | -urlcache -split -f (download) |
+| mshta | Execution from email/temp |
+| powershell | -enc (encoded command) |
+| wmic | process call create |
+| bitsadmin | /transfer (download) |
+
+### Investigation Commands
+\`\`\`powershell
+Get-Process | Select Name, Id, Path
+Get-NetTCPConnection | Where {$_.State -eq "Established"}
+Get-AuthenticodeSignature "path\\to\\file.exe"
+Get-FileHash "path\\to\\file.exe" -Algorithm SHA256
+\`\`\`
+`,
+  },
+  {
+    id: "sap-r5",
+    courseId: "soc-analyst-path",
+    title: "Email Analysis Toolkit Guide",
+    type: "pdf",
+    content: `
+## Email Analysis Toolkit
+
+### Header Analysis Tools
+| Tool | Purpose |
+|------|---------|
+| MXToolbox | Parse and analyze headers |
+| Google Admin Toolbox | Gmail header analysis |
+
+### Authentication Checks
+\`\`\`bash
+dig TXT example.com | grep spf      # SPF
+dig TXT _dmarc.example.com          # DMARC
+dig TXT selector._domainkey.example.com  # DKIM
+\`\`\`
+
+### URL Investigation
+1. Defang URL
+2. Parse components
+3. Check reputation (URLScan, VT, PhishTank)
+4. Domain investigation (WHOIS, crt.sh, PassiveDNS)
+5. Expand shortened URLs
+
+### Attachment Analysis
+\`\`\`bash
+file suspicious_attachment           # Identify type
+sha256sum suspicious_attachment      # Hash
+olevba suspicious.docm              # Extract macros
+pdfid suspicious.pdf                # PDF structure
+\`\`\`
+
+### IOC Extraction Template
+| Type | Value | Context |
+|------|-------|---------|
+| Sender Email | | From address |
+| Sender IP | | X-Originating-IP |
+| Domain | | Phishing domain |
+| URL | | Defanged link |
+| SHA256 | | Attachment hash |
+`,
+  },
+  {
+    id: "sap-r6",
+    courseId: "soc-analyst-path",
+    title: "Incident Report Template",
+    type: "template",
+    content: `
+## Incident Report Template
+
+### 1. Executive Summary
+**ID:** INC-YYYY-### | **Status:** ☐ Active ☐ Contained ☐ Resolved
+**Severity:** ☐ P1 ☐ P2 ☐ P3 ☐ P4
+
+_[What happened? Impact? Contained? Current status?]_
+
+### 2. Timeline
+| Date/Time (UTC) | Event | Source |
+|-----------------|-------|--------|
+| | | |
+
+### 3. Technical Analysis
+- **Attack Vector:** _[How attacker gained access]_
+- **Affected Systems:** _[Hostnames, IPs, roles]_
+- **MITRE Mapping:** _[Tactics and techniques]_
+
+### 4. Indicators of Compromise
+| Type | Value (Defanged) | Context |
+|------|-----------------|---------|
+| | | |
+
+### 5. Impact Assessment
+- Data exposure scope
+- Systems affected
+- Business impact
+- Regulatory implications
+
+### 6. Response Actions
+- Containment: _[Actions with timestamps]_
+- Eradication: _[Actions with timestamps]_
+- Recovery: _[Actions with timestamps]_
+
+### 7. Recommendations
+- **Immediate (0-7 days):**
+- **Short-term (7-30 days):**
+- **Long-term (30-90 days):**
+
+**Author:** _[Name]_ | **Classification:** _[TLP]_
+`,
+  },
 ];
 
 export const getResourceContent = (courseId: string, resourceId: string): ResourceDocument | undefined => {
