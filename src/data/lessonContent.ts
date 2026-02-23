@@ -25898,6 +25898,995 @@ Campaign Object:
       "Confidence levels prevent over-attribution from single data points"
     ]
   },
+  // ==========================================
+  // SOC ANALYST LEARNING PATH
+  // ==========================================
+  {
+    id: "1.1",
+    courseId: "soc-analyst-path",
+    title: "Day in the Life of a SOC Analyst",
+    content: `
+# Day in the Life of a SOC Analyst
+
+Working as a SOC analyst means being on the front lines of cyber defense. This lesson walks through a real shift.
+
+## Shift Structure
+
+| Shift | Hours | Focus |
+|-------|-------|-------|
+| Morning | 06:00–14:00 | Overnight review, active monitoring |
+| Afternoon | 14:00–22:00 | Peak activity, investigations |
+| Night | 22:00–06:00 | Reduced noise, proactive hunting |
+
+## A Typical Morning Shift
+
+### 06:00 – Shift Handover
+- Review outgoing analyst's notes
+- Check active incidents
+- Review threat intel briefing
+
+### 06:30 – Alert Queue Review
+- Open SIEM dashboard, check backlog
+- Prioritize: Critical → High → Medium → Low
+
+### 07:00 – Active Triage
+For each alert: read details, enrich IOCs, correlate events, classify (TP/FP/BTP), document, escalate if needed.
+
+### 09:00 – Deep Investigation
+- Pull endpoint telemetry from EDR
+- Review process execution timeline
+- Map to MITRE ATT&CK
+
+### 11:00 – Collaboration
+- Sync with Tier 2 on incidents
+- Daily SOC standup
+
+### 13:00 – Documentation & Handover
+- Update all open tickets
+- Prepare shift handover summary
+
+## Key Analyst Habits
+1. Stay organized with consistent ticket formats
+2. Document every action, even dead ends
+3. Communicate and escalate early
+4. Take breaks to combat alert fatigue
+5. Keep learning continuously
+    `,
+    keyTakeaways: [
+      "SOC analysts work rotating shifts for 24/7 coverage",
+      "Structured triage ensures consistent alert handling",
+      "Documentation quality is as important as detection speed",
+      "Collaboration with L2 analysts is essential",
+      "Managing alert fatigue through breaks is crucial"
+    ],
+  },
+  {
+    id: "1.2",
+    courseId: "soc-analyst-path",
+    title: "SOC Maturity Models",
+    content: `
+# SOC Maturity Models
+
+Understanding SOC maturity helps identify gaps and set improvement goals.
+
+## SOC-CMM Maturity Levels
+
+| Level | Name | Description |
+|-------|------|-------------|
+| 0 | Incomplete | No formal SOC |
+| 1 | Initial | Basic reactive monitoring |
+| 2 | Managed | Defined processes, basic tooling |
+| 3 | Defined | Standardized workflows, metrics |
+| 4 | Quantitatively Managed | Data-driven, automation |
+| 5 | Optimizing | Continuous improvement, advanced analytics |
+
+## Five Assessment Domains
+1. **People** – Staffing, skills, training, retention
+2. **Process** – SOPs, playbooks, escalation, change management
+3. **Technology** – SIEM, EDR, SOAR, threat intel
+4. **Services** – Monitoring scope, IR capabilities, hunting
+5. **Governance** – KPIs, compliance, risk prioritization
+
+## Moving Up the Scale
+- **1→2:** Document everything, define roles, establish baselines
+- **2→3:** Standardize, measure KPIs, regular training
+- **3→4:** Automate with SOAR, refine detection, start hunting
+- **4→5:** Advanced analytics, ML, threat-informed defense
+    `,
+    keyTakeaways: [
+      "SOC maturity models assess People, Process, Technology, Services, and Governance",
+      "Most SOCs operate at Level 1-2",
+      "Documentation and standardization are the foundation",
+      "Metrics tracking is essential for progress",
+      "Automation accelerates maturity growth"
+    ],
+  },
+  {
+    id: "1.3",
+    courseId: "soc-analyst-path",
+    title: "Compliance & Regulatory Frameworks",
+    content: `
+# Compliance & Regulatory Frameworks
+
+Compliance requirements influence what you monitor, log retention, and incident reporting.
+
+## Key Frameworks
+
+### PCI-DSS
+- Monitor access to cardholder data
+- Log retention: 1 year (3 months online)
+- Daily log review required
+
+### HIPAA
+- Monitor ePHI access
+- Breach notification within 60 days
+- Annual risk assessments
+
+### GDPR
+- 72-hour breach notification
+- Data access logging
+- Right to erasure affects retention
+
+### SOX
+- Monitor financial systems access
+- Change management controls
+- Audit trails required
+
+## Log Retention Summary
+
+| Framework | Retention |
+|-----------|----------|
+| PCI-DSS | 1 year |
+| HIPAA | 6 years |
+| SOX | 7 years |
+| GDPR | As needed (minimize) |
+
+> Compliance is the floor, not the ceiling. True security goes beyond minimum requirements.
+    `,
+    keyTakeaways: [
+      "PCI-DSS requires daily log review and 1-year retention",
+      "GDPR mandates 72-hour breach notification",
+      "HIPAA requires audit controls for ePHI",
+      "NIST CSF focuses on Detect and Respond for SOCs",
+      "Compliance is a minimum baseline"
+    ],
+  },
+  {
+    id: "1.4",
+    courseId: "soc-analyst-path",
+    title: "Building Your Analyst Toolkit",
+    content: `
+# Building Your Analyst Toolkit
+
+Every effective SOC analyst builds a personal toolkit for faster investigations.
+
+## Essential Free Tools
+
+| Tool | Purpose |
+|------|---------|
+| VirusTotal | File/URL/IP analysis |
+| AbuseIPDB | IP reputation |
+| URLScan.io | URL analysis |
+| CyberChef | Data transformation |
+| Shodan | Internet device search |
+| Wireshark | Packet analysis |
+| Process Monitor | Windows process monitoring |
+| Autoruns | Windows persistence locations |
+
+## Organize Your Bookmarks
+- Reputation Checks (VT, AbuseIPDB, GreyNoise)
+- OSINT (Shodan, crt.sh, DNSDumpster)
+- Malware (Any.Run, MalwareBazaar)
+- Reference (MITRE ATT&CK, CVE Details)
+
+## Templates to Prepare
+1. Alert triage template
+2. Incident report template
+3. IOC extraction template
+4. Shift handover template
+5. Investigation timeline template
+
+## Lab Setup
+- REMnux for malware analysis
+- FlareVM for Windows analysis
+- Keep VMs isolated from production
+- Take snapshots before analyzing malware
+    `,
+    keyTakeaways: [
+      "Build organized bookmarks for quick investigation access",
+      "Maintain scripts for common lookups and automation",
+      "Prepare standard templates for triage and reporting",
+      "Set up an isolated lab environment",
+      "Continuously expand your toolkit"
+    ],
+  },
+  {
+    id: "2.1",
+    courseId: "soc-analyst-path",
+    title: "TCP/IP Deep Dive for Analysts",
+    content: `
+# TCP/IP Deep Dive for Analysts
+
+Understanding TCP/IP deeply is essential for network-based threat detection.
+
+## TCP Flags
+| Flag | Name | Purpose |
+|------|------|---------|
+| SYN | Synchronize | Initiate connection |
+| ACK | Acknowledge | Confirm receipt |
+| FIN | Finish | Graceful close |
+| RST | Reset | Abort connection |
+
+## Suspicious TCP Behaviors
+
+### Port Scanning
+- **SYN Scan:** SYN→SYN-ACK→RST (never completes handshake)
+- **XMAS Scan:** FIN+PSH+URG flags set
+- **Detection:** Many SYN packets to different ports
+
+### C2 Beaconing
+Regular interval connections with consistent packet sizes to same destination.
+
+## Common Ports
+| Port | Service | Attack Context |
+|------|---------|----------------|
+| 22 | SSH | Brute force, tunneling |
+| 53 | DNS | DNS tunneling, C2 |
+| 445 | SMB | Lateral movement |
+| 3389 | RDP | Brute force |
+| 4444 | Metasploit | Default reverse shell |
+    `,
+    keyTakeaways: [
+      "TCP flags reveal connection intent",
+      "C2 beaconing shows regular intervals and consistent sizes",
+      "TTL values help identify operating systems",
+      "Port scanning patterns have distinct signatures",
+      "Common attack ports require constant monitoring"
+    ],
+  },
+  {
+    id: "2.2",
+    courseId: "soc-analyst-path",
+    title: "DNS Analysis & Threat Detection",
+    content: `
+# DNS Analysis & Threat Detection
+
+DNS is one of the most abused protocols by attackers.
+
+## DNS-Based Threats
+
+### DNS Tunneling
+Encodes data in DNS queries: \`aGVsbG8gd29ybGQ.data.evil.com\`
+- Long subdomain labels (>30 chars)
+- High entropy strings
+- High volume TXT queries
+
+### DGA (Domain Generation Algorithms)
+Malware generates random domains: \`xkq8r3m2p.com\`
+- Many NXDomain responses
+- Short domain lifespan
+
+### Fast-Flux DNS
+Rapidly rotating IPs behind a domain (every 30-60 seconds)
+- Very low TTL values
+- IPs across multiple ASNs
+
+## Detection Rules
+- Subdomain entropy > 3.5 AND length > 30
+- NXDomain count > 100 within 10 minutes per source
+- Queries to rare TLDs (.xyz, .top, .club)
+    `,
+    keyTakeaways: [
+      "DNS tunneling uses long, high-entropy subdomains",
+      "DGA domains generate many NXDomain responses",
+      "Fast-flux DNS uses rapid IP rotation with low TTL",
+      "Monitor query length, entropy, and response codes",
+      "Passive DNS and WHOIS are essential for investigation"
+    ],
+  },
+  {
+    id: "2.3",
+    courseId: "soc-analyst-path",
+    title: "HTTP/HTTPS Traffic Investigation",
+    content: `
+# HTTP/HTTPS Traffic Investigation
+
+Web traffic analysis is fundamental. Attackers use HTTP/S for C2, exfiltration, and payload delivery.
+
+## Key Detection Areas
+
+### Suspicious User-Agents
+Python-requests, curl, empty, or misspelled browsers indicate automation.
+
+### C2 Beaconing Over HTTP
+- Regular POST intervals
+- Consistent response sizes
+- HTTPS to recently registered domains
+
+### Web Shell Detection
+POST requests to unusual paths (uploads/cmd.php) with command strings.
+
+### Proxy Log Red Flags
+- Large POST requests to external sites
+- Access to uncategorized domains
+- CONNECT to non-standard ports
+- Requests to raw IP addresses
+
+### TLS/SSL Clues
+- JA3 fingerprints identify malware through encryption
+- Self-signed or recently issued certificates
+- SNI inspection reveals target domains
+    `,
+    keyTakeaways: [
+      "Unusual User-Agent strings indicate automated tools or malware",
+      "C2 beaconing shows regular intervals and consistent payloads",
+      "Web shells detected through POST to unusual file paths",
+      "Proxy logs reveal exfiltration through large outbound POSTs",
+      "JA3 fingerprints identify malware through encryption"
+    ],
+  },
+  {
+    id: "2.4",
+    courseId: "soc-analyst-path",
+    title: "Wireshark for SOC Analysts",
+    content: `
+# Wireshark for SOC Analysts
+
+Wireshark is the gold standard for packet analysis.
+
+## Essential Display Filters
+- By address: \`ip.addr == 192.168.1.100\`
+- By port: \`tcp.port == 443\`
+- By content: \`http.request.uri contains "cmd"\`
+- Combinations: \`ip.addr == 10.0.0.5 && tcp.port == 443\`
+
+## Key Workflows
+
+### Following TCP Stream
+Right-click → Follow → TCP Stream to reconstruct conversations.
+
+### Extracting Files
+File → Export Objects → HTTP to extract downloaded files.
+
+### Statistics Tools
+- Conversations: Top talkers
+- I/O Graphs: Traffic patterns over time
+- Protocol Hierarchy: Traffic breakdown
+
+## Investigation Scenarios
+1. **C2 Detection:** Filter suspicious IP, check I/O Graphs for intervals
+2. **Data Exfil:** Filter POST requests, sort by content length
+3. **Malware Download:** Filter HTTP 200 with application content type, export and hash files
+    `,
+    keyTakeaways: [
+      "Master display filters for finding needles in haystacks",
+      "Follow TCP Stream reconstructs full conversations",
+      "Export HTTP Objects extracts files for analysis",
+      "Statistics tools reveal beaconing and anomalies",
+      "Handle extracted files in sandbox only"
+    ],
+  },
+  {
+    id: "3.1",
+    courseId: "soc-analyst-path",
+    title: "Advanced SIEM Queries",
+    content: `
+# Advanced SIEM Queries
+
+Moving beyond basic searches to craft complex queries.
+
+## Key Patterns
+
+### Statistical Functions
+\`\`\`
+| stats count by source_ip, destination_port
+| stats dc(destination_ip) as unique_targets by source_ip
+| stats avg(bytes_out) as avg_upload by user
+\`\`\`
+
+### Outlier Detection
+Find users with abnormally high failed logins by comparing to average.
+
+### Process Chain Analysis
+\`\`\`
+parent_process IN ("outlook.exe","winword.exe")
+AND process_name IN ("cmd.exe","powershell.exe","wscript.exe")
+\`\`\`
+
+### Lateral Movement Detection
+\`\`\`
+event_id=4624 logon_type=10
+| stats dc(target_host) as hosts by source_ip
+| where hosts > 3
+\`\`\`
+
+## Optimization Tips
+1. Filter early — time range and source first
+2. Use indexed fields
+3. Limit results during development
+4. Save and document common queries
+    `,
+    keyTakeaways: [
+      "Statistical functions reveal anomalies in large datasets",
+      "Time-based correlation links events across sources",
+      "Baseline deviation detects unusual behavior",
+      "Process chain analysis identifies suspicious spawning",
+      "Optimize by filtering early with indexed fields"
+    ],
+  },
+  {
+    id: "3.2",
+    courseId: "soc-analyst-path",
+    title: "Correlation Rule Development",
+    content: `
+# Correlation Rule Development
+
+Well-crafted correlation rules surface real threats while minimizing false positives.
+
+## Design Principles
+
+1. **Threat-Informed:** Start with MITRE ATT&CK technique, not log source
+2. **Multi-Event:** Correlate multiple events for higher confidence
+3. **Baseline-Aware:** Use static thresholds AND dynamic baselines
+
+## Example Rules
+
+### Brute Force → Success
+IF failed_logins > 5 within 10 min FOLLOWED BY successful_login within 30 min
+
+### Data Exfiltration
+Upload > 100MB to unapproved external IP outside business hours
+
+### Ransomware
+File renames > 50 in 5 min with extensions like .encrypted, .locked
+
+## Reducing False Positives
+- Add whitelists for known-good behavior
+- Increase thresholds based on data
+- Add context conditions (business hours, user role)
+- Implement cool-down periods
+    `,
+    keyTakeaways: [
+      "Start with MITRE ATT&CK techniques",
+      "Multi-event correlation reduces false positives",
+      "Combine static thresholds with dynamic baselines",
+      "Whitelisting and cool-downs reduce noise",
+      "Rules need ongoing tuning"
+    ],
+  },
+  {
+    id: "3.3",
+    courseId: "soc-analyst-path",
+    title: "Dashboard Creation & Visualization",
+    content: `
+# Dashboard Creation & Visualization
+
+Effective dashboards transform raw data into actionable intelligence.
+
+## Design Principles
+1. Every panel answers a specific question
+2. Visual hierarchy: critical info at top-left
+3. Max 8-10 panels per dashboard
+4. Enable drill-down from every panel
+5. Use dynamic baselines, not static thresholds
+
+## Essential Panels
+- Alert summary by severity
+- Top threat sources
+- MTTD/MTTR trends
+- Active investigations
+- Geographic attack distribution
+- MITRE technique coverage
+
+## Anti-Patterns to Avoid
+- Too many panels (information overload)
+- No drill-down capability
+- Static thresholds (becomes noise)
+- Pretty but not actionable
+    `,
+    keyTakeaways: [
+      "Every panel should answer a specific operational question",
+      "Critical information goes top-left",
+      "Limit to 8-10 panels",
+      "Enable drill-down for investigation workflow",
+      "Use dynamic baselines for meaningful alerting"
+    ],
+  },
+  {
+    id: "3.4",
+    courseId: "soc-analyst-path",
+    title: "Log Source Onboarding",
+    content: `
+# Log Source Onboarding
+
+Adding new data sources to SIEM expands detection coverage.
+
+## Onboarding Workflow
+1. **Identify** — Device, events, format, volume
+2. **Plan** — Collection method, connectivity, storage
+3. **Configure** — Syslog, agent, or API collection
+4. **Normalize** — Map vendor fields to common schema
+5. **Validate** — Timestamps, parsing, volume, searchability
+6. **Alert** — Build initial detection rules
+
+## Validation Checklist
+- [ ] Events are being received
+- [ ] Timestamps are correct (timezone!)
+- [ ] Fields are properly parsed
+- [ ] Key fields are searchable
+- [ ] Volume matches expectations
+- [ ] No data loss or gaps
+
+## Common Challenges
+- Timestamp mismatches → Standardize on UTC
+- Missing fields → Update parser
+- High volume → Filter at source
+- Format changes → Version your parsers
+    `,
+    keyTakeaways: [
+      "Follow structured workflow: Identify → Plan → Configure → Normalize → Validate → Alert",
+      "Field normalization enables cross-source correlation",
+      "Always validate timestamps and field parsing",
+      "Start with vendor-recommended detection rules",
+      "Version parsers and monitor for format changes"
+    ],
+  },
+  {
+    id: "4.1",
+    courseId: "soc-analyst-path",
+    title: "Process Forensics on Windows",
+    content: `
+# Process Forensics on Windows
+
+Understanding normal process behavior helps quickly identify malicious activity.
+
+## Red Flags in Process Trees
+- Wrong parent (svchost.exe from explorer.exe)
+- Wrong path (svchost.exe in \\Users\\temp\\)
+- Misspelled names (svch0st.exe)
+- Office spawning CLI (winword.exe → cmd.exe → powershell.exe)
+
+## LOLBins (Living-Off-the-Land Binaries)
+| Binary | Attack Use |
+|--------|------------|
+| certutil.exe | Download files |
+| mshta.exe | Execute VBScript |
+| rundll32.exe | Execute malicious DLLs |
+| wmic.exe | Recon, execution |
+| bitsadmin.exe | Download payloads |
+
+## DLL Injection
+- **Process Hollowing:** Create suspended process, replace memory with malicious code
+- **DLL Side-Loading:** Place malicious DLL in application directory
+
+## Investigation Commands
+\`\`\`powershell
+Get-WmiObject Win32_Process | Select Name, ProcessId, ParentProcessId, CommandLine
+Get-NetTCPConnection | Where {$_.State -eq "Established"}
+Get-AuthenticodeSignature "C:\\path\\to\\suspicious.exe"
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Know legitimate Windows process hierarchy",
+      "LOLBins blend in with normal activity",
+      "Process hollowing hides code in legitimate processes",
+      "Check path, parent, user context, and command line",
+      "Office apps spawning CLI tools is a critical indicator"
+    ],
+  },
+  {
+    id: "4.2",
+    courseId: "soc-analyst-path",
+    title: "Registry & Persistence Analysis",
+    content: `
+# Registry & Persistence Analysis
+
+The Windows Registry is the most common persistence mechanism.
+
+## Top Persistence Locations
+- **Run Keys:** HKLM/HKCU\\...\\CurrentVersion\\Run
+- **Scheduled Tasks:** C:\\Windows\\System32\\Tasks\\
+- **Services:** HKLM\\SYSTEM\\CurrentControlSet\\Services\\
+- **Startup Folders:** User and ProgramData startup directories
+- **WMI Event Subscriptions:** root/subscription namespace
+
+## Investigation Steps
+1. Compare Registry to known-good baseline
+2. Use Sysinternals Autoruns for all autostart locations
+3. Validate each entry: signed? expected path? recent? baselined?
+
+## MITRE ATT&CK Mapping
+| Technique | Location |
+|-----------|----------|
+| T1547.001 Boot Autostart | Run/RunOnce keys |
+| T1053.005 Scheduled Task | Task Scheduler |
+| T1543.003 System Process | Services registry |
+| T1546.003 WMI Subscription | WMI root/subscription |
+    `,
+    keyTakeaways: [
+      "Run keys, tasks, and services are most common persistence",
+      "WMI subscriptions provide fileless persistence",
+      "Autoruns is essential for viewing all autostart locations",
+      "Verify digital signatures and file paths",
+      "Map persistence to MITRE ATT&CK techniques"
+    ],
+  },
+  {
+    id: "4.3",
+    courseId: "soc-analyst-path",
+    title: "Linux Endpoint Forensics",
+    content: `
+# Linux Endpoint Forensics
+
+Linux servers are common targets — web servers, databases, and cloud infra.
+
+## Initial Triage
+\`\`\`bash
+ps auxf          # Process tree
+ss -tulnp        # Listening ports
+who / w / last   # User sessions
+\`\`\`
+
+## Persistence Locations
+- Cron: \`crontab -l\`, \`/etc/cron.*\`
+- Systemd: \`systemctl list-unit-files\`
+- SSH keys: \`find / -name "authorized_keys"\`
+- Shell configs: \`.bashrc\`, \`.bash_profile\`
+
+## Common Attack Artifacts
+- **Web shells:** \`grep -r "eval\\|system\\|exec" /var/www/\`
+- **Cryptominers:** High CPU + connections to mining ports
+- **Log tampering:** Cleared history, modified log files
+
+## Timeline Creation
+\`\`\`bash
+find / -mtime -7 -type f 2>/dev/null | sort > /tmp/timeline.txt
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Start with processes, network, and logins",
+      "Check cron, systemd, SSH keys, shell configs",
+      "Web shells use eval/exec functions",
+      "Log tampering includes cleared history",
+      "File system timelines correlate attacker activity"
+    ],
+  },
+  {
+    id: "4.4",
+    courseId: "soc-analyst-path",
+    title: "Memory Analysis Fundamentals",
+    content: `
+# Memory Analysis Fundamentals
+
+Memory forensics reveals fileless malware, injected code, and hidden connections that disk analysis misses.
+
+## Why Memory?
+- Captures fileless payloads
+- Reveals process injection
+- Shows active network connections
+- Captures decrypted data
+
+## Volatility Framework
+
+### Key Plugins
+| Plugin | Purpose |
+|--------|---------|
+| pslist | Active processes |
+| psscan | Hidden processes |
+| pstree | Parent-child tree |
+| netscan | Network connections |
+| malfind | Injected code detection |
+| dlllist | Loaded DLLs |
+| cmdline | Process command lines |
+
+### Detecting Injection (malfind)
+Red flags: PAGE_EXECUTE_READWRITE protection, MZ headers in unexpected memory regions.
+
+### Hidden Processes
+Compare pslist vs psscan — differences reveal hidden/rootkit processes.
+
+**Critical:** Capture memory BEFORE shutting down or rebooting!
+    `,
+    keyTakeaways: [
+      "Memory forensics catches fileless malware",
+      "Capture memory BEFORE any remediation",
+      "malfind detects injection through RWX memory",
+      "Compare pslist vs psscan for hidden processes",
+      "Network connections link C2 to specific processes"
+    ],
+  },
+  {
+    id: "5.1",
+    courseId: "soc-analyst-path",
+    title: "Email Header Analysis",
+    content: `
+# Email Header Analysis
+
+Email headers tell how a message traveled from sender to recipient.
+
+## Key Points
+- Read headers **bottom-to-top** (oldest at bottom)
+- Check From vs Reply-To (mismatch = phishing indicator)
+- Verify SPF/DKIM/DMARC authentication results
+- Look up X-Originating-IP reputation
+- Verify Message-ID domain matches sender
+
+## Authentication Checks
+- **SPF:** Is the sending IP authorized?
+- **DKIM:** Was the email tampered with?
+- **DMARC:** Policy-level SPF+DKIM combined check
+
+## Phishing Indicators
+1. From ≠ Reply-To
+2. SPF/DKIM/DMARC failures
+3. Unusual sending infrastructure
+4. Time discrepancies
+5. X-Originating-IP from unexpected geography
+    `,
+    keyTakeaways: [
+      "Read Received headers bottom-to-top",
+      "From address is easily spoofed — verify against Reply-To",
+      "SPF, DKIM, DMARC reveal authentication status",
+      "Mismatched From/Reply-To is a strong phishing indicator",
+      "X-Originating-IP identifies true sending infrastructure"
+    ],
+  },
+  {
+    id: "5.2",
+    courseId: "soc-analyst-path",
+    title: "Malicious Attachment Analysis",
+    content: `
+# Malicious Attachment Analysis
+
+Email attachments remain a top malware delivery method.
+
+## Common Malicious Types
+Office macros (.docm, .xlsm), PDFs, archives (.zip, .rar), disk images (.iso), shortcuts (.lnk), HTML smuggling, scripts (.js, .vbs)
+
+## Safe Analysis Workflow
+1. **Never open on your workstation** — use sandbox/VM
+2. **Static:** Hash file, check VT, extract metadata
+3. **Macro Analysis:** Use olevba — look for AutoOpen, Shell, Base64
+4. **Dynamic:** Submit to Any.Run or Hybrid Analysis
+
+## Key Threats
+- **HTML Smuggling:** Base64-encoded payloads in JavaScript that auto-download
+- **ISO/IMG Abuse:** Bypass Mark-of-the-Web, payloads execute without warnings
+- **Macro Red Flags:** AutoOpen, ShellExecute, URLDownloadToFile
+    `,
+    keyTakeaways: [
+      "Never open suspicious attachments on your workstation",
+      "olevba extracts VBA macros from Office documents",
+      "AutoOpen and Shell calls are key macro red flags",
+      "HTML smuggling hides payloads in Base64 JavaScript",
+      "ISO files bypass Mark-of-the-Web"
+    ],
+  },
+  {
+    id: "5.3",
+    courseId: "soc-analyst-path",
+    title: "URL & Domain Investigation",
+    content: `
+# URL & Domain Investigation
+
+Thorough URL investigation identifies attacker infrastructure.
+
+## Workflow
+1. **Defang** the URL (hxxps://evil[.]com)
+2. **Parse** components (scheme, domain, port, path, params)
+3. **Investigate** domain (WHOIS, age, reputation, cert transparency)
+4. **Scan** with URLScan.io, VirusTotal, PhishTank
+
+## Common Tricks
+- **Homoglyphs:** Cyrillic 'а' vs Latin 'a'
+- **URL shorteners:** Hide real destination
+- **Open redirects:** Abuse legitimate site redirects
+- **Brand in subdomain:** login.paypal.evil.com
+
+## Red Flags
+- Recently registered domain (< 30 days)
+- IP address instead of domain
+- Unusual ports
+- Encoded characters in URL
+    `,
+    keyTakeaways: [
+      "Always defang URLs before sharing",
+      "Check domain age — recent registration is high risk",
+      "Homoglyphs use look-alike characters",
+      "URL shorteners hide malicious destinations",
+      "Combine WHOIS, passive DNS, and cert transparency"
+    ],
+  },
+  {
+    id: "5.4",
+    courseId: "soc-analyst-path",
+    title: "Phishing Response Playbook",
+    content: `
+# Phishing Response Playbook
+
+Complete end-to-end phishing incident handling.
+
+## Phase 1: Detection
+- Capture original email with full headers
+- Extract all URLs and attachments
+- Identify all recipients
+
+## Phase 2: Analysis
+- Check SPF/DKIM/DMARC, sender domain age
+- Scan URLs (URLScan, VT)
+- Sandbox attachments
+
+## Phase 3: Containment
+- Block sender domain/IP at email gateway
+- Block URLs at proxy/firewall
+- Purge email from ALL mailboxes
+- If credentials entered: reset passwords, revoke sessions, check forwarding rules
+
+## Phase 4: Post-Incident
+- Document timeline and IOCs
+- Update filtering rules
+- Share IOCs with ISACs
+- Conduct targeted awareness training
+    `,
+    keyTakeaways: [
+      "Capture original email with full headers first",
+      "Assess severity by recipients, clicks, and payload type",
+      "Purge phishing from ALL mailboxes",
+      "After credential compromise: reset, revoke, check forwarding",
+      "Always update detection rules post-incident"
+    ],
+  },
+  {
+    id: "6.1",
+    courseId: "soc-analyst-path",
+    title: "Incident Severity Classification",
+    content: `
+# Incident Severity Classification
+
+Consistent classification ensures appropriate resources and response times.
+
+## Four-Level Classification
+
+| Severity | Response Time | Notification |
+|----------|---------------|--------------|
+| Critical (P1) | < 15 min | CISO, Legal |
+| High (P2) | < 1 hour | SOC Manager |
+| Medium (P3) | < 4 hours | SOC Lead |
+| Low (P4) | < 24 hours | Documented only |
+
+## Decision Matrix
+Combines threat level and business impact. High threat + High impact = P1.
+
+## Key Rule
+When in doubt, escalate UP — it's easier to de-escalate than recover from delay.
+
+## Examples
+- **P1:** Active ransomware, confirmed data breach, compromised domain admin
+- **P2:** Malware contained on single endpoint, confirmed credential phishing
+- **P3:** Suspicious PowerShell, unusual VPN logins
+- **P4:** Port scan from known vendor, single failed login
+    `,
+    keyTakeaways: [
+      "Classification considers both threat and impact",
+      "Critical incidents need immediate CISO notification",
+      "Use a decision matrix for consistency",
+      "When in doubt, escalate UP",
+      "Downgrades require documented justification"
+    ],
+  },
+  {
+    id: "6.2",
+    courseId: "soc-analyst-path",
+    title: "Evidence Collection & Chain of Custody",
+    content: `
+# Evidence Collection & Chain of Custody
+
+Properly preserving digital evidence is essential for IR and legal proceedings.
+
+## Order of Volatility
+1. Memory / RAM (most volatile)
+2. Network state & connections
+3. Running processes
+4. Disk / file system
+5. Remote logging / SIEM data
+6. Backups / archives (least volatile)
+
+## Key Principles
+- Hash everything with SHA256 before and after
+- Never analyze original evidence — work on copies
+- Document every action and handoff
+- Secure encrypted storage with access controls
+- Use hardware write blockers for disk imaging
+
+## Chain of Custody Log
+Document for every piece of evidence: who collected it, when, how, storage location, and every subsequent handoff.
+    `,
+    keyTakeaways: [
+      "Collect from most volatile to least volatile",
+      "Hash all evidence with SHA256",
+      "Never analyze original evidence",
+      "Document who, what, when, why for every handoff",
+      "Proper handling ensures legal admissibility"
+    ],
+  },
+  {
+    id: "6.3",
+    courseId: "soc-analyst-path",
+    title: "Writing Effective Incident Reports",
+    content: `
+# Writing Effective Incident Reports
+
+Reports serve technical teams, management, legal, and compliance.
+
+## Structure
+1. **Executive Summary** — Non-technical: what happened, impact, status
+2. **Timeline** — UTC timestamps with evidence sources
+3. **Technical Analysis** — Attack vector, MITRE mapping, affected systems
+4. **IOCs** — Defanged indicators with context
+5. **Impact Assessment** — Data, systems, business, regulatory
+6. **Response Actions** — Containment, eradication, recovery
+7. **Recommendations** — Short-term, long-term, process, training
+
+## Writing Tips
+- Be factual, not speculative
+- Use UTC timestamps
+- Defang all IOCs
+- Document dead ends too
+- Know your audience
+    `,
+    keyTakeaways: [
+      "Start with non-technical executive summary",
+      "Build detailed timeline with UTC timestamps",
+      "Include defanged IOCs with context",
+      "Map to MITRE ATT&CK techniques",
+      "Reports serve multiple audiences"
+    ],
+  },
+  {
+    id: "6.4",
+    courseId: "soc-analyst-path",
+    title: "Post-Incident Review & Lessons Learned",
+    content: `
+# Post-Incident Review & Lessons Learned
+
+PIRs turn incidents into improvements. Without them, you repeat mistakes.
+
+## Blameless Retrospective
+Focus on systems and processes, not individuals.
+
+## Meeting Agenda (60-90 min)
+1. Timeline Review (20 min)
+2. What Went Well (10 min)
+3. What Could Improve (20 min)
+4. Action Items (20 min)
+5. Wrap-Up (10 min)
+
+## Key Questions
+- How was it detected? Could we detect earlier?
+- Were playbooks adequate?
+- Was communication effective?
+- What was the root cause?
+
+## Action Items Must Be
+- Specific (not "improve monitoring")
+- Assigned to an owner
+- Given a deadline
+- Tracked to completion
+
+## Anti-Patterns
+- Blaming individuals (kills reporting culture)
+- No action items (nothing changes)
+- Skipping PIR (miss improvement opportunity)
+- No follow-up (actions never completed)
+    `,
+    keyTakeaways: [
+      "Blameless culture is essential",
+      "Every PIR must produce assigned, deadline-driven action items",
+      "Ask detection, response, communication, prevention questions",
+      "Track recurrence rate to measure effectiveness",
+      "Make PIRs mandatory for P1 and P2 incidents"
+    ],
+  },
 ];
 
 export const getLessonContent = (courseId: string, lessonId: string): LessonContent | undefined => {
