@@ -1740,7 +1740,7 @@ export const courses: Course[] = [
     shortTitle: "SOC Analyst Path",
     description: "A structured career-ready program covering everything from foundational SOC skills to advanced threat analysis, incident handling, and reporting. Designed to prepare you for real-world SOC analyst roles.",
     difficulty: "medium",
-    duration: "20 hours",
+    duration: "40 hours",
     bgImage: "courses/soc-analyst-path-bg.jpg",
     modules: [
       {
@@ -1752,6 +1752,8 @@ export const courses: Course[] = [
           { id: "1.2", title: "SOC Maturity Models", description: "Understand SOC maturity levels from reactive to proactive and how organizations evolve their security operations.", duration: "25 min", status: "unlocked" },
           { id: "1.3", title: "Compliance & Regulatory Frameworks", description: "Overview of PCI-DSS, HIPAA, GDPR, and SOX requirements relevant to SOC operations.", duration: "20 min", status: "locked" },
           { id: "1.4", title: "Building Your Analyst Toolkit", description: "Set up your personal investigation toolkit with essential free and commercial tools.", duration: "30 min", status: "locked" },
+          { id: "1.5", title: "SOC Communication & Stakeholder Management", description: "Learn to communicate effectively with IT teams, management, and external parties during incidents.", duration: "20 min", status: "locked" },
+          { id: "1.6", title: "Metrics, KPIs & Reporting for SOC Teams", description: "Track and present SOC performance using MTTD, MTTR, alert volume, and efficiency metrics.", duration: "25 min", status: "locked" },
         ],
       },
       {
@@ -1763,6 +1765,8 @@ export const courses: Course[] = [
           { id: "2.2", title: "DNS Analysis & Threat Detection", description: "Detect DNS tunneling, DGA domains, fast-flux networks, and DNS-based C2 channels.", duration: "25 min", status: "locked" },
           { id: "2.3", title: "HTTP/HTTPS Traffic Investigation", description: "Analyze web traffic for malicious payloads, beaconing patterns, and data exfiltration.", duration: "30 min", status: "locked" },
           { id: "2.4", title: "Wireshark for SOC Analysts", description: "Practical packet capture analysis using display filters, stream following, and expert info.", duration: "35 min", status: "locked" },
+          { id: "2.5", title: "TLS/SSL Interception & Analysis", description: "Understand TLS handshakes, certificate validation, and how to analyze encrypted traffic.", duration: "25 min", status: "locked" },
+          { id: "2.6", title: "Network Flow Analysis with Zeek", description: "Use Zeek (Bro) for connection logs, protocol analysis, and behavioral network monitoring.", duration: "30 min", status: "locked" },
         ],
       },
       {
@@ -1774,6 +1778,8 @@ export const courses: Course[] = [
           { id: "3.2", title: "Correlation Rule Development", description: "Design multi-event correlation rules to detect attack chains and reduce false positives.", duration: "30 min", status: "locked" },
           { id: "3.3", title: "Dashboard Creation & Visualization", description: "Build actionable SOC dashboards that surface critical alerts and trends.", duration: "25 min", status: "locked" },
           { id: "3.4", title: "Log Source Onboarding", description: "Integrate new data sources, normalize fields, and validate event parsing.", duration: "25 min", status: "locked" },
+          { id: "3.5", title: "Alert Tuning & False Positive Reduction", description: "Systematically reduce noise by tuning thresholds, whitelisting, and enrichment-based suppression.", duration: "25 min", status: "locked" },
+          { id: "3.6", title: "SIEM Use Case Development", description: "Design detection use cases from threat model to implementation and validation.", duration: "30 min", status: "locked" },
         ],
       },
       {
@@ -1785,6 +1791,8 @@ export const courses: Course[] = [
           { id: "4.2", title: "Registry & Persistence Analysis", description: "Identify persistence mechanisms via Run keys, scheduled tasks, services, and WMI subscriptions.", duration: "25 min", status: "locked" },
           { id: "4.3", title: "Linux Endpoint Forensics", description: "Investigate suspicious processes, network connections, cron jobs, and shell history on Linux.", duration: "25 min", status: "locked" },
           { id: "4.4", title: "Memory Analysis Fundamentals", description: "Use Volatility to analyze memory dumps for hidden processes, injected code, and network artifacts.", duration: "35 min", status: "locked" },
+          { id: "4.5", title: "Browser Forensics & Web Artifacts", description: "Extract browsing history, cached files, cookies, and download records for investigation.", duration: "25 min", status: "locked" },
+          { id: "4.6", title: "PowerShell & Script Block Logging", description: "Detect malicious PowerShell usage through script block logging, transcription, and AMSI.", duration: "30 min", status: "locked" },
         ],
       },
       {
@@ -1796,6 +1804,8 @@ export const courses: Course[] = [
           { id: "5.2", title: "Malicious Attachment Analysis", description: "Safely examine Office macros, PDFs, ISO files, and archive-based payloads.", duration: "30 min", status: "locked" },
           { id: "5.3", title: "URL & Domain Investigation", description: "Investigate suspicious links using URLScan, VirusTotal, WHOIS, and passive DNS.", duration: "25 min", status: "locked" },
           { id: "5.4", title: "Phishing Response Playbook", description: "End-to-end phishing incident handling: detection, containment, eradication, and reporting.", duration: "30 min", status: "locked" },
+          { id: "5.5", title: "Business Email Compromise Detection", description: "Identify BEC patterns including CEO fraud, vendor impersonation, and invoice redirection.", duration: "25 min", status: "locked" },
+          { id: "5.6", title: "Email Security Architecture", description: "Configure and evaluate SPF, DKIM, DMARC, email gateways, and sandboxing solutions.", duration: "30 min", status: "locked" },
         ],
       },
       {
@@ -1807,6 +1817,41 @@ export const courses: Course[] = [
           { id: "6.2", title: "Evidence Collection & Chain of Custody", description: "Preserve digital evidence with proper hashing, storage, and documentation for legal admissibility.", duration: "25 min", status: "locked" },
           { id: "6.3", title: "Writing Effective Incident Reports", description: "Structure professional reports with executive summary, timeline, technical findings, and recommendations.", duration: "25 min", status: "locked" },
           { id: "6.4", title: "Post-Incident Review & Lessons Learned", description: "Conduct blameless retrospectives to improve detection, response, and prevention capabilities.", duration: "20 min", status: "locked" },
+          { id: "6.5", title: "Tabletop Exercises & Simulation", description: "Plan and conduct incident response tabletop exercises to test team readiness.", duration: "25 min", status: "locked" },
+          { id: "6.6", title: "Building Runbooks & Automation", description: "Create standardized runbooks and automate repetitive response actions with SOAR.", duration: "30 min", status: "locked" },
+        ],
+      },
+      {
+        id: "7",
+        title: "Cloud Security Monitoring",
+        quizId: "sap-q7",
+        lessons: [
+          { id: "7.1", title: "Cloud Security Fundamentals for SOC", description: "Understand shared responsibility, cloud service models, and security implications for monitoring.", duration: "25 min", status: "locked" },
+          { id: "7.2", title: "AWS CloudTrail & GuardDuty Analysis", description: "Investigate AWS API activity, detect unauthorized access, and analyze GuardDuty findings.", duration: "30 min", status: "locked" },
+          { id: "7.3", title: "Azure & Microsoft 365 Security Monitoring", description: "Monitor Azure AD sign-ins, Defender alerts, and Microsoft 365 audit logs.", duration: "30 min", status: "locked" },
+          { id: "7.4", title: "Container & Kubernetes Security", description: "Detect threats in containerized environments including image scanning and runtime monitoring.", duration: "30 min", status: "locked" },
+        ],
+      },
+      {
+        id: "8",
+        title: "Threat Intelligence & Hunting",
+        quizId: "sap-q8",
+        lessons: [
+          { id: "8.1", title: "Threat Intelligence Lifecycle", description: "Plan, collect, process, analyze, and disseminate actionable threat intelligence.", duration: "25 min", status: "locked" },
+          { id: "8.2", title: "Building IOC Feeds & STIX/TAXII", description: "Create and consume threat intelligence feeds using STIX format and TAXII protocols.", duration: "30 min", status: "locked" },
+          { id: "8.3", title: "Hypothesis-Driven Threat Hunting", description: "Develop hunting hypotheses from ATT&CK techniques and execute structured hunts.", duration: "35 min", status: "locked" },
+          { id: "8.4", title: "Hunting with Data Analytics", description: "Apply statistical analysis, frequency analysis, and anomaly detection to find hidden threats.", duration: "30 min", status: "locked" },
+        ],
+      },
+      {
+        id: "9",
+        title: "Digital Forensics Fundamentals",
+        quizId: "sap-q9",
+        lessons: [
+          { id: "9.1", title: "Digital Forensics Methodology", description: "Follow forensic methodology: identification, preservation, analysis, and presentation.", duration: "25 min", status: "locked" },
+          { id: "9.2", title: "Disk Imaging & File System Analysis", description: "Create forensic images and analyze NTFS, ext4, and FAT file systems for evidence.", duration: "30 min", status: "locked" },
+          { id: "9.3", title: "Timeline Analysis & Super Timeline", description: "Build comprehensive timelines from multiple artifact sources using log2timeline/plaso.", duration: "35 min", status: "locked" },
+          { id: "9.4", title: "Anti-Forensics & Evidence Destruction", description: "Detect timestomping, log clearing, secure deletion, and other anti-forensic techniques.", duration: "25 min", status: "locked" },
         ],
       },
     ],
@@ -1817,6 +1862,9 @@ export const courses: Course[] = [
       { id: "sap-q4", title: "Endpoint Investigation Quiz", description: "Assess your endpoint forensics knowledge on Windows and Linux systems.", questionCount: 15, passingScore: 70, duration: "20 min", status: "locked" },
       { id: "sap-q5", title: "Phishing & Email Analysis Quiz", description: "Validate your email header analysis and phishing response skills.", questionCount: 15, passingScore: 75, duration: "20 min", status: "locked" },
       { id: "sap-q6", title: "Incident Handling Final Exam", description: "Comprehensive exam covering incident handling, reporting, and evidence management.", questionCount: 25, passingScore: 80, duration: "35 min", status: "locked" },
+      { id: "sap-q7", title: "Cloud Security Monitoring Quiz", description: "Test your cloud security knowledge across AWS, Azure, and container environments.", questionCount: 15, passingScore: 75, duration: "20 min", status: "locked" },
+      { id: "sap-q8", title: "Threat Intelligence & Hunting Quiz", description: "Assess threat intel lifecycle, IOC management, and hunting methodology skills.", questionCount: 15, passingScore: 75, duration: "20 min", status: "locked" },
+      { id: "sap-q9", title: "Digital Forensics Assessment", description: "Evaluate disk forensics, timeline analysis, and anti-forensics detection skills.", questionCount: 15, passingScore: 75, duration: "25 min", status: "locked" },
     ],
     resources: [
       { id: "sap-r1", title: "SOC Analyst Investigation Playbook", description: "Step-by-step investigation guides for common alert types and scenarios.", type: "template" },

