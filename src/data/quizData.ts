@@ -4886,6 +4886,81 @@ export const quizzes: QuizData[] = [
       { id: "sap-q6-20", question: "Ultimate goal of the IR lifecycle?", options: ["Closing tickets", "Continuously improving detection, response, and prevention", "Avoiding blame", "Reducing workload"], correctAnswer: 1, explanation: "The IR lifecycle feeds lessons learned into continuous improvement." }
     ]
   },
+  {
+    quizId: "sap-q7",
+    courseId: "soc-analyst-path",
+    title: "Cloud Security Monitoring Quiz",
+    description: "Test your cloud security knowledge across AWS, Azure, and container environments.",
+    passingScore: 75,
+    timeLimit: 20,
+    questions: [
+      { id: "sap-q7-1", question: "In the shared responsibility model, who is ALWAYS responsible for data security?", options: ["Cloud provider", "Customer", "Both equally", "Depends on SLA"], correctAnswer: 1, explanation: "Customers always own their data security regardless of cloud model (IaaS/PaaS/SaaS)." },
+      { id: "sap-q7-2", question: "What AWS service logs all API calls?", options: ["GuardDuty", "CloudTrail", "CloudWatch", "Inspector"], correctAnswer: 1, explanation: "CloudTrail records every API call made in an AWS account for auditing and investigation." },
+      { id: "sap-q7-3", question: "What does the CloudTrail event 'StopLogging' indicate?", options: ["Normal maintenance", "Defense evasion — attacker disabling audit trail", "Log rotation", "Account closure"], correctAnswer: 1, explanation: "StopLogging is a critical indicator of defense evasion — attackers disable logging to hide activity." },
+      { id: "sap-q7-4", question: "What is the #1 cloud security threat according to CSA?", options: ["DDoS attacks", "Misconfiguration", "Insider threat", "Zero-day exploits"], correctAnswer: 1, explanation: "Misconfiguration (public S3 buckets, open security groups) is the most common cloud security issue." },
+      { id: "sap-q7-5", question: "What does 'impossible travel' detection identify?", options: ["Flight booking fraud", "User logging in from geographically impossible locations in short time", "VPN usage", "Time zone changes"], correctAnswer: 1, explanation: "Impossible travel flags when a user authenticates from two distant locations faster than physically possible." },
+      { id: "sap-q7-6", question: "Which Azure log tracks user sign-in activity?", options: ["Activity Log", "Azure AD Sign-in Logs", "NSG Flow Logs", "Diagnostic Logs"], correctAnswer: 1, explanation: "Azure AD Sign-in Logs record all authentication attempts with location, device, and risk information." },
+      { id: "sap-q7-7", question: "Why is running containers as root dangerous?", options: ["Performance impact", "Container escape gives full host access", "Logging issues", "Network conflicts"], correctAnswer: 1, explanation: "If an attacker escapes a root container, they have root access to the underlying host system." },
+      { id: "sap-q7-8", question: "What tool provides open-source runtime detection for containers?", options: ["kube-bench", "Falco", "Trivy", "Clair"], correctAnswer: 1, explanation: "Falco detects runtime threats in containers like unexpected shell access, network connections, and file modifications." },
+      { id: "sap-q7-9", question: "What M365 operation indicates possible email compromise persistence?", options: ["MailItemsAccessed", "New-InboxRule with forwarding", "FileDownloaded", "UserLoggedIn"], correctAnswer: 1, explanation: "Creating inbox forwarding rules allows attackers to maintain access to emails even after password reset." },
+      { id: "sap-q7-10", question: "What GuardDuty finding indicates crypto mining?", options: ["UnauthorizedAccess", "Recon:PortProbe", "CryptoCurrency:EC2/BitcoinTool", "Trojan:DNSExfiltration"], correctAnswer: 2, explanation: "GuardDuty specifically detects cryptocurrency mining activity on EC2 instances." },
+      { id: "sap-q7-11", question: "First response to compromised AWS access keys?", options: ["Delete the user", "Disable the access keys and revoke sessions", "Change the password", "Stop all EC2 instances"], correctAnswer: 1, explanation: "Immediately disable compromised access keys and revoke active sessions to stop unauthorized access." },
+      { id: "sap-q7-12", question: "What Kubernetes resource gives full cluster access?", options: ["Pod", "Service", "ClusterRole: cluster-admin", "ConfigMap"], correctAnswer: 2, explanation: "The cluster-admin ClusterRole grants unrestricted access to all resources in the Kubernetes cluster." },
+      { id: "sap-q7-13", question: "What is OAuth app consent phishing?", options: ["Stealing OAuth tokens", "Tricking users into granting malicious apps permissions", "OAuth server attack", "Token expiration"], correctAnswer: 1, explanation: "Attackers create malicious OAuth apps that request broad permissions (mail.read, files.readwrite) via consent phishing." },
+      { id: "sap-q7-14", question: "Which cloud detection monitors for public storage exposure?", options: ["Data volume anomaly", "S3/Blob bucket policy monitoring", "DNS monitoring", "CPU usage alert"], correctAnswer: 1, explanation: "Monitoring bucket/container policies for public access prevents accidental data exposure." },
+      { id: "sap-q7-15", question: "What does VPC Flow Logs capture?", options: ["Application data", "IP traffic metadata (source, dest, ports, action)", "File transfers", "Database queries"], correctAnswer: 1, explanation: "VPC Flow Logs capture network traffic metadata including source/destination IPs, ports, and allow/deny actions." }
+    ]
+  },
+  {
+    quizId: "sap-q8",
+    courseId: "soc-analyst-path",
+    title: "Threat Intelligence & Hunting Quiz",
+    description: "Assess threat intel lifecycle, IOC management, and hunting methodology skills.",
+    passingScore: 75,
+    timeLimit: 20,
+    questions: [
+      { id: "sap-q8-1", question: "How many phases are in the threat intelligence lifecycle?", options: ["4", "5", "6", "7"], correctAnswer: 2, explanation: "The 6 phases: Planning & Direction, Collection, Processing, Analysis, Dissemination, Feedback." },
+      { id: "sap-q8-2", question: "What is STIX?", options: ["A firewall protocol", "A structured language for describing cyber threat intelligence", "A SIEM platform", "An encryption standard"], correctAnswer: 1, explanation: "STIX (Structured Threat Information eXpression) is the standard JSON format for threat intelligence." },
+      { id: "sap-q8-3", question: "What does TAXII provide?", options: ["Threat analysis", "Automated transport/sharing of STIX intelligence", "Malware sandboxing", "Vulnerability scanning"], correctAnswer: 1, explanation: "TAXII defines how STIX data is shared between organizations via REST APIs." },
+      { id: "sap-q8-4", question: "Typical IOC expiration for IP addresses?", options: ["7 days", "30 days", "1 year", "Never"], correctAnswer: 1, explanation: "IP addresses change frequently — 30 days is a typical expiration before they may be reassigned to legitimate use." },
+      { id: "sap-q8-5", question: "What distinguishes threat hunting from detection?", options: ["Hunting uses better tools", "Hunting is proactive, detection is reactive", "Hunting is automated", "Detection is manual"], correctAnswer: 1, explanation: "Hunting proactively searches for threats that bypass automated detections, while detection waits for alerts." },
+      { id: "sap-q8-6", question: "A hunting hypothesis should be?", options: ["Vague and broad", "Testable with available data sources", "Always confirmed", "Based only on intuition"], correctAnswer: 1, explanation: "Good hypotheses are specific, testable with available data, and based on threat intelligence or ATT&CK gaps." },
+      { id: "sap-q8-7", question: "What is 'stacking' in threat hunting?", options: ["Building infrastructure", "Frequency analysis — counting occurrences to find rare values", "Layering defenses", "Log aggregation"], correctAnswer: 1, explanation: "Stacking counts occurrences and sorts by frequency — rare values at the bottom often indicate threats." },
+      { id: "sap-q8-8", question: "How to detect C2 beaconing?", options: ["Check file hashes", "Analyze connection interval consistency (low jitter)", "Monitor CPU usage", "Scan for open ports"], correctAnswer: 1, explanation: "C2 beaconing has regular intervals with low jitter (variation), which is detectable through statistical analysis." },
+      { id: "sap-q8-9", question: "What is tactical threat intelligence?", options: ["Strategic business context", "IOCs and TTPs for immediate detection by SOC analysts", "Geopolitical analysis", "Budget planning"], correctAnswer: 1, explanation: "Tactical intelligence includes specific IOCs and TTPs that analysts can immediately use for detection." },
+      { id: "sap-q8-10", question: "What should a hunt report always include?", options: ["Only findings", "Hypothesis, methodology, findings, and recommendations", "Just IOCs", "Executive summary only"], correctAnswer: 1, explanation: "Complete hunt reports document the hypothesis, data sources, methodology, findings, and operationalized detections." },
+      { id: "sap-q8-11", question: "What is 'long tail analysis'?", options: ["Tracking long-running processes", "Focusing on the rare 2% of events outside the top common items", "Analyzing network latency", "Log retention policy"], correctAnswer: 1, explanation: "Long tail analysis focuses on rare events (the 2%) that fall outside common patterns — where threats often hide." },
+      { id: "sap-q8-12", question: "Best source for hunting hypotheses?", options: ["Random guessing", "Threat intelligence reports and ATT&CK gaps", "Vendor marketing", "Social media"], correctAnswer: 1, explanation: "Threat intelligence and MITRE ATT&CK coverage gaps provide evidence-based starting points for hunts." },
+      { id: "sap-q8-13", question: "What indicates 3+ standard deviations in data transfer?", options: ["Normal variation", "Statistical anomaly requiring investigation", "System error", "Scheduled backup"], correctAnswer: 1, explanation: "3+ standard deviations from the mean is statistically unusual and warrants investigation for data exfiltration." },
+      { id: "sap-q8-14", question: "How often should baselines be rebuilt?", options: ["Never", "Monthly", "Yearly", "Only after incidents"], correctAnswer: 1, explanation: "Monthly baseline rebuilds account for organic changes while keeping detection relevant." },
+      { id: "sap-q8-15", question: "What should hunting findings be converted into?", options: ["Deleted", "Automated detection rules for continuous monitoring", "Manual checks", "Reports only"], correctAnswer: 1, explanation: "Operationalizing findings into automated detection rules ensures the same technique is caught in the future." }
+    ]
+  },
+  {
+    quizId: "sap-q9",
+    courseId: "soc-analyst-path",
+    title: "Digital Forensics Assessment",
+    description: "Evaluate disk forensics, timeline analysis, and anti-forensics detection skills.",
+    passingScore: 75,
+    timeLimit: 25,
+    questions: [
+      { id: "sap-q9-1", question: "Correct order of the forensic process?", options: ["Collection, Analysis, Identification", "Analysis, Preservation, Presentation", "Identification, Preservation, Collection, Analysis, Presentation", "Presentation, Collection, Analysis"], correctAnswer: 2, explanation: "The forensic process follows: Identification → Preservation → Collection → Analysis → Presentation." },
+      { id: "sap-q9-2", question: "Most volatile evidence type?", options: ["Disk data", "CPU registers and memory", "Backup tapes", "Log files"], correctAnswer: 1, explanation: "CPU registers and memory are the most volatile — they're lost in seconds when power is removed." },
+      { id: "sap-q9-3", question: "What hash algorithm is standard for evidence integrity?", options: ["MD5", "CRC32", "SHA-256", "Base64"], correctAnswer: 2, explanation: "SHA-256 is the forensic standard for evidence integrity verification in legal proceedings." },
+      { id: "sap-q9-4", question: "What is the NTFS Master File Table ($MFT)?", options: ["A disk encryption key", "Database containing metadata for every file on the volume", "Network routing table", "Memory allocation table"], correctAnswer: 1, explanation: "The $MFT stores metadata (timestamps, size, location, permissions) for every file and directory on NTFS." },
+      { id: "sap-q9-5", question: "How to detect timestomping?", options: ["Check file size", "Compare $STANDARD_INFORMATION vs $FILE_NAME timestamps", "Run antivirus", "Check file extension"], correctAnswer: 1, explanation: "$SI timestamps are easily modified but $FN timestamps are harder to change — discrepancy indicates timestomping." },
+      { id: "sap-q9-6", question: "What Windows Event ID indicates Security log was cleared?", options: ["4624", "4688", "1102", "7045"], correctAnswer: 2, explanation: "Event ID 1102 is generated when the Windows Security audit log is cleared." },
+      { id: "sap-q9-7", question: "What is a super timeline?", options: ["A very long timeline", "Timeline combining timestamps from 100+ artifact sources", "A project management tool", "Real-time event stream"], correctAnswer: 1, explanation: "A super timeline merges timestamps from file system, event logs, registry, browser, and more into one view." },
+      { id: "sap-q9-8", question: "What tool creates super timelines?", options: ["Wireshark", "Plaso/log2timeline", "Nmap", "Burp Suite"], correctAnswer: 1, explanation: "Plaso (log2timeline) extracts timestamps from 100+ sources and creates comprehensive super timelines." },
+      { id: "sap-q9-9", question: "What survives secure file deletion?", options: ["The file data", "Nothing at all", "USN Journal entries and Prefetch files", "Only the filename"], correctAnswer: 2, explanation: "USN Journal records the deletion event, and Prefetch records execution of the deletion tool." },
+      { id: "sap-q9-10", question: "What is an Alternate Data Stream (ADS)?", options: ["Network protocol", "Hidden data stream attached to NTFS files", "Backup format", "Encryption method"], correctAnswer: 1, explanation: "NTFS ADS allows hiding data within existing files — attackers use them to conceal malicious payloads." },
+      { id: "sap-q9-11", question: "What should you NEVER do with original evidence?", options: ["Hash it", "Document it", "Analyze it directly", "Photograph it"], correctAnswer: 2, explanation: "Always create working copies — analyzing original evidence risks modification that destroys legal admissibility." },
+      { id: "sap-q9-12", question: "What does the $UsnJrnl artifact record?", options: ["User logins", "File creates, deletes, renames, and modifications", "Network connections", "Registry changes"], correctAnswer: 1, explanation: "The USN (Update Sequence Number) Journal records all file system changes including creates, deletes, and renames." },
+      { id: "sap-q9-13", question: "Best approach for timeline analysis?", options: ["Start from the beginning of time", "Start from known events and expand outward", "Only look at the last 24 hours", "Random sampling"], correctAnswer: 1, explanation: "Pivot from known events (malware detection, alert time) and expand outward to build the full picture." },
+      { id: "sap-q9-14", question: "How does fileless malware evade disk forensics?", options: ["Encrypts the disk", "Operates entirely in memory without writing to disk", "Uses very small files", "Hides in system folders"], correctAnswer: 1, explanation: "Fileless malware loads and executes in memory, leaving no traditional file-based artifacts for disk forensics." },
+      { id: "sap-q9-15", question: "Key principle of anti-forensics detection?", options: ["Attackers always succeed", "Anti-forensics creates its own artifacts — the cover-up leaves traces", "Evidence cannot be recovered", "Only advanced tools can detect it"], correctAnswer: 1, explanation: "The act of destroying evidence (clearing logs, timestomping, secure deletion) creates new artifacts that analysts can find." }
+    ]
+  },
 ];
 
 export const getQuizById = (courseId: string, quizId: string): QuizData | undefined => {
