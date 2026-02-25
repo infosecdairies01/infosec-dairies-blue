@@ -1330,6 +1330,7 @@ export const courses: Course[] = [
       { id: "nsm-q4", title: "Network Metadata with Zeek Quiz", description: "Test your knowledge of Zeek logs, threat hunting with metadata, and Zeek scripting.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
       { id: "nsm-q5", title: "Network Attack Detection Quiz", description: "Assess your ability to detect reconnaissance, C2, lateral movement, and exfiltration.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
       { id: "nsm-q6", title: "Practical NSM Operations Quiz", description: "Evaluate your understanding of NSM workflows, network forensics, and best practices.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "nsm-q7", title: "NSM Certification Exam", description: "Comprehensive final exam covering all 6 modules. Pass with 80% to earn your certificate.", questionCount: 30, passingScore: 80, duration: "60 min", status: "locked" },
     ],
     resources: [
       { id: "nsm-r1", title: "Wireshark Display Filter Cheat Sheet", description: "Quick reference for common Wireshark display filters used in threat detection.", type: "cheatsheet" },
@@ -1425,6 +1426,7 @@ export const courses: Course[] = [
       { id: "ir-q4", title: "Containment Strategies Quiz", description: "Test containment approaches including isolation, evidence preservation, and decision frameworks.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
       { id: "ir-q5", title: "Eradication & Recovery Quiz", description: "Assess knowledge of malware removal, system restoration, validation, and business resumption.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
       { id: "ir-q6", title: "Post-Incident Activities Quiz", description: "Evaluate understanding of lessons learned, report writing, IR metrics, and continuous improvement.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "ir-q7", title: "IR Certification Exam", description: "Comprehensive final exam covering all 6 modules. Pass with 80% to earn your certificate.", questionCount: 30, passingScore: 80, duration: "60 min", status: "locked" },
     ],
     resources: [
       { id: "ir-r1", title: "IR Playbook Template", description: "Pre-built incident response playbook covering phishing, malware, and data breach scenarios.", type: "template" },
@@ -1520,6 +1522,7 @@ export const courses: Course[] = [
       { id: "th-q4", title: "Endpoint Threat Hunting Quiz", description: "Test your knowledge of process analysis, persistence hunting, fileless threats, and credential attacks.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
       { id: "th-q5", title: "Network & Cloud Hunting Quiz", description: "Assess your ability to hunt in network metadata, encrypted traffic, cloud logs, and identity systems.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
       { id: "th-q6", title: "Hunt Operations & Reporting Quiz", description: "Evaluate your understanding of hunt planning, automation, reporting, and converting hunts to detections.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "th-q7", title: "Threat Hunting Certification Exam", description: "Comprehensive final exam covering all 6 modules. Pass with 80% to earn your certificate.", questionCount: 30, passingScore: 80, duration: "60 min", status: "locked" },
     ],
     resources: [
       { id: "th-r1", title: "Threat Hunting Hypothesis Templates", description: "Pre-built hypothesis templates aligned to MITRE ATT&CK techniques for structured hunts.", type: "template" },
@@ -1547,6 +1550,7 @@ export const courses: Course[] = [
       { id: "de-q4", title: "Log Source Mastery Quiz", description: "Test your knowledge of Windows, Linux, network, and cloud log sources.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" as const },
       { id: "de-q5", title: "Detection-as-Code Quiz", description: "Assess your understanding of version control, CI/CD, and testing for detections.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" as const },
       { id: "de-q6", title: "Detection Operations Quiz", description: "Quiz on tuning, metrics, coverage mapping, and detection lifecycle management.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" as const },
+      { id: "de-q7", title: "Detection Engineering Certification Exam", description: "Comprehensive final exam covering all 6 modules. Pass with 80% to earn your certificate.", questionCount: 30, passingScore: 80, duration: "60 min", status: "locked" as const },
     ],
     modules: [
       {
@@ -1654,6 +1658,7 @@ export const courses: Course[] = [
       { id: "ma-q4", title: "Document & Script Malware Quiz", description: "Evaluate your ability to analyze macro and script-based threats.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
       { id: "ma-q5", title: "Reverse Engineering Fundamentals Quiz", description: "Test your knowledge of disassembly, debugging, and code analysis.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
       { id: "ma-q6", title: "Reporting & Threat Intel Quiz", description: "Assess your malware reporting and IOC extraction skills.", questionCount: 10, passingScore: 70, duration: "15 min", status: "locked" },
+      { id: "ma-q7", title: "Malware Analysis Certification Exam", description: "Comprehensive final exam covering all 6 modules. Pass with 80% to earn your certificate.", questionCount: 30, passingScore: 80, duration: "60 min", status: "locked" },
     ],
     modules: [
       {
