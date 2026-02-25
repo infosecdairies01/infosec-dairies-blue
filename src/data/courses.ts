@@ -1865,6 +1865,7 @@ export const courses: Course[] = [
       { id: "sap-q7", title: "Cloud Security Monitoring Quiz", description: "Test your cloud security knowledge across AWS, Azure, and container environments.", questionCount: 15, passingScore: 75, duration: "20 min", status: "locked" },
       { id: "sap-q8", title: "Threat Intelligence & Hunting Quiz", description: "Assess threat intel lifecycle, IOC management, and hunting methodology skills.", questionCount: 15, passingScore: 75, duration: "20 min", status: "locked" },
       { id: "sap-q9", title: "Digital Forensics Assessment", description: "Evaluate disk forensics, timeline analysis, and anti-forensics detection skills.", questionCount: 15, passingScore: 75, duration: "25 min", status: "locked" },
+      { id: "sap-q10", title: "SOC Analyst Certification Exam", description: "Comprehensive final exam covering all 9 modules. Pass with 80% to earn your certificate.", questionCount: 30, passingScore: 80, duration: "60 min", status: "locked" },
     ],
     resources: [
       { id: "sap-r1", title: "SOC Analyst Investigation Playbook", description: "Step-by-step investigation guides for common alert types and scenarios.", type: "template" },
