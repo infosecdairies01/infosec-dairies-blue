@@ -600,6 +600,142 @@ export const liveCourses: LiveCourse[] = [
       "Laptop with ability to run virtual machines"
     ],
     certificationDetails: "Certificate of Completion awarded. This training provides a strong foundation for OSCP, OSWE, and eWPT certifications."
+  },
+  {
+    id: "cyber-crime-investigation",
+    title: "Cyber Crime Investigation",
+    tagline: "Investigate Cyber Crimes with Law Enforcement Precision",
+    description: "Master the art and science of cyber crime investigation. This comprehensive training covers the entire investigative lifecycle — from identifying digital evidence to building legally admissible cases. Learn to trace cybercriminals, analyze financial fraud, investigate social media crimes, and work alongside law enforcement agencies.",
+    duration: "10 Weeks",
+    format: "Live Online Sessions (Weekends)",
+    batchSize: "Limited to 20 participants",
+    fee: "₹15,000",
+    whoIsItFor: [
+      "Law enforcement officers handling cyber crime cases",
+      "Security professionals transitioning to investigation roles",
+      "Legal professionals wanting to understand digital evidence",
+      "IT professionals interested in cyber crime careers",
+      "Aspiring cyber crime investigators and consultants"
+    ],
+    whatYouWillLearn: [
+      "Understand the legal framework governing cyber crime investigations",
+      "Identify, collect, and preserve digital evidence from multiple sources",
+      "Trace cyber criminals through open-source intelligence (OSINT)",
+      "Investigate financial fraud, phishing scams, and identity theft",
+      "Analyze social media and dark web activities for evidence",
+      "Work with email headers, IP tracing, and network logs for attribution",
+      "Prepare court-admissible forensic reports and documentation",
+      "Collaborate with law enforcement agencies and CERTs effectively"
+    ],
+    roadmap: [
+      {
+        week: 1,
+        title: "Introduction to Cyber Crime & Legal Framework",
+        topics: [
+          "Types of cyber crimes: hacking, fraud, harassment, data theft",
+          "Indian IT Act 2000 and relevant amendments",
+          "International cyber laws and cross-border jurisdictions",
+          "Roles of LEAs, CERTs, and cyber crime cells"
+        ]
+      },
+      {
+        week: 2,
+        title: "Digital Evidence & First Responder Procedures",
+        topics: [
+          "Understanding digital evidence types and sources",
+          "First responder protocols at a cyber crime scene",
+          "Evidence seizure, packaging, and transportation",
+          "Chain of custody documentation and best practices"
+        ]
+      },
+      {
+        week: 3,
+        title: "OSINT & Cyber Criminal Profiling",
+        topics: [
+          "Open-source intelligence gathering techniques",
+          "Social media intelligence (SOCMINT) for investigations",
+          "Email tracing and header analysis",
+          "IP address tracing and geolocation"
+        ]
+      },
+      {
+        week: 4,
+        title: "Financial Cyber Crime Investigation",
+        topics: [
+          "Investigating online banking fraud and UPI scams",
+          "Cryptocurrency tracing and blockchain analysis basics",
+          "Credit card fraud and carding investigation",
+          "Money laundering detection in digital transactions"
+        ]
+      },
+      {
+        week: 5,
+        title: "Social Media & Online Harassment Cases",
+        topics: [
+          "Investigating cyber bullying and online stalking",
+          "Social media account takeover and impersonation",
+          "Fake news and misinformation tracking",
+          "Preserving volatile social media evidence"
+        ]
+      },
+      {
+        week: 6,
+        title: "Malware & Ransomware Investigation",
+        topics: [
+          "Tracing malware origin and distribution networks",
+          "Ransomware incident investigation methodology",
+          "Analyzing command and control infrastructure",
+          "Working with threat intelligence for attribution"
+        ]
+      },
+      {
+        week: 7,
+        title: "Dark Web & Encrypted Communications",
+        topics: [
+          "Understanding the dark web ecosystem",
+          "Tor network investigation techniques",
+          "Investigating encrypted messaging platforms",
+          "Dark web marketplace monitoring and evidence collection"
+        ]
+      },
+      {
+        week: 8,
+        title: "Mobile Device & IoT Forensics",
+        topics: [
+          "Mobile device evidence extraction techniques",
+          "Analyzing call records, SMS, and app data",
+          "IoT device investigation for smart home crimes",
+          "Cloud data acquisition from mobile backups"
+        ]
+      },
+      {
+        week: 9,
+        title: "Report Writing & Legal Proceedings",
+        topics: [
+          "Writing FIR-ready cyber crime complaints",
+          "Preparing forensic examination reports",
+          "Expert witness testimony preparation",
+          "Presenting digital evidence in court"
+        ]
+      },
+      {
+        week: 10,
+        title: "Capstone Investigation & Career Guidance",
+        topics: [
+          "Full-scale simulated cyber crime investigation",
+          "Multi-vector attack scenario analysis",
+          "Building your cyber crime investigation portfolio",
+          "Career paths: LEA, private investigation, consulting"
+        ]
+      }
+    ],
+    prerequisites: [
+      "Basic understanding of computer systems and networking",
+      "Familiarity with internet technologies and social media platforms",
+      "Interest in law enforcement and investigation processes",
+      "Laptop with minimum 8GB RAM for lab exercises"
+    ],
+    certificationDetails: "Certificate of Completion awarded upon finishing all modules and capstone investigation. This training prepares you for certifications like CHFI, ECIH, and law enforcement cyber crime specializations."
   }
 ];
 
