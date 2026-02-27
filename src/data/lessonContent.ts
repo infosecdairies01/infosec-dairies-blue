@@ -29141,6 +29141,4334 @@ Get-WinEvent -FilterHashtable @{LogName='Security';ID=1102}
       "Anti-forensics creates its own artifacts — the cover-up leaves traces"
     ],
   },
+
+  // ==========================================
+  // NETWORK FUNDAMENTALS COURSE
+  // ==========================================
+
+  // Module 1: Introduction to Computer Networks
+  {
+    id: "nf-1.1",
+    courseId: "network-fundamentals",
+    title: "What is a Computer Network?",
+    content: `
+# What is a Computer Network?
+
+A **computer network** is a collection of interconnected devices that can communicate and share resources with each other. Networks form the backbone of modern IT infrastructure and are essential knowledge for cybersecurity.
+
+## Why Networks Matter
+
+Every cyberattack traverses a network. Understanding how networks function is fundamental to:
+- **Detecting threats** — recognizing abnormal network behavior
+- **Investigating incidents** — tracing attacker movement
+- **Defending infrastructure** — configuring secure network architectures
+
+## Basic Network Components
+
+### 1. End Devices (Hosts)
+Devices that originate or receive data:
+- Computers, laptops, servers
+- Smartphones, tablets
+- IoT devices, printers
+
+### 2. Intermediary Devices
+Devices that forward data between hosts:
+- **Routers** — connect different networks, make forwarding decisions based on IP
+- **Switches** — connect devices within a network, forward based on MAC address
+- **Access Points** — provide wireless connectivity
+- **Firewalls** — filter traffic based on rules
+
+### 3. Network Media
+The physical or wireless medium for data transmission:
+
+| Media Type | Speed | Distance | Use Case |
+|-----------|-------|----------|----------|
+| Copper (UTP) | Up to 10 Gbps | 100m | LAN connections |
+| Fiber Optic | Up to 100+ Gbps | Kilometers | WAN, data centers |
+| Wireless | Up to 9.6 Gbps (Wi-Fi 6) | ~100m | Mobile, convenience |
+
+## How Network Communication Works
+
+Network communication follows a basic pattern:
+
+\`\`\`
+[Sender] → [Encode] → [Transmit] → [Medium] → [Receive] → [Decode] → [Recipient]
+\`\`\`
+
+### Key Concepts:
+- **Protocol** — a set of rules governing communication (like HTTP, TCP, DNS)
+- **Bandwidth** — maximum data transfer rate (measured in Mbps/Gbps)
+- **Latency** — delay between sending and receiving data (measured in ms)
+- **Throughput** — actual data transfer rate achieved
+
+## Network Communication Models
+
+### Unicast
+One-to-one communication — most common (e.g., browsing a website)
+
+### Broadcast
+One-to-all communication — sent to all devices on the network (e.g., ARP requests)
+
+### Multicast
+One-to-many communication — sent to a specific group (e.g., video streaming)
+
+## The Internet: A Network of Networks
+
+The internet is simply a massive interconnection of smaller networks:
+
+\`\`\`
+[Home LAN] → [ISP] → [Internet Backbone] → [ISP] → [Data Center LAN]
+\`\`\`
+
+Key internet concepts:
+- **ISP** — Internet Service Provider
+- **BGP** — Border Gateway Protocol (routes between ISPs)
+- **DNS** — Translates domain names to IP addresses
+- **HTTP/HTTPS** — Web browsing protocols
+    `,
+    keyTakeaways: [
+      "A network connects devices to share resources and communicate",
+      "Key components are end devices, intermediary devices, and network media",
+      "Protocols are rules that govern how devices communicate",
+      "Bandwidth, latency, and throughput are fundamental performance metrics",
+      "The internet is a global network of interconnected smaller networks"
+    ],
+  },
+  {
+    id: "nf-1.2",
+    courseId: "network-fundamentals",
+    title: "Types of Networks: LAN, WAN, MAN & More",
+    content: `
+# Types of Networks
+
+Networks are classified by their geographic scope, ownership, and purpose. Understanding these types helps you design and secure appropriate network architectures.
+
+## Local Area Network (LAN)
+
+A **LAN** covers a small geographic area — a home, office, or building.
+
+### Characteristics:
+- High speed (100 Mbps to 10+ Gbps)
+- Low latency (< 1 ms)
+- Privately owned and managed
+- Uses Ethernet (802.3) and Wi-Fi (802.11)
+
+### Common LAN Components:
+\`\`\`
+[PC] ──── [Switch] ──── [Router] ──── [Internet]
+[Laptop] ──┘    │
+[Printer] ──────┘
+\`\`\`
+
+## Wide Area Network (WAN)
+
+A **WAN** spans large geographic areas — cities, countries, or the entire globe.
+
+### Characteristics:
+- Lower speed than LAN (typically Mbps range)
+- Higher latency (10-100+ ms)
+- Often uses leased lines from telecom providers
+- The internet is the largest WAN
+
+### WAN Technologies:
+| Technology | Speed | Description |
+|-----------|-------|-------------|
+| MPLS | 1-100 Gbps | Private labeled paths |
+| Metro Ethernet | 10 Mbps-10 Gbps | Ethernet over WAN |
+| SD-WAN | Variable | Software-defined WAN |
+| Leased Lines | 1.5 Mbps-10 Gbps | Dedicated point-to-point |
+
+## Metropolitan Area Network (MAN)
+
+A **MAN** covers a city or large campus — larger than LAN, smaller than WAN.
+
+- Typically owned by ISPs or large organizations
+- Used to connect multiple LANs across a city
+- Often fiber-optic based
+
+## Other Network Types
+
+### PAN (Personal Area Network)
+- Very small range (few meters)
+- Bluetooth, USB connections
+- Connecting phone to earbuds, smartwatch to phone
+
+### CAN (Campus Area Network)
+- Interconnects multiple buildings (university, corporate campus)
+- Larger than LAN, smaller than MAN
+- Usually fiber backbone between buildings
+
+### SAN (Storage Area Network)
+- Dedicated high-speed network for storage devices
+- Fibre Channel or iSCSI
+- Found in data centers
+
+### WLAN (Wireless LAN)
+- LAN using wireless technology (Wi-Fi)
+- 802.11 standards
+- Common in homes and offices
+
+## Network Comparison
+
+| Type | Range | Speed | Ownership | Example |
+|------|-------|-------|-----------|---------|
+| PAN | Meters | Low-Med | Personal | Bluetooth |
+| LAN | Building | High | Private | Office |
+| CAN | Campus | High | Private | University |
+| MAN | City | Medium | ISP/Org | City network |
+| WAN | Global | Variable | ISP | Internet |
+| SAN | Data center | Very High | Private | Storage |
+    `,
+    keyTakeaways: [
+      "LANs are high-speed, low-latency networks covering a small area",
+      "WANs span large geographic areas and typically have higher latency",
+      "MANs cover a metropolitan area, bridging LANs across a city",
+      "PANs, CANs, and SANs serve specific purposes and scales",
+      "Network type selection depends on geographic scope, speed needs, and budget"
+    ],
+  },
+  {
+    id: "nf-1.3",
+    courseId: "network-fundamentals",
+    title: "Network Topologies",
+    content: `
+# Network Topologies
+
+A **network topology** describes how devices are arranged and connected in a network. Topology choice impacts performance, reliability, scalability, and cost.
+
+## Physical vs Logical Topology
+
+- **Physical topology** — the actual cable layout and device placement
+- **Logical topology** — how data flows through the network (may differ from physical)
+
+## Star Topology
+
+The most common modern LAN topology.
+
+\`\`\`
+      [PC1]
+        │
+[PC2]──[Switch]──[PC3]
+        │
+      [PC4]
+\`\`\`
+
+### Advantages:
+- Easy to install and manage
+- Single device failure doesn't affect others
+- Easy to add new devices
+
+### Disadvantages:
+- Central device (switch) is a single point of failure
+- Requires more cable than bus topology
+
+## Bus Topology
+
+All devices share a single communication line (legacy).
+
+\`\`\`
+[PC1]──[PC2]──[PC3]──[PC4]
+─────────────────────────── (single cable)
+\`\`\`
+
+### Advantages:
+- Simple and inexpensive
+- Easy to extend
+
+### Disadvantages:
+- Single cable failure brings down entire network
+- Performance degrades with more devices
+- Difficult to troubleshoot
+
+## Ring Topology
+
+Devices connected in a circular chain.
+
+\`\`\`
+[PC1] → [PC2] → [PC3] → [PC4] → [PC1]
+\`\`\`
+
+### Advantages:
+- Equal access for all devices
+- Predictable performance
+
+### Disadvantages:
+- Single device failure can break the ring
+- Difficult to add/remove devices
+
+## Mesh Topology
+
+Every device connects to every other device.
+
+### Full Mesh:
+- Every device has a direct link to all others
+- Maximum redundancy
+- Expensive — formula: n(n-1)/2 links
+
+### Partial Mesh:
+- Some devices have multiple connections
+- Balance between redundancy and cost
+- Common in WAN designs
+
+## Hybrid Topology
+
+Combines two or more topologies. Most real-world networks are hybrid:
+
+\`\`\`
+[Star LAN 1]──[Router]──[Star LAN 2]
+                 │
+          [Star LAN 3]
+\`\`\`
+
+## Topology Selection Guide
+
+| Topology | Cost | Reliability | Scalability | Use Case |
+|----------|------|-------------|-------------|----------|
+| Star | Medium | High | Easy | Office LAN |
+| Bus | Low | Low | Difficult | Legacy/small |
+| Ring | Medium | Medium | Difficult | Token Ring |
+| Full Mesh | Very High | Very High | Complex | WAN core |
+| Hybrid | Variable | High | Flexible | Enterprise |
+    `,
+    keyTakeaways: [
+      "Star topology is the most common — uses a central switch or hub",
+      "Bus and ring topologies are largely legacy but important to understand",
+      "Mesh topology provides maximum redundancy at higher cost",
+      "Most enterprise networks use hybrid topologies",
+      "Topology choice impacts reliability, cost, and scalability"
+    ],
+  },
+  {
+    id: "nf-1.4",
+    courseId: "network-fundamentals",
+    title: "Network Architecture: Client-Server vs Peer-to-Peer",
+    content: `
+# Network Architecture Models
+
+Network architecture defines how resources and services are organized and accessed across the network. The two primary models are **client-server** and **peer-to-peer (P2P)**.
+
+## Client-Server Architecture
+
+A centralized model where **servers** provide resources and **clients** consume them.
+
+\`\`\`
+[Client 1] ──┐
+[Client 2] ──┼── [Server]
+[Client 3] ──┘
+\`\`\`
+
+### Characteristics:
+- **Centralized management** — easier to administer and secure
+- **Dedicated servers** — optimized for specific services (web, file, email, database)
+- **Scalable** — add more servers to handle load
+- **Authentication** — centralized user management (Active Directory, LDAP)
+
+### Common Server Types:
+| Server Type | Function | Protocol |
+|------------|----------|----------|
+| Web Server | Hosts websites | HTTP/HTTPS |
+| File Server | Shared file storage | SMB/NFS |
+| Email Server | Email services | SMTP/IMAP |
+| DNS Server | Name resolution | DNS |
+| DHCP Server | IP assignment | DHCP |
+| Database Server | Data storage | SQL |
+
+### Security Advantages:
+- Centralized patching and updates
+- Access control and permissions
+- Audit logging and monitoring
+- Backup and disaster recovery
+
+## Peer-to-Peer (P2P) Architecture
+
+A decentralized model where each device can act as both client and server.
+
+\`\`\`
+[Peer 1] ←→ [Peer 2]
+   ↕            ↕
+[Peer 3] ←→ [Peer 4]
+\`\`\`
+
+### Characteristics:
+- No dedicated server required
+- Each device shares and accesses resources
+- Simple to set up for small networks
+- No central point of failure
+
+### Use Cases:
+- Small office/home networks
+- File sharing (BitTorrent)
+- Blockchain networks
+- Collaboration tools
+
+### Security Concerns:
+- No centralized security management
+- Difficult to enforce policies
+- Each device must be individually secured
+- Popular target for malware distribution
+
+## Comparison
+
+| Feature | Client-Server | Peer-to-Peer |
+|---------|--------------|--------------|
+| Management | Centralized | Decentralized |
+| Security | Strong | Weak |
+| Scalability | High | Limited |
+| Cost | Higher | Lower |
+| Performance | Optimized | Variable |
+| Best For | Enterprise | Small/Home |
+    `,
+    keyTakeaways: [
+      "Client-server uses centralized servers for resources and management",
+      "Peer-to-peer allows each device to share and consume resources equally",
+      "Client-server is preferred for enterprise due to security and scalability",
+      "P2P is simpler but harder to secure and manage at scale",
+      "Most organizations use client-server architecture for critical services"
+    ],
+  },
+
+  // Module 2: The OSI Model
+  {
+    id: "nf-2.1",
+    courseId: "network-fundamentals",
+    title: "Understanding the OSI Reference Model",
+    content: `
+# The OSI Reference Model
+
+The **Open Systems Interconnection (OSI) model** is a conceptual framework that standardizes network communication into 7 distinct layers. Created by ISO in 1984, it remains the universal reference for understanding how networks work.
+
+## The 7 Layers
+
+\`\`\`
+Layer 7: Application    ← User interaction (HTTP, DNS, FTP)
+Layer 6: Presentation   ← Data formatting, encryption (SSL/TLS, JPEG)
+Layer 5: Session        ← Session management (NetBIOS, RPC)
+Layer 4: Transport      ← End-to-end delivery (TCP, UDP)
+Layer 3: Network        ← Routing & IP addressing (IP, ICMP)
+Layer 2: Data Link      ← MAC addressing, framing (Ethernet, Wi-Fi)
+Layer 1: Physical       ← Bits on the wire (cables, signals)
+\`\`\`
+
+**Memory Aid:** "**A**ll **P**eople **S**eem **T**o **N**eed **D**ata **P**rocessing" (top to bottom)
+
+Or bottom-up: "**P**lease **D**o **N**ot **T**hrow **S**ausage **P**izza **A**way"
+
+## Why the OSI Model Matters
+
+1. **Troubleshooting** — isolate problems to a specific layer
+2. **Communication** — universal language for network professionals
+3. **Design** — structured approach to network architecture
+4. **Security** — understand where attacks target and where to defend
+
+## Layer Overview
+
+### Layer 1: Physical
+- Deals with raw bits (0s and 1s)
+- Cables, connectors, signal encoding
+- Devices: hubs, repeaters, cables
+
+### Layer 2: Data Link
+- Frames data for local delivery
+- MAC addressing
+- Error detection (CRC)
+- Devices: switches, bridges
+
+### Layer 3: Network
+- Logical addressing (IP)
+- Routing between networks
+- Path determination
+- Devices: routers
+
+### Layer 4: Transport
+- End-to-end communication
+- TCP (reliable) vs UDP (fast)
+- Port numbers
+- Flow control, error recovery
+
+### Layer 5: Session
+- Establishes, manages, terminates sessions
+- Dialog control
+- Synchronization
+
+### Layer 6: Presentation
+- Data format translation
+- Encryption/decryption
+- Compression
+- Character encoding (ASCII, Unicode)
+
+### Layer 7: Application
+- User-facing services
+- HTTP, FTP, SMTP, DNS
+- Not the application itself, but the network services it uses
+
+## Security at Each Layer
+
+| Layer | Attack Examples | Defense |
+|-------|----------------|---------|
+| 1 | Cable tapping, jamming | Physical security |
+| 2 | MAC spoofing, ARP poisoning | Port security, DAI |
+| 3 | IP spoofing, ICMP attacks | ACLs, firewalls |
+| 4 | SYN floods, port scanning | Stateful firewall, IPS |
+| 5 | Session hijacking | Encryption, tokens |
+| 6 | SSL stripping | HSTS, certificate pinning |
+| 7 | SQL injection, XSS | WAF, input validation |
+    `,
+    keyTakeaways: [
+      "The OSI model has 7 layers from Physical (1) to Application (7)",
+      "Each layer has specific functions and communicates with adjacent layers",
+      "The model helps troubleshoot by isolating issues to specific layers",
+      "Security threats exist at every layer and require layer-specific defenses",
+      "Understanding OSI is foundational for all networking and security work"
+    ],
+  },
+  {
+    id: "nf-2.2",
+    courseId: "network-fundamentals",
+    title: "Physical & Data Link Layers (Layers 1-2)",
+    content: `
+# Physical & Data Link Layers
+
+## Layer 1: Physical Layer
+
+The Physical layer deals with the actual transmission of raw binary data (bits) over a physical medium.
+
+### Transmission Media
+
+#### Copper Cables (UTP — Unshielded Twisted Pair)
+| Category | Speed | Bandwidth | Use Case |
+|----------|-------|-----------|----------|
+| Cat5 | 100 Mbps | 100 MHz | Legacy |
+| Cat5e | 1 Gbps | 100 MHz | Common LAN |
+| Cat6 | 10 Gbps (55m) | 250 MHz | High performance |
+| Cat6a | 10 Gbps (100m) | 500 MHz | Data centers |
+| Cat7 | 10 Gbps | 600 MHz | Shielded |
+
+#### Fiber Optic
+- **Single-mode (SMF)** — long distance, laser, yellow jacket
+- **Multi-mode (MMF)** — short distance, LED, orange/aqua jacket
+- Immune to electromagnetic interference (EMI)
+- Much higher speeds and distances
+
+#### Wireless
+- Radio waves (Wi-Fi, Bluetooth)
+- Subject to interference and security concerns
+
+### Connectors
+- **RJ-45** — Ethernet copper cables
+- **LC, SC, ST** — fiber optic connectors
+- **Straight-through cable** — different devices (PC → switch)
+- **Crossover cable** — same devices (switch → switch)
+
+### Signal Types
+- **Digital** — discrete signals (0s and 1s)
+- **Analog** — continuous wave signals
+- **Encoding schemes** — NRZ, Manchester, 4B/5B
+
+## Layer 2: Data Link Layer
+
+The Data Link layer provides node-to-node delivery by framing data and using MAC addresses.
+
+### Two Sub-layers
+
+1. **LLC (Logical Link Control)** — interfaces with the Network layer
+2. **MAC (Media Access Control)** — controls hardware addressing and media access
+
+### MAC Addresses
+
+A MAC address is a 48-bit (6-byte) hardware address burned into the NIC.
+
+\`\`\`
+Format: AA:BB:CC:DD:EE:FF
+         └─OUI─┘ └─NIC──┘
+
+OUI = Organizationally Unique Identifier (manufacturer)
+NIC = Unique device identifier
+\`\`\`
+
+**Special MAC Addresses:**
+- **FF:FF:FF:FF:FF:FF** — Broadcast (all devices)
+- **01:00:5E:xx:xx:xx** — IPv4 Multicast
+- **33:33:xx:xx:xx:xx** — IPv6 Multicast
+
+### Ethernet Frame Structure
+
+\`\`\`
+┌──────────┬───────┬──────┬──────┬──────────┬─────┐
+│ Preamble │ Dest  │ Src  │ Type │ Payload  │ FCS │
+│ (8B)     │ MAC   │ MAC  │(2B)  │(46-1500B)│(4B) │
+│          │ (6B)  │ (6B) │      │          │     │
+└──────────┴───────┴──────┴──────┴──────────┴─────┘
+\`\`\`
+
+- **Preamble** — synchronization pattern
+- **Destination MAC** — recipient's hardware address
+- **Source MAC** — sender's hardware address
+- **Type/Length** — indicates upper-layer protocol (0x0800 = IPv4, 0x0806 = ARP)
+- **Payload** — data from higher layers
+- **FCS** — Frame Check Sequence for error detection (CRC)
+
+### Switching at Layer 2
+
+Switches build a **MAC address table** by learning source MACs:
+
+1. Frame arrives on port 1 with source MAC AA:AA:AA:AA:AA:AA
+2. Switch records: MAC AA → Port 1
+3. Switch checks destination MAC in table
+4. If found → forward to that port (unicast)
+5. If not found → flood to all ports except source (unknown unicast)
+    `,
+    keyTakeaways: [
+      "Layer 1 handles physical transmission using copper, fiber, or wireless media",
+      "Cat5e and Cat6 are common copper cable types; fiber supports longer distances",
+      "MAC addresses are 48-bit hardware addresses unique to each network interface",
+      "Ethernet frames encapsulate data with source/destination MAC and error checking",
+      "Switches learn MAC addresses to make intelligent forwarding decisions"
+    ],
+  },
+  {
+    id: "nf-2.3",
+    courseId: "network-fundamentals",
+    title: "Network & Transport Layers (Layers 3-4)",
+    content: `
+# Network & Transport Layers
+
+## Layer 3: Network Layer
+
+The Network layer handles **logical addressing (IP)** and **routing** — getting packets from source to destination across multiple networks.
+
+### IP Addressing
+- Provides unique logical addresses to every device
+- IPv4: 32-bit address (e.g., 192.168.1.100)
+- IPv6: 128-bit address (e.g., 2001:db8::1)
+- Separates network portion from host portion
+
+### Routing
+Routers make forwarding decisions based on destination IP:
+
+\`\`\`
+[PC: 192.168.1.10] → [Router A] → [Router B] → [Server: 10.0.0.5]
+    Network A              Internet              Network B
+\`\`\`
+
+### IP Packet Structure
+\`\`\`
+┌─────────┬─────┬─────────┬──────────┬──────────┬─────────┐
+│ Version │ IHL │  ToS    │  Length   │   TTL    │Protocol │
+├─────────┴─────┴─────────┴──────────┼──────────┴─────────┤
+│        Source IP Address           │                     │
+├────────────────────────────────────┤                     │
+│      Destination IP Address        │       Data          │
+└────────────────────────────────────┴─────────────────────┘
+\`\`\`
+
+Key fields:
+- **TTL (Time to Live)** — decremented by each router, prevents routing loops
+- **Protocol** — identifies upper layer (6=TCP, 17=UDP, 1=ICMP)
+- **Source/Destination IP** — logical addresses
+
+### ICMP (Internet Control Message Protocol)
+- Error reporting and diagnostics
+- **Ping** — Echo Request/Reply (test reachability)
+- **Traceroute** — maps the path packets take
+- Common types: Destination Unreachable, Time Exceeded, Redirect
+
+## Layer 4: Transport Layer
+
+The Transport layer provides **end-to-end communication** between applications using **port numbers**.
+
+### TCP (Transmission Control Protocol)
+
+**Connection-oriented, reliable delivery**
+
+#### Three-Way Handshake:
+\`\`\`
+Client          Server
+  │── SYN ────→│      Step 1: Client initiates
+  │←─ SYN-ACK ─│      Step 2: Server acknowledges
+  │── ACK ────→│      Step 3: Connection established
+\`\`\`
+
+#### Key Features:
+- Sequence numbers for ordering
+- Acknowledgments for delivery confirmation
+- Flow control (window size)
+- Error detection and retransmission
+- Connection teardown (FIN/ACK)
+
+### UDP (User Datagram Protocol)
+
+**Connectionless, best-effort delivery**
+
+- No handshake, no acknowledgments
+- Faster but unreliable
+- Used for: DNS queries, streaming, VoIP, gaming
+
+### TCP vs UDP
+
+| Feature | TCP | UDP |
+|---------|-----|-----|
+| Connection | Yes | No |
+| Reliability | Guaranteed | Best-effort |
+| Ordering | Yes | No |
+| Speed | Slower | Faster |
+| Overhead | Higher | Lower |
+| Use Cases | Web, email, file transfer | DNS, streaming, gaming |
+
+### Port Numbers
+
+Ports identify specific applications/services:
+
+| Range | Name | Example |
+|-------|------|---------|
+| 0-1023 | Well-Known | HTTP (80), HTTPS (443), SSH (22) |
+| 1024-49151 | Registered | MySQL (3306), RDP (3389) |
+| 49152-65535 | Dynamic/Ephemeral | Client-side connections |
+
+### Essential Well-Known Ports:
+| Port | Service | Protocol |
+|------|---------|----------|
+| 20/21 | FTP | TCP |
+| 22 | SSH | TCP |
+| 23 | Telnet | TCP |
+| 25 | SMTP | TCP |
+| 53 | DNS | TCP/UDP |
+| 67/68 | DHCP | UDP |
+| 80 | HTTP | TCP |
+| 110 | POP3 | TCP |
+| 143 | IMAP | TCP |
+| 443 | HTTPS | TCP |
+| 3389 | RDP | TCP |
+    `,
+    keyTakeaways: [
+      "Layer 3 uses IP addresses for logical addressing and routing between networks",
+      "TTL prevents routing loops by decrementing at each hop",
+      "TCP provides reliable, ordered delivery via three-way handshake",
+      "UDP provides fast, connectionless communication for latency-sensitive apps",
+      "Port numbers identify specific services — memorize well-known ports (0-1023)"
+    ],
+  },
+  {
+    id: "nf-2.4",
+    courseId: "network-fundamentals",
+    title: "Session, Presentation & Application Layers (Layers 5-7)",
+    content: `
+# Upper Layers: Session, Presentation & Application
+
+## Layer 5: Session Layer
+
+The Session layer manages **dialog control** between applications — establishing, maintaining, and terminating communication sessions.
+
+### Functions:
+- **Session establishment** — setting up communication parameters
+- **Session maintenance** — keeping the connection alive
+- **Session termination** — graceful closing of connections
+- **Synchronization** — checkpoints for data recovery
+- **Dialog control** — half-duplex or full-duplex communication
+
+### Examples:
+- **NetBIOS** — Windows network communication
+- **RPC (Remote Procedure Call)** — executing procedures on remote systems
+- **PPTP** — Point-to-Point Tunneling Protocol
+- **SQL sessions** — database connections
+
+### Security Concerns:
+- Session hijacking — stealing an active session
+- Session fixation — forcing a known session ID
+- Mitigation: encryption, secure tokens, timeout policies
+
+## Layer 6: Presentation Layer
+
+The Presentation layer handles **data translation, encryption, and compression** — ensuring data from the Application layer is in a usable format.
+
+### Functions:
+
+#### Data Translation
+- Character encoding: ASCII, Unicode (UTF-8)
+- Data format conversion
+- Byte order (endianness) handling
+
+#### Encryption/Decryption
+- **SSL/TLS** — secure socket layer / transport layer security
+- Ensures data confidentiality during transmission
+- Certificate-based authentication
+
+#### Compression
+- Reduces data size for efficient transmission
+- Image formats: JPEG, PNG, GIF
+- Video formats: MPEG, H.264
+
+### Common Formats:
+| Type | Formats |
+|------|---------|
+| Text | ASCII, Unicode, EBCDIC |
+| Image | JPEG, PNG, GIF, TIFF |
+| Audio | MP3, WAV, AAC |
+| Video | MPEG, AVI, MP4 |
+| Encryption | SSL, TLS |
+
+## Layer 7: Application Layer
+
+The Application layer is the **closest to the user** — it provides network services directly to applications.
+
+> Note: The Application layer is NOT the application itself (e.g., Chrome browser), but the network protocols that applications use.
+
+### Key Protocols:
+
+#### HTTP/HTTPS (Web)
+- Port 80 (HTTP) / 443 (HTTPS)
+- Request methods: GET, POST, PUT, DELETE
+- Status codes: 200 OK, 301 Redirect, 404 Not Found, 500 Server Error
+
+#### DNS (Domain Name System)
+- Port 53
+- Translates domain names to IP addresses
+- Hierarchical: Root → TLD → Domain → Subdomain
+
+#### DHCP (Dynamic Host Configuration)
+- Ports 67/68
+- Automatically assigns IP configuration to clients
+- DORA: Discover, Offer, Request, Acknowledge
+
+#### SMTP/POP3/IMAP (Email)
+- SMTP (25/587) — sending email
+- POP3 (110) — downloading email
+- IMAP (143) — synchronizing email
+
+#### FTP/SFTP (File Transfer)
+- FTP (20/21) — unencrypted file transfer
+- SFTP (22) — encrypted file transfer over SSH
+
+#### SSH (Secure Shell)
+- Port 22
+- Encrypted remote access
+- Replaced insecure Telnet (port 23)
+    `,
+    keyTakeaways: [
+      "Session layer manages communication sessions — establishing, maintaining, terminating",
+      "Presentation layer handles encryption, compression, and data format translation",
+      "Application layer provides network services to user applications",
+      "SSL/TLS at the Presentation layer ensures secure communication",
+      "Key application protocols: HTTP, DNS, DHCP, SMTP, FTP, SSH"
+    ],
+  },
+  {
+    id: "nf-2.5",
+    courseId: "network-fundamentals",
+    title: "Data Encapsulation & PDUs",
+    content: `
+# Data Encapsulation & Protocol Data Units
+
+**Encapsulation** is the process of wrapping data with protocol headers (and sometimes trailers) as it moves down the OSI layers. **De-encapsulation** reverses this at the receiving end.
+
+## The Encapsulation Process
+
+\`\`\`
+Layer 7-5: [        DATA        ]                    → Data
+Layer 4:   [TCP Hdr][   DATA    ]                    → Segment
+Layer 3:   [IP Hdr][TCP Hdr][DATA]                   → Packet
+Layer 2:   [Eth Hdr][IP][TCP][DATA][FCS]             → Frame
+Layer 1:   10110011010110100110...                    → Bits
+\`\`\`
+
+## Protocol Data Units (PDUs)
+
+Each layer has its own name for the data unit it handles:
+
+| Layer | PDU Name | Contains |
+|-------|----------|----------|
+| 7-5 | Data | Application payload |
+| 4 | Segment (TCP) / Datagram (UDP) | Transport header + data |
+| 3 | Packet | Network header + segment |
+| 2 | Frame | Data link header + packet + trailer |
+| 1 | Bits | Binary stream on the wire |
+
+## Detailed Encapsulation Example
+
+When you browse a website:
+
+### Step 1: Application Layer (Layer 7)
+Browser creates an HTTP GET request:
+\`\`\`
+GET /index.html HTTP/1.1
+Host: www.example.com
+\`\`\`
+
+### Step 2: Transport Layer (Layer 4)
+TCP adds its header (source port, dest port 80, sequence number):
+\`\`\`
+[TCP: SrcPort=49152, DstPort=80, Seq=1] [HTTP Data]
+\`\`\`
+
+### Step 3: Network Layer (Layer 3)
+IP adds source and destination addresses:
+\`\`\`
+[IP: Src=192.168.1.10, Dst=93.184.216.34, TTL=64] [TCP] [HTTP]
+\`\`\`
+
+### Step 4: Data Link Layer (Layer 2)
+Ethernet adds MAC addresses and error checking:
+\`\`\`
+[Eth: DstMAC, SrcMAC, Type=0x0800] [IP] [TCP] [HTTP] [FCS]
+\`\`\`
+
+### Step 5: Physical Layer (Layer 1)
+Frame converted to electrical signals, light pulses, or radio waves.
+
+## De-encapsulation at Receiver
+
+The reverse process at the destination:
+
+1. **Layer 1** → receives bits, assembles frame
+2. **Layer 2** → strips Ethernet header, checks FCS, passes packet up
+3. **Layer 3** → strips IP header, verifies destination, passes segment up
+4. **Layer 4** → strips TCP header, reassembles data, passes to application
+5. **Layer 7** → application processes the HTTP request
+
+## Why Encapsulation Matters for Security
+
+Understanding encapsulation helps you:
+- **Analyze packet captures** — know what each header contains
+- **Identify attack layers** — where in the stack is the attack?
+- **Configure firewalls** — filter at appropriate layers
+- **Detect tampering** — spot modified headers or payloads
+    `,
+    keyTakeaways: [
+      "Encapsulation adds protocol headers as data moves down the OSI stack",
+      "Each layer has a specific PDU: data, segment, packet, frame, bits",
+      "De-encapsulation strips headers as data moves up at the receiver",
+      "Understanding encapsulation is essential for packet analysis and security",
+      "Wireshark and packet analyzers show encapsulated data at each layer"
+    ],
+  },
+
+  // Module 3: TCP/IP Protocol Suite
+  {
+    id: "nf-3.1",
+    courseId: "network-fundamentals",
+    title: "TCP/IP Model vs OSI Model",
+    content: `
+# TCP/IP Model vs OSI Model
+
+While the OSI model is the theoretical reference, the **TCP/IP model** is the practical implementation that powers the internet. Understanding both is essential.
+
+## The TCP/IP Model (4 Layers)
+
+\`\`\`
+┌─────────────────────┐     ┌─────────────────────┐
+│    Application      │     │ 7. Application      │
+│   (HTTP, DNS, FTP,  │     │ 6. Presentation     │
+│    SMTP, SSH)       │     │ 5. Session           │
+├─────────────────────┤     ├─────────────────────┤
+│    Transport        │     │ 4. Transport         │
+│   (TCP, UDP)        │     │                      │
+├─────────────────────┤     ├─────────────────────┤
+│    Internet         │     │ 3. Network           │
+│   (IP, ICMP, ARP)   │     │                      │
+├─────────────────────┤     ├─────────────────────┤
+│  Network Access     │     │ 2. Data Link         │
+│  (Ethernet, Wi-Fi)  │     │ 1. Physical          │
+└─────────────────────┘     └─────────────────────┘
+      TCP/IP Model               OSI Model
+\`\`\`
+
+## Key Differences
+
+| Feature | OSI Model | TCP/IP Model |
+|---------|-----------|-------------|
+| Layers | 7 | 4 |
+| Purpose | Theoretical reference | Practical implementation |
+| Development | ISO (1984) | DARPA (1970s) |
+| Approach | Protocol-independent | Protocol-specific |
+| Session/Presentation | Separate layers | Merged into Application |
+
+## TCP/IP Protocol Stack
+
+### Application Layer
+Combines OSI layers 5-7. Protocols include:
+- **HTTP/HTTPS** — web browsing
+- **DNS** — name resolution
+- **DHCP** — IP configuration
+- **FTP/SFTP** — file transfer
+- **SMTP/POP3/IMAP** — email
+- **SSH** — secure remote access
+- **SNMP** — network management
+- **NTP** — time synchronization
+
+### Transport Layer
+Same as OSI Layer 4:
+- **TCP** — reliable, connection-oriented
+- **UDP** — fast, connectionless
+
+### Internet Layer
+Equivalent to OSI Layer 3:
+- **IP (IPv4/IPv6)** — logical addressing and routing
+- **ICMP** — error messages and diagnostics
+- **ARP** — maps IP to MAC addresses
+- **IGMP** — multicast group management
+
+### Network Access Layer
+Combines OSI Layers 1-2:
+- **Ethernet (802.3)** — wired LAN
+- **Wi-Fi (802.11)** — wireless LAN
+- **PPP** — point-to-point connections
+- Handles physical transmission and framing
+
+## Which Model to Use?
+
+- **OSI** — for learning, troubleshooting, and communication
+- **TCP/IP** — for understanding real-world implementation
+- Both are essential knowledge for networking professionals
+    `,
+    keyTakeaways: [
+      "TCP/IP has 4 layers; OSI has 7 — TCP/IP merges upper and lower layers",
+      "TCP/IP is the practical model powering the internet",
+      "OSI remains the standard reference for conceptual understanding",
+      "Both models are important — OSI for theory, TCP/IP for practice",
+      "Know which protocols belong to which layer in both models"
+    ],
+  },
+  {
+    id: "nf-3.2",
+    courseId: "network-fundamentals",
+    title: "TCP: Connection-Oriented Communication",
+    content: `
+# TCP: Transmission Control Protocol
+
+TCP is a **connection-oriented, reliable** transport protocol. It ensures data arrives complete, in order, and without errors.
+
+## Three-Way Handshake
+
+Every TCP connection begins with a three-way handshake:
+
+\`\`\`
+Client                    Server
+  │                         │
+  │──── SYN (seq=100) ────→│   1. Client sends SYN
+  │                         │
+  │←── SYN-ACK ────────────│   2. Server responds with SYN-ACK
+  │    (seq=300, ack=101)   │
+  │                         │
+  │──── ACK (ack=301) ────→│   3. Client acknowledges
+  │                         │
+  │    CONNECTION ESTABLISHED│
+\`\`\`
+
+## TCP Header Structure
+
+\`\`\`
+┌────────────────┬────────────────┐
+│  Source Port   │  Dest Port     │  (16 bits each)
+├────────────────┴────────────────┤
+│         Sequence Number         │  (32 bits)
+├─────────────────────────────────┤
+│      Acknowledgment Number      │  (32 bits)
+├────┬──────┬─────────────────────┤
+│Hdr │Flags │    Window Size      │
+│Len │UAPRSF│                     │
+├────┴──────┴─────────────────────┤
+│  Checksum    │  Urgent Pointer  │
+└──────────────┴──────────────────┘
+\`\`\`
+
+### TCP Flags:
+| Flag | Name | Purpose |
+|------|------|---------|
+| SYN | Synchronize | Initiate connection |
+| ACK | Acknowledge | Confirm receipt |
+| FIN | Finish | Close connection |
+| RST | Reset | Abort connection |
+| PSH | Push | Send data immediately |
+| URG | Urgent | Priority data |
+
+## Sequence Numbers & Acknowledgments
+
+TCP tracks every byte of data:
+- **Sequence number** — position of the first byte in this segment
+- **Acknowledgment number** — next byte expected from the other side
+
+\`\`\`
+Client sends: SEQ=1, Data="Hello" (5 bytes)
+Server responds: ACK=6 (expecting byte 6 next)
+Client sends: SEQ=6, Data="World" (5 bytes)
+Server responds: ACK=11
+\`\`\`
+
+## Flow Control (Window Size)
+
+TCP uses **sliding window** to control data flow:
+- Receiver advertises how much data it can buffer (window size)
+- Sender won't send more than the receiver can handle
+- Prevents overwhelming slow receivers
+
+## Congestion Control
+
+TCP detects and responds to network congestion:
+- **Slow Start** — begin with small window, increase exponentially
+- **Congestion Avoidance** — linear increase after threshold
+- **Fast Retransmit** — retransmit on 3 duplicate ACKs
+- **Fast Recovery** — avoid restarting slow start after fast retransmit
+
+## Connection Termination (Four-Way)
+
+\`\`\`
+Client                    Server
+  │──── FIN ────→│         1. Client wants to close
+  │←──── ACK ────│         2. Server acknowledges
+  │←──── FIN ────│         3. Server ready to close
+  │──── ACK ────→│         4. Client acknowledges
+  │   CONNECTION CLOSED    │
+\`\`\`
+
+## Security Implications
+
+- **SYN Flood** — attacker sends many SYNs without completing handshake
+- **TCP Reset Attack** — injecting RST packets to kill connections
+- **Session Hijacking** — predicting sequence numbers to inject data
+    `,
+    keyTakeaways: [
+      "TCP uses a three-way handshake (SYN, SYN-ACK, ACK) to establish connections",
+      "Sequence and acknowledgment numbers track every byte for reliable delivery",
+      "Flow control via sliding window prevents overwhelming the receiver",
+      "TCP flags (SYN, ACK, FIN, RST, PSH, URG) control connection state",
+      "SYN floods are a common DoS attack exploiting the handshake process"
+    ],
+  },
+  {
+    id: "nf-3.3",
+    courseId: "network-fundamentals",
+    title: "UDP: Connectionless Communication",
+    content: `
+# UDP: User Datagram Protocol
+
+UDP is a **connectionless, lightweight** transport protocol. It sacrifices reliability for speed — there's no handshake, no acknowledgments, and no guaranteed delivery.
+
+## UDP Header
+
+The UDP header is minimal — only 8 bytes:
+
+\`\`\`
+┌────────────────┬────────────────┐
+│  Source Port   │  Dest Port     │  (16 bits each)
+├────────────────┴────────────────┤
+│     Length     │   Checksum     │  (16 bits each)
+├─────────────────────────────────┤
+│              Data               │
+└─────────────────────────────────┘
+\`\`\`
+
+Compare: TCP header is 20-60 bytes; UDP header is just 8 bytes.
+
+## When to Use UDP
+
+UDP is ideal when:
+- **Speed matters more than reliability** — streaming, gaming
+- **Small requests/responses** — DNS queries
+- **Broadcasting** — sending to all devices
+- **Application handles reliability** — custom error handling
+
+### Common UDP Applications:
+| Application | Port | Why UDP? |
+|------------|------|----------|
+| DNS | 53 | Small, fast queries |
+| DHCP | 67/68 | Broadcast-based |
+| SNMP | 161/162 | Simple monitoring |
+| NTP | 123 | Time sync |
+| VoIP/SIP | 5060 | Real-time audio |
+| Video Streaming | Various | Latency-sensitive |
+| Online Gaming | Various | Speed critical |
+| TFTP | 69 | Simple file transfer |
+
+## UDP vs TCP: When to Choose
+
+Choose **TCP** when:
+- Data must arrive complete (file transfer, web, email)
+- Order matters
+- Error recovery is needed
+
+Choose **UDP** when:
+- Speed is critical (real-time)
+- Losing some data is acceptable (streaming)
+- Overhead must be minimal
+- Broadcasting/multicasting
+
+## Security Implications
+
+### UDP Flood Attack
+- Attacker sends massive UDP packets to random ports
+- Target responds with ICMP "Destination Unreachable" for each
+- Overwhelms the target's resources
+
+### DNS Amplification
+- Attacker spoofs source IP to victim's address
+- Sends small DNS queries to open resolvers
+- Resolvers send large responses to victim
+- Amplification factor: 50-70x
+
+### Mitigation:
+- Rate limiting UDP traffic
+- Disabling unused UDP services
+- Configuring DNS resolvers properly
+- Using DDoS protection services
+    `,
+    keyTakeaways: [
+      "UDP is connectionless — no handshake, no acknowledgments, no guarantees",
+      "UDP header is only 8 bytes vs TCP's 20+ bytes — minimal overhead",
+      "Used for DNS, DHCP, streaming, VoIP, gaming where speed matters",
+      "UDP floods and DNS amplification are common DDoS attack vectors",
+      "Choose TCP for reliability, UDP for speed and real-time applications"
+    ],
+  },
+  {
+    id: "nf-3.4",
+    courseId: "network-fundamentals",
+    title: "ICMP & ARP Protocols",
+    content: `
+# ICMP & ARP Protocols
+
+## ICMP (Internet Control Message Protocol)
+
+ICMP is a **Network layer protocol** used for error reporting and network diagnostics. It doesn't carry application data — it carries control messages.
+
+### Common ICMP Message Types:
+
+| Type | Code | Name | Description |
+|------|------|------|-------------|
+| 0 | 0 | Echo Reply | Ping response |
+| 3 | 0 | Dest Unreachable: Network | Can't reach network |
+| 3 | 1 | Dest Unreachable: Host | Can't reach host |
+| 3 | 3 | Dest Unreachable: Port | Port not listening |
+| 8 | 0 | Echo Request | Ping request |
+| 11 | 0 | Time Exceeded | TTL expired (traceroute) |
+
+### Ping
+Tests reachability between hosts:
+\`\`\`bash
+$ ping 8.8.8.8
+PING 8.8.8.8: 64 bytes, seq=1, ttl=118, time=12.3ms
+PING 8.8.8.8: 64 bytes, seq=2, ttl=118, time=11.8ms
+\`\`\`
+
+### Traceroute
+Maps the path packets take:
+\`\`\`bash
+$ traceroute 8.8.8.8
+ 1  192.168.1.1    1.2ms
+ 2  10.0.0.1       5.4ms
+ 3  72.14.215.85   12.1ms
+ 4  8.8.8.8        11.8ms
+\`\`\`
+
+Works by sending packets with incrementing TTL values. Each router that decrements TTL to 0 sends back "Time Exceeded."
+
+### ICMP Security Concerns:
+- **Ping sweep** — scanning for live hosts
+- **ICMP tunneling** — hiding data in ping packets
+- **Ping of Death** — oversized ICMP packets (historic)
+- **Smurf Attack** — broadcast ping with spoofed source
+
+## ARP (Address Resolution Protocol)
+
+ARP resolves **IP addresses to MAC addresses** on a local network. When a device knows the destination IP but not the MAC, it uses ARP.
+
+### ARP Process:
+
+\`\`\`
+1. PC-A wants to send to 192.168.1.5
+2. PC-A checks ARP cache — not found
+3. PC-A broadcasts: "Who has 192.168.1.5? Tell 192.168.1.10"
+   (Destination MAC: FF:FF:FF:FF:FF:FF)
+4. PC-B responds: "192.168.1.5 is at AA:BB:CC:DD:EE:FF"
+   (Unicast reply)
+5. PC-A caches the mapping and sends the frame
+\`\`\`
+
+### ARP Cache
+View the ARP cache:
+\`\`\`bash
+# Windows
+arp -a
+
+# Linux
+arp -n
+ip neigh show
+\`\`\`
+
+### ARP Security Concerns:
+
+#### ARP Spoofing/Poisoning
+- Attacker sends fake ARP replies
+- Associates attacker's MAC with the gateway IP
+- All traffic flows through attacker (Man-in-the-Middle)
+
+\`\`\`
+Normal:  Victim → Gateway (correct MAC)
+Attack:  Victim → Attacker (fake MAC) → Gateway
+\`\`\`
+
+#### Defenses:
+- **Dynamic ARP Inspection (DAI)** — validates ARP on switches
+- **Static ARP entries** — manually set critical mappings
+- **ARP monitoring tools** — detect anomalies
+- **802.1X** — port-based authentication
+    `,
+    keyTakeaways: [
+      "ICMP provides error reporting and diagnostics — ping and traceroute",
+      "Traceroute works by incrementing TTL to discover each hop",
+      "ARP resolves IP addresses to MAC addresses on the local network",
+      "ARP spoofing enables man-in-the-middle attacks by sending fake replies",
+      "Dynamic ARP Inspection (DAI) on switches helps prevent ARP attacks"
+    ],
+  },
+  {
+    id: "nf-3.5",
+    courseId: "network-fundamentals",
+    title: "Ports & Sockets",
+    content: `
+# Ports & Sockets
+
+## Understanding Ports
+
+A **port** is a 16-bit number (0-65535) that identifies a specific process or service on a device. Combined with an IP address, it creates a unique endpoint for communication.
+
+### Port Ranges:
+
+| Range | Name | Description |
+|-------|------|-------------|
+| 0-1023 | Well-Known | Reserved for common services (requires root/admin) |
+| 1024-49151 | Registered | Assigned to specific applications |
+| 49152-65535 | Dynamic/Ephemeral | Temporary client-side ports |
+
+### Must-Know Ports:
+
+| Port | Protocol | Service |
+|------|----------|---------|
+| 20 | TCP | FTP Data |
+| 21 | TCP | FTP Control |
+| 22 | TCP | SSH/SFTP |
+| 23 | TCP | Telnet |
+| 25 | TCP | SMTP |
+| 53 | TCP/UDP | DNS |
+| 67/68 | UDP | DHCP |
+| 69 | UDP | TFTP |
+| 80 | TCP | HTTP |
+| 110 | TCP | POP3 |
+| 123 | UDP | NTP |
+| 143 | TCP | IMAP |
+| 161/162 | UDP | SNMP |
+| 389 | TCP | LDAP |
+| 443 | TCP | HTTPS |
+| 445 | TCP | SMB |
+| 636 | TCP | LDAPS |
+| 993 | TCP | IMAPS |
+| 995 | TCP | POP3S |
+| 1433 | TCP | MSSQL |
+| 3306 | TCP | MySQL |
+| 3389 | TCP | RDP |
+| 5060 | UDP | SIP |
+| 8080 | TCP | HTTP Alt |
+
+## Sockets
+
+A **socket** is the combination of an IP address and a port number, creating a unique communication endpoint:
+
+\`\`\`
+Socket = IP Address + Port Number
+Example: 192.168.1.10:443
+\`\`\`
+
+### Socket Pair (Connection):
+A connection is identified by a pair of sockets:
+\`\`\`
+Source Socket:       192.168.1.10:49152
+Destination Socket:  93.184.216.34:443
+\`\`\`
+
+## Viewing Active Connections
+
+\`\`\`bash
+# Windows
+netstat -an
+netstat -anob  # with process names
+
+# Linux
+ss -tuln       # listening ports
+ss -tunap      # all connections with processes
+netstat -tulnp
+\`\`\`
+
+### Connection States:
+| State | Description |
+|-------|-------------|
+| LISTEN | Waiting for connections |
+| ESTABLISHED | Active connection |
+| TIME_WAIT | Waiting after close |
+| CLOSE_WAIT | Remote side closed |
+| SYN_SENT | Connection initiating |
+
+## Security Implications
+
+- **Port scanning** — attackers probe for open ports (Nmap)
+- **Open ports = attack surface** — minimize exposed services
+- **Unusual ports** — malware may use non-standard ports
+- **Port hopping** — C2 traffic changing ports to evade detection
+    `,
+    keyTakeaways: [
+      "Ports (0-65535) identify specific services on a device",
+      "Well-known ports (0-1023) are reserved for standard services",
+      "A socket combines IP address + port for unique endpoint identification",
+      "Use netstat/ss to view active connections and listening ports",
+      "Minimizing open ports reduces the attack surface"
+    ],
+  },
+
+  // Module 4: IP Addressing & Subnetting
+  {
+    id: "nf-4.1",
+    courseId: "network-fundamentals",
+    title: "IPv4 Addressing Fundamentals",
+    content: `
+# IPv4 Addressing Fundamentals
+
+An **IPv4 address** is a 32-bit number that uniquely identifies a device on a network. It's written in **dotted decimal notation** — four octets separated by dots.
+
+## Binary to Decimal
+
+Each octet is 8 bits (0-255):
+
+\`\`\`
+Binary:    11000000.10101000.00000001.00001010
+Decimal:   192     .168     .1       .10
+\`\`\`
+
+### Binary Position Values:
+\`\`\`
+128  64  32  16  8  4  2  1
+ 2⁷  2⁶  2⁵  2⁴ 2³ 2² 2¹ 2⁰
+\`\`\`
+
+**Example:** Convert 192 to binary:
+128 + 64 = 192 → **11000000**
+
+## IP Address Classes (Classful)
+
+| Class | First Octet | Default Mask | Networks | Hosts/Network |
+|-------|------------|-------------|----------|---------------|
+| A | 1-126 | 255.0.0.0 (/8) | 126 | ~16.7 million |
+| B | 128-191 | 255.255.0.0 (/16) | 16,384 | ~65,534 |
+| C | 192-223 | 255.255.255.0 (/24) | ~2.1 million | 254 |
+| D | 224-239 | N/A | Multicast | N/A |
+| E | 240-255 | N/A | Experimental | N/A |
+
+> Note: 127.x.x.x is reserved for **loopback** (localhost). 127.0.0.1 is the most common.
+
+## Parts of an IP Address
+
+Every IP address has two parts:
+- **Network portion** — identifies the network
+- **Host portion** — identifies the device on that network
+
+\`\`\`
+Class C: 192.168.1.10 / 255.255.255.0
+         └─Network──┘ └Host┘
+
+Network ID:  192.168.1.0   (all host bits = 0)
+Broadcast:   192.168.1.255 (all host bits = 1)
+Usable:      192.168.1.1 - 192.168.1.254
+\`\`\`
+
+## Special IP Addresses
+
+| Address | Purpose |
+|---------|---------|
+| 0.0.0.0 | Default route / "any" |
+| 127.0.0.1 | Loopback (localhost) |
+| 255.255.255.255 | Limited broadcast |
+| 169.254.x.x | APIPA (auto-configured) |
+| 224.0.0.0 - 239.255.255.255 | Multicast |
+
+## Classful vs Classless
+
+**Classful** addressing (legacy) wastes IP space. Modern networks use **CIDR (Classless Inter-Domain Routing)** for flexible subnetting — covered in the next lesson.
+    `,
+    keyTakeaways: [
+      "IPv4 addresses are 32-bit numbers in dotted decimal (4 octets)",
+      "Each octet ranges from 0-255 — understand binary conversion",
+      "IP addresses have network and host portions defined by the subnet mask",
+      "Class A/B/C define default network sizes; Classes D/E are special purpose",
+      "127.0.0.1 is loopback; 169.254.x.x indicates DHCP failure (APIPA)"
+    ],
+  },
+  {
+    id: "nf-4.2",
+    courseId: "network-fundamentals",
+    title: "Subnet Masks & CIDR Notation",
+    content: `
+# Subnet Masks & CIDR Notation
+
+## What is a Subnet Mask?
+
+A **subnet mask** determines which part of an IP address is the network portion and which is the host portion. It's a 32-bit number where:
+- **1s** = network bits
+- **0s** = host bits
+
+\`\`\`
+IP:      192.168.1.10     = 11000000.10101000.00000001.00001010
+Mask:    255.255.255.0    = 11111111.11111111.11111111.00000000
+                            └──────Network──────────┘ └─Host──┘
+\`\`\`
+
+## CIDR Notation
+
+**CIDR (Classless Inter-Domain Routing)** uses a slash followed by the number of network bits:
+
+| Mask | CIDR | Network Bits | Host Bits | Usable Hosts |
+|------|------|-------------|-----------|-------------|
+| 255.0.0.0 | /8 | 8 | 24 | 16,777,214 |
+| 255.255.0.0 | /16 | 16 | 16 | 65,534 |
+| 255.255.255.0 | /24 | 24 | 8 | 254 |
+| 255.255.255.128 | /25 | 25 | 7 | 126 |
+| 255.255.255.192 | /26 | 26 | 6 | 62 |
+| 255.255.255.224 | /27 | 27 | 5 | 30 |
+| 255.255.255.240 | /28 | 28 | 4 | 14 |
+| 255.255.255.248 | /29 | 29 | 3 | 6 |
+| 255.255.255.252 | /30 | 30 | 2 | 2 |
+
+### Formula:
+- **Usable hosts** = 2^(host bits) - 2
+- Subtract 2 because: 1 for network ID + 1 for broadcast
+
+## ANDing: Finding the Network ID
+
+To find the network address, perform a bitwise AND:
+
+\`\`\`
+IP:      192.168.1.130   = 11000000.10101000.00000001.10000010
+Mask:    255.255.255.192 = 11111111.11111111.11111111.11000000
+AND:     192.168.1.128   = 11000000.10101000.00000001.10000000
+\`\`\`
+
+Network ID: **192.168.1.128/26**
+
+## Quick Reference: Common Subnets
+
+| CIDR | Mask | Block Size | Subnets (from /24) | Hosts |
+|------|------|-----------|-------------------|-------|
+| /24 | 255.255.255.0 | 256 | 1 | 254 |
+| /25 | 255.255.255.128 | 128 | 2 | 126 |
+| /26 | 255.255.255.192 | 64 | 4 | 62 |
+| /27 | 255.255.255.224 | 32 | 8 | 30 |
+| /28 | 255.255.255.240 | 16 | 16 | 14 |
+| /29 | 255.255.255.248 | 8 | 32 | 6 |
+| /30 | 255.255.255.252 | 4 | 64 | 2 |
+
+**Block size** = 256 - last non-zero mask octet
+    `,
+    keyTakeaways: [
+      "Subnet masks separate network bits (1s) from host bits (0s)",
+      "CIDR notation (/24) indicates the number of network bits",
+      "Usable hosts = 2^(host bits) - 2 (subtract network ID and broadcast)",
+      "ANDing an IP with its mask reveals the network address",
+      "Block size = 256 minus the subnet mask value in the relevant octet"
+    ],
+  },
+  {
+    id: "nf-4.3",
+    courseId: "network-fundamentals",
+    title: "Subnetting Practice",
+    content: `
+# Subnetting Practice
+
+## Step-by-Step Subnetting Method
+
+Given: **192.168.10.0/26** — find all subnet details.
+
+### Step 1: Identify the mask
+/26 = 255.255.255.192
+
+### Step 2: Find the block size
+256 - 192 = **64**
+
+### Step 3: List the subnets
+Start at 0 and increment by block size (64):
+
+| Subnet | Network ID | First Host | Last Host | Broadcast |
+|--------|-----------|------------|-----------|-----------|
+| 1 | 192.168.10.0 | 192.168.10.1 | 192.168.10.62 | 192.168.10.63 |
+| 2 | 192.168.10.64 | 192.168.10.65 | 192.168.10.126 | 192.168.10.127 |
+| 3 | 192.168.10.128 | 192.168.10.129 | 192.168.10.190 | 192.168.10.191 |
+| 4 | 192.168.10.192 | 192.168.10.193 | 192.168.10.254 | 192.168.10.255 |
+
+Each subnet has **62 usable hosts** (2⁶ - 2 = 62).
+
+## Practice Problem 1
+
+**Given:** 10.0.0.0/20 — What subnet does 10.0.5.100 belong to?
+
+### Solution:
+- /20 mask = 255.255.240.0
+- Block size in 3rd octet: 256 - 240 = 16
+- Subnets: 10.0.0.0, 10.0.16.0, 10.0.32.0...
+- 10.0.5.100 → 5 falls between 0 and 16
+- **Network: 10.0.0.0/20**
+- **Broadcast: 10.0.15.255**
+- **Usable: 10.0.0.1 - 10.0.15.254** (4094 hosts)
+
+## Practice Problem 2
+
+**Given:** A company needs 50 hosts per subnet. What is the minimum CIDR?
+
+### Solution:
+- Need at least 50 usable hosts
+- 2⁶ - 2 = 62 ✓ (6 host bits)
+- 2⁵ - 2 = 30 ✗ (not enough)
+- 32 - 6 = **/26** (255.255.255.192)
+
+## Practice Problem 3
+
+**Given:** 172.16.0.0/22 — How many usable hosts?
+
+### Solution:
+- /22 = 10 host bits (32 - 22 = 10)
+- 2¹⁰ - 2 = **1022 usable hosts**
+
+## Subnetting Cheat Sheet
+
+\`\`\`
+CIDR  Mask            Hosts   Block
+/24   255.255.255.0   254     256
+/25   .128            126     128
+/26   .192            62      64
+/27   .224            30      32
+/28   .240            14      16
+/29   .248            6       8
+/30   .252            2       4
+/31   .254            2*      2    (* point-to-point)
+/32   .255            1       1    (host route)
+\`\`\`
+
+## Tips for Fast Subnetting
+
+1. **Memorize the powers of 2**: 2, 4, 8, 16, 32, 64, 128, 256
+2. **Block size** = 256 - mask value
+3. **Network ID** = always a multiple of block size
+4. **Broadcast** = next network ID - 1
+5. **First host** = network ID + 1
+6. **Last host** = broadcast - 1
+    `,
+    keyTakeaways: [
+      "Block size method: 256 minus mask value gives the subnet increment",
+      "Network ID is always a multiple of the block size",
+      "Broadcast is the last address in each subnet (next network - 1)",
+      "To find needed CIDR: calculate minimum host bits where 2^n - 2 ≥ required hosts",
+      "Memorize powers of 2 and common CIDR masks for fast calculations"
+    ],
+  },
+  {
+    id: "nf-4.4",
+    courseId: "network-fundamentals",
+    title: "Private vs Public IP Addresses & NAT",
+    content: `
+# Private vs Public IP Addresses & NAT
+
+## Private IP Ranges (RFC 1918)
+
+Private addresses are used within internal networks and are **not routable on the internet**:
+
+| Class | Range | CIDR | Addresses |
+|-------|-------|------|-----------|
+| A | 10.0.0.0 - 10.255.255.255 | 10.0.0.0/8 | ~16.7 million |
+| B | 172.16.0.0 - 172.31.255.255 | 172.16.0.0/12 | ~1 million |
+| C | 192.168.0.0 - 192.168.255.255 | 192.168.0.0/16 | ~65,000 |
+
+### Why Private Addresses?
+- IPv4 only has ~4.3 billion addresses — not enough for all devices
+- Private addresses can be reused across organizations
+- NAT translates private to public for internet access
+
+## Public IP Addresses
+- Globally unique
+- Assigned by ISPs (from regional registries: ARIN, RIPE, APNIC)
+- Routable on the internet
+
+## NAT (Network Address Translation)
+
+NAT translates private IP addresses to public IP addresses at the network boundary (router/firewall).
+
+### Static NAT (1:1)
+One private IP maps to one public IP:
+\`\`\`
+Internal: 192.168.1.10 ←→ External: 203.0.113.10
+\`\`\`
+Used for servers that need consistent public addressing.
+
+### Dynamic NAT
+Private IPs mapped to a pool of public IPs dynamically:
+\`\`\`
+Pool: 203.0.113.10 - 203.0.113.20
+192.168.1.10 → 203.0.113.10 (assigned from pool)
+192.168.1.11 → 203.0.113.11 (next available)
+\`\`\`
+
+### PAT (Port Address Translation) / NAT Overload
+Many private IPs share ONE public IP using different port numbers:
+\`\`\`
+192.168.1.10:49152 → 203.0.113.1:10001
+192.168.1.11:49153 → 203.0.113.1:10002
+192.168.1.12:49154 → 203.0.113.1:10003
+\`\`\`
+This is the most common form — used by home routers.
+
+## NAT Security Implications
+
+### Benefits:
+- Hides internal network structure
+- Prevents direct external access to internal hosts
+- Conserves public IP addresses
+
+### Concerns:
+- Not a firewall — doesn't inspect traffic content
+- Can complicate certain protocols (FTP, SIP, IPsec)
+- Makes forensic tracing harder (many users → one IP)
+- Breaks end-to-end connectivity principle
+    `,
+    keyTakeaways: [
+      "RFC 1918 defines private ranges: 10.x, 172.16-31.x, 192.168.x",
+      "Private IPs are not routable on the internet — NAT translates them",
+      "PAT (NAT overload) lets many devices share one public IP using ports",
+      "NAT provides some security by hiding internal addresses, but isn't a firewall",
+      "IPv4 exhaustion drove the need for NAT and eventually IPv6"
+    ],
+  },
+  {
+    id: "nf-4.5",
+    courseId: "network-fundamentals",
+    title: "IPv6 Fundamentals",
+    content: `
+# IPv6 Fundamentals
+
+**IPv6** uses 128-bit addresses, providing virtually unlimited address space (340 undecillion addresses) to solve IPv4 exhaustion.
+
+## IPv6 Address Format
+
+Written as 8 groups of 4 hexadecimal digits, separated by colons:
+
+\`\`\`
+Full:        2001:0db8:0000:0000:0000:0000:0000:0001
+Compressed:  2001:db8::1
+\`\`\`
+
+### Compression Rules:
+1. **Leading zeros** can be omitted: 0db8 → db8
+2. **Consecutive zero groups** can be replaced with :: (only once)
+
+## IPv6 Address Types
+
+| Type | Prefix | Description |
+|------|--------|-------------|
+| Global Unicast | 2000::/3 | Public, routable (like public IPv4) |
+| Link-Local | fe80::/10 | Auto-configured, non-routable (like APIPA) |
+| Unique Local | fc00::/7 | Private (like RFC 1918) |
+| Multicast | ff00::/8 | One-to-many |
+| Loopback | ::1 | Localhost (like 127.0.0.1) |
+| Unspecified | :: | No address (like 0.0.0.0) |
+
+> Note: IPv6 has **no broadcast** — uses multicast instead.
+
+## IPv6 vs IPv4
+
+| Feature | IPv4 | IPv6 |
+|---------|------|------|
+| Address Size | 32-bit | 128-bit |
+| Address Count | ~4.3 billion | ~340 undecillion |
+| Notation | Dotted decimal | Hexadecimal colon |
+| Configuration | Manual/DHCP | SLAAC/DHCPv6 |
+| IPsec | Optional | Built-in |
+| Broadcast | Yes | No (multicast) |
+| NAT | Common | Not needed |
+| Header | Variable, complex | Fixed 40 bytes, simpler |
+
+## Transition Mechanisms
+
+Since IPv4 and IPv6 must coexist:
+
+### Dual Stack
+- Devices run both IPv4 and IPv6 simultaneously
+- Most common approach today
+
+### Tunneling
+- Encapsulate IPv6 packets inside IPv4 for transport
+- 6to4, Teredo, ISATAP
+
+### Translation (NAT64)
+- Translates between IPv4 and IPv6
+- Allows IPv6-only devices to reach IPv4 services
+
+## Security Considerations
+
+- **Larger attack surface** — more addresses to manage
+- **Rogue Router Advertisements** — can redirect traffic
+- **Tunnel vulnerabilities** — tunneled traffic may bypass security
+- **IPv6 firewalls** — ensure firewall rules cover both stacks
+    `,
+    keyTakeaways: [
+      "IPv6 uses 128-bit addresses in hexadecimal colon notation",
+      "Leading zeros and consecutive zero groups can be compressed",
+      "IPv6 eliminates the need for NAT with abundant address space",
+      "Dual-stack is the most common IPv4-to-IPv6 transition mechanism",
+      "IPv6 has no broadcast — uses multicast; IPsec is built-in"
+    ],
+  },
+
+  // Module 5: Network Devices & Infrastructure
+  {
+    id: "nf-5.1",
+    courseId: "network-fundamentals",
+    title: "Hubs, Switches & Bridges",
+    content: `
+# Hubs, Switches & Bridges
+
+## Hub (Layer 1 Device)
+
+A hub is a simple **repeater** — it receives a signal on one port and broadcasts it out ALL other ports.
+
+### Characteristics:
+- Operates at Layer 1 (Physical)
+- No intelligence — doesn't understand addresses
+- Creates a single **collision domain** (all ports)
+- Single **broadcast domain**
+- Half-duplex communication
+- **Obsolete** in modern networks
+
+## Switch (Layer 2 Device)
+
+A switch is an intelligent device that forwards frames based on **MAC addresses**.
+
+### How Switches Work:
+
+1. **Learning** — records source MAC + port in MAC address table
+2. **Forwarding** — sends frame to specific port based on destination MAC
+3. **Filtering** — doesn't forward to ports where destination isn't located
+4. **Flooding** — sends to all ports if destination MAC is unknown
+
+### Key Features:
+- Each port is a separate **collision domain**
+- All ports share one **broadcast domain** (unless VLANs configured)
+- Full-duplex communication
+- Microsecond switching latency
+
+### Switch Types:
+| Type | Description | Use Case |
+|------|-------------|----------|
+| Unmanaged | Plug-and-play, no config | Home/small office |
+| Managed | Full configuration, monitoring | Enterprise |
+| PoE | Power over Ethernet | IP phones, cameras |
+| Layer 3 | Can route between VLANs | Core/distribution |
+
+### MAC Address Table:
+\`\`\`
+Port 1 → AA:BB:CC:DD:EE:01
+Port 2 → AA:BB:CC:DD:EE:02
+Port 3 → AA:BB:CC:DD:EE:03
+\`\`\`
+
+## Bridge (Layer 2 Device)
+
+A bridge connects two network segments and makes forwarding decisions based on MAC addresses.
+
+- Essentially a simple switch with fewer ports
+- Was used to segment collision domains
+- Mostly replaced by switches
+
+## Collision Domain vs Broadcast Domain
+
+| Concept | Hub | Switch | Router |
+|---------|-----|--------|--------|
+| Collision Domains | 1 (shared) | 1 per port | 1 per port |
+| Broadcast Domains | 1 | 1 (or per VLAN) | 1 per interface |
+
+## Security Concerns
+
+- **MAC flooding** — overwhelm switch table, forcing it to act like a hub
+- **MAC spoofing** — impersonate another device's MAC address
+- **Port security** — limit MACs per port to prevent attacks
+- **DHCP snooping** — prevent rogue DHCP servers
+    `,
+    keyTakeaways: [
+      "Hubs broadcast to all ports (Layer 1); switches forward intelligently (Layer 2)",
+      "Switches learn MAC addresses and build a forwarding table",
+      "Each switch port creates a separate collision domain",
+      "MAC flooding attacks force switches to behave like hubs",
+      "Port security limits allowed MAC addresses per port"
+    ],
+  },
+  {
+    id: "nf-5.2",
+    courseId: "network-fundamentals",
+    title: "Routers & Routing Basics",
+    content: `
+# Routers & Routing Basics
+
+A **router** operates at Layer 3 and forwards packets between different networks based on IP addresses.
+
+## Router Functions
+
+1. **Path determination** — find the best route to the destination
+2. **Packet forwarding** — send packets toward the destination
+3. **Network segmentation** — each interface is a separate broadcast domain
+4. **NAT** — translate private to public addresses
+5. **Filtering** — basic ACLs for traffic control
+
+## Routing Table
+
+Every router maintains a routing table:
+
+\`\`\`
+Destination        Gateway         Interface    Metric
+10.0.0.0/24        —               eth0         0
+192.168.1.0/24     —               eth1         0
+172.16.0.0/16      10.0.0.1        eth0         10
+0.0.0.0/0          10.0.0.254      eth0         1    ← Default route
+\`\`\`
+
+### Route Selection:
+1. **Longest prefix match** — most specific route wins
+2. **Administrative distance** — trust level of routing source
+3. **Metric** — cost of the route (hop count, bandwidth, delay)
+
+## Static vs Dynamic Routing
+
+### Static Routing
+- Manually configured routes
+- Predictable and simple
+- Doesn't adapt to network changes
+- Best for: small networks, stub networks, default routes
+
+### Dynamic Routing
+- Routes learned automatically from other routers
+- Adapts to topology changes
+- Higher overhead (CPU, bandwidth)
+- Best for: large, complex networks
+
+### Dynamic Routing Protocols:
+
+| Protocol | Type | Algorithm | Metric | Use Case |
+|----------|------|-----------|--------|----------|
+| RIP | Distance Vector | Bellman-Ford | Hop count (max 15) | Small networks |
+| OSPF | Link State | Dijkstra (SPF) | Cost (bandwidth) | Enterprise |
+| EIGRP | Hybrid | DUAL | Composite | Cisco networks |
+| BGP | Path Vector | Path selection | AS path, policies | Internet (ISPs) |
+
+## Default Gateway
+
+The **default gateway** is the router IP that hosts use to reach networks outside their own:
+
+\`\`\`
+PC (192.168.1.10) → wants to reach 10.0.0.5
+PC's gateway: 192.168.1.1 (router interface)
+PC sends packet to router → router forwards to 10.0.0.0 network
+\`\`\`
+
+If no default gateway is configured, the device can only communicate on its local subnet.
+
+## Administrative Distance
+
+| Source | AD | Trust Level |
+|--------|-----|------------|
+| Directly Connected | 0 | Highest |
+| Static Route | 1 | Very High |
+| EIGRP | 90 | High |
+| OSPF | 110 | Medium |
+| RIP | 120 | Low |
+| Unknown | 255 | Not used |
+    `,
+    keyTakeaways: [
+      "Routers forward packets between networks using IP addresses (Layer 3)",
+      "Routing tables contain destination networks, gateways, and metrics",
+      "Longest prefix match determines which route is selected",
+      "Static routing is manual; dynamic routing adapts to changes automatically",
+      "The default gateway is essential for hosts to reach remote networks"
+    ],
+  },
+  {
+    id: "nf-5.3",
+    courseId: "network-fundamentals",
+    title: "Firewalls, Proxies & Load Balancers",
+    content: `
+# Firewalls, Proxies & Load Balancers
+
+## Firewalls
+
+A **firewall** controls traffic flow between networks based on defined rules.
+
+### Types of Firewalls:
+
+#### Packet Filtering (Stateless)
+- Inspects individual packets against ACL rules
+- Checks: source/dest IP, ports, protocol
+- Fast but no context awareness
+- Can't track connection state
+
+#### Stateful Inspection
+- Tracks active connections (state table)
+- Allows return traffic automatically
+- More secure than packet filtering
+- Most common type today
+
+#### Next-Generation Firewall (NGFW)
+- Deep packet inspection (DPI)
+- Application awareness (identifies apps regardless of port)
+- Integrated IPS/IDS
+- URL filtering, SSL inspection
+- Examples: Palo Alto, Fortinet, Cisco Firepower
+
+#### Web Application Firewall (WAF)
+- Protects web applications specifically
+- Blocks SQL injection, XSS, CSRF
+- Operates at Layer 7
+
+### Firewall Rule Example:
+\`\`\`
+Rule  Action  Source          Dest           Port    Protocol
+1     ALLOW   192.168.1.0/24 ANY            443     TCP
+2     ALLOW   ANY            10.0.0.5       80      TCP
+3     DENY    ANY            ANY            23      TCP
+4     ALLOW   10.0.0.0/8     10.0.0.0/8     ANY     ANY
+5     DENY    ANY            ANY            ANY     ANY  ← Implicit deny
+\`\`\`
+
+Rules are processed **top-down** — first match wins.
+
+## Proxy Servers
+
+A proxy acts as an **intermediary** between clients and servers.
+
+### Forward Proxy
+- Client → Proxy → Internet
+- Hides client identity
+- Content filtering, caching
+- Used by organizations to control outbound access
+
+### Reverse Proxy
+- Internet → Proxy → Internal Servers
+- Hides server identity
+- Load balancing, SSL termination, caching
+- Examples: Nginx, HAProxy, Cloudflare
+
+## Load Balancers
+
+Distribute traffic across multiple servers for availability and performance.
+
+### Methods:
+| Method | Description |
+|--------|-------------|
+| Round Robin | Sequential distribution |
+| Least Connections | Send to least busy server |
+| IP Hash | Same client → same server |
+| Weighted | More traffic to powerful servers |
+
+### Health Checks:
+- Periodically test backend servers
+- Remove unhealthy servers from rotation
+- Re-add when recovered
+    `,
+    keyTakeaways: [
+      "Stateful firewalls track connections; NGFWs add application awareness and DPI",
+      "Firewall rules are processed top-down — first match wins with implicit deny at end",
+      "Forward proxies control outbound access; reverse proxies protect inbound servers",
+      "Load balancers distribute traffic for availability and performance",
+      "WAFs specifically protect web applications from Layer 7 attacks"
+    ],
+  },
+  {
+    id: "nf-5.4",
+    courseId: "network-fundamentals",
+    title: "Access Points & Network Controllers",
+    content: `
+# Access Points & Network Controllers
+
+## Wireless Access Points (APs)
+
+A **wireless access point** provides Wi-Fi connectivity, bridging wireless clients to the wired network.
+
+### AP Functions:
+- Broadcasts SSID (network name)
+- Authenticates wireless clients
+- Encrypts wireless traffic (WPA2/WPA3)
+- Bridges wireless to wired (Layer 2)
+- Manages client associations
+
+### AP Types:
+| Type | Description | Use Case |
+|------|-------------|----------|
+| Standalone (Fat) | Independent, self-configured | Small office, home |
+| Controller-based (Thin) | Managed centrally by WLC | Enterprise |
+| Cloud-managed | Managed via cloud dashboard | Multi-site |
+
+### AP Placement Considerations:
+- **Coverage** — overlap cells for seamless roaming
+- **Capacity** — more APs for high-density areas
+- **Interference** — avoid channel overlap
+- **Security** — physical security of AP devices
+
+## Wireless LAN Controller (WLC)
+
+A **WLC** centrally manages multiple access points:
+
+### Functions:
+- Centralized configuration and firmware updates
+- RF management (channel, power adjustment)
+- Client roaming between APs
+- Security policy enforcement
+- Guest network management
+- Traffic analytics
+
+### CAPWAP Protocol
+- **Control And Provisioning of Wireless Access Points**
+- Tunnel between AP and WLC
+- Control channel (port 5246) — management
+- Data channel (port 5247) — user traffic (optional)
+
+## Network Management
+
+### SNMP (Simple Network Management Protocol)
+- Monitors and manages network devices
+- Agents on devices report to SNMP manager
+- **v1/v2c** — community strings (insecure)
+- **v3** — authentication and encryption (recommended)
+
+### Syslog
+- Centralized logging from network devices
+- Severity levels 0-7 (Emergency to Debug)
+- UDP port 514 (or TCP for reliable delivery)
+
+### NTP (Network Time Protocol)
+- Synchronizes clocks across devices
+- Critical for log correlation and forensics
+- UDP port 123
+    `,
+    keyTakeaways: [
+      "Access points bridge wireless clients to the wired network",
+      "Enterprise networks use controller-based APs for central management",
+      "CAPWAP tunnels connect thin APs to wireless LAN controllers",
+      "SNMP v3 with authentication should be used for device management",
+      "NTP time synchronization is critical for log correlation in security"
+    ],
+  },
+  {
+    id: "nf-5.5",
+    courseId: "network-fundamentals",
+    title: "VLANs & Network Segmentation",
+    content: `
+# VLANs & Network Segmentation
+
+## What is a VLAN?
+
+A **Virtual LAN (VLAN)** logically segments a single physical switch into multiple separate broadcast domains. Devices in different VLANs cannot communicate without a router (inter-VLAN routing).
+
+## Why VLANs?
+
+### Without VLANs:
+\`\`\`
+[HR PC]──[Switch]──[IT PC]──[Finance PC]
+All in same broadcast domain — all see each other's broadcasts
+\`\`\`
+
+### With VLANs:
+\`\`\`
+VLAN 10 (HR):      [HR PC1] [HR PC2]
+VLAN 20 (IT):      [IT PC1] [IT PC2]
+VLAN 30 (Finance): [Fin PC1] [Fin PC2]
+── Same physical switch, separate broadcast domains ──
+\`\`\`
+
+### Benefits:
+- **Security** — isolate sensitive departments
+- **Performance** — reduce broadcast traffic
+- **Flexibility** — logical grouping regardless of physical location
+- **Management** — easier policy application per group
+
+## VLAN Configuration
+
+### Access Ports
+- Belong to a single VLAN
+- Connect to end devices (PCs, printers)
+- Device is unaware of VLAN assignment
+
+### Trunk Ports
+- Carry traffic for multiple VLANs
+- Connect switches to switches, or switches to routers
+- Use **802.1Q tagging** to identify VLAN membership
+
+### 802.1Q Tag
+\`\`\`
+┌──────────┬──────┬───────┬──────┬─────────┬─────┐
+│ Dest MAC │ Src  │ 802.1Q│ Type │ Payload │ FCS │
+│          │ MAC  │ Tag   │      │         │     │
+└──────────┴──────┴───────┴──────┴─────────┴─────┘
+                     │
+              ┌──────┴──────┐
+              │ TPID│Priority│
+              │     │VLAN ID │
+              └─────┴────────┘
+\`\`\`
+
+### Native VLAN
+- Untagged traffic on a trunk port
+- Default is VLAN 1 — change it for security!
+- Mismatched native VLANs can cause issues
+
+## Inter-VLAN Routing
+
+### Router-on-a-Stick
+- Single router interface with sub-interfaces
+- Each sub-interface assigned to a VLAN
+- Works but creates a bottleneck
+
+### Layer 3 Switch
+- Switch with routing capability
+- Creates SVI (Switched Virtual Interface) per VLAN
+- Much faster than router-on-a-stick
+
+## VLAN Security
+
+### VLAN Hopping Attack
+- Attacker tries to access other VLANs
+- **Double tagging** — nested 802.1Q tags
+- **Switch spoofing** — pretending to be a trunk port
+
+### Mitigation:
+- Disable unused ports
+- Change native VLAN from default (1)
+- Explicitly configure access vs trunk ports
+- Enable BPDU guard and root guard
+    `,
+    keyTakeaways: [
+      "VLANs create separate broadcast domains on a single physical switch",
+      "Access ports serve end devices; trunk ports carry multiple VLANs with 802.1Q tags",
+      "Inter-VLAN routing requires a Layer 3 device (router or L3 switch)",
+      "VLAN hopping attacks exploit trunk misconfiguration and default native VLAN",
+      "Always change native VLAN from default and disable unused switch ports"
+    ],
+  },
+
+  // Module 6: Application Layer Protocols
+  {
+    id: "nf-6.1",
+    courseId: "network-fundamentals",
+    title: "DNS: Domain Name System",
+    content: `
+# DNS: Domain Name System
+
+DNS translates human-readable domain names (www.example.com) into IP addresses (93.184.216.34). It's one of the most critical internet services.
+
+## DNS Hierarchy
+
+\`\`\`
+                    [Root DNS (.)]
+                    /     |      \\
+              [.com]   [.org]   [.net]     ← TLD (Top-Level Domain)
+              /    \\
+        [google] [example]                  ← Second-Level Domain
+         /
+   [www] [mail]                             ← Subdomain
+\`\`\`
+
+## DNS Query Process
+
+1. User types www.example.com in browser
+2. Browser checks **local cache**
+3. OS checks **hosts file** and **OS cache**
+4. Query sent to **recursive resolver** (ISP or 8.8.8.8)
+5. Resolver queries **root server** → ".com TLD" → "example.com authoritative"
+6. Authoritative server returns IP address
+7. Resolver caches and returns to client
+
+## DNS Record Types
+
+| Record | Purpose | Example |
+|--------|---------|---------|
+| A | IPv4 address | example.com → 93.184.216.34 |
+| AAAA | IPv6 address | example.com → 2606:2800:220:1:... |
+| CNAME | Alias | www → example.com |
+| MX | Mail server | example.com → mail.example.com (priority 10) |
+| NS | Name server | example.com → ns1.example.com |
+| TXT | Text data | SPF, DKIM, DMARC, verification |
+| PTR | Reverse lookup | IP → domain name |
+| SOA | Zone authority | Primary NS, admin email, serial |
+| SRV | Service locator | _sip._tcp.example.com |
+
+## DNS Tools
+
+\`\`\`bash
+# nslookup
+nslookup example.com
+nslookup -type=MX example.com
+
+# dig (more detailed)
+dig example.com
+dig example.com MX
+dig +trace example.com   # full resolution path
+\`\`\`
+
+## DNS Security Threats
+
+| Threat | Description | Mitigation |
+|--------|-------------|------------|
+| DNS Spoofing/Poisoning | Inject false records | DNSSEC |
+| DNS Tunneling | Hide data in DNS queries | Monitor DNS traffic |
+| DNS Amplification | DDoS using open resolvers | Rate limiting |
+| Typosquatting | Similar domain names | User awareness |
+| Domain Hijacking | Steal domain registration | Registrar lock, MFA |
+
+## DNSSEC
+- Digitally signs DNS records
+- Verifies authenticity of responses
+- Prevents cache poisoning
+- Adds RRSIG, DNSKEY, DS records
+    `,
+    keyTakeaways: [
+      "DNS resolves domain names to IP addresses through a hierarchical system",
+      "Key records: A (IPv4), AAAA (IPv6), CNAME (alias), MX (mail), TXT (verification)",
+      "DNS queries flow: cache → recursive resolver → root → TLD → authoritative",
+      "DNS tunneling and amplification are common attack vectors",
+      "DNSSEC adds cryptographic signatures to prevent DNS spoofing"
+    ],
+  },
+  {
+    id: "nf-6.2",
+    courseId: "network-fundamentals",
+    title: "DHCP: Dynamic Host Configuration",
+    content: `
+# DHCP: Dynamic Host Configuration Protocol
+
+DHCP **automatically assigns IP configuration** to devices on a network, eliminating the need for manual configuration.
+
+## What DHCP Provides
+
+- IP address
+- Subnet mask
+- Default gateway
+- DNS server addresses
+- Lease duration
+- Optional: domain name, NTP server, WINS server
+
+## The DORA Process
+
+\`\`\`
+Client                           Server
+  │                                │
+  │── DISCOVER (broadcast) ──────→│  1. "Any DHCP servers out there?"
+  │   Src: 0.0.0.0                │     Dst: 255.255.255.255
+  │                                │
+  │←────── OFFER ─────────────────│  2. "Here's an IP you can use"
+  │   Offered IP: 192.168.1.10    │
+  │                                │
+  │── REQUEST (broadcast) ───────→│  3. "I'll take that one please"
+  │   Requested: 192.168.1.10     │
+  │                                │
+  │←────── ACKNOWLEDGE ───────────│  4. "It's yours for 24 hours"
+  │   Confirmed: 192.168.1.10     │
+  │                                │
+  │   CLIENT CONFIGURED            │
+\`\`\`
+
+**D**iscover → **O**ffer → **R**equest → **A**cknowledge
+
+## DHCP Lease Lifecycle
+
+1. **Allocation** — client receives IP via DORA
+2. **Reuse** — at 50% lease time, client tries to renew (unicast to server)
+3. **Rebinding** — at 87.5%, client broadcasts renewal request
+4. **Expiration** — if no renewal, IP is released back to pool
+
+## DHCP Scope & Configuration
+
+### Scope
+A range of IP addresses available for assignment:
+\`\`\`
+Scope: 192.168.1.10 - 192.168.1.200
+Subnet: 255.255.255.0
+Gateway: 192.168.1.1
+DNS: 8.8.8.8, 8.8.4.4
+Lease: 24 hours
+\`\`\`
+
+### Reservations
+Map a specific MAC address to a specific IP:
+\`\`\`
+MAC: AA:BB:CC:DD:EE:FF → Always gets 192.168.1.50
+\`\`\`
+
+### Exclusions
+IPs within the scope that shouldn't be assigned (servers, printers with static IPs).
+
+## DHCP Relay (IP Helper)
+
+DHCP broadcasts don't cross routers. A **DHCP relay agent** forwards DHCP requests to a server on a different subnet:
+
+\`\`\`
+[Client] → [Router with Relay] → [DHCP Server on different subnet]
+\`\`\`
+
+## DHCP Security
+
+### DHCP Starvation Attack
+- Attacker sends many DISCOVER messages with spoofed MACs
+- Exhausts the entire DHCP pool
+- Legitimate clients can't get addresses
+
+### Rogue DHCP Server
+- Attacker sets up fake DHCP server
+- Assigns wrong gateway (attacker's IP) → MITM attack
+
+### Mitigation:
+- **DHCP Snooping** — switch validates DHCP messages
+- **Port security** — limits MACs per port
+- **Rate limiting** — restricts DHCP message frequency
+    `,
+    keyTakeaways: [
+      "DHCP automates IP configuration using the DORA process",
+      "Leases are temporary — clients must renew at 50% and 87.5% intervals",
+      "DHCP relay agents forward requests across subnet boundaries",
+      "DHCP starvation and rogue servers are common attack vectors",
+      "DHCP snooping on switches validates DHCP messages for security"
+    ],
+  },
+  {
+    id: "nf-6.3",
+    courseId: "network-fundamentals",
+    title: "HTTP & HTTPS",
+    content: `
+# HTTP & HTTPS
+
+## HTTP (HyperText Transfer Protocol)
+
+HTTP is the foundation of web communication — a **request-response** protocol operating at Layer 7.
+
+### HTTP Request Structure:
+\`\`\`
+GET /index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0
+Accept: text/html
+Cookie: session=abc123
+\`\`\`
+
+### HTTP Methods:
+| Method | Purpose | Safe? | Idempotent? |
+|--------|---------|-------|-------------|
+| GET | Retrieve data | Yes | Yes |
+| POST | Submit data | No | No |
+| PUT | Replace resource | No | Yes |
+| DELETE | Remove resource | No | Yes |
+| PATCH | Partial update | No | No |
+| HEAD | Headers only | Yes | Yes |
+| OPTIONS | Available methods | Yes | Yes |
+
+### HTTP Status Codes:
+| Range | Category | Examples |
+|-------|----------|---------|
+| 1xx | Informational | 100 Continue |
+| 2xx | Success | 200 OK, 201 Created |
+| 3xx | Redirection | 301 Moved, 302 Found, 304 Not Modified |
+| 4xx | Client Error | 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found |
+| 5xx | Server Error | 500 Internal Error, 502 Bad Gateway, 503 Unavailable |
+
+## HTTPS (HTTP Secure)
+
+HTTPS = HTTP + **TLS/SSL encryption**. Port 443 instead of 80.
+
+### TLS Handshake (simplified):
+\`\`\`
+Client                          Server
+  │── ClientHello ──────────→│   Supported ciphers, TLS version
+  │←── ServerHello ──────────│   Chosen cipher, certificate
+  │   Verify Certificate      │
+  │── Key Exchange ──────────→│   Pre-master secret
+  │←── Finished ─────────────│   Session keys established
+  │   ENCRYPTED COMMUNICATION │
+\`\`\`
+
+### What TLS Provides:
+- **Confidentiality** — encryption prevents eavesdropping
+- **Integrity** — HMAC detects tampering
+- **Authentication** — certificates verify server identity
+
+### SSL/TLS Versions:
+| Version | Status |
+|---------|--------|
+| SSL 2.0/3.0 | Deprecated, insecure |
+| TLS 1.0/1.1 | Deprecated |
+| TLS 1.2 | Current, widely used |
+| TLS 1.3 | Latest, fastest, most secure |
+
+## HTTP Headers for Security
+
+| Header | Purpose |
+|--------|---------|
+| Strict-Transport-Security | Force HTTPS (HSTS) |
+| Content-Security-Policy | Prevent XSS |
+| X-Frame-Options | Prevent clickjacking |
+| X-Content-Type-Options | Prevent MIME sniffing |
+| Set-Cookie (Secure, HttpOnly) | Cookie protection |
+    `,
+    keyTakeaways: [
+      "HTTP is a request-response protocol; HTTPS adds TLS encryption on port 443",
+      "Know HTTP methods (GET, POST, PUT, DELETE) and status codes (2xx, 4xx, 5xx)",
+      "TLS handshake establishes encrypted channel with certificate authentication",
+      "TLS 1.2 is current standard; TLS 1.3 is latest and most secure",
+      "Security headers (HSTS, CSP, X-Frame-Options) harden web applications"
+    ],
+  },
+  {
+    id: "nf-6.4",
+    courseId: "network-fundamentals",
+    title: "Email Protocols: SMTP, POP3, IMAP",
+    content: `
+# Email Protocols
+
+Email uses multiple protocols working together to send, route, and retrieve messages.
+
+## Email Architecture
+
+\`\`\`
+[Sender MUA] → [Sender MTA/SMTP] → [Recipient MTA] → [Recipient MUA]
+  (Outlook)      (mail.sender.com)   (mail.recip.com)   (Gmail app)
+                      Port 25/587                        Port 110/143/993/995
+\`\`\`
+
+- **MUA** — Mail User Agent (email client: Outlook, Thunderbird)
+- **MTA** — Mail Transfer Agent (email server: Postfix, Exchange)
+- **MDA** — Mail Delivery Agent (delivers to mailbox)
+
+## SMTP (Simple Mail Transfer Protocol)
+
+Used for **sending** email.
+
+| Port | Usage |
+|------|-------|
+| 25 | Server-to-server relay |
+| 587 | Client submission (with auth) |
+| 465 | SMTPS (deprecated, still used) |
+
+### SMTP Commands:
+\`\`\`
+HELO/EHLO  — identify the sender
+MAIL FROM: — sender address
+RCPT TO:   — recipient address
+DATA       — message content
+QUIT       — end session
+\`\`\`
+
+## POP3 (Post Office Protocol v3)
+
+Used for **downloading** email.
+
+| Port | Usage |
+|------|-------|
+| 110 | Unencrypted |
+| 995 | POP3S (encrypted) |
+
+### Characteristics:
+- Downloads messages to local device
+- Typically **deletes from server** after download
+- Simple, less storage on server
+- No synchronization between devices
+
+## IMAP (Internet Message Access Protocol)
+
+Used for **synchronizing** email.
+
+| Port | Usage |
+|------|-------|
+| 143 | Unencrypted |
+| 993 | IMAPS (encrypted) |
+
+### Characteristics:
+- Messages stay on server
+- Synchronized across all devices
+- Folder management on server
+- Requires more server storage
+- Better for multiple device access
+
+## Email Security
+
+### SPF (Sender Policy Framework)
+- DNS TXT record specifying authorized mail servers
+- Prevents sender address spoofing
+
+### DKIM (DomainKeys Identified Mail)
+- Cryptographic signature in email headers
+- Verifies message wasn't altered in transit
+
+### DMARC (Domain-based Message Authentication)
+- Builds on SPF and DKIM
+- Defines policy for handling failures
+- Provides reporting
+
+### Email Header Analysis
+\`\`\`
+Received: from mail.attacker.com (1.2.3.4) by mail.victim.com
+From: ceo@company.com (may be spoofed!)
+Reply-To: attacker@evil.com
+X-Originating-IP: 1.2.3.4
+\`\`\`
+
+Always check: Received headers (bottom-up), Reply-To mismatches, SPF/DKIM results.
+    `,
+    keyTakeaways: [
+      "SMTP sends email (ports 25/587); POP3 downloads (110/995); IMAP syncs (143/993)",
+      "POP3 downloads and removes from server; IMAP keeps messages synchronized",
+      "SPF, DKIM, and DMARC work together to authenticate email and prevent spoofing",
+      "Email headers reveal the true origin — check Received headers bottom-up",
+      "Always use encrypted versions: SMTPS, POP3S, IMAPS"
+    ],
+  },
+  {
+    id: "nf-6.5",
+    courseId: "network-fundamentals",
+    title: "FTP, SSH, Telnet & Other Protocols",
+    content: `
+# FTP, SSH, Telnet & Other Protocols
+
+## FTP (File Transfer Protocol)
+
+FTP transfers files between client and server using **two connections**:
+
+| Port | Channel | Purpose |
+|------|---------|---------|
+| 21 | Control | Commands and responses |
+| 20 | Data | File transfer (active mode) |
+
+### FTP Modes:
+- **Active mode** — server connects back to client (port 20 → client)
+- **Passive mode** — client connects to server's random high port (firewall-friendly)
+
+### FTP Variants:
+| Protocol | Port | Security |
+|----------|------|----------|
+| FTP | 21 | None (plaintext!) |
+| FTPS | 990 | FTP + TLS |
+| SFTP | 22 | FTP over SSH |
+
+> **Security Warning:** Standard FTP sends credentials in cleartext. Always use SFTP or FTPS.
+
+## SSH (Secure Shell)
+
+SSH provides **encrypted remote access** and secure file transfer.
+
+### Features:
+- Encrypted terminal access (replaces Telnet)
+- Secure file transfer (SFTP, SCP)
+- Port forwarding / tunneling
+- Key-based authentication
+- Port 22
+
+### SSH Authentication:
+1. **Password** — basic, less secure
+2. **Key-based** — public/private key pair (recommended)
+
+\`\`\`bash
+# Connect via SSH
+ssh user@192.168.1.10
+
+# Copy files via SCP
+scp file.txt user@192.168.1.10:/home/user/
+
+# Generate SSH keys
+ssh-keygen -t ed25519
+\`\`\`
+
+## Telnet
+
+Legacy remote access protocol — **completely unencrypted**.
+
+- Port 23
+- Sends everything in plaintext (including passwords!)
+- **Never use in production** — replaced by SSH
+- Still sometimes used for quick device testing
+
+## Other Important Protocols
+
+### SNMP (Simple Network Management Protocol)
+- Ports 161 (queries) / 162 (traps)
+- Monitors and manages network devices
+- v3 recommended (encryption + authentication)
+
+### NTP (Network Time Protocol)
+- Port 123 (UDP)
+- Synchronizes clocks across devices
+- Critical for log correlation
+
+### LDAP/LDAPS (Lightweight Directory Access Protocol)
+- Ports 389 (LDAP) / 636 (LDAPS)
+- Directory services (Active Directory)
+- User authentication and lookup
+
+### RDP (Remote Desktop Protocol)
+- Port 3389
+- Windows remote desktop access
+- Should be secured with VPN or gateway
+
+### SMB (Server Message Block)
+- Port 445 (modern) / 139 (legacy with NetBIOS)
+- Windows file and printer sharing
+- Historically vulnerable (EternalBlue, WannaCry)
+    `,
+    keyTakeaways: [
+      "FTP uses two channels (21 control, 20 data) — always use SFTP or FTPS instead",
+      "SSH (port 22) provides encrypted remote access and replaces Telnet",
+      "Telnet (port 23) is completely unencrypted — never use in production",
+      "SNMP v3, LDAPS, and encrypted protocols should always be preferred",
+      "SMB (port 445) has critical historical vulnerabilities — patch and monitor closely"
+    ],
+  },
+
+  // Module 7: Ethernet & Data Link Technologies
+  {
+    id: "nf-7.1",
+    courseId: "network-fundamentals",
+    title: "Ethernet Standards & Cabling",
+    content: `
+# Ethernet Standards & Cabling
+
+## Ethernet Standards (IEEE 802.3)
+
+| Standard | Speed | Cable | Max Distance | Name |
+|----------|-------|-------|-------------|------|
+| 802.3 | 10 Mbps | Cat3 UTP | 100m | 10BASE-T |
+| 802.3u | 100 Mbps | Cat5 UTP | 100m | 100BASE-TX |
+| 802.3ab | 1 Gbps | Cat5e UTP | 100m | 1000BASE-T |
+| 802.3an | 10 Gbps | Cat6a UTP | 100m | 10GBASE-T |
+| 802.3z | 1 Gbps | Fiber | 550m/5km | 1000BASE-SX/LX |
+| 802.3ae | 10 Gbps | Fiber | 300m/40km | 10GBASE-SR/LR |
+
+## Cable Types
+
+### UTP (Unshielded Twisted Pair)
+- Most common LAN cable
+- 4 pairs of twisted copper wires
+- RJ-45 connector
+- Max 100 meters
+
+### STP (Shielded Twisted Pair)
+- Additional shielding against EMI
+- Used in high-interference environments
+- More expensive than UTP
+
+### Coaxial
+- Central conductor with insulation and shielding
+- Used for cable TV/internet (RG-6)
+- Legacy LAN use (RG-58, 10BASE2)
+
+### Fiber Optic
+- Glass or plastic core carries light pulses
+- **Single-mode** — long distance (up to 80+ km), narrow core
+- **Multi-mode** — shorter distance (up to 2 km), wider core
+
+| Feature | Single-Mode | Multi-Mode |
+|---------|-------------|------------|
+| Core Size | 8-10 μm | 50-62.5 μm |
+| Light Source | Laser | LED |
+| Distance | Up to 80+ km | Up to 2 km |
+| Cost | Higher | Lower |
+| Jacket Color | Yellow | Orange/Aqua |
+
+## Cable Wiring Standards
+
+### T-568A vs T-568B
+Two wiring standards for RJ-45 connectors:
+
+\`\`\`
+T-568A: White/Green, Green, White/Orange, Blue, White/Blue, Orange, White/Brown, Brown
+T-568B: White/Orange, Orange, White/Green, Blue, White/Blue, Green, White/Brown, Brown
+\`\`\`
+
+### Cable Types by Wiring:
+- **Straight-through** — same standard on both ends (PC → Switch)
+- **Crossover** — different standards on each end (Switch → Switch)
+- **Rollover/Console** — reversed pinout (PC → Router console)
+
+> Modern switches support **Auto-MDIX** — automatically detect and adjust for cable type.
+
+## Structured Cabling
+
+Enterprise cabling follows a structured approach:
+1. **Entrance Facility** — where ISP connection enters building
+2. **MDF (Main Distribution Frame)** — primary wiring closet
+3. **IDF (Intermediate Distribution Frame)** — floor-level closets
+4. **Horizontal Cabling** — MDF/IDF to wall outlets (max 90m)
+5. **Patch Cables** — wall outlet to device (max 10m total)
+    `,
+    keyTakeaways: [
+      "Cat5e supports 1 Gbps; Cat6a supports 10 Gbps — all limited to 100m for copper",
+      "Single-mode fiber uses lasers for long distances; multi-mode uses LEDs for shorter",
+      "Straight-through cables connect different devices; crossover connects same devices",
+      "Auto-MDIX on modern switches eliminates the need to worry about cable type",
+      "Structured cabling follows a hierarchy: entrance → MDF → IDF → horizontal → device"
+    ],
+  },
+  {
+    id: "nf-7.2",
+    courseId: "network-fundamentals",
+    title: "MAC Addresses & Ethernet Framing",
+    content: `
+# MAC Addresses & Ethernet Framing
+
+## MAC Address Deep Dive
+
+A **MAC (Media Access Control) address** is a 48-bit (6-byte) hardware identifier assigned to every network interface.
+
+### Format:
+\`\`\`
+AA:BB:CC:DD:EE:FF
+AA-BB-CC-DD-EE-FF
+AABB.CCDD.EEFF     (Cisco format)
+\`\`\`
+
+### Structure:
+\`\`\`
+AA:BB:CC : DD:EE:FF
+└─OUI──┘   └─NIC──┘
+
+OUI = Organizationally Unique Identifier (manufacturer)
+NIC = Network Interface Controller (unique per device)
+\`\`\`
+
+### Special Bits:
+- **Bit 0 of first byte** — Unicast (0) vs Multicast (1)
+- **Bit 1 of first byte** — Globally unique (0) vs Locally administered (1)
+
+### Special Addresses:
+| Address | Type | Usage |
+|---------|------|-------|
+| FF:FF:FF:FF:FF:FF | Broadcast | All devices on segment |
+| 01:00:5E:xx:xx:xx | IPv4 Multicast | Multicast group members |
+| 33:33:xx:xx:xx:xx | IPv6 Multicast | IPv6 multicast |
+| 01:80:C2:00:00:00 | STP | Spanning Tree BPDUs |
+
+## OUI Lookup
+
+You can identify device manufacturers from the OUI:
+- **00:50:56** — VMware
+- **00:0C:29** — VMware
+- **AC:DE:48** — Apple
+- **3C:22:FB** — Apple
+- **FC:FB:FB** — Cisco
+
+> OUI lookup tools: Wireshark OUI database, macvendors.com
+
+## Ethernet Frame in Detail
+
+\`\`\`
+┌──────────┬────────┬────────┬──────────┬───────────────┬──────┐
+│ Preamble │  Dest  │  Src   │EtherType │    Payload    │  FCS │
+│ 7 bytes  │  MAC   │  MAC   │  2 bytes │ 46-1500 bytes │4 bytes│
+│+ 1 SFD   │6 bytes │6 bytes │          │               │      │
+└──────────┴────────┴────────┴──────────┴───────────────┴──────┘
+\`\`\`
+
+### EtherType Values:
+| Value | Protocol |
+|-------|----------|
+| 0x0800 | IPv4 |
+| 0x0806 | ARP |
+| 0x86DD | IPv6 |
+| 0x8100 | 802.1Q VLAN tag |
+| 0x8847 | MPLS |
+
+### MTU (Maximum Transmission Unit)
+- Standard Ethernet MTU: **1500 bytes** (payload)
+- Jumbo frames: up to 9000 bytes (data centers)
+- If data exceeds MTU → fragmentation at Layer 3
+
+### FCS (Frame Check Sequence)
+- 4-byte CRC (Cyclic Redundancy Check)
+- Detects transmission errors
+- If FCS doesn't match → frame is silently discarded
+    `,
+    keyTakeaways: [
+      "MAC addresses are 48-bit hardware identifiers with OUI (manufacturer) and NIC portions",
+      "FF:FF:FF:FF:FF:FF is the broadcast MAC — reaches all devices on the segment",
+      "EtherType field identifies the upper-layer protocol (0x0800=IPv4, 0x0806=ARP)",
+      "Standard Ethernet MTU is 1500 bytes; exceeding it causes IP fragmentation",
+      "OUI lookup helps identify device manufacturers during network investigations"
+    ],
+  },
+  {
+    id: "nf-7.3",
+    courseId: "network-fundamentals",
+    title: "Switching Concepts & STP",
+    content: `
+# Switching Concepts & STP
+
+## Switch Operation Review
+
+Switches make forwarding decisions using their **MAC address table** (CAM table):
+
+### Three Actions:
+1. **Forward** — destination MAC found in table → send to specific port
+2. **Flood** — destination MAC unknown → send to all ports (except source)
+3. **Filter** — source and destination on same port → don't forward
+
+### Switching Methods:
+| Method | Description | Latency | Error Checking |
+|--------|-------------|---------|----------------|
+| Store-and-Forward | Receive entire frame, check FCS, then forward | Higher | Yes |
+| Cut-Through | Forward after reading destination MAC (first 6 bytes) | Lower | No |
+| Fragment-Free | Read first 64 bytes before forwarding | Medium | Partial |
+
+## Spanning Tree Protocol (STP)
+
+STP (IEEE 802.1D) **prevents Layer 2 loops** in redundant switch topologies.
+
+### The Loop Problem:
+Without STP, redundant links cause:
+- **Broadcast storms** — broadcasts loop endlessly
+- **MAC table instability** — entries constantly change
+- **Duplicate frames** — same frame received multiple times
+- **Network meltdown** — complete network failure
+
+### How STP Works:
+
+1. **Elect a Root Bridge** — switch with lowest Bridge ID (priority + MAC)
+2. **Determine Root Ports** — each non-root switch's best port toward root
+3. **Determine Designated Ports** — best port on each segment toward root
+4. **Block Redundant Ports** — remaining ports are blocked to prevent loops
+
+### STP Port States:
+| State | Duration | Sends/Receives | Learns MACs |
+|-------|----------|----------------|-------------|
+| Blocking | — | Receives BPDUs only | No |
+| Listening | 15 sec | Sends/receives BPDUs | No |
+| Learning | 15 sec | Sends/receives BPDUs | Yes |
+| Forwarding | — | Sends/receives all | Yes |
+| Disabled | — | Nothing | No |
+
+**Convergence time: ~30-50 seconds** (Blocking → Forwarding)
+
+### RSTP (Rapid STP — 802.1w)
+- Faster convergence (~1-2 seconds)
+- Simplified port roles and states
+- Backward compatible with STP
+- Preferred in modern networks
+
+## STP Security
+
+### STP Attacks:
+- **Root bridge attack** — attacker sends BPDUs with lowest priority to become root
+- **BPDU flooding** — overwhelm STP processing
+
+### Mitigation:
+- **BPDU Guard** — shuts down port if BPDU received on access port
+- **Root Guard** — prevents port from becoming root port
+- **Loop Guard** — prevents blocked port from transitioning to forwarding
+    `,
+    keyTakeaways: [
+      "STP prevents Layer 2 loops by blocking redundant paths",
+      "Root bridge election uses lowest Bridge ID (priority + MAC address)",
+      "Classic STP converges in 30-50 seconds; RSTP converges in 1-2 seconds",
+      "BPDU Guard on access ports prevents STP manipulation attacks",
+      "Store-and-forward switching checks errors; cut-through is faster but unchecked"
+    ],
+  },
+  {
+    id: "nf-7.4",
+    courseId: "network-fundamentals",
+    title: "ARP & Layer 2 Security Concerns",
+    content: `
+# ARP & Layer 2 Security
+
+## ARP Review
+
+ARP (Address Resolution Protocol) maps IP addresses to MAC addresses on the local network.
+
+### ARP Table:
+\`\`\`bash
+$ arp -a
+192.168.1.1    00:1A:2B:3C:4D:5E  dynamic
+192.168.1.10   AA:BB:CC:DD:EE:FF  dynamic
+192.168.1.254  00:11:22:33:44:55  static
+\`\`\`
+
+### Gratuitous ARP
+- Unsolicited ARP reply announcing IP-MAC mapping
+- Used for: IP conflict detection, updating caches, failover
+- **Security concern:** easily abused for ARP spoofing
+
+## Layer 2 Attack Vectors
+
+### 1. ARP Spoofing / Poisoning
+
+Attacker sends fake ARP replies to associate their MAC with the gateway IP:
+
+\`\`\`
+Normal: Victim ARP cache → Gateway 192.168.1.1 = 00:1A:2B:3C:4D:5E (real)
+Attack: Victim ARP cache → Gateway 192.168.1.1 = AA:AA:AA:AA:AA:AA (attacker!)
+\`\`\`
+
+**Result:** All victim traffic flows through attacker (Man-in-the-Middle).
+
+**Tools:** arpspoof, ettercap, Bettercap
+
+### 2. MAC Flooding
+
+Attacker floods switch with thousands of fake MAC addresses:
+- Fills the MAC address table (CAM table)
+- Switch can't learn legitimate MACs
+- Falls back to hub behavior (floods all traffic)
+- Attacker captures all traffic on the network
+
+### 3. DHCP Attacks
+
+**Starvation:** Exhaust DHCP pool with fake requests
+**Rogue Server:** Set up fake DHCP server with attacker as gateway
+
+### 4. VLAN Hopping
+
+**Double tagging:** Two 802.1Q tags to reach another VLAN
+**Switch spoofing:** Negotiate trunk with switch
+
+## Layer 2 Defense Mechanisms
+
+| Defense | Protects Against |
+|---------|-----------------|
+| **Port Security** | MAC flooding, unauthorized devices |
+| **DAI (Dynamic ARP Inspection)** | ARP spoofing/poisoning |
+| **DHCP Snooping** | Rogue DHCP, starvation |
+| **802.1X** | Unauthorized network access |
+| **Private VLANs** | Inter-host communication within VLAN |
+| **Storm Control** | Broadcast/multicast storms |
+
+### Port Security Configuration Example:
+\`\`\`
+Maximum MACs per port: 2
+Violation action: shutdown
+Aging: 60 minutes
+\`\`\`
+
+### DAI (Dynamic ARP Inspection):
+- Validates ARP packets against DHCP snooping binding table
+- Drops invalid ARP packets
+- Logs violations for security monitoring
+    `,
+    keyTakeaways: [
+      "ARP spoofing sends fake ARP replies to redirect traffic (MITM attack)",
+      "MAC flooding overwhelms the switch CAM table, forcing hub behavior",
+      "Port security limits MAC addresses per port to prevent flooding attacks",
+      "DAI validates ARP packets using the DHCP snooping binding table",
+      "Layer 2 security requires multiple overlapping defenses"
+    ],
+  },
+
+  // Module 8: Wireless Networking
+  {
+    id: "nf-8.1",
+    courseId: "network-fundamentals",
+    title: "Wireless Standards (802.11a/b/g/n/ac/ax)",
+    content: `
+# Wireless Standards
+
+## Wi-Fi Generations
+
+| Generation | Standard | Frequency | Max Speed | Year |
+|-----------|----------|-----------|-----------|------|
+| Wi-Fi 1 | 802.11b | 2.4 GHz | 11 Mbps | 1999 |
+| Wi-Fi 2 | 802.11a | 5 GHz | 54 Mbps | 1999 |
+| Wi-Fi 3 | 802.11g | 2.4 GHz | 54 Mbps | 2003 |
+| Wi-Fi 4 | 802.11n | 2.4/5 GHz | 600 Mbps | 2009 |
+| Wi-Fi 5 | 802.11ac | 5 GHz | 6.9 Gbps | 2013 |
+| Wi-Fi 6 | 802.11ax | 2.4/5 GHz | 9.6 Gbps | 2019 |
+| Wi-Fi 6E | 802.11ax | 6 GHz | 9.6 Gbps | 2021 |
+| Wi-Fi 7 | 802.11be | 2.4/5/6 GHz | 46 Gbps | 2024 |
+
+## Frequency Bands
+
+### 2.4 GHz
+- **Range:** Better penetration through walls
+- **Channels:** 11 (US), only 3 non-overlapping (1, 6, 11)
+- **Interference:** Crowded — Bluetooth, microwaves, baby monitors
+- **Speed:** Generally slower
+
+### 5 GHz
+- **Range:** Shorter, less wall penetration
+- **Channels:** 25+ non-overlapping channels
+- **Interference:** Less congested
+- **Speed:** Generally faster
+
+### 6 GHz (Wi-Fi 6E)
+- **Range:** Shortest
+- **Channels:** 59 channels (20 MHz), very clean spectrum
+- **Speed:** Highest available
+- **Requirements:** New devices and access points
+
+## Key Technologies
+
+### MIMO (Multiple Input Multiple Output)
+- Multiple antennas for simultaneous data streams
+- 802.11n: up to 4×4 MIMO
+- 802.11ac: up to 8×8 MU-MIMO
+
+### OFDMA (Orthogonal Frequency Division Multiple Access)
+- Wi-Fi 6 feature
+- Divides channel into smaller sub-channels
+- Multiple users transmit simultaneously
+- Better efficiency in high-density environments
+
+### Beamforming
+- Focuses signal toward specific client
+- Improves range and speed
+- Available in 802.11ac and later
+
+## Channel Planning
+
+For 2.4 GHz, only use channels **1, 6, and 11** to avoid overlap:
+
+\`\`\`
+Ch 1   Ch 6   Ch 11
+├──────┤├──────┤├──────┤
+  No overlap between these three
+\`\`\`
+
+For 5 GHz, many non-overlapping channels are available — less planning needed.
+    `,
+    keyTakeaways: [
+      "Wi-Fi 6 (802.11ax) is current standard; Wi-Fi 7 (802.11be) is emerging",
+      "2.4 GHz has better range but more interference; 5 GHz is faster but shorter range",
+      "Only channels 1, 6, and 11 should be used on 2.4 GHz to avoid overlap",
+      "MIMO enables multiple simultaneous data streams; OFDMA improves multi-user efficiency",
+      "Wi-Fi 6E adds 6 GHz band with many clean channels for high-density environments"
+    ],
+  },
+  {
+    id: "nf-8.2",
+    courseId: "network-fundamentals",
+    title: "Wireless Security: WEP, WPA, WPA2, WPA3",
+    content: `
+# Wireless Security Protocols
+
+## Evolution of Wi-Fi Security
+
+### WEP (Wired Equivalent Privacy) — BROKEN
+- Released 1997
+- Uses RC4 stream cipher with 40/104-bit keys
+- Static key shared by all users
+- **Cracked in minutes** — never use!
+- Vulnerabilities: weak IVs, key reuse
+
+### WPA (Wi-Fi Protected Access) — Deprecated
+- Interim fix for WEP (2003)
+- Uses TKIP (Temporal Key Integrity Protocol)
+- Per-packet key mixing
+- Better than WEP but still has vulnerabilities
+- **Deprecated** — avoid in production
+
+### WPA2 (2004) — Current Standard
+- Uses **AES-CCMP** encryption (much stronger)
+- Two modes:
+
+| Mode | Authentication | Use Case |
+|------|---------------|----------|
+| WPA2-Personal (PSK) | Pre-shared key | Home/small office |
+| WPA2-Enterprise | 802.1X/RADIUS | Corporate networks |
+
+**Known Vulnerability:** KRACK attack (Key Reinstallation Attack) — patched
+
+### WPA3 (2018) — Latest Standard
+- **SAE (Simultaneous Authentication of Equals)** replaces PSK
+- Forward secrecy — past sessions can't be decrypted even if key is compromised
+- Protection against offline dictionary attacks
+- 192-bit security suite for enterprise
+- **Enhanced Open** — encrypts open networks (OWE)
+
+## Security Comparison
+
+| Feature | WEP | WPA | WPA2 | WPA3 |
+|---------|-----|-----|------|------|
+| Encryption | RC4 | TKIP | AES-CCMP | AES-CCMP/GCMP |
+| Key Mgmt | Static | Per-packet | 4-way handshake | SAE |
+| Security | Broken | Weak | Strong | Strongest |
+| Status | Dead | Deprecated | Current | Recommended |
+
+## Best Practices
+
+1. **Use WPA3** where possible, minimum WPA2
+2. **Strong passphrases** — 20+ characters for PSK
+3. **Enterprise mode** with RADIUS for corporate
+4. **Disable WPS** — vulnerable to brute force
+5. **Regular key rotation** for PSK networks
+6. **Hide SSID** — minor security by obscurity (not real protection)
+7. **MAC filtering** — easily bypassed but adds a layer
+    `,
+    keyTakeaways: [
+      "WEP is completely broken; WPA is deprecated — minimum WPA2 required",
+      "WPA2 uses AES-CCMP; WPA3 adds SAE for forward secrecy",
+      "WPA2-Personal uses pre-shared keys; Enterprise uses 802.1X/RADIUS",
+      "WPA3 protects against offline dictionary attacks and provides encrypted open networks",
+      "Always disable WPS and use strong passphrases (20+ characters)"
+    ],
+  },
+  {
+    id: "nf-8.3",
+    courseId: "network-fundamentals",
+    title: "Wireless Authentication & Enterprise Wi-Fi",
+    content: `
+# Wireless Authentication & Enterprise Wi-Fi
+
+## Authentication Methods
+
+### Pre-Shared Key (PSK)
+- Single password shared by all users
+- Simple to set up, suitable for home/small office
+- Cannot identify individual users
+- If key is compromised, everyone must change it
+
+### 802.1X / EAP (Enterprise)
+
+Enterprise Wi-Fi uses **802.1X** with a **RADIUS server** for individual user authentication.
+
+\`\`\`
+[Client/Supplicant] ←→ [AP/Authenticator] ←→ [RADIUS Server]
+                                                    │
+                                              [User Database]
+                                              (AD, LDAP, etc.)
+\`\`\`
+
+### Components:
+- **Supplicant** — client software requesting access
+- **Authenticator** — AP/switch enforcing access
+- **Authentication Server** — RADIUS server (FreeRADIUS, Microsoft NPS)
+
+## EAP Methods
+
+| Method | Description | Certificate Required? |
+|--------|-------------|----------------------|
+| EAP-TLS | Mutual certificate authentication | Client + Server |
+| EAP-TTLS | Tunneled TLS, inner authentication | Server only |
+| PEAP | Protected EAP, MS-CHAPv2 inner auth | Server only |
+| EAP-FAST | Cisco's fast re-authentication | Optional |
+
+### EAP-TLS (Most Secure)
+- Both client and server present certificates
+- No passwords transmitted
+- Most complex to deploy (PKI required)
+- Gold standard for enterprise security
+
+### PEAP (Most Common)
+- Server presents certificate
+- Client authenticates with username/password inside TLS tunnel
+- Easier to deploy than EAP-TLS
+- Good balance of security and usability
+
+## Guest Networks
+
+Best practices for guest Wi-Fi:
+- **Separate VLAN** — isolated from corporate network
+- **Captive portal** — terms acceptance, time-limited access
+- **Bandwidth limiting** — prevent abuse
+- **Internet-only access** — no internal resources
+- **Logging** — maintain access logs for compliance
+
+## Wireless Network Design
+
+### Controller-based Architecture:
+\`\`\`
+[AP1] [AP2] [AP3] ←→ [WLC] ←→ [RADIUS] ←→ [Active Directory]
+                         │
+                    [Core Switch]
+\`\`\`
+
+### Key Considerations:
+- **Coverage vs capacity** — more APs for dense areas
+- **Roaming** — seamless handoff between APs (802.11r)
+- **Band steering** — push capable clients to 5 GHz
+- **Load balancing** — distribute clients across APs
+    `,
+    keyTakeaways: [
+      "802.1X with RADIUS provides individual user authentication for enterprise Wi-Fi",
+      "EAP-TLS (mutual certificates) is most secure; PEAP is most commonly deployed",
+      "Three components: supplicant (client), authenticator (AP), authentication server (RADIUS)",
+      "Guest networks should be isolated on separate VLANs with captive portals",
+      "802.11r enables fast roaming between access points in enterprise deployments"
+    ],
+  },
+  {
+    id: "nf-8.4",
+    courseId: "network-fundamentals",
+    title: "Wireless Threats & Mitigation",
+    content: `
+# Wireless Threats & Mitigation
+
+## Common Wireless Attacks
+
+### 1. Evil Twin Attack
+Attacker creates a rogue AP with the same SSID as a legitimate network:
+\`\`\`
+Legitimate: "CorpWiFi" (strong signal from real AP)
+Evil Twin:  "CorpWiFi" (stronger signal from attacker)
+\`\`\`
+Clients connect to the stronger signal → attacker captures all traffic.
+
+### 2. Rogue Access Point
+Unauthorized AP connected to the corporate network:
+- Employee plugs in personal AP
+- Bypasses network security controls
+- Creates an unmonitored entry point
+
+### 3. Deauthentication Attack
+Attacker sends forged deauth frames to disconnect clients:
+\`\`\`
+Attacker → Deauth Frame (spoofed as AP) → Client disconnects
+Client reconnects → may connect to evil twin
+\`\`\`
+**Note:** WPA3 and 802.11w (Management Frame Protection) mitigate this.
+
+### 4. WPA2 Handshake Capture
+- Capture the 4-way handshake during client connection
+- Perform offline dictionary/brute-force attack on the PSK
+- Weak passwords can be cracked quickly
+
+### 5. War Driving
+- Scanning for wireless networks while moving (car, walking)
+- Maps SSIDs, encryption types, signal strength
+- Tools: Kismet, Wigle, inSSIDer
+
+### 6. Karma/MANA Attack
+- Listens for client probe requests
+- Responds to ANY SSID the client is looking for
+- Client auto-connects thinking it's a known network
+
+## Wireless Defense Strategies
+
+### Network-Level:
+| Defense | Purpose |
+|---------|---------|
+| WPA3/WPA2-Enterprise | Strong encryption and authentication |
+| 802.11w (PMF) | Protect management frames from spoofing |
+| Wireless IDS/IPS (WIDS) | Detect rogue APs and attacks |
+| SSID policy | Don't broadcast if not needed |
+| Network segmentation | Isolate wireless from critical systems |
+
+### Client-Level:
+- Forget unused SSIDs
+- Disable auto-connect
+- Use VPN on untrusted networks
+- Verify certificate for Enterprise Wi-Fi
+
+### Monitoring:
+- Regular rogue AP scans
+- Monitor for deauth frame floods
+- Alert on new SSIDs matching corporate names
+- Track client connection anomalies
+
+## Wireless Penetration Testing
+
+Ethical hackers test wireless security using:
+- **Aircrack-ng** — WPA/WPA2 cracking suite
+- **Kismet** — wireless network detector
+- **Wireshark** — packet analysis
+- **Bettercap** — MITM framework
+- **WiFi Pineapple** — rogue AP hardware
+    `,
+    keyTakeaways: [
+      "Evil twin attacks clone legitimate SSIDs to capture user traffic",
+      "Deauth attacks disconnect clients — mitigated by 802.11w (PMF) and WPA3",
+      "WPA2 PSK can be cracked offline if the handshake is captured and password is weak",
+      "Wireless IDS detects rogue APs, deauth floods, and other wireless attacks",
+      "Always use VPN on untrusted networks and disable auto-connect on clients"
+    ],
+  },
+
+  // Module 9: Network Troubleshooting & Tools
+  {
+    id: "nf-9.1",
+    courseId: "network-fundamentals",
+    title: "Troubleshooting Methodology",
+    content: `
+# Network Troubleshooting Methodology
+
+## The 7-Step Troubleshooting Process
+
+1. **Identify the problem** — gather information, question users, identify symptoms
+2. **Establish a theory** — consider most likely causes (top-down, bottom-up, divide-and-conquer)
+3. **Test the theory** — validate your hypothesis
+4. **Establish a plan** — determine the fix and assess impact
+5. **Implement the solution** — apply the fix
+6. **Verify functionality** — confirm the issue is resolved and no side effects
+7. **Document** — record the problem, cause, and solution
+
+## Troubleshooting Approaches
+
+### Bottom-Up (Physical → Application)
+Start at Layer 1 and work up:
+\`\`\`
+1. Cable connected? Link light on?        (Layer 1)
+2. Getting MAC address? Switch port up?    (Layer 2)
+3. IP address correct? Can ping gateway?   (Layer 3)
+4. Port open? Service running?             (Layer 4)
+5-7. Application responding correctly?     (Layers 5-7)
+\`\`\`
+
+### Top-Down (Application → Physical)
+Start at the application and work down:
+\`\`\`
+7. Can you access the website?
+4. Is the web server port open (80/443)?
+3. Can you ping the server?
+2. Is the switch port active?
+1. Is the cable connected?
+\`\`\`
+
+### Divide and Conquer
+Start at Layer 3 (middle) and go up or down based on results:
+\`\`\`
+Can you ping the gateway? 
+  YES → problem is above Layer 3 (check DNS, application)
+  NO  → problem is below Layer 3 (check cable, switch, IP config)
+\`\`\`
+
+## Common Network Issues
+
+| Symptom | Likely Cause | Check |
+|---------|-------------|-------|
+| No connectivity | Cable, IP, gateway | Physical, ipconfig |
+| Slow performance | Congestion, duplex mismatch | Bandwidth, errors |
+| Intermittent drops | Bad cable, interference | Cable test, Wi-Fi scan |
+| Can't reach internet | DNS, gateway, NAT | ping, nslookup |
+| Can ping IP not name | DNS issue | nslookup, DNS config |
+
+## Quick Diagnostic Checklist
+
+\`\`\`
+□ Link light on? Cable connected?
+□ IP address assigned? (ipconfig/ifconfig)
+□ Correct subnet mask and gateway?
+□ Can ping localhost (127.0.0.1)?
+□ Can ping own IP?
+□ Can ping default gateway?
+□ Can ping remote IP (8.8.8.8)?
+□ Can resolve DNS names? (nslookup google.com)
+□ Can reach the target service?
+\`\`\`
+
+Each step that fails narrows down the problem layer.
+    `,
+    keyTakeaways: [
+      "Follow a systematic 7-step process: identify, theorize, test, plan, implement, verify, document",
+      "Bottom-up starts at physical layer; top-down starts at application",
+      "Divide-and-conquer starts at Layer 3 and eliminates half the stack",
+      "If ping works but DNS doesn't → DNS issue; if nothing pings → check lower layers",
+      "Always document the problem, cause, and solution for future reference"
+    ],
+  },
+  {
+    id: "nf-9.2",
+    courseId: "network-fundamentals",
+    title: "Command-Line Tools: ping, traceroute, nslookup",
+    content: `
+# Network Diagnostic Tools
+
+## ping
+
+Tests reachability and measures round-trip time using ICMP.
+
+\`\`\`bash
+# Basic ping
+ping 8.8.8.8
+ping www.google.com
+
+# Windows: continuous ping
+ping -t 8.8.8.8
+
+# Linux: set count
+ping -c 4 8.8.8.8
+
+# Set packet size
+ping -s 1472 8.8.8.8    # test MTU
+\`\`\`
+
+### Reading Ping Output:
+\`\`\`
+Reply from 8.8.8.8: bytes=32 time=12ms TTL=118
+\`\`\`
+- **time** — round-trip latency
+- **TTL** — hops remaining (helps estimate distance)
+- **Request timed out** — no response (blocked, down, or unreachable)
+
+## traceroute / tracert
+
+Maps every hop (router) between source and destination.
+
+\`\`\`bash
+# Windows
+tracert 8.8.8.8
+
+# Linux
+traceroute 8.8.8.8
+
+# TCP-based (avoids ICMP blocks)
+traceroute -T -p 443 8.8.8.8
+\`\`\`
+
+### Reading Traceroute:
+\`\`\`
+ 1   1.2ms   192.168.1.1      ← Your gateway
+ 2   5.4ms   10.0.0.1         ← ISP router
+ 3   * * *                     ← Router doesn't respond (or blocks ICMP)
+ 4   12.1ms  72.14.215.85     ← Internet backbone
+ 5   11.8ms  8.8.8.8          ← Destination
+\`\`\`
+
+## nslookup / dig
+
+DNS query tools.
+
+\`\`\`bash
+# Basic lookup
+nslookup example.com
+nslookup -type=MX example.com
+nslookup example.com 8.8.8.8    # use specific DNS server
+
+# dig (Linux/Mac — more detailed)
+dig example.com
+dig example.com MX
+dig +short example.com
+dig @8.8.8.8 example.com
+dig +trace example.com    # full resolution path
+\`\`\`
+
+## pathping (Windows)
+
+Combines ping and traceroute — shows packet loss at each hop:
+\`\`\`bash
+pathping 8.8.8.8
+\`\`\`
+
+## mtr (Linux)
+
+Real-time combination of ping and traceroute:
+\`\`\`bash
+mtr 8.8.8.8
+\`\`\`
+
+## Practical Troubleshooting Flow
+
+\`\`\`
+1. ping 127.0.0.1          → Test TCP/IP stack
+2. ping <own IP>            → Test NIC
+3. ping <gateway>           → Test local network
+4. ping 8.8.8.8             → Test internet (bypasses DNS)
+5. ping www.google.com      → Test DNS resolution
+6. traceroute <destination>  → Find where the problem is
+7. nslookup <domain>        → Verify DNS
+\`\`\`
+    `,
+    keyTakeaways: [
+      "ping tests reachability and latency using ICMP Echo Request/Reply",
+      "traceroute/tracert maps every router hop to the destination",
+      "nslookup and dig query DNS records — use specific DNS servers to isolate issues",
+      "Stars (* * *) in traceroute usually mean ICMP is blocked, not necessarily a problem",
+      "Follow the diagnostic flow: loopback → own IP → gateway → internet → DNS"
+    ],
+  },
+  {
+    id: "nf-9.3",
+    courseId: "network-fundamentals",
+    title: "Network Analysis: netstat, ss, arp, ipconfig/ifconfig",
+    content: `
+# Network Configuration & Analysis Tools
+
+## ipconfig / ifconfig / ip
+
+View and manage network interface configuration.
+
+### Windows: ipconfig
+\`\`\`bash
+ipconfig                    # Basic info
+ipconfig /all               # Detailed info (MAC, DHCP, DNS)
+ipconfig /release           # Release DHCP lease
+ipconfig /renew             # Renew DHCP lease
+ipconfig /flushdns          # Clear DNS cache
+ipconfig /displaydns        # Show DNS cache
+\`\`\`
+
+### Linux: ip / ifconfig
+\`\`\`bash
+ip addr show                # Show all interfaces
+ip route show               # Show routing table
+ip neigh show               # Show ARP table
+ifconfig                    # Legacy — show interfaces
+\`\`\`
+
+## netstat / ss
+
+View network connections, listening ports, and statistics.
+
+### netstat
+\`\`\`bash
+# Windows
+netstat -an                 # All connections, numeric
+netstat -anob               # With process names and PIDs
+netstat -r                  # Routing table
+
+# Linux
+netstat -tulnp              # TCP/UDP listening ports with PIDs
+netstat -an                 # All connections
+\`\`\`
+
+### ss (Socket Statistics — Linux, faster than netstat)
+\`\`\`bash
+ss -tuln                    # TCP/UDP listening ports
+ss -tunap                   # All connections with processes
+ss -s                       # Summary statistics
+ss state established        # Only established connections
+ss dst 10.0.0.5             # Connections to specific host
+\`\`\`
+
+### Connection States to Know:
+| State | Meaning | Concern? |
+|-------|---------|----------|
+| LISTEN | Waiting for connections | Expected for servers |
+| ESTABLISHED | Active connection | Normal |
+| TIME_WAIT | Connection closing | Normal (many = check app) |
+| CLOSE_WAIT | Remote closed, local didn't | App bug? |
+| SYN_SENT | Initiating connection | Many = possible scan |
+| SYN_RECV | Received SYN | Many = possible SYN flood |
+
+## arp
+
+View and manage the ARP cache.
+
+\`\`\`bash
+# Windows
+arp -a                      # View ARP table
+arp -d *                    # Clear ARP cache
+arp -s 192.168.1.1 00-11-22-33-44-55  # Static entry
+
+# Linux
+arp -n                      # View ARP table
+ip neigh show               # Modern equivalent
+\`\`\`
+
+## route
+
+View and manage routing table.
+
+\`\`\`bash
+# Windows
+route print                 # Display routing table
+route add 10.0.0.0 mask 255.255.255.0 192.168.1.1
+
+# Linux
+ip route show               # Display routes
+ip route add 10.0.0.0/24 via 192.168.1.1
+\`\`\`
+
+## nbtstat (Windows — NetBIOS)
+
+\`\`\`bash
+nbtstat -a <hostname>       # Remote machine name table
+nbtstat -n                  # Local name table
+nbtstat -c                  # Name cache
+\`\`\`
+    `,
+    keyTakeaways: [
+      "ipconfig/all (Windows) and ip addr show (Linux) reveal full network configuration",
+      "netstat -anob and ss -tunap show active connections with process information",
+      "Many SYN_RECV states may indicate a SYN flood attack",
+      "arp -a displays the ARP cache; watch for unexpected MAC address changes",
+      "ipconfig /flushdns clears the DNS cache — useful when DNS records change"
+    ],
+  },
+  {
+    id: "nf-9.4",
+    courseId: "network-fundamentals",
+    title: "Packet Capture with Wireshark",
+    content: `
+# Packet Capture with Wireshark
+
+**Wireshark** is the world's most popular network protocol analyzer. It captures and analyzes network traffic in real-time.
+
+## Wireshark Interface
+
+\`\`\`
+┌─────────────────────────────────────────────────────┐
+│ [Filter Bar]  ip.addr == 192.168.1.10               │
+├─────────────────────────────────────────────────────┤
+│ Packet List                                          │
+│ No. Time     Source        Dest         Protocol Info│
+│ 1   0.000    192.168.1.10  8.8.8.8      DNS     ...│
+│ 2   0.012    8.8.8.8       192.168.1.10 DNS     ...│
+├─────────────────────────────────────────────────────┤
+│ Packet Details (protocol tree)                       │
+│ ▸ Ethernet II                                        │
+│ ▸ Internet Protocol Version 4                        │
+│ ▸ User Datagram Protocol                             │
+│ ▸ Domain Name System                                 │
+├─────────────────────────────────────────────────────┤
+│ Packet Bytes (hex dump)                              │
+└─────────────────────────────────────────────────────┘
+\`\`\`
+
+## Essential Display Filters
+
+### By Protocol:
+\`\`\`
+http
+dns
+tcp
+udp
+arp
+icmp
+tls
+\`\`\`
+
+### By IP Address:
+\`\`\`
+ip.addr == 192.168.1.10            # Source or destination
+ip.src == 192.168.1.10             # Source only
+ip.dst == 10.0.0.5                 # Destination only
+\`\`\`
+
+### By Port:
+\`\`\`
+tcp.port == 80
+tcp.port == 443
+udp.port == 53
+tcp.dstport == 22
+\`\`\`
+
+### By TCP Flags:
+\`\`\`
+tcp.flags.syn == 1                 # SYN packets
+tcp.flags.syn == 1 && tcp.flags.ack == 0  # SYN only (no SYN-ACK)
+tcp.flags.rst == 1                 # RST packets
+\`\`\`
+
+### Combining Filters:
+\`\`\`
+ip.addr == 192.168.1.10 && tcp.port == 80
+dns && ip.src == 192.168.1.10
+http.request.method == "POST"
+tcp.flags.syn == 1 && !(tcp.flags.ack == 1)
+\`\`\`
+
+## Key Analysis Techniques
+
+### Following TCP Streams
+Right-click → Follow → TCP Stream
+Shows the entire conversation in readable format.
+
+### DNS Analysis
+\`\`\`
+Filter: dns
+Look for:
+- Unusual query patterns (DGA)
+- Queries to suspicious domains
+- Large TXT record responses (tunneling)
+- High query volume from single host
+\`\`\`
+
+### HTTP Analysis
+\`\`\`
+Filter: http
+Look for:
+- Suspicious URLs and user agents
+- POST data (credentials, uploads)
+- Response codes and content types
+- Unusual headers
+\`\`\`
+
+### Detecting Anomalies
+- **Port scans** — many SYN packets to different ports from one source
+- **ARP storms** — excessive ARP requests/replies
+- **DNS tunneling** — large DNS queries with encoded data
+- **C2 beaconing** — regular interval connections to same destination
+
+## Capture Filters vs Display Filters
+
+| Type | When Applied | Syntax |
+|------|-------------|--------|
+| Capture | During capture | BPF syntax: \`host 192.168.1.10\` |
+| Display | After capture | Wireshark syntax: \`ip.addr == 192.168.1.10\` |
+
+Capture filters reduce file size; display filters allow flexible analysis.
+    `,
+    keyTakeaways: [
+      "Wireshark captures and analyzes network traffic at the packet level",
+      "Display filters (ip.addr, tcp.port, http) help isolate relevant traffic",
+      "Follow TCP Stream shows complete conversations in readable format",
+      "Look for port scans (many SYNs), DNS tunneling (large queries), and C2 beaconing",
+      "Capture filters use BPF syntax during capture; display filters are applied after"
+    ],
+  },
+  {
+    id: "nf-9.5",
+    courseId: "network-fundamentals",
+    title: "Hands-On: Network Troubleshooting Lab",
+    content: `
+# Hands-On: Network Troubleshooting Lab
+
+## Scenario 1: No Internet Access
+
+**Symptoms:** User reports they cannot browse any websites.
+
+### Troubleshooting Steps:
+
+\`\`\`bash
+# Step 1: Check IP configuration
+ipconfig /all
+# Look for: IP address, subnet mask, gateway, DNS
+
+# Step 2: Test local connectivity
+ping 127.0.0.1        # Loopback — TCP/IP stack OK?
+ping <own_ip>          # NIC working?
+ping <gateway>         # Local network OK?
+
+# Step 3: Test internet
+ping 8.8.8.8           # Internet reachable? (bypass DNS)
+
+# Step 4: Test DNS
+nslookup google.com
+nslookup google.com 8.8.8.8   # Try alternate DNS
+
+# Step 5: Check routing
+route print            # Default route exists?
+tracert 8.8.8.8        # Where does it fail?
+\`\`\`
+
+### Common Findings:
+- **No IP address (169.254.x.x)** → DHCP issue: check server, cable
+- **Can't ping gateway** → Layer 2 issue: check cable, switch port
+- **Can ping 8.8.8.8 but not names** → DNS issue: check DNS settings
+- **Traceroute dies at hop 1** → Gateway down or misconfigured
+
+## Scenario 2: Slow Network Performance
+
+\`\`\`bash
+# Check for duplex mismatch
+# Check interface errors and collisions
+
+# Windows
+netstat -s              # Protocol statistics
+netstat -e              # Interface errors
+
+# Test throughput
+# Use iperf3 between two points
+
+# Check for broadcast storms
+# Wireshark: filter "eth.dst == ff:ff:ff:ff:ff:ff"
+\`\`\`
+
+## Scenario 3: Intermittent Connectivity
+
+\`\`\`bash
+# Continuous monitoring
+ping -t <gateway>       # Watch for drops
+
+# Check for duplicate IPs
+arp -a                  # Multiple MACs for same IP?
+
+# Check cable
+# Look for CRC errors on switch port
+
+# Check wireless
+# Signal strength, interference, channel overlap
+\`\`\`
+
+## Scenario 4: Can't Reach Specific Server
+
+\`\`\`bash
+# Verify DNS resolution
+nslookup server.company.com
+
+# Test connectivity
+ping <server_ip>
+tracert <server_ip>
+
+# Check specific port
+# PowerShell:
+Test-NetConnection <server_ip> -Port 443
+
+# Linux:
+nc -zv <server_ip> 443
+curl -v https://server.company.com
+\`\`\`
+
+## Troubleshooting Documentation Template
+
+\`\`\`markdown
+## Issue: [Description]
+**Reported by:** [User]
+**Date/Time:** [Timestamp]
+**Affected:** [Users/devices/services]
+
+## Symptoms
+- [What was observed]
+
+## Diagnostic Steps
+1. [Command/action] → [Result]
+2. [Command/action] → [Result]
+
+## Root Cause
+[What caused the issue]
+
+## Resolution
+[What fixed it]
+
+## Prevention
+[How to prevent recurrence]
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Follow the systematic ping sequence: loopback → own IP → gateway → internet → DNS",
+      "169.254.x.x (APIPA) means DHCP failed — check DHCP server and connectivity",
+      "Can ping IPs but not names → DNS problem, not network connectivity issue",
+      "Duplicate IP addresses cause intermittent connectivity — check ARP table",
+      "Always document troubleshooting steps, root cause, and resolution"
+    ],
+  },
+
+  // Module 10: Network Security & Modern Networking
+  {
+    id: "nf-10.1",
+    courseId: "network-fundamentals",
+    title: "Network Security Fundamentals",
+    content: `
+# Network Security Fundamentals
+
+## The CIA Triad in Networking
+
+### Confidentiality
+- Encryption (TLS, IPsec, WPA3)
+- VPNs for remote access
+- Network segmentation
+
+### Integrity
+- Checksums and hashing
+- Digital signatures
+- Message authentication codes (HMAC)
+
+### Availability
+- Redundant links and devices
+- Load balancing
+- DDoS mitigation
+
+## Defense in Depth
+
+Multiple layers of security controls:
+
+\`\`\`
+[Internet] → [Firewall] → [IDS/IPS] → [DMZ] → [Internal Firewall] → [Internal Network]
+                                         │
+                                    [Web Server]
+                                    [Mail Server]
+\`\`\`
+
+### DMZ (Demilitarized Zone)
+- Buffer zone between internet and internal network
+- Hosts public-facing services
+- Protected by external AND internal firewalls
+- Limits damage if a public server is compromised
+
+## Network Segmentation
+
+### Benefits:
+- **Limit blast radius** — breach contained to one segment
+- **Regulatory compliance** — isolate PCI, HIPAA data
+- **Performance** — reduce broadcast traffic
+- **Access control** — enforce least privilege
+
+### Methods:
+| Method | Layer | Description |
+|--------|-------|-------------|
+| VLANs | 2 | Logical separation on same switch |
+| Subnets | 3 | Different IP networks |
+| Firewalls | 3-7 | Rule-based access control |
+| Micro-segmentation | 3-7 | Per-workload policies (SDN) |
+
+## Access Control Lists (ACLs)
+
+ACLs filter traffic on routers and firewalls:
+
+### Standard ACL (filters by source IP only):
+\`\`\`
+permit 192.168.1.0 0.0.0.255
+deny 10.0.0.0 0.255.255.255
+permit any
+\`\`\`
+
+### Extended ACL (filters by source, dest, protocol, port):
+\`\`\`
+permit tcp 192.168.1.0 0.0.0.255 10.0.0.5 0.0.0.0 eq 443
+deny ip any 10.0.0.0 0.0.0.255
+permit ip any any
+\`\`\`
+
+## Zero Trust Architecture
+
+**"Never trust, always verify"** — no implicit trust based on network location.
+
+### Principles:
+1. Verify explicitly — authenticate and authorize every request
+2. Least privilege access — minimum necessary permissions
+3. Assume breach — minimize blast radius, segment access
+
+### Implementation:
+- Multi-factor authentication everywhere
+- Micro-segmentation
+- Continuous monitoring and validation
+- Identity-based access (not network-based)
+    `,
+    keyTakeaways: [
+      "CIA triad (Confidentiality, Integrity, Availability) guides network security",
+      "Defense in depth layers multiple security controls",
+      "DMZ isolates public-facing servers between external and internal firewalls",
+      "Network segmentation limits breach impact and enforces least privilege",
+      "Zero Trust assumes no implicit trust — verify every request"
+    ],
+  },
+  {
+    id: "nf-10.2",
+    courseId: "network-fundamentals",
+    title: "VPNs: Site-to-Site & Remote Access",
+    content: `
+# VPNs: Virtual Private Networks
+
+A **VPN** creates an encrypted tunnel over a public network (internet), providing secure communication as if devices were on the same private network.
+
+## VPN Types
+
+### Remote Access VPN
+Individual users connect to the corporate network from remote locations:
+\`\`\`
+[Remote User] → [Internet] → [VPN Gateway] → [Corporate Network]
+                    └── Encrypted Tunnel ──┘
+\`\`\`
+
+### Site-to-Site VPN
+Connects entire networks between offices:
+\`\`\`
+[Office A LAN] → [VPN Gateway A] ← Encrypted → [VPN Gateway B] → [Office B LAN]
+                        └──── Internet ────┘
+\`\`\`
+
+## VPN Protocols
+
+### IPsec (Internet Protocol Security)
+- Industry standard for site-to-site VPNs
+- Operates at Layer 3
+- Two modes:
+  - **Transport mode** — encrypts payload only
+  - **Tunnel mode** — encrypts entire packet (new IP header added)
+- Components: IKE (key exchange), ESP (encryption), AH (authentication)
+
+### SSL/TLS VPN
+- Web-based VPN access via browser
+- Operates at Layer 4-7
+- Easier to deploy (no client software needed for basic access)
+- Common products: Cisco AnyConnect, Palo Alto GlobalProtect
+
+### WireGuard
+- Modern, lightweight VPN protocol
+- Very fast and simple configuration
+- Uses state-of-the-art cryptography
+- Growing popularity for both personal and enterprise use
+
+## Split Tunneling
+
+### Full Tunnel
+- ALL traffic goes through VPN
+- Maximum security — corporate can inspect everything
+- Higher latency for non-corporate traffic
+
+### Split Tunnel
+- Only corporate traffic goes through VPN
+- Internet traffic goes directly
+- Better performance but less security
+- Risk: compromised client can bridge networks
+
+## VPN Security Considerations
+
+- **Strong authentication** — MFA required
+- **Encryption strength** — AES-256, modern ciphers
+- **Kill switch** — disconnect if VPN drops (prevent data leaks)
+- **DNS leak prevention** — ensure DNS queries go through VPN
+- **Logging policy** — understand what's logged
+- **Always-on VPN** — enforce VPN for all corporate devices
+    `,
+    keyTakeaways: [
+      "Remote access VPNs connect individual users; site-to-site connects entire networks",
+      "IPsec operates at Layer 3 with tunnel and transport modes",
+      "SSL/TLS VPNs are easier to deploy — work through browsers",
+      "Split tunneling improves performance but reduces security",
+      "Always enforce MFA and kill switches on VPN connections"
+    ],
+  },
+  {
+    id: "nf-10.3",
+    courseId: "network-fundamentals",
+    title: "Network Access Control (NAC) & 802.1X",
+    content: `
+# Network Access Control & 802.1X
+
+## NAC (Network Access Control)
+
+NAC controls **who and what** can access the network, enforcing security policies before granting access.
+
+### NAC Functions:
+1. **Authentication** — verify user/device identity
+2. **Authorization** — grant appropriate access level
+3. **Posture Assessment** — check device health (patches, antivirus, compliance)
+4. **Remediation** — fix non-compliant devices before granting access
+5. **Monitoring** — continuous compliance checking
+
+### NAC Process:
+\`\`\`
+[Device Connects] → [Authentication] → [Posture Check] → [Access Granted]
+                          │                    │
+                     [Deny if fail]      [Quarantine VLAN]
+                                         [Remediate]
+\`\`\`
+
+## 802.1X Port-Based Authentication
+
+802.1X provides **port-based network access control** — a port stays closed until the user successfully authenticates.
+
+### Components:
+\`\`\`
+[Supplicant]  ←→  [Authenticator]  ←→  [Auth Server]
+(Client SW)       (Switch/AP port)     (RADIUS)
+                                           │
+                                     [User Database]
+                                     (AD, LDAP)
+\`\`\`
+
+### Process:
+1. Device connects to switch port
+2. Port starts in **unauthorized state** (only EAP traffic allowed)
+3. Supplicant provides credentials
+4. Authenticator forwards to RADIUS server
+5. RADIUS validates against directory
+6. **Success** → port authorized, VLAN assigned
+7. **Failure** → port stays unauthorized or moved to guest VLAN
+
+### RADIUS (Remote Authentication Dial-In User Service)
+- Central authentication server
+- Ports: 1812 (auth), 1813 (accounting)
+- Supports multiple authentication methods (EAP-TLS, PEAP)
+- Assigns VLAN, ACL based on user role
+
+## Profiling
+
+NAC can identify device types on the network:
+- **DHCP fingerprinting** — analyze DHCP requests
+- **HTTP user-agent** — identify OS/browser
+- **MAC OUI** — identify manufacturer
+- **SNMP** — query device information
+- Automatically apply appropriate policies per device type
+
+## Guest Access
+
+### Best Practices:
+- Separate guest VLAN with internet-only access
+- Captive portal for registration/acceptance
+- Time-limited access
+- Bandwidth restrictions
+- No access to internal resources
+- Logging for compliance
+
+## Zero Trust Network Access (ZTNA)
+
+Modern evolution of NAC:
+- Identity-centric, not network-centric
+- Per-application access (not full network)
+- Continuous verification
+- Works regardless of location
+- Replaces traditional VPN for many use cases
+    `,
+    keyTakeaways: [
+      "NAC verifies identity and device health before granting network access",
+      "802.1X keeps switch ports unauthorized until successful authentication",
+      "RADIUS server handles centralized authentication with VLAN/ACL assignment",
+      "Posture assessment checks device compliance (patches, AV) before access",
+      "ZTNA extends NAC concepts with per-application, identity-based access"
+    ],
+  },
+  {
+    id: "nf-10.4",
+    courseId: "network-fundamentals",
+    title: "Cloud & Virtualized Networking",
+    content: `
+# Cloud & Virtualized Networking
+
+## Virtual Networking
+
+### Virtual Switches (vSwitch)
+- Software-based switches within hypervisors
+- Connect VMs to each other and physical network
+- Examples: VMware vSwitch, Hyper-V Virtual Switch, Open vSwitch
+
+### Virtual NICs (vNIC)
+- Software network interfaces assigned to VMs
+- Multiple vNICs per VM for different networks
+- Can have their own MAC and IP addresses
+
+### Network Functions Virtualization (NFV)
+Replace physical network appliances with software:
+- Virtual firewalls
+- Virtual load balancers
+- Virtual routers
+- Virtual IDS/IPS
+
+## Software-Defined Networking (SDN)
+
+SDN separates the **control plane** (decision-making) from the **data plane** (forwarding):
+
+\`\`\`
+┌─────────────────────────┐
+│    SDN Controller       │   ← Control Plane (brain)
+│  (centralized logic)    │
+└────────┬────────────────┘
+         │ OpenFlow/API
+┌────────┼────────────────┐
+│  [Switch] [Switch] [Switch]  │  ← Data Plane (muscle)
+│  (forwarding only)          │
+└─────────────────────────────┘
+\`\`\`
+
+### Benefits:
+- Centralized network management
+- Programmable and automated
+- Rapid provisioning
+- Micro-segmentation capabilities
+- Vendor-agnostic (OpenFlow standard)
+
+## Cloud Networking
+
+### VPC (Virtual Private Cloud)
+- Isolated virtual network in the cloud
+- Define your own IP ranges, subnets, route tables
+- Cloud equivalent of a traditional data center network
+
+### Cloud Network Components:
+| Component | AWS | Azure | Function |
+|-----------|-----|-------|----------|
+| VPC/VNet | VPC | VNet | Virtual network |
+| Subnet | Subnet | Subnet | Network segment |
+| Route Table | Route Table | Route Table | Traffic routing |
+| NAT Gateway | NAT Gateway | NAT Gateway | Outbound internet |
+| Load Balancer | ELB/ALB | Azure LB | Traffic distribution |
+| Firewall | Security Groups + NACLs | NSG + Azure FW | Access control |
+| Peering | VPC Peering | VNet Peering | Connect VPCs |
+| VPN | VPN Gateway | VPN Gateway | Hybrid connectivity |
+
+### Security Groups (Cloud Firewalls)
+- Stateful packet filtering at instance level
+- Allow rules only (implicit deny)
+- Applied per instance/NIC
+
+### NACLs (Network ACLs)
+- Stateless filtering at subnet level
+- Allow and deny rules
+- Numbered rules processed in order
+
+## Micro-Segmentation
+
+Granular security policies at the workload level:
+- Each VM/container has its own security policy
+- East-west traffic (between servers) is controlled
+- Prevents lateral movement after a breach
+- Enabled by SDN and cloud-native tools
+    `,
+    keyTakeaways: [
+      "Virtual switches connect VMs; NFV replaces physical appliances with software",
+      "SDN separates control plane from data plane for centralized programmable networking",
+      "VPC/VNet is the cloud equivalent of a traditional data center network",
+      "Security Groups are stateful (per-instance); NACLs are stateless (per-subnet)",
+      "Micro-segmentation provides per-workload security to prevent lateral movement"
+    ],
+  },
+  {
+    id: "nf-10.5",
+    courseId: "network-fundamentals",
+    title: "Course Summary & Next Steps",
+    content: `
+# Course Summary & Next Steps
+
+## What You've Learned
+
+### Module 1: Introduction to Networks
+- Network types (LAN, WAN, MAN), topologies, and architecture models
+
+### Module 2: The OSI Model
+- All 7 layers, their functions, and data encapsulation/PDUs
+
+### Module 3: TCP/IP Protocol Suite
+- TCP vs UDP, three-way handshake, ICMP, ARP, ports and sockets
+
+### Module 4: IP Addressing & Subnetting
+- IPv4 addressing, subnet masks, CIDR, subnetting calculations, NAT, IPv6
+
+### Module 5: Network Devices & Infrastructure
+- Switches, routers, firewalls, VLANs, and network segmentation
+
+### Module 6: Application Layer Protocols
+- DNS, DHCP, HTTP/HTTPS, email protocols, FTP, SSH
+
+### Module 7: Ethernet & Data Link
+- Ethernet standards, cabling, MAC addresses, STP, Layer 2 security
+
+### Module 8: Wireless Networking
+- Wi-Fi standards, WPA2/WPA3, enterprise authentication, wireless threats
+
+### Module 9: Troubleshooting & Tools
+- Methodology, ping, traceroute, nslookup, netstat, Wireshark
+
+### Module 10: Network Security & Modern Networking
+- Defense in depth, VPNs, NAC, cloud networking, SDN
+
+## Key Takeaways
+
+> **Networks are the foundation of cybersecurity.** Every attack traverses a network, every defense protects one, and every investigation traces through one.
+
+### Essential Skills You've Built:
+- Read and interpret network traffic
+- Understand how protocols communicate
+- Calculate and plan IP addressing schemes
+- Troubleshoot network issues systematically
+- Recognize network-based attack vectors
+- Understand modern network architectures
+
+## Recommended Next Steps
+
+### Certifications:
+| Cert | Focus | Provider |
+|------|-------|----------|
+| CompTIA Network+ | General networking | CompTIA |
+| Cisco CCNA | Cisco networking | Cisco |
+| CompTIA Security+ | Security fundamentals | CompTIA |
+
+### Continue Learning on InfoSecDiaries:
+- **SOC Fundamentals** — apply networking to security operations
+- **Network Security Monitoring** — deep dive into traffic analysis
+- **Log Analysis** — analyze network device logs
+- **SIEM Fundamentals** — correlate network events at scale
+
+### Practice:
+- Set up a home lab with GNS3 or Packet Tracer
+- Capture and analyze traffic with Wireshark
+- Practice subnetting until it's second nature
+- Build and segment virtual networks
+    `,
+    keyTakeaways: [
+      "Network fundamentals are essential for every cybersecurity role",
+      "Practice subnetting, Wireshark analysis, and CLI tools regularly",
+      "CompTIA Network+ and Cisco CCNA are recommended next certifications",
+      "Continue with SOC Fundamentals and Network Security Monitoring courses",
+      "Build a home lab to practice networking concepts hands-on"
+    ],
+  },
 ];
 
 export const getLessonContent = (courseId: string, lessonId: string): LessonContent | undefined => {
