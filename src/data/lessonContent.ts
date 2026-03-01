@@ -33469,6 +33469,2118 @@ Granular security policies at the workload level:
       "Build a home lab to practice networking concepts hands-on"
     ],
   },
+  // =============================================
+  // CYBERSECURITY FRAMEWORKS COURSE
+  // =============================================
+
+  // Module 1: Introduction to Cybersecurity Governance
+  {
+    id: "cf-1.1",
+    courseId: "cybersecurity-frameworks",
+    title: "What is Cybersecurity Governance?",
+    content: `
+# What is Cybersecurity Governance?
+
+Cybersecurity governance is the system of policies, structures, and processes that ensure an organization's security efforts align with its business goals. It provides the strategic direction for how security is managed, measured, and improved.
+
+## Governance vs. Management
+
+| Aspect | Governance | Management |
+|--------|-----------|------------|
+| Focus | Strategic direction | Day-to-day operations |
+| Responsibility | Board & executives | Security teams |
+| Output | Policies & oversight | Implementation & execution |
+| Timeframe | Long-term | Short-term |
+
+## Why Governance Matters
+
+Without governance, security becomes reactive and fragmented. Governance ensures:
+
+1. **Strategic Alignment** — Security investments support business objectives
+2. **Resource Optimization** — Budgets are allocated based on risk, not fear
+3. **Accountability** — Clear ownership of security decisions and outcomes
+4. **Regulatory Compliance** — Systematic approach to meeting legal obligations
+5. **Risk-Informed Decisions** — Leadership understands cyber risk in business terms
+
+## The Governance Hierarchy
+
+\`\`\`
+┌────────────────────────────────────────┐
+│           Board of Directors           │
+│    (Ultimate accountability for risk)  │
+├────────────────────────────────────────┤
+│          Executive Leadership          │
+│  (CISO, CIO, CRO — strategic direction)│
+├────────────────────────────────────────┤
+│        Security Steering Committee     │
+│  (Cross-functional oversight & review) │
+├────────────────────────────────────────┤
+│          Security Operations           │
+│  (Implementation & daily execution)    │
+└────────────────────────────────────────┘
+\`\`\`
+
+## Key Governance Activities
+
+### 1. Setting Security Strategy
+- Define the organization's risk appetite
+- Establish security objectives tied to business goals
+- Approve the security roadmap and budget
+
+### 2. Policy Development
+- Create enforceable security policies
+- Ensure policies reflect current threat landscape
+- Review and update policies annually
+
+### 3. Risk Oversight
+- Review risk assessments and treatment plans
+- Monitor key risk indicators (KRIs)
+- Approve risk acceptance decisions
+
+### 4. Performance Monitoring
+- Track security metrics and KPIs
+- Review incident trends and response effectiveness
+- Evaluate control maturity over time
+
+## Governance Frameworks
+
+Several frameworks provide guidance for establishing cybersecurity governance:
+
+- **COBIT** — Control Objectives for Information and Related Technology
+- **ITIL** — IT Infrastructure Library (service management)
+- **ISO 38500** — Governance of IT for the organization
+- **NACD Cyber-Risk Oversight Handbook** — Board-level governance guide
+
+## Real-World Impact
+
+Organizations with mature governance programs experience:
+- **53% fewer security breaches** (Ponemon Institute)
+- **Faster incident response** due to clear escalation paths
+- **Better regulatory outcomes** during audits
+- **Increased stakeholder confidence** in security posture
+    `,
+    keyTakeaways: [
+      "Governance provides strategic direction; management handles execution",
+      "The board holds ultimate accountability for cybersecurity risk",
+      "Governance ensures security aligns with business objectives",
+      "Key activities include strategy, policy, risk oversight, and performance monitoring",
+      "Mature governance programs measurably reduce breach frequency"
+    ],
+    additionalResources: [
+      { title: "NACD Director's Handbook on Cyber-Risk Oversight", type: "documentation" },
+      { title: "ISACA COBIT Framework", type: "documentation" },
+    ]
+  },
+  {
+    id: "cf-1.2",
+    courseId: "cybersecurity-frameworks",
+    title: "The GRC Triad: Governance, Risk & Compliance",
+    content: `
+# The GRC Triad: Governance, Risk & Compliance
+
+GRC is the integrated approach to managing governance, risk, and compliance across an organization. These three disciplines are deeply interconnected — weakness in one undermines the others.
+
+## The GRC Relationship
+
+\`\`\`
+         ┌──────────────┐
+         │  GOVERNANCE  │
+         │ (Direction)  │
+         └──────┬───────┘
+                │
+    ┌───────────┴───────────┐
+    │                       │
+┌───┴────────┐      ┌──────┴───────┐
+│    RISK    │◄────►│  COMPLIANCE  │
+│ (Analysis) │      │ (Adherence)  │
+└────────────┘      └──────────────┘
+\`\`\`
+
+## Governance Component
+
+Governance sets the "what" and "why" — the strategic framework within which risk and compliance operate.
+
+**Key Elements:**
+- Security charter and vision
+- Organizational structure for security
+- Decision-making authority and escalation
+- Performance measurement framework
+
+## Risk Management Component
+
+Risk management answers "what could go wrong?" and "what do we do about it?"
+
+**The Risk Lifecycle:**
+1. **Identify** — Catalog assets, threats, and vulnerabilities
+2. **Assess** — Determine likelihood and impact
+3. **Treat** — Mitigate, transfer, avoid, or accept
+4. **Monitor** — Continuously track risk levels
+5. **Report** — Communicate risk posture to stakeholders
+
+### Risk Appetite vs. Risk Tolerance
+
+| Concept | Definition | Example |
+|---------|-----------|---------|
+| Risk Appetite | Overall level of risk an org is willing to accept | "We accept moderate cyber risk to enable innovation" |
+| Risk Tolerance | Acceptable deviation from risk appetite | "Critical systems must have <4hr recovery time" |
+| Risk Capacity | Maximum risk an org can absorb | "A $5M breach would threaten business viability" |
+
+## Compliance Component
+
+Compliance ensures the organization meets external obligations and internal policies.
+
+**Types of Compliance:**
+- **Regulatory** — GDPR, HIPAA, SOX, PCI-DSS
+- **Contractual** — Customer security requirements, SLAs
+- **Industry** — ISO 27001 certification, SOC 2 attestation
+- **Internal** — Adherence to own policies and standards
+
+### Compliance vs. Security
+
+> "You can be compliant and still insecure. Compliance is the floor, not the ceiling."
+
+Compliance provides a baseline, but true security requires going beyond checkbox compliance to address actual risk.
+
+## Integrating GRC
+
+### The Cost of Siloed GRC
+- Duplicated effort across teams
+- Inconsistent risk assessments
+- Gaps in coverage and visibility
+- Audit fatigue from overlapping requirements
+
+### Benefits of Integrated GRC
+- Single source of truth for controls and risks
+- Unified reporting to leadership
+- Efficient use of resources
+- Better decision-making with complete picture
+
+### GRC Technology Platforms
+- **ServiceNow GRC** — Enterprise workflow automation
+- **RSA Archer** — Risk and compliance management
+- **OneTrust** — Privacy and compliance automation
+- **LogicGate** — Flexible risk and compliance workflows
+- **Drata / Vanta** — Continuous compliance monitoring
+    `,
+    keyTakeaways: [
+      "GRC integrates governance, risk management, and compliance into a unified approach",
+      "Governance sets direction; risk analyzes threats; compliance ensures adherence",
+      "Risk appetite defines how much risk an organization willingly accepts",
+      "Compliance is the floor — true security goes beyond regulatory checkboxes",
+      "Integrated GRC reduces duplication and improves decision-making"
+    ],
+    practicalExercise: {
+      title: "GRC Mapping Exercise",
+      description: "Map a real-world scenario to each GRC component and identify how they interact.",
+      steps: [
+        "Choose an industry (healthcare, finance, retail)",
+        "Identify governance structures needed",
+        "List top 5 risks and their treatment strategies",
+        "Map applicable compliance requirements"
+      ]
+    }
+  },
+  {
+    id: "cf-1.3",
+    courseId: "cybersecurity-frameworks",
+    title: "Security Policies, Standards & Procedures",
+    content: `
+# Security Policies, Standards & Procedures
+
+The documentation hierarchy is the backbone of any security program. It translates governance decisions into actionable guidance for every level of the organization.
+
+## The Documentation Hierarchy
+
+\`\`\`
+┌─────────────────────────────────────┐
+│           POLICIES                  │
+│  (What must be done — mandatory)    │
+├─────────────────────────────────────┤
+│          STANDARDS                  │
+│  (Specific requirements — how)      │
+├─────────────────────────────────────┤
+│         PROCEDURES                  │
+│  (Step-by-step instructions)        │
+├─────────────────────────────────────┤
+│         GUIDELINES                  │
+│  (Recommendations — optional)       │
+└─────────────────────────────────────┘
+\`\`\`
+
+## Policies
+
+Policies are high-level, mandatory statements approved by senior management.
+
+**Characteristics:**
+- Broad in scope, technology-agnostic
+- Approved by executive leadership
+- Reviewed annually (minimum)
+- Enforceable with consequences for non-compliance
+
+**Essential Security Policies:**
+
+| Policy | Purpose |
+|--------|---------|
+| Information Security Policy | Overarching security direction |
+| Acceptable Use Policy (AUP) | Defines appropriate use of IT resources |
+| Access Control Policy | Principles for granting and revoking access |
+| Incident Response Policy | Obligations for reporting and responding to incidents |
+| Data Classification Policy | Categories and handling requirements for data |
+| Password Policy | Authentication requirements |
+| Remote Work Policy | Security requirements for remote access |
+| BYOD Policy | Bring Your Own Device rules |
+
+### Writing Effective Policies
+
+**Template Structure:**
+\`\`\`markdown
+1. Purpose — Why this policy exists
+2. Scope — Who and what it applies to
+3. Policy Statements — The mandatory requirements
+4. Roles & Responsibilities — Who does what
+5. Enforcement — Consequences of non-compliance
+6. Related Documents — Links to standards & procedures
+7. Review History — Version tracking
+\`\`\`
+
+## Standards
+
+Standards specify the mandatory technical or operational requirements to implement a policy.
+
+**Example:**
+- **Policy:** "All systems must use strong authentication"
+- **Standard:** "Passwords must be minimum 14 characters, include uppercase, lowercase, numbers, and special characters. MFA is required for all privileged accounts."
+
+## Procedures
+
+Procedures provide step-by-step instructions for performing specific tasks.
+
+**Example: Account Deprovisioning Procedure:**
+1. Receive termination notification from HR
+2. Disable Active Directory account within 4 hours
+3. Revoke VPN and remote access tokens
+4. Transfer mailbox ownership to manager
+5. Archive and remove cloud storage access
+6. Update access review log
+7. Confirm completion in ticketing system
+
+## Guidelines
+
+Guidelines are recommended practices — helpful but not mandatory.
+
+**Example:** "When traveling internationally, it is recommended to use a clean laptop without sensitive data."
+
+## Document Lifecycle Management
+
+Every document should follow a lifecycle:
+1. **Draft** → Initial creation and stakeholder review
+2. **Review** → Legal, HR, IT, and management input
+3. **Approve** → Executive sign-off
+4. **Publish** → Distribute and train
+5. **Monitor** → Track compliance and effectiveness
+6. **Review** → Annual reassessment
+7. **Retire** → Deprecate outdated documents
+    `,
+    keyTakeaways: [
+      "Policies are mandatory, high-level statements approved by executives",
+      "Standards define specific technical requirements to implement policies",
+      "Procedures provide step-by-step operational instructions",
+      "Guidelines are recommended but not mandatory practices",
+      "All security documents must follow a lifecycle with regular review"
+    ]
+  },
+  {
+    id: "cf-1.4",
+    courseId: "cybersecurity-frameworks",
+    title: "Roles in Security Governance",
+    content: `
+# Roles in Security Governance
+
+Effective cybersecurity governance requires clear role definition across the organization. Every level — from the board to individual employees — plays a part.
+
+## Board of Directors
+
+The board holds ultimate fiduciary responsibility for cybersecurity risk.
+
+**Responsibilities:**
+- Approve the cybersecurity strategy and risk appetite
+- Receive and review quarterly security reports
+- Ensure adequate resources are allocated to security
+- Oversee incident response for material breaches
+- Appoint the CISO (directly or through the CEO)
+
+> SEC regulations now require public companies to disclose material cybersecurity incidents within 4 business days and describe board oversight of cyber risk.
+
+## Chief Information Security Officer (CISO)
+
+The CISO is the senior executive responsible for the organization's cybersecurity program.
+
+**Key Responsibilities:**
+- Develop and execute the security strategy
+- Report to the board and executive team on cyber risk
+- Manage the security budget and team
+- Lead incident response for major incidents
+- Ensure regulatory compliance
+
+**Reporting Structure:**
+\`\`\`
+Modern best practice:
+   Board → CEO → CISO (independent of IT)
+
+Legacy (less effective):
+   Board → CEO → CIO → CISO (conflict of interest)
+\`\`\`
+
+## Data Protection Officer (DPO)
+
+Required under GDPR for certain organizations.
+
+**Responsibilities:**
+- Monitor compliance with data protection regulations
+- Serve as contact point for supervisory authorities
+- Conduct data protection impact assessments
+- Train staff on data handling obligations
+- Advise on privacy by design
+
+## Security Steering Committee
+
+A cross-functional body that provides governance oversight.
+
+**Typical Members:**
+- CISO (chair)
+- CIO / CTO
+- Legal / General Counsel
+- HR representative
+- Business unit leaders
+- Compliance officer
+- Internal audit
+
+**Meeting Cadence:** Monthly or quarterly
+
+**Agenda Items:**
+- Review security metrics and KPIs
+- Discuss significant incidents and lessons learned
+- Approve policy changes
+- Review risk register updates
+- Approve vendor security assessments
+
+## Risk Owner vs. Control Owner
+
+| Role | Responsibility |
+|------|---------------|
+| Risk Owner | Business leader accountable for a specific risk |
+| Control Owner | Technical lead responsible for implementing and maintaining a control |
+
+**Example:**
+- **Risk:** "Customer data breach through web application"
+- **Risk Owner:** VP of Engineering
+- **Control Owner:** Application Security Engineer (implements WAF, SAST, code review)
+
+## Every Employee's Role
+
+Cybersecurity is everyone's responsibility:
+- Follow security policies and procedures
+- Report suspicious activity promptly
+- Complete security awareness training
+- Protect credentials and sensitive data
+- Practice secure remote work habits
+
+## Building a Security-Aware Culture
+
+Culture starts at the top. When leadership visibly prioritizes security:
+- Employees take training seriously
+- Security teams are empowered to enforce policies
+- Budgets reflect genuine commitment
+- Security is treated as a business enabler, not a blocker
+    `,
+    keyTakeaways: [
+      "The board holds ultimate accountability for cybersecurity risk oversight",
+      "CISOs should report independently of IT to avoid conflicts of interest",
+      "DPOs are mandatory under GDPR for organizations processing personal data at scale",
+      "Security steering committees provide cross-functional governance oversight",
+      "Every employee has a role in maintaining the organization's security posture"
+    ]
+  },
+
+  // Module 2: NIST CSF
+  {
+    id: "cf-2.1",
+    courseId: "cybersecurity-frameworks",
+    title: "NIST CSF Overview & History",
+    content: `
+# NIST Cybersecurity Framework: Overview & History
+
+The NIST Cybersecurity Framework (CSF) is the most widely adopted cybersecurity framework globally. Created by the National Institute of Standards and Technology, it provides a voluntary, risk-based approach to managing cybersecurity risk.
+
+## Origins
+
+In 2013, President Obama issued Executive Order 13636, directing NIST to develop a voluntary framework for critical infrastructure cybersecurity. The result was NIST CSF v1.0, released in February 2014.
+
+### Evolution Timeline
+
+| Version | Year | Key Changes |
+|---------|------|-------------|
+| v1.0 | 2014 | Original release — 5 core functions |
+| v1.1 | 2018 | Added supply chain risk, self-assessment guidance |
+| v2.0 | 2024 | Added Govern function, expanded scope beyond critical infrastructure |
+
+## Why NIST CSF?
+
+- **Free and publicly available** — No licensing costs
+- **Technology-neutral** — Works with any technology stack
+- **Scalable** — Applicable to organizations of any size
+- **Risk-based** — Focuses on outcomes, not checklists
+- **Widely recognized** — Accepted by regulators, auditors, and partners globally
+- **Integrative** — Maps to ISO 27001, CIS Controls, COBIT, and more
+
+## Who Uses NIST CSF?
+
+While originally designed for US critical infrastructure, adoption has expanded to:
+- Financial services, healthcare, and energy sectors
+- Small and medium businesses
+- Government agencies worldwide
+- Cloud service providers
+- International organizations (adapted in Israel, Italy, Japan)
+
+## NIST CSF v2.0 Structure
+
+\`\`\`
+┌─────────────────────────────────────────────────┐
+│                   GOVERN (GV)                    │
+│  (Organizational context, risk strategy, roles)  │
+├──────────┬──────────┬──────────┬────────┬────────┤
+│ IDENTIFY │ PROTECT  │  DETECT  │ RESPOND│ RECOVER│
+│   (ID)   │  (PR)    │   (DE)   │  (RS)  │  (RC)  │
+└──────────┴──────────┴──────────┴────────┴────────┘
+\`\`\`
+
+The framework consists of:
+1. **Core** — The 6 functions, categories, and subcategories
+2. **Profiles** — Current and target state alignment
+3. **Tiers** — Maturity levels (1-4) for risk management
+
+## NIST CSF vs. Other Frameworks
+
+| Feature | NIST CSF | ISO 27001 | CIS Controls |
+|---------|----------|-----------|--------------|
+| Cost | Free | Paid standard | Free |
+| Certification | No | Yes | No |
+| Approach | Risk-based | Process-based | Prescriptive |
+| Scope | Broad | Comprehensive | Tactical |
+| Best For | Strategy & communication | Formal certification | Quick implementation |
+    `,
+    keyTakeaways: [
+      "NIST CSF originated from a 2013 executive order for critical infrastructure protection",
+      "Version 2.0 added the Govern function and expanded applicability beyond critical infrastructure",
+      "The framework is free, technology-neutral, and scalable to any organization size",
+      "CSF consists of Core (functions/categories), Profiles (current/target), and Tiers (maturity)",
+      "It maps to other major frameworks including ISO 27001 and CIS Controls"
+    ]
+  },
+  {
+    id: "cf-2.2",
+    courseId: "cybersecurity-frameworks",
+    title: "The Six Core Functions",
+    content: `
+# The Six Core Functions of NIST CSF v2.0
+
+The core is the heart of the framework, organized into six functions that represent the complete lifecycle of cybersecurity risk management.
+
+## 1. GOVERN (GV) — New in v2.0
+
+Establishes the organizational context, strategy, and oversight for cybersecurity risk management.
+
+**Categories:**
+- **GV.OC** — Organizational Context
+- **GV.RM** — Risk Management Strategy
+- **GV.RR** — Roles, Responsibilities & Authorities
+- **GV.PO** — Policy
+- **GV.OV** — Oversight
+- **GV.SC** — Cybersecurity Supply Chain Risk Management
+
+**In Practice:** The board approves a cybersecurity risk appetite statement. The CISO establishes a security steering committee. Supply chain security requirements are added to vendor contracts.
+
+## 2. IDENTIFY (ID)
+
+Develop organizational understanding of cybersecurity risk to systems, people, assets, and data.
+
+**Categories:**
+- **ID.AM** — Asset Management
+- **ID.RA** — Risk Assessment
+- **ID.IM** — Improvement
+
+**In Practice:** Maintain a complete inventory of hardware, software, and data assets. Conduct annual risk assessments. Track and prioritize vulnerabilities.
+
+## 3. PROTECT (PR)
+
+Implement safeguards to ensure delivery of critical services and limit the impact of incidents.
+
+**Categories:**
+- **PR.AA** — Identity Management, Authentication & Access Control
+- **PR.AT** — Awareness & Training
+- **PR.DS** — Data Security
+- **PR.PS** — Platform Security
+- **PR.IR** — Technology Infrastructure Resilience
+
+**In Practice:** Deploy MFA for all users. Encrypt sensitive data at rest and in transit. Conduct monthly security awareness training. Harden systems per CIS Benchmarks.
+
+## 4. DETECT (DE)
+
+Discover cybersecurity events in a timely manner.
+
+**Categories:**
+- **DE.CM** — Continuous Monitoring
+- **DE.AE** — Adverse Event Analysis
+
+**In Practice:** SIEM monitors for anomalous behavior. EDR alerts on suspicious process execution. Network sensors detect C2 communication patterns.
+
+## 5. RESPOND (RS)
+
+Take action when a cybersecurity incident is detected.
+
+**Categories:**
+- **RS.MA** — Incident Management
+- **RS.AN** — Incident Analysis
+- **RS.CO** — Incident Response Reporting & Communication
+- **RS.MI** — Incident Mitigation
+
+**In Practice:** Activate the incident response plan. Contain the threat (isolate affected systems). Communicate to stakeholders per the communication plan. Conduct root cause analysis.
+
+## 6. RECOVER (RC)
+
+Restore capabilities and services impaired by a cybersecurity incident.
+
+**Categories:**
+- **RC.RP** — Incident Recovery Plan Execution
+- **RC.CO** — Incident Recovery Communication
+
+**In Practice:** Restore systems from clean backups. Validate system integrity before returning to production. Conduct post-incident review and update procedures.
+
+## Function Relationships
+
+\`\`\`
+                    GOVERN
+                  (overarches all)
+                       │
+    ┌──────────────────┼──────────────────┐
+    │                  │                  │
+ IDENTIFY          PROTECT            DETECT
+ (know your        (safeguard         (find
+  assets)           them)              threats)
+    │                  │                  │
+    └──────────────────┼──────────────────┘
+                       │
+                    RESPOND ──→ RECOVER
+                  (act on          (restore
+                   incidents)       services)
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Govern is the new overarching function in v2.0 covering strategy, roles, and supply chain",
+      "Identify focuses on understanding your assets, risks, and improvement opportunities",
+      "Protect implements safeguards including access control, training, and data security",
+      "Detect ensures timely discovery through continuous monitoring and event analysis",
+      "Respond and Recover handle incident management, mitigation, and service restoration"
+    ]
+  },
+  {
+    id: "cf-2.3",
+    courseId: "cybersecurity-frameworks",
+    title: "Framework Profiles & Tiers",
+    content: `
+# Framework Profiles & Tiers
+
+Profiles and Tiers help organizations understand where they are, where they want to be, and how mature their risk management practices are.
+
+## Framework Profiles
+
+A Profile represents an organization's alignment with the CSF Core based on its business needs, risk tolerance, and resources.
+
+### Current Profile
+Documents the cybersecurity outcomes currently being achieved.
+
+### Target Profile
+Describes the desired cybersecurity outcomes based on business requirements and risk appetite.
+
+### Gap Analysis
+The difference between Current and Target Profiles reveals:
+- Areas needing improvement
+- Resource requirements
+- Prioritization of investments
+
+**Example Profile Entry:**
+
+| Function | Category | Current State | Target State | Gap |
+|----------|----------|--------------|-------------|-----|
+| Protect | PR.AA | Partial MFA deployment | MFA on all systems | Medium |
+| Detect | DE.CM | Basic SIEM monitoring | 24/7 SOC with advanced analytics | High |
+| Respond | RS.MA | Ad-hoc incident response | Documented IR plan with regular drills | Medium |
+
+## Framework Tiers
+
+Tiers describe the degree of rigor and sophistication of an organization's cybersecurity risk management.
+
+### Tier 1: Partial
+- Risk management is ad hoc and reactive
+- Limited awareness of cybersecurity risk
+- No formal processes or coordination
+- **Typical of:** Very small businesses or those just starting their security journey
+
+### Tier 2: Risk Informed
+- Risk management practices are approved but not organization-wide
+- Some awareness of risk but inconsistent implementation
+- Informal sharing of information within the organization
+- **Typical of:** Growing organizations beginning to formalize security
+
+### Tier 3: Repeatable
+- Risk management practices are formally approved and expressed as policy
+- Organization-wide approach to managing risk
+- Consistent methods for responding to changes
+- Regular collaboration with external partners
+- **Typical of:** Mature organizations with established security programs
+
+### Tier 4: Adaptive
+- Risk management is part of organizational culture
+- Continuous improvement based on lessons learned and predictive indicators
+- Active participation in information sharing with partners
+- Real-time risk awareness and response
+- **Typical of:** Industry leaders, large enterprises, critical infrastructure operators
+
+### Tier Selection Guidance
+
+Tiers are NOT maturity levels — not every organization needs to reach Tier 4.
+
+\`\`\`
+ Risk Level vs. Required Tier:
+
+ Low Risk Business  ──→  Tier 1-2 may be sufficient
+ Moderate Risk      ──→  Tier 2-3 recommended
+ High Risk / CI     ──→  Tier 3-4 expected
+ Regulated Industry ──→  Tier 3+ often required
+\`\`\`
+
+## Creating Your First Profile
+
+1. **Define scope** — Which business units, systems, or processes?
+2. **Review categories** — Go through each CSF category
+3. **Assess current state** — Document existing controls and capabilities
+4. **Define target state** — Based on business needs and risk tolerance
+5. **Identify gaps** — Prioritize based on risk impact
+6. **Create action plan** — Budget, timeline, and responsibilities
+    `,
+    keyTakeaways: [
+      "Profiles capture current and target cybersecurity outcomes for gap analysis",
+      "Tiers 1-4 describe risk management sophistication from Partial to Adaptive",
+      "Tiers are not maturity levels — the right tier depends on organizational risk",
+      "Gap analysis between current and target profiles drives investment prioritization",
+      "Profile creation starts with scoping and ends with an actionable improvement plan"
+    ]
+  },
+  {
+    id: "cf-2.4",
+    courseId: "cybersecurity-frameworks",
+    title: "Implementing NIST CSF in Practice",
+    content: `
+# Implementing NIST CSF in Practice
+
+Adopting the NIST CSF requires a structured approach tailored to your organization's size, industry, and risk profile.
+
+## Implementation Steps
+
+### Step 1: Secure Executive Buy-In
+- Present the business case for CSF adoption
+- Highlight regulatory, insurance, and partnership benefits
+- Define resource requirements and expected timeline
+- Assign a project sponsor (ideally the CISO)
+
+### Step 2: Define Scope and Priorities
+- Identify critical business services and supporting systems
+- Determine which regulatory requirements apply
+- Prioritize based on risk (start with crown jewels)
+
+### Step 3: Create Your Current Profile
+- Conduct a comprehensive assessment of existing controls
+- Map current capabilities to CSF categories and subcategories
+- Document evidence of implementation for each subcategory
+- Rate each subcategory: Not Implemented / Partially / Fully
+
+### Step 4: Conduct Risk Assessment
+- Identify threats and vulnerabilities to in-scope systems
+- Assess likelihood and impact of potential incidents
+- Determine risk levels using your organization's risk methodology
+
+### Step 5: Create Your Target Profile
+- Define desired outcomes based on risk assessment results
+- Consider regulatory requirements, business needs, and budget
+- Set realistic timelines for achieving each target
+
+### Step 6: Perform Gap Analysis
+- Compare Current Profile to Target Profile
+- Quantify gaps in terms of risk, cost, and effort
+- Prioritize gaps based on risk reduction potential
+
+### Step 7: Implement Action Plan
+- Assign ownership for each gap remediation
+- Establish milestones and track progress
+- Begin with quick wins to build momentum
+
+### Step 8: Monitor and Improve
+- Establish ongoing monitoring of control effectiveness
+- Conduct periodic reassessments (at least annually)
+- Update profiles as the business and threat landscape evolve
+
+## Scaling for Organization Size
+
+### Small Organizations (< 100 employees)
+- Focus on IG1 CIS Controls mapped to CSF
+- Use free tools (CIS-CAT, NIST CSF templates)
+- Assign security responsibilities to existing IT staff
+- Target Tier 2 maturity
+
+### Medium Organizations (100-1000)
+- Dedicated security team or managed service
+- Formal risk assessment process
+- GRC tool for tracking controls and evidence
+- Target Tier 2-3 maturity
+
+### Large Organizations (1000+)
+- Full security program with dedicated teams
+- Enterprise GRC platform
+- Continuous monitoring and automated compliance
+- Target Tier 3-4 maturity
+
+## Common Implementation Mistakes
+
+1. **Treating it as a checkbox exercise** — CSF is risk-based, not compliance-based
+2. **Boiling the ocean** — Start focused, expand gradually
+3. **Ignoring the Govern function** — Strategy and oversight are foundational
+4. **No executive sponsorship** — Doomed without top-down support
+5. **Static profiles** — Must be living documents updated regularly
+    `,
+    keyTakeaways: [
+      "Implementation follows 8 steps from executive buy-in through continuous improvement",
+      "Start with critical business services — don't try to cover everything at once",
+      "Scale your approach based on organization size and risk profile",
+      "Common mistakes include treating CSF as a checkbox and ignoring the Govern function",
+      "Profiles must be living documents updated as business and threats evolve"
+    ],
+    practicalExercise: {
+      title: "NIST CSF Quick Assessment",
+      description: "Perform a simplified CSF assessment for a fictional organization.",
+      steps: [
+        "Choose a fictional company (e.g., a 200-person e-commerce retailer)",
+        "Identify 3 critical business services",
+        "Rate 5 CSF categories (one from each function) as Not/Partial/Full",
+        "Define a target state and identify the top 3 gaps",
+        "Create a prioritized action plan with owners and timelines"
+      ]
+    }
+  },
+  {
+    id: "cf-2.5",
+    courseId: "cybersecurity-frameworks",
+    title: "Hands-On: NIST CSF Gap Assessment",
+    content: `
+# Hands-On: NIST CSF Gap Assessment
+
+In this exercise, you'll conduct a complete gap assessment using the NIST CSF for a simulated organization. This mirrors the real-world process used by security consultants and internal teams.
+
+## Scenario: MedTech Solutions Inc.
+
+**Company Profile:**
+- 500 employees, healthcare technology company
+- Processes protected health information (PHI)
+- Cloud-hosted SaaS platform (AWS)
+- Subject to HIPAA and state privacy laws
+- Recent ransomware attempt (detected but caused concern)
+- No formal security framework currently adopted
+
+## Exercise Part 1: Current Profile Assessment
+
+Assess MedTech's current state for each CSF function:
+
+### GOVERN
+| Category | Subcategory | Current State | Evidence |
+|----------|------------|--------------|---------|
+| GV.OC | Organizational context understood | Partial | Mission documented, but cyber risk not formally tied to business objectives |
+| GV.RM | Risk management strategy established | Not Implemented | No formal risk appetite statement or risk management policy |
+| GV.RR | Roles & responsibilities defined | Partial | CISO hired recently, but security steering committee not formed |
+
+### IDENTIFY
+| Category | Subcategory | Current State | Evidence |
+|----------|------------|--------------|---------|
+| ID.AM | Asset inventory maintained | Partial | Server inventory exists, but no shadow IT or SaaS discovery |
+| ID.RA | Risk assessments conducted | Not Implemented | No formal risk assessment has been performed |
+
+### PROTECT
+| Category | Subcategory | Current State | Evidence |
+|----------|------------|--------------|---------|
+| PR.AA | MFA deployed | Partial | MFA on email only, not on VPN or cloud admin |
+| PR.AT | Security awareness training | Partial | Annual training exists but no phishing simulations |
+| PR.DS | Data encryption | Implemented | AES-256 at rest, TLS 1.2+ in transit |
+
+### DETECT
+| Category | Subcategory | Current State | Evidence |
+|----------|------------|--------------|---------|
+| DE.CM | Continuous monitoring | Partial | Basic CloudWatch alerts, no SIEM or SOC |
+| DE.AE | Adverse events analyzed | Not Implemented | No formal process for analyzing security events |
+
+### RESPOND
+| Category | Subcategory | Current State | Evidence |
+|----------|------------|--------------|---------|
+| RS.MA | Incident response plan | Partial | Draft IR plan exists but never tested |
+| RS.CO | Stakeholder communication | Not Implemented | No breach notification process documented |
+
+### RECOVER
+| Category | Subcategory | Current State | Evidence |
+|----------|------------|--------------|---------|
+| RC.RP | Recovery plan executed | Partial | Backups exist but RTO/RPO not defined or tested |
+
+## Exercise Part 2: Target Profile
+
+Based on MedTech's risk profile (healthcare, PHI, cloud):
+
+**Target: Tier 3 (Repeatable) within 18 months**
+
+Priority targets:
+1. Formal risk management program (GV.RM)
+2. Complete asset inventory with CMDB (ID.AM)
+3. MFA on all systems (PR.AA)
+4. SIEM deployment with 24/5 monitoring (DE.CM)
+5. Tested incident response plan (RS.MA)
+6. Defined and tested DR/BC plan (RC.RP)
+
+## Exercise Part 3: Gap Analysis & Action Plan
+
+| Gap | Priority | Effort | Timeline | Owner |
+|-----|----------|--------|----------|-------|
+| No risk management program | Critical | High | Q1 | CISO |
+| Incomplete asset inventory | High | Medium | Q1-Q2 | IT Director |
+| Limited MFA deployment | High | Low | Q1 | Security Engineer |
+| No SIEM or SOC | Critical | High | Q2-Q3 | CISO |
+| Untested IR plan | High | Medium | Q2 | IR Lead |
+| No DR/BC testing | Medium | Medium | Q3-Q4 | IT Director |
+
+## Deliverables
+
+After completing this exercise, you should have:
+1. ✅ A documented Current Profile with evidence
+2. ✅ A Target Profile aligned with business risk
+3. ✅ A prioritized gap analysis
+4. ✅ An action plan with owners, timelines, and effort estimates
+    `,
+    keyTakeaways: [
+      "Gap assessments compare current controls against desired CSF outcomes",
+      "Each subcategory should be rated with supporting evidence",
+      "Target profiles must reflect regulatory requirements and business risk",
+      "Action plans need clear ownership, timelines, and priority levels",
+      "Healthcare organizations typically target Tier 3 maturity for HIPAA alignment"
+    ]
+  },
+
+  // Module 3: ISO 27001 (summary lessons)
+  {
+    id: "cf-3.1",
+    courseId: "cybersecurity-frameworks",
+    title: "ISO 27001 ISMS Overview",
+    content: `
+# ISO 27001: Information Security Management System
+
+ISO/IEC 27001 is the internationally recognized standard for establishing, implementing, maintaining, and continually improving an Information Security Management System (ISMS). It is the only cybersecurity framework that offers formal third-party certification.
+
+## What is an ISMS?
+
+An ISMS is a systematic approach to managing sensitive information so that it remains secure. It encompasses people, processes, and technology through risk management.
+
+\`\`\`
+┌─────────────────────────────────────────┐
+│              ISMS                        │
+│  ┌─────────┐ ┌──────────┐ ┌──────────┐  │
+│  │ People  │ │ Process  │ │Technology│  │
+│  └────┬────┘ └────┬─────┘ └────┬─────┘  │
+│       └───────────┼────────────┘        │
+│                   │                      │
+│         Risk Management                  │
+│                   │                      │
+│       Confidentiality                    │
+│       Integrity                          │
+│       Availability                       │
+└─────────────────────────────────────────┘
+\`\`\`
+
+## ISO 27001:2022 Structure
+
+The standard follows the Annex SL high-level structure:
+
+| Clause | Title | Purpose |
+|--------|-------|---------|
+| 4 | Context of the Organization | Understand internal/external factors and stakeholder needs |
+| 5 | Leadership | Demonstrate management commitment and establish policy |
+| 6 | Planning | Address risks and opportunities, set objectives |
+| 7 | Support | Provide resources, competence, awareness, communication |
+| 8 | Operation | Implement risk treatment plans and controls |
+| 9 | Performance Evaluation | Monitor, measure, audit, and review |
+| 10 | Improvement | Address nonconformities and drive continual improvement |
+
+## The PDCA Cycle
+
+ISO 27001 is built on the Plan-Do-Check-Act cycle:
+
+\`\`\`
+    ┌──────────────┐
+    │     PLAN     │ Establish ISMS policy, objectives,
+    │              │ risk assessment, risk treatment
+    └──────┬───────┘
+           ↓
+    ┌──────────────┐
+    │      DO      │ Implement controls, training,
+    │              │ and operations
+    └──────┬───────┘
+           ↓
+    ┌──────────────┐
+    │    CHECK     │ Monitor, measure, audit,
+    │              │ and management review
+    └──────┬───────┘
+           ↓
+    ┌──────────────┐
+    │     ACT      │ Correct nonconformities,
+    │              │ continual improvement
+    └──────────────┘
+\`\`\`
+
+## Certification Process
+
+### Stage 1 Audit (Documentation Review)
+- Review ISMS documentation
+- Assess readiness for Stage 2
+- Identify areas of concern
+
+### Stage 2 Audit (Implementation Audit)
+- On-site assessment (typically 5-10 days)
+- Interview staff across the organization
+- Verify controls are implemented and effective
+- Review evidence and records
+
+### Surveillance Audits
+- Annual audits to maintain certification
+- Subset of the full audit scope
+- Must demonstrate continual improvement
+
+### Recertification
+- Full audit every 3 years
+- Complete reassessment of the ISMS
+
+## Benefits of ISO 27001 Certification
+
+- **Market differentiation** — Competitive advantage in bids and partnerships
+- **Regulatory alignment** — Satisfies many GDPR, HIPAA, and SOX requirements
+- **Customer confidence** — Demonstrates commitment to security
+- **Operational improvement** — Structured approach reduces incidents
+- **Insurance benefits** — May reduce cyber insurance premiums
+    `,
+    keyTakeaways: [
+      "ISO 27001 is the only cybersecurity framework offering formal third-party certification",
+      "An ISMS systematically manages security through people, processes, and technology",
+      "The standard follows the PDCA cycle for continual improvement",
+      "Certification involves Stage 1 (documentation), Stage 2 (implementation), and annual surveillance audits",
+      "Certification provides market differentiation, regulatory alignment, and customer confidence"
+    ]
+  },
+  {
+    id: "cf-3.2",
+    courseId: "cybersecurity-frameworks",
+    title: "Annex A Controls Deep Dive",
+    content: `
+# ISO 27001:2022 Annex A Controls
+
+Annex A of ISO 27001:2022 contains 93 controls organized into 4 themes (reduced from 114 controls in 14 domains in the 2013 version). These controls are detailed in the companion standard ISO 27002:2022.
+
+## The Four Themes
+
+### Theme 1: Organizational Controls (37 controls)
+Controls related to policies, responsibilities, and management processes.
+
+**Key Controls:**
+| Control | Title | Purpose |
+|---------|-------|---------|
+| A.5.1 | Policies for information security | Provide management direction for security |
+| A.5.2 | Information security roles | Define and allocate responsibilities |
+| A.5.7 | Threat intelligence | Collect and analyze threat information |
+| A.5.23 | Information security for cloud services | Secure cloud usage |
+| A.5.29 | Security during disruption | Maintain security in adverse conditions |
+
+### Theme 2: People Controls (8 controls)
+Controls related to individuals before, during, and after employment.
+
+**Key Controls:**
+| Control | Title | Purpose |
+|---------|-------|---------|
+| A.6.1 | Screening | Background checks before employment |
+| A.6.3 | Information security awareness | Training and education programs |
+| A.6.5 | Responsibilities after termination | Ensure security obligations continue |
+
+### Theme 3: Physical Controls (14 controls)
+Controls for securing physical areas and equipment.
+
+**Key Controls:**
+| Control | Title | Purpose |
+|---------|-------|---------|
+| A.7.1 | Physical security perimeters | Define and protect secure areas |
+| A.7.4 | Physical security monitoring | Surveillance and detection |
+| A.7.10 | Storage media | Manage media throughout lifecycle |
+
+### Theme 4: Technological Controls (34 controls)
+Controls for information technology systems and processes.
+
+**Key Controls:**
+| Control | Title | Purpose |
+|---------|-------|---------|
+| A.8.1 | User endpoint devices | Secure laptops, phones, tablets |
+| A.8.5 | Secure authentication | Implement strong authentication |
+| A.8.9 | Configuration management | Maintain secure configurations |
+| A.8.12 | Data leakage prevention | Prevent unauthorized data exfiltration |
+| A.8.16 | Monitoring activities | Log and monitor for security events |
+| A.8.23 | Web filtering | Control access to external websites |
+| A.8.25 | Secure development lifecycle | Security in software development |
+| A.8.28 | Secure coding | Implement secure coding practices |
+
+## New Controls in 2022
+
+11 new controls were introduced:
+1. **A.5.7** — Threat intelligence
+2. **A.5.23** — Cloud services security
+3. **A.5.30** — ICT readiness for business continuity
+4. **A.7.4** — Physical security monitoring
+5. **A.8.9** — Configuration management
+6. **A.8.10** — Information deletion
+7. **A.8.11** — Data masking
+8. **A.8.12** — Data leakage prevention
+9. **A.8.16** — Monitoring activities
+10. **A.8.23** — Web filtering
+11. **A.8.28** — Secure coding
+
+## Control Attributes
+
+Each control now includes attributes for easier filtering:
+- **Control type:** Preventive, Detective, Corrective
+- **Information security properties:** Confidentiality, Integrity, Availability
+- **Cybersecurity concepts:** Identify, Protect, Detect, Respond, Recover
+- **Operational capabilities:** Governance, Asset Management, etc.
+- **Security domains:** Governance, Protection, Defence, Resilience
+    `,
+    keyTakeaways: [
+      "ISO 27001:2022 reorganized controls into 4 themes with 93 total controls",
+      "11 new controls address modern concerns like cloud, DLP, threat intel, and secure coding",
+      "Organizational controls (37) are the largest group covering policies and management",
+      "Each control now has attributes mapping to NIST CSF concepts for cross-framework alignment",
+      "Controls are selected based on risk assessment — not all 93 are mandatory"
+    ]
+  },
+  {
+    id: "cf-3.3",
+    courseId: "cybersecurity-frameworks",
+    title: "Risk Assessment Methodology (ISO 27005)",
+    content: `
+# Risk Assessment Methodology — ISO 27005
+
+ISO 27005 provides guidelines for information security risk management, supporting the risk assessment requirements of ISO 27001. It is the standard methodology for identifying, analyzing, and evaluating cybersecurity risks.
+
+## The Risk Assessment Process
+
+\`\`\`
+┌──────────────┐
+│ Context      │ Define scope, criteria, and risk appetite
+│ Establishment│
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│ Risk         │ Identify assets, threats, vulnerabilities,
+│ Identification│ and existing controls
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│ Risk         │ Determine likelihood and impact
+│ Analysis     │ (Qualitative or Quantitative)
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│ Risk         │ Compare against risk criteria
+│ Evaluation   │ and prioritize
+└──────┬───────┘
+       ↓
+┌──────────────┐
+│ Risk         │ Mitigate, Transfer, Avoid, or Accept
+│ Treatment    │
+└──────────────┘
+\`\`\`
+
+## Step 1: Context Establishment
+
+Define:
+- **Scope** — Which systems, processes, and data are included?
+- **Risk criteria** — How will you measure and compare risks?
+- **Risk appetite** — What level of risk is acceptable?
+
+## Step 2: Risk Identification
+
+### Asset Identification
+Catalog all information assets within scope:
+- Information (databases, documents, intellectual property)
+- Software (applications, operating systems)
+- Hardware (servers, laptops, network equipment)
+- Services (cloud, SaaS, third-party)
+- People (roles with access to sensitive data)
+
+### Threat Identification
+Common threat sources:
+- **Natural:** Floods, earthquakes, fires
+- **Human (intentional):** Hackers, insider threats, nation-states
+- **Human (accidental):** Employee errors, misconfiguration
+- **Technical:** Hardware failure, software bugs
+
+### Vulnerability Identification
+- Vulnerability scans and penetration tests
+- Configuration reviews
+- Process and procedural gaps
+- Physical security weaknesses
+
+## Step 3: Risk Analysis
+
+### Qualitative Analysis
+Uses descriptive scales (High/Medium/Low):
+
+| Likelihood | Impact | Risk Level |
+|-----------|--------|------------|
+| High | High | Critical |
+| High | Medium | High |
+| Medium | Medium | Medium |
+| Low | Medium | Low |
+| Low | Low | Very Low |
+
+### Quantitative Analysis (FAIR Methodology)
+Uses numerical values:
+- **ALE** (Annualized Loss Expectancy) = SLE × ARO
+- **SLE** (Single Loss Expectancy) = Asset Value × Exposure Factor
+- **ARO** (Annualized Rate of Occurrence)
+
+**Example:**
+- Asset: Customer database (value: $2M)
+- Threat: SQL injection breach
+- Exposure Factor: 30%
+- SLE = $2M × 0.30 = $600,000
+- ARO = 0.1 (once every 10 years)
+- ALE = $600,000 × 0.1 = $60,000/year
+
+## Step 4: Risk Evaluation
+
+Compare analyzed risks against acceptance criteria:
+- Risks above appetite → Must be treated
+- Risks within appetite → May be accepted with documentation
+- Create a prioritized risk register
+
+## Step 5: Risk Treatment
+
+| Strategy | Description | Example |
+|----------|------------|---------|
+| Mitigate | Reduce likelihood or impact | Deploy WAF to reduce SQL injection risk |
+| Transfer | Shift risk to a third party | Purchase cyber insurance |
+| Avoid | Eliminate the risk source | Discontinue the vulnerable service |
+| Accept | Acknowledge and document | Low-impact risk within appetite |
+    `,
+    keyTakeaways: [
+      "ISO 27005 provides a structured process for cybersecurity risk assessment",
+      "Risk identification covers assets, threats, vulnerabilities, and existing controls",
+      "Qualitative analysis uses descriptive scales; quantitative uses financial models like FAIR",
+      "ALE = SLE × ARO is the core formula for quantitative risk analysis",
+      "Risk treatment options are mitigate, transfer, avoid, or accept"
+    ]
+  },
+  {
+    id: "cf-3.4",
+    courseId: "cybersecurity-frameworks",
+    title: "Statement of Applicability & Audit Readiness",
+    content: `
+# Statement of Applicability & Audit Readiness
+
+The Statement of Applicability (SoA) is the most critical document in ISO 27001 — it defines which Annex A controls your organization has selected and why.
+
+## The Statement of Applicability (SoA)
+
+The SoA is a comprehensive table listing all 93 Annex A controls with:
+- Whether each control is **applicable** or **not applicable**
+- **Justification** for inclusion or exclusion
+- **Implementation status** (Implemented / In Progress / Planned)
+- **Control description** — How the control is implemented in your context
+
+### SoA Template
+
+| Control | Title | Applicable? | Justification | Status | Implementation |
+|---------|-------|-------------|---------------|--------|---------------|
+| A.5.1 | Info security policies | Yes | Required for ISMS governance | Implemented | Policy approved by CISO, reviewed annually |
+| A.7.2 | Physical entry | Yes | Office contains sensitive data | Implemented | Badge access, visitor logs, CCTV |
+| A.8.12 | Data leakage prevention | Yes | Process customer PII and financial data | In Progress | DLP tool selected, deployment Q2 |
+| A.7.3 | Securing offices/rooms | No | Fully remote workforce, no physical offices | N/A | — |
+
+### SoA Best Practices
+- Don't exclude controls without strong justification
+- "We don't do that" is not a valid exclusion reason
+- Link each control to the risk(s) it addresses
+- Update the SoA whenever controls change
+
+## Preparing for the Audit
+
+### Documentation Checklist
+
+**Mandatory Documents:**
+- [ ] ISMS scope statement
+- [ ] Information security policy
+- [ ] Risk assessment methodology
+- [ ] Risk assessment results
+- [ ] Risk treatment plan
+- [ ] Statement of Applicability
+- [ ] Information security objectives
+- [ ] Evidence of competence (training records)
+- [ ] Operational planning and control evidence
+- [ ] Internal audit results
+- [ ] Management review minutes
+- [ ] Corrective action records
+
+### Internal Audits
+
+ISO 27001 requires internal audits before the certification audit:
+
+**Audit Program:**
+1. Plan audits covering all ISMS clauses and applicable controls
+2. Use auditors independent of the area being audited
+3. Document findings: conformities, nonconformities, observations
+4. Track corrective actions to closure
+5. Report results to management
+
+### Management Reviews
+
+Management reviews must cover:
+- Status of actions from previous reviews
+- Changes in external/internal issues
+- Feedback on security performance
+- Results of risk assessments
+- Audit results
+- Opportunities for improvement
+
+### Common Audit Findings
+
+| Finding | Type | Prevention |
+|---------|------|-----------|
+| Policies not reviewed annually | Minor NC | Set calendar reminders for review cycles |
+| No evidence of risk assessment updates | Major NC | Document all risk assessment activities |
+| Staff unaware of security policy | Minor NC | Improve awareness program and track completion |
+| Incomplete asset inventory | Major NC | Implement automated discovery tools |
+| No incident response testing | Minor NC | Schedule tabletop exercises quarterly |
+
+**NC = Nonconformity**
+
+## After Certification
+
+Certification is not the finish line — it's the starting point:
+- Conduct surveillance audits annually
+- Continuously improve based on incidents and audit findings
+- Update risk assessments when the environment changes
+- Maintain evidence of ongoing control effectiveness
+    `,
+    keyTakeaways: [
+      "The SoA lists all 93 controls with applicability, justification, and implementation status",
+      "Never exclude a control without documented, defensible justification",
+      "Internal audits must be conducted before the certification audit",
+      "Management reviews are mandatory and must cover specific required topics",
+      "Certification requires ongoing maintenance through surveillance audits and improvement"
+    ]
+  },
+
+  // Remaining modules - shorter content for brevity but still unique
+  {
+    id: "cf-4.1",
+    courseId: "cybersecurity-frameworks",
+    title: "CIS Controls v8 Overview",
+    content: `
+# CIS Critical Security Controls v8
+
+The Center for Internet Security (CIS) Controls are a prioritized set of 18 cybersecurity best practices developed by a global community of IT professionals. They represent the most effective actions organizations can take to stop today's most common attacks.
+
+## The 18 CIS Controls
+
+### Basic Controls (IG1 — Essential Cyber Hygiene)
+| # | Control | Focus |
+|---|---------|-------|
+| 1 | Inventory and Control of Enterprise Assets | Know what's on your network |
+| 2 | Inventory and Control of Software Assets | Know what software is running |
+| 3 | Data Protection | Classify and protect sensitive data |
+| 4 | Secure Configuration of Assets & Software | Harden default configurations |
+| 5 | Account Management | Manage user and admin accounts |
+| 6 | Access Control Management | Enforce least privilege |
+
+### Foundational Controls (IG2)
+| # | Control | Focus |
+|---|---------|-------|
+| 7 | Continuous Vulnerability Management | Find and fix vulnerabilities |
+| 8 | Audit Log Management | Collect and retain logs |
+| 9 | Email and Web Browser Protections | Secure primary attack vectors |
+| 10 | Malware Defenses | Prevent and detect malware |
+| 11 | Data Recovery | Maintain and test backups |
+| 12 | Network Infrastructure Management | Secure network devices |
+
+### Organizational Controls (IG3)
+| # | Control | Focus |
+|---|---------|-------|
+| 13 | Network Monitoring and Defense | Detect intrusions |
+| 14 | Security Awareness and Skills Training | Educate users |
+| 15 | Service Provider Management | Manage third-party risk |
+| 16 | Application Software Security | Secure software development |
+| 17 | Incident Response Management | Plan and practice IR |
+| 18 | Penetration Testing | Validate defenses |
+
+## Implementation Groups (IGs)
+
+CIS Controls use Implementation Groups to prioritize based on organizational resources and risk:
+
+### IG1: Essential Cyber Hygiene (56 safeguards)
+- Every organization should implement these
+- Small organizations with limited IT resources
+- Addresses the most common attack patterns
+- **Achieves ~80% risk reduction**
+
+### IG2: Intermediate (74 additional safeguards)
+- Organizations with dedicated IT staff
+- Managing enterprise-level complexity
+- Sensitive client data or regulatory requirements
+
+### IG3: Advanced (23 additional safeguards)
+- Organizations with security experts
+- Critical infrastructure or high-value targets
+- Sophisticated threat defense
+
+## CIS Controls vs. NIST CSF Mapping
+
+| CIS Control | NIST CSF Function |
+|-------------|-------------------|
+| 1-2 (Inventory) | Identify |
+| 3-6 (Protect) | Protect |
+| 7-12 (Foundational) | Protect / Detect |
+| 13 (Network Defense) | Detect |
+| 14 (Training) | Protect |
+| 17 (Incident Response) | Respond |
+| 18 (Pen Testing) | Identify |
+    `,
+    keyTakeaways: [
+      "CIS Controls provide 18 prioritized cybersecurity actions organized by implementation groups",
+      "IG1 (Essential Cyber Hygiene) with 56 safeguards achieves approximately 80% risk reduction",
+      "Controls are developed by a global community and updated regularly based on real attack data",
+      "CIS Controls map directly to NIST CSF functions for integrated framework adoption",
+      "Start with IG1 regardless of organization size — it covers the most critical defenses"
+    ]
+  },
+  {
+    id: "cf-4.2",
+    courseId: "cybersecurity-frameworks",
+    title: "Implementation Group 1: Essential Cyber Hygiene",
+    content: `
+# Implementation Group 1: Essential Cyber Hygiene
+
+IG1 is the on-ramp to the CIS Controls — 56 safeguards that every organization, regardless of size, should implement. These address the most common and impactful cyber attacks.
+
+## Why Start with IG1?
+
+According to the CIS Community Defense Model, IG1 safeguards protect against **77% of MITRE ATT&CK (sub-)techniques** used in common attacks. This makes IG1 the single most cost-effective security investment.
+
+## Key IG1 Safeguards by Control
+
+### Control 1: Enterprise Asset Inventory
+- **1.1** Establish and maintain a detailed enterprise asset inventory
+- **1.2** Address unauthorized assets (quarantine or remove)
+- Use: Network scanning, DHCP logs, NAC, endpoint agents
+
+### Control 2: Software Asset Inventory
+- **2.1** Establish and maintain a software inventory
+- **2.2** Ensure authorized software is currently supported
+- **2.3** Address unauthorized software
+- Use: Application whitelisting, software inventory tools
+
+### Control 3: Data Protection
+- **3.1** Establish and maintain a data management process
+- **3.4** Enforce data retention policies
+- **3.6** Encrypt data on end-user devices (full disk encryption)
+- Use: BitLocker, FileVault, data classification tools
+
+### Control 4: Secure Configuration
+- **4.1** Establish and maintain a secure configuration process
+- **4.7** Manage default accounts (disable or rename)
+- Use: CIS Benchmarks, group policy, configuration management
+
+### Control 5: Account Management
+- **5.1** Establish and maintain an account inventory
+- **5.2** Use unique passwords (no shared accounts)
+- **5.3** Disable dormant accounts (after 45 days of inactivity)
+- **5.4** Restrict admin privileges to dedicated admin accounts
+
+### Control 6: Access Control
+- **6.1** Establish an access granting process
+- **6.2** Establish an access revoking process
+- **6.5** Require MFA for externally-exposed applications
+- **6.8** Define and enforce access based on role (RBAC)
+
+## Quick Implementation Checklist
+
+\`\`\`
+□ Can you list every device on your network?
+□ Do you know what software is installed on each system?
+□ Are default passwords changed on all systems?
+□ Is full disk encryption enabled on all laptops?
+□ Are admin accounts separate from daily-use accounts?
+□ Is MFA enabled for email, VPN, and cloud services?
+□ Are inactive accounts disabled within 45 days?
+□ Do you have a process for granting and revoking access?
+\`\`\`
+
+If you answered "no" to any of these, those are your IG1 priorities.
+
+## Free Tools for IG1
+
+- **CIS-CAT Lite** — Free benchmarking tool
+- **NMAP** — Network discovery and inventory
+- **Nessus Essentials** — Vulnerability scanning (free for 16 IPs)
+- **LAPS** — Local admin password management (Microsoft)
+- **Snipe-IT** — Open-source IT asset management
+    `,
+    keyTakeaways: [
+      "IG1's 56 safeguards protect against 77% of common ATT&CK techniques",
+      "Key focuses: asset inventory, secure configuration, account management, MFA, and encryption",
+      "IG1 is the most cost-effective security investment for any organization",
+      "Free tools like CIS-CAT, NMAP, and Nessus Essentials enable IG1 implementation",
+      "Start with the quick checklist to identify your most critical IG1 gaps"
+    ]
+  },
+  {
+    id: "cf-4.3",
+    courseId: "cybersecurity-frameworks",
+    title: "Implementation Groups 2 & 3: Advanced Controls",
+    content: `
+# Implementation Groups 2 & 3: Advanced Controls
+
+After mastering IG1, organizations with more resources and higher risk profiles progress to IG2 and IG3 safeguards for deeper defense.
+
+## Implementation Group 2 (74 additional safeguards)
+
+IG2 is for organizations that manage sensitive data, have dedicated IT teams, and face more sophisticated threats.
+
+### Key IG2 Additions by Control
+
+**Control 7: Vulnerability Management**
+- Automated vulnerability scanning (at least weekly)
+- Remediate detected vulnerabilities based on risk
+- Manage internal vulnerability scanning processes
+
+**Control 8: Audit Log Management**
+- Collect audit logs across all enterprise assets
+- Standardize time synchronization (NTP)
+- Retain audit logs for at least 90 days
+- Review logs for anomalies (weekly minimum)
+
+**Control 9: Email & Browser Protections**
+- Use DNS filtering to block known malicious domains
+- Restrict unnecessary browser and email plugins
+- Deploy email authentication (SPF, DKIM, DMARC)
+
+**Control 10: Malware Defenses**
+- Deploy anti-malware on all enterprise assets
+- Enable auto-update for anti-malware signatures
+- Disable autorun for removable media
+
+**Control 11: Data Recovery**
+- Perform automated backups (at least weekly)
+- Test data recovery from backups quarterly
+- Protect backups with encryption and separate credentials
+- Maintain offline backup copies (3-2-1 rule)
+
+**Control 12: Network Infrastructure**
+- Manage network devices using secure protocols (SSH, HTTPS)
+- Ensure all network devices have current firmware
+- Centralize network authentication (RADIUS/TACACS+)
+
+## Implementation Group 3 (23 additional safeguards)
+
+IG3 is for mature organizations protecting critical infrastructure or high-value targets.
+
+### Key IG3 Additions
+
+**Control 13: Network Monitoring**
+- Deploy IDS/IPS at network boundaries
+- Perform traffic analysis for anomaly detection
+- Deploy SIEM with correlation rules
+
+**Control 16: Application Security**
+- Perform static and dynamic code analysis (SAST/DAST)
+- Conduct security testing for in-house applications
+- Maintain a software bill of materials (SBOM)
+
+**Control 18: Penetration Testing**
+- Conduct external and internal penetration testing annually
+- Perform red team exercises
+- Include social engineering in security testing
+
+## IG Progression Strategy
+
+\`\`\`
+Year 1: Implement all IG1 safeguards
+         ↓
+Year 2: Add IG2 safeguards (focus on logging, vuln mgmt, email)
+         ↓
+Year 3: Add IG3 safeguards (pen testing, app security, advanced monitoring)
+         ↓
+Ongoing: Continuous improvement and reassessment
+\`\`\`
+    `,
+    keyTakeaways: [
+      "IG2 adds 74 safeguards focusing on logging, vulnerability management, and email security",
+      "IG3 adds 23 advanced safeguards including pen testing, SIEM, and application security",
+      "A typical progression takes 3+ years from IG1 through IG3",
+      "IG2 priorities: automated scanning, centralized logging, backup testing, email authentication",
+      "IG3 is for organizations with dedicated security teams defending against sophisticated threats"
+    ]
+  },
+  {
+    id: "cf-4.4",
+    courseId: "cybersecurity-frameworks",
+    title: "CIS Benchmarks & Hardening Guides",
+    content: `
+# CIS Benchmarks & Hardening Guides
+
+CIS Benchmarks are detailed configuration guidelines developed through a consensus process to harden operating systems, applications, cloud platforms, and network devices.
+
+## What Are CIS Benchmarks?
+
+CIS Benchmarks are prescriptive, step-by-step hardening guides that specify exact configuration settings to secure a system. They are developed by subject matter experts and updated regularly.
+
+## Available Benchmarks
+
+### Operating Systems
+- Windows 10/11 Enterprise
+- Windows Server 2019/2022
+- Ubuntu Linux 20.04/22.04
+- Red Hat Enterprise Linux 8/9
+- macOS Ventura/Sonoma
+- CentOS, Debian, Amazon Linux
+
+### Cloud Platforms
+- AWS Foundations Benchmark
+- Azure Foundations Benchmark
+- Google Cloud Platform (GCP)
+- Oracle Cloud Infrastructure
+- Alibaba Cloud
+
+### Applications & Databases
+- Microsoft 365
+- Google Workspace
+- Docker / Kubernetes
+- PostgreSQL, MySQL, Oracle
+- Apache, Nginx, IIS
+
+### Network Devices
+- Cisco IOS/NX-OS
+- Palo Alto PAN-OS
+- Juniper Junos
+- Fortinet FortiOS
+
+## Benchmark Profiles
+
+Each benchmark has two profiles:
+
+### Level 1 (L1) — Practical Security
+- Minimal performance impact
+- Broadly applicable
+- Should be implemented on all systems
+- **Example:** Ensure Windows Firewall is enabled for all profiles
+
+### Level 2 (L2) — Defense in Depth
+- May impact functionality or performance
+- For high-security environments
+- **Example:** Disable all local administrator accounts except the built-in
+
+## Using CIS-CAT for Assessment
+
+CIS-CAT (Configuration Assessment Tool) automates benchmark compliance checking:
+
+\`\`\`
+CIS-CAT Assessment Report
+═══════════════════════════
+Benchmark: CIS Microsoft Windows 11 Enterprise v2.0.0
+Profile:   Level 1
+Date:      2024-12-15
+
+Overall Score: 78% (156/200 checks passed)
+
+Failed Checks (High Priority):
+✗ 1.1.1  Ensure 'Enforce password history' is set to '24 or more'
+✗ 2.3.1  Ensure 'Accounts: Block Microsoft accounts' is set to enabled
+✗ 18.9.5 Ensure 'Turn on PowerShell Script Block Logging' is enabled
+\`\`\`
+
+## Hardening Process
+
+1. **Baseline** — Run CIS-CAT assessment on a standard build
+2. **Analyze** — Review failed checks and assess impact
+3. **Test** — Apply settings in a test environment
+4. **Validate** — Confirm no application breakage
+5. **Deploy** — Push via Group Policy, Ansible, or SCCM
+6. **Monitor** — Continuously check for configuration drift
+
+## Integration with Frameworks
+
+CIS Benchmarks directly support:
+- **NIST CSF PR.PS** (Platform Security)
+- **ISO 27001 A.8.9** (Configuration Management)
+- **CIS Control 4** (Secure Configuration)
+- **PCI-DSS Requirement 2** (Do not use vendor-supplied defaults)
+    `,
+    keyTakeaways: [
+      "CIS Benchmarks provide prescriptive hardening guides for 100+ technologies",
+      "Level 1 profiles are practical for all systems; Level 2 is for high-security environments",
+      "CIS-CAT automates compliance checking against benchmark settings",
+      "Hardening should follow: baseline → analyze → test → validate → deploy → monitor",
+      "Benchmarks directly support NIST CSF, ISO 27001, CIS Controls, and PCI-DSS requirements"
+    ]
+  },
+
+  // Modules 5-10: Concise unique content
+  {
+    id: "cf-5.1", courseId: "cybersecurity-frameworks", title: "NIST Risk Management Framework (RMF)",
+    content: `
+# NIST Risk Management Framework (RMF)
+
+The NIST RMF (SP 800-37) provides a structured 7-step process for integrating security, privacy, and supply chain risk management into the system development lifecycle. Originally designed for US federal agencies, it is now widely adopted by defense contractors, critical infrastructure, and large enterprises.
+
+## The 7 RMF Steps
+
+### Step 1: Prepare
+- Establish context and priorities
+- Identify key stakeholders
+- Conduct organization-level risk assessment
+- Develop or update the risk management strategy
+
+### Step 2: Categorize
+- Categorize the information system based on FIPS 199
+- Determine impact levels (Low, Moderate, High) for:
+  - **Confidentiality** — Unauthorized disclosure
+  - **Integrity** — Unauthorized modification
+  - **Availability** — Disruption of access
+
+### Step 3: Select
+- Choose security controls from NIST SP 800-53
+- Tailor controls based on risk assessment
+- Document in the System Security Plan (SSP)
+
+### Step 4: Implement
+- Deploy selected controls in the information system
+- Document how controls are implemented
+- Update the SSP with implementation details
+
+### Step 5: Assess
+- Evaluate whether controls are properly implemented
+- Determine if controls produce desired outcomes
+- Document findings in the Security Assessment Report (SAR)
+
+### Step 6: Authorize
+- Senior official reviews the risk package
+- Makes a risk-based decision: Authorize, Deny, or Authorize with Conditions
+- Issues the Authorization to Operate (ATO)
+
+### Step 7: Monitor
+- Continuously monitor control effectiveness
+- Track changes to the system and environment
+- Update the risk package as needed
+- Report security posture to stakeholders
+
+## NIST SP 800-53 Control Families
+
+SP 800-53 Rev. 5 contains over 1,000 controls across 20 families:
+
+| Family | Code | Example Control |
+|--------|------|----------------|
+| Access Control | AC | AC-2: Account Management |
+| Audit & Accountability | AU | AU-6: Audit Review |
+| Security Assessment | CA | CA-7: Continuous Monitoring |
+| Configuration Management | CM | CM-6: Configuration Settings |
+| Incident Response | IR | IR-4: Incident Handling |
+| Risk Assessment | RA | RA-5: Vulnerability Monitoring |
+| System & Information Integrity | SI | SI-4: System Monitoring |
+
+## RMF vs. Other Frameworks
+
+| Feature | NIST RMF | NIST CSF | ISO 27001 |
+|---------|----------|----------|-----------|
+| Mandatory for | US federal agencies | Voluntary | Voluntary (certifiable) |
+| Focus | System-level authorization | Organizational risk | Management system |
+| Controls | SP 800-53 (1000+) | References other standards | Annex A (93) |
+| Output | ATO decision | Risk profile | Certification |
+    `,
+    keyTakeaways: [
+      "NIST RMF follows 7 steps: Prepare, Categorize, Select, Implement, Assess, Authorize, Monitor",
+      "Systems are categorized as Low, Moderate, or High impact using FIPS 199",
+      "Controls are selected from NIST SP 800-53 with over 1,000 controls across 20 families",
+      "The process culminates in an Authorization to Operate (ATO) decision",
+      "RMF is mandatory for US federal systems but widely adopted in defense and critical infrastructure"
+    ]
+  },
+  { id: "cf-5.2", courseId: "cybersecurity-frameworks", title: "Risk Assessment Techniques",
+    content: `
+# Risk Assessment Techniques
+
+Risk assessment is the systematic process of identifying, analyzing, and evaluating risks. This lesson explores the major methodologies used in cybersecurity risk assessment.
+
+## Qualitative vs. Quantitative
+
+### Qualitative Risk Assessment
+Uses subjective ratings (High/Medium/Low) based on expert judgment.
+
+**Risk Matrix (5x5):**
+\`\`\`
+Impact →    Negligible  Minor  Moderate  Major  Catastrophic
+Likelihood ↓
+Almost Certain   M        H       H        C        C
+Likely           M        M       H        H        C
+Possible         L        M       M        H        H
+Unlikely         L        L       M        M        H
+Rare             L        L       L        M        M
+\`\`\`
+
+**Pros:** Fast, easy to understand, works with limited data
+**Cons:** Subjective, inconsistent between assessors, hard to justify spending
+
+### Quantitative Risk Assessment (FAIR)
+Factor Analysis of Information Risk (FAIR) provides a quantitative model.
+
+**FAIR Taxonomy:**
+\`\`\`
+Risk = Loss Event Frequency × Loss Magnitude
+
+Loss Event Frequency = Threat Event Frequency × Vulnerability
+Loss Magnitude = Primary Loss + Secondary Loss
+\`\`\`
+
+**Example Calculation:**
+- Threat: Ransomware attack on file servers
+- Threat Event Frequency: 2 per year (based on industry data)
+- Vulnerability: 0.3 (30% chance of successful attack)
+- Loss Event Frequency: 2 × 0.3 = 0.6 per year
+- Primary Loss (downtime, recovery): $500,000
+- Secondary Loss (reputation, legal): $200,000
+- Total Loss Magnitude: $700,000
+- Annual Risk: 0.6 × $700,000 = $420,000/year
+
+**Pros:** Defensible, enables ROI calculations, comparable
+**Cons:** Requires data, complex, time-consuming
+
+## Threat Modeling Methodologies
+
+### STRIDE (Microsoft)
+Categorizes threats by type:
+- **S**poofing — Pretending to be someone else
+- **T**ampering — Modifying data or code
+- **R**epudiation — Denying actions taken
+- **I**nformation Disclosure — Exposing sensitive data
+- **D**enial of Service — Making services unavailable
+- **E**levation of Privilege — Gaining unauthorized access
+
+### DREAD (Scoring)
+Rates threats on a 1-10 scale:
+- **D**amage potential
+- **R**eproducibility
+- **E**xploitability
+- **A**ffected users
+- **D**iscoverability
+
+### PASTA (Process for Attack Simulation and Threat Analysis)
+A 7-stage risk-centric threat modeling methodology that aligns business objectives with technical requirements.
+
+## Choosing the Right Approach
+
+| Scenario | Recommended Method |
+|----------|-------------------|
+| Initial/quick assessment | Qualitative (risk matrix) |
+| Board presentation for budget | Quantitative (FAIR) |
+| Application security review | STRIDE threat modeling |
+| Comprehensive program | Hybrid (qualitative + quantitative for top risks) |
+    `,
+    keyTakeaways: [
+      "Qualitative assessments use subjective ratings; quantitative use financial models",
+      "FAIR methodology calculates risk as Loss Event Frequency × Loss Magnitude",
+      "STRIDE categorizes threats: Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation",
+      "Most mature organizations use a hybrid approach — qualitative screening with quantitative deep dives",
+      "Quantitative analysis is essential for justifying security budgets to executives"
+    ]
+  },
+  { id: "cf-5.3", courseId: "cybersecurity-frameworks", title: "Risk Treatment & Acceptance",
+    content: `
+# Risk Treatment & Acceptance
+
+After identifying and analyzing risks, organizations must decide how to address each one. Risk treatment is the process of selecting and implementing measures to modify risk.
+
+## The Four Treatment Strategies
+
+### 1. Risk Mitigation (Reduce)
+Implement controls to reduce the likelihood or impact of a risk.
+
+**Examples:**
+- Deploy MFA to reduce credential theft risk
+- Implement network segmentation to limit blast radius
+- Conduct security awareness training to reduce phishing success rate
+
+**When to use:** When the cost of mitigation is less than the expected loss
+
+### 2. Risk Transfer (Share)
+Shift the financial burden of risk to a third party.
+
+**Examples:**
+- Purchase cyber insurance
+- Outsource security operations to an MSSP
+- Use cloud services with shared responsibility model
+
+**When to use:** When the organization cannot fully mitigate the risk, or when transfer is more cost-effective
+
+### 3. Risk Avoidance (Eliminate)
+Remove the source of risk entirely.
+
+**Examples:**
+- Decommission a legacy system with known vulnerabilities
+- Stop collecting unnecessary personal data
+- Exit a market with unacceptable regulatory risk
+
+**When to use:** When the risk outweighs the business benefit
+
+### 4. Risk Acceptance (Retain)
+Acknowledge the risk and choose not to take additional action.
+
+**Requirements for acceptance:**
+- Risk must be within the organization's risk appetite
+- Must be formally documented and approved by a risk owner
+- Must be reviewed periodically (at least annually)
+- Must include a trigger for reassessment
+
+**Risk Acceptance Form:**
+\`\`\`
+Risk ID:           R-2024-042
+Risk Description:  Unpatched legacy application (end-of-life)
+Risk Level:        Medium
+Justification:     System scheduled for decommission in Q3 2025.
+                   Compensating controls: network isolation, enhanced monitoring.
+Risk Owner:        VP Engineering
+Approval Date:     2024-12-01
+Review Date:       2025-06-01
+\`\`\`
+
+## Risk Treatment Plan
+
+A Risk Treatment Plan documents all decisions:
+
+| Risk ID | Risk | Treatment | Control | Owner | Timeline | Status |
+|---------|------|-----------|---------|-------|----------|--------|
+| R-001 | Phishing | Mitigate | Email gateway + training | CISO | Q1 | In Progress |
+| R-002 | Ransomware | Mitigate + Transfer | EDR + Cyber insurance | IT Director | Q2 | Planned |
+| R-003 | Legacy app vuln | Accept | Network isolation | VP Eng | Q3 | Accepted |
+| R-004 | Insider data theft | Mitigate | DLP + access reviews | CISO | Q2 | In Progress |
+
+## Residual Risk
+
+After treatment, the remaining risk is called **residual risk**. If residual risk exceeds the risk appetite, additional treatment is needed.
+
+\`\`\`
+Inherent Risk  →  Treatment  →  Residual Risk
+(before controls)              (after controls)
+
+Must be within risk appetite
+\`\`\`
+    `,
+    keyTakeaways: [
+      "Four treatment strategies: mitigate, transfer, avoid, and accept",
+      "Risk acceptance requires formal documentation, risk owner approval, and periodic review",
+      "Risk treatment plans document all decisions with owners, timelines, and status",
+      "Residual risk is what remains after treatment — it must fall within risk appetite",
+      "Cyber insurance is risk transfer, not risk elimination — controls are still needed"
+    ]
+  },
+  { id: "cf-5.4", courseId: "cybersecurity-frameworks", title: "Third-Party Risk Management",
+    content: `
+# Third-Party Risk Management
+
+Organizations increasingly rely on vendors, cloud providers, and partners — each introducing risk to the supply chain. Third-party risk management (TPRM) ensures these external relationships don't become security blind spots.
+
+## Why TPRM Matters
+
+- **60% of data breaches** involve a third party (Ponemon)
+- Supply chain attacks (SolarWinds, Kaseya, MOVEit) demonstrate cascading risk
+- Regulations (GDPR, PCI-DSS, DORA) require vendor security oversight
+- Cloud adoption means critical data resides outside organizational boundaries
+
+## The TPRM Lifecycle
+
+\`\`\`
+┌─────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐
+│ Identify │→│ Assess    │→│ Contract  │→│ Monitor   │→│ Offboard  │
+│ & Classify│ │ Risk      │  │ & Onboard │  │ & Review  │  │ & Retain  │
+└─────────┘   └──────────┘   └──────────┘   └──────────┘   └──────────┘
+\`\`\`
+
+### Step 1: Identify & Classify Vendors
+- Maintain a vendor inventory
+- Classify by risk tier based on data access and criticality
+
+| Tier | Criteria | Assessment Level |
+|------|----------|-----------------|
+| Critical | Accesses sensitive data, business-critical service | Full assessment + on-site audit |
+| High | Accesses internal systems or moderate data | Detailed questionnaire + evidence review |
+| Medium | Limited data access, replaceable service | Standard questionnaire |
+| Low | No data access, minimal integration | Self-attestation |
+
+### Step 2: Assess Risk
+- **Security questionnaires** — SIG (Standardized Information Gathering), CAIQ
+- **Certifications** — ISO 27001, SOC 2 Type II, PCI-DSS
+- **External scanning** — SecurityScorecard, BitSight, RiskRecon
+- **Penetration test reports** — Recent third-party pen test results
+
+### Step 3: Contract & Onboard
+Include security requirements in contracts:
+- Data protection obligations
+- Incident notification requirements (e.g., within 24-72 hours)
+- Right to audit clause
+- Subprocessor controls
+- Data return/deletion on termination
+- Breach liability and indemnification
+
+### Step 4: Monitor & Review
+- Continuous monitoring via security rating platforms
+- Annual reassessment for critical vendors
+- Review SOC 2 reports annually
+- Track vendor security incidents
+
+### Step 5: Offboard
+- Ensure data return or secure deletion
+- Revoke all access credentials
+- Confirm contractual obligations are met
+- Update vendor inventory
+
+## Vendor Risk Assessment Red Flags
+
+- No SOC 2 or ISO 27001 certification
+- Unwilling to complete security questionnaires
+- No incident response plan or breach notification process
+- Outdated infrastructure or unpatched systems
+- History of security breaches without demonstrated improvement
+    `,
+    keyTakeaways: [
+      "60% of breaches involve third parties — TPRM is essential for supply chain security",
+      "Vendors should be classified into risk tiers determining assessment depth",
+      "Contracts must include incident notification, right to audit, and data protection clauses",
+      "Continuous monitoring through security rating platforms supplements periodic assessments",
+      "Offboarding must include verified data deletion and complete access revocation"
+    ]
+  },
+
+  // Module 6-10 lessons (abbreviated but unique)
+  { id: "cf-6.1", courseId: "cybersecurity-frameworks", title: "PCI-DSS v4.0 Overview",
+    content: `
+# PCI-DSS v4.0 Overview
+
+The Payment Card Industry Data Security Standard (PCI-DSS) is a set of security standards designed to protect cardholder data wherever it is processed, stored, or transmitted. Version 4.0 was released in March 2022 with a compliance deadline of March 31, 2025.
+
+## The 12 PCI-DSS Requirements
+
+### Build and Maintain a Secure Network and Systems
+1. **Install and maintain network security controls** (firewalls, WAFs, network segmentation)
+2. **Apply secure configurations to all system components** (remove defaults, harden systems)
+
+### Protect Account Data
+3. **Protect stored account data** (encryption, masking, tokenization)
+4. **Protect cardholder data with strong cryptography during transmission** (TLS 1.2+)
+
+### Maintain a Vulnerability Management Program
+5. **Protect all systems against malware** (anti-malware, anti-phishing)
+6. **Develop and maintain secure systems and software** (secure SDLC, patching)
+
+### Implement Strong Access Control Measures
+7. **Restrict access to system components by business need** (least privilege)
+8. **Identify users and authenticate access** (MFA, strong passwords, unique IDs)
+9. **Restrict physical access to cardholder data** (badges, cameras, visitor logs)
+
+### Regularly Monitor and Test Networks
+10. **Log and monitor all access to system components** (audit trails, SIEM)
+11. **Test security of systems and networks regularly** (vulnerability scans, pen tests)
+
+### Maintain an Information Security Policy
+12. **Support information security with organizational policies** (governance, risk, training)
+
+## Key Changes in v4.0
+
+- **Customized approach** — Alternative to the defined approach for meeting requirements
+- **Enhanced authentication** — MFA for all access to the CDE (not just remote)
+- **Targeted risk analysis** — Define frequency of activities based on risk
+- **Roles and responsibilities** — Explicitly defined for every requirement
+- **E-commerce protections** — New requirements for payment page scripts and integrity
+
+## Cardholder Data Environment (CDE)
+
+The CDE includes all people, processes, and technology that store, process, or transmit cardholder data or sensitive authentication data.
+
+**Key Data Elements:**
+| Data | Storage Allowed? | Must Encrypt? |
+|------|-----------------|---------------|
+| PAN (Primary Account Number) | Yes (encrypted) | Yes |
+| Cardholder Name | Yes | Recommended |
+| Expiration Date | Yes | Recommended |
+| CVV/CVC | Never | N/A |
+| Full Track Data | Never | N/A |
+| PIN/PIN Block | Never | N/A |
+
+## Compliance Levels
+
+| Level | Criteria | Validation |
+|-------|----------|-----------|
+| 1 | >6M transactions/year | Annual on-site QSA audit + quarterly ASV scan |
+| 2 | 1-6M transactions/year | Annual SAQ + quarterly ASV scan |
+| 3 | 20K-1M e-commerce transactions | Annual SAQ + quarterly ASV scan |
+| 4 | <20K e-commerce / <1M other | Annual SAQ (recommended) |
+    `,
+    keyTakeaways: [
+      "PCI-DSS v4.0 contains 12 requirements organized into 6 goals for protecting cardholder data",
+      "CVV, full track data, and PINs must never be stored after authorization",
+      "v4.0 introduces the customized approach as an alternative to prescriptive requirements",
+      "MFA is now required for all access to the CDE, not just remote access",
+      "Compliance level determines validation requirements based on transaction volume"
+    ]
+  },
+  { id: "cf-6.2", courseId: "cybersecurity-frameworks", title: "Scoping, SAQs & Compliance Levels", content: `# Scoping, SAQs & Compliance Levels\n\nProper scoping is the most critical step in PCI-DSS compliance. An incorrectly scoped assessment leads to either over-investment or dangerous gaps.\n\n## Scoping the CDE\n\nThe Cardholder Data Environment (CDE) includes:\n- Systems that store, process, or transmit cardholder data\n- Systems connected to or that could impact CDE security\n- Network segments without proper isolation from the CDE\n\n### Scope Reduction Strategies\n\n1. **Network Segmentation** — Isolate CDE from corporate network\n2. **Tokenization** — Replace PAN with non-sensitive tokens\n3. **Point-to-Point Encryption (P2PE)** — Encrypt at the terminal\n4. **Outsourcing** — Use a PCI-compliant payment processor\n5. **Cloud Payment Pages** — Redirect to hosted payment forms\n\n## Self-Assessment Questionnaires (SAQs)\n\n| SAQ Type | Description | Requirements |\n|----------|-------------|-------------|\n| SAQ A | Card-not-present, fully outsourced | 22 questions |\n| SAQ A-EP | E-commerce with website impacting payment | 191 questions |\n| SAQ B | Imprint or standalone dial-out terminals | 41 questions |\n| SAQ C | Payment terminals with internet connection | 160 questions |\n| SAQ D | All other merchants / service providers | 329 questions |\n\n**Choosing the right SAQ:**\n- The simpler your payment processing, the simpler your SAQ\n- SAQ A is the goal — fully outsource payment processing\n- SAQ D is effectively the full PCI-DSS assessment\n\n## Reducing Compliance Burden\n\nThe most effective strategy: **minimize your CDE scope**\n\n\`\`\`\nTraditional (large scope):\n[Corporate Network] ←→ [Payment Processing] ←→ [Card Data Storage]\n     All in scope — SAQ D required\n\nOptimized (minimal scope):\n[Corporate Network] | [Segmented CDE] → [Tokenized Storage]\n                    ↑\n              Hosted Payment Page (SAQ A)\n\`\`\`\n\nBy using hosted payment pages and tokenization, many organizations can reduce from SAQ D (329 questions) to SAQ A (22 questions).`, keyTakeaways: ["Proper scoping is the most critical step in PCI-DSS — it determines your compliance burden", "Scope reduction through segmentation, tokenization, and outsourcing dramatically simplifies compliance", "SAQ types range from A (22 questions, fully outsourced) to D (329 questions, full assessment)", "Hosted payment pages and tokenization can reduce SAQ D to SAQ A", "Every connected system without proper segmentation falls into PCI scope"] },
+  { id: "cf-6.3", courseId: "cybersecurity-frameworks", title: "Network Segmentation & Encryption", content: `# Network Segmentation & Encryption in PCI-DSS\n\nTwo of the most powerful tools for PCI-DSS compliance are network segmentation and encryption. Together they reduce scope and protect cardholder data.\n\n## Network Segmentation\n\nWhile not explicitly required by PCI-DSS, segmentation is strongly recommended because it reduces the scope of the assessment.\n\n### Segmentation Methods\n\n| Method | Description | Effectiveness |\n|--------|-------------|---------------|\n| VLAN + ACLs | Logical separation with access control lists | Moderate |\n| Firewall | Dedicated firewall between CDE and corporate | High |\n| Micro-segmentation | Software-defined, host-level isolation | Very High |\n| Physical Separation | Completely separate network infrastructure | Highest |\n\n### Segmentation Validation\nPCI-DSS v4.0 requires:\n- Penetration testing to verify segmentation effectiveness\n- Testing every 6 months for service providers\n- Testing annually for merchants\n- Documentation of all segmentation controls\n\n## Encryption Requirements\n\n### Data in Transit\n- TLS 1.2 or higher for all cardholder data transmission\n- Strong cipher suites (AES-256-GCM preferred)\n- Certificate validation and pinning where applicable\n- No fallback to insecure protocols\n\n### Data at Rest\n- AES-256 encryption for stored PAN\n- Key management procedures (generation, distribution, rotation)\n- Dual control and split knowledge for encryption keys\n- Keys stored separately from encrypted data\n\n### Key Management\n\`\`\`\nKey Lifecycle:\nGenerate → Distribute → Store → Use → Rotate → Archive → Destroy\n\nKey Rotation: At least annually or upon suspected compromise\nKey Storage: HSM recommended, never stored in plaintext\nAccess: Minimum necessary, documented custodians\n\`\`\`\n\n## Tokenization\n\nTokenization replaces cardholder data with a non-sensitive substitute (token) that has no exploitable value.\n\n**Benefits:**\n- Tokens are useless if breached\n- Dramatically reduces CDE scope\n- Original data stored securely in token vault\n- Reversible only through the tokenization system`, keyTakeaways: ["Network segmentation is the most effective way to reduce PCI-DSS scope", "Segmentation must be validated through penetration testing (annually or semi-annually)", "TLS 1.2+ is mandatory for data in transit; AES-256 for data at rest", "Key management requires dual control, split knowledge, and annual rotation", "Tokenization replaces sensitive data with valueless tokens, dramatically reducing risk and scope"] },
+  { id: "cf-6.4", courseId: "cybersecurity-frameworks", title: "PCI-DSS Audits & Remediation", content: `# PCI-DSS Audits & Remediation\n\nPCI-DSS compliance is validated through assessments, and non-compliance can result in fines, increased transaction fees, and loss of the ability to process card payments.\n\n## Assessment Types\n\n### Qualified Security Assessor (QSA) Audit\n- Required for Level 1 merchants and service providers\n- Conducted by PCI-SSC certified QSA companies\n- Results in a Report on Compliance (ROC)\n- Typically takes 2-4 weeks on-site\n\n### Internal Security Assessor (ISA)\n- Organization's own trained and certified staff\n- Can conduct assessments for Level 2-4 merchants\n- Must pass PCI-SSC ISA certification program\n\n### ASV Scans\n- Quarterly external vulnerability scans by an Approved Scanning Vendor\n- Must achieve a "pass" result (no high vulnerabilities)\n- Required for all compliance levels\n\n## Common Audit Findings\n\n| Finding | Frequency | Remediation |\n|---------|-----------|-------------|\n| Weak passwords / no MFA | Very Common | Deploy password manager + MFA |\n| Missing patches | Very Common | Implement automated patch management |\n| Insufficient logging | Common | Deploy SIEM, ensure 12-month retention |\n| Inadequate segmentation | Common | Implement firewall rules + validation testing |\n| Stored CVV data | Serious | Immediately purge; fix application logic |\n| Unencrypted PAN | Serious | Implement encryption + tokenization |\n\n## Non-Compliance Consequences\n\n- **Fines:** $5,000 - $100,000 per month until compliant\n- **Increased fees:** Higher transaction processing rates\n- **Breach liability:** Full cost of fraudulent transactions\n- **Brand damage:** Public disclosure of non-compliance\n- **Loss of processing:** Payment brands may revoke processing rights\n\n## Remediation Best Practices\n\n1. **Prioritize by risk** — Address critical findings first\n2. **Create a remediation plan** — With owners, timelines, and milestones\n3. **Track progress** — Regular status updates to leadership\n4. **Validate fixes** — Retest after remediation\n5. **Document everything** — Evidence is essential for the next audit\n6. **Continuous compliance** — Don't treat it as an annual event`, keyTakeaways: ["QSA audits are required for Level 1 merchants; quarterly ASV scans for all levels", "Common findings include weak authentication, missing patches, and insufficient logging", "Non-compliance fines range from $5,000-$100,000/month plus breach liability", "Stored CVV data is a critical finding requiring immediate remediation", "Continuous compliance is more effective than annual audit cramming"] },
+
+  // Module 7: Data Privacy
+  { id: "cf-7.1", courseId: "cybersecurity-frameworks", title: "GDPR: Principles & Rights", content: `# GDPR: Principles & Rights\n\nThe General Data Protection Regulation (GDPR) is the European Union's comprehensive data protection law, effective since May 25, 2018. It applies to any organization processing personal data of EU/EEA residents, regardless of where the organization is located.\n\n## The 7 GDPR Principles\n\n| # | Principle | Description |\n|---|-----------|-------------|\n| 1 | Lawfulness, Fairness, Transparency | Process data lawfully with clear communication |\n| 2 | Purpose Limitation | Collect data only for specified, legitimate purposes |\n| 3 | Data Minimization | Collect only what is necessary |\n| 4 | Accuracy | Keep data accurate and up-to-date |\n| 5 | Storage Limitation | Retain data only as long as needed |\n| 6 | Integrity & Confidentiality | Protect data with appropriate security |\n| 7 | Accountability | Demonstrate compliance through documentation |\n\n## Data Subject Rights\n\n1. **Right of Access** — Obtain confirmation and copy of personal data\n2. **Right to Rectification** — Correct inaccurate personal data\n3. **Right to Erasure** (Right to be Forgotten) — Request deletion of personal data\n4. **Right to Restrict Processing** — Limit how data is used\n5. **Right to Data Portability** — Receive data in a structured, machine-readable format\n6. **Right to Object** — Object to processing based on legitimate interests\n7. **Rights Related to Automated Decision-Making** — Not be subject to purely automated decisions with legal effects\n\n## Lawful Bases for Processing\n\n| Basis | Description | Example |\n|-------|-------------|--------|\n| Consent | Freely given, specific, informed | Marketing emails with opt-in |\n| Contract | Necessary for contract performance | Processing a purchase order |\n| Legal Obligation | Required by law | Tax record retention |\n| Vital Interests | Protect someone's life | Emergency medical data sharing |\n| Public Task | Necessary for official authority | Government census |\n| Legitimate Interests | Balanced against data subject rights | Fraud prevention |\n\n## Breach Notification\n\n- **To supervisory authority:** Within 72 hours of becoming aware\n- **To data subjects:** Without undue delay if high risk to rights/freedoms\n- Must include: nature of breach, DPO contact, consequences, remedial measures\n\n## Penalties\n\n- **Tier 1:** Up to €10M or 2% of annual global turnover\n- **Tier 2:** Up to €20M or 4% of annual global turnover\n- **Notable fines:** Meta (€1.2B), Amazon (€746M), WhatsApp (€225M)`, keyTakeaways: ["GDPR applies to any organization processing EU/EEA residents' personal data worldwide", "7 principles govern all data processing: lawfulness, purpose limitation, minimization, accuracy, storage limitation, security, accountability", "Data subjects have 7 rights including access, erasure, portability, and objection", "Breaches must be reported to authorities within 72 hours", "Maximum penalties are €20M or 4% of global annual turnover — whichever is greater"] },
+  { id: "cf-7.2", courseId: "cybersecurity-frameworks", title: "HIPAA Security & Privacy Rules", content: `# HIPAA Security & Privacy Rules\n\nThe Health Insurance Portability and Accountability Act (HIPAA) establishes national standards for protecting health information in the United States. It applies to covered entities (healthcare providers, health plans, healthcare clearinghouses) and their business associates.\n\n## Protected Health Information (PHI)\n\nPHI is any individually identifiable health information, including:\n- Patient names, addresses, dates of birth\n- Medical record numbers, Social Security numbers\n- Diagnoses, treatment information, lab results\n- Insurance information, billing records\n- Any data that can identify a patient + relates to health\n\n**ePHI** = PHI in electronic form\n\n## The HIPAA Security Rule\n\nApplies specifically to ePHI and requires three types of safeguards:\n\n### Administrative Safeguards\n- Risk analysis and risk management\n- Security personnel designation\n- Workforce training and management\n- Information access management\n- Contingency planning\n- Evaluation and review\n\n### Physical Safeguards\n- Facility access controls\n- Workstation use and security\n- Device and media controls\n- Disposal of ePHI media\n\n### Technical Safeguards\n- Access control (unique user IDs, automatic logoff, encryption)\n- Audit controls (recording and examining access to ePHI)\n- Integrity controls (mechanisms to verify ePHI hasn't been altered)\n- Transmission security (encryption during transmission)\n\n## The HIPAA Privacy Rule\n\n- Establishes patient rights over their health information\n- Defines permitted uses and disclosures of PHI\n- Requires minimum necessary standard\n- Mandates Notice of Privacy Practices\n- Grants patients access to their records\n\n## Breach Notification Rule\n\n| Breach Size | Notification Timeline | To Whom |\n|-------------|----------------------|--------|\n| 500+ individuals | Within 60 days | HHS, media, individuals |\n| < 500 individuals | Annual log submission | HHS, affected individuals |\n\n## HIPAA Penalties\n\n| Tier | Knowledge Level | Penalty per Violation | Annual Max |\n|------|----------------|----------------------|------------|\n| 1 | Did not know | $100 - $50,000 | $25,000 |\n| 2 | Reasonable cause | $1,000 - $50,000 | $100,000 |\n| 3 | Willful neglect (corrected) | $10,000 - $50,000 | $250,000 |\n| 4 | Willful neglect (not corrected) | $50,000 | $1.5M |\n\n## Business Associate Agreements (BAAs)\n\nAny vendor handling ePHI must sign a BAA that:\n- Defines permitted uses of PHI\n- Requires appropriate safeguards\n- Mandates breach reporting to the covered entity\n- Ensures subcontractors also comply\n- Specifies data return/destruction on termination`, keyTakeaways: ["HIPAA protects PHI/ePHI through administrative, physical, and technical safeguards", "The Security Rule covers electronic PHI; the Privacy Rule covers all PHI formats", "Breaches affecting 500+ individuals require notification within 60 days to HHS, media, and individuals", "Penalties range from $100 to $50,000 per violation with annual maximums up to $1.5M", "Business Associate Agreements are legally required for all vendors handling ePHI"] },
+  { id: "cf-7.3", courseId: "cybersecurity-frameworks", title: "CCPA, CPRA & Emerging Privacy Laws", content: `# CCPA, CPRA & Emerging Privacy Laws\n\nThe US lacks a single federal privacy law, but states are rapidly enacting their own. The California Consumer Privacy Act (CCPA) and its amendment, the California Privacy Rights Act (CPRA), set the template.\n\n## CCPA/CPRA Overview\n\n**Applies to businesses that:**\n- Have annual gross revenue over $25M, OR\n- Buy/sell/share personal information of 100K+ consumers/households, OR\n- Derive 50%+ of revenue from selling/sharing personal information\n\n**Consumer Rights:**\n1. Right to know what data is collected and how it's used\n2. Right to delete personal information\n3. Right to opt-out of sale/sharing of personal information\n4. Right to non-discrimination for exercising rights\n5. Right to correct inaccurate information (CPRA addition)\n6. Right to limit use of sensitive personal information (CPRA)\n\n**CPRA Additions (effective Jan 2023):**\n- Created the California Privacy Protection Agency (CPPA)\n- Added "sensitive personal information" category\n- Extended data minimization and purpose limitation\n- Strengthened contractor and service provider obligations\n- Added right to opt-out of automated decision-making\n\n## State Privacy Law Landscape (2024-2025)\n\n| State | Law | Effective | Key Feature |\n|-------|-----|-----------|-------------|\n| California | CCPA/CPRA | Jan 2020/2023 | Most comprehensive |\n| Virginia | VCDPA | Jan 2023 | Consent for sensitive data |\n| Colorado | CPA | Jul 2023 | Universal opt-out mechanism |\n| Connecticut | CTDPA | Jul 2023 | Loyalty program protections |\n| Utah | UCPA | Dec 2023 | Business-friendly approach |\n| Texas | TDPSA | Jul 2024 | Broad applicability |\n| Oregon | OCPA | Jul 2024 | Non-profit inclusion |\n| Montana | MCDPA | Oct 2024 | Smallest population threshold |\n| 10+ others | Various | 2024-2026 | Varying requirements |\n\n## Federal Privacy Proposals\n\nSeveral federal privacy bills have been proposed:\n- **ADPPA** (American Data Privacy and Protection Act) — Most advanced\n- **COPRA** (Consumer Online Privacy Rights Act)\n- None have passed as of 2024\n\n## Global Privacy Trends\n\n- **137+ countries** now have data protection laws\n- Cross-border transfer mechanisms (SCCs, BCRs, adequacy decisions)\n- Trend toward stricter consent requirements\n- Children's data receiving enhanced protections globally\n- AI governance increasingly linked to privacy regulation`, keyTakeaways: ["CCPA applies to businesses with $25M+ revenue, 100K+ consumer data, or 50%+ data-selling revenue", "CPRA added sensitive personal information protections and created the CPPA enforcement agency", "15+ US states now have comprehensive privacy laws with varying requirements", "No federal privacy law exists yet, creating a patchwork of state requirements", "137+ countries have data protection laws — global privacy compliance is increasingly complex"] },
+  { id: "cf-7.4", courseId: "cybersecurity-frameworks", title: "Data Protection Impact Assessments", content: `# Data Protection Impact Assessments (DPIAs)\n\nA DPIA is a process to identify and minimize data protection risks of a project or processing activity. GDPR mandates DPIAs for processing that is "likely to result in a high risk" to individuals' rights and freedoms.\n\n## When is a DPIA Required?\n\nA DPIA is mandatory when processing involves:\n- Systematic and extensive profiling with significant effects\n- Large-scale processing of special category data (health, biometrics, etc.)\n- Systematic monitoring of publicly accessible areas\n- New technologies with unknown privacy impacts\n- Automated decision-making with legal effects\n- Large-scale data matching or combining\n- Processing of vulnerable individuals' data (children, employees)\n\n## DPIA Process\n\n### Step 1: Describe the Processing\n- What data is collected and from whom?\n- What is the purpose and legal basis?\n- Who has access to the data?\n- How long is data retained?\n- What systems and technologies are used?\n\n### Step 2: Assess Necessity and Proportionality\n- Is the processing necessary for the stated purpose?\n- Could the purpose be achieved with less data?\n- Is the legal basis appropriate?\n- Are data subjects adequately informed?\n\n### Step 3: Identify and Assess Risks\n\n| Risk | Likelihood | Severity | Overall Risk |\n|------|-----------|----------|-------------|\n| Unauthorized access to personal data | Medium | High | High |\n| Inaccurate profiling decisions | Low | High | Medium |\n| Excessive data retention | Medium | Medium | Medium |\n| Cross-border transfer without safeguards | Low | High | Medium |\n\n### Step 4: Identify Mitigation Measures\n\n| Risk | Mitigation | Residual Risk |\n|------|-----------|---------------|\n| Unauthorized access | Encryption + RBAC + MFA | Low |\n| Inaccurate profiling | Human review process | Low |\n| Excessive retention | Automated deletion policy | Low |\n| Cross-border transfer | Standard Contractual Clauses | Low |\n\n### Step 5: Sign-Off and Documentation\n- DPO review and recommendation\n- Controller sign-off\n- Document the DPIA and store for audit purposes\n- Consult the supervisory authority if high residual risk remains\n\n## Privacy by Design\n\n7 foundational principles (Ann Cavoukian):\n1. Proactive not reactive — prevent rather than remediate\n2. Privacy as the default setting\n3. Privacy embedded into design\n4. Full functionality — positive-sum, not zero-sum\n5. End-to-end security — full lifecycle protection\n6. Visibility and transparency\n7. Respect for user privacy`, keyTakeaways: ["DPIAs are mandatory under GDPR for high-risk processing activities", "The process covers: describe processing, assess necessity, identify risks, plan mitigations, document", "If residual risk remains high after mitigation, consultation with the supervisory authority is required", "Privacy by Design embeds privacy into systems proactively rather than retroactively", "DPIAs should be conducted early in project planning, not after systems are built"] },
+
+  // Module 8: SOC 2 & Cloud
+  { id: "cf-8.1", courseId: "cybersecurity-frameworks", title: "SOC 2 Trust Service Criteria", content: `# SOC 2 Trust Service Criteria\n\nSOC 2 (System and Organization Controls 2) is an auditing framework developed by the AICPA for service organizations. It evaluates an organization's controls relevant to security, availability, processing integrity, confidentiality, and privacy.\n\n## The Five Trust Service Criteria (TSCs)\n\n### 1. Security (Common Criteria) — REQUIRED\nThe foundation — always included in every SOC 2 report.\n- Protection against unauthorized access (physical and logical)\n- Intrusion detection and monitoring\n- Incident response procedures\n- Change management controls\n- Risk assessment processes\n\n### 2. Availability — OPTIONAL\nSystem is available for operation as committed.\n- Uptime monitoring and SLA management\n- Disaster recovery and business continuity\n- Capacity planning\n- Backup and restore procedures\n- Incident communication protocols\n\n### 3. Processing Integrity — OPTIONAL\nSystem processing is complete, valid, accurate, and timely.\n- Data validation and error handling\n- Quality assurance procedures\n- Processing monitoring and reconciliation\n- Output review and verification\n\n### 4. Confidentiality — OPTIONAL\nInformation designated as confidential is protected.\n- Data classification policies\n- Encryption of confidential data\n- Access controls based on classification\n- Secure data disposal procedures\n- NDA and confidentiality agreements\n\n### 5. Privacy — OPTIONAL\nPersonal information is collected, used, retained, and disposed of properly.\n- Privacy notice and consent\n- Choice and consent mechanisms\n- Data subject access requests\n- Disclosure to third parties\n- Data quality and retention\n\n## Common Criteria (CC) Categories\n\nThe Security criteria are organized into 9 categories:\n\n| Category | Focus |\n|----------|-------|\n| CC1 | Control Environment |\n| CC2 | Communication and Information |\n| CC3 | Risk Assessment |\n| CC4 | Monitoring Activities |\n| CC5 | Control Activities |\n| CC6 | Logical and Physical Access |\n| CC7 | System Operations |\n| CC8 | Change Management |\n| CC9 | Risk Mitigation |\n\n## Choosing Your TSCs\n\nMost organizations include:\n- **SaaS companies:** Security + Availability + Confidentiality\n- **Data processors:** Security + Confidentiality + Privacy\n- **Financial services:** Security + Processing Integrity + Availability\n- **Healthcare tech:** All five TSCs`, keyTakeaways: ["SOC 2 evaluates controls across 5 Trust Service Criteria: Security, Availability, Processing Integrity, Confidentiality, Privacy", "Security (Common Criteria) is always required; the other 4 TSCs are optional", "9 Common Criteria categories cover control environment through risk mitigation", "Choose TSCs based on your business model and customer expectations", "SOC 2 is an attestation (not certification) — issued by licensed CPA firms"] },
+  { id: "cf-8.2", courseId: "cybersecurity-frameworks", title: "SOC 2 Type I vs. Type II Audits", content: `# SOC 2 Type I vs. Type II Audits\n\nUnderstanding the difference between Type I and Type II is essential for planning your SOC 2 journey.\n\n## Type I: Point-in-Time\n\n- Evaluates control design at a **specific date**\n- Confirms controls are suitably designed\n- Does NOT test operating effectiveness over time\n- Faster and less expensive\n- Useful as a first step\n\n**Timeline:** 2-4 months to prepare, 2-4 weeks for audit\n\n## Type II: Period of Time\n\n- Evaluates control design AND operating effectiveness\n- Covers a **minimum 3-month period** (typically 6-12 months)\n- Tests that controls were consistently operating\n- More valuable and credible to customers\n- Required by most enterprise customers\n\n**Timeline:** 6-12 months of evidence collection + 4-6 weeks for audit\n\n## Comparison\n\n| Aspect | Type I | Type II |\n|--------|--------|--------|\n| Scope | Design at a point in time | Design + effectiveness over time |\n| Duration | Single date | 3-12 month observation period |\n| Evidence | Policies, configurations | Policies + operational evidence |\n| Cost | Lower ($20K-$50K) | Higher ($30K-$100K+) |\n| Customer Value | Moderate | High |\n| Recommended For | First-time SOC 2 | Ongoing compliance |\n\n## The SOC 2 Journey\n\n\`\`\`\nMonth 1-3: Readiness Assessment\n  └→ Gap analysis against TSCs\n  └→ Remediate critical gaps\n  └→ Implement missing controls\n\nMonth 4: Type I Audit\n  └→ Demonstrate control design\n  └→ Receive Type I report\n\nMonth 5-10: Evidence Collection Period\n  └→ Operate controls consistently\n  └→ Collect evidence continuously\n  └→ Address any control failures\n\nMonth 11-12: Type II Audit\n  └→ Auditor reviews evidence\n  └→ Tests control effectiveness\n  └→ Issues Type II report\n\nOngoing: Annual Type II renewal\n\`\`\`\n\n## Audit Readiness Tips\n\n1. **Automate evidence collection** — Use tools like Drata, Vanta, or Secureframe\n2. **Centralize documentation** — All policies, procedures, and evidence in one place\n3. **Train your team** — Everyone should understand their control responsibilities\n4. **Continuous monitoring** — Don't wait for audit season to check controls\n5. **Pre-audit self-assessment** — Identify issues before the auditor does`, keyTakeaways: ["Type I assesses control design at a point in time; Type II tests effectiveness over a period", "Type II reports are significantly more valuable to customers and partners", "The typical journey: readiness (3mo) → Type I (1mo) → evidence period (6mo) → Type II", "Automation tools like Drata and Vanta dramatically reduce the burden of evidence collection", "Annual Type II renewals are expected once you begin the SOC 2 program"] },
+  { id: "cf-8.3", courseId: "cybersecurity-frameworks", title: "Cloud Security Alliance (CSA) STAR", content: `# Cloud Security Alliance (CSA) STAR\n\nThe CSA Security, Trust, Assurance, and Risk (STAR) program provides a framework for cloud security assurance. It helps cloud customers evaluate provider security through standardized assessments.\n\n## CSA STAR Levels\n\n| Level | Name | Description |\n|-------|------|-------------|\n| 1 | Self-Assessment | Provider completes CAIQ or CCM self-assessment |\n| 2 | Third-Party Audit | Independent assessment (CSA STAR Certification or Attestation) |\n| 3 | Continuous Monitoring | Real-time, continuous assessment (future goal) |\n\n## Cloud Controls Matrix (CCM)\n\nThe CCM is a cybersecurity control framework specifically designed for cloud computing. Version 4.0 contains 197 control objectives across 17 domains:\n\n| Domain | Code | Focus |\n|--------|------|-------|\n| Audit & Assurance | A&A | Audit planning and reporting |\n| Application & Interface Security | AIS | Secure application development |\n| Business Continuity | BCR | Disaster recovery and resilience |\n| Change Control | CCC | Change management processes |\n| Data Security | DSP | Data lifecycle protection |\n| Encryption & Key Mgmt | EKM | Cryptographic controls |\n| Governance & Risk | GRC | Governance and compliance |\n| Human Resources | HRS | Personnel security |\n| Identity & Access | IAM | Authentication and authorization |\n| Infrastructure & Virtualization | IVS | Virtual infrastructure security |\n| Interoperability & Portability | IPY | Data portability and vendor lock-in |\n| Logging & Monitoring | LOG | Security monitoring |\n| Security Incident Mgmt | SEF | Incident response |\n| Supply Chain Mgmt | STA | Third-party risk |\n| Threat & Vulnerability | TVM | Vulnerability management |\n| Universal Endpoint | UEM | Device management |\n\n## Consensus Assessments Initiative Questionnaire (CAIQ)\n\nThe CAIQ is a standardized questionnaire with Yes/No questions based on the CCM. Cloud providers complete it to document their security posture.\n\n**Benefits:**\n- Standardized format reduces vendor assessment fatigue\n- Maps to NIST CSF, ISO 27001, PCI-DSS, and other frameworks\n- Published on the STAR Registry for public review\n- Free to access and use\n\n## STAR Registry\n\nThe public registry at cloudsecurityalliance.org/star lists:\n- Self-assessments (CAIQ responses)\n- Certifications and attestations\n- Provider security posture documentation\n\n**Major providers on the registry:**\nAWS, Microsoft Azure, Google Cloud, Salesforce, ServiceNow, Zoom, and 1,000+ others.`, keyTakeaways: ["CSA STAR provides three levels of cloud security assurance from self-assessment to continuous monitoring", "The Cloud Controls Matrix (CCM) v4.0 covers 197 control objectives across 17 cloud-specific domains", "CAIQ provides standardized vendor questionnaires that map to major frameworks", "The STAR Registry is a free public resource for evaluating cloud provider security", "CSA STAR complements SOC 2 and ISO 27001 with cloud-specific security controls"] },
+  { id: "cf-8.4", courseId: "cybersecurity-frameworks", title: "AWS, Azure & GCP Security Frameworks", content: `# Cloud Provider Security Frameworks\n\nMajor cloud providers operate under a shared responsibility model — they secure the cloud infrastructure while customers secure what they put in it.\n\n## The Shared Responsibility Model\n\n\`\`\`\n┌──────────────────────────────────────────────────────┐\n│              Customer Responsibility                  │\n│  Data, Identity, Application, OS, Network Config     │\n├──────────────────────────────────────────────────────┤\n│             Shared Responsibility                     │\n│  Patch management, configuration, encryption          │\n├──────────────────────────────────────────────────────┤\n│            Cloud Provider Responsibility              │\n│  Physical, Network, Hypervisor, Global Infrastructure│\n└──────────────────────────────────────────────────────┘\n\`\`\`\n\nResponsibility varies by service model:\n\n| Responsibility | IaaS | PaaS | SaaS |\n|---------------|------|------|------|\n| Data classification | Customer | Customer | Customer |\n| Identity & access | Customer | Shared | Shared |\n| Application | Customer | Shared | Provider |\n| OS patching | Customer | Provider | Provider |\n| Network controls | Shared | Provider | Provider |\n| Physical security | Provider | Provider | Provider |\n\n## AWS Security Framework\n\n**AWS Well-Architected Framework — Security Pillar:**\n- Identity and access management (IAM)\n- Detection (CloudTrail, GuardDuty, Security Hub)\n- Infrastructure protection (VPC, Security Groups, WAF)\n- Data protection (KMS, encryption)\n- Incident response (IR runbooks, automated response)\n\n**Key Services:**\n- AWS Security Hub — Centralized security findings\n- Amazon GuardDuty — Threat detection\n- AWS Config — Configuration compliance\n- AWS CloudTrail — API audit logging\n\n## Azure Security Framework\n\n**Microsoft Cloud Security Benchmark (MCSB):**\n- 12 control domains aligned with NIST CSF and CIS Controls\n- Azure Security Center (now Defender for Cloud)\n- Microsoft Sentinel — Cloud-native SIEM\n- Azure Policy — Automated compliance enforcement\n\n## GCP Security Framework\n\n**Google Cloud Security Foundations:**\n- Organization hierarchy and IAM\n- Security Command Center — Threat and vulnerability management\n- Chronicle — Security analytics\n- BeyondCorp — Zero trust access model\n\n## Multi-Cloud Security Considerations\n\n- Each provider has different security services and terminology\n- Unified visibility requires third-party CSPM tools\n- Identity federation across providers is complex but essential\n- Consistent policy enforcement needs cloud-agnostic tooling\n- Cost of security tooling compounds across providers`, keyTakeaways: ["Shared responsibility means the provider secures the cloud; customers secure their workloads", "Responsibility shifts with service model — IaaS gives most control, SaaS gives least", "AWS, Azure, and GCP each have comprehensive security frameworks with different approaches", "Multi-cloud environments require unified visibility and consistent policy enforcement", "Cloud-native security tools should be supplemented with third-party CSPM for cross-cloud coverage"] },
+
+  // Module 9: MITRE ATT&CK for compliance
+  { id: "cf-9.1", courseId: "cybersecurity-frameworks", title: "Mapping Controls to MITRE ATT&CK", content: `# Mapping Controls to MITRE ATT&CK\n\nMITRE ATT&CK is primarily known as a threat intelligence framework, but it's increasingly used to validate security control coverage and identify detection gaps.\n\n## Why Map Controls to ATT&CK?\n\n- **Gap identification** — Find techniques you can't detect\n- **Investment prioritization** — Focus on commonly used techniques\n- **Red team alignment** — Test controls against real adversary behavior\n- **Board reporting** — Show coverage in business-understandable terms\n- **Compliance enrichment** — Add detection context to framework controls\n\n## The Mapping Process\n\n### Step 1: Identify Your Controls\nList all security controls from your framework (NIST CSF, ISO 27001, CIS).\n\n### Step 2: Map to ATT&CK Techniques\nFor each control, identify which ATT&CK techniques it detects, prevents, or mitigates.\n\n**Example Mappings:**\n\n| Control | ATT&CK Technique | Relationship |\n|---------|------------------|-------------|\n| MFA (PR.AA) | T1078 Valid Accounts | Prevents |\n| SIEM Monitoring (DE.CM) | T1059 Command & Scripting | Detects |\n| Network Segmentation (PR.IR) | T1021 Remote Services | Mitigates |\n| Email Filtering (PR.DS) | T1566 Phishing | Prevents |\n| EDR (DE.CM) | T1055 Process Injection | Detects |\n| Backup Testing (RC.RP) | T1486 Data Encrypted for Impact | Recovers |\n\n### Step 3: Visualize Coverage\nUse the ATT&CK Navigator to create a heatmap showing:\n- Green: Techniques with detection/prevention controls\n- Yellow: Techniques with partial coverage\n- Red: Techniques with no coverage (gaps)\n\n### Step 4: Prioritize Gaps\nNot all gaps are equal. Prioritize based on:\n- Frequency of technique use by relevant threat actors\n- Impact if the technique succeeds\n- Cost and feasibility of implementing detection\n\n## ATT&CK Navigator Scoring\n\n\`\`\`\nScore 0: No coverage (red)\nScore 1: Partial detection, log visibility only (orange)\nScore 2: Alert-level detection, may have false positives (yellow)\nScore 3: High-fidelity detection with automated response (green)\nScore 4: Prevention control blocks the technique (blue)\n\`\`\`\n\n## NIST CSF to ATT&CK Mapping\n\nNIST has published official mappings between NIST CSF and ATT&CK:\n- Identify → Reconnaissance, Resource Development\n- Protect → Initial Access, Execution, Persistence, Privilege Escalation\n- Detect → All tactics (detection is cross-cutting)\n- Respond → All tactics (response applies everywhere)\n- Recover → Impact\n\nThis mapping enables organizations to demonstrate that their CSF implementation addresses real-world adversary techniques.`, keyTakeaways: ["Mapping controls to ATT&CK reveals detection gaps against real adversary techniques", "Use ATT&CK Navigator to create visual heatmaps of coverage across all tactics", "Prioritize gaps based on technique prevalence, impact, and remediation feasibility", "Score controls from 0 (no coverage) to 4 (prevention) for each technique", "NIST publishes official CSF-to-ATT&CK mappings for standardized alignment"] },
+  { id: "cf-9.2", courseId: "cybersecurity-frameworks", title: "D3FEND: The Defensive Framework", content: `# MITRE D3FEND: The Defensive Framework\n\nWhile ATT&CK catalogs adversary techniques, D3FEND provides a knowledge graph of cybersecurity countermeasures. It bridges the gap between "what attackers do" and "what defenders can do about it."\n\n## What is D3FEND?\n\nD3FEND (Detection, Denial, and Disruption Framework Empowering Network Defense) is a knowledge base of defensive techniques organized by their relationship to ATT&CK offensive techniques.\n\n## D3FEND Tactics\n\n| Tactic | Purpose | Example Techniques |\n|--------|---------|-------------------|\n| Harden | Reduce attack surface | Application hardening, credential hardening |\n| Detect | Identify adversary activity | Network traffic analysis, process analysis |\n| Isolate | Contain threats | Network isolation, execution isolation |\n| Deceive | Mislead adversaries | Decoy environments, honeypots |\n| Evict | Remove adversary presence | Credential eviction, process eviction |\n\n## D3FEND + ATT&CK Integration\n\n**Example: Defending Against T1566 (Phishing)**\n\n| D3FEND Technique | Category | Implementation |\n|-----------------|----------|---------------|\n| Sender MTA Reputation Analysis | Detect | Email gateway reputation filtering |\n| URL Analysis | Detect | Sandboxed URL detonation |\n| File Content Rules | Detect | YARA rules for malicious attachments |\n| Homoglyph Detection | Detect | Identify lookalike domain names |\n| Outbound Traffic Filtering | Harden | Block known C2 domains |\n| User Training | Harden | Phishing awareness program |\n| Email Quarantine | Isolate | Suspicious email isolation |\n\n## Using D3FEND for Framework Compliance\n\nD3FEND enriches framework controls with specific defensive techniques:\n\n1. **Map your framework controls** (e.g., ISO 27001 A.8.23 Web Filtering)\n2. **Identify the ATT&CK techniques** the control addresses\n3. **Find D3FEND countermeasures** that implement the control\n4. **Evaluate coverage** — are you using the most effective defensive techniques?\n\n## D3FEND Knowledge Graph\n\nThe knowledge graph connects:\n- **Digital artifacts** (files, processes, network traffic)\n- **Defensive techniques** (what defenders do)\n- **Offensive techniques** (what attackers do)\n- **Technologies** (tools that implement defenses)\n\nThis creates a complete picture: "When an attacker does X to artifact Y, we can defend with technique Z using technology W."`, keyTakeaways: ["D3FEND catalogs defensive techniques organized into Harden, Detect, Isolate, Deceive, and Evict", "It provides the defensive counterpart to ATT&CK's offensive technique catalog", "D3FEND enriches framework controls with specific, actionable defensive techniques", "The knowledge graph connects artifacts, offensive techniques, defensive techniques, and technologies", "Use D3FEND to evaluate whether your controls use the most effective defensive approaches"] },
+  { id: "cf-9.3", courseId: "cybersecurity-frameworks", title: "Framework Cross-Mapping & Integration", content: `# Framework Cross-Mapping & Integration\n\nMost organizations need to comply with multiple frameworks simultaneously. Cross-mapping identifies overlapping requirements to reduce duplication and create a unified control framework.\n\n## Why Cross-Map?\n\n- **Reduce audit fatigue** — One control can satisfy multiple frameworks\n- **Eliminate redundancy** — Avoid implementing the same control differently\n- **Unified reporting** — Single dashboard for multi-framework compliance\n- **Cost efficiency** — Maximize ROI on control implementation\n\n## Major Framework Mappings\n\n### NIST CSF ↔ ISO 27001 ↔ CIS Controls\n\n| NIST CSF | ISO 27001:2022 | CIS Control v8 |\n|----------|---------------|----------------|\n| ID.AM (Asset Management) | A.5.9, A.5.10 | CIS 1, 2 |\n| PR.AA (Access Control) | A.5.15, A.8.5 | CIS 5, 6 |\n| PR.DS (Data Security) | A.8.10, A.8.11, A.8.12 | CIS 3 |\n| PR.PS (Platform Security) | A.8.9 | CIS 4 |\n| DE.CM (Continuous Monitoring) | A.8.16 | CIS 8, 13 |\n| RS.MA (Incident Management) | A.5.24, A.5.25, A.5.26 | CIS 17 |\n\n### Adding PCI-DSS to the Map\n\n| Unified Control | NIST CSF | ISO 27001 | CIS | PCI-DSS |\n|----------------|----------|-----------|-----|--------|\n| Asset Inventory | ID.AM-1 | A.5.9 | 1.1 | 2.4 |\n| Access Control | PR.AA-1 | A.5.15 | 6.1 | 7.1 |\n| Encryption | PR.DS-1 | A.8.24 | 3.6 | 3.4, 4.1 |\n| Logging | DE.CM-1 | A.8.16 | 8.2 | 10.1 |\n| Vulnerability Mgmt | ID.RA-1 | A.8.8 | 7.1 | 6.1, 11.2 |\n| Incident Response | RS.MA-1 | A.5.24 | 17.1 | 12.10 |\n\n## Building a Unified Control Framework\n\n### Step 1: Choose a Primary Framework\nSelect one framework as your foundation (usually NIST CSF or ISO 27001).\n\n### Step 2: Map Secondary Frameworks\nMap all other framework requirements to your primary framework's controls.\n\n### Step 3: Identify Unique Requirements\nSome frameworks have unique requirements not covered by others:\n- PCI-DSS: Specific cardholder data encryption requirements\n- HIPAA: Business Associate Agreements\n- GDPR: Data subject access requests, DPIAs\n\n### Step 4: Create Unified Control Catalog\n\n\`\`\`\nControl ID: UC-001\nControl Name: Enterprise Asset Inventory\nDescription: Maintain a complete inventory of all enterprise assets\nFramework Mappings:\n  - NIST CSF: ID.AM-1\n  - ISO 27001: A.5.9\n  - CIS Controls: 1.1\n  - PCI-DSS: 2.4\n  - SOC 2: CC6.1\nOwner: IT Asset Manager\nEvidence: CMDB export, network scan results\nReview Frequency: Quarterly\n\`\`\`\n\n## GRC Tools for Cross-Mapping\n\n- **Drata/Vanta** — Automated compliance mapping\n- **OneTrust** — Multi-framework management\n- **ServiceNow GRC** — Enterprise governance platform\n- **LogicGate** — Flexible risk and compliance workflows`, keyTakeaways: ["Cross-mapping identifies overlapping controls across frameworks to eliminate redundancy", "One well-implemented control can satisfy requirements from 4-5 different frameworks", "Choose a primary framework (NIST CSF or ISO 27001) and map others to it", "Identify unique requirements that don't overlap (BAAs for HIPAA, DPIAs for GDPR)", "GRC tools automate cross-mapping and centralize multi-framework compliance management"] },
+  { id: "cf-9.4", courseId: "cybersecurity-frameworks", title: "Hands-On: Building a Control Mapping Matrix", content: `# Hands-On: Building a Control Mapping Matrix\n\nIn this exercise, you'll create a practical cross-framework control mapping matrix that can be used in real-world security programs.\n\n## Exercise Scenario\n\nYou are the security analyst for CloudFirst Inc., a SaaS company that:\n- Processes customer financial data (PCI-DSS applies)\n- Has EU customers (GDPR applies)\n- Needs SOC 2 Type II for enterprise sales\n- Uses NIST CSF as their primary framework\n\n## Step 1: Create the Matrix Template\n\n\`\`\`\n| Control ID | Control Name | NIST CSF | ISO 27001 | CIS v8 | PCI-DSS | SOC 2 | GDPR | Owner | Status |\n|-----------|-------------|----------|-----------|--------|---------|-------|------|-------|--------|\n\`\`\`\n\n## Step 2: Populate Core Controls\n\n| ID | Control | NIST CSF | ISO 27001 | CIS | PCI-DSS | SOC 2 | GDPR |\n|----|---------|----------|-----------|-----|---------|-------|------|\n| UC-001 | Asset Inventory | ID.AM-1 | A.5.9 | 1.1 | 2.4 | CC6.1 | Art.30 |\n| UC-002 | MFA Enforcement | PR.AA-3 | A.8.5 | 6.5 | 8.4 | CC6.1 | Art.32 |\n| UC-003 | Data Encryption at Rest | PR.DS-1 | A.8.24 | 3.6 | 3.4 | CC6.1 | Art.32 |\n| UC-004 | Data Encryption in Transit | PR.DS-2 | A.8.24 | 3.9 | 4.1 | CC6.1 | Art.32 |\n| UC-005 | Vulnerability Scanning | ID.RA-1 | A.8.8 | 7.1 | 11.2 | CC7.1 | Art.32 |\n| UC-006 | Security Awareness Training | PR.AT-1 | A.6.3 | 14.1 | 12.6 | CC1.4 | Art.39 |\n| UC-007 | Incident Response Plan | RS.MA-1 | A.5.24 | 17.1 | 12.10 | CC7.3 | Art.33 |\n| UC-008 | Access Reviews | PR.AA-5 | A.5.18 | 5.1 | 7.2 | CC6.2 | Art.32 |\n| UC-009 | Backup & Recovery | RC.RP-1 | A.8.13 | 11.1 | 9.5.1 | A1.2 | Art.32 |\n| UC-010 | Change Management | PR.PS-1 | A.8.32 | 4.1 | 6.5.6 | CC8.1 | — |\n\n## Step 3: Identify Unique Requirements\n\nSome requirements are framework-specific:\n\n| Framework | Unique Requirement | Control Needed |\n|-----------|-------------------|---------------|\n| PCI-DSS | No CVV storage | Data purging policy |\n| GDPR | DPIA process | Privacy impact assessment |\n| GDPR | Data subject access requests | DSAR workflow |\n| GDPR | DPO appointment | Role designation |\n| SOC 2 | Annual pen test | Third-party assessment |\n| PCI-DSS | Quarterly ASV scan | External scanning |\n\n## Step 4: Add Evidence Requirements\n\nFor each unified control, document:\n- What evidence demonstrates compliance\n- Where evidence is stored\n- How often evidence is collected\n- Who is responsible for collection\n\n## Deliverables\n\nAfter this exercise, you should have:\n1. ✅ A unified control matrix mapping 6 frameworks\n2. ✅ Framework-specific requirements identified\n3. ✅ Evidence requirements for each control\n4. ✅ A template ready for real-world use`, keyTakeaways: ["A unified control matrix consolidates 6+ frameworks into a single manageable document", "Core controls like MFA, encryption, and incident response satisfy nearly every framework", "Each framework has unique requirements (CVV storage for PCI, DPIAs for GDPR) that need dedicated controls", "Evidence requirements must be documented for every control to support audits", "This matrix becomes the foundation of your GRC program and audit preparation"] },
+
+  // Module 10: Building & Maturing
+  { id: "cf-10.1", courseId: "cybersecurity-frameworks", title: "Security Program Maturity Models", content: `# Security Program Maturity Models\n\nMaturity models provide a structured way to measure and improve an organization's cybersecurity capabilities over time. They help answer: "How good are we?" and "What should we improve next?"\n\n## Common Maturity Models\n\n### Capability Maturity Model Integration (CMMI)\n\n| Level | Name | Description |\n|-------|------|-------------|\n| 1 | Initial | Ad hoc, reactive, chaotic |\n| 2 | Managed | Documented processes for specific projects |\n| 3 | Defined | Organization-wide standardized processes |\n| 4 | Quantitatively Managed | Measured and controlled with metrics |\n| 5 | Optimizing | Continuous improvement driven by data |\n\n### Cybersecurity Capability Maturity Model (C2M2)\nDesigned for critical infrastructure:\n- 10 domains (Risk Management, Asset Management, Threat Detection, etc.)\n- 4 maturity indicator levels (MIL0-MIL3)\n- Self-assessment tool available from DOE\n\n### NIST CSF Tiers (Simplified Maturity)\n- Tier 1: Partial\n- Tier 2: Risk Informed\n- Tier 3: Repeatable\n- Tier 4: Adaptive\n\n## Building Your Own Maturity Assessment\n\n### Step 1: Define Domains\nSelect 8-12 security domains to assess:\n1. Governance & Strategy\n2. Risk Management\n3. Asset Management\n4. Identity & Access Management\n5. Data Protection\n6. Security Operations (Monitoring & Detection)\n7. Incident Response\n8. Vulnerability Management\n9. Third-Party Risk\n10. Security Awareness\n\n### Step 2: Define Maturity Levels\n\n| Level | Characteristics | Evidence |\n|-------|----------------|----------|\n| 1 - Ad Hoc | No formal process, reactive | Tribal knowledge only |\n| 2 - Developing | Some documentation, inconsistent | Draft policies, partial coverage |\n| 3 - Defined | Documented, standardized, consistent | Approved policies, procedures |\n| 4 - Managed | Measured, tracked, reported | Metrics, dashboards, KPIs |\n| 5 - Optimized | Automated, predictive, continuously improving | ML-driven, real-time adjustment |\n\n### Step 3: Assess and Score\n\nFor each domain, rate current maturity and set a target:\n\n\`\`\`\nDomain                     Current  Target  Gap\n─────────────────────────  ───────  ──────  ───\nGovernance & Strategy         2       3      1\nRisk Management               1       3      2\nAsset Management              2       3      1\nIdentity & Access             3       4      1\nData Protection               2       3      1\nSecurity Operations           1       3      2\nIncident Response             2       3      1\nVulnerability Management      2       4      2\nThird-Party Risk              1       2      1\nSecurity Awareness            3       3      0\n─────────────────────────  ───────  ──────  ───\nAverage                      1.9     3.1    1.2\n\`\`\`\n\n### Step 4: Create Improvement Roadmap\n\nPrioritize domains with the largest gaps and highest business impact.`, keyTakeaways: ["Maturity models measure cybersecurity capabilities from ad hoc (Level 1) to optimized (Level 5)", "CMMI, C2M2, and NIST CSF Tiers are the most widely used maturity frameworks", "Custom maturity assessments typically cover 8-12 security domains", "Gap between current and target maturity drives the improvement roadmap", "Not every domain needs to reach Level 5 — target maturity should align with risk appetite"] },
+  { id: "cf-10.2", courseId: "cybersecurity-frameworks", title: "Metrics, KPIs & Reporting to Leadership", content: `# Metrics, KPIs & Reporting to Leadership\n\nSecurity metrics translate technical activity into business-relevant information. Good metrics drive better decisions; bad metrics create false confidence.\n\n## Types of Security Metrics\n\n### Key Performance Indicators (KPIs)\nMeasure how well the security program is performing:\n- Percentage of systems with current patches\n- Percentage of employees completing security training\n- Mean time to detect (MTTD)\n- Mean time to respond (MTTR)\n\n### Key Risk Indicators (KRIs)\nSignal changes in the risk landscape:\n- Number of critical vulnerabilities unpatched >30 days\n- Number of privileged accounts without MFA\n- Third-party vendors without current assessments\n- Phishing simulation click rate trend\n\n### Operational Metrics\nTrack daily security operations:\n- Alerts triaged per analyst per day\n- False positive rate\n- Incident volume by category\n- Vulnerability scan coverage\n\n## Effective Security Dashboard\n\n### Executive Dashboard (Board/C-Suite)\nFocuses on risk and business impact:\n\`\`\`\n┌─────────────────────────────────────────────────┐\n│  Overall Risk Score: 72/100 (Moderate) ▲ +5     │\n├─────────────────┬───────────────────────────────┤\n│ Framework       │ NIST CSF Maturity: 2.8/4.0   │\n│ Compliance      │ PCI-DSS: 94% compliant        │\n│                 │ SOC 2: Annual audit passed     │\n├─────────────────┼───────────────────────────────┤\n│ Key Risks       │ 3 Critical │ 12 High │ 28 Med │\n├─────────────────┼───────────────────────────────┤\n│ Incidents       │ 2 this quarter (both resolved) │\n│ MTTD: 2.3 hrs  │ MTTR: 4.1 hrs (target: <6hr) │\n├─────────────────┼───────────────────────────────┤\n│ Investments     │ 3 projects on track, 1 delayed│\n└─────────────────┴───────────────────────────────┘\n\`\`\`\n\n### Operational Dashboard (Security Team)\n- Real-time alert queue status\n- Analyst workload distribution\n- SIEM performance and health\n- Active investigations\n- Threat intelligence feed status\n\n## Reporting Best Practices\n\n1. **Lead with risk, not technology** — "We have 3 unpatched critical systems" not "We need to deploy KB5034441"\n2. **Use trends, not snapshots** — Show improvement (or degradation) over time\n3. **Compare to benchmarks** — Industry averages provide context\n4. **Include recommendations** — Every metric should drive a decision\n5. **Limit to 5-7 metrics** for executive audiences\n6. **Tell a story** — Connect metrics to business outcomes\n\n## Dangerous Metrics (Avoid)\n\n- Number of attacks blocked (vanity metric)\n- Number of vulnerabilities found (without context)\n- Compliance percentage without risk context\n- Metrics that only go up (no accountability)`, keyTakeaways: ["KPIs measure program performance; KRIs signal changes in the risk landscape", "Executive dashboards should focus on risk scores, compliance status, and incident trends", "Effective reporting leads with risk and business impact, not technical details", "Limit executive metrics to 5-7 key indicators with trend data and benchmarks", "Avoid vanity metrics like 'attacks blocked' that provide no actionable insight"] },
+  { id: "cf-10.3", courseId: "cybersecurity-frameworks", title: "Continuous Compliance & Automation", content: `# Continuous Compliance & Automation\n\nTraditional compliance is a point-in-time exercise — annual audits, manual evidence collection, and last-minute scrambles. Continuous compliance transforms this into an ongoing, automated process.\n\n## The Problem with Point-in-Time Compliance\n\n- Controls may degrade between audits\n- Evidence collection is manual and time-consuming\n- Audit preparation creates "compliance sprints"\n- Gap between compliance state and audit results\n- Teams spend weeks preparing documentation\n\n## Continuous Compliance Architecture\n\n\`\`\`\n┌──────────────────────────────────────────────────┐\n│              GRC Platform                         │\n│  (Drata, Vanta, Secureframe, OneTrust)           │\n├──────────────┬───────────────┬────────────────────┤\n│ Automated    │ Evidence      │ Policy & Control   │\n│ Monitoring   │ Collection    │ Management         │\n├──────────────┼───────────────┼────────────────────┤\n│ Integrations:                                     │\n│ Cloud (AWS, Azure, GCP) → Config compliance       │\n│ Identity (Okta, Azure AD) → Access reviews        │\n│ Endpoint (MDM) → Device compliance                │\n│ HR (BambooHR) → Background checks, training       │\n│ Dev (GitHub) → Code review, SDLC compliance       │\n│ Ticketing (Jira) → Change management evidence     │\n└──────────────────────────────────────────────────┘\n\`\`\`\n\n## Key Automation Capabilities\n\n### 1. Automated Evidence Collection\n- Pull configurations from cloud providers automatically\n- Screenshot dashboards at regular intervals\n- Collect access review completions from identity providers\n- Track training completion from LMS systems\n\n### 2. Continuous Control Monitoring\n- Real-time alerts when controls fail\n- Configuration drift detection\n- Policy compliance checks (e.g., MFA enabled, encryption on)\n- Automated remediation for common issues\n\n### 3. Automated Testing\n- Scheduled vulnerability scans\n- Configuration benchmarking (CIS-CAT)\n- Automated penetration testing tools\n- Cloud security posture management (CSPM)\n\n## GRC Platform Comparison\n\n| Platform | Best For | Key Feature | Price Range |\n|----------|---------|-------------|-------------|\n| Drata | Startups/SMB | 75+ integrations | $$$ |\n| Vanta | SaaS companies | Fast SOC 2 readiness | $$$ |\n| Secureframe | Mid-market | Multi-framework | $$$ |\n| OneTrust | Enterprise | Privacy + GRC | $$$$ |\n| ServiceNow GRC | Large enterprise | IT integration | $$$$$ |\n\n## Implementation Roadmap\n\n1. **Month 1-2:** Select GRC platform, configure integrations\n2. **Month 2-3:** Map controls, enable automated evidence collection\n3. **Month 3-4:** Set up continuous monitoring alerts\n4. **Month 4-6:** Fine-tune, reduce manual tasks to <20%\n5. **Ongoing:** Maintain integrations, add new frameworks`, keyTakeaways: ["Continuous compliance replaces annual audit scrambles with automated, ongoing monitoring", "GRC platforms integrate with cloud, identity, HR, and dev tools for automatic evidence collection", "Automation can reduce manual compliance work by 80% or more", "Key capabilities: evidence collection, control monitoring, and automated testing", "Implementation typically takes 4-6 months to achieve mature continuous compliance"] },
+  { id: "cf-10.4", courseId: "cybersecurity-frameworks", title: "Course Summary & Career Paths in GRC", content: `# Course Summary & Career Paths in GRC\n\nCongratulations on completing the Cybersecurity Frameworks course! Let's review what you've learned and explore career paths in governance, risk, and compliance.\n\n## Course Summary\n\n### Module 1: Cybersecurity Governance\n- Governance provides strategic direction and accountability\n- GRC integrates governance, risk management, and compliance\n- Security policies form the documentation hierarchy backbone\n\n### Module 2: NIST CSF\n- 6 functions: Govern, Identify, Protect, Detect, Respond, Recover\n- Profiles capture current and target states for gap analysis\n- Tiers 1-4 measure risk management maturity\n\n### Module 3: ISO 27001\n- The only certifiable cybersecurity framework\n- ISMS approach: people, processes, technology through risk management\n- 93 Annex A controls across 4 themes\n\n### Module 4: CIS Controls\n- 18 prioritized controls with Implementation Groups (IG1-IG3)\n- IG1 achieves ~80% risk reduction with essential cyber hygiene\n- CIS Benchmarks provide prescriptive hardening guides\n\n### Module 5: Risk Management\n- NIST RMF: 7-step process for system authorization\n- Qualitative and quantitative risk assessment techniques\n- Risk treatment: mitigate, transfer, avoid, accept\n\n### Module 6: PCI-DSS\n- 12 requirements for protecting cardholder data\n- Scope reduction through segmentation and tokenization\n- Compliance levels determine validation requirements\n\n### Module 7: Data Privacy\n- GDPR: 7 principles, data subject rights, 72-hour breach notification\n- HIPAA: PHI protection through administrative, physical, technical safeguards\n- Growing patchwork of US state privacy laws\n\n### Module 8: SOC 2 & Cloud Security\n- 5 Trust Service Criteria with Security always required\n- Type I (point-in-time) vs. Type II (period of time)\n- Shared responsibility model for cloud security\n\n### Module 9: MITRE ATT&CK & D3FEND\n- Map controls to ATT&CK techniques for gap analysis\n- D3FEND provides defensive countermeasure catalog\n- Cross-mapping creates unified control frameworks\n\n### Module 10: Program Maturity\n- Maturity models measure and guide improvement\n- Effective metrics drive decisions, not dashboards\n- Continuous compliance through automation\n\n## Career Paths in GRC\n\n| Role | Experience | Salary Range (US) |\n|------|-----------|-------------------|\n| GRC Analyst | 0-2 years | $60K-$85K |\n| Compliance Analyst | 1-3 years | $70K-$95K |\n| Risk Analyst | 2-4 years | $80K-$110K |\n| GRC Manager | 4-7 years | $110K-$150K |\n| Director of Compliance | 7-10 years | $140K-$180K |\n| CISO | 10+ years | $180K-$350K+ |\n\n## Recommended Certifications\n\n- **CISA** — Certified Information Systems Auditor (ISACA)\n- **CRISC** — Certified in Risk and Information Systems Control (ISACA)\n- **CISM** — Certified Information Security Manager (ISACA)\n- **CISSP** — Certified Information Systems Security Professional (ISC²)\n- **CompTIA Security+** — Foundation certification\n- **ISO 27001 Lead Auditor** — For ISO certification consulting\n- **PCIP** — Payment Card Industry Professional (PCI-SSC)\n\n## Next Steps\n\n1. Choose a framework and practice implementing it\n2. Pursue relevant certifications (start with CISA or Security+)\n3. Build a portfolio of risk assessments and policy documents\n4. Join professional communities (ISACA, (ISC)², CSA)\n5. Stay current with regulatory changes and emerging frameworks`, keyTakeaways: ["This course covered 9 major frameworks: NIST CSF, ISO 27001, CIS Controls, NIST RMF, PCI-DSS, GDPR, HIPAA, SOC 2, and MITRE ATT&CK", "GRC careers span from analyst to CISO with strong salary growth", "Key certifications: CISA, CRISC, CISM, CISSP for career advancement", "Practical skills (risk assessments, policy writing, gap analysis) are more valuable than theory alone", "The cybersecurity frameworks landscape continues to evolve — continuous learning is essential"] },
 ];
 
 export const getLessonContent = (courseId: string, lessonId: string): LessonContent | undefined => {
