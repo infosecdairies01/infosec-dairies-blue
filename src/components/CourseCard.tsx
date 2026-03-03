@@ -22,6 +22,8 @@ interface CourseCardProps {
   courseId?: string;
   thumbnail?: string;
   isLiveCourse?: boolean;
+  price?: number;
+  originalPrice?: number;
 }
 
 const difficultyStyles = {
@@ -45,7 +47,7 @@ const thumbnailMap: Record<string, string> = {
   "courses/cybersecurity-frameworks-bg.jpg": cybersecurityFrameworksBg,
 };
 
-const CourseCard = ({ title, description, index, difficulty, courseId, thumbnail, isLiveCourse }: CourseCardProps) => {
+const CourseCard = ({ title, description, index, difficulty, courseId, thumbnail, isLiveCourse, price, originalPrice }: CourseCardProps) => {
   const linkTo = courseId 
     ? (isLiveCourse ? `/live-courses/${courseId}` : `/courses/${courseId}`) 
     : "/courses";
@@ -115,8 +117,23 @@ const CourseCard = ({ title, description, index, difficulty, courseId, thumbnail
             {description}
           </p>
           
+          {/* Pricing */}
+          {price !== undefined && (
+            <div className="flex items-center gap-2 mt-4">
+              <span className="text-lg font-bold text-primary">₹{price.toLocaleString()}</span>
+              {originalPrice && (
+                <span className="text-sm text-muted-foreground line-through">₹{originalPrice.toLocaleString()}</span>
+              )}
+              {originalPrice && (
+                <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-green-500/15 text-green-400 border border-green-500/25">
+                  {Math.round((1 - price / originalPrice) * 100)}% off
+                </span>
+              )}
+            </div>
+          )}
+
           {/* CTA */}
-          <span className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 mt-4">
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 mt-3">
             Explore Course
             <svg 
               className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" 
