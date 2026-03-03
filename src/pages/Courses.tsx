@@ -58,6 +58,27 @@ const Courses = () => {
               }
             </p>
             
+            {/* Bundle Offer */}
+            <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-primary/20 p-6 mb-10 shadow-lg shadow-primary/10">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.06] via-transparent to-secondary/[0.04] pointer-events-none" />
+              <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-70" />
+              <div className="relative flex flex-col md:flex-row items-center justify-between gap-4 pl-3">
+                <div>
+                  <h3 className="text-lg font-bold text-foreground mb-1">🎯 All Courses Bundle</h3>
+                  <p className="text-muted-foreground text-sm">Get access to all {selfPacedCourses.length} self-paced courses at one price</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <span className="text-2xl font-bold text-primary">₹3,999</span>
+                    <p className="text-xs text-muted-foreground">one-time payment</p>
+                  </div>
+                  <button className="px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors shadow-md shadow-primary/25">
+                    Get Bundle
+                  </button>
+                </div>
+              </div>
+            </div>
+
             {/* Courses Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {activeTab === "self-paced" 
