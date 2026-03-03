@@ -57,7 +57,6 @@ export const courses: Course[] = [
     difficulty: "easy",
     duration: "12 hours",
     price: 499,
-    originalPrice: 999,
     bgImage: "soc-course-bg.jpg",
     modules: [
       {
@@ -564,8 +563,7 @@ export const courses: Course[] = [
     description: "Start your journey into log analysis. Learn to read, parse, and understand security logs from various sources including Windows, Linux, and network devices.",
     difficulty: "easy",
     duration: "8 hours",
-    price: 399,
-    originalPrice: 799,
+    price: 499,
     bgImage: "courses/log-analysis-bg.jpg",
     modules: [
       {
@@ -906,8 +904,7 @@ export const courses: Course[] = [
     description: "Master Security Information and Event Management basics. Learn to navigate and understand modern SIEM platforms, create queries, build dashboards, and respond to alerts effectively.",
     difficulty: "easy",
     duration: "10 hours",
-    price: 599,
-    originalPrice: 1199,
+    price: 499,
     bgImage: "courses/siem-fundamentals-bg.jpg",
     modules: [
       {
@@ -1261,8 +1258,7 @@ export const courses: Course[] = [
     description: "Master deep packet inspection, network-based threat detection, and traffic analysis. Learn to use tools like Zeek, Suricata, and Wireshark to identify malicious activity on the wire.",
     difficulty: "medium",
     duration: "14 hours",
-    price: 999,
-    originalPrice: 1999,
+    price: 799,
     bgImage: "courses/soc-analyst-practical-bg.jpg",
     modules: [
       {
@@ -1360,8 +1356,7 @@ export const courses: Course[] = [
     description: "Learn the complete incident response lifecycle. Master containment, eradication, recovery, and post-incident analysis procedures used by IR professionals.",
     difficulty: "medium",
     duration: "12 hours",
-    price: 899,
-    originalPrice: 1799,
+    price: 799,
     bgImage: "courses/incident-response-bg.jpg",
     modules: [
       {
@@ -1458,8 +1453,7 @@ export const courses: Course[] = [
     description: "Proactively search for threats in your environment. Learn hypothesis-driven hunting, IOC analysis, and threat intelligence integration techniques.",
     difficulty: "hard",
     duration: "14 hours",
-    price: 1499,
-    originalPrice: 2999,
+    price: 1199,
     bgImage: "courses/threat-hunting-bg.jpg",
     modules: [
       {
@@ -1556,8 +1550,7 @@ export const courses: Course[] = [
     description: "Build custom detection rules and analytics. Master SIGMA rules, YARA signatures, and detection-as-code methodologies for modern SOC environments.",
     difficulty: "hard",
     duration: "16 hours",
-    price: 1499,
-    originalPrice: 2999,
+    price: 1199,
     bgImage: "courses/detection-engineering-bg.jpg",
     quizzes: [
       { id: "de-q1", title: "Detection Fundamentals Quiz", description: "Test your understanding of detection philosophy, coverage models, and alert quality.", questionCount: 10, passingScore: 70, duration: "15 min", status: "unlocked" as const },
@@ -1666,8 +1659,7 @@ export const courses: Course[] = [
     description: "Analyze malicious software safely. Learn static and dynamic analysis, sandboxing, and reverse engineering basics for security professionals.",
     difficulty: "hard",
     duration: "18 hours",
-    price: 1999,
-    originalPrice: 3499,
+    price: 1199,
     bgImage: "courses/malware-analysis-bg.jpg",
     quizzes: [
       { id: "ma-q1", title: "Malware Landscape & Lab Setup Quiz", description: "Test your knowledge of malware categories and safe analysis environments.", questionCount: 10, passingScore: 70, duration: "15 min", status: "unlocked" },
@@ -1765,7 +1757,6 @@ export const courses: Course[] = [
     difficulty: "medium",
     duration: "40 hours",
     price: 3999,
-    originalPrice: 7999,
     bgImage: "courses/soc-analyst-path-bg.jpg",
     modules: [
       {
@@ -1911,7 +1902,6 @@ export const courses: Course[] = [
     difficulty: "easy" as const,
     duration: "16 hours",
     price: 499,
-    originalPrice: 999,
     bgImage: "courses/network-fundamentals-bg.jpg",
     modules: [
       {
@@ -2061,7 +2051,6 @@ export const courses: Course[] = [
     difficulty: "medium",
     duration: "16 hours",
     price: 799,
-    originalPrice: 1599,
     bgImage: "courses/cybersecurity-frameworks-bg.jpg",
     modules: [
       {
