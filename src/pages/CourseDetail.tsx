@@ -142,6 +142,22 @@ const CourseDetail = () => {
                   <div className="relative pl-3 space-y-4">
                     <h3 className="text-lg font-semibold text-foreground">Course Info</h3>
                     
+                    {/* Pricing */}
+                    <div className="space-y-1">
+                      <span className="text-muted-foreground text-sm">Price:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl font-bold text-primary">₹{course.price.toLocaleString()}</span>
+                        {course.originalPrice && (
+                          <span className="text-sm text-muted-foreground line-through">₹{course.originalPrice.toLocaleString()}</span>
+                        )}
+                      </div>
+                      {course.originalPrice && (
+                        <span className="inline-flex text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-green-500/15 text-green-400 border border-green-500/25">
+                          Save {Math.round((1 - course.price / course.originalPrice) * 100)}%
+                        </span>
+                      )}
+                    </div>
+
                     <div className="flex items-center gap-3">
                       <span className="text-muted-foreground">Difficulty:</span>
                       <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-card/50 border border-white/[0.08] text-foreground">
@@ -158,6 +174,11 @@ const CourseDetail = () => {
                       <BookOpen className="w-4 h-4 text-primary" />
                       <span>Lessons, Quizzes, Labs</span>
                     </div>
+
+                    {/* Enroll Button */}
+                    <button className="w-full mt-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors duration-200 shadow-md shadow-primary/25">
+                      Enroll Now — ₹{course.price.toLocaleString()}
+                    </button>
                   </div>
                 </div>
               </div>
