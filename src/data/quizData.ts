@@ -4961,14 +4961,82 @@ export const quizzes: QuizData[] = [
       { id: "sap-q9-15", question: "Key principle of anti-forensics detection?", options: ["Attackers always succeed", "Anti-forensics creates its own artifacts — the cover-up leaves traces", "Evidence cannot be recovered", "Only advanced tools can detect it"], correctAnswer: 1, explanation: "The act of destroying evidence (clearing logs, timestomping, secure deletion) creates new artifacts that analysts can find." }
     ]
   },
-  // SOC ANALYST LEARNING PATH — FINAL CERTIFICATION EXAM
+  // MODULE 10: SECURITY AUTOMATION & SOAR
   {
     quizId: "sap-q10",
     courseId: "soc-analyst-path",
-    title: "SOC Analyst Certification Exam",
-    description: "Comprehensive final exam covering all 9 modules. You must pass this exam with 80% or higher to earn your SOC Analyst Learning Path certificate.",
+    title: "Security Automation & SOAR Quiz",
+    description: "Test your SOAR platform knowledge, playbook design, and API integration skills.",
+    passingScore: 75,
+    timeLimit: 20,
+    questions: [
+      { id: "sap-q10-1", question: "What does SOAR stand for?", options: ["Security Operations and Response", "Security Orchestration, Automation, and Response", "System Orchestration and Remediation", "Security Operations Automated Runbooks"], correctAnswer: 1, explanation: "SOAR = Security Orchestration, Automation, and Response — combining tool integration, task automation, and incident response." },
+      { id: "sap-q10-2", question: "What is the recommended first step when implementing SOAR?", options: ["Automate all blocking actions", "Start with enrichment automation", "Replace all analysts with bots", "Deploy the most expensive platform"], correctAnswer: 1, explanation: "Starting with enrichment is low-risk and high-value — it speeds up analyst decisions without risk of automated blocking mistakes." },
+      { id: "sap-q10-3", question: "What HTTP status code indicates API rate limiting?", options: ["401 Unauthorized", "403 Forbidden", "429 Too Many Requests", "503 Service Unavailable"], correctAnswer: 2, explanation: "HTTP 429 indicates the client has sent too many requests — implement retry with backoff when received." },
+      { id: "sap-q10-4", question: "In a phishing response playbook, what should happen BEFORE automated blocking?", options: ["Notify the user", "Extract and enrich IOCs to confirm malicious intent", "Delete all emails", "Reset all passwords"], correctAnswer: 1, explanation: "IOC extraction and enrichment must confirm the email is malicious before automated blocking to avoid disrupting legitimate communications." },
+      { id: "sap-q10-5", question: "What is the primary benefit of idempotent playbooks?", options: ["They run faster", "They are safe to run multiple times without unintended side effects", "They use less memory", "They don't need testing"], correctAnswer: 1, explanation: "Idempotent playbooks produce the same result regardless of how many times they run — critical for reliability in automated security response." },
+      { id: "sap-q10-6", question: "Which Python library is essential for making HTTP requests to security APIs?", options: ["pandas", "requests", "matplotlib", "numpy"], correctAnswer: 1, explanation: "The requests library is the standard for HTTP API calls in Python — used for VirusTotal, CrowdStrike, and other security tool integrations." },
+      { id: "sap-q10-7", question: "What metric best measures SOAR effectiveness?", options: ["Number of playbooks created", "Reduction in Mean Time to Respond (MTTR)", "API call volume", "Number of integrations"], correctAnswer: 1, explanation: "MTTR reduction directly measures how automation speeds up incident response — the core goal of SOAR implementation." },
+      { id: "sap-q10-8", question: "When should a SOAR playbook escalate to a human analyst?", options: ["Never — full automation is the goal", "When the action requires judgment about business impact or is a novel threat", "Only during business hours", "After every automated action"], correctAnswer: 1, explanation: "Automation handles known scenarios; humans make judgment calls on business impact, novel threats, and high-risk containment decisions." },
+      { id: "sap-q10-9", question: "What authentication method is most secure for API integrations?", options: ["Hardcoded API keys in source code", "OAuth 2.0 with token refresh and secret vault storage", "Basic auth over HTTP", "Shared passwords"], correctAnswer: 1, explanation: "OAuth 2.0 with vault-stored secrets provides secure, auditable, and rotatable authentication for API integrations." },
+      { id: "sap-q10-10", question: "How can SOC automation reduce alert fatigue?", options: ["By turning off all alerts", "By auto-triaging and closing known false positives, enriching remaining alerts", "By reducing the number of security tools", "By increasing analyst headcount"], correctAnswer: 1, explanation: "Automation filters noise by auto-closing known false positives and enriching real alerts, letting analysts focus on genuine threats." },
+    ]
+  },
+  // MODULE 11: VULNERABILITY MANAGEMENT
+  {
+    quizId: "sap-q11",
+    courseId: "soc-analyst-path",
+    title: "Vulnerability Management Quiz",
+    description: "Assess vulnerability scanning, CVSS scoring, and remediation workflow knowledge.",
+    passingScore: 75,
+    timeLimit: 20,
+    questions: [
+      { id: "sap-q11-1", question: "What is the correct order of the vulnerability management lifecycle?", options: ["Patch, Scan, Report", "Discover, Assess, Prioritize, Remediate, Verify", "Scan, Fix, Forget", "Report, Scan, Remediate"], correctAnswer: 1, explanation: "The VM lifecycle is continuous: Discover/Scan → Assess/Classify → Prioritize/Plan → Remediate/Patch → Verify/Report." },
+      { id: "sap-q11-2", question: "What does CVSS stand for?", options: ["Common Vulnerability Scanning System", "Common Vulnerability Scoring System", "Cyber Vulnerability Security Score", "Critical Vulnerability Status System"], correctAnswer: 1, explanation: "CVSS = Common Vulnerability Scoring System — a standardized framework for rating vulnerability severity on a 0-10 scale." },
+      { id: "sap-q11-3", question: "A vulnerability has CVSS 6.1 but EPSS 0.85. How should you prioritize it?", options: ["Low priority based on CVSS", "High priority — EPSS indicates 85% exploitation probability in 30 days", "Ignore it", "Wait for vendor patch"], correctAnswer: 1, explanation: "EPSS 0.85 means 85% chance of exploitation in 30 days — this overrides the moderate CVSS score and demands urgent attention." },
+      { id: "sap-q11-4", question: "What is the advantage of credentialed vulnerability scans over unauthenticated?", options: ["They are faster", "They provide deeper visibility into installed software, patches, and configurations", "They are less disruptive", "They don't require network access"], correctAnswer: 1, explanation: "Credentialed scans log into systems to check installed patches, software versions, and configurations — far more accurate than external probing." },
+      { id: "sap-q11-5", question: "What is CISA KEV?", options: ["A vulnerability scanner", "A catalog of Known Exploited Vulnerabilities requiring urgent remediation", "A CVSS calculator", "A patch management tool"], correctAnswer: 1, explanation: "CISA KEV (Known Exploited Vulnerabilities) catalogs CVEs actively exploited in the wild — any CVE on the list demands immediate priority." },
+      { id: "sap-q11-6", question: "When patching is not possible, what should be implemented?", options: ["Nothing — accept the risk silently", "Compensating controls like network segmentation, WAF rules, and enhanced monitoring", "Remove the system from inventory", "Disable all network access"], correctAnswer: 1, explanation: "Compensating controls (segmentation, virtual patching, monitoring) reduce risk when direct patching isn't feasible — plus documented risk acceptance." },
+      { id: "sap-q11-7", question: "What is Attack Surface Management?", options: ["Managing firewall rules", "Continuous discovery and monitoring of internet-facing assets", "Employee security training", "Antivirus management"], correctAnswer: 1, explanation: "ASM continuously discovers, inventories, and monitors all external-facing assets including shadow IT and third-party services." },
+      { id: "sap-q11-8", question: "What is the typical remediation SLA for a critical vulnerability?", options: ["90 days", "30 days", "24-48 hours", "1 year"], correctAnswer: 2, explanation: "Critical vulnerabilities (actively exploited, remote code execution) typically require remediation within 24-48 hours." },
+      { id: "sap-q11-9", question: "How should vulnerability risk be communicated to executives?", options: ["Share raw CVSS scores", "Translate to business impact — affected customers, potential breach cost, downtime", "Send the full scan report", "Only discuss when asked"], correctAnswer: 1, explanation: "Executives need business context: customer impact, financial risk, regulatory consequences — not technical CVSS details." },
+      { id: "sap-q11-10", question: "What tool is commonly used for open-source vulnerability scanning?", options: ["Nessus", "Qualys", "OpenVAS (Greenbone)", "CrowdStrike"], correctAnswer: 2, explanation: "OpenVAS (now Greenbone Community Edition) is the leading open-source vulnerability scanner with 80,000+ NVTs." },
+    ]
+  },
+  // MODULE 12: ADVANCED ATTACK TECHNIQUES
+  {
+    quizId: "sap-q12",
+    courseId: "soc-analyst-path",
+    title: "Advanced Attack Techniques Exam",
+    description: "Evaluate AD attacks, lateral movement, ransomware analysis, and purple team skills.",
     passingScore: 80,
-    timeLimit: 60,
+    timeLimit: 30,
+    questions: [
+      { id: "sap-q12-1", question: "What Windows Event ID indicates a Kerberos service ticket request (Kerberoasting)?", options: ["4624", "4769", "7045", "1102"], correctAnswer: 1, explanation: "Event ID 4769 logs Kerberos service ticket operations — RC4 encryption type (0x17) from a single account requesting many tickets indicates Kerberoasting." },
+      { id: "sap-q12-2", question: "In a Pass-the-Hash attack, what does the attacker use to authenticate?", options: ["The user's password", "The NTLM password hash directly", "A Kerberos ticket", "A session cookie"], correctAnswer: 1, explanation: "PtH uses the NTLM hash as-is for authentication — NTLM protocol accepts the hash without needing the plaintext password." },
+      { id: "sap-q12-3", question: "What is a DCSync attack?", options: ["Syncing domain controllers for backup", "Mimicking DC replication to extract all password hashes from Active Directory", "A DNS cache sync", "Database synchronization"], correctAnswer: 1, explanation: "DCSync uses replication protocol permissions to request password hashes from a Domain Controller — detected via Event ID 4662." },
+      { id: "sap-q12-4", question: "Which Windows Event ID records service installation (PsExec detection)?", options: ["4624", "4688", "7045", "4769"], correctAnswer: 2, explanation: "Event ID 7045 records new service installation — PsExec creates the PSEXESVC service on target machines." },
+      { id: "sap-q12-5", question: "What is the first indicator of ransomware pre-encryption activity?", options: ["Ransom note appearance", "Backup deletion commands (vssadmin delete shadows)", "File encryption", "Network scanning"], correctAnswer: 1, explanation: "Attackers delete Volume Shadow Copies before encryption — detecting 'vssadmin delete shadows' is an early warning to prevent encryption." },
+      { id: "sap-q12-6", question: "What was the primary attack vector in the SolarWinds supply chain attack?", options: ["Phishing emails", "Compromised software build system injecting backdoor into updates", "VPN exploitation", "USB drive"], correctAnswer: 1, explanation: "Attackers compromised SolarWinds' build system to inject the SUNBURST backdoor into legitimate Orion software updates." },
+      { id: "sap-q12-7", question: "How does deception technology help detect lateral movement?", options: ["It blocks all connections", "Honey accounts and canary files generate high-fidelity alerts when accessed by attackers", "It encrypts network traffic", "It speeds up authentication"], correctAnswer: 1, explanation: "Decoy credentials, shares, and systems have no legitimate use — any interaction is a high-confidence indicator of malicious activity." },
+      { id: "sap-q12-8", question: "What behavioral indicator suggests zero-day document exploitation?", options: ["User opens a PDF", "Office application spawning cmd.exe or PowerShell", "Document is emailed", "File is large"], correctAnswer: 1, explanation: "Office apps should never spawn command interpreters — Word/Excel launching cmd.exe or PowerShell strongly indicates exploit payload execution." },
+      { id: "sap-q12-9", question: "What is the purpose of Atomic Red Team?", options: ["A penetration testing service", "Standardized, repeatable tests mapped to MITRE ATT&CK for validating detections", "An antivirus product", "A threat intelligence feed"], correctAnswer: 1, explanation: "Atomic Red Team provides small, focused test cases for each ATT&CK technique — enabling repeatable detection validation." },
+      { id: "sap-q12-10", question: "In a purple team exercise scorecard, what three levels should be tracked per technique?", options: ["Fast, Medium, Slow", "Logged, Alerted, Blocked", "Red, Yellow, Green", "Low, Medium, High"], correctAnswer: 1, explanation: "Track whether each technique was Logged (visibility), Alerted (detection), and Blocked (prevention) to measure detection maturity." },
+      { id: "sap-q12-11", question: "What percentage of ransomware victims who pay are targeted again?", options: ["10%", "30%", "~80%", "0%"], correctAnswer: 2, explanation: "Studies show approximately 80% of organizations that pay ransom are attacked again — payment signals willingness to pay." },
+      { id: "sap-q12-12", question: "What is dependency confusion in supply chain attacks?", options: ["Confusing developers about dependencies", "Tricking build systems into pulling malicious public packages instead of private ones", "Using too many libraries", "Version mismatch errors"], correctAnswer: 1, explanation: "Dependency confusion publishes malicious packages on public registries with the same name as internal packages — build systems may prefer the public version." },
+      { id: "sap-q12-13", question: "What defense prevents Golden Ticket attacks?", options: ["Firewall rules", "Regular KRBTGT password rotation (twice, 12+ hours apart)", "Antivirus updates", "Network segmentation"], correctAnswer: 1, explanation: "Golden Tickets are forged using the KRBTGT hash — rotating it twice invalidates all existing tickets including forged ones." },
+      { id: "sap-q12-14", question: "How do you detect WMI-based lateral movement?", options: ["Check firewall logs", "Monitor wmiprvse.exe spawning unexpected child processes", "Review email logs", "Check DNS queries"], correctAnswer: 1, explanation: "Remote WMI execution causes wmiprvse.exe to spawn child processes — unexpected children like cmd.exe or PowerShell indicate lateral movement." },
+      { id: "sap-q12-15", question: "What is the average dwell time for modern ransomware before encryption?", options: ["Minutes", "5-14 days", "6 months", "1 hour"], correctAnswer: 1, explanation: "Modern ransomware operators spend 5-14 days in the network performing reconnaissance, credential theft, and data exfiltration before encrypting." },
+    ]
+  },
+  // SOC ANALYST LEARNING PATH — FINAL CERTIFICATION EXAM
+  {
+    quizId: "sap-q13",
+    courseId: "soc-analyst-path",
+    title: "SOC Analyst Certification Exam",
+    description: "Comprehensive final exam covering all 12 modules. You must pass this exam with 80% or higher to earn your SOC Analyst Learning Path certificate.",
+    passingScore: 80,
+    timeLimit: 90,
     questions: [
       // Module 1 — SOC Foundations
       { id: "sap-q10-1", question: "In the SOC-CMM model, which level indicates processes are documented, standardized, and measured?", options: ["Level 1 – Initial", "Level 2 – Managed", "Level 3 – Defined", "Level 4 – Quantitatively Managed"], correctAnswer: 3, explanation: "Level 4 (Quantitatively Managed) means processes are measured with KPIs and managed using data-driven decisions." },
