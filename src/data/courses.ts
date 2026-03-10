@@ -1755,7 +1755,7 @@ export const courses: Course[] = [
     shortTitle: "SOC Analyst Path",
     description: "A structured career-ready program covering everything from foundational SOC skills to advanced threat analysis, incident handling, and reporting. Designed to prepare you for real-world SOC analyst roles.",
     difficulty: "medium",
-    duration: "40 hours",
+    duration: "65 hours",
     price: 3999,
     bgImage: "courses/soc-analyst-path-bg.jpg",
     modules: [
