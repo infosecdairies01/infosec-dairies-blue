@@ -640,6 +640,7 @@ const Alerts = () => {
           )}
         </div>
       </div>
+      </div>
     </div>
   );
 };
