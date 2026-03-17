@@ -373,42 +373,12 @@ const Alerts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b1220] text-neutral-300 flex flex-col font-sans">
-      {/* ─── Minimal Top Bar ─── */}
-      <header className="h-12 bg-[#0d1526] border-b border-[#1a2540] flex items-center px-6 shrink-0">
-        <Link to="/" className="flex items-center gap-2 mr-8">
-          <img src={logo} alt="InfoSec Dairies" className="h-8 w-auto" />
-        </Link>
-        <nav className="flex items-center gap-1">
-          {[
-            { label: "Dashboard", href: "/labs" },
-            { label: "Alerts", href: "/labs/alerts" },
-            { label: "Logs", href: "/labs/logs" },
-            { label: "Investigations", href: "/labs/incidents" },
-            { label: "MITRE ATT&CK", href: "/labs/threat-intel" },
-            { label: "Leaderboard", href: "/labs/settings" },
-          ].map((item) => (
-            <Link
-              key={item.label}
-              to={item.href}
-              className={cn(
-                "px-3 py-1.5 text-xs font-medium rounded transition-colors",
-                item.label === "Alerts"
-                  ? "bg-[#162033] text-white border border-[#1e2d4a]"
-                  : "text-neutral-500 hover:text-neutral-300"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="ml-auto flex items-center gap-3">
-          <Bell className="w-4 h-4 text-neutral-600" />
-          <div className="w-7 h-7 rounded-full bg-[#162033] border border-[#1e2d4a] flex items-center justify-center">
-            <User className="w-3.5 h-3.5 text-neutral-400" />
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#0b1220] text-neutral-300 flex">
+      {/* ─── SOC Sidebar ─── */}
+      <SOCSidebar activeItem="Alerts" />
+
+      {/* ─── Main Content ─── */}
+      <div className="flex-1 flex flex-col overflow-hidden">
 
       {/* ─── Page Header ─── */}
       <div className="px-6 pt-6 pb-4">
