@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
   Search, RotateCcw, ChevronDown, ChevronUp, Play, ThumbsUp, ThumbsDown, XCircle,
-  Shield, Bell, User, Star, AlertTriangle, Square,
+  Shield, Star, AlertTriangle, Square,
 } from "lucide-react";
-import logo from "@/assets/infosecdairies-logo.png";
+import SOCSidebar from "@/components/soc/SOCSidebar";
 
 // ── Types ──────────────────────────────────────────────────────
 interface Alert {
