@@ -666,6 +666,29 @@ All external communication should go through proper channels:
         "Create a handover document using the template",
         "Include all active incidents and pending items",
         "Identify any high-priority items for the next shift"
+      ],
+      labQuestions: [
+        {
+          id: "1.4-q1",
+          scenario: "During your shift, you triaged 45 alerts. 3 were escalated to L2 — one involved a confirmed phishing email with a malicious attachment. The incident is still being investigated when your shift ends.",
+          question: "What is the MOST critical item to include in the handover document?",
+          answer: "The active phishing incident under investigation",
+          hint: "Handovers must highlight ongoing incidents that require continuity."
+        },
+        {
+          id: "1.4-q2",
+          scenario: "You noticed a recurring false positive alert from a specific detection rule during your shift. It triggered 12 times today.",
+          question: "Should this be included in the handover? If yes, in which section?",
+          answer: "Yes, in the pending items or recommendations section",
+          hint: "Recurring issues affect the next shift's workload and should be documented for tuning."
+        },
+        {
+          id: "1.4-q3",
+          scenario: "A new IOC blocklist was deployed mid-shift, and you observed 2 alerts triggered by it. Both were true positives that were contained.",
+          question: "What details about these incidents should be in the handover?",
+          answer: "Incident IDs, affected hosts, containment actions taken, and current status",
+          hint: "The next shift needs to know what happened and whether follow-up is required."
+        }
       ]
     }
   },
