@@ -1057,6 +1057,36 @@ Attack the vendor to reach the target.
         "Extract any IOCs (domains, URLs, attachment hashes)",
         "Classify the type of phishing attack",
         "Recommend user awareness improvements"
+      ],
+      labQuestions: [
+        {
+          id: "2.2-q1",
+          scenario: "You receive an email from 'support@micros0ft-security.com' with subject 'Urgent: Your account will be suspended'. The email contains a link to 'https://login.micros0ft-security.com/verify'.",
+          question: "What is the primary red flag in the sender's email address?",
+          answer: "Typosquatting — the domain uses '0' (zero) instead of 'o' in 'microsoft'",
+          hint: "Look carefully at the spelling of the domain name."
+        },
+        {
+          id: "2.2-q2",
+          scenario: "An employee reports receiving an email from their CEO asking them to urgently purchase gift cards and send the codes. The email came from a Gmail address.",
+          question: "What type of phishing attack is this?",
+          answer: "Business Email Compromise (BEC) / CEO fraud",
+          hint: "This involves impersonating a high-ranking executive to manipulate employees."
+        },
+        {
+          id: "2.2-q3",
+          scenario: "A phishing email contains an attachment named 'Invoice_2024.pdf.exe'. The email claims it is from a known vendor.",
+          question: "What technique is the attacker using with the file name?",
+          answer: "Double extension to disguise an executable as a PDF",
+          hint: "Look at the full file extension — what is the actual file type?"
+        },
+        {
+          id: "2.2-q4",
+          scenario: "You are analyzing email headers and notice the 'Return-Path' shows 'attacker@evil.com' while the 'From' field shows 'hr@yourcompany.com'.",
+          question: "What does this mismatch indicate?",
+          answer: "Email spoofing — the From field is forged to appear as an internal sender",
+          hint: "Compare the Return-Path (actual sender) with the From field (displayed sender)."
+        }
       ]
     }
   },
