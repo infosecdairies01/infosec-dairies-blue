@@ -1,3 +1,11 @@
+export interface LabQuestion {
+  id: string;
+  scenario: string;
+  question: string;
+  answer: string;
+  hint?: string;
+}
+
 export interface LessonContent {
   id: string;
   courseId: string;
@@ -8,6 +16,7 @@ export interface LessonContent {
     title: string;
     description: string;
     steps: string[];
+    labQuestions?: LabQuestion[];
   };
   additionalResources?: {
     title: string;
