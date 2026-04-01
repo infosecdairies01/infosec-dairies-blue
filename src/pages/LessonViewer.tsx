@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { getCourseById, Course, Lesson, Module } from "@/data/courses";
-import { getLessonContent, LessonContent } from "@/data/lessonContent";
+import { getLessonContent, LessonContent, LabQuestion } from "@/data/lessonContent";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Import course backgrounds
