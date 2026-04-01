@@ -31,6 +31,106 @@ const courseBackgrounds: Record<string, string> = {
   "malware-analysis": malwareAnalysisBg,
 };
 
+const LabQuestionsSection = ({ questions }: { questions: LabQuestion[] }) => {
+  const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
+  const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
+  const [showHint, setShowHint] = useState<Record<string, boolean>>({});
+  const [showAnswer, setShowAnswer] = useState<Record<string, boolean>>({});
+
+  const handleSubmit = (qId: string) => {
+    setSubmitted(prev => ({ ...prev, [qId]: true }));
+  };
+
+  const isCorrect = (q: LabQuestion) => {
+    const user = (userAnswers[q.id] || "").trim().toLowerCase();
+    const correct = q.answer.toLowerCase();
+    const keywords = correct.split(/[\s,—-]+/).filter(w => w.length > 3);
+    const matchCount = keywords.filter(kw => user.includes(kw)).length;
+    return matchCount >= Math.min(2, keywords.length) || user.includes(correct.substring(0, 20).toLowerCase());
+  };
+
+  return (
+    <div className="mt-6 space-y-4">
+      <div className="flex items-center gap-2 mb-2">
+        <HelpCircle className="w-4 h-4 text-cyan-400" />
+        <h4 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">Scenario Lab Questions</h4>
+      </div>
+      {questions.map((q, idx) => (
+        <div key={q.id} className="p-4 rounded-lg bg-background/40 border border-white/[0.06] space-y-3">
+          <div className="flex items-start gap-2">
+            <span className="flex-shrink-0 w-5 h-5 rounded bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-bold mt-0.5">
+              {idx + 1}
+            </span>
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                <span className="font-medium text-foreground">Scenario:</span> {q.scenario}
+              </p>
+              <p className="text-sm font-medium text-foreground">{q.question}</p>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Type your answer..."
+              value={userAnswers[q.id] || ""}
+              onChange={e => setUserAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+              disabled={submitted[q.id]}
+              className="flex-1 px-3 py-2 text-sm rounded-md bg-background/60 border border-white/[0.1] text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-cyan-500/50 disabled:opacity-60"
+            />
+            {!submitted[q.id] && (
+              <button
+                onClick={() => handleSubmit(q.id)}
+                disabled={!userAnswers[q.id]?.trim()}
+                className="px-3 py-2 rounded-md bg-cyan-600/80 text-white text-sm font-medium hover:bg-cyan-600 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 transition-colors"
+              >
+                <Send className="w-3.5 h-3.5" />
+                Submit
+              </button>
+            )}
+          </div>
+
+          {q.hint && !submitted[q.id] && (
+            <button
+              onClick={() => setShowHint(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+              className="text-xs text-yellow-500/80 hover:text-yellow-400 flex items-center gap-1 transition-colors"
+            >
+              <Lightbulb className="w-3 h-3" />
+              {showHint[q.id] ? "Hide hint" : "Show hint"}
+            </button>
+          )}
+          {showHint[q.id] && !submitted[q.id] && (
+            <p className="text-xs text-yellow-500/70 pl-4 border-l-2 border-yellow-500/30">{q.hint}</p>
+          )}
+
+          {submitted[q.id] && (
+            <div className="space-y-2">
+              <div className={`flex items-center gap-2 text-sm font-medium ${isCorrect(q) ? "text-emerald-400" : "text-orange-400"}`}>
+                {isCorrect(q) ? (
+                  <><CheckCircle className="w-4 h-4" /> Great answer!</>
+                ) : (
+                  <><Eye className="w-4 h-4" /> Review the correct answer below</>
+                )}
+              </div>
+              <button
+                onClick={() => setShowAnswer(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+                className="text-xs text-cyan-400/80 hover:text-cyan-300 flex items-center gap-1 transition-colors"
+              >
+                {showAnswer[q.id] ? <><EyeOff className="w-3 h-3" /> Hide answer</> : <><Eye className="w-3 h-3" /> Show answer</>}
+              </button>
+              {showAnswer[q.id] && (
+                <div className="p-3 rounded-md bg-emerald-500/10 border border-emerald-500/20">
+                  <p className="text-sm text-emerald-300"><span className="font-semibold">Answer:</span> {q.answer}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const LessonViewer = () => {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
   const navigate = useNavigate();
