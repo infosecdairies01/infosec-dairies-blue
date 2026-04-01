@@ -3,7 +3,7 @@ import { Link, useParams, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { 
   Shield, ChevronLeft, ChevronRight, CheckCircle, Clock, BookOpen, 
-  Lightbulb, FlaskConical, ExternalLink, Menu, X, Lock
+  Lightbulb, FlaskConical, ExternalLink, Menu, X, Lock, Eye, EyeOff, HelpCircle, Send
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { getCourseById, Course, Lesson, Module } from "@/data/courses";
