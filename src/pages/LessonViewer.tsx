@@ -444,7 +444,7 @@ const LessonViewer = () => {
                         </h3>
                       </div>
                       <p className="text-muted-foreground mb-4">{lessonContent.practicalExercise.description}</p>
-                      <ol className="space-y-2">
+                      <ol className="space-y-2 mb-6">
                         {lessonContent.practicalExercise.steps.map((step, idx) => (
                           <li key={idx} className="flex items-start gap-3 text-muted-foreground">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-secondary/20 text-secondary text-sm flex items-center justify-center">
@@ -454,6 +454,11 @@ const LessonViewer = () => {
                           </li>
                         ))}
                       </ol>
+
+                      {/* Interactive Lab Questions */}
+                      {lessonContent.practicalExercise.labQuestions && lessonContent.practicalExercise.labQuestions.length > 0 && (
+                        <LabQuestionsSection questions={lessonContent.practicalExercise.labQuestions} />
+                      )}
                     </div>
                   )}
 
