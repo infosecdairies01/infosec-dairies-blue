@@ -31,7 +31,7 @@ const courseBackgrounds: Record<string, string> = {
   "malware-analysis": malwareAnalysisBg,
 };
 
-const LabQuestionsSection = ({ questions }: { questions: LabQuestion[] }) => {
+const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; questions: LabQuestion[] }) => {
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
   const [showHint, setShowHint] = useState<Record<string, boolean>>({});
@@ -53,20 +53,23 @@ const LabQuestionsSection = ({ questions }: { questions: LabQuestion[] }) => {
     <div className="mt-6 space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <HelpCircle className="w-4 h-4 text-cyan-400" />
-        <h4 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">Scenario Lab Questions</h4>
+        <h4 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">Scenario Lab</h4>
       </div>
+
+      {scenario && (
+        <div className="p-4 rounded-lg bg-cyan-500/5 border border-cyan-500/20 space-y-2">
+          <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Scenario</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{scenario}</p>
+        </div>
+      )}
+
       {questions.map((q, idx) => (
         <div key={q.id} className="p-4 rounded-lg bg-background/40 border border-white/[0.06] space-y-3">
           <div className="flex items-start gap-2">
             <span className="flex-shrink-0 w-5 h-5 rounded bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-bold mt-0.5">
               {idx + 1}
             </span>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                <span className="font-medium text-foreground">Scenario:</span> {q.scenario}
-              </p>
-              <p className="text-sm font-medium text-foreground">{q.question}</p>
-            </div>
+            <p className="text-sm font-medium text-foreground">{q.question}</p>
           </div>
 
           <div className="flex gap-2">
@@ -557,7 +560,7 @@ const LessonViewer = () => {
 
                       {/* Interactive Lab Questions */}
                       {lessonContent.practicalExercise.labQuestions && lessonContent.practicalExercise.labQuestions.length > 0 && (
-                        <LabQuestionsSection questions={lessonContent.practicalExercise.labQuestions} />
+                        <LabQuestionsSection scenario={lessonContent.practicalExercise.labScenario} questions={lessonContent.practicalExercise.labQuestions} />
                       )}
                     </div>
                   )}

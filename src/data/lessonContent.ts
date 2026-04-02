@@ -1,6 +1,5 @@
 export interface LabQuestion {
   id: string;
-  scenario: string;
   question: string;
   answer: string;
   hint?: string;
@@ -16,6 +15,7 @@ export interface LessonContent {
     title: string;
     description: string;
     steps: string[];
+    labScenario?: string;
     labQuestions?: LabQuestion[];
   };
   additionalResources?: {
@@ -262,41 +262,31 @@ The average time to progress from L1 to L2 is 1-2 years with continuous learning
         "Identify which SOC role should handle each",
         "Explain your reasoning for each decision"
       ],
+      labScenario: "A SIEM alert fires showing 50 failed login attempts from a single IP address against the VPN gateway in the last 10 minutes. After initial triage, the L1 analyst confirms the brute force attack succeeded and the attacker logged into an internal server. Lateral movement is suspected, and a new zero-day exploit has been reported targeting your organization's web application framework.",
       labQuestions: [
         {
           id: "1.2-q1",
-          scenario: "A SIEM alert fires showing 50 failed login attempts from a single IP address against the VPN gateway in the last 10 minutes.",
-          question: "Which SOC role should handle this alert first?",
+          question: "Which SOC role should handle this alert first when it appears on the SIEM dashboard?",
           answer: "L1 Analyst",
           hint: "Think about who monitors the SIEM dashboard and performs initial triage."
         },
         {
           id: "1.2-q2",
-          scenario: "After initial triage, the L1 analyst confirms the brute force attack succeeded and the attacker logged into an internal server. Lateral movement is suspected.",
-          question: "Who should this be escalated to?",
+          question: "Once the brute force success and lateral movement are confirmed, who should this be escalated to?",
           answer: "L2 Analyst",
           hint: "This requires deeper investigation, containment, and correlation across multiple sources."
         },
         {
           id: "1.2-q3",
-          scenario: "A new zero-day exploit is reported in the wild targeting your organization's web application framework. No alerts have fired yet.",
-          question: "Which role would proactively hunt for signs of this exploit in your environment?",
+          question: "Which role would proactively hunt for signs of the reported zero-day exploit in your environment before any alerts trigger?",
           answer: "Threat Hunter",
           hint: "This is a proactive activity — searching for threats before alerts trigger."
         },
         {
           id: "1.2-q4",
-          scenario: "The SOC is experiencing a high volume of false positive alerts from a newly deployed firewall rule.",
-          question: "Which role is responsible for tuning the detection rules to reduce false positives?",
+          question: "If the initial VPN brute force alert is generating excessive false positives from the new firewall rule, which role is responsible for tuning detection rules?",
           answer: "Detection Engineer",
           hint: "Think about who develops and tunes detection rules."
-        },
-        {
-          id: "1.2-q5",
-          scenario: "Management requests a monthly report on SOC performance metrics including MTTD, MTTR, and alert volume trends.",
-          question: "Who is responsible for preparing this report?",
-          answer: "SOC Manager",
-          hint: "This involves stakeholder communication and metrics tracking."
         }
       ]
     }
@@ -667,25 +657,23 @@ All external communication should go through proper channels:
         "Include all active incidents and pending items",
         "Identify any high-priority items for the next shift"
       ],
+      labScenario: "During your 12-hour SOC shift, you triaged 45 alerts. 3 were escalated to L2 — one involved a confirmed phishing email with a malicious attachment targeting the finance team. The incident is still under active investigation when your shift ends. Additionally, a recurring false positive from a newly deployed firewall rule triggered 12 times during the shift, and a new IOC blocklist was deployed mid-shift that caught 2 true positive connections which were contained.",
       labQuestions: [
         {
           id: "1.4-q1",
-          scenario: "During your shift, you triaged 45 alerts. 3 were escalated to L2 — one involved a confirmed phishing email with a malicious attachment. The incident is still being investigated when your shift ends.",
-          question: "What is the MOST critical item to include in the handover document?",
+          question: "What is the MOST critical item to include in the handover document for the incoming shift?",
           answer: "The active phishing incident under investigation",
           hint: "Handovers must highlight ongoing incidents that require continuity."
         },
         {
           id: "1.4-q2",
-          scenario: "You noticed a recurring false positive alert from a specific detection rule during your shift. It triggered 12 times today.",
-          question: "Should this be included in the handover? If yes, in which section?",
+          question: "Should the recurring false positive alert be included in the handover? If yes, in which section?",
           answer: "Yes, in the pending items or recommendations section",
           hint: "Recurring issues affect the next shift's workload and should be documented for tuning."
         },
         {
           id: "1.4-q3",
-          scenario: "A new IOC blocklist was deployed mid-shift, and you observed 2 alerts triggered by it. Both were true positives that were contained.",
-          question: "What details about these incidents should be in the handover?",
+          question: "What details about the 2 true positive IOC blocklist incidents should be documented in the handover?",
           answer: "Incident IDs, affected hosts, containment actions taken, and current status",
           hint: "The next shift needs to know what happened and whether follow-up is required."
         }
@@ -1058,34 +1046,31 @@ Attack the vendor to reach the target.
         "Classify the type of phishing attack",
         "Recommend user awareness improvements"
       ],
+      labScenario: "An employee in the finance department reports a suspicious email from 'support@micros0ft-security.com' with subject 'Urgent: Your account will be suspended'. The email contains a link to 'https://login.micros0ft-security.com/verify' and an attachment named 'Invoice_2024.pdf.exe'. Upon checking the email headers, the 'Return-Path' shows 'attacker@evil.com' while the 'From' field displays 'hr@yourcompany.com'.",
       labQuestions: [
         {
           id: "2.2-q1",
-          scenario: "You receive an email from 'support@micros0ft-security.com' with subject 'Urgent: Your account will be suspended'. The email contains a link to 'https://login.micros0ft-security.com/verify'.",
           question: "What is the primary red flag in the sender's email address?",
           answer: "Typosquatting — the domain uses '0' (zero) instead of 'o' in 'microsoft'",
           hint: "Look carefully at the spelling of the domain name."
         },
         {
           id: "2.2-q2",
-          scenario: "An employee reports receiving an email from their CEO asking them to urgently purchase gift cards and send the codes. The email came from a Gmail address.",
-          question: "What type of phishing attack is this?",
-          answer: "Business Email Compromise (BEC) / CEO fraud",
-          hint: "This involves impersonating a high-ranking executive to manipulate employees."
-        },
-        {
-          id: "2.2-q3",
-          scenario: "A phishing email contains an attachment named 'Invoice_2024.pdf.exe'. The email claims it is from a known vendor.",
-          question: "What technique is the attacker using with the file name?",
+          question: "What technique is the attacker using with the attachment file name 'Invoice_2024.pdf.exe'?",
           answer: "Double extension to disguise an executable as a PDF",
           hint: "Look at the full file extension — what is the actual file type?"
         },
         {
-          id: "2.2-q4",
-          scenario: "You are analyzing email headers and notice the 'Return-Path' shows 'attacker@evil.com' while the 'From' field shows 'hr@yourcompany.com'.",
-          question: "What does this mismatch indicate?",
+          id: "2.2-q3",
+          question: "What does the mismatch between 'Return-Path: attacker@evil.com' and 'From: hr@yourcompany.com' indicate?",
           answer: "Email spoofing — the From field is forged to appear as an internal sender",
           hint: "Compare the Return-Path (actual sender) with the From field (displayed sender)."
+        },
+        {
+          id: "2.2-q4",
+          question: "Based on all the indicators, what type of phishing attack is this?",
+          answer: "Spear phishing with multiple social engineering techniques including typosquatting, double extension, and email spoofing",
+          hint: "Consider all the techniques used together — this is a targeted attack."
         }
       ]
     }
@@ -1820,32 +1805,29 @@ Verdict: Likely malicious macro execution
         "Find privilege escalation through group membership changes",
         "Document findings with timeline and affected systems"
       ],
+      labScenario: "Your SIEM flags workstation WS-PC01 for suspicious activity. Windows Event Logs show 150 Event ID 4625 (failed logon) entries in 5 minutes, all targeting the 'Administrator' account. Shortly after, a single Event ID 4624 (successful logon) with Logon Type 10 appears for 'Administrator' from an external IP. Later, Event ID 4732 shows user 'john.doe' was added to the 'Domain Admins' group by 'Administrator' at 2:00 AM. Sysmon Event ID 1 shows 'powershell.exe' spawned by 'winword.exe' with a Base64-encoded command line.",
       labQuestions: [
         {
           id: "3.2-q1",
-          scenario: "You see 150 Event ID 4625 (failed logon) entries in 5 minutes from workstation WS-PC01, all targeting the 'Administrator' account.",
-          question: "What type of attack does this indicate?",
+          question: "What type of attack do the 150 failed logon attempts (Event ID 4625) in 5 minutes indicate?",
           answer: "Brute force attack",
           hint: "A high volume of failed login attempts against a single account is a classic indicator."
         },
         {
           id: "3.2-q2",
-          scenario: "After the failed attempts, you see a single Event ID 4624 (successful logon) with Logon Type 10 for the 'Administrator' account from an external IP.",
-          question: "What does Logon Type 10 indicate, and why is this concerning?",
+          question: "What does Logon Type 10 in the successful logon event indicate, and why is it concerning after the brute force attempts?",
           answer: "Logon Type 10 is Remote Desktop (RDP). An RDP login from an external IP after brute force attempts indicates the attacker succeeded.",
           hint: "Logon Type 10 is associated with a specific remote access protocol."
         },
         {
           id: "3.2-q3",
-          scenario: "You find Event ID 4732 showing user 'john.doe' was added to the 'Domain Admins' group by user 'Administrator' at 2:00 AM.",
-          question: "What security concern does this raise?",
+          question: "What security concern does the Event ID 4732 (adding john.doe to Domain Admins at 2:00 AM) raise?",
           answer: "Privilege escalation — a user was added to Domain Admins outside business hours, possibly by a compromised admin account",
           hint: "Think about why admin group changes at unusual hours are suspicious."
         },
         {
           id: "3.2-q4",
-          scenario: "Sysmon Event ID 1 shows 'powershell.exe' spawned by 'winword.exe' (Microsoft Word) with a Base64-encoded command line.",
-          question: "What does this process chain suggest?",
+          question: "What does the Sysmon process chain of winword.exe spawning powershell.exe with Base64 encoding suggest?",
           answer: "A malicious macro in a Word document executed PowerShell — likely a malware dropper",
           hint: "Word should not normally spawn PowerShell. This is a common malware delivery chain."
         }
@@ -2379,25 +2361,23 @@ Files/Commands:
         "Determine the scope of the incident",
         "Write recommended containment and remediation actions"
       ],
+      labScenario: "Firewall logs show outbound connections from database server SRV-DB01 to IP 185.220.101.45 on port 443 every 60 seconds — the IP is flagged as a known C2 server. DNS logs from the same host show queries for 'aGVsbG8=.evil-domain.com' where the subdomain appears Base64 encoded. Investigation reveals the compromised service account 'svc-backup' and file hash 'd41d8cd98f00b204e9800998ecf8427e' on the server.",
       labQuestions: [
         {
           id: "3.5-q1",
-          scenario: "Firewall logs show outbound connections from server SRV-DB01 to IP 185.220.101.45 on port 443 every 60 seconds. The IP is flagged as a known C2 server.",
-          question: "What MITRE ATT&CK technique does this periodic outbound connection represent?",
+          question: "What MITRE ATT&CK technique does the periodic 60-second outbound connection to the C2 IP represent?",
           answer: "Command and Control (C2) beaconing — T1071 (Application Layer Protocol)",
           hint: "Regular interval connections to a known malicious IP indicate automated communication."
         },
         {
           id: "3.5-q2",
-          scenario: "DNS logs show queries for 'aGVsbG8=.evil-domain.com' from an internal host. The subdomain appears to be Base64 encoded.",
-          question: "What technique is being used and what is the decoded subdomain?",
+          question: "What technique is being used via the DNS queries, and what does 'aGVsbG8=' decode to?",
           answer: "DNS tunneling for data exfiltration. The Base64 'aGVsbG8=' decodes to 'hello'.",
           hint: "Encoding data in DNS queries is a common exfiltration technique."
         },
         {
           id: "3.5-q3",
-          scenario: "You have identified the following IOCs: IP 185.220.101.45, domain evil-domain.com, file hash 'd41d8cd98f00b204e9800998ecf8427e', and compromised account 'svc-backup'.",
-          question: "What is the first containment action you should take?",
+          question: "Given all the IOCs identified (C2 IP, domain, file hash, compromised account), what is the first containment action you should take?",
           answer: "Block the C2 IP and domain at the firewall/proxy and disable the compromised service account",
           hint: "Containment focuses on stopping active communication with the attacker and preventing further access."
         }
