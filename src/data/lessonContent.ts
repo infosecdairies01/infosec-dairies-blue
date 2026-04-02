@@ -1805,32 +1805,29 @@ Verdict: Likely malicious macro execution
         "Find privilege escalation through group membership changes",
         "Document findings with timeline and affected systems"
       ],
+      labScenario: "Your SIEM flags workstation WS-PC01 for suspicious activity. Windows Event Logs show 150 Event ID 4625 (failed logon) entries in 5 minutes, all targeting the 'Administrator' account. Shortly after, a single Event ID 4624 (successful logon) with Logon Type 10 appears for 'Administrator' from an external IP. Later, Event ID 4732 shows user 'john.doe' was added to the 'Domain Admins' group by 'Administrator' at 2:00 AM. Sysmon Event ID 1 shows 'powershell.exe' spawned by 'winword.exe' with a Base64-encoded command line.",
       labQuestions: [
         {
           id: "3.2-q1",
-          scenario: "You see 150 Event ID 4625 (failed logon) entries in 5 minutes from workstation WS-PC01, all targeting the 'Administrator' account.",
-          question: "What type of attack does this indicate?",
+          question: "What type of attack do the 150 failed logon attempts (Event ID 4625) in 5 minutes indicate?",
           answer: "Brute force attack",
           hint: "A high volume of failed login attempts against a single account is a classic indicator."
         },
         {
           id: "3.2-q2",
-          scenario: "After the failed attempts, you see a single Event ID 4624 (successful logon) with Logon Type 10 for the 'Administrator' account from an external IP.",
-          question: "What does Logon Type 10 indicate, and why is this concerning?",
+          question: "What does Logon Type 10 in the successful logon event indicate, and why is it concerning after the brute force attempts?",
           answer: "Logon Type 10 is Remote Desktop (RDP). An RDP login from an external IP after brute force attempts indicates the attacker succeeded.",
           hint: "Logon Type 10 is associated with a specific remote access protocol."
         },
         {
           id: "3.2-q3",
-          scenario: "You find Event ID 4732 showing user 'john.doe' was added to the 'Domain Admins' group by user 'Administrator' at 2:00 AM.",
-          question: "What security concern does this raise?",
+          question: "What security concern does the Event ID 4732 (adding john.doe to Domain Admins at 2:00 AM) raise?",
           answer: "Privilege escalation — a user was added to Domain Admins outside business hours, possibly by a compromised admin account",
           hint: "Think about why admin group changes at unusual hours are suspicious."
         },
         {
           id: "3.2-q4",
-          scenario: "Sysmon Event ID 1 shows 'powershell.exe' spawned by 'winword.exe' (Microsoft Word) with a Base64-encoded command line.",
-          question: "What does this process chain suggest?",
+          question: "What does the Sysmon process chain of winword.exe spawning powershell.exe with Base64 encoding suggest?",
           answer: "A malicious macro in a Word document executed PowerShell — likely a malware dropper",
           hint: "Word should not normally spawn PowerShell. This is a common malware delivery chain."
         }
