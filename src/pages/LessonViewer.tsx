@@ -560,7 +560,7 @@ const LessonViewer = () => {
 
                       {/* Interactive Lab Questions */}
                       {lessonContent.practicalExercise.labQuestions && lessonContent.practicalExercise.labQuestions.length > 0 && (
-                        <LabQuestionsSection questions={lessonContent.practicalExercise.labQuestions} />
+                        <LabQuestionsSection scenario={lessonContent.practicalExercise.labScenario} questions={lessonContent.practicalExercise.labQuestions} />
                       )}
                     </div>
                   )}
