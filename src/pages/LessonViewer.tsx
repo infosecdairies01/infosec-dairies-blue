@@ -36,9 +36,28 @@ const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; quest
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
   const [showHint, setShowHint] = useState<Record<string, boolean>>({});
   const [showAnswer, setShowAnswer] = useState<Record<string, boolean>>({});
+  const [attempts, setAttempts] = useState<Record<string, number>>({});
+  const [locked, setLocked] = useState<Record<string, boolean>>({});
 
-  const handleSubmit = (qId: string) => {
+  const handleSubmit = (qId: string, q: LabQuestion) => {
+    const newAttempts = (attempts[qId] || 0) + 1;
+    setAttempts(prev => ({ ...prev, [qId]: newAttempts }));
     setSubmitted(prev => ({ ...prev, [qId]: true }));
+    
+    const user = (userAnswers[qId] || "").trim().toLowerCase();
+    const correct = q.answer.toLowerCase();
+    const keywords = correct.split(/[\s,—-]+/).filter(w => w.length > 3);
+    const matchCount = keywords.filter(kw => user.includes(kw)).length;
+    const isRight = matchCount >= Math.min(2, keywords.length) || user.includes(correct.substring(0, 20).toLowerCase());
+    
+    if (isRight || newAttempts >= 4) {
+      setLocked(prev => ({ ...prev, [qId]: true }));
+    }
+  };
+
+  const handleRetry = (qId: string) => {
+    setUserAnswers(prev => ({ ...prev, [qId]: "" }));
+    setSubmitted(prev => ({ ...prev, [qId]: false }));
   };
 
   const isCorrect = (q: LabQuestion) => {
