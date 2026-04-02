@@ -134,7 +134,7 @@ const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; quest
               ) : (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm font-medium text-orange-400">
-                    <Eye className="w-4 h-4" /> Incorrect — {(attempts[q.id] || 0) < 4 ? `Attempt ${attempts[q.id]}/4. Try again!` : "All attempts used."}
+                    <Eye className="w-4 h-4" /> Incorrect {(attempts[q.id] || 0) >= 4 ? "— All attempts used." : ""}
                   </div>
                   {(attempts[q.id] || 0) < 4 && (
                     <button
