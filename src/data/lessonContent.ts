@@ -1,6 +1,5 @@
 export interface LabQuestion {
   id: string;
-  scenario: string;
   question: string;
   answer: string;
   hint?: string;
