@@ -262,41 +262,31 @@ The average time to progress from L1 to L2 is 1-2 years with continuous learning
         "Identify which SOC role should handle each",
         "Explain your reasoning for each decision"
       ],
+      labScenario: "A SIEM alert fires showing 50 failed login attempts from a single IP address against the VPN gateway in the last 10 minutes. After initial triage, the L1 analyst confirms the brute force attack succeeded and the attacker logged into an internal server. Lateral movement is suspected, and a new zero-day exploit has been reported targeting your organization's web application framework.",
       labQuestions: [
         {
           id: "1.2-q1",
-          scenario: "A SIEM alert fires showing 50 failed login attempts from a single IP address against the VPN gateway in the last 10 minutes.",
-          question: "Which SOC role should handle this alert first?",
+          question: "Which SOC role should handle this alert first when it appears on the SIEM dashboard?",
           answer: "L1 Analyst",
           hint: "Think about who monitors the SIEM dashboard and performs initial triage."
         },
         {
           id: "1.2-q2",
-          scenario: "After initial triage, the L1 analyst confirms the brute force attack succeeded and the attacker logged into an internal server. Lateral movement is suspected.",
-          question: "Who should this be escalated to?",
+          question: "Once the brute force success and lateral movement are confirmed, who should this be escalated to?",
           answer: "L2 Analyst",
           hint: "This requires deeper investigation, containment, and correlation across multiple sources."
         },
         {
           id: "1.2-q3",
-          scenario: "A new zero-day exploit is reported in the wild targeting your organization's web application framework. No alerts have fired yet.",
-          question: "Which role would proactively hunt for signs of this exploit in your environment?",
+          question: "Which role would proactively hunt for signs of the reported zero-day exploit in your environment before any alerts trigger?",
           answer: "Threat Hunter",
           hint: "This is a proactive activity — searching for threats before alerts trigger."
         },
         {
           id: "1.2-q4",
-          scenario: "The SOC is experiencing a high volume of false positive alerts from a newly deployed firewall rule.",
-          question: "Which role is responsible for tuning the detection rules to reduce false positives?",
+          question: "If the initial VPN brute force alert is generating excessive false positives from the new firewall rule, which role is responsible for tuning detection rules?",
           answer: "Detection Engineer",
           hint: "Think about who develops and tunes detection rules."
-        },
-        {
-          id: "1.2-q5",
-          scenario: "Management requests a monthly report on SOC performance metrics including MTTD, MTTR, and alert volume trends.",
-          question: "Who is responsible for preparing this report?",
-          answer: "SOC Manager",
-          hint: "This involves stakeholder communication and metrics tracking."
         }
       ]
     }
