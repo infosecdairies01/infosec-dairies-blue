@@ -2361,25 +2361,23 @@ Files/Commands:
         "Determine the scope of the incident",
         "Write recommended containment and remediation actions"
       ],
+      labScenario: "Firewall logs show outbound connections from database server SRV-DB01 to IP 185.220.101.45 on port 443 every 60 seconds — the IP is flagged as a known C2 server. DNS logs from the same host show queries for 'aGVsbG8=.evil-domain.com' where the subdomain appears Base64 encoded. Investigation reveals the compromised service account 'svc-backup' and file hash 'd41d8cd98f00b204e9800998ecf8427e' on the server.",
       labQuestions: [
         {
           id: "3.5-q1",
-          scenario: "Firewall logs show outbound connections from server SRV-DB01 to IP 185.220.101.45 on port 443 every 60 seconds. The IP is flagged as a known C2 server.",
-          question: "What MITRE ATT&CK technique does this periodic outbound connection represent?",
+          question: "What MITRE ATT&CK technique does the periodic 60-second outbound connection to the C2 IP represent?",
           answer: "Command and Control (C2) beaconing — T1071 (Application Layer Protocol)",
           hint: "Regular interval connections to a known malicious IP indicate automated communication."
         },
         {
           id: "3.5-q2",
-          scenario: "DNS logs show queries for 'aGVsbG8=.evil-domain.com' from an internal host. The subdomain appears to be Base64 encoded.",
-          question: "What technique is being used and what is the decoded subdomain?",
+          question: "What technique is being used via the DNS queries, and what does 'aGVsbG8=' decode to?",
           answer: "DNS tunneling for data exfiltration. The Base64 'aGVsbG8=' decodes to 'hello'.",
           hint: "Encoding data in DNS queries is a common exfiltration technique."
         },
         {
           id: "3.5-q3",
-          scenario: "You have identified the following IOCs: IP 185.220.101.45, domain evil-domain.com, file hash 'd41d8cd98f00b204e9800998ecf8427e', and compromised account 'svc-backup'.",
-          question: "What is the first containment action you should take?",
+          question: "Given all the IOCs identified (C2 IP, domain, file hash, compromised account), what is the first containment action you should take?",
           answer: "Block the C2 IP and domain at the firewall/proxy and disable the compromised service account",
           hint: "Containment focuses on stopping active communication with the attacker and preventing further access."
         }
