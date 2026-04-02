@@ -15,6 +15,7 @@ export interface LessonContent {
     title: string;
     description: string;
     steps: string[];
+    labScenario?: string;
     labQuestions?: LabQuestion[];
   };
   additionalResources?: {
