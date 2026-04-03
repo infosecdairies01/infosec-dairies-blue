@@ -4326,6 +4326,33 @@ Before escalating:
         "Determine if escalation is needed",
         "Complete an escalation template",
         "Identify any missing information for the handoff"
+      ],
+      labScenario: "At 14:32 UTC, your SIEM generates a high-severity alert: 'Data Exfiltration Detected — Outbound Transfer Exceeds Threshold.' Workstation WS-FIN-07 belonging to user 'sarah.chen' from the Finance department uploaded 2.3 GB of data to an external cloud storage service (mega.nz) over HTTPS. The transfer occurred during business hours. Checking the DLP logs, you find the transferred files include 'Q4_Financial_Report.xlsx', 'Employee_Salary_Data.csv', and 'Board_Meeting_Notes.docx'. Sarah's manager confirms she was not authorized to transfer these files externally. Her account shows no signs of compromise — MFA is enabled, and the login originated from her usual office IP.",
+      labQuestions: [
+        {
+          id: "5.5-q1",
+          question: "Based on the evidence, is this alert more likely a true positive or false positive?",
+          answer: "true positive",
+          hint: "The manager confirmed the transfer was unauthorized."
+        },
+        {
+          id: "5.5-q2",
+          question: "What type of insider threat does this scenario most likely represent?",
+          answer: "insider threat",
+          hint: "The user's account is not compromised — the actions came from the legitimate user."
+        },
+        {
+          id: "5.5-q3",
+          question: "Should this alert be escalated to L2? Answer yes or no.",
+          answer: "yes",
+          hint: "Consider the sensitivity of the data and the unauthorized nature of the transfer."
+        },
+        {
+          id: "5.5-q4",
+          question: "What external service was used to exfiltrate the data?",
+          answer: "mega.nz",
+          hint: "Check the cloud storage destination mentioned in the alert."
+        }
       ]
     }
   },
