@@ -7859,6 +7859,33 @@ Exfiltration:
         "Look for C2 communication patterns",
         "Find evidence of lateral movement",
         "Detect any data exfiltration indicators"
+      ],
+      labScenario: "Network monitoring tools detect anomalous traffic from server SRV-WEB-01 (192.168.1.100). The IDS flags DNS queries to 'x7k9m2.data-analytics-cdn.com' occurring every 30 seconds — each query encodes a different subdomain that appears to be Base64 data. Simultaneously, Zeek logs show SMB connections from SRV-WEB-01 to 5 internal hosts (192.168.1.50–54) on port 445, all within a 2-minute window. NetFlow data reveals a 500 MB transfer from 192.168.1.52 to SRV-WEB-01, followed by an outbound HTTPS connection from SRV-WEB-01 to 91.234.56.78 on port 8443 transferring 480 MB. The destination IP is not in any known CDN range.",
+      labQuestions: [
+        {
+          id: "9.4-q1",
+          question: "What technique is being used for C2 communication based on the DNS queries?",
+          answer: "DNS tunneling",
+          hint: "Encoded subdomains at regular intervals suggest data hidden in DNS."
+        },
+        {
+          id: "9.4-q2",
+          question: "How many internal hosts did the compromised server connect to via SMB?",
+          answer: "5",
+          hint: "Count the IP range 192.168.1.50 through 54."
+        },
+        {
+          id: "9.4-q3",
+          question: "What is the approximate size of data exfiltrated to the external IP?",
+          answer: "480 MB",
+          hint: "Check the outbound HTTPS transfer size."
+        },
+        {
+          id: "9.4-q4",
+          question: "What port was used for the outbound data exfiltration?",
+          answer: "8443",
+          hint: "Look at the HTTPS connection to the external IP."
+        }
       ]
     }
   },
