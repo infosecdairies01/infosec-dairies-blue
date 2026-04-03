@@ -8127,6 +8127,33 @@ Annually:
         "Identify what evidence you'd need to test each hypothesis",
         "Practice pivoting from the initial IOC to find related indicators",
         "Build a timeline of the scenario events"
+      ],
+      labScenario: "At 02:17 AM, your SIEM triggers a critical alert: 'Anomalous Privileged Account Activity.' The domain admin account 'da-backup' — normally used only by the backup system — logged in interactively (Event ID 4624, Logon Type 2) from workstation WS-REC-01 in the reception area. Within 8 minutes, the account accessed the Active Directory server (DC-01) via RDP, ran 'ntdsutil' to create a snapshot of the AD database, and copied the file to a USB-connected drive (E:\\backup.dit). No change tickets exist for this maintenance, and the backup team confirms no one was scheduled to work. The account's password was last changed 387 days ago.",
+      labQuestions: [
+        {
+          id: "10.1-q1",
+          question: "What tool was used to extract the Active Directory database?",
+          answer: "ntdsutil",
+          hint: "Check the commands run on the domain controller."
+        },
+        {
+          id: "10.1-q2",
+          question: "What Logon Type indicates an interactive (physical) logon?",
+          answer: "2",
+          hint: "Look at the Event ID 4624 details in the scenario."
+        },
+        {
+          id: "10.1-q3",
+          question: "How many days since the compromised account's password was last changed?",
+          answer: "387",
+          hint: "Check the password age mentioned at the end of the scenario."
+        },
+        {
+          id: "10.1-q4",
+          question: "Where was the AD database file copied to?",
+          answer: "USB",
+          hint: "Look at the destination drive letter and type."
+        }
       ]
     }
   },
