@@ -4940,6 +4940,33 @@ Enriched Alert to Analyst
         "Research a recent malware sample on ThreatFox",
         "Use Shodan to search for exposed services",
         "Document 5 tools you'll add to your daily workflow"
+      ],
+      labScenario: "During alert triage, you encounter a suspicious file downloaded by a user: 'update_patch.exe'. You extract the SHA256 hash: 'e99a18c428cb38d5f260853678922e03abd836f5d3a4e6f1b3c5e8d9f2a1b4c7'. A VirusTotal scan shows 48/72 vendors flagging it as malicious, categorized as 'Trojan.GenericKD.46543210'. The file was downloaded from 'http://198.51.100.23/updates/patch.exe'. AbuseIPDB shows the IP has been reported 347 times in the last 30 days for malware distribution. AlienVault OTX links this IP to the 'APT29' threat group with a recent pulse titled 'Cozy Bear Infrastructure Update Q1 2025'.",
+      labQuestions: [
+        {
+          id: "6.4-q1",
+          question: "How many VirusTotal vendors flagged the file as malicious?",
+          answer: "48",
+          hint: "Check the detection ratio in the scenario."
+        },
+        {
+          id: "6.4-q2",
+          question: "Which APT group is linked to the IP address used for distribution?",
+          answer: "APT29",
+          hint: "Check the AlienVault OTX information."
+        },
+        {
+          id: "6.4-q3",
+          question: "What is the IP address hosting the malicious file?",
+          answer: "198.51.100.23",
+          hint: "Look at the download URL in the scenario."
+        },
+        {
+          id: "6.4-q4",
+          question: "What is the common name for the APT29 threat group?",
+          answer: "Cozy Bear",
+          hint: "Check the OTX pulse title for the group's alias."
+        }
       ]
     }
   },
