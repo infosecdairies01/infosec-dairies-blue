@@ -2959,6 +2959,33 @@ EventCode=4625 | stats count by src_ip     # Add grouping
         "Filter to show only IPs with more than 5 failures",
         "Add user information to the output",
         "Sort by count and limit to top 10"
+      ],
+      labScenario: "Your SIEM receives an alert: 'Excessive Failed Logins Detected.' The correlation rule triggered because 85 failed login attempts (Event ID 4625) were recorded against the 'admin' account from IP 203.0.113.50 within 3 minutes. Shortly after, a successful login (Event ID 4624) from the same IP was logged. The source IP is geolocated to a country your organization has no business with. A follow-up query shows the same IP performed a port scan on the internal network 10 minutes later.",
+      labQuestions: [
+        {
+          id: "4.3-q1",
+          question: "What type of attack does this pattern of 85 failed logins followed by a successful login indicate?",
+          answer: "brute force",
+          hint: "Think about an attack that tries many passwords until one works."
+        },
+        {
+          id: "4.3-q2",
+          question: "Which Windows Event ID indicates the successful login after the brute force attempt?",
+          answer: "4624",
+          hint: "This is the standard Windows event for a successful logon."
+        },
+        {
+          id: "4.3-q3",
+          question: "What follow-up activity did the attacker perform after gaining access?",
+          answer: "port scan",
+          hint: "Look at what the IP did 10 minutes after login."
+        },
+        {
+          id: "4.3-q4",
+          question: "What is the source IP address involved in this attack?",
+          answer: "203.0.113.50",
+          hint: "Check the IP mentioned in the scenario."
+        }
       ]
     }
   },
