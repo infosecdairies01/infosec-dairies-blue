@@ -6020,6 +6020,33 @@ Recommendations:
         "Document a timeline of the incident",
         "Draft a user notification message",
         "Write three recommendations for prevention"
+      ],
+      labScenario: "At 09:15 AM, 12 employees in the HR department received an email from 'ceo@yourcompany-hr.com' (spoofed domain) with subject 'Urgent: Updated Benefits Enrollment'. The email contained a link to 'https://yourcompany-benefits.evil.com/enroll'. Three employees clicked the link and entered their corporate credentials on a fake login page. By 09:45 AM, the SOC detected unusual Office 365 activity: two of the compromised accounts had new inbox rules created forwarding all emails to an external address 'collector@protonmail.com'. One compromised account sent 45 emails to external contacts with an updated malicious link. The attacker also accessed the company's SharePoint and downloaded the 'Employee_Directory.xlsx' file.",
+      labQuestions: [
+        {
+          id: "7.5-q1",
+          question: "How many employees entered their credentials on the phishing page?",
+          answer: "3",
+          hint: "Look at how many employees clicked and submitted credentials."
+        },
+        {
+          id: "7.5-q2",
+          question: "What persistence mechanism did the attacker set up in the compromised mailboxes?",
+          answer: "inbox rules",
+          hint: "Think about how the attacker ensured continued access to emails."
+        },
+        {
+          id: "7.5-q3",
+          question: "What external email address were the forwarded emails sent to?",
+          answer: "collector@protonmail.com",
+          hint: "Check the inbox rule destination."
+        },
+        {
+          id: "7.5-q4",
+          question: "What sensitive file did the attacker download from SharePoint?",
+          answer: "Employee_Directory.xlsx",
+          hint: "Look at the SharePoint access activity."
+        }
       ]
     }
   },
