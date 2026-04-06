@@ -492,7 +492,7 @@ More advanced tools (forensics, malware analysis) are typically used by L2+ anal
     additionalResources: [
       { title: "Splunk Fundamentals 1", type: "documentation", url: "https://www.splunk.com/en_us/training/courses/splunk-fundamentals-1.html" },
       { title: "MITRE ATT&CK Navigator", type: "tool", url: "https://mitre-attack.github.io/attack-navigator/" }
-    ]
+    ],
     practicalExercise: {
       title: "SOC Tool Identification",
       description: "Identify the correct SOC tools for different security tasks.",
