@@ -493,6 +493,42 @@ More advanced tools (forensics, malware analysis) are typically used by L2+ anal
       { title: "Splunk Fundamentals 1", type: "documentation", url: "https://www.splunk.com/en_us/training/courses/splunk-fundamentals-1.html" },
       { title: "MITRE ATT&CK Navigator", type: "tool", url: "https://mitre-attack.github.io/attack-navigator/" }
     ]
+    practicalExercise: {
+      title: "SOC Tool Identification",
+      description: "Identify the correct SOC tools for different security tasks.",
+      steps: [
+        "Review the alert details and determine the appropriate tool",
+        "Match each investigation task to its corresponding platform",
+        "Consider how tools integrate in a SOC workflow",
+      ],
+      labScenario: "You are onboarding as a new L1 SOC analyst. Your manager gives you a test: five alerts have come in and you must identify which tool to use for each task. Alert 1: A phishing email reported by an employee needs header analysis. Alert 2: A workstation is showing suspicious process execution. Alert 3: You need to search for all failed logins across the enterprise in the last hour. Alert 4: A confirmed incident needs to be documented and tracked. Alert 5: You need to check if a suspicious IP has been seen before in your environment.",
+      labQuestions: [
+        {
+          id: "1.3-q1",
+          question: "Which tool category would you use to investigate the suspicious process execution on the workstation (Alert 2)?",
+          answer: "EDR",
+          hint: "This tool provides endpoint visibility including process trees and file activity."
+        },
+        {
+          id: "1.3-q2",
+          question: "Which tool would you use to search for all failed logins across the enterprise (Alert 3)?",
+          answer: "SIEM",
+          hint: "This tool aggregates and correlates logs from multiple sources across the environment."
+        },
+        {
+          id: "1.3-q3",
+          question: "What tool category is used to document and track the confirmed incident (Alert 4)?",
+          answer: "ticketing system",
+          hint: "Think about where incidents are formally logged, assigned, and tracked through resolution."
+        },
+        {
+          id: "1.3-q4",
+          question: "Which tool would help you check if the suspicious IP has been seen before (Alert 5)?",
+          answer: "threat intelligence platform",
+          hint: "This tool stores IOCs and enrichment data from various feeds."
+        },
+      ]
+    },
   },
   {
     id: "1.4",
@@ -886,6 +922,36 @@ Understanding threat actors helps you:
       "Insider threats are dangerous due to legitimate access and system knowledge",
       "Understanding motivations helps prioritize and respond to threats"
     ]
+    practicalExercise: {
+      title: "Threat Actor Attribution",
+      description: "Classify threat actors based on observed behavior and motivation.",
+      steps: [
+        "Analyze the attack characteristics and TTPs",
+        "Determine the likely motivation behind the attack",
+        "Classify the threat actor category",
+      ],
+      labScenario: "Your SOC receives intelligence about four separate incidents targeting your organization this week. Incident A: A sophisticated implant was discovered on a government contractor's network, using custom zero-day exploits with no financial demands — only data exfiltration of classified documents. Incident B: An employee in IT downloaded a cracked software tool that contained a crypto-miner, consuming 80% CPU on their workstation. Incident C: Your company website was defaced with political messages after your CEO made a controversial public statement. Incident D: A disgruntled employee who was passed over for promotion copied 50GB of customer data to a personal USB drive before resigning.",
+      labQuestions: [
+        {
+          id: "2.1-q1",
+          question: "What type of threat actor is most likely behind Incident A (zero-day exploit, data exfiltration of classified documents)?",
+          answer: "nation-state",
+          hint: "Custom zero-days and targeting classified data suggest a well-funded government-backed group."
+        },
+        {
+          id: "2.1-q2",
+          question: "What category does Incident C (website defacement with political messages) fall under?",
+          answer: "hacktivist",
+          hint: "Defacement with political messaging is a hallmark of ideologically motivated attackers."
+        },
+        {
+          id: "2.1-q3",
+          question: "What type of threat does Incident D represent (employee copying data to USB)?",
+          answer: "insider threat",
+          hint: "This person had legitimate access and a personal grievance as motivation."
+        },
+      ]
+    },
   },
   {
     id: "2.2",
@@ -1311,6 +1377,42 @@ Generation 3: Encrypt + Exfiltrate + DDoS → Triple extortion
       { title: "MITRE ATT&CK Malware", type: "documentation" },
       { title: "Any.Run Malware Sandbox", type: "tool" }
     ]
+    practicalExercise: {
+      title: "Malware Classification",
+      description: "Identify malware types based on observed behaviors and indicators.",
+      steps: [
+        "Review the behavioral indicators from each sample",
+        "Match behaviors to known malware categories",
+        "Determine the primary objective of each malware",
+      ],
+      labScenario: "Your malware analysis team shares findings from four samples recovered during recent incidents. Sample 1: The binary encrypts all .docx, .xlsx, and .pdf files on the network share, appends '.locked' extension, and drops a 'README_DECRYPT.txt' demanding 2 BTC. Sample 2: A process disguised as 'svchost32.exe' opens a reverse shell to 45.77.65.12 on port 4444, awaiting commands. It persists via a registry Run key. Sample 3: A legitimate-looking 'Adobe_Update.exe' installs properly but silently logs all keystrokes to a hidden file and exfiltrates them via DNS queries. Sample 4: A worm spreads across the network via SMB, exploiting EternalBlue, replicating itself to every reachable host.",
+      labQuestions: [
+        {
+          id: "2.3-q1",
+          question: "What type of malware is Sample 1 (encrypts files, demands BTC)?",
+          answer: "ransomware",
+          hint: "File encryption combined with a ransom demand is the defining behavior."
+        },
+        {
+          id: "2.3-q2",
+          question: "What is Sample 2 classified as (reverse shell, awaits commands)?",
+          answer: "RAT",
+          hint: "A Remote Access tool that provides persistent backdoor access and command execution."
+        },
+        {
+          id: "2.3-q3",
+          question: "What type of malware is Sample 3 (logs keystrokes, exfiltrates via DNS)?",
+          answer: "trojan",
+          hint: "It appears legitimate but carries hidden malicious functionality."
+        },
+        {
+          id: "2.3-q4",
+          question: "What spreading mechanism does Sample 4 use to propagate across the network?",
+          answer: "SMB",
+          hint: "It exploits a well-known vulnerability in a Windows file sharing protocol."
+        },
+      ]
+    },
   },
   {
     id: "2.4",
@@ -1494,6 +1596,42 @@ ATT&CK maps techniques to data sources needed for detection:
       { title: "MITRE ATT&CK Website", type: "documentation", url: "https://attack.mitre.org/" },
       { title: "ATT&CK Navigator", type: "tool", url: "https://mitre-attack.github.io/attack-navigator/" }
     ]
+    practicalExercise: {
+      title: "MITRE ATT&CK Mapping",
+      description: "Map observed attacker behaviors to MITRE ATT&CK tactics and techniques.",
+      steps: [
+        "Review the attack timeline and observed behaviors",
+        "Identify the ATT&CK tactic for each phase",
+        "Map specific techniques to observed actions",
+      ],
+      labScenario: "During an incident investigation, the following attacker activity timeline was reconstructed: Step 1: The attacker sent a spear-phishing email with a malicious Word macro to the HR department. Step 2: The macro executed PowerShell to download a second-stage payload from an external server. Step 3: The attacker used Mimikatz to dump credentials from LSASS memory. Step 4: Using stolen credentials, the attacker accessed three additional servers via RDP. Step 5: The attacker compressed sensitive files into a .7z archive and uploaded them to a cloud storage service.",
+      labQuestions: [
+        {
+          id: "2.4-q1",
+          question: "What MITRE ATT&CK tactic does Step 1 (spear-phishing email) fall under?",
+          answer: "Initial Access",
+          hint: "This is how the attacker first gained entry into the environment."
+        },
+        {
+          id: "2.4-q2",
+          question: "What tactic does Step 3 (Mimikatz credential dumping) represent?",
+          answer: "Credential Access",
+          hint: "The attacker is harvesting authentication material to use later."
+        },
+        {
+          id: "2.4-q3",
+          question: "What tactic does Step 4 (RDP to additional servers) represent?",
+          answer: "Lateral Movement",
+          hint: "The attacker is moving through the network to reach more systems."
+        },
+        {
+          id: "2.4-q4",
+          question: "What tactic does Step 5 (compressing and uploading files) fall under?",
+          answer: "Exfiltration",
+          hint: "The attacker is stealing data from the environment."
+        },
+      ]
+    },
   },
   // Module 3: Log Analysis Fundamentals
   {
@@ -2078,6 +2216,42 @@ zgrep "pattern" /var/log/auth.log.*.gz
       "The audit framework provides detailed syscall and file access logging",
       "Web server logs can reveal SQL injection, path traversal, and web shell activity"
     ]
+    practicalExercise: {
+      title: "Linux Log Investigation",
+      description: "Analyze Linux system logs to identify suspicious activity.",
+      steps: [
+        "Review authentication logs for anomalies",
+        "Check system logs for unauthorized changes",
+        "Correlate timestamps across log sources",
+      ],
+      labScenario: "A Linux web server (Ubuntu 22.04) has been flagged by your SIEM. The /var/log/auth.log shows 200 failed SSH login attempts for user 'root' from IP 103.25.40.11 between 02:00-02:15 UTC, followed by a successful login at 02:16 UTC. After login, /var/log/syslog shows a new user 'support_admin' was created at 02:18 UTC. The /var/log/auth.log then shows 'support_admin' running 'sudo apt install ncat' at 02:20 UTC. Apache access logs show no web traffic anomalies during this period.",
+      labQuestions: [
+        {
+          id: "3.3-q1",
+          question: "What type of attack do the 200 failed SSH attempts followed by a success indicate?",
+          answer: "brute force",
+          hint: "Many failed attempts followed by a success is a classic pattern."
+        },
+        {
+          id: "3.3-q2",
+          question: "What Linux log file records SSH authentication events?",
+          answer: "auth.log",
+          hint: "This log in /var/log/ captures all authentication-related events."
+        },
+        {
+          id: "3.3-q3",
+          question: "What persistence technique did the attacker use after gaining access?",
+          answer: "create account",
+          hint: "The attacker made a new user to maintain future access."
+        },
+        {
+          id: "3.3-q4",
+          question: "What tool did the attacker install that could be used for reverse shells?",
+          answer: "ncat",
+          hint: "This is the networking utility installed via apt."
+        },
+      ]
+    },
   },
   {
     id: "3.4",
@@ -2262,6 +2436,36 @@ query=totally-legit-bank-login.com
       "VPN logs track remote access with user, location, and duration details",
       "Look for patterns: scanning, beaconing, impossible travel, and data exfiltration"
     ]
+    practicalExercise: {
+      title: "Network Log Analysis",
+      description: "Analyze firewall and network device logs to detect threats.",
+      steps: [
+        "Review firewall logs for suspicious connections",
+        "Identify beaconing patterns in network traffic",
+        "Correlate network events with endpoint alerts",
+      ],
+      labScenario: "Your firewall logs show the following activity from internal host 10.0.5.22 (workstation WS-SALES-08): Between 08:00-17:00 UTC, the host made outbound HTTPS connections to IP 91.195.240.11 exactly every 300 seconds (5 minutes). Each connection transferred approximately 1KB of data outbound and 500 bytes inbound. DNS logs show the host resolved 'cdn-analytics.techupdate.xyz' which points to 91.195.240.11. Your threat intel feed flags this domain as a known C2 server associated with the SolarMarker malware family. VPN logs confirm the user was working remotely from a home IP.",
+      labQuestions: [
+        {
+          id: "3.4-q1",
+          question: "What does the regular 300-second connection interval suggest about this traffic?",
+          answer: "beaconing",
+          hint: "Regular, predictable intervals of outbound connections are a hallmark of this C2 behavior."
+        },
+        {
+          id: "3.4-q2",
+          question: "What is the C2 domain the host is communicating with?",
+          answer: "cdn-analytics.techupdate.xyz",
+          hint: "Check the DNS resolution logs for the domain that resolves to the suspicious IP."
+        },
+        {
+          id: "3.4-q3",
+          question: "What malware family is associated with this C2 infrastructure?",
+          answer: "SolarMarker",
+          hint: "The threat intel feed identified the associated malware family."
+        },
+      ]
+    },
   },
   {
     id: "3.5",
@@ -2844,6 +3048,36 @@ Most SIEMs have a field browser showing:
       "Always start with appropriate time ranges and refine as needed",
       "Save common searches and create personal dashboards for efficiency"
     ]
+    practicalExercise: {
+      title: "SIEM Dashboard Investigation",
+      description: "Navigate SIEM dashboards to locate and investigate security events.",
+      steps: [
+        "Use the SIEM search interface to query relevant events",
+        "Apply time filters and field selections",
+        "Interpret dashboard visualizations",
+      ],
+      labScenario: "You log into the SIEM at the start of your shift and the main dashboard shows: 1,247 events in the last hour, 23 high-severity alerts, and 3 critical alerts. The top sources widget shows 'DC-01' generating 40% of all events. The geographic map highlights unusual traffic from Eastern Europe. One critical alert reads: 'Multiple failed logins followed by success — DC-01.' You need to investigate but the default dashboard only shows summary data. The alert timestamp is 06:45 UTC and your shift started at 07:00 UTC.",
+      labQuestions: [
+        {
+          id: "4.2-q1",
+          question: "Which source device should you investigate first based on the dashboard?",
+          answer: "DC-01",
+          hint: "Look at which device is generating the most events and has a critical alert."
+        },
+        {
+          id: "4.2-q2",
+          question: "What time range should you set in your SIEM search to capture events before and after the alert?",
+          answer: "06:00 to 07:00",
+          hint: "Set a window around the 06:45 UTC alert timestamp to see surrounding context."
+        },
+        {
+          id: "4.2-q3",
+          question: "What severity level are the 3 alerts that need immediate attention?",
+          answer: "critical",
+          hint: "The dashboard highlights three alerts at the highest severity level."
+        },
+      ]
+    },
   },
   {
     id: "4.3",
@@ -3329,6 +3563,36 @@ Risk Assessment: Low - these are known internal scanners
       "Alert tuning reduces false positives while maintaining detection",
       "Document tuning requests with business justification and risk assessment"
     ]
+    practicalExercise: {
+      title: "Correlation Rule Analysis",
+      description: "Evaluate SIEM correlation rules and tune alerts to reduce false positives.",
+      steps: [
+        "Review the correlation rule logic and thresholds",
+        "Analyze alert frequency and false positive rate",
+        "Recommend tuning adjustments",
+      ],
+      labScenario: "Your SOC has a correlation rule: 'Brute Force Detection' that triggers when more than 5 failed logins occur within 10 minutes from a single source IP. This rule generated 145 alerts last week. Upon review, 130 alerts were caused by a service account 'svc-monitor' that polls 20 servers every 5 minutes — its password expired last Tuesday causing repeated failures. 10 alerts were from employees mistyping passwords at the VPN portal. 5 alerts were genuine brute force attempts from external IPs, 2 of which led to successful logins.",
+      labQuestions: [
+        {
+          id: "4.4-q1",
+          question: "What is the false positive rate of this correlation rule last week (approximate percentage)?",
+          answer: "97%",
+          hint: "Calculate: (130 + 10) false positives out of 145 total alerts."
+        },
+        {
+          id: "4.4-q2",
+          question: "What caused the majority of false positive alerts?",
+          answer: "expired service account password",
+          hint: "130 out of 145 alerts came from a single service account with an authentication issue."
+        },
+        {
+          id: "4.4-q3",
+          question: "What tuning action would most effectively reduce false positives from svc-monitor?",
+          answer: "whitelist the service account",
+          hint: "Exclude the known service account from the correlation rule to eliminate 130 false alerts."
+        },
+      ]
+    },
   },
   {
     id: "4.5",
@@ -3861,6 +4125,36 @@ Add scanner IPs to allowlist for this rule
       "Gather context about affected assets and users",
       "Document every triage decision with reasoning"
     ]
+    practicalExercise: {
+      title: "Alert Triage Prioritization",
+      description: "Prioritize and triage multiple simultaneous alerts effectively.",
+      steps: [
+        "Assess each alert's severity and context",
+        "Determine investigation priority order",
+        "Identify which alerts require immediate escalation",
+      ],
+      labScenario: "Five alerts arrive in your queue within 2 minutes. Alert A: Low severity — antivirus quarantined a known adware PUP on a marketing laptop. Alert B: High severity — EDR detected Mimikatz execution on domain controller DC-02 at 3:00 AM. Alert C: Medium severity — outbound connection to a Tor exit node from a developer workstation, lasting 3 seconds. Alert D: Critical severity — DLP alert showing 5GB upload to external storage from the CFO's laptop. Alert E: Medium severity — port scan detected from internal IP 10.0.1.100 targeting the server subnet.",
+      labQuestions: [
+        {
+          id: "5.2-q1",
+          question: "Which alert should you investigate first?",
+          answer: "Alert B",
+          hint: "Mimikatz on a domain controller is the highest-impact threat — credential theft on the most critical asset."
+        },
+        {
+          id: "5.2-q2",
+          question: "Which alert can safely be deprioritized or closed with minimal investigation?",
+          answer: "Alert A",
+          hint: "The antivirus already quarantined a low-risk PUP — this is largely handled."
+        },
+        {
+          id: "5.2-q3",
+          question: "Which two alerts together might indicate a coordinated attack (lateral movement + exfiltration)?",
+          answer: "Alert B and Alert D",
+          hint: "Credential theft on a DC followed by large data exfiltration from an executive's laptop could be linked."
+        },
+      ]
+    },
   },
   {
     id: "5.3",
@@ -4042,6 +4336,42 @@ If you can't determine TP vs FP:
       "Analyze process chains and behavioral baselines",
       "When uncertain, document thoroughly and escalate"
     ]
+    practicalExercise: {
+      title: "TP/FP Classification",
+      description: "Determine whether alerts are true positives or false positives.",
+      steps: [
+        "Analyze each alert with available context",
+        "Apply verification checks to classify the alert",
+        "Document your reasoning for each classification",
+      ],
+      labScenario: "You must classify four alerts during your shift. Alert 1: SIEM flags 'powershell.exe spawned by excel.exe' on WS-FIN-01. The user confirms they opened a macro-enabled spreadsheet from an unknown external sender. Alert 2: EDR detects 'psexec.exe' on server SRV-APP-01. The change management system shows an approved maintenance ticket for that server by the sysadmin team at that exact time. Alert 3: Firewall blocks outbound traffic to a known malicious IP from workstation WS-DEV-05. DNS logs show the user visited a compromised website 2 minutes prior. Alert 4: IDS alerts on 'SQL injection attempt' from the company's own vulnerability scanner IP during a scheduled scan window.",
+      labQuestions: [
+        {
+          id: "5.3-q1",
+          question: "Is Alert 1 (PowerShell from Excel, unknown sender) a true positive or false positive?",
+          answer: "true positive",
+          hint: "PowerShell spawned by Excel from an unknown external sender is highly suspicious behavior."
+        },
+        {
+          id: "5.3-q2",
+          question: "Is Alert 2 (PsExec during approved maintenance) a true positive or false positive?",
+          answer: "false positive",
+          hint: "The activity matches an approved change management ticket — it's expected behavior."
+        },
+        {
+          id: "5.3-q3",
+          question: "Is Alert 4 (SQL injection from vulnerability scanner) a true positive or false positive?",
+          answer: "false positive",
+          hint: "The source is the company's own scanner running during a scheduled window."
+        },
+        {
+          id: "5.3-q4",
+          question: "For Alert 3, what likely caused the malicious IP connection?",
+          answer: "compromised website",
+          hint: "The user visited a compromised website 2 minutes before the blocked connection."
+        },
+      ]
+    },
   },
   {
     id: "5.4",
@@ -4255,6 +4585,36 @@ on_alert:
       "Check historical data for previous alerts and known patterns",
       "Automate enrichment to speed up triage and ensure consistency"
     ]
+    practicalExercise: {
+      title: "Alert Enrichment",
+      description: "Enrich alerts with additional context to support investigation decisions.",
+      steps: [
+        "Query threat intelligence for IOC reputation",
+        "Check asset inventory for affected host details",
+        "Review user context and historical activity",
+      ],
+      labScenario: "A medium-severity alert fires: workstation WS-HR-04 connected to IP 198.51.100.77 on port 443. You need to enrich this alert before deciding on escalation. Your threat intel platform shows the IP was flagged by 2 out of 80 vendors as 'suspicious' 6 months ago but has no recent reports. WHOIS shows the IP is registered to a legitimate cloud hosting provider in Germany. The CMDB shows WS-HR-04 belongs to 'anna.kowalski' in the HR department — the machine has no special permissions. Checking Anna's login history, she logged in from her usual office IP this morning. Her browser history shows she clicked a link from a LinkedIn message 5 minutes before the alert.",
+      labQuestions: [
+        {
+          id: "5.4-q1",
+          question: "Based on the threat intel enrichment, is the IP reputation high-risk or low-risk?",
+          answer: "low-risk",
+          hint: "Only 2/80 vendors flagged it, the reports are 6 months old, and it belongs to a legitimate hosting provider."
+        },
+        {
+          id: "5.4-q2",
+          question: "What user action likely triggered the connection to the suspicious IP?",
+          answer: "clicked LinkedIn link",
+          hint: "Check the browser history for activity immediately before the alert."
+        },
+        {
+          id: "5.4-q3",
+          question: "What additional enrichment source would help determine if the LinkedIn link was malicious?",
+          answer: "URL scanner",
+          hint: "Tools like VirusTotal or URLScan can analyze the reputation and behavior of the URL she clicked."
+        },
+      ]
+    },
   },
   {
     id: "5.5",
@@ -4972,6 +5332,36 @@ Analysis:
       { title: "AbuseIPDB", type: "tool", url: "https://www.abuseipdb.com" },
       { title: "Shodan", type: "tool", url: "https://www.shodan.io" }
     ]
+    practicalExercise: {
+      title: "OSINT Investigation",
+      description: "Use open-source intelligence tools to investigate suspicious indicators.",
+      steps: [
+        "Query public databases for IP and domain intelligence",
+        "Analyze WHOIS and DNS records for attribution",
+        "Cross-reference findings across multiple OSINT sources",
+      ],
+      labScenario: "During an investigation, you extract three IOCs that need OSINT enrichment. IOC 1: IP address 185.220.101.45 — your firewall blocked outbound connections to this IP from two internal hosts. IOC 2: Domain 'secure-update-portal.com' — found in a phishing email sent to 5 employees. IOC 3: File hash 'e99a18c428cb38d5f260853678922e03' — extracted from a suspicious attachment on one employee's workstation. You check AbuseIPDB (185.220.101.45 reported 500+ times for malware), WHOIS (domain registered 3 days ago with privacy protection), and VirusTotal (hash detected by 52/72 engines as Emotet).",
+      labQuestions: [
+        {
+          id: "6.3-q1",
+          question: "Based on AbuseIPDB results, what is IP 185.220.101.45 primarily associated with?",
+          answer: "malware",
+          hint: "The IP was reported 500+ times — check what category of abuse it's flagged for."
+        },
+        {
+          id: "6.3-q2",
+          question: "What WHOIS detail about the domain suggests it is malicious?",
+          answer: "registered 3 days ago",
+          hint: "Very recently registered domains with privacy protection are common indicators of malicious infrastructure."
+        },
+        {
+          id: "6.3-q3",
+          question: "What malware family was the suspicious file hash identified as?",
+          answer: "Emotet",
+          hint: "VirusTotal detection results include the malware family classification."
+        },
+      ]
+    },
   },
   {
     id: "6.4",
