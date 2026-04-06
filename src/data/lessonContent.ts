@@ -492,7 +492,7 @@ More advanced tools (forensics, malware analysis) are typically used by L2+ anal
     additionalResources: [
       { title: "Splunk Fundamentals 1", type: "documentation", url: "https://www.splunk.com/en_us/training/courses/splunk-fundamentals-1.html" },
       { title: "MITRE ATT&CK Navigator", type: "tool", url: "https://mitre-attack.github.io/attack-navigator/" }
-    ]
+    ],
     practicalExercise: {
       title: "SOC Tool Identification",
       description: "Identify the correct SOC tools for different security tasks.",
@@ -921,7 +921,7 @@ Understanding threat actors helps you:
       "Hacktivists are ideologically driven and seek publicity",
       "Insider threats are dangerous due to legitimate access and system knowledge",
       "Understanding motivations helps prioritize and respond to threats"
-    ]
+    ],
     practicalExercise: {
       title: "Threat Actor Attribution",
       description: "Classify threat actors based on observed behavior and motivation.",
@@ -1376,7 +1376,7 @@ Generation 3: Encrypt + Exfiltrate + DDoS → Triple extortion
     additionalResources: [
       { title: "MITRE ATT&CK Malware", type: "documentation" },
       { title: "Any.Run Malware Sandbox", type: "tool" }
-    ]
+    ],
     practicalExercise: {
       title: "Malware Classification",
       description: "Identify malware types based on observed behaviors and indicators.",
@@ -1595,7 +1595,7 @@ ATT&CK maps techniques to data sources needed for detection:
     additionalResources: [
       { title: "MITRE ATT&CK Website", type: "documentation", url: "https://attack.mitre.org/" },
       { title: "ATT&CK Navigator", type: "tool", url: "https://mitre-attack.github.io/attack-navigator/" }
-    ]
+    ],
     practicalExercise: {
       title: "MITRE ATT&CK Mapping",
       description: "Map observed attacker behaviors to MITRE ATT&CK tactics and techniques.",
@@ -2215,7 +2215,7 @@ zgrep "pattern" /var/log/auth.log.*.gz
       "Sudo logs capture privilege escalation with full command details",
       "The audit framework provides detailed syscall and file access logging",
       "Web server logs can reveal SQL injection, path traversal, and web shell activity"
-    ]
+    ],
     practicalExercise: {
       title: "Linux Log Investigation",
       description: "Analyze Linux system logs to identify suspicious activity.",
@@ -2435,7 +2435,7 @@ query=totally-legit-bank-login.com
       "DNS logs can reveal DGA domains, tunneling, and malicious lookups",
       "VPN logs track remote access with user, location, and duration details",
       "Look for patterns: scanning, beaconing, impossible travel, and data exfiltration"
-    ]
+    ],
     practicalExercise: {
       title: "Network Log Analysis",
       description: "Analyze firewall and network device logs to detect threats.",
@@ -3047,7 +3047,7 @@ Most SIEMs have a field browser showing:
       "Dashboards provide visual summaries of security metrics",
       "Always start with appropriate time ranges and refine as needed",
       "Save common searches and create personal dashboards for efficiency"
-    ]
+    ],
     practicalExercise: {
       title: "SIEM Dashboard Investigation",
       description: "Navigate SIEM dashboards to locate and investigate security events.",
@@ -3562,7 +3562,7 @@ Risk Assessment: Low - these are known internal scanners
       "Severity levels drive response urgency and SLA requirements",
       "Alert tuning reduces false positives while maintaining detection",
       "Document tuning requests with business justification and risk assessment"
-    ]
+    ],
     practicalExercise: {
       title: "Correlation Rule Analysis",
       description: "Evaluate SIEM correlation rules and tune alerts to reduce false positives.",
@@ -4124,7 +4124,7 @@ Add scanner IPs to allowlist for this rule
       "Enrich IOCs with threat intelligence and reputation data",
       "Gather context about affected assets and users",
       "Document every triage decision with reasoning"
-    ]
+    ],
     practicalExercise: {
       title: "Alert Triage Prioritization",
       description: "Prioritize and triage multiple simultaneous alerts effectively.",
@@ -4335,7 +4335,7 @@ If you can't determine TP vs FP:
       "Use multiple verification sources for IOC analysis",
       "Analyze process chains and behavioral baselines",
       "When uncertain, document thoroughly and escalate"
-    ]
+    ],
     practicalExercise: {
       title: "TP/FP Classification",
       description: "Determine whether alerts are true positives or false positives.",
@@ -4584,7 +4584,7 @@ on_alert:
       "Query internal systems (CMDB, IAM) for asset and user context",
       "Check historical data for previous alerts and known patterns",
       "Automate enrichment to speed up triage and ensure consistency"
-    ]
+    ],
     practicalExercise: {
       title: "Alert Enrichment",
       description: "Enrich alerts with additional context to support investigation decisions.",
@@ -5331,7 +5331,7 @@ Analysis:
       { title: "VirusTotal", type: "tool", url: "https://www.virustotal.com" },
       { title: "AbuseIPDB", type: "tool", url: "https://www.abuseipdb.com" },
       { title: "Shodan", type: "tool", url: "https://www.shodan.io" }
-    ]
+    ],
     practicalExercise: {
       title: "OSINT Investigation",
       description: "Use open-source intelligence tools to investigate suspicious indicators.",
@@ -9048,7 +9048,7 @@ A healthy SOC has:
     additionalResources: [
       { title: "Mental Health Resources", type: "article", url: "https://www.mentalhealth.gov" },
       { title: "SOC Analyst Wellbeing Guide", type: "article", url: "https://www.sans.org" }
-    ]
+    ],
   },
   {
     id: "10.3",
@@ -9271,7 +9271,7 @@ Benefits:
       { title: "TryHackMe", type: "tool", url: "https://tryhackme.com" },
       { title: "LetsDefend", type: "tool", url: "https://letsdefend.io" },
       { title: "CyberDefenders", type: "tool", url: "https://cyberdefenders.org" }
-    ]
+    ],
   },
   {
     id: "10.4",
@@ -9653,7 +9653,7 @@ Mastering log analysis is one of the most valuable skills for any security profe
     additionalResources: [
       { title: "NIST Guide to Computer Security Log Management", type: "documentation" },
       { title: "SANS Log Management Best Practices", type: "article" }
-    ]
+    ],
   },
   {
     id: "1.2",
@@ -9800,7 +9800,7 @@ LEEF:Version|Vendor|Product|Version|EventID|
       "JSON is increasingly popular for its flexibility and readability",
       "Windows uses XML-based EVTX format with Event IDs",
       "Understanding log formats is essential for effective parsing and analysis"
-    ]
+    ],
   },
   {
     id: "1.3",
@@ -9951,7 +9951,7 @@ For security monitoring, prioritize:
       "Cloud services have their own logging systems (CloudTrail, Azure Activity)",
       "Authentication logs are the highest priority for security monitoring",
       "EDR provides rich telemetry beyond traditional OS logs"
-    ]
+    ],
   },
   {
     id: "1.4",
@@ -10116,7 +10116,7 @@ Estimate daily log volume:
       "Syslog, WEF, and APIs are common collection methods",
       "Timestamp normalization and field mapping are critical",
       "Plan for log volume and retention requirements"
-    ]
+    ],
   },
   // Module 2: Windows Event Logs
   {
@@ -10277,7 +10277,7 @@ Configure via: **Event Viewer → Log Properties → Maximum log size**
       "Audit policies must be configured to generate security events",
       "Event Viewer and PowerShell are primary tools for log access",
       "Default log sizes are too small—increase for security monitoring"
-    ]
+    ],
   },
   {
     id: "2.2",
@@ -10588,7 +10588,7 @@ When investigating authentication events:
       "Lateral movement typically uses Type 3 (network) logons",
       "Monitor for NTLM usage as it's more vulnerable than Kerberos",
       "Correlate authentication events with subsequent activity (4688)"
-    ]
+    ],
   },
   {
     id: "2.4",
@@ -10765,7 +10765,7 @@ AND CommandLine contains any of ("-urlcache", "-split", "http://", "https://")
       "Watch for LOLBins (certutil, mshta, bitsadmin) used maliciously",
       "Unusual parent-child relationships indicate potential compromise",
       "Encoded PowerShell commands are a major red flag"
-    ]
+    ],
   },
   {
     id: "2.5",
@@ -10951,7 +10951,7 @@ ScriptBlockText contains any of (
       "Watch for download cradles, AMSI bypasses, and obfuscation",
       "Transcription logging creates full session records",
       "Correlate PowerShell events with process creation events"
-    ]
+    ],
   },
   {
     id: "2.6",
@@ -11357,7 +11357,7 @@ w
       "journalctl is the modern way to query logs on systemd systems",
       "auditd provides detailed system call auditing for security",
       "Understanding syslog facilities and priorities helps filter logs"
-    ]
+    ],
   },
   {
     id: "3.2",
@@ -11700,7 +11700,7 @@ grep "UFW BLOCK" /var/log/syslog | awk '{print $12}' | cut -d= -f2 | sort | uniq
       "Cron logs can expose persistence mechanisms",
       "Package manager logs show software installations and removals",
       "AppArmor/SELinux denials indicate blocked malicious behavior"
-    ]
+    ],
   },
   {
     id: "3.4",
@@ -11869,7 +11869,7 @@ awk '$10 > 1000000 {print $1, $7, $10}' access.log
       "SQL injection shows as quotes and SQL keywords in URLs",
       "Web shells have distinctive access patterns (cmd parameters)",
       "Unusual User-Agents often indicate automated attacks"
-    ]
+    ],
   },
   {
     id: "3.5",
@@ -12220,7 +12220,7 @@ Normalized Fields:
     additionalResources: [
       { title: "Gartner SIEM Magic Quadrant", type: "article" },
       { title: "SANS SIEM Guide", type: "documentation" }
-    ]
+    ],
   },
   {
     id: "1.2",
@@ -12402,7 +12402,7 @@ ALERT: Brute Force Attack Detected - 3 failures then success
       "Storage tiers (hot/warm/cold) balance performance with cost",
       "Scalability depends on data volume and search requirements",
       "Cloud SIEMs offer faster deployment but less control over data"
-    ]
+    ],
   },
   {
     id: "1.3",
@@ -12635,7 +12635,7 @@ Regardless of platform, these skills transfer:
     additionalResources: [
       { title: "Splunk Fundamentals 1 (Free)", type: "documentation", url: "https://www.splunk.com/en_us/training/courses/splunk-fundamentals-1.html" },
       { title: "Microsoft Sentinel Training", type: "documentation", url: "https://learn.microsoft.com/en-us/training/paths/security-ops-sentinel/" }
-    ]
+    ],
   },
   {
     id: "1.4",
@@ -12844,7 +12844,7 @@ Report: Complete timeline from initial access to detection
       "Investigation capabilities let analysts pivot and expand from initial alerts",
       "Compliance requires specific log retention and reporting features",
       "Dashboards provide real-time visibility into security posture"
-    ]
+    ],
   },
 
   // Module 2: Data Ingestion & Management
@@ -13114,7 +13114,7 @@ Okta ──────────────────────→ │
       "API collection is essential for cloud services and SaaS applications",
       "Choose collection method based on source type, reliability needs, and overhead",
       "Modern SIEMs support multiple collection methods simultaneously"
-    ]
+    ],
   },
   {
     id: "2.2",
@@ -13366,7 +13366,7 @@ Action: Update parser configuration
       "Field extraction uses regex, key-value, JSON, and delimiter parsing",
       "Timestamps should be normalized to UTC in ISO 8601 format",
       "Enrichment adds valuable context like geo-location and threat intel"
-    ]
+    ],
   },
   {
     id: "2.3",
@@ -13575,7 +13575,7 @@ debug:        7 days
       "Inverted indexes enable fast text-based searching",
       "Plan index strategy based on security domains, compliance, and access needs",
       "Monitor index health for size, performance, and ingestion rates"
-    ]
+    ],
   },
   {
     id: "2.4",
@@ -13810,7 +13810,7 @@ Event → Hot → Warm → Cold → Frozen → PRESERVED INDEFINITELY
       "Data lifecycle management automates transitions between tiers",
       "Filter unnecessary data at ingestion to reduce costs",
       "Legal holds can override normal retention for litigation or investigations"
-    ]
+    ],
   },
 
   // Module 3: Search & Query Fundamentals
@@ -14302,7 +14302,7 @@ earliest=-24h
       "EVAL creates calculated fields for analysis",
       "REX extracts data from unstructured text using regex",
       "SORT, DEDUP, and HEAD/TAIL organize and limit results"
-    ]
+    ],
   },
   {
     id: "3.3",
@@ -14535,7 +14535,7 @@ index=security
       "Asterisk (*) matches zero or more characters",
       "Question mark (?) matches exactly one character",
       "Leading wildcards (*admin) are slower than trailing wildcards (admin*)"
-    ]
+    ],
   },
   {
     id: "3.4",
@@ -15029,7 +15029,7 @@ index=security EventCode=4625
       "Top and rare commands quickly identify common/uncommon values",
       "Group by multiple fields for detailed breakdowns",
       "Aggregation is essential for detecting patterns like brute force attacks"
-    ]
+    ],
   },
   {
     id: "4.2",
@@ -15246,7 +15246,7 @@ index=network action=denied
       "Joins combine results from two different searches",
       "Subsearches use results of one search to filter another",
       "Lookups are generally faster and preferred over joins"
-    ]
+    ],
   },
   {
     id: "4.3",
@@ -15451,7 +15451,7 @@ index=security
       "Use startswith/endswith to define transaction boundaries",
       "maxspan and maxpause control transaction time limits",
       "Stats is often faster than transaction for simple aggregations"
-    ]
+    ],
   },
   {
     id: "4.4",
@@ -15688,7 +15688,7 @@ Complete this based on your findings:
       "Timecharts reveal patterns in data over time",
       "Joins and subsearches correlate data across sources",
       "Transactions help identify attack chains and sessions"
-    ]
+    ],
   },
 
   // Module 5: Dashboards & Visualization
@@ -15879,7 +15879,7 @@ Row 4: Recent critical alerts (table)
       "Follow visual hierarchy: critical info at top-left",
       "Apply the 5-second rule for key information visibility",
       "Include drill-down capability for investigation"
-    ]
+    ],
   },
   {
     id: "5.2",
@@ -16129,7 +16129,7 @@ index=security EventCode=4625
       "Tables provide detail; single values highlight KPIs",
       "Geographic maps visualize attack origins",
       "Use consistent color coding across all dashboards"
-    ]
+    ],
   },
   {
     id: "5.3",
@@ -16378,7 +16378,7 @@ Show/hide panels based on selections.
       "Drilldowns enable click-to-investigate workflows",
       "Tokens pass values between inputs and panels",
       "Interactive dashboards transform monitoring into investigation"
-    ]
+    ],
   },
   {
     id: "5.4",
@@ -16623,7 +16623,7 @@ earliest=$time.earliest$ latest=$time.latest$
       "Single values highlight key metrics",
       "Add drilldowns for investigation workflows",
       "Test all interactive elements before deployment"
-    ]
+    ],
   },
 
   // Module 6: Alerts & Correlation Rules
@@ -16806,7 +16806,7 @@ Real Threats Missed
       "Alert fatigue from too many false positives leads to missed threats",
       "Key metrics: FP rate, MTTD, MTTR, and alert volume per analyst",
       "Proper tuning is essential to maintain effective alerting"
-    ]
+    ],
   },
   {
     id: "6.2",
@@ -17015,7 +17015,7 @@ Link rules to attack techniques:
       "Map rules to MITRE ATT&CK for coverage visibility",
       "Document rules with logic, tuning guidance, and response procedures",
       "Balance detection sensitivity with false positive rate"
-    ]
+    ],
   },
   {
     id: "6.3",
@@ -17254,7 +17254,7 @@ After Tuning:
       "Maintain exception lists with expiration dates and approval",
       "Always validate that tuning doesn't break detection of real threats",
       "Document all tuning changes for audit and rollback"
-    ]
+    ],
   },
   {
     id: "6.4",
@@ -17472,7 +17472,7 @@ Automated response playbooks:
       "Aggregate related alerts to prevent alert storms",
       "Start SOAR automation with enrichment, not destructive actions",
       "Always include rollback procedures for automated responses"
-    ]
+    ],
   },
 
   // Module 7: Practical SIEM Operations
@@ -17706,7 +17706,7 @@ with wrong password, eventually succeeded.
       "Gather context from asset DB, user directory, and previous alerts",
       "Use a decision tree to systematically classify alerts",
       "Thorough documentation enables learning and audit"
-    ]
+    ],
   },
   {
     id: "7.2",
@@ -17933,7 +17933,7 @@ index=security user=compromised_user action=access
       "Map findings to MITRE ATT&CK for structured analysis",
       "Extract and document all IOCs for blocking and hunting",
       "Assess scope to understand full impact of incident"
-    ]
+    ],
   },
   {
     id: "7.3",
@@ -18171,7 +18171,7 @@ NOTES:
       "Organize saved searches and dashboards with clear naming",
       "Maintain runbooks for consistent alert handling",
       "Track metrics to measure and improve SOC performance"
-    ]
+    ],
   },
   {
     id: "7.4",
@@ -18556,7 +18556,7 @@ Without NSM, the organization might only discover the breach weeks later during 
     additionalResources: [
       { title: "The Practice of Network Security Monitoring — Richard Bejtlich", type: "article" },
       { title: "SANS NSM Reading Room", url: "https://www.sans.org/reading-room/", type: "documentation" }
-    ]
+    ],
   },
   {
     id: "1.2",
@@ -18762,7 +18762,7 @@ Different layers require different sensor types:
       "NSM sensors must be placed strategically to cover multiple layers",
       "Layer 2-3 attacks (ARP spoofing, IP spoofing) require different tools than Layer 7 attacks",
       "Understanding the layer where an attack occurs guides the appropriate response"
-    ]
+    ],
   },
   {
     id: "1.4",
@@ -18858,7 +18858,7 @@ DMZ      ─┤    DMZ Switch       ├──── TAP ──→ Suricata + Zee
       "Sensor placement must cover perimeter, internal segments, and DMZ",
       "Storage architecture requires tiering — hot, warm, and cold — based on data type",
       "East-west monitoring is crucial for detecting lateral movement"
-    ]
+    ],
   },
 
   // Module 2: Packet Capture & Analysis
@@ -19081,7 +19081,7 @@ Order TCP streams chronologically to build a narrative:
       "Retransmissions and RSTs can indicate network interference or attacks",
       "File magic bytes in streams help identify transferred file types",
       "Chronological stream analysis builds forensic timelines"
-    ]
+    ],
   },
   {
     id: "2.3",
@@ -19298,7 +19298,7 @@ Modern protocols introduce new challenges for NSM:
       "JA3 fingerprinting identifies applications even in encrypted traffic",
       "TLS certificates and SNI provide metadata even when payloads are encrypted",
       "HTTP/2 and HTTP/3 introduce new challenges for traditional NSM inspection"
-    ]
+    ],
   },
   {
     id: "2.5",
@@ -19596,7 +19596,7 @@ Suricata's EVE (Extensible Event Format) produces structured JSON for each event
       "HOME_NET configuration is critical — defines what Suricata considers 'internal'",
       "EVE JSON output integrates seamlessly with SIEM platforms",
       "suricata-update manages rule sources and keeps signatures current"
-    ]
+    ],
   },
   {
     id: "3.2",
@@ -19877,7 +19877,7 @@ filebeat.inputs:
       "Suppression silences specific source/destination combinations without disabling rules",
       "Threshold types (limit, threshold, both) control alert frequency",
       "A structured triage workflow prevents alert fatigue"
-    ]
+    ],
   },
   {
     id: "3.4",
@@ -20002,7 +20002,7 @@ suricata --engine-analysis -c /etc/suricata/suricata.yaml -S custom.rules
       "PCRE (regex) enables flexible pattern matching for encoded or variable data",
       "Always test rules with both positive (malicious) and negative (benign) samples",
       "Threshold rules are essential for detecting scanning and brute-force patterns"
-    ]
+    ],
   },
 
   // Module 4: Network Metadata with Zeek
@@ -20104,7 +20104,7 @@ This UID correlation is one of Zeek's most powerful features — you can trace a
       "UIDs link related logs across conn, http, dns, files, and other log types",
       "Zeek complements Suricata — metadata for hunting vs. signatures for alerting",
       "The Zeek scripting language enables custom behavioral detections"
-    ]
+    ],
   },
   {
     id: "4.2",
@@ -20238,7 +20238,7 @@ Zeek logs protocol violations and unexpected behaviors here. These "weirds" ofte
       "Connection state codes (S0, SF, REJ) quickly identify scanning and anomalies",
       "zeek-cut is the essential tool for extracting and analyzing specific log fields",
       "files.log captures hashes of every file transferred on the network"
-    ]
+    ],
   },
   {
     id: "4.3",
@@ -20348,7 +20348,7 @@ Document each hunt with:
       "Lateral movement hunting focuses on unusual internal-to-internal connections",
       "Data exfiltration detection uses volume asymmetry and protocol tunneling indicators",
       "Documenting hunts as playbooks ensures repeatable, systematic hunting"
-    ]
+    ],
   },
   {
     id: "4.4",
@@ -20503,7 +20503,7 @@ echo "@load ./my_detection.zeek" >> /opt/zeek/share/zeek/site/local.zeek
       "Sets and tables enable tracking state across connections (e.g., counting NXDomains per host)",
       "The Notice framework generates structured alerts from script detections",
       "Scripts can be loaded persistently via local.zeek or per-run with -r"
-    ]
+    ],
   },
 
   // Module 5: Network Attack Detection
@@ -20615,7 +20615,7 @@ cat dns.log | zeek-cut ts id.orig_h query qtype_name | grep 'PTR' | \\
       "Horizontal scans target one port across many hosts; vertical scans target many ports on one host",
       "Nmap scan types produce distinctive TCP flag combinations visible in Zeek logs",
       "Correlating reconnaissance with subsequent activity reveals full attack chains"
-    ]
+    ],
   },
   {
     id: "5.2",
@@ -20713,7 +20713,7 @@ Attackers choose protocols likely to pass through firewalls:
       "JA3 fingerprinting identifies C2 frameworks even in encrypted traffic",
       "DNS-based C2 uses high query volumes and encoded subdomain labels",
       "Multi-layered detection (JA3 + timing + certificates) reduces evasion success"
-    ]
+    ],
   },
   {
     id: "5.3",
@@ -20816,7 +20816,7 @@ Deploy internal honeypots on ports commonly targeted during lateral movement:
       "Workstation-to-workstation SMB/RDP connections are high-confidence indicators",
       "Baselining normal internal traffic patterns reveals anomalous connections",
       "Honeypots on common lateral movement ports provide high-fidelity alerts"
-    ]
+    ],
   },
   {
     id: "5.4",
@@ -20934,7 +20934,7 @@ Network-based DLP can inspect content for:
       "Volume asymmetry (upload >> download) is the primary indicator for direct transfer",
       "DNS exfiltration encodes data in subdomain labels and is detectable through query analysis",
       "Cloud storage exfiltration is harder to detect but SSL SNI reveals destinations"
-    ]
+    ],
   },
 
   // Module 6: Practical NSM Operations
@@ -21072,7 +21072,7 @@ This correlation provides the analyst with a complete picture from a single aler
       "Filebeat bridges NSM sensors to centralized analytics platforms",
       "Cross-tool correlation (Suricata alerts + Zeek metadata) provides investigation context",
       "Dashboards should serve both SOC overview and deep-dive investigation needs"
-    ]
+    ],
   },
   {
     id: "6.2",
@@ -21189,7 +21189,7 @@ tshark -r evidence.pcap -Y "dns && ip.src==10.0.1.50" \\
       "Timeline construction from Zeek logs and PCAPs reveals the full attack narrative",
       "File extraction from PCAPs preserves malware samples and stolen documents",
       "Forensic reports must reference specific evidence for every claim"
-    ]
+    ],
   },
   {
     id: "6.3",
@@ -21316,7 +21316,7 @@ When the network changes, NSM must adapt:
       "Rule lifecycle management ensures detections stay relevant and accurate",
       "Version-controlled rules enable change tracking and rollback",
       "NSM must continuously adapt to network architecture changes"
-    ]
+    ],
   },
   {
     id: "6.4",
@@ -21455,7 +21455,7 @@ These skills form the foundation for advanced roles in incident response, threat
       "Multi-tool correlation (Suricata + Zeek + Wireshark) provides the complete picture",
       "Timeline construction is the core deliverable of any network forensic investigation",
       "Reports must be evidence-based with specific references to logs and artifacts"
-    ]
+    ],
   },
   // ==========================================
   // Incident Response Fundamentals Course
@@ -21616,7 +21616,7 @@ Each incident feeds lessons back into the Preparation phase, creating a cycle of
       "Preparation is the foundation — without it, the other phases fail",
       "Detection & Analysis is the most technically challenging phase",
       "Post-Incident Activity closes the loop by feeding lessons back into Preparation"
-    ]
+    ],
   },
   {
     id: "1.3",
@@ -21668,7 +21668,7 @@ Beyond NIST and SANS, other frameworks include:
       "SANS separates containment, eradication, and recovery into distinct phases unlike NIST",
       "Most teams use a hybrid of NIST and SANS adapted to their organization",
       "The Identification phase emphasizes confirming an event is a true incident before activating the full IR plan"
-    ]
+    ],
   },
   {
     id: "1.4",
@@ -21734,7 +21734,7 @@ IR teams must coordinate with:
       "Core roles include IR Manager, Incident Handlers, Forensic Analysts, and Threat Intel Analysts",
       "A RACI matrix clarifies responsibility and accountability for every IR activity",
       "Cross-functional coordination with legal, HR, communications, IT, and executives is essential"
-    ]
+    ],
   },
 
   // Module 2: Preparation & Readiness
@@ -21798,7 +21798,7 @@ Every organization should have playbooks for their most common incident types:
       "Severity classification (SEV-1 through SEV-4) drives escalation and resource allocation",
       "Every organization needs playbooks for their most common incident types",
       "Authority levels must be explicitly defined so responders can act decisively during crises"
-    ]
+    ],
   },
   {
     id: "2.2",
@@ -21858,7 +21858,7 @@ Work with legal counsel to establish:
       "Pre-approved notification templates save critical time during active incidents",
       "Regulatory notification timelines vary: GDPR is 72 hours, HIPAA is 60 days",
       "Work with legal to establish attorney-client privilege for IR communications"
-    ]
+    ],
   },
   {
     id: "2.3",
@@ -21916,7 +21916,7 @@ An IR "jump bag" is a pre-assembled kit of hardware and software tools ready for
       "Write blockers and forensic laptops ensure evidence integrity",
       "Key tools include FTK Imager, KAPE, Velociraptor, Volatility, and Chainsaw",
       "The kit must be validated monthly and updated after every real incident"
-    ]
+    ],
   },
   {
     id: "2.4",
@@ -21979,7 +21979,7 @@ INJECT 6 (T+75 min): Media outlet contacts PR team about the breach
       "Scenarios should unfold with timed injects that increase in severity",
       "Common findings include outdated contact lists, unclear authority, and untested backups",
       "After-action reports must include assigned action items with owners and deadlines"
-    ]
+    ],
   },
 
   // Module 3: Detection & Analysis
@@ -22041,7 +22041,7 @@ Many attacks exploit detection blind spots:
       "MTTD (Mean Time to Detect) is a critical metric targeting less than 24 hours",
       "Encrypted traffic, living-off-the-land techniques, and cloud environments create detection gaps",
       "User reports are often the first detection source for phishing and social engineering attacks"
-    ]
+    ],
   },
   {
     id: "3.2",
@@ -22103,7 +22103,7 @@ Alert Received → Validate → Classify → Prioritize → Assign → Investiga
       "Impact (CIA triad) and urgency together determine severity level",
       "SEV-1 incidents require 15-minute initial response and continuous updates",
       "Alert fatigue and anchoring bias are common triage pitfalls"
-    ]
+    ],
   },
   {
     id: "3.3",
@@ -22170,7 +22170,7 @@ Focus your detection efforts higher on the pyramid for more resilient detections
       "The Pyramid of Pain shows that detecting TTPs is most valuable but hardest to implement",
       "Temporal and entity correlation connect individual indicators into a coherent attack narrative",
       "Attack timelines are essential deliverables of the analysis phase"
-    ]
+    ],
   },
   {
     id: "3.4",
@@ -22235,7 +22235,7 @@ The root cause is always a **systemic failure** — something the organization c
       "The 5 Whys method drills from the incident to the underlying organizational failure",
       "Fishbone diagrams categorize contributing factors across People, Process, Technology, Environment, and Policy",
       "Root causes are always systemic and fixable — individual human error is a contributing factor, not a root cause"
-    ]
+    ],
   },
 
   // Module 4: Containment Strategies
@@ -22296,7 +22296,7 @@ Short-term containment focuses on **immediately stopping the attacker's ability 
       "DNS sinkholes reveal additional compromised systems by capturing C2 connection attempts",
       "Never power off a compromised system before capturing volatile memory",
       "EDR isolation is preferred over physical disconnection as it maintains management access"
-    ]
+    ],
   },
   {
     id: "4.2",
@@ -22355,7 +22355,7 @@ The key is **coordinated containment** — plan all containment actions and exec
       "KRBTGT must be reset twice with 12+ hours between resets for Golden Ticket remediation",
       "Coordinated simultaneous containment prevents attackers from adapting to individual actions",
       "Scope often expands during containment as additional compromised systems are discovered"
-    ]
+    ],
   },
   {
     id: "4.3",
@@ -22414,7 +22414,7 @@ Evidence Item: Memory dump from WORKSTATION-042
       "Chain of custody documentation is required for every evidence item",
       "Always use write blockers and verify hashes when creating forensic images",
       "Improper evidence handling can render artifacts inadmissible in legal proceedings"
-    ]
+    ],
   },
   {
     id: "4.4",
@@ -22477,7 +22477,7 @@ Every containment decision should be documented:
       "Active exfiltration and spreading ransomware always warrant immediate isolation",
       "Sometimes monitoring is more valuable than immediate containment — if you need scope or intelligence",
       "Every containment decision must be documented with who, what, when, why, and expected impact"
-    ]
+    ],
   },
 
   // Module 5: Eradication & Recovery
@@ -22542,7 +22542,7 @@ Before removal, you must find every way the attacker can return:
       "Common persistence includes registry keys, scheduled tasks, services, WMI subscriptions, and webshells",
       "When in doubt, rebuild from clean media rather than attempting to clean a compromised system",
       "KRBTGT reset is required whenever Active Directory domain compromise is confirmed"
-    ]
+    ],
   },
   {
     id: "5.2",
@@ -22605,7 +22605,7 @@ Monitor each phase for signs of re-compromise before proceeding to the next.
       "Verify backup integrity and confirm the backup predates the compromise before restoring",
       "Use phased restoration — core infrastructure first, non-critical systems last",
       "Enhanced monitoring must be in place before any restored system goes back to production"
-    ]
+    ],
   },
   {
     id: "5.3",
@@ -22666,7 +22666,7 @@ An incident can be closed when:
       "Enhanced monitoring should continue for 30-90 days after incident closure",
       "Signs of re-compromise include connections to blocked infrastructure from new sources",
       "Incident closure requires validated systems, clean monitoring, preserved evidence, and completed reports"
-    ]
+    ],
   },
   {
     id: "5.4",
@@ -22726,7 +22726,7 @@ Business resumption bridges the gap between technical recovery and full operatio
       "Users need clear communication about changed procedures (passwords, MFA, workflows)",
       "Application dependencies can block resumption even when individual systems are recovered",
       "Executive sign-off marks the formal transition from incident response to normal operations"
-    ]
+    ],
   },
 
   // Module 6: Post-Incident Activities
@@ -22791,7 +22791,7 @@ Track action items in a shared system and review progress in monthly security me
       "Schedule the meeting within 2 weeks of incident closure while details are fresh",
       "Every action item needs a single owner, specific deadline, and clear success criteria",
       "Celebrating what went well is as important as identifying improvements"
-    ]
+    ],
   },
   {
     id: "6.2",
@@ -22856,7 +22856,7 @@ The incident report is the permanent record of what happened, what was done, and
       "Use UTC timestamps and precise counts throughout the report",
       "Separate observed facts from analytical conclusions",
       "Recommendations should be categorized by timeframe: immediate, short-term, and long-term"
-    ]
+    ],
   },
   {
     id: "6.3",
@@ -22922,7 +22922,7 @@ Monthly IR Dashboard:
       "Industry average dwell time is ~200 days — high-performing teams target under 7 days",
       "Re-compromise rate measures eradication effectiveness and is a critical quality metric",
       "Metrics should drive specific improvement actions, not just fill dashboards"
-    ]
+    ],
   },
   {
     id: "6.4",
@@ -22997,7 +22997,7 @@ Track your IR program maturity over time:
       "Improvements span four categories: detection, process, technology, and people",
       "Each improvement maps directly back to strengthening the Preparation phase",
       "IR maturity progresses from ad hoc (Initial) to automated and predictive (Optimizing)"
-    ]
+    ],
   },
 
   // ==========================================
@@ -23084,7 +23084,7 @@ Treat detections like software: they need requirements, testing, versioning, doc
       "Every alert must be actionable; noise erodes analyst trust",
       "Treat detections as software products with full lifecycle management",
       "Assume breach and validate controls through detection"
-    ]
+    ],
   },
   {
     id: "1.2",
@@ -23144,7 +23144,7 @@ Use ATT&CK Navigator to create visual heat maps showing:
       "Verify data source availability before writing any detection",
       "Coverage gaps are normal — document and prioritize them",
       "Use ATT&CK Navigator heat maps to visualize detection posture"
-    ]
+    ],
   },
   {
     id: "1.3",
@@ -23201,7 +23201,7 @@ Track weekly:
       "Every rule should have a target FP rate and be measured against it",
       "Use allowlisting, thresholds, enrichment, and correlation to reduce FPs",
       "Apply the 5-day rule: disable persistently noisy detections immediately"
-    ]
+    ],
   },
   {
     id: "1.4",
@@ -23259,7 +23259,7 @@ Each detection moves through the pipeline with defined quality gates at each sta
       "Every detection needs test cases for both true positives and false positives",
       "Staged rollout with alert-only periods prevents production noise",
       "Quarterly reviews ensure detections remain relevant and performant"
-    ]
+    ],
   },
 
   // Module 2: SIGMA Rules
@@ -23325,7 +23325,7 @@ Common categories: \`process_creation\`, \`file_event\`, \`registry_event\`, \`n
       "Rules consist of logsource, detection, and metadata sections",
       "Tags map directly to MITRE ATT&CK techniques",
       "Log source categories abstract away vendor-specific field names"
-    ]
+    ],
   },
   {
     id: "2.2",
@@ -23396,7 +23396,7 @@ detection:
       "Use value modifiers (contains, endswith, re) for flexible matching",
       "Combine multiple selections with filters for precise detection",
       "Always test against benign activity and document false positives"
-    ]
+    ],
   },
   {
     id: "2.3",
@@ -23476,7 +23476,7 @@ Always verify:
       "Near-time correlation detects sequences of related events",
       "Field lists enable compact rules covering multiple variants",
       "Always validate conditions against both malicious and benign data"
-    ]
+    ],
   },
   {
     id: "2.4",
@@ -23546,7 +23546,7 @@ For unsupported platforms, write custom pySigma backends:
       "Processing pipelines handle field name translation between platforms",
       "Always validate converted queries for syntax, field mapping, and logic",
       "SigmaHQ provides 2000+ community-maintained detection rules"
-    ]
+    ],
   },
 
   // Module 3: YARA Signatures
@@ -23617,7 +23617,7 @@ Boolean logic determining when the rule matches:
       "Strings can be text, hex bytes, or regular expressions",
       "Modifiers like ascii, wide, nocase, and xor expand matching capability",
       "Conditions use boolean logic to combine string matches"
-    ]
+    ],
   },
   {
     id: "3.2",
@@ -23693,7 +23693,7 @@ condition:
       "Hex wildcards (??) and jumps [min-max] handle variable code",
       "XOR modifier automatically generates all rotation variants",
       "Require multiple indicators in conditions to reduce false positives"
-    ]
+    ],
   },
   {
     id: "3.3",
@@ -23783,7 +23783,7 @@ rule likely_packed
       "Math module calculates entropy to detect packed/encrypted content",
       "String counting (#) and position (@) add precision to conditions",
       "Combine modules for sophisticated malware classification rules"
-    ]
+    ],
   },
   {
     id: "3.4",
@@ -23849,7 +23849,7 @@ Trigger YARA scans from automated playbooks:
       "Optimize rules with anchors, filesize filters, and limited regex",
       "Integrate YARA with EDR and SOAR for automated scanning workflows",
       "Maintain rules in Git with regular review and retirement cycles"
-    ]
+    ],
   },
 
   // Module 4: Log Source Mastery
@@ -23914,7 +23914,7 @@ Enable via Group Policy:
       "Sysmon provides vastly more detail than native Windows auditing",
       "Configure audit policies to capture process command lines",
       "Combine Security, Sysmon, and PowerShell logs for comprehensive coverage"
-    ]
+    ],
   },
   {
     id: "4.2",
@@ -23976,7 +23976,7 @@ Metadata about network flows without payload:
       "Zeek generates structured network logs essential for network detection",
       "Combine auth.log, auditd, and syslog for comprehensive Linux coverage",
       "NetFlow enables beaconing and exfiltration detection without payload inspection"
-    ]
+    ],
   },
   {
     id: "4.3",
@@ -24049,7 +24049,7 @@ event.reason: "INVALID_CREDENTIALS"
       "Identity provider logs (Okta, Entra ID) reveal authentication attacks",
       "SaaS audit logs capture data access, sharing, and configuration changes",
       "Cloud-specific detections include impossible travel, MFA fatigue, and OAuth abuse"
-    ]
+    ],
   },
   {
     id: "4.4",
@@ -24135,7 +24135,7 @@ Enrichment transforms an ordinary login into a **critical alert**.`,
       "Enrichment adds context: asset info, threat intel, GeoIP, user details",
       "Enriched logs dramatically improve detection quality and analyst efficiency",
       "Build enrichment pipelines at ingest time for real-time detection benefit"
-    ]
+    ],
   },
 
   // Module 5: Detection as Code
@@ -24214,7 +24214,7 @@ deprecate(network): retire legacy DNS tunnel rule (replaced by de-1045)
       "Use pull requests with mandatory review before production deployment",
       "Organize rules by platform (windows/linux/cloud/network) and technique",
       "Use conventional commits for clear change history"
-    ]
+    ],
   },
   {
     id: "5.2",
@@ -24294,7 +24294,7 @@ On deployment:
       "Quality gates block broken or noisy rules from reaching production",
       "Automated conversion ensures rules stay in sync across SIEM platforms",
       "Notifications keep SOC analysts informed of new and updated detections"
-    ]
+    ],
   },
   {
     id: "5.3",
@@ -24377,7 +24377,7 @@ Detection testing aligns with purple teaming:
       "Atomic Red Team provides pre-built attack simulations mapped to ATT&CK",
       "Schedule continuous validation: daily for critical, weekly for high-priority",
       "Purple team exercises directly validate and improve detection coverage"
-    ]
+    ],
   },
   {
     id: "5.4",
@@ -24462,7 +24462,7 @@ configs/
       "Terraform and Ansible automate SIEM deployment and configuration",
       "Maintain dev/staging/production parity for reliable testing",
       "IaC enables disaster recovery, auditing, and environment consistency"
-    ]
+    ],
   },
 
   // Module 6: Detection Operations
@@ -24535,7 +24535,7 @@ Add weight based on:
       "Use allowlisting, thresholds, time filters, and context scoring to reduce FPs",
       "Target <5% FP rate before enabling full production alerting",
       "Disable rules with >50% FP rate and unclear patterns immediately"
-    ]
+    ],
   },
   {
     id: "6.2",
@@ -24598,7 +24598,7 @@ Compare against industry:
       "Target >60% ATT&CK coverage of priority techniques",
       "Build dashboards showing coverage heat maps, quality trends, and pipeline velocity",
       "Report to leadership with coverage delta, quality improvements, and threats detected"
-    ]
+    ],
   },
   {
     id: "6.3",
@@ -24681,7 +24681,7 @@ If one data source fails, others still detect the technique.`,
       "Use ATT&CK Navigator to create visual coverage heat maps",
       "Prioritize gaps by threat relevance, impact, and detection feasibility",
       "Layer multiple detections per technique across different data sources"
-    ]
+    ],
   },
   {
     id: "6.4",
@@ -24757,7 +24757,7 @@ Start wherever you are and improve incrementally. Every organization can reach L
       "Check detection health: still firing, accurate, needed, performant, documented?",
       "Retire detections formally: document, verify replacement, archive, update coverage",
       "Build program maturity from ad-hoc (Level 1) to leading (Level 5) incrementally"
-    ]
+    ],
   },
   // ==================== MALWARE ANALYSIS FUNDAMENTALS ====================
   // Module 1: Malware Landscape & Lab Setup
@@ -24828,7 +24828,7 @@ Destructive malware designed to permanently destroy data. No recovery mechanism.
       "Modern malware often combines multiple categories (e.g., worm + ransomware)",
       "Understanding taxonomy helps predict behavior during analysis",
       "Attribution often correlates with malware sophistication and objectives"
-    ]
+    ],
   },
   {
     id: "1.2",
@@ -24887,7 +24887,7 @@ Malicious or negligent insiders deploying:
       "RaaS has democratized ransomware, lowering the barrier to entry",
       "APT malware requires deeper reverse engineering due to custom tooling",
       "Attribution combines technical indicators with geopolitical context"
-    ]
+    ],
   },
   {
     id: "1.3",
@@ -24965,7 +24965,7 @@ Clean Install → Base Snapshot → Tool Install → Analysis Snapshot
       "FlareVM provides a comprehensive Windows analysis toolkit",
       "REMnux simulates network services so malware behaves naturally",
       "Snapshot before every execution and revert after every analysis session"
-    ]
+    ],
   },
   {
     id: "1.4",
@@ -25042,7 +25042,7 @@ vt file <SHA256> --include=last_analysis_stats
       "Always use password-protected archives and renamed extensions",
       "Maintain chain of custody documentation for every sample",
       "Verify hashes before and after transfer to ensure integrity"
-    ]
+    ],
   },
   // Module 2: Static Analysis Techniques
   {
@@ -25127,7 +25127,7 @@ print(pe.get_rich_header_hash())
       "SHA256 is the standard for unique sample identification",
       "Fuzzy hashing (ssdeep) finds variants of the same malware family",
       "Import hashing links samples built with the same toolkit"
-    ]
+    ],
   },
   {
     id: "2.2",
@@ -25209,7 +25209,7 @@ grep -oP '[A-Za-z0-9+/]{40,}={0,2}' strings.txt
       "FLOSS recovers obfuscated strings that basic tools miss",
       "Network IOCs in strings often reveal C2 infrastructure",
       "Registry and file path strings indicate persistence mechanisms"
-    ]
+    ],
   },
   {
     id: "2.3",
@@ -25294,7 +25294,7 @@ Suspicious Import Groups:
       "Import tables directly indicate malware functionality",
       "High entropy sections suggest encrypted or packed content",
       "Anomalous section names and entry points are packing indicators"
-    ]
+    ],
   },
   {
     id: "2.4",
@@ -25383,7 +25383,7 @@ Strategy: Find Original Entry Point (OEP)
       "Entropy >7.0 strongly indicates packed or encrypted content",
       "UPX is trivially unpacked; custom packers require manual debugging",
       "Detect It Easy identifies most common packers automatically"
-    ]
+    ],
   },
   // Module 3: Dynamic & Behavioral Analysis
   {
@@ -25464,7 +25464,7 @@ Network:           DNS queries, HTTP/HTTPS C2, data exfiltration
       "ANY.RUN's interactive mode handles malware requiring user clicks",
       "Sophisticated malware actively detects and evades sandboxes",
       "Focus on process trees, network activity, and persistence indicators"
-    ]
+    ],
   },
   {
     id: "3.2",
@@ -25546,7 +25546,7 @@ Values Modified: HKLM\\SOFTWARE\\Policies\\...
       "Watch for child process creation, especially from Office or script hosts",
       "RWX memory regions in Process Hacker indicate code injection",
       "Regshot diffs reveal persistence and configuration changes"
-    ]
+    ],
   },
   {
     id: "3.3",
@@ -25628,7 +25628,7 @@ Domain Generation Algorithm (DGA):
       "DNS queries often reveal C2 domains and DGA patterns",
       "Wireshark display filters help isolate malicious traffic from noise",
       "Beaconing patterns reveal C2 check-in intervals and jitter"
-    ]
+    ],
   },
   {
     id: "3.4",
@@ -25725,7 +25725,7 @@ Keylogging:
       "Process injection follows recognizable API call sequences",
       "API Monitor provides graphical filtering for targeted monitoring",
       "x64dbg conditional breakpoints enable logging without stopping execution"
-    ]
+    ],
   },
   // Module 4: Document & Script Malware
   {
@@ -25821,7 +25821,7 @@ vmonkey malicious.docm
       "olevba identifies suspicious keywords and deobfuscates strings",
       "String concatenation and Chr() encoding are primary VBA obfuscation methods",
       "ViperMonkey safely emulates macro execution without running Office"
-    ]
+    ],
   },
   {
     id: "4.2",
@@ -25908,7 +25908,7 @@ var sc = unescape("%ue8fc%u0082....");
       "pdf-parser and peepdf are the primary PDF analysis tools",
       "JavaScript in PDFs often performs heap spraying for exploit delivery",
       "Always check for /Launch, /JS, /EmbeddedFile, and /URI objects"
-    ]
+    ],
   },
   {
     id: "4.3",
@@ -25997,7 +25997,7 @@ box-js malicious.js --output-dir=analysis/
       "Base64 + string manipulation + variable substitution = common triple layer",
       "PSDecode automates multi-layer PowerShell deobfuscation",
       "box-js safely emulates malicious JScript to extract IOCs"
-    ]
+    ],
   },
   {
     id: "4.4",
@@ -26092,7 +26092,7 @@ Often delivered via HTML smuggling:
       "Look for atob(), Blob, and createObjectURL in suspicious HTML files",
       "LNK files disguise command execution as innocent-looking shortcuts",
       "ISO containers from HTML smuggling typically contain LNK + DLL pairs"
-    ]
+    ],
   },
   // Module 5: Reverse Engineering Fundamentals
   {
@@ -26193,7 +26193,7 @@ x64 Linux (System V):
       "ESP/RSP always points to the top of the stack",
       "CMP sets flags used by conditional jumps (JE, JNE, JG, JL)",
       "x64 Windows passes first 4 args in RCX, RDX, R8, R9"
-    ]
+    ],
   },
   {
     id: "5.2",
@@ -26293,7 +26293,7 @@ if (IsDebuggerPresent()) {
       "Aggressively rename functions and variables as you understand them",
       "Cross-references reveal how functions and data are interconnected",
       "Dynamic API resolution hides imports from static analysis"
-    ]
+    ],
   },
   {
     id: "5.3",
@@ -26396,7 +26396,7 @@ After malware unpacks itself in memory:
       "Hardware breakpoints survive anti-debugging and self-modifying code",
       "ScyllaHide plugin automatically defeats most anti-debugging tricks",
       "Scylla dumps unpacked malware from memory with import table reconstruction"
-    ]
+    ],
   },
   {
     id: "5.4",
@@ -26505,7 +26505,7 @@ DnsQuery_A(encoded_subdomain, DNS_TYPE_TXT, ...);
       "XOR encryption is trivially reversible but still widely used",
       "DGAs generate pseudo-random domains using seeds like dates",
       "Config extraction reveals C2 infrastructure, campaign IDs, and crypto keys"
-    ]
+    ],
   },
   // Module 6: Reporting & Threat Intelligence
   {
@@ -26598,7 +26598,7 @@ indicators = tc_source.query([
       "STIX 2.1 is the standard format for machine-readable threat intelligence",
       "TAXII enables automated IOC sharing between organizations",
       "Extract IOCs from strings, sandbox reports, and network captures"
-    ]
+    ],
   },
   {
     id: "6.2",
@@ -26700,7 +26700,7 @@ time yara -r rule.yar /large/file/collection/
       "Always include MZ header check and filesize constraints to reduce false positives",
       "Test rules against both malware samples AND clean files",
       "PE module enables matching on imports, exports, and section properties"
-    ]
+    ],
   },
   {
     id: "6.3",
@@ -26795,7 +26795,7 @@ of provided YARA rules is recommended.
       "MITRE ATT&CK mapping connects findings to a shared framework",
       "IOC tables should include context for each indicator",
       "Reports serve multiple audiences: executives, SOC, and threat intel teams"
-    ]
+    ],
   },
   {
     id: "6.4",
@@ -26903,7 +26903,7 @@ Campaign Object:
       "Code similarity tools (BinDiff, ssdeep) link samples to families",
       "Infrastructure tracking through passive DNS reveals actor patterns",
       "Confidence levels prevent over-attribution from single data points"
-    ]
+    ],
   },
   // ==========================================
   // SOC ANALYST LEARNING PATH
@@ -37525,7 +37525,7 @@ Organizations with mature governance programs experience:
     additionalResources: [
       { title: "NACD Director's Handbook on Cyber-Risk Oversight", type: "documentation" },
       { title: "ISACA COBIT Framework", type: "documentation" },
-    ]
+    ],
   },
   {
     id: "cf-1.2",
@@ -37743,7 +37743,7 @@ Every document should follow a lifecycle:
       "Procedures provide step-by-step operational instructions",
       "Guidelines are recommended but not mandatory practices",
       "All security documents must follow a lifecycle with regular review"
-    ]
+    ],
   },
   {
     id: "cf-1.4",
@@ -37855,7 +37855,7 @@ Culture starts at the top. When leadership visibly prioritizes security:
       "DPOs are mandatory under GDPR for organizations processing personal data at scale",
       "Security steering committees provide cross-functional governance oversight",
       "Every employee has a role in maintaining the organization's security posture"
-    ]
+    ],
   },
 
   // Module 2: NIST CSF
@@ -37931,7 +37931,7 @@ The framework consists of:
       "The framework is free, technology-neutral, and scalable to any organization size",
       "CSF consists of Core (functions/categories), Profiles (current/target), and Tiers (maturity)",
       "It maps to other major frameworks including ISO 27001 and CIS Controls"
-    ]
+    ],
   },
   {
     id: "cf-2.2",
@@ -38037,7 +38037,7 @@ Restore capabilities and services impaired by a cybersecurity incident.
       "Protect implements safeguards including access control, training, and data security",
       "Detect ensures timely discovery through continuous monitoring and event analysis",
       "Respond and Recover handle incident management, mitigation, and service restoration"
-    ]
+    ],
   },
   {
     id: "cf-2.3",
@@ -38130,7 +38130,7 @@ Tiers are NOT maturity levels — not every organization needs to reach Tier 4.
       "Tiers are not maturity levels — the right tier depends on organizational risk",
       "Gap analysis between current and target profiles drives investment prioritization",
       "Profile creation starts with scoping and ends with an actionable improvement plan"
-    ]
+    ],
   },
   {
     id: "cf-2.4",
@@ -38331,7 +38331,7 @@ After completing this exercise, you should have:
       "Target profiles must reflect regulatory requirements and business risk",
       "Action plans need clear ownership, timelines, and priority levels",
       "Healthcare organizations typically target Tier 3 maturity for HIPAA alignment"
-    ]
+    ],
   },
 
   // Module 3: ISO 27001 (summary lessons)
@@ -38440,7 +38440,7 @@ ISO 27001 is built on the Plan-Do-Check-Act cycle:
       "The standard follows the PDCA cycle for continual improvement",
       "Certification involves Stage 1 (documentation), Stage 2 (implementation), and annual surveillance audits",
       "Certification provides market differentiation, regulatory alignment, and customer confidence"
-    ]
+    ],
   },
   {
     id: "cf-3.2",
@@ -38530,7 +38530,7 @@ Each control now includes attributes for easier filtering:
       "Organizational controls (37) are the largest group covering policies and management",
       "Each control now has attributes mapping to NIST CSF concepts for cross-framework alignment",
       "Controls are selected based on risk assessment — not all 93 are mandatory"
-    ]
+    ],
   },
   {
     id: "cf-3.3",
@@ -38649,7 +38649,7 @@ Compare analyzed risks against acceptance criteria:
       "Qualitative analysis uses descriptive scales; quantitative uses financial models like FAIR",
       "ALE = SLE × ARO is the core formula for quantitative risk analysis",
       "Risk treatment options are mitigate, transfer, avoid, or accept"
-    ]
+    ],
   },
   {
     id: "cf-3.4",
@@ -38748,7 +38748,7 @@ Certification is not the finish line — it's the starting point:
       "Internal audits must be conducted before the certification audit",
       "Management reviews are mandatory and must cover specific required topics",
       "Certification requires ongoing maintenance through surveillance audits and improvement"
-    ]
+    ],
   },
 
   // Remaining modules - shorter content for brevity but still unique
@@ -38831,7 +38831,7 @@ CIS Controls use Implementation Groups to prioritize based on organizational res
       "Controls are developed by a global community and updated regularly based on real attack data",
       "CIS Controls map directly to NIST CSF functions for integrated framework adoption",
       "Start with IG1 regardless of organization size — it covers the most critical defenses"
-    ]
+    ],
   },
   {
     id: "cf-4.2",
@@ -38911,7 +38911,7 @@ If you answered "no" to any of these, those are your IG1 priorities.
       "IG1 is the most cost-effective security investment for any organization",
       "Free tools like CIS-CAT, NMAP, and Nessus Essentials enable IG1 implementation",
       "Start with the quick checklist to identify your most critical IG1 gaps"
-    ]
+    ],
   },
   {
     id: "cf-4.3",
@@ -38999,7 +38999,7 @@ Ongoing: Continuous improvement and reassessment
       "A typical progression takes 3+ years from IG1 through IG3",
       "IG2 priorities: automated scanning, centralized logging, backup testing, email authentication",
       "IG3 is for organizations with dedicated security teams defending against sophisticated threats"
-    ]
+    ],
   },
   {
     id: "cf-4.4",
@@ -39101,7 +39101,7 @@ CIS Benchmarks directly support:
       "CIS-CAT automates compliance checking against benchmark settings",
       "Hardening should follow: baseline → analyze → test → validate → deploy → monitor",
       "Benchmarks directly support NIST CSF, ISO 27001, CIS Controls, and PCI-DSS requirements"
-    ]
+    ],
   },
 
   // Modules 5-10: Concise unique content
@@ -39182,7 +39182,7 @@ SP 800-53 Rev. 5 contains over 1,000 controls across 20 families:
       "Controls are selected from NIST SP 800-53 with over 1,000 controls across 20 families",
       "The process culminates in an Authorization to Operate (ATO) decision",
       "RMF is mandatory for US federal systems but widely adopted in defense and critical infrastructure"
-    ]
+    ],
   },
   { id: "cf-5.2", courseId: "cybersecurity-frameworks", title: "Risk Assessment Techniques",
     content: `
@@ -39270,7 +39270,7 @@ A 7-stage risk-centric threat modeling methodology that aligns business objectiv
       "STRIDE categorizes threats: Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation",
       "Most mature organizations use a hybrid approach — qualitative screening with quantitative deep dives",
       "Quantitative analysis is essential for justifying security budgets to executives"
-    ]
+    ],
   },
   { id: "cf-5.3", courseId: "cybersecurity-frameworks", title: "Risk Treatment & Acceptance",
     content: `
@@ -39359,7 +39359,7 @@ Must be within risk appetite
       "Risk treatment plans document all decisions with owners, timelines, and status",
       "Residual risk is what remains after treatment — it must fall within risk appetite",
       "Cyber insurance is risk transfer, not risk elimination — controls are still needed"
-    ]
+    ],
   },
   { id: "cf-5.4", courseId: "cybersecurity-frameworks", title: "Third-Party Risk Management",
     content: `
@@ -39435,7 +39435,7 @@ Include security requirements in contracts:
       "Contracts must include incident notification, right to audit, and data protection clauses",
       "Continuous monitoring through security rating platforms supplements periodic assessments",
       "Offboarding must include verified data deletion and complete access revocation"
-    ]
+    ],
   },
 
   // Module 6-10 lessons (abbreviated but unique)
@@ -39508,7 +39508,7 @@ The CDE includes all people, processes, and technology that store, process, or t
       "v4.0 introduces the customized approach as an alternative to prescriptive requirements",
       "MFA is now required for all access to the CDE, not just remote access",
       "Compliance level determines validation requirements based on transaction volume"
-    ]
+    ],
   },
   { id: "cf-6.2", courseId: "cybersecurity-frameworks", title: "Scoping, SAQs & Compliance Levels", content: `# Scoping, SAQs & Compliance Levels\n\nProper scoping is the most critical step in PCI-DSS compliance. An incorrectly scoped assessment leads to either over-investment or dangerous gaps.\n\n## Scoping the CDE\n\nThe Cardholder Data Environment (CDE) includes:\n- Systems that store, process, or transmit cardholder data\n- Systems connected to or that could impact CDE security\n- Network segments without proper isolation from the CDE\n\n### Scope Reduction Strategies\n\n1. **Network Segmentation** — Isolate CDE from corporate network\n2. **Tokenization** — Replace PAN with non-sensitive tokens\n3. **Point-to-Point Encryption (P2PE)** — Encrypt at the terminal\n4. **Outsourcing** — Use a PCI-compliant payment processor\n5. **Cloud Payment Pages** — Redirect to hosted payment forms\n\n## Self-Assessment Questionnaires (SAQs)\n\n| SAQ Type | Description | Requirements |\n|----------|-------------|-------------|\n| SAQ A | Card-not-present, fully outsourced | 22 questions |\n| SAQ A-EP | E-commerce with website impacting payment | 191 questions |\n| SAQ B | Imprint or standalone dial-out terminals | 41 questions |\n| SAQ C | Payment terminals with internet connection | 160 questions |\n| SAQ D | All other merchants / service providers | 329 questions |\n\n**Choosing the right SAQ:**\n- The simpler your payment processing, the simpler your SAQ\n- SAQ A is the goal — fully outsource payment processing\n- SAQ D is effectively the full PCI-DSS assessment\n\n## Reducing Compliance Burden\n\nThe most effective strategy: **minimize your CDE scope**\n\n\`\`\`\nTraditional (large scope):\n[Corporate Network] ←→ [Payment Processing] ←→ [Card Data Storage]\n     All in scope — SAQ D required\n\nOptimized (minimal scope):\n[Corporate Network] | [Segmented CDE] → [Tokenized Storage]\n                    ↑\n              Hosted Payment Page (SAQ A)\n\`\`\`\n\nBy using hosted payment pages and tokenization, many organizations can reduce from SAQ D (329 questions) to SAQ A (22 questions).`, keyTakeaways: ["Proper scoping is the most critical step in PCI-DSS — it determines your compliance burden", "Scope reduction through segmentation, tokenization, and outsourcing dramatically simplifies compliance", "SAQ types range from A (22 questions, fully outsourced) to D (329 questions, full assessment)", "Hosted payment pages and tokenization can reduce SAQ D to SAQ A", "Every connected system without proper segmentation falls into PCI scope"] },
   { id: "cf-6.3", courseId: "cybersecurity-frameworks", title: "Network Segmentation & Encryption", content: `# Network Segmentation & Encryption in PCI-DSS\n\nTwo of the most powerful tools for PCI-DSS compliance are network segmentation and encryption. Together they reduce scope and protect cardholder data.\n\n## Network Segmentation\n\nWhile not explicitly required by PCI-DSS, segmentation is strongly recommended because it reduces the scope of the assessment.\n\n### Segmentation Methods\n\n| Method | Description | Effectiveness |\n|--------|-------------|---------------|\n| VLAN + ACLs | Logical separation with access control lists | Moderate |\n| Firewall | Dedicated firewall between CDE and corporate | High |\n| Micro-segmentation | Software-defined, host-level isolation | Very High |\n| Physical Separation | Completely separate network infrastructure | Highest |\n\n### Segmentation Validation\nPCI-DSS v4.0 requires:\n- Penetration testing to verify segmentation effectiveness\n- Testing every 6 months for service providers\n- Testing annually for merchants\n- Documentation of all segmentation controls\n\n## Encryption Requirements\n\n### Data in Transit\n- TLS 1.2 or higher for all cardholder data transmission\n- Strong cipher suites (AES-256-GCM preferred)\n- Certificate validation and pinning where applicable\n- No fallback to insecure protocols\n\n### Data at Rest\n- AES-256 encryption for stored PAN\n- Key management procedures (generation, distribution, rotation)\n- Dual control and split knowledge for encryption keys\n- Keys stored separately from encrypted data\n\n### Key Management\n\`\`\`\nKey Lifecycle:\nGenerate → Distribute → Store → Use → Rotate → Archive → Destroy\n\nKey Rotation: At least annually or upon suspected compromise\nKey Storage: HSM recommended, never stored in plaintext\nAccess: Minimum necessary, documented custodians\n\`\`\`\n\n## Tokenization\n\nTokenization replaces cardholder data with a non-sensitive substitute (token) that has no exploitable value.\n\n**Benefits:**\n- Tokens are useless if breached\n- Dramatically reduces CDE scope\n- Original data stored securely in token vault\n- Reversible only through the tokenization system`, keyTakeaways: ["Network segmentation is the most effective way to reduce PCI-DSS scope", "Segmentation must be validated through penetration testing (annually or semi-annually)", "TLS 1.2+ is mandatory for data in transit; AES-256 for data at rest", "Key management requires dual control, split knowledge, and annual rotation", "Tokenization replaces sensitive data with valueless tokens, dramatically reducing risk and scope"] },
