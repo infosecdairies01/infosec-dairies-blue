@@ -36154,6 +36154,37 @@ You can identify device manufacturers from the OUI:
       "Standard Ethernet MTU is 1500 bytes; exceeding it causes IP fragmentation",
       "OUI lookup helps identify device manufacturers during network investigations"
     ],
+    practicalExercise: {
+      title: "MAC Address & Ethernet Analysis",
+      description: "Analyze MAC addresses and Ethernet frames to identify devices and issues.",
+      steps: [
+        "Examine the MAC addresses in the scenario",
+        "Use OUI prefixes to identify manufacturers",
+        "Analyze the Ethernet frame details",
+        "Identify anomalies"
+      ],
+      labScenario: "You run 'arp -a' on a workstation and see these entries:\n\n10.0.0.1    00:1A:2B:3C:4D:5E    dynamic\n10.0.0.1    AA:BB:CC:DD:EE:FF    dynamic\n10.0.0.50   00:50:56:AB:CD:EF    dynamic\n10.0.0.51   FF:FF:FF:FF:FF:FF    dynamic\n\nYou notice two different MAC addresses mapped to the same IP (10.0.0.1, the default gateway).",
+      labQuestions: [
+        {
+          id: "nf-7.2-q1",
+          question: "What attack could cause two MAC addresses for the gateway IP 10.0.0.1?",
+          answer: "ARP spoofing",
+          hint: "An attacker sends fake ARP replies to associate their MAC with the gateway IP."
+        },
+        {
+          id: "nf-7.2-q2",
+          question: "What does the MAC prefix 00:50:56 typically indicate (which vendor)?",
+          answer: "VMware",
+          hint: "00:50:56 is a well-known OUI assigned to VMware virtual machines."
+        },
+        {
+          id: "nf-7.2-q3",
+          question: "What is the MAC address FF:FF:FF:FF:FF:FF used for?",
+          answer: "broadcast",
+          hint: "This is the Ethernet broadcast address — frames sent to all devices on the LAN."
+        }
+      ]
+    },
   },
   {
     id: "nf-7.3",
