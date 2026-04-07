@@ -34262,6 +34262,37 @@ Client                    Server
       "TCP flags (SYN, ACK, FIN, RST, PSH, URG) control connection state",
       "SYN floods are a common DoS attack exploiting the handshake process"
     ],
+    practicalExercise: {
+      title: "TCP Connection Analysis",
+      description: "Analyze TCP flag sequences to identify normal and suspicious connections.",
+      steps: [
+        "Review the captured packet flags in order",
+        "Identify normal handshake vs abnormal patterns",
+        "Determine the connection state",
+        "Flag any suspicious behavior"
+      ],
+      labScenario: "You capture the following three TCP sessions in Wireshark:\n\nSession 1: SYN → SYN-ACK → ACK → PSH-ACK → FIN-ACK → ACK\nSession 2: SYN → SYN → SYN → SYN → SYN (hundreds of SYN packets from different IPs, no SYN-ACK responses completed)\nSession 3: SYN → RST-ACK (immediate reset from server)",
+      labQuestions: [
+        {
+          id: "nf-3.2-q1",
+          question: "Which session shows a normal, complete TCP connection?",
+          answer: "session 1",
+          hint: "A normal connection completes the three-way handshake and transfers data."
+        },
+        {
+          id: "nf-3.2-q2",
+          question: "What type of attack does Session 2 indicate?",
+          answer: "SYN flood",
+          hint: "Many SYN packets without completing handshakes exhaust server resources."
+        },
+        {
+          id: "nf-3.2-q3",
+          question: "Why did the server send RST-ACK in Session 3?",
+          answer: "port closed",
+          hint: "RST-ACK means the server is refusing the connection — the port isn't listening."
+        }
+      ]
+    },
   },
   {
     id: "nf-3.3",
