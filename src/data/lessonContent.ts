@@ -33393,6 +33393,43 @@ Combines two or more topologies. Most real-world networks are hybrid:
       "Most enterprise networks use hybrid topologies",
       "Topology choice impacts reliability, cost, and scalability"
     ],
+    practicalExercise: {
+      title: "Network Topology Identification",
+      description: "Identify and compare network topologies based on real-world scenarios.",
+      steps: [
+        "Read the network description carefully",
+        "Identify the topology based on connection patterns",
+        "Consider fault tolerance and cost tradeoffs",
+        "Select the correct topology type"
+      ],
+      labScenario: "You are a junior network engineer reviewing three office setups:\n\nOffice A: All 20 workstations connect to a single central switch. If the switch fails, the entire office loses connectivity.\n\nOffice B: Each workstation connects to exactly two neighbors, forming a closed loop. Traffic can travel in either direction.\n\nOffice C: All devices connect to a shared coaxial cable backbone with terminators at both ends. Adding a new device requires tapping into the cable.",
+      labQuestions: [
+        {
+          id: "nf-1.3-q1",
+          question: "What topology does Office A use?",
+          answer: "star",
+          hint: "All devices connect to one central device — a hub or switch."
+        },
+        {
+          id: "nf-1.3-q2",
+          question: "What topology does Office B use?",
+          answer: "ring",
+          hint: "Devices form a closed loop, each connected to exactly two neighbors."
+        },
+        {
+          id: "nf-1.3-q3",
+          question: "What topology does Office C use?",
+          answer: "bus",
+          hint: "All devices share a single backbone cable with terminators at each end."
+        },
+        {
+          id: "nf-1.3-q4",
+          question: "Which office (A, B, or C) has the highest single point of failure risk?",
+          answer: "A",
+          hint: "Think about what happens when the central device fails."
+        }
+      ]
+    },
   },
   {
     id: "nf-1.4",
@@ -33802,6 +33839,43 @@ Ports identify specific applications/services:
       "UDP provides fast, connectionless communication for latency-sensitive apps",
       "Port numbers identify specific services — memorize well-known ports (0-1023)"
     ],
+    practicalExercise: {
+      title: "OSI Layer Mapping",
+      description: "Map network events and protocols to the correct OSI layer.",
+      steps: [
+        "Review each network event described in the scenario",
+        "Identify which OSI layer handles that function",
+        "Match protocols to their correct layers",
+        "Consider how data is encapsulated at each layer"
+      ],
+      labScenario: "A user opens a browser and visits https://www.example.com. The following events occur in sequence:\n\nEvent 1: The browser encrypts the HTTP request using TLS.\nEvent 2: TCP performs a three-way handshake with the web server on port 443.\nEvent 3: The packet is routed across three networks using IP addresses.\nEvent 4: The data is converted to electrical signals and sent over an Ethernet cable.",
+      labQuestions: [
+        {
+          id: "nf-2.3-q1",
+          question: "Which OSI layer handles TLS encryption (Event 1)? Answer with layer number.",
+          answer: "6",
+          hint: "TLS handles encryption and decryption — this is the Presentation Layer."
+        },
+        {
+          id: "nf-2.3-q2",
+          question: "Which OSI layer handles the TCP three-way handshake (Event 2)? Answer with layer number.",
+          answer: "4",
+          hint: "TCP provides reliable, connection-oriented delivery at the Transport Layer."
+        },
+        {
+          id: "nf-2.3-q3",
+          question: "Which OSI layer handles IP routing (Event 3)? Answer with layer number.",
+          answer: "3",
+          hint: "IP addressing and routing happen at the Network Layer."
+        },
+        {
+          id: "nf-2.3-q4",
+          question: "Which OSI layer converts data to electrical signals (Event 4)? Answer with layer number.",
+          answer: "1",
+          hint: "The Physical Layer handles transmission of raw bits over the medium."
+        }
+      ]
+    },
   },
   {
     id: "nf-2.4",
@@ -34188,6 +34262,37 @@ Client                    Server
       "TCP flags (SYN, ACK, FIN, RST, PSH, URG) control connection state",
       "SYN floods are a common DoS attack exploiting the handshake process"
     ],
+    practicalExercise: {
+      title: "TCP Connection Analysis",
+      description: "Analyze TCP flag sequences to identify normal and suspicious connections.",
+      steps: [
+        "Review the captured packet flags in order",
+        "Identify normal handshake vs abnormal patterns",
+        "Determine the connection state",
+        "Flag any suspicious behavior"
+      ],
+      labScenario: "You capture the following three TCP sessions in Wireshark:\n\nSession 1: SYN → SYN-ACK → ACK → PSH-ACK → FIN-ACK → ACK\nSession 2: SYN → SYN → SYN → SYN → SYN (hundreds of SYN packets from different IPs, no SYN-ACK responses completed)\nSession 3: SYN → RST-ACK (immediate reset from server)",
+      labQuestions: [
+        {
+          id: "nf-3.2-q1",
+          question: "Which session shows a normal, complete TCP connection?",
+          answer: "session 1",
+          hint: "A normal connection completes the three-way handshake and transfers data."
+        },
+        {
+          id: "nf-3.2-q2",
+          question: "What type of attack does Session 2 indicate?",
+          answer: "SYN flood",
+          hint: "Many SYN packets without completing handshakes exhaust server resources."
+        },
+        {
+          id: "nf-3.2-q3",
+          question: "Why did the server send RST-ACK in Session 3?",
+          answer: "port closed",
+          hint: "RST-ACK means the server is refusing the connection — the port isn't listening."
+        }
+      ]
+    },
   },
   {
     id: "nf-3.3",
@@ -34718,6 +34823,43 @@ CIDR  Mask            Hosts   Block
       "To find needed CIDR: calculate minimum host bits where 2^n - 2 ≥ required hosts",
       "Memorize powers of 2 and common CIDR masks for fast calculations"
     ],
+    practicalExercise: {
+      title: "Subnetting Practice",
+      description: "Calculate subnet details from given IP addresses and CIDR notation.",
+      steps: [
+        "Identify the network address from the given IP and CIDR",
+        "Calculate the subnet mask in dotted decimal",
+        "Determine the number of usable hosts",
+        "Find the broadcast address"
+      ],
+      labScenario: "Your company is assigned the network 192.168.10.0/24. The network team needs three subnets:\n\nSubnet A: Engineering department — needs 100 hosts\nSubnet B: Marketing department — needs 50 hosts\nSubnet C: Management — needs 25 hosts\n\nYou need to subnet the /24 network efficiently to accommodate all three departments.",
+      labQuestions: [
+        {
+          id: "nf-4.3-q1",
+          question: "What is the smallest CIDR prefix (e.g., /25) that can accommodate 100 hosts for Subnet A?",
+          answer: "/25",
+          hint: "A /25 gives 128 addresses (126 usable hosts). A /26 only gives 62."
+        },
+        {
+          id: "nf-4.3-q2",
+          question: "What subnet mask in dotted decimal corresponds to /26?",
+          answer: "255.255.255.192",
+          hint: "/26 means 26 bits for network = 255.255.255.192."
+        },
+        {
+          id: "nf-4.3-q3",
+          question: "How many usable host addresses are in a /27 subnet?",
+          answer: "30",
+          hint: "A /27 has 32 total addresses. Subtract 2 (network + broadcast) = 30 usable."
+        },
+        {
+          id: "nf-4.3-q4",
+          question: "What is the broadcast address for the network 192.168.10.0/25?",
+          answer: "192.168.10.127",
+          hint: "/25 covers .0 to .127. The last address is always the broadcast."
+        }
+      ]
+    },
   },
   {
     id: "nf-4.4",
@@ -35134,6 +35276,37 @@ Distribute traffic across multiple servers for availability and performance.
       "Load balancers distribute traffic for availability and performance",
       "WAFs specifically protect web applications from Layer 7 attacks"
     ],
+    practicalExercise: {
+      title: "Firewall Rule Analysis",
+      description: "Evaluate firewall rules to determine which traffic is allowed or blocked.",
+      steps: [
+        "Review each firewall rule in order",
+        "Apply rules top-down as firewalls process them",
+        "Determine the action for each traffic scenario",
+        "Identify any misconfigurations"
+      ],
+      labScenario: "Your firewall has the following rules (processed top to bottom):\n\nRule 1: ALLOW TCP from 10.0.0.0/24 to ANY on port 443\nRule 2: DENY TCP from ANY to 192.168.1.100 on port 22\nRule 3: ALLOW TCP from 10.0.0.5 to 192.168.1.100 on port 22\nRule 4: DENY ALL from ANY to ANY (default deny)",
+      labQuestions: [
+        {
+          id: "nf-5.3-q1",
+          question: "Can host 10.0.0.5 access port 22 on 192.168.1.100?",
+          answer: "no",
+          hint: "Firewall rules are processed top-down. Rule 2 denies ALL sources on port 22 before Rule 3."
+        },
+        {
+          id: "nf-5.3-q2",
+          question: "Can host 10.0.0.15 access an HTTPS website (port 443)?",
+          answer: "yes",
+          hint: "Rule 1 allows all hosts in 10.0.0.0/24 to access port 443 on any destination."
+        },
+        {
+          id: "nf-5.3-q3",
+          question: "What is the problem with Rule 3's placement?",
+          answer: "shadowed by rule 2",
+          hint: "Rule 2 blocks all SSH before Rule 3 can allow it — Rule 3 never triggers."
+        }
+      ]
+    },
   },
   {
     id: "nf-5.4",
@@ -35489,6 +35662,37 @@ DHCP broadcasts don't cross routers. A **DHCP relay agent** forwards DHCP reques
       "DHCP starvation and rogue servers are common attack vectors",
       "DHCP snooping on switches validates DHCP messages for security"
     ],
+    practicalExercise: {
+      title: "DHCP Troubleshooting",
+      description: "Diagnose DHCP issues from network symptoms and logs.",
+      steps: [
+        "Review the symptoms described in each scenario",
+        "Identify which part of DHCP (DORA) is failing",
+        "Determine the likely cause",
+        "Recommend the fix"
+      ],
+      labScenario: "Three support tickets arrive at your IT helpdesk:\n\nTicket 1: A new laptop connects to WiFi but gets a 169.254.x.x address. Other devices on the same network work fine.\n\nTicket 2: Multiple users in Building B suddenly get IP addresses in a different subnet (10.99.0.0/24 instead of 10.10.0.0/24). A new unauthorized device was plugged into the network.\n\nTicket 3: A server with a static IP of 10.10.0.50 goes offline. Investigation shows another device was assigned 10.10.0.50 by DHCP.",
+      labQuestions: [
+        {
+          id: "nf-6.2-q1",
+          question: "What does a 169.254.x.x address in Ticket 1 indicate?",
+          answer: "APIPA",
+          hint: "When DHCP fails, Windows self-assigns an address from 169.254.0.0/16."
+        },
+        {
+          id: "nf-6.2-q2",
+          question: "What attack is occurring in Ticket 2?",
+          answer: "rogue DHCP server",
+          hint: "An unauthorized device is handing out wrong IP configurations."
+        },
+        {
+          id: "nf-6.2-q3",
+          question: "What caused the conflict in Ticket 3?",
+          answer: "IP conflict",
+          hint: "The static IP wasn't excluded from the DHCP scope, causing a duplicate."
+        }
+      ]
+    },
   },
   {
     id: "nf-6.3",
@@ -35950,6 +36154,37 @@ You can identify device manufacturers from the OUI:
       "Standard Ethernet MTU is 1500 bytes; exceeding it causes IP fragmentation",
       "OUI lookup helps identify device manufacturers during network investigations"
     ],
+    practicalExercise: {
+      title: "MAC Address & Ethernet Analysis",
+      description: "Analyze MAC addresses and Ethernet frames to identify devices and issues.",
+      steps: [
+        "Examine the MAC addresses in the scenario",
+        "Use OUI prefixes to identify manufacturers",
+        "Analyze the Ethernet frame details",
+        "Identify anomalies"
+      ],
+      labScenario: "You run 'arp -a' on a workstation and see these entries:\n\n10.0.0.1    00:1A:2B:3C:4D:5E    dynamic\n10.0.0.1    AA:BB:CC:DD:EE:FF    dynamic\n10.0.0.50   00:50:56:AB:CD:EF    dynamic\n10.0.0.51   FF:FF:FF:FF:FF:FF    dynamic\n\nYou notice two different MAC addresses mapped to the same IP (10.0.0.1, the default gateway).",
+      labQuestions: [
+        {
+          id: "nf-7.2-q1",
+          question: "What attack could cause two MAC addresses for the gateway IP 10.0.0.1?",
+          answer: "ARP spoofing",
+          hint: "An attacker sends fake ARP replies to associate their MAC with the gateway IP."
+        },
+        {
+          id: "nf-7.2-q2",
+          question: "What does the MAC prefix 00:50:56 typically indicate (which vendor)?",
+          answer: "VMware",
+          hint: "00:50:56 is a well-known OUI assigned to VMware virtual machines."
+        },
+        {
+          id: "nf-7.2-q3",
+          question: "What is the MAC address FF:FF:FF:FF:FF:FF used for?",
+          answer: "broadcast",
+          hint: "This is the Ethernet broadcast address — frames sent to all devices on the LAN."
+        }
+      ]
+    },
   },
   {
     id: "nf-7.3",
@@ -36263,6 +36498,37 @@ For 5 GHz, many non-overlapping channels are available — less planning needed.
       "WPA3 protects against offline dictionary attacks and provides encrypted open networks",
       "Always disable WPS and use strong passphrases (20+ characters)"
     ],
+    practicalExercise: {
+      title: "Wireless Security Assessment",
+      description: "Evaluate wireless network configurations for security weaknesses.",
+      steps: [
+        "Review each wireless network configuration",
+        "Identify the security protocol used",
+        "Assess vulnerabilities in each setup",
+        "Recommend improvements"
+      ],
+      labScenario: "During a security audit, you scan for nearby wireless networks and find:\n\nNetwork A: SSID 'CorpWiFi' — WPA2-Enterprise with 802.1X, RADIUS authentication, SSID hidden\nNetwork B: SSID 'GuestNet' — WPA2-Personal with password 'welcome123', WPS enabled\nNetwork C: SSID 'OldPrinters' — WEP encryption with a 10-character key\nNetwork D: SSID '' (hidden) — Open network with no encryption",
+      labQuestions: [
+        {
+          id: "nf-8.2-q1",
+          question: "Which network (A, B, C, or D) is most secure?",
+          answer: "A",
+          hint: "WPA2-Enterprise with RADIUS provides the strongest authentication."
+        },
+        {
+          id: "nf-8.2-q2",
+          question: "What is the biggest vulnerability on Network B?",
+          answer: "WPS enabled",
+          hint: "WPS has a known brute-force flaw that can bypass even strong passwords."
+        },
+        {
+          id: "nf-8.2-q3",
+          question: "Why is Network C considered completely insecure?",
+          answer: "WEP is cracked",
+          hint: "WEP encryption can be broken in minutes with freely available tools."
+        }
+      ]
+    },
   },
   {
     id: "nf-8.3",
@@ -36735,6 +37001,37 @@ nbtstat -c                  # Name cache
       "arp -a displays the ARP cache; watch for unexpected MAC address changes",
       "ipconfig /flushdns clears the DNS cache — useful when DNS records change"
     ],
+    practicalExercise: {
+      title: "Network Troubleshooting with CLI Tools",
+      description: "Use command-line output to diagnose network connectivity issues.",
+      steps: [
+        "Review the command outputs provided",
+        "Identify what each output tells you about the problem",
+        "Determine the root cause",
+        "Recommend the correct fix"
+      ],
+      labScenario: "A user reports they cannot access internal websites. You run the following commands:\n\n$ ping 10.0.0.1 → Reply from 10.0.0.1: time=1ms (success)\n$ ping 8.8.8.8 → Request timed out (failure)\n$ ping www.company.com → Could not find host (failure)\n$ netstat -an | grep ':80' → No results\n$ ipconfig → Default Gateway: 10.0.0.1, DNS: 10.0.0.5",
+      labQuestions: [
+        {
+          id: "nf-9.3-q1",
+          question: "The user can ping the gateway but not 8.8.8.8. Where is the problem?",
+          answer: "internet gateway",
+          hint: "Local connectivity works but external traffic fails — the issue is at the gateway or ISP."
+        },
+        {
+          id: "nf-9.3-q2",
+          question: "The ping to www.company.com fails with 'could not find host'. What service is failing?",
+          answer: "DNS",
+          hint: "The system cannot resolve the hostname to an IP — DNS resolution is broken."
+        },
+        {
+          id: "nf-9.3-q3",
+          question: "What does the empty netstat output for port 80 tell you?",
+          answer: "no web server running",
+          hint: "No process is listening on port 80, meaning the web service isn't started."
+        }
+      ]
+    },
   },
   {
     id: "nf-9.4",
@@ -37160,6 +37457,37 @@ Connects entire networks between offices:
       "Split tunneling improves performance but reduces security",
       "Always enforce MFA and kill switches on VPN connections"
     ],
+    practicalExercise: {
+      title: "Protocol Identification",
+      description: "Identify network protocols based on traffic characteristics and port numbers.",
+      steps: [
+        "Examine the traffic capture details",
+        "Match port numbers and behavior to known protocols",
+        "Determine whether the traffic is normal or suspicious",
+        "Classify each connection"
+      ],
+      labScenario: "Your network monitoring tool flags four unusual connections:\n\nConnection 1: 10.0.0.15 → 203.0.113.5 on TCP port 443 — encrypted payload, certificate exchange observed\nConnection 2: 10.0.0.22 → 198.51.100.10 on UDP port 53 — large TXT record responses (500+ bytes each), recurring every 30 seconds\nConnection 3: 10.0.0.30 → 192.168.1.1 on TCP port 23 — plaintext credentials visible in payload\nConnection 4: 10.0.0.8 → 10.0.0.1 on UDP port 67 — DHCP Discover messages",
+      labQuestions: [
+        {
+          id: "nf-10.2-q1",
+          question: "What protocol is Connection 1 using (TCP 443 with certificate exchange)?",
+          answer: "HTTPS",
+          hint: "TCP port 443 with TLS certificate exchange is standard HTTPS traffic."
+        },
+        {
+          id: "nf-10.2-q2",
+          question: "Connection 2 shows large recurring DNS TXT queries. What attack might this indicate?",
+          answer: "DNS tunneling",
+          hint: "Large TXT records at regular intervals often indicate data exfiltration via DNS."
+        },
+        {
+          id: "nf-10.2-q3",
+          question: "What insecure protocol is Connection 3 using on port 23?",
+          answer: "Telnet",
+          hint: "Port 23 with plaintext credentials is Telnet — never use it, use SSH instead."
+        }
+      ]
+    },
   },
   {
     id: "nf-10.3",
