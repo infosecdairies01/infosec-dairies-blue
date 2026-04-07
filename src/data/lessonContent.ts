@@ -36498,6 +36498,37 @@ For 5 GHz, many non-overlapping channels are available — less planning needed.
       "WPA3 protects against offline dictionary attacks and provides encrypted open networks",
       "Always disable WPS and use strong passphrases (20+ characters)"
     ],
+    practicalExercise: {
+      title: "Wireless Security Assessment",
+      description: "Evaluate wireless network configurations for security weaknesses.",
+      steps: [
+        "Review each wireless network configuration",
+        "Identify the security protocol used",
+        "Assess vulnerabilities in each setup",
+        "Recommend improvements"
+      ],
+      labScenario: "During a security audit, you scan for nearby wireless networks and find:\n\nNetwork A: SSID 'CorpWiFi' — WPA2-Enterprise with 802.1X, RADIUS authentication, SSID hidden\nNetwork B: SSID 'GuestNet' — WPA2-Personal with password 'welcome123', WPS enabled\nNetwork C: SSID 'OldPrinters' — WEP encryption with a 10-character key\nNetwork D: SSID '' (hidden) — Open network with no encryption",
+      labQuestions: [
+        {
+          id: "nf-8.2-q1",
+          question: "Which network (A, B, C, or D) is most secure?",
+          answer: "A",
+          hint: "WPA2-Enterprise with RADIUS provides the strongest authentication."
+        },
+        {
+          id: "nf-8.2-q2",
+          question: "What is the biggest vulnerability on Network B?",
+          answer: "WPS enabled",
+          hint: "WPS has a known brute-force flaw that can bypass even strong passwords."
+        },
+        {
+          id: "nf-8.2-q3",
+          question: "Why is Network C considered completely insecure?",
+          answer: "WEP is cracked",
+          hint: "WEP encryption can be broken in minutes with freely available tools."
+        }
+      ]
+    },
   },
   {
     id: "nf-8.3",
