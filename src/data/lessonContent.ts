@@ -34823,6 +34823,43 @@ CIDR  Mask            Hosts   Block
       "To find needed CIDR: calculate minimum host bits where 2^n - 2 ≥ required hosts",
       "Memorize powers of 2 and common CIDR masks for fast calculations"
     ],
+    practicalExercise: {
+      title: "Subnetting Practice",
+      description: "Calculate subnet details from given IP addresses and CIDR notation.",
+      steps: [
+        "Identify the network address from the given IP and CIDR",
+        "Calculate the subnet mask in dotted decimal",
+        "Determine the number of usable hosts",
+        "Find the broadcast address"
+      ],
+      labScenario: "Your company is assigned the network 192.168.10.0/24. The network team needs three subnets:\n\nSubnet A: Engineering department — needs 100 hosts\nSubnet B: Marketing department — needs 50 hosts\nSubnet C: Management — needs 25 hosts\n\nYou need to subnet the /24 network efficiently to accommodate all three departments.",
+      labQuestions: [
+        {
+          id: "nf-4.3-q1",
+          question: "What is the smallest CIDR prefix (e.g., /25) that can accommodate 100 hosts for Subnet A?",
+          answer: "/25",
+          hint: "A /25 gives 128 addresses (126 usable hosts). A /26 only gives 62."
+        },
+        {
+          id: "nf-4.3-q2",
+          question: "What subnet mask in dotted decimal corresponds to /26?",
+          answer: "255.255.255.192",
+          hint: "/26 means 26 bits for network = 255.255.255.192."
+        },
+        {
+          id: "nf-4.3-q3",
+          question: "How many usable host addresses are in a /27 subnet?",
+          answer: "30",
+          hint: "A /27 has 32 total addresses. Subtract 2 (network + broadcast) = 30 usable."
+        },
+        {
+          id: "nf-4.3-q4",
+          question: "What is the broadcast address for the network 192.168.10.0/25?",
+          answer: "192.168.10.127",
+          hint: "/25 covers .0 to .127. The last address is always the broadcast."
+        }
+      ]
+    },
   },
   {
     id: "nf-4.4",
