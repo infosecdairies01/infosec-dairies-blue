@@ -35276,6 +35276,37 @@ Distribute traffic across multiple servers for availability and performance.
       "Load balancers distribute traffic for availability and performance",
       "WAFs specifically protect web applications from Layer 7 attacks"
     ],
+    practicalExercise: {
+      title: "Firewall Rule Analysis",
+      description: "Evaluate firewall rules to determine which traffic is allowed or blocked.",
+      steps: [
+        "Review each firewall rule in order",
+        "Apply rules top-down as firewalls process them",
+        "Determine the action for each traffic scenario",
+        "Identify any misconfigurations"
+      ],
+      labScenario: "Your firewall has the following rules (processed top to bottom):\n\nRule 1: ALLOW TCP from 10.0.0.0/24 to ANY on port 443\nRule 2: DENY TCP from ANY to 192.168.1.100 on port 22\nRule 3: ALLOW TCP from 10.0.0.5 to 192.168.1.100 on port 22\nRule 4: DENY ALL from ANY to ANY (default deny)",
+      labQuestions: [
+        {
+          id: "nf-5.3-q1",
+          question: "Can host 10.0.0.5 access port 22 on 192.168.1.100?",
+          answer: "no",
+          hint: "Firewall rules are processed top-down. Rule 2 denies ALL sources on port 22 before Rule 3."
+        },
+        {
+          id: "nf-5.3-q2",
+          question: "Can host 10.0.0.15 access an HTTPS website (port 443)?",
+          answer: "yes",
+          hint: "Rule 1 allows all hosts in 10.0.0.0/24 to access port 443 on any destination."
+        },
+        {
+          id: "nf-5.3-q3",
+          question: "What is the problem with Rule 3's placement?",
+          answer: "shadowed by rule 2",
+          hint: "Rule 2 blocks all SSH before Rule 3 can allow it — Rule 3 never triggers."
+        }
+      ]
+    },
   },
   {
     id: "nf-5.4",
