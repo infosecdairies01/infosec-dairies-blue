@@ -37457,6 +37457,37 @@ Connects entire networks between offices:
       "Split tunneling improves performance but reduces security",
       "Always enforce MFA and kill switches on VPN connections"
     ],
+    practicalExercise: {
+      title: "Protocol Identification",
+      description: "Identify network protocols based on traffic characteristics and port numbers.",
+      steps: [
+        "Examine the traffic capture details",
+        "Match port numbers and behavior to known protocols",
+        "Determine whether the traffic is normal or suspicious",
+        "Classify each connection"
+      ],
+      labScenario: "Your network monitoring tool flags four unusual connections:\n\nConnection 1: 10.0.0.15 → 203.0.113.5 on TCP port 443 — encrypted payload, certificate exchange observed\nConnection 2: 10.0.0.22 → 198.51.100.10 on UDP port 53 — large TXT record responses (500+ bytes each), recurring every 30 seconds\nConnection 3: 10.0.0.30 → 192.168.1.1 on TCP port 23 — plaintext credentials visible in payload\nConnection 4: 10.0.0.8 → 10.0.0.1 on UDP port 67 — DHCP Discover messages",
+      labQuestions: [
+        {
+          id: "nf-10.2-q1",
+          question: "What protocol is Connection 1 using (TCP 443 with certificate exchange)?",
+          answer: "HTTPS",
+          hint: "TCP port 443 with TLS certificate exchange is standard HTTPS traffic."
+        },
+        {
+          id: "nf-10.2-q2",
+          question: "Connection 2 shows large recurring DNS TXT queries. What attack might this indicate?",
+          answer: "DNS tunneling",
+          hint: "Large TXT records at regular intervals often indicate data exfiltration via DNS."
+        },
+        {
+          id: "nf-10.2-q3",
+          question: "What insecure protocol is Connection 3 using on port 23?",
+          answer: "Telnet",
+          hint: "Port 23 with plaintext credentials is Telnet — never use it, use SSH instead."
+        }
+      ]
+    },
   },
   {
     id: "nf-10.3",
