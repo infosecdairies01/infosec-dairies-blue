@@ -33839,6 +33839,43 @@ Ports identify specific applications/services:
       "UDP provides fast, connectionless communication for latency-sensitive apps",
       "Port numbers identify specific services — memorize well-known ports (0-1023)"
     ],
+    practicalExercise: {
+      title: "OSI Layer Mapping",
+      description: "Map network events and protocols to the correct OSI layer.",
+      steps: [
+        "Review each network event described in the scenario",
+        "Identify which OSI layer handles that function",
+        "Match protocols to their correct layers",
+        "Consider how data is encapsulated at each layer"
+      ],
+      labScenario: "A user opens a browser and visits https://www.example.com. The following events occur in sequence:\n\nEvent 1: The browser encrypts the HTTP request using TLS.\nEvent 2: TCP performs a three-way handshake with the web server on port 443.\nEvent 3: The packet is routed across three networks using IP addresses.\nEvent 4: The data is converted to electrical signals and sent over an Ethernet cable.",
+      labQuestions: [
+        {
+          id: "nf-2.3-q1",
+          question: "Which OSI layer handles TLS encryption (Event 1)? Answer with layer number.",
+          answer: "6",
+          hint: "TLS handles encryption and decryption — this is the Presentation Layer."
+        },
+        {
+          id: "nf-2.3-q2",
+          question: "Which OSI layer handles the TCP three-way handshake (Event 2)? Answer with layer number.",
+          answer: "4",
+          hint: "TCP provides reliable, connection-oriented delivery at the Transport Layer."
+        },
+        {
+          id: "nf-2.3-q3",
+          question: "Which OSI layer handles IP routing (Event 3)? Answer with layer number.",
+          answer: "3",
+          hint: "IP addressing and routing happen at the Network Layer."
+        },
+        {
+          id: "nf-2.3-q4",
+          question: "Which OSI layer converts data to electrical signals (Event 4)? Answer with layer number.",
+          answer: "1",
+          hint: "The Physical Layer handles transmission of raw bits over the medium."
+        }
+      ]
+    },
   },
   {
     id: "nf-2.4",
