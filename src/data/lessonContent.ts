@@ -35662,6 +35662,37 @@ DHCP broadcasts don't cross routers. A **DHCP relay agent** forwards DHCP reques
       "DHCP starvation and rogue servers are common attack vectors",
       "DHCP snooping on switches validates DHCP messages for security"
     ],
+    practicalExercise: {
+      title: "DHCP Troubleshooting",
+      description: "Diagnose DHCP issues from network symptoms and logs.",
+      steps: [
+        "Review the symptoms described in each scenario",
+        "Identify which part of DHCP (DORA) is failing",
+        "Determine the likely cause",
+        "Recommend the fix"
+      ],
+      labScenario: "Three support tickets arrive at your IT helpdesk:\n\nTicket 1: A new laptop connects to WiFi but gets a 169.254.x.x address. Other devices on the same network work fine.\n\nTicket 2: Multiple users in Building B suddenly get IP addresses in a different subnet (10.99.0.0/24 instead of 10.10.0.0/24). A new unauthorized device was plugged into the network.\n\nTicket 3: A server with a static IP of 10.10.0.50 goes offline. Investigation shows another device was assigned 10.10.0.50 by DHCP.",
+      labQuestions: [
+        {
+          id: "nf-6.2-q1",
+          question: "What does a 169.254.x.x address in Ticket 1 indicate?",
+          answer: "APIPA",
+          hint: "When DHCP fails, Windows self-assigns an address from 169.254.0.0/16."
+        },
+        {
+          id: "nf-6.2-q2",
+          question: "What attack is occurring in Ticket 2?",
+          answer: "rogue DHCP server",
+          hint: "An unauthorized device is handing out wrong IP configurations."
+        },
+        {
+          id: "nf-6.2-q3",
+          question: "What caused the conflict in Ticket 3?",
+          answer: "IP conflict",
+          hint: "The static IP wasn't excluded from the DHCP scope, causing a duplicate."
+        }
+      ]
+    },
   },
   {
     id: "nf-6.3",
