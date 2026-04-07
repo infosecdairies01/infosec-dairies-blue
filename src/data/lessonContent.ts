@@ -33393,6 +33393,43 @@ Combines two or more topologies. Most real-world networks are hybrid:
       "Most enterprise networks use hybrid topologies",
       "Topology choice impacts reliability, cost, and scalability"
     ],
+    practicalExercise: {
+      title: "Network Topology Identification",
+      description: "Identify and compare network topologies based on real-world scenarios.",
+      steps: [
+        "Read the network description carefully",
+        "Identify the topology based on connection patterns",
+        "Consider fault tolerance and cost tradeoffs",
+        "Select the correct topology type"
+      ],
+      labScenario: "You are a junior network engineer reviewing three office setups:\n\nOffice A: All 20 workstations connect to a single central switch. If the switch fails, the entire office loses connectivity.\n\nOffice B: Each workstation connects to exactly two neighbors, forming a closed loop. Traffic can travel in either direction.\n\nOffice C: All devices connect to a shared coaxial cable backbone with terminators at both ends. Adding a new device requires tapping into the cable.",
+      labQuestions: [
+        {
+          id: "nf-1.3-q1",
+          question: "What topology does Office A use?",
+          answer: "star",
+          hint: "All devices connect to one central device — a hub or switch."
+        },
+        {
+          id: "nf-1.3-q2",
+          question: "What topology does Office B use?",
+          answer: "ring",
+          hint: "Devices form a closed loop, each connected to exactly two neighbors."
+        },
+        {
+          id: "nf-1.3-q3",
+          question: "What topology does Office C use?",
+          answer: "bus",
+          hint: "All devices share a single backbone cable with terminators at each end."
+        },
+        {
+          id: "nf-1.3-q4",
+          question: "Which office (A, B, or C) has the highest single point of failure risk?",
+          answer: "A",
+          hint: "Think about what happens when the central device fails."
+        }
+      ]
+    },
   },
   {
     id: "nf-1.4",
