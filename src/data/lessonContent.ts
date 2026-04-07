@@ -37001,6 +37001,37 @@ nbtstat -c                  # Name cache
       "arp -a displays the ARP cache; watch for unexpected MAC address changes",
       "ipconfig /flushdns clears the DNS cache — useful when DNS records change"
     ],
+    practicalExercise: {
+      title: "Network Troubleshooting with CLI Tools",
+      description: "Use command-line output to diagnose network connectivity issues.",
+      steps: [
+        "Review the command outputs provided",
+        "Identify what each output tells you about the problem",
+        "Determine the root cause",
+        "Recommend the correct fix"
+      ],
+      labScenario: "A user reports they cannot access internal websites. You run the following commands:\n\n$ ping 10.0.0.1 → Reply from 10.0.0.1: time=1ms (success)\n$ ping 8.8.8.8 → Request timed out (failure)\n$ ping www.company.com → Could not find host (failure)\n$ netstat -an | grep ':80' → No results\n$ ipconfig → Default Gateway: 10.0.0.1, DNS: 10.0.0.5",
+      labQuestions: [
+        {
+          id: "nf-9.3-q1",
+          question: "The user can ping the gateway but not 8.8.8.8. Where is the problem?",
+          answer: "internet gateway",
+          hint: "Local connectivity works but external traffic fails — the issue is at the gateway or ISP."
+        },
+        {
+          id: "nf-9.3-q2",
+          question: "The ping to www.company.com fails with 'could not find host'. What service is failing?",
+          answer: "DNS",
+          hint: "The system cannot resolve the hostname to an IP — DNS resolution is broken."
+        },
+        {
+          id: "nf-9.3-q3",
+          question: "What does the empty netstat output for port 80 tell you?",
+          answer: "no web server running",
+          hint: "No process is listening on port 80, meaning the web service isn't started."
+        }
+      ]
+    },
   },
   {
     id: "nf-9.4",
