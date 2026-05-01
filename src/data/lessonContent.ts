@@ -12394,6 +12394,37 @@ Normalized Fields:
       { title: "Gartner SIEM Magic Quadrant", type: "article" },
       { title: "SANS SIEM Guide", type: "documentation" }
     ],
+    practicalExercise: {
+      title: "SIEM Coverage Gap Analysis",
+      description: "Identify what a SIEM should cover in a small SOC environment.",
+      steps: [
+        "Read the scenario carefully",
+        "Identify which log sources are missing",
+        "Match SIEM capabilities to business needs",
+        "Answer the questions"
+      ],
+      labScenario: "A 200-employee company just deployed a SIEM. It collects firewall and Windows server logs only. Last week, an attacker phished an employee, logged into Microsoft 365, and exfiltrated files from a cloud share. The SOC saw nothing in the SIEM. Management asks why the SIEM missed it and what to add.",
+      labQuestions: [
+        {
+          id: "1.1-q1",
+          question: "Which critical log source was missing that would have shown the phished login?",
+          answer: "cloud",
+          hint: "Think about where the attacker actually logged in."
+        },
+        {
+          id: "1.1-q2",
+          question: "What SIEM core capability connects events from email, endpoint, and cloud to spot the full attack?",
+          answer: "correlation",
+          hint: "It links related events across sources."
+        },
+        {
+          id: "1.1-q3",
+          question: "Name one compliance benefit a SIEM provides through long-term log storage.",
+          answer: "retention",
+          hint: "Regulators require keeping logs for a set period."
+        }
+      ]
+    }
   },
   {
     id: "1.2",
@@ -13540,6 +13571,36 @@ Action: Update parser configuration
       "Timestamps should be normalized to UTC in ISO 8601 format",
       "Enrichment adds valuable context like geo-location and threat intel"
     ],
+    practicalExercise: {
+      title: "Parse a Raw Log Line",
+      description: "Extract normalized fields from a raw firewall log entry.",
+      steps: [
+        "Read the raw log line in the scenario",
+        "Identify the key fields and their values",
+        "Answer the questions using the extracted fields"
+      ],
+      labScenario: "Your SIEM ingests this raw log: `Oct 28 14:22:10 fw-01 action=deny src=203.0.113.45 dst=10.1.1.20 dport=3389 proto=TCP user=- rule=block_rdp_external`. The parser must normalize it into Common Data Model fields so analysts can search across vendors.",
+      labQuestions: [
+        {
+          id: "2.2-q1",
+          question: "What action did the firewall take on this connection?",
+          answer: "deny",
+          hint: "Look at the action field."
+        },
+        {
+          id: "2.2-q2",
+          question: "What destination port was targeted (commonly used for RDP)?",
+          answer: "3389",
+          hint: "Check the dport field."
+        },
+        {
+          id: "2.2-q3",
+          question: "What is the source IP address of the connection?",
+          answer: "203.0.113.45",
+          hint: "Look at the src field."
+        }
+      ]
+    }
   },
   {
     id: "2.3",
@@ -14476,6 +14537,36 @@ earliest=-24h
       "REX extracts data from unstructured text using regex",
       "SORT, DEDUP, and HEAD/TAIL organize and limit results"
     ],
+    practicalExercise: {
+      title: "Filter Failed Logins for One User",
+      description: "Build a filtered SIEM query to isolate suspicious activity.",
+      steps: [
+        "Read the scenario",
+        "Decide which filters narrow results to the right user and event",
+        "Answer the questions"
+      ],
+      labScenario: "An analyst needs to find all failed Windows logins (EventCode=4625) for user `j.smith` in the last 24 hours, showing only the time, source IP, and workstation. The index is `wineventlog`.",
+      labQuestions: [
+        {
+          id: "3.2-q1",
+          question: "Which Windows EventCode represents a failed logon?",
+          answer: "4625",
+          hint: "Check the scenario."
+        },
+        {
+          id: "3.2-q2",
+          question: "Which command limits the displayed columns to only time, IP, and workstation?",
+          answer: "table",
+          hint: "Used to pick specific fields for output."
+        },
+        {
+          id: "3.2-q3",
+          question: "Which boolean operator joins `EventCode=4625` AND `user=j.smith` in the filter?",
+          answer: "AND",
+          hint: "Both conditions must be true."
+        }
+      ]
+    }
   },
   {
     id: "3.3",
@@ -15203,6 +15294,37 @@ index=security EventCode=4625
       "Group by multiple fields for detailed breakdowns",
       "Aggregation is essential for detecting patterns like brute force attacks"
     ],
+    practicalExercise: {
+      title: "Detect Brute Force with Aggregation",
+      description: "Use stats to count failed logins per source IP and spot the attacker.",
+      steps: [
+        "Review the scenario data",
+        "Decide which command counts events per IP",
+        "Identify the attacking IP",
+        "Answer the questions"
+      ],
+      labScenario: "In the last hour, your SIEM shows EventCode=4625 (failed logon) counts grouped by src_ip: 10.0.0.5 = 3 failures, 10.0.0.8 = 2 failures, 198.51.100.77 = 412 failures, 192.168.1.20 = 1 failure. Your threshold for brute force is 50 failures per hour.",
+      labQuestions: [
+        {
+          id: "4.1-q1",
+          question: "Which IP address is conducting a brute force attack?",
+          answer: "198.51.100.77",
+          hint: "It vastly exceeds the threshold."
+        },
+        {
+          id: "4.1-q2",
+          question: "Which SIEM command groups and counts events per field (e.g., per src_ip)?",
+          answer: "stats",
+          hint: "Standard aggregation command."
+        },
+        {
+          id: "4.1-q3",
+          question: "Which command would you use to plot these failures over time?",
+          answer: "timechart",
+          hint: "Creates time-series visualizations."
+        }
+      ]
+    }
   },
   {
     id: "4.2",
@@ -16797,6 +16919,36 @@ earliest=$time.earliest$ latest=$time.latest$
       "Add drilldowns for investigation workflows",
       "Test all interactive elements before deployment"
     ],
+    practicalExercise: {
+      title: "Design a SOC Overview Dashboard",
+      description: "Choose the right panels and visualizations for a SOC dashboard.",
+      steps: [
+        "Read the requirements in the scenario",
+        "Pick the right visualization for each metric",
+        "Answer the questions"
+      ],
+      labScenario: "Your SOC manager wants a single-pane dashboard showing: total open alerts (one big number), alert volume over the last 24 hours (trend), top 10 source IPs by alert count, and a map of attack origins by country.",
+      labQuestions: [
+        {
+          id: "5.4-q1",
+          question: "Which panel type best displays a single number like 'total open alerts'?",
+          answer: "single value",
+          hint: "Highlights one key metric."
+        },
+        {
+          id: "5.4-q2",
+          question: "Which visualization shows alert volume trends over 24 hours?",
+          answer: "timechart",
+          hint: "Time-series line/area chart."
+        },
+        {
+          id: "5.4-q3",
+          question: "Which visualization shows attack origins by country geographically?",
+          answer: "map",
+          hint: "Geographic visualization."
+        }
+      ]
+    }
   },
 
   // Module 6: Alerts & Correlation Rules
@@ -17189,6 +17341,36 @@ Link rules to attack techniques:
       "Document rules with logic, tuning guidance, and response procedures",
       "Balance detection sensitivity with false positive rate"
     ],
+    practicalExercise: {
+      title: "Write a Threshold Detection Rule",
+      description: "Design a rule to detect impossible travel logins.",
+      steps: [
+        "Read the scenario",
+        "Identify the rule type and threshold",
+        "Answer the questions"
+      ],
+      labScenario: "User `alice@corp.com` logs into Microsoft 365 from New York at 09:00 UTC, then from Singapore at 09:30 UTC. The physical distance makes travel in 30 minutes impossible. You need a SIEM rule that flags any user logging in from two countries within 1 hour.",
+      labQuestions: [
+        {
+          id: "6.2-q1",
+          question: "What detection rule type best fits this scenario (matching patterns across events)?",
+          answer: "correlation",
+          hint: "It links multiple related events."
+        },
+        {
+          id: "6.2-q2",
+          question: "What is the common name for this attack pattern?",
+          answer: "impossible travel",
+          hint: "It's in the scenario title."
+        },
+        {
+          id: "6.2-q3",
+          question: "Which MITRE ATT&CK tactic does a stolen credential login map to?",
+          answer: "initial access",
+          hint: "Attacker is gaining a foothold."
+        }
+      ]
+    }
   },
   {
     id: "6.3",
@@ -17880,6 +18062,36 @@ with wrong password, eventually succeeded.
       "Use a decision tree to systematically classify alerts",
       "Thorough documentation enables learning and audit"
     ],
+    practicalExercise: {
+      title: "Triage a Live Malware Alert",
+      description: "Apply the SOC triage workflow to a real-style EDR alert.",
+      steps: [
+        "Read the alert details",
+        "Decide the severity and next action",
+        "Answer the questions"
+      ],
+      labScenario: "Your SIEM fires an EDR alert at 02:14 UTC: host `WS-HR-12` executed `powershell.exe -enc <base64>` from parent `outlook.exe`. The encoded command decodes to a download from `hxxp://malicious-cdn[.]top/payload.exe`. The user is on PTO. No prior alerts for this host. Asset DB shows it stores HR records.",
+      labQuestions: [
+        {
+          id: "7.1-q1",
+          question: "What is the appropriate severity (low, medium, high, critical)?",
+          answer: "critical",
+          hint: "Active code execution + sensitive data + user away."
+        },
+        {
+          id: "7.1-q2",
+          question: "What is the FIRST containment action you should take on the host?",
+          answer: "isolate",
+          hint: "Cut its network access."
+        },
+        {
+          id: "7.1-q3",
+          question: "Which parent process indicates the attack likely started via phishing?",
+          answer: "outlook.exe",
+          hint: "Email client."
+        }
+      ]
+    }
   },
   {
     id: "7.2",
