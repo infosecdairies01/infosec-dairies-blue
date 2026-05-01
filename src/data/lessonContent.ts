@@ -19713,12 +19713,38 @@ Key fields to analyze:
     ],
     practicalExercise: {
       title: "DNS Threat Detection Lab",
-      description: "Analyze DNS logs to identify tunneling and DGA activity.",
+      description: "Investigate suspicious DNS activity captured by Zeek.",
       steps: [
-        "Calculate the entropy of subdomain strings in a DNS log sample",
-        "Identify domains with unusually high query volumes (>100/hour)",
-        "Find TXT record queries and evaluate their response sizes",
-        "Look for NXDomain clustering that may indicate DGA activity"
+        "Read the Zeek dns.log findings carefully",
+        "Identify which patterns indicate tunneling vs DGA",
+        "Answer using only the values shown in the scenario"
+      ],
+      labScenario: "Zeek dns.log entries from sensor SENS-EAST show host 10.30.7.42 generating DNS activity over the last hour: 1,840 queries to subdomains of 'tun.exfilzone.com', each subdomain 60+ characters of random base32 (e.g. 'k7m2p9q3r1s8t4u6v0w5x2y9z1a3b7c4.tun.exfilzone.com'), all returning TXT records of 240 bytes. In parallel, the same host issues 612 queries to randomly-generated 12-character domains under .top, of which 598 return NXDOMAIN. The internal DNS resolver baseline for this host is normally under 200 queries per hour.",
+      labQuestions: [
+        {
+          id: "2.3-q1",
+          question: "Which parent domain is being used for likely DNS tunneling?",
+          answer: "tun.exfilzone.com",
+          hint: "Look at the suffix shared by the long random subdomains."
+        },
+        {
+          id: "2.3-q2",
+          question: "Which DNS record type is carrying the 240-byte responses?",
+          answer: "TXT",
+          hint: "The scenario names the record type for the large responses."
+        },
+        {
+          id: "2.3-q3",
+          question: "How many of the 612 .top queries returned NXDOMAIN, indicating DGA?",
+          answer: "598",
+          hint: "The NXDOMAIN count is given directly."
+        },
+        {
+          id: "2.3-q4",
+          question: "Which internal host is generating all of this suspicious DNS activity?",
+          answer: "10.30.7.42",
+          hint: "The source IP appears at the start of the scenario."
+        }
       ]
     }
   },
