@@ -12258,6 +12258,290 @@ Document all IOCs:
     }
   },
 
+  // Module 4: Network Device Logs
+  {
+    id: "4.1",
+    courseId: "log-analysis",
+    title: "Firewall Log Analysis",
+    content: `
+# Firewall Log Analysis
+
+Firewall logs are one of the most valuable sources of network telemetry. Every allow or deny decision tells a story about who is talking to whom, on which port, and whether that traffic was permitted.
+
+## What a Firewall Log Contains
+
+Most firewall logs include the same core fields, regardless of vendor:
+
+- **Timestamp** — when the connection was seen
+- **Action** — ALLOW, DENY, DROP, RESET
+- **Source IP / Source Port**
+- **Destination IP / Destination Port**
+- **Protocol** — TCP, UDP, ICMP
+- **Bytes sent / received**
+- **Interface or zone** (inside, outside, DMZ)
+- **Rule name or ID** that matched
+
+## Common Firewall Log Formats
+
+\`\`\`
+# Cisco ASA
+%ASA-6-302013: Built outbound TCP connection 12345 for outside:8.8.8.8/443 (8.8.8.8/443) to inside:10.0.0.5/52341
+
+# Palo Alto
+2026/04/30 10:15:22,TRAFFIC,end,1,10.0.0.5,8.8.8.8,53,udp,allow
+
+# pfSense / iptables
+Apr 30 10:15:22 fw kernel: BLOCK IN=eth0 SRC=185.220.101.5 DST=10.0.0.5 PROTO=TCP SPT=44321 DPT=22
+\`\`\`
+
+## What to Look For
+
+| Pattern | What it suggests |
+|---------|------------------|
+| Many DENY events from one external IP to many internal ports | Port scan |
+| Many DENY events from one internal host outbound | Malware beaconing or misconfig |
+| ALLOW to non-business countries on non-standard ports | Possible C2 |
+| Large outbound transfers to a single external IP | Data exfiltration |
+| Repeated ALLOW on port 22/3389 from internet | Exposed admin services |
+
+## Triage Workflow
+
+1. Filter by **action = DENY** to see what is being blocked.
+2. Group by **source IP** and count — top sources are usually scanners or noisy hosts.
+3. For internal sources, investigate the host immediately.
+4. Filter by **destination port** to spot unusual services (4444, 8080, 9001).
+5. Look at **bytes** to detect bulk transfers.
+
+## Key Takeaway
+
+Firewall logs alone rarely tell the whole story, but they are the fastest way to confirm whether suspicious traffic actually traversed the perimeter.
+    `,
+    keyTakeaways: [
+      "Firewall logs record allow/deny decisions for every connection",
+      "Top talkers and top denied IPs are quick wins for triage",
+      "Unusual destination ports often signal C2 or exfiltration",
+      "Always pivot from firewall logs to endpoint and proxy data for confirmation"
+    ],
+    practicalExercise: {
+      title: "Firewall Log Triage",
+      description: "Triage a firewall log excerpt to identify suspicious traffic.",
+      steps: [
+        "Read the firewall log scenario",
+        "Identify scanning, exfiltration, and policy violations",
+        "Provide short answers"
+      ],
+      labScenario: "Your perimeter firewall produced these events in a 10-minute window: (1) 8,400 DENY events from 185.220.101.5 to 10.0.0.0/24 across ports 21, 22, 23, 80, 443, 3389. (2) Internal host 10.0.0.42 made 1,200 ALLOW connections to 91.219.236.18 on TCP/4444, total 850 MB outbound. (3) Internal host 10.0.0.7 had 600 DENY events outbound to random IPs on TCP/6667. (4) One ALLOW from 203.0.113.9 to 10.0.0.50 on TCP/3389.",
+      labQuestions: [
+        {
+          id: "la-4.1-q1",
+          question: "Which external IP is performing a port scan?",
+          answer: "185.220.101.5",
+          hint: "Look for many DENY events to many ports from a single source."
+        },
+        {
+          id: "la-4.1-q2",
+          question: "Which internal host is most likely exfiltrating data?",
+          answer: "10.0.0.42",
+          hint: "Large outbound bytes on a non-standard port (4444)."
+        },
+        {
+          id: "la-4.1-q3",
+          question: "What port is associated with the IRC-based C2 attempts being blocked?",
+          answer: "6667",
+          hint: "Standard IRC port often used by older botnets."
+        },
+        {
+          id: "la-4.1-q4",
+          question: "Which event represents a risky exposed admin service?",
+          answer: "RDP from 203.0.113.9 to 10.0.0.50",
+          hint: "Port 3389 allowed from the public internet."
+        }
+      ]
+    }
+  },
+
+  // Module 5: Log Analysis Techniques
+  {
+    id: "5.4",
+    courseId: "log-analysis",
+    title: "Command Line Tools for Logs",
+    content: `
+# Command Line Tools for Logs
+
+Before SIEMs, analysts used the shell to slice through gigabytes of logs — and they still do. Knowing \`grep\`, \`awk\`, \`sed\`, \`cut\`, \`sort\`, and \`uniq\` is essential muscle memory for any blue teamer.
+
+## The Core Toolkit
+
+| Tool | Use it for |
+|------|------------|
+| \`grep\` | Find lines that match a pattern |
+| \`awk\` | Extract or transform specific fields |
+| \`cut\` | Pull a column by delimiter |
+| \`sed\` | Substitute or delete text |
+| \`sort\` | Order results |
+| \`uniq -c\` | Count duplicates |
+| \`wc -l\` | Count matching lines |
+
+## Common Patterns
+
+\`\`\`bash
+# Count failed SSH logins per source IP
+grep "Failed password" /var/log/auth.log | awk '{print $11}' | sort | uniq -c | sort -rn
+
+# Top 10 source IPs in an Apache log
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -10
+
+# Find all 404 responses
+awk '$9 == 404' access.log
+
+# Pull only the URL field from access.log (CLF format)
+awk '{print $7}' access.log
+
+# Show requests for a specific IP
+grep "203.0.113.50" access.log
+
+# Count requests per hour
+awk '{print $4}' access.log | cut -c14-15 | sort | uniq -c
+\`\`\`
+
+## Building a Pipeline
+
+The power comes from chaining commands. Read the pipeline left to right:
+
+\`\`\`bash
+cat auth.log | grep "Accepted" | awk '{print $9, $11}' | sort | uniq -c | sort -rn
+\`\`\`
+
+This says: take auth.log, find successful logins, print user and source IP, count unique pairs, and rank by frequency.
+
+## Key Takeaway
+
+You will not always have a SIEM. The CLI is your safety net — fast, scriptable, and always available on any Linux host.
+    `,
+    keyTakeaways: [
+      "grep, awk, cut, sort, uniq form the backbone of CLI log analysis",
+      "Pipelines let you build complex queries without a SIEM",
+      "Counting and ranking with uniq -c | sort -rn surfaces outliers fast",
+      "These skills work on any Linux server during incident response"
+    ],
+    practicalExercise: {
+      title: "CLI Log Triage",
+      description: "Use the right CLI commands to answer questions about a log set.",
+      steps: [
+        "Read the scenario describing the log files available",
+        "Pick the correct command pattern for each question",
+        "Provide short answers"
+      ],
+      labScenario: "You SSH into a compromised webserver and find /var/log/auth.log and /var/log/apache2/access.log. Quick counts show: 12,430 'Failed password' lines in auth.log, mostly from IP 198.51.100.77. In access.log, the top source IP by request count is 45.33.32.156 with 8,902 requests, and there are 1,204 lines with status 500. The user 'admin' appears in 'Accepted password' lines from IP 10.0.0.55 at 02:14 UTC.",
+      labQuestions: [
+        {
+          id: "la-5.4-q1",
+          question: "Which command counts failed SSH logins per source IP?",
+          answer: "grep Failed password auth.log | awk print $11 | sort | uniq -c",
+          hint: "Combine grep, awk for the IP field, then sort | uniq -c."
+        },
+        {
+          id: "la-5.4-q2",
+          question: "What IP is responsible for the SSH brute force?",
+          answer: "198.51.100.77",
+          hint: "The IP tied to the 12,430 failed password attempts."
+        },
+        {
+          id: "la-5.4-q3",
+          question: "Which awk one-liner finds Apache 500 errors?",
+          answer: "awk '$9 == 500' access.log",
+          hint: "Status code is field 9 in CLF format."
+        },
+        {
+          id: "la-5.4-q4",
+          question: "From where did 'admin' successfully log in?",
+          answer: "10.0.0.55",
+          hint: "Look at the Accepted password line for the admin account."
+        }
+      ]
+    }
+  },
+
+  // Module 6: Practical Log Analysis
+  {
+    id: "6.4",
+    courseId: "log-analysis",
+    title: "Final Practical Challenge",
+    content: `
+# Final Practical Challenge
+
+This is your capstone. You will be given a multi-source log scenario and asked to reconstruct the full attack — initial access, persistence, lateral movement, and exfiltration — using only the logs.
+
+## Approach
+
+1. **Build a timeline.** Order events from earliest to latest across all sources.
+2. **Identify the entry point.** Look at perimeter logs and authentication first.
+3. **Track the attacker.** Follow source IPs, accounts, and process names through the data.
+4. **Find persistence.** New accounts, services, scheduled tasks, registry keys.
+5. **Look for staging and exfil.** Large file copies, unusual outbound transfers.
+6. **Extract IOCs.** IPs, hashes, filenames, accounts to share with the team.
+
+## Tips
+
+- When in doubt, **count and rank**. Outliers usually tell the story.
+- **Correlate by username and source IP** across systems.
+- Pay attention to **time gaps** — attackers often pause between phases.
+- Document everything as you go; the report is part of the job.
+
+## Key Takeaway
+
+Real investigations are messy. The goal is not perfection — it is a defensible, evidence-backed narrative of what happened.
+    `,
+    keyTakeaways: [
+      "Always build a unified timeline across sources",
+      "Follow accounts and IPs as your pivot points",
+      "Persistence is almost always added — look for it",
+      "Document IOCs as you find them, not at the end"
+    ],
+    practicalExercise: {
+      title: "Multi-Source Breach Investigation",
+      description: "Use firewall, Windows, and proxy logs to reconstruct a full intrusion.",
+      steps: [
+        "Read the multi-source scenario",
+        "Identify each attack phase",
+        "Extract the key IOCs"
+      ],
+      labScenario: "On 30 April, your SOC sees the following: (1) Firewall: ALLOW inbound RDP on 3389 from 91.219.236.18 to 10.0.0.50 at 03:12 UTC. (2) Windows Security log on 10.0.0.50: Event 4624 logon type 10 for account 'svc_helpdesk' at 03:13 UTC. (3) Windows Security 4688: process 'mimikatz.exe' run from C:\\Users\\svc_helpdesk\\AppData\\Local\\Temp\\ at 03:21 UTC. (4) Windows Security 4624 logon type 3 from 10.0.0.50 to 10.0.0.75 as 'Administrator' at 03:34 UTC. (5) Proxy log: host 10.0.0.75 uploaded 2.3 GB to https://files.megaup.example/u/abc123 at 04:02 UTC.",
+      labQuestions: [
+        {
+          id: "la-6.4-q1",
+          question: "What was the initial access vector?",
+          answer: "RDP from 91.219.236.18",
+          hint: "Look at the firewall ALLOW on port 3389."
+        },
+        {
+          id: "la-6.4-q2",
+          question: "Which compromised account was used to log in first?",
+          answer: "svc_helpdesk",
+          hint: "Event 4624 logon type 10 on host 10.0.0.50."
+        },
+        {
+          id: "la-6.4-q3",
+          question: "What credential theft tool was executed?",
+          answer: "mimikatz.exe",
+          hint: "Event 4688 process creation on the first host."
+        },
+        {
+          id: "la-6.4-q4",
+          question: "Which host did the attacker move laterally to?",
+          answer: "10.0.0.75",
+          hint: "Logon type 3 (network logon) from 10.0.0.50."
+        },
+        {
+          id: "la-6.4-q5",
+          question: "How much data was exfiltrated and to where?",
+          answer: "2.3 GB to files.megaup.example",
+          hint: "Proxy log shows the outbound upload."
+        }
+      ]
+    }
+  },
+
   // ============================================
   // SIEM FUNDAMENTALS COURSE CONTENT
   // ============================================
