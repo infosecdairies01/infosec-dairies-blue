@@ -13571,6 +13571,36 @@ Action: Update parser configuration
       "Timestamps should be normalized to UTC in ISO 8601 format",
       "Enrichment adds valuable context like geo-location and threat intel"
     ],
+    practicalExercise: {
+      title: "Parse a Raw Log Line",
+      description: "Extract normalized fields from a raw firewall log entry.",
+      steps: [
+        "Read the raw log line in the scenario",
+        "Identify the key fields and their values",
+        "Answer the questions using the extracted fields"
+      ],
+      labScenario: "Your SIEM ingests this raw log: `Oct 28 14:22:10 fw-01 action=deny src=203.0.113.45 dst=10.1.1.20 dport=3389 proto=TCP user=- rule=block_rdp_external`. The parser must normalize it into Common Data Model fields so analysts can search across vendors.",
+      labQuestions: [
+        {
+          id: "2.2-q1",
+          question: "What action did the firewall take on this connection?",
+          answer: "deny",
+          hint: "Look at the action field."
+        },
+        {
+          id: "2.2-q2",
+          question: "What destination port was targeted (commonly used for RDP)?",
+          answer: "3389",
+          hint: "Check the dport field."
+        },
+        {
+          id: "2.2-q3",
+          question: "What is the source IP address of the connection?",
+          answer: "203.0.113.45",
+          hint: "Look at the src field."
+        }
+      ]
+    }
   },
   {
     id: "2.3",
