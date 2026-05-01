@@ -225,6 +225,23 @@ const CourseDetail = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Modules List */}
               <div className="lg:col-span-2 space-y-3">
+                {activeTab === "modules" && (() => {
+                  const lockedLessons = course.modules.flatMap(m => m.lessons).filter(l => l.status === "locked");
+                  if (lockedLessons.length === 0) return null;
+                  return (
+                    <div className="rounded-xl bg-card/25 backdrop-blur-lg border border-amber-500/30 p-4 flex items-start gap-3 shadow-lg shadow-amber-500/5">
+                      <Lock className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="text-foreground font-medium mb-1">
+                          {lockedLessons.length} lesson{lockedLessons.length === 1 ? "" : "s"} locked
+                        </p>
+                        <p className="text-muted-foreground/80 text-xs leading-relaxed">
+                          Practical exercises and lab scenarios in locked lessons won't appear until those lessons are unlocked. Complete prior lessons or unlock the course to access them.
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })()}
                 {activeTab === "modules" && course.modules.map(module => <Collapsible key={module.id} open={openModules.includes(module.id)} onOpenChange={() => toggleModule(module.id)}>
                     <div className="group relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] shadow-lg shadow-black/20 transition-all duration-500 ease-out hover:bg-card/35 hover:translate-y-[-2px] hover:border-white/[0.12] hover:shadow-xl hover:shadow-primary/10">
                       {/* Soft outer glow on hover */}
