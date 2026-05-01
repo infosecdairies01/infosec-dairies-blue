@@ -15080,13 +15080,19 @@ index=windows EventCode=4625
       "Timeline reconstruction helps understand attack sequences"
     ],
     practicalExercise: {
-      title: "Independent Practice",
-      description: "Apply what you've learned to your own SIEM environment.",
+      title: "Basic Search Lab Triage",
+      description: "Use SPL queries to triage suspicious activity from the lab indexes.",
       steps: [
-        "Find all authentication failures in the last 24 hours",
-        "Identify the top 10 source IPs for denied firewall connections",
-        "Create a timeline for a specific user's activity",
-        "Find all PowerShell execution events on servers"
+        "Read the scenario carefully",
+        "Map each question to the right index and field",
+        "Pull answers directly from the scenario details"
+      ],
+      labScenario: "It's 09:00 UTC. In your SIEM you have three indexes: windows, network, and web. Overnight, host WKS007 (10.0.1.7) generated 142 EventCode=4625 failed logins targeting user 'admin'. The firewall (index=network) shows 318 denied connections from external IP 203.0.113.45 to dst_port=3389. The web server WEB01 (index=web) recorded 84 status=404 hits from clientip 198.51.100.22 hitting URIs like /admin, /login.php, and /wp-admin. You need to confirm each finding using the correct query.",
+      labQuestions: [
+        { id: "siem-3.4-q1", question: "Which EventCode and index identify the failed logins on WKS007?", answer: "EventCode=4625 in index=windows", hint: "Failed logon attempts in Windows Security logs." },
+        { id: "siem-3.4-q2", question: "How many denied connections came from 203.0.113.45 and to which port?", answer: "318 denied connections to dst_port=3389", hint: "Check the firewall denied counts in the scenario." },
+        { id: "siem-3.4-q3", question: "Which clientip is scanning WEB01 with 404 errors?", answer: "198.51.100.22", hint: "Look at the web index 404 details." },
+        { id: "siem-3.4-q4", question: "Which targeted user account on WKS007 should be flagged?", answer: "admin", hint: "Re-read the failed login detail." }
       ]
     }
   },
