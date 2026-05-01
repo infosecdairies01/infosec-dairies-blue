@@ -16919,6 +16919,36 @@ earliest=$time.earliest$ latest=$time.latest$
       "Add drilldowns for investigation workflows",
       "Test all interactive elements before deployment"
     ],
+    practicalExercise: {
+      title: "Design a SOC Overview Dashboard",
+      description: "Choose the right panels and visualizations for a SOC dashboard.",
+      steps: [
+        "Read the requirements in the scenario",
+        "Pick the right visualization for each metric",
+        "Answer the questions"
+      ],
+      labScenario: "Your SOC manager wants a single-pane dashboard showing: total open alerts (one big number), alert volume over the last 24 hours (trend), top 10 source IPs by alert count, and a map of attack origins by country.",
+      labQuestions: [
+        {
+          id: "5.4-q1",
+          question: "Which panel type best displays a single number like 'total open alerts'?",
+          answer: "single value",
+          hint: "Highlights one key metric."
+        },
+        {
+          id: "5.4-q2",
+          question: "Which visualization shows alert volume trends over 24 hours?",
+          answer: "timechart",
+          hint: "Time-series line/area chart."
+        },
+        {
+          id: "5.4-q3",
+          question: "Which visualization shows attack origins by country geographically?",
+          answer: "map",
+          hint: "Geographic visualization."
+        }
+      ]
+    }
   },
 
   // Module 6: Alerts & Correlation Rules
