@@ -18062,6 +18062,36 @@ with wrong password, eventually succeeded.
       "Use a decision tree to systematically classify alerts",
       "Thorough documentation enables learning and audit"
     ],
+    practicalExercise: {
+      title: "Triage a Live Malware Alert",
+      description: "Apply the SOC triage workflow to a real-style EDR alert.",
+      steps: [
+        "Read the alert details",
+        "Decide the severity and next action",
+        "Answer the questions"
+      ],
+      labScenario: "Your SIEM fires an EDR alert at 02:14 UTC: host `WS-HR-12` executed `powershell.exe -enc <base64>` from parent `outlook.exe`. The encoded command decodes to a download from `hxxp://malicious-cdn[.]top/payload.exe`. The user is on PTO. No prior alerts for this host. Asset DB shows it stores HR records.",
+      labQuestions: [
+        {
+          id: "7.1-q1",
+          question: "What is the appropriate severity (low, medium, high, critical)?",
+          answer: "critical",
+          hint: "Active code execution + sensitive data + user away."
+        },
+        {
+          id: "7.1-q2",
+          question: "What is the FIRST containment action you should take on the host?",
+          answer: "isolate",
+          hint: "Cut its network access."
+        },
+        {
+          id: "7.1-q3",
+          question: "Which parent process indicates the attack likely started via phishing?",
+          answer: "outlook.exe",
+          hint: "Email client."
+        }
+      ]
+    }
   },
   {
     id: "7.2",
