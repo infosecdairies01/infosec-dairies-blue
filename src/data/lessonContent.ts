@@ -19984,13 +19984,38 @@ Document all Indicators of Compromise (IOCs):
     ],
     practicalExercise: {
       title: "Full PCAP Investigation",
-      description: "Analyze a sample PCAP from start to finish using the methodology above.",
+      description: "Walk through a complete PCAP investigation from initial alert to summary.",
       steps: [
-        "Download a challenge PCAP from malware-traffic-analysis.net",
-        "Run the initial statistics commands to get a capture overview",
-        "Investigate DNS queries for suspicious domains",
-        "Examine HTTP objects for malicious files",
-        "Build a complete timeline and write an incident summary"
+        "Read each artifact found in the PCAP",
+        "Identify the delivery, payload, C2 and exfil stages",
+        "Answer the questions using only details from the scenario"
+      ],
+      labScenario: "You analyze the file 'incident-042.pcap' (size 184 MB, 412,330 packets, capture window 09:12-09:47 UTC). Initial statistics show host 10.50.1.27 is the top internal talker. DNS queries reveal the host resolved 'cdn-update-microsoft.support' to 91.243.59.10. An HTTP GET request downloaded 'invoice.doc' (212 KB, MD5 a1b2c3d4e5f60718293a4b5c6d7e8f90) from that server. Two minutes later, 10.50.1.27 began HTTPS sessions to 91.243.59.10:443 every 30 seconds, each 1.4 KB. At 09:41 UTC, a single 64 MB upload to the same host completed in 90 seconds.",
+      labQuestions: [
+        {
+          id: "2.5-q1",
+          question: "Which suspicious domain did host 10.50.1.27 resolve at the start of the incident?",
+          answer: "cdn-update-microsoft.support",
+          hint: "Look at the DNS query in the scenario."
+        },
+        {
+          id: "2.5-q2",
+          question: "What is the filename of the malicious document downloaded over HTTP?",
+          answer: "invoice.doc",
+          hint: "The HTTP GET object name is shown."
+        },
+        {
+          id: "2.5-q3",
+          question: "What is the MD5 hash of the downloaded document?",
+          answer: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+          hint: "The hash is given alongside the file size."
+        },
+        {
+          id: "2.5-q4",
+          question: "How large was the exfiltration upload that completed at 09:41 UTC?",
+          answer: "64 MB",
+          hint: "The scenario states the upload size."
+        }
       ]
     }
   },
