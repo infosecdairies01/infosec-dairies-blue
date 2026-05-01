@@ -22770,6 +22770,43 @@ Alert Received → Validate → Classify → Prioritize → Assign → Investiga
       "SEV-1 incidents require 15-minute initial response and continuous updates",
       "Alert fatigue and anchoring bias are common triage pitfalls"
     ],
+    practicalExercise: {
+      title: "Morning Triage Queue",
+      description: "Triage four overnight alerts and decide what gets escalated first.",
+      steps: [
+        "Read the scenario",
+        "Compare each alert against the severity matrix",
+        "Decide which one is SEV-1",
+        "Answer the questions"
+      ],
+      labScenario: "At 09:00 you open the queue and see four overnight alerts. Alert A: failed login spike against the marketing intern's account, no success. Alert B: EDR flagged ransomware encryption activity on file server FS-PROD-02, still running. Alert C: a developer ran nmap from their laptop against a test subnet. Alert D: an outbound DNS request to a known C2 domain from the CFO's workstation, single hit 30 minutes ago.",
+      labQuestions: [
+        {
+          id: "ir-3.2-q1",
+          question: "Which alert letter is SEV-1?",
+          answer: "B",
+          hint: "Active encryption on a production server."
+        },
+        {
+          id: "ir-3.2-q2",
+          question: "Which server is being encrypted?",
+          answer: "FS-PROD-02",
+          hint: "Named in alert B."
+        },
+        {
+          id: "ir-3.2-q3",
+          question: "Which alert is most likely a false positive from authorized activity?",
+          answer: "C",
+          hint: "Internal employee testing."
+        },
+        {
+          id: "ir-3.2-q4",
+          question: "Whose workstation contacted the C2 domain?",
+          answer: "CFO",
+          hint: "Named in alert D."
+        }
+      ]
+    }
   },
   {
     id: "3.3",
@@ -22963,6 +23000,43 @@ Short-term containment focuses on **immediately stopping the attacker's ability 
       "Never power off a compromised system before capturing volatile memory",
       "EDR isolation is preferred over physical disconnection as it maintains management access"
     ],
+    practicalExercise: {
+      title: "Containing an Active Beacon",
+      description: "Decide the right short-term containment actions for an active C2 beacon.",
+      steps: [
+        "Read the scenario carefully",
+        "Identify the affected host and attacker IP",
+        "Choose containment that preserves evidence",
+        "Answer the questions"
+      ],
+      labScenario: "Your EDR shows host WKS-HR-14 beaconing every 60 seconds to attacker IP 203.0.113.45 over HTTPS. The user is on PTO and the laptop is in the office, plugged in. Memory has not been captured yet. The CISO wants the beacon stopped within 10 minutes but also wants forensic evidence preserved.",
+      labQuestions: [
+        {
+          id: "ir-4.1-q1",
+          question: "Which host needs to be contained?",
+          answer: "WKS-HR-14",
+          hint: "Named in the scenario."
+        },
+        {
+          id: "ir-4.1-q2",
+          question: "Which attacker IP should be blocked at the firewall?",
+          answer: "203.0.113.45",
+          hint: "The destination of the beacon."
+        },
+        {
+          id: "ir-4.1-q3",
+          question: "What containment action preserves evidence and stops the beacon? (one word)",
+          answer: "EDR isolation",
+          hint: "Network-isolates the host but keeps management access."
+        },
+        {
+          id: "ir-4.1-q4",
+          question: "What must you capture before any action that could disrupt running processes?",
+          answer: "memory",
+          hint: "Volatile data lost on shutdown."
+        }
+      ]
+    }
   },
   {
     id: "4.2",
@@ -23209,6 +23283,43 @@ Before removal, you must find every way the attacker can return:
       "When in doubt, rebuild from clean media rather than attempting to clean a compromised system",
       "KRBTGT reset is required whenever Active Directory domain compromise is confirmed"
     ],
+    practicalExercise: {
+      title: "Eradicating a Persistent Foothold",
+      description: "Identify what must be removed to fully evict the attacker.",
+      steps: [
+        "Read the scenario",
+        "List each persistence mechanism mentioned",
+        "Decide between cleaning and rebuilding",
+        "Answer the questions"
+      ],
+      labScenario: "On compromised web server WEB-DMZ-01 you found a webshell at /var/www/html/help.php, a new local account named svc_update, an SSH key added to /root/.ssh/authorized_keys, and a cron job running every 10 minutes calling /tmp/.x. The attacker also dumped LSASS on a Windows DC and pass-the-hash was observed. Initial access was an unpatched Log4j vulnerability.",
+      labQuestions: [
+        {
+          id: "ir-5.1-q1",
+          question: "What is the filename of the webshell?",
+          answer: "help.php",
+          hint: "Found under /var/www/html/."
+        },
+        {
+          id: "ir-5.1-q2",
+          question: "What is the name of the backdoor account?",
+          answer: "svc_update",
+          hint: "Listed in the scenario."
+        },
+        {
+          id: "ir-5.1-q3",
+          question: "Which AD account must be reset twice because the DC was compromised?",
+          answer: "KRBTGT",
+          hint: "Required after domain compromise."
+        },
+        {
+          id: "ir-5.1-q4",
+          question: "Which vulnerability provided initial access?",
+          answer: "Log4j",
+          hint: "Stated at the end of the scenario."
+        }
+      ]
+    }
   },
   {
     id: "5.2",
@@ -23523,6 +23634,43 @@ The incident report is the permanent record of what happened, what was done, and
       "Separate observed facts from analytical conclusions",
       "Recommendations should be categorized by timeframe: immediate, short-term, and long-term"
     ],
+    practicalExercise: {
+      title: "Drafting the Incident Report",
+      description: "Pull the right facts from the case notes into the report sections.",
+      steps: [
+        "Read the scenario",
+        "Match each fact to the correct report section",
+        "Keep numbers and times precise",
+        "Answer the questions"
+      ],
+      labScenario: "Incident INC-2026-041 was declared SEV-2. A phishing email was delivered at 2026-04-22 08:32 UTC, the user clicked at 08:45 UTC, a Cobalt Strike beacon started at 08:46 UTC, and containment completed at 11:15 UTC. 3 servers and 12 user accounts were affected. No regulated data was exposed. The root cause was a missing email attachment sandbox.",
+      labQuestions: [
+        {
+          id: "ir-6.2-q1",
+          question: "What incident ID is being reported?",
+          answer: "INC-2026-041",
+          hint: "Top of the scenario."
+        },
+        {
+          id: "ir-6.2-q2",
+          question: "What severity was assigned?",
+          answer: "SEV-2",
+          hint: "Stated in the first sentence."
+        },
+        {
+          id: "ir-6.2-q3",
+          question: "How many servers were affected?",
+          answer: "3",
+          hint: "Be precise — number, not 'several'."
+        },
+        {
+          id: "ir-6.2-q4",
+          question: "What was the root cause?",
+          answer: "missing email attachment sandbox",
+          hint: "Stated at the end of the scenario."
+        }
+      ]
+    }
   },
   {
     id: "6.3",
