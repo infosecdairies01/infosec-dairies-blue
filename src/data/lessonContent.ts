@@ -12407,21 +12407,27 @@ Normalized Fields:
       labQuestions: [
         {
           id: "1.1-q1",
-          question: "Which critical log source was missing that would have shown the phished login?",
-          answer: "cloud",
-          hint: "Think about where the attacker actually logged in."
+          question: "Which two log sources is the SIEM currently collecting?",
+          answer: "firewall and Windows server",
+          hint: "Listed directly in the scenario."
         },
         {
           id: "1.1-q2",
-          question: "What SIEM core capability connects events from email, endpoint, and cloud to spot the full attack?",
-          answer: "correlation",
-          hint: "It links related events across sources."
+          question: "Which cloud platform was the attacker logged into during the breach?",
+          answer: "Microsoft 365",
+          hint: "Named in the scenario."
         },
         {
           id: "1.1-q3",
-          question: "Name one compliance benefit a SIEM provides through long-term log storage.",
-          answer: "retention",
-          hint: "Regulators require keeping logs for a set period."
+          question: "How did the attacker initially compromise the employee?",
+          answer: "phishing",
+          hint: "Stated in the first sentence of the incident."
+        },
+        {
+          id: "1.1-q4",
+          question: "What was stolen from the cloud share?",
+          answer: "files",
+          hint: "Look for what was exfiltrated."
         }
       ]
     }
@@ -13589,7 +13595,7 @@ Action: Update parser configuration
         },
         {
           id: "2.2-q2",
-          question: "What destination port was targeted (commonly used for RDP)?",
+          question: "What destination port was targeted?",
           answer: "3389",
           hint: "Check the dport field."
         },
@@ -13598,6 +13604,18 @@ Action: Update parser configuration
           question: "What is the source IP address of the connection?",
           answer: "203.0.113.45",
           hint: "Look at the src field."
+        },
+        {
+          id: "2.2-q4",
+          question: "What is the destination IP address?",
+          answer: "10.1.1.20",
+          hint: "Check the dst field."
+        },
+        {
+          id: "2.2-q5",
+          question: "Which firewall rule blocked the connection?",
+          answer: "block_rdp_external",
+          hint: "Look at the rule field."
         }
       ]
     }
@@ -14549,21 +14567,27 @@ earliest=-24h
       labQuestions: [
         {
           id: "3.2-q1",
-          question: "Which Windows EventCode represents a failed logon?",
+          question: "Which Windows EventCode represents the failed logon in this scenario?",
           answer: "4625",
-          hint: "Check the scenario."
+          hint: "Stated in the scenario."
         },
         {
           id: "3.2-q2",
-          question: "Which command limits the displayed columns to only time, IP, and workstation?",
-          answer: "table",
-          hint: "Used to pick specific fields for output."
+          question: "Which user account is being investigated?",
+          answer: "j.smith",
+          hint: "Named in the scenario."
         },
         {
           id: "3.2-q3",
-          question: "Which boolean operator joins `EventCode=4625` AND `user=j.smith` in the filter?",
-          answer: "AND",
-          hint: "Both conditions must be true."
+          question: "Which SIEM index holds the Windows logs needed for this query?",
+          answer: "wineventlog",
+          hint: "Look for the index name in the scenario."
+        },
+        {
+          id: "3.2-q4",
+          question: "What time range does the analyst need to cover?",
+          answer: "24 hours",
+          hint: "Stated near the end of the scenario."
         }
       ]
     }
@@ -15307,21 +15331,27 @@ index=security EventCode=4625
       labQuestions: [
         {
           id: "4.1-q1",
-          question: "Which IP address is conducting a brute force attack?",
+          question: "Which IP address exceeds the brute force threshold?",
           answer: "198.51.100.77",
-          hint: "It vastly exceeds the threshold."
+          hint: "It vastly exceeds 50 failures."
         },
         {
           id: "4.1-q2",
-          question: "Which SIEM command groups and counts events per field (e.g., per src_ip)?",
-          answer: "stats",
-          hint: "Standard aggregation command."
+          question: "How many failed logons did that IP generate in the last hour?",
+          answer: "412",
+          hint: "Listed beside the attacking IP."
         },
         {
           id: "4.1-q3",
-          question: "Which command would you use to plot these failures over time?",
-          answer: "timechart",
-          hint: "Creates time-series visualizations."
+          question: "What is the brute force threshold defined in the scenario (failures per hour)?",
+          answer: "50",
+          hint: "Stated at the end of the scenario."
+        },
+        {
+          id: "4.1-q4",
+          question: "Which Windows EventCode is being aggregated?",
+          answer: "4625",
+          hint: "Identified in the scenario as the failed logon code."
         }
       ]
     }
@@ -16931,21 +16961,27 @@ earliest=$time.earliest$ latest=$time.latest$
       labQuestions: [
         {
           id: "5.4-q1",
-          question: "Which panel type best displays a single number like 'total open alerts'?",
-          answer: "single value",
-          hint: "Highlights one key metric."
+          question: "Which metric does the manager want shown as 'one big number'?",
+          answer: "total open alerts",
+          hint: "First requirement listed."
         },
         {
           id: "5.4-q2",
-          question: "Which visualization shows alert volume trends over 24 hours?",
-          answer: "timechart",
-          hint: "Time-series line/area chart."
+          question: "What time window does the alert volume trend cover?",
+          answer: "24 hours",
+          hint: "Stated in the trend requirement."
         },
         {
           id: "5.4-q3",
-          question: "Which visualization shows attack origins by country geographically?",
-          answer: "map",
-          hint: "Geographic visualization."
+          question: "How many top source IPs should the dashboard rank by alert count?",
+          answer: "10",
+          hint: "Stated in the third requirement."
+        },
+        {
+          id: "5.4-q4",
+          question: "What field is the geographic panel grouped by?",
+          answer: "country",
+          hint: "Stated in the map requirement."
         }
       ]
     }
@@ -17353,21 +17389,33 @@ Link rules to attack techniques:
       labQuestions: [
         {
           id: "6.2-q1",
-          question: "What detection rule type best fits this scenario (matching patterns across events)?",
-          answer: "correlation",
-          hint: "It links multiple related events."
+          question: "Which user account is being investigated?",
+          answer: "alice@corp.com",
+          hint: "Named in the scenario."
         },
         {
           id: "6.2-q2",
-          question: "What is the common name for this attack pattern?",
-          answer: "impossible travel",
-          hint: "It's in the scenario title."
+          question: "From which city did the first login originate?",
+          answer: "New York",
+          hint: "First login location."
         },
         {
           id: "6.2-q3",
-          question: "Which MITRE ATT&CK tactic does a stolen credential login map to?",
-          answer: "initial access",
-          hint: "Attacker is gaining a foothold."
+          question: "From which city did the second login originate?",
+          answer: "Singapore",
+          hint: "Second login location."
+        },
+        {
+          id: "6.2-q4",
+          question: "How many minutes elapsed between the two logins?",
+          answer: "30",
+          hint: "Compare 09:00 UTC and 09:30 UTC."
+        },
+        {
+          id: "6.2-q5",
+          question: "What time window (in hours) should the rule use to flag logins from two countries?",
+          answer: "1",
+          hint: "Stated at the end of the scenario."
         }
       ]
     }
@@ -18074,21 +18122,33 @@ with wrong password, eventually succeeded.
       labQuestions: [
         {
           id: "7.1-q1",
-          question: "What is the appropriate severity (low, medium, high, critical)?",
-          answer: "critical",
-          hint: "Active code execution + sensitive data + user away."
+          question: "Which host triggered the EDR alert?",
+          answer: "WS-HR-12",
+          hint: "Named in the alert."
         },
         {
           id: "7.1-q2",
-          question: "What is the FIRST containment action you should take on the host?",
-          answer: "isolate",
-          hint: "Cut its network access."
+          question: "Which child process was executed with an encoded command?",
+          answer: "powershell.exe",
+          hint: "The suspicious binary in the alert."
         },
         {
           id: "7.1-q3",
-          question: "Which parent process indicates the attack likely started via phishing?",
+          question: "Which parent process spawned the suspicious command?",
           answer: "outlook.exe",
-          hint: "Email client."
+          hint: "Listed as the parent in the scenario."
+        },
+        {
+          id: "7.1-q4",
+          question: "What type of sensitive data does this host store (per asset DB)?",
+          answer: "HR records",
+          hint: "Stated at the end of the scenario."
+        },
+        {
+          id: "7.1-q5",
+          question: "At what UTC time did the alert fire?",
+          answer: "02:14",
+          hint: "Listed as the alert timestamp."
         }
       ]
     }
