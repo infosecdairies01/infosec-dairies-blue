@@ -20317,13 +20317,38 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET any (
     ],
     practicalExercise: {
       title: "Write Custom Detection Rules",
-      description: "Create Suricata rules for specific threat scenarios.",
+      description: "Build a Suricata rule from a real threat brief.",
       steps: [
-        "Write a rule to detect HTTP POST requests to '/gate.php' or '/panel.php'",
-        "Create a DNS detection rule for queries containing '.onion.' in the domain",
-        "Write a TLS rule using JA3 fingerprinting for a known malware family",
-        "Add threshold logic to a port scan detection rule",
-        "Test your rules against a sample PCAP using suricata -r"
+        "Read the threat intel brief in the scenario",
+        "Identify the protocol, port, content match and SID",
+        "Answer the questions using only the brief"
+      ],
+      labScenario: "Threat intel reports a new commodity stealer named 'NightOwl'. Analysts confirm: every infected host sends an HTTP POST request from any source port to TCP port 80, targeting the URI '/gate.php' on attacker-controlled web servers. The HTTP body always contains the static string 'owl_id=' followed by the victim ID. Your team agrees to deploy a Suricata alert with the message 'NightOwl Stealer C2 Check-in' and assign SID 2026041 in the local rule file local.rules. The rule should fire on traffic from $HOME_NET to $EXTERNAL_NET.",
+      labQuestions: [
+        {
+          id: "3.2-q1",
+          question: "Which HTTP method should the Suricata rule match for NightOwl C2?",
+          answer: "POST",
+          hint: "The brief specifies the HTTP method."
+        },
+        {
+          id: "3.2-q2",
+          question: "Which URI path is targeted by the malware check-in?",
+          answer: "/gate.php",
+          hint: "The brief gives the exact URI path."
+        },
+        {
+          id: "3.2-q3",
+          question: "Which static content string appears in every POST body?",
+          answer: "owl_id=",
+          hint: "Look at the body content described in the brief."
+        },
+        {
+          id: "3.2-q4",
+          question: "Which SID should be assigned to the new rule?",
+          answer: "2026041",
+          hint: "The team agreed on a specific SID number."
+        }
       ]
     }
   },
