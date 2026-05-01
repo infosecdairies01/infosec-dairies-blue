@@ -18989,13 +18989,39 @@ Without NSM, the organization might only discover the breach weeks later during 
       "Collection, detection, and analysis form the three pillars of NSM"
     ],
     practicalExercise: {
-      title: "Map Your NSM Data Sources",
-      description: "Identify the NSM data sources available in a typical enterprise environment.",
+      title: "NSM Data Source Triage",
+      description: "Use the NSM data types to investigate a suspected intrusion.",
       steps: [
-        "List all network segments in a hypothetical corporate environment (DMZ, internal, guest)",
-        "For each segment, identify what NSM data types could be collected",
-        "Determine optimal sensor placement for each segment",
-        "Document which tools would generate each data type (Zeek for session, Suricata for alerts, tcpdump for PCAP)"
+        "Read the scenario carefully",
+        "Match each finding to the correct NSM data type",
+        "Answer the questions using only the scenario details"
+      ],
+      labScenario: "Your NSM platform alerts on workstation WKS-MKT-09 at 02:14 UTC. Suricata fires an alert tagged 'ET MALWARE Possible C2 Beacon'. Zeek session data shows WKS-MKT-09 connecting to 185.220.101.45 on port 443 every 60 seconds for the last 4 hours, each session transferring exactly 1.2 KB. A full packet capture stored on the sensor preserves every byte of those sessions. Endpoint EDR has not generated any alert for this host yet.",
+      labQuestions: [
+        {
+          id: "1.1-q1",
+          question: "Which Suricata alert tag fired for WKS-MKT-09?",
+          answer: "ET MALWARE Possible C2 Beacon",
+          hint: "Look at the Suricata alert text in the scenario."
+        },
+        {
+          id: "1.1-q2",
+          question: "What is the beacon interval observed in Zeek session data?",
+          answer: "60 seconds",
+          hint: "The scenario states how often the connection repeats."
+        },
+        {
+          id: "1.1-q3",
+          question: "Which external IP is WKS-MKT-09 communicating with?",
+          answer: "185.220.101.45",
+          hint: "The destination IP is given in the Zeek session details."
+        },
+        {
+          id: "1.1-q4",
+          question: "Which NSM data type would let you reconstruct the exact bytes sent in each beacon?",
+          answer: "full packet capture",
+          hint: "The scenario mentions data 'preserves every byte'."
+        }
       ]
     },
     additionalResources: [
