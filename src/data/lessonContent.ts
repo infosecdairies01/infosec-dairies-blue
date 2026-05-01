@@ -11202,14 +11202,39 @@ List all IOCs from this investigation:
       "Building a timeline is critical for understanding the full attack"
     ],
     practicalExercise: {
-      title: "Create an Investigation Report",
-      description: "Document this incident as if you were the responding analyst.",
+      title: "Windows Attack Chain Investigation",
+      description: "Reconstruct an intrusion using Windows Event Logs.",
       steps: [
-        "Write an executive summary",
-        "Create a detailed timeline",
-        "List all IOCs discovered",
-        "Document the attack chain",
-        "Provide recommendations for remediation"
+        "Read the scenario events in order",
+        "Identify each phase of the attack",
+        "Submit short, specific answers"
+      ],
+      labScenario: "On workstation FIN-WS-04 you see this sequence in Windows logs: 47 Event ID 4625 entries from IP 203.0.113.45 in 6 minutes, then a single 4624 (Logon Type 3) from the same IP, then Event 4104 showing an obfuscated PowerShell script downloading a payload, then Event 4698 creating a scheduled task named 'WindowsHealth' running every 30 minutes, and finally Event 5140 showing access to the C$ share on a domain controller.",
+      labQuestions: [
+        {
+          id: "2.6-q1",
+          question: "What type of attack is shown by 47 failed logons followed by one success?",
+          answer: "brute force",
+          hint: "Repeated password guessing leading to a successful login."
+        },
+        {
+          id: "2.6-q2",
+          question: "What logon type indicates a network logon (often used in lateral movement)?",
+          answer: "3",
+          hint: "Logon Type for SMB or remote network access."
+        },
+        {
+          id: "2.6-q3",
+          question: "Which technique is the attacker using for persistence?",
+          answer: "scheduled task",
+          hint: "The new 'WindowsHealth' task runs every 30 minutes."
+        },
+        {
+          id: "2.6-q4",
+          question: "What MITRE tactic does accessing C$ on the DC represent?",
+          answer: "lateral movement",
+          hint: "Moving from one host to another inside the network."
+        }
       ]
     }
   },
