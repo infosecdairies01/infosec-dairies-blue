@@ -9952,6 +9952,42 @@ For security monitoring, prioritize:
       "Authentication logs are the highest priority for security monitoring",
       "EDR provides rich telemetry beyond traditional OS logs"
     ],
+    practicalExercise: {
+      title: "Identify the Right Log Source",
+      description: "Match each investigation goal to the correct log source.",
+      steps: [
+        "Read the scenario carefully",
+        "Decide which log source answers each question",
+        "Submit short answers (1-2 words)"
+      ],
+      labScenario: "An employee reports that a file was deleted from a shared Windows server overnight. You also notice unusual outbound traffic from the same server to an unknown IP, and the user claims they never logged in. You have access to Windows Security logs, firewall logs, AWS CloudTrail (server is on EC2), and EDR telemetry from the host.",
+      labQuestions: [
+        {
+          id: "1.3-q1",
+          question: "Which log source confirms WHO logged into the Windows server?",
+          answer: "Windows Security",
+          hint: "Think about authentication events like 4624."
+        },
+        {
+          id: "1.3-q2",
+          question: "Which log source shows the outbound connection to the unknown IP?",
+          answer: "firewall",
+          hint: "Network traffic decisions are logged here."
+        },
+        {
+          id: "1.3-q3",
+          question: "Which log source records that the EC2 instance configuration was changed?",
+          answer: "CloudTrail",
+          hint: "AWS API activity logging service."
+        },
+        {
+          id: "1.3-q4",
+          question: "Which log source shows the actual process that deleted the file?",
+          answer: "EDR",
+          hint: "Endpoint telemetry tracks process and file activity."
+        }
+      ]
+    }
   },
   {
     id: "1.4",
