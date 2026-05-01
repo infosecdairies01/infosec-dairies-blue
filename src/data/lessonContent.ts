@@ -9952,6 +9952,42 @@ For security monitoring, prioritize:
       "Authentication logs are the highest priority for security monitoring",
       "EDR provides rich telemetry beyond traditional OS logs"
     ],
+    practicalExercise: {
+      title: "Identify the Right Log Source",
+      description: "Match each investigation goal to the correct log source.",
+      steps: [
+        "Read the scenario carefully",
+        "Decide which log source answers each question",
+        "Submit short answers (1-2 words)"
+      ],
+      labScenario: "An employee reports that a file was deleted from a shared Windows server overnight. You also notice unusual outbound traffic from the same server to an unknown IP, and the user claims they never logged in. You have access to Windows Security logs, firewall logs, AWS CloudTrail (server is on EC2), and EDR telemetry from the host.",
+      labQuestions: [
+        {
+          id: "1.3-q1",
+          question: "Which log source confirms WHO logged into the Windows server?",
+          answer: "Windows Security",
+          hint: "Think about authentication events like 4624."
+        },
+        {
+          id: "1.3-q2",
+          question: "Which log source shows the outbound connection to the unknown IP?",
+          answer: "firewall",
+          hint: "Network traffic decisions are logged here."
+        },
+        {
+          id: "1.3-q3",
+          question: "Which log source records that the EC2 instance configuration was changed?",
+          answer: "CloudTrail",
+          hint: "AWS API activity logging service."
+        },
+        {
+          id: "1.3-q4",
+          question: "Which log source shows the actual process that deleted the file?",
+          answer: "EDR",
+          hint: "Endpoint telemetry tracks process and file activity."
+        }
+      ]
+    }
   },
   {
     id: "1.4",
@@ -10429,13 +10465,39 @@ Always correlate events! A single 4624 tells you someone logged in. Combine with
       "Always correlate multiple event types for complete visibility"
     ],
     practicalExercise: {
-      title: "Event ID Flash Cards",
-      description: "Create flash cards to memorize the top 15 critical Event IDs.",
+      title: "Critical Event ID Triage",
+      description: "Identify the right Windows Event ID for each suspicious activity.",
       steps: [
-        "Write Event ID on one side, description on the other",
-        "Practice identifying events by ID",
-        "Test yourself on logon types",
-        "Quiz a colleague on the events"
+        "Read the scenario",
+        "Match each behavior to its Event ID",
+        "Provide just the numeric ID"
+      ],
+      labScenario: "Reviewing a compromised Windows server, you see four suspicious activities in the Security log: (1) an attacker successfully logged in after multiple failed attempts, (2) a new local user account was created, (3) the user was added to the Administrators group, and (4) the Security event log itself was cleared to hide tracks. You need to confirm the Event ID associated with each action.",
+      labQuestions: [
+        {
+          id: "2.2-q1",
+          question: "What Event ID indicates a successful logon?",
+          answer: "4624",
+          hint: "The most common authentication success event."
+        },
+        {
+          id: "2.2-q2",
+          question: "What Event ID is logged when a new user account is created?",
+          answer: "4720",
+          hint: "Account management event in the 47xx range."
+        },
+        {
+          id: "2.2-q3",
+          question: "What Event ID indicates a member was added to a security-enabled group?",
+          answer: "4732",
+          hint: "Group membership change event."
+        },
+        {
+          id: "2.2-q4",
+          question: "What Event ID is logged when the audit log is cleared?",
+          answer: "1102",
+          hint: "A four-digit ID outside the 4xxx range."
+        }
       ]
     }
   },
@@ -11140,14 +11202,39 @@ List all IOCs from this investigation:
       "Building a timeline is critical for understanding the full attack"
     ],
     practicalExercise: {
-      title: "Create an Investigation Report",
-      description: "Document this incident as if you were the responding analyst.",
+      title: "Windows Attack Chain Investigation",
+      description: "Reconstruct an intrusion using Windows Event Logs.",
       steps: [
-        "Write an executive summary",
-        "Create a detailed timeline",
-        "List all IOCs discovered",
-        "Document the attack chain",
-        "Provide recommendations for remediation"
+        "Read the scenario events in order",
+        "Identify each phase of the attack",
+        "Submit short, specific answers"
+      ],
+      labScenario: "On workstation FIN-WS-04 you see this sequence in Windows logs: 47 Event ID 4625 entries from IP 203.0.113.45 in 6 minutes, then a single 4624 (Logon Type 3) from the same IP, then Event 4104 showing an obfuscated PowerShell script downloading a payload, then Event 4698 creating a scheduled task named 'WindowsHealth' running every 30 minutes, and finally Event 5140 showing access to the C$ share on a domain controller.",
+      labQuestions: [
+        {
+          id: "2.6-q1",
+          question: "What type of attack is shown by 47 failed logons followed by one success?",
+          answer: "brute force",
+          hint: "Repeated password guessing leading to a successful login."
+        },
+        {
+          id: "2.6-q2",
+          question: "What logon type indicates a network logon (often used in lateral movement)?",
+          answer: "3",
+          hint: "Logon Type for SMB or remote network access."
+        },
+        {
+          id: "2.6-q3",
+          question: "Which technique is the attacker using for persistence?",
+          answer: "scheduled task",
+          hint: "The new 'WindowsHealth' task runs every 30 minutes."
+        },
+        {
+          id: "2.6-q4",
+          question: "What MITRE tactic does accessing C$ on the DC represent?",
+          answer: "lateral movement",
+          hint: "Moving from one host to another inside the network."
+        }
       ]
     }
   },
@@ -11506,14 +11593,39 @@ grep "to group" /var/log/auth.log
       "PAM logs record authentication across all services"
     ],
     practicalExercise: {
-      title: "Auth Log Analysis",
-      description: "Analyze a sample auth.log file for security events.",
+      title: "Linux Auth Log Investigation",
+      description: "Hunt brute force and privilege escalation in /var/log/auth.log.",
       steps: [
-        "Count total failed SSH logins",
-        "Identify the top 5 source IPs for failed logins",
-        "Find any successful logins after failed attempts",
-        "List all sudo commands run as root",
-        "Identify any new user accounts created"
+        "Read the auth.log scenario",
+        "Identify attacker behavior",
+        "Provide concise answers"
+      ],
+      labScenario: "In /var/log/auth.log you see 312 'Failed password for root' entries from IP 198.51.100.7 over 8 minutes, followed by 'Accepted password for backup from 198.51.100.7'. Minutes later: 'sudo: backup : user NOT in sudoers ; COMMAND=/bin/bash', then 'useradd: new user: name=helper, UID=0, GID=0', and finally 'session opened for user helper'.",
+      labQuestions: [
+        {
+          id: "3.2-q1",
+          question: "Which user account did the attacker successfully log in as?",
+          answer: "backup",
+          hint: "Look at the 'Accepted password' line."
+        },
+        {
+          id: "3.2-q2",
+          question: "What does 'NOT in sudoers' indicate the attacker was attempting?",
+          answer: "privilege escalation",
+          hint: "Trying to run a command they aren't allowed to."
+        },
+        {
+          id: "3.2-q3",
+          question: "What is suspicious about the new user 'helper'?",
+          answer: "UID 0",
+          hint: "Its UID/GID matches the root user."
+        },
+        {
+          id: "3.2-q4",
+          question: "What is the source IP of the attack?",
+          answer: "198.51.100.7",
+          hint: "Same IP appears in failed and accepted login lines."
+        }
       ]
     }
   },
@@ -11701,6 +11813,42 @@ grep "UFW BLOCK" /var/log/syslog | awk '{print $12}' | cut -d= -f2 | sort | uniq
       "Package manager logs show software installations and removals",
       "AppArmor/SELinux denials indicate blocked malicious behavior"
     ],
+    practicalExercise: {
+      title: "Hunt Persistence in System Logs",
+      description: "Use Linux system and cron logs to find attacker persistence.",
+      steps: [
+        "Read the log snippets",
+        "Identify the persistence technique",
+        "Answer with short keywords"
+      ],
+      labScenario: "On a suspected compromised Linux web server you find: in /var/log/cron a new entry runs '/tmp/.update.sh' every 5 minutes as root; in /var/log/dpkg.log a recent install of 'netcat-openbsd'; in /var/log/syslog repeated AppArmor 'DENIED' messages for the apache2 profile trying to execute /bin/bash; and in /var/log/kern.log iptables 'BLOCK' messages showing outbound traffic to 185.220.101.7 on port 4444.",
+      labQuestions: [
+        {
+          id: "3.3-q1",
+          question: "Which log file revealed the malicious scheduled job?",
+          answer: "cron",
+          hint: "Stored under /var/log/ and tracks scheduled tasks."
+        },
+        {
+          id: "3.3-q2",
+          question: "What suspicious tool was recently installed via the package manager?",
+          answer: "netcat",
+          hint: "Common reverse shell utility."
+        },
+        {
+          id: "3.3-q3",
+          question: "What security control blocked apache from spawning a shell?",
+          answer: "AppArmor",
+          hint: "Mandatory access control system on Ubuntu/Debian."
+        },
+        {
+          id: "3.3-q4",
+          question: "What port is associated with the blocked outbound connection?",
+          answer: "4444",
+          hint: "Common Metasploit/reverse shell port in the kernel log."
+        }
+      ]
+    }
   },
   {
     id: "3.4",
@@ -12073,14 +12221,39 @@ Document all IOCs:
       "IOC extraction is critical for blocking and hunting"
     ],
     practicalExercise: {
-      title: "Write the Incident Report",
-      description: "Create a formal incident report from this investigation.",
+      title: "Linux Web Server Compromise Investigation",
+      description: "Correlate auth, web, and system logs to map a full attack.",
       steps: [
-        "Write an executive summary",
-        "Document the attack chain (MITRE ATT&CK mapping)",
-        "List all IOCs with context",
-        "Provide remediation steps",
-        "Suggest detection improvements"
+        "Read the multi-source log scenario",
+        "Identify each phase of the intrusion",
+        "Provide short answers"
+      ],
+      labScenario: "A Linux web server is suspected of being compromised. In Apache access.log you see GET requests with '../../etc/passwd' from 45.77.10.20, then a POST to /upload.php uploading 'shell.php', then GET /uploads/shell.php?cmd=id. In auth.log: 'Accepted publickey for www-data'. In /var/log/cron: a new job '@reboot /usr/bin/python3 /tmp/.bd.py'. In syslog: a new systemd service 'sysmonitor.service' was enabled.",
+      labQuestions: [
+        {
+          id: "3.5-q1",
+          question: "What initial attack technique is shown by the '../../etc/passwd' request?",
+          answer: "path traversal",
+          hint: "Also known as directory traversal."
+        },
+        {
+          id: "3.5-q2",
+          question: "What type of malicious file did the attacker upload?",
+          answer: "web shell",
+          hint: "shell.php executed via cmd= parameter."
+        },
+        {
+          id: "3.5-q3",
+          question: "Name ONE persistence mechanism used by the attacker.",
+          answer: "cron",
+          hint: "Either the @reboot cron job or the new systemd service is acceptable."
+        },
+        {
+          id: "3.5-q4",
+          question: "What is the attacker's source IP?",
+          answer: "45.77.10.20",
+          hint: "Seen in the Apache access log entries."
+        }
       ]
     }
   },
