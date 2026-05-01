@@ -22770,6 +22770,43 @@ Alert Received → Validate → Classify → Prioritize → Assign → Investiga
       "SEV-1 incidents require 15-minute initial response and continuous updates",
       "Alert fatigue and anchoring bias are common triage pitfalls"
     ],
+    practicalExercise: {
+      title: "Morning Triage Queue",
+      description: "Triage four overnight alerts and decide what gets escalated first.",
+      steps: [
+        "Read the scenario",
+        "Compare each alert against the severity matrix",
+        "Decide which one is SEV-1",
+        "Answer the questions"
+      ],
+      labScenario: "At 09:00 you open the queue and see four overnight alerts. Alert A: failed login spike against the marketing intern's account, no success. Alert B: EDR flagged ransomware encryption activity on file server FS-PROD-02, still running. Alert C: a developer ran nmap from their laptop against a test subnet. Alert D: an outbound DNS request to a known C2 domain from the CFO's workstation, single hit 30 minutes ago.",
+      labQuestions: [
+        {
+          id: "ir-3.2-q1",
+          question: "Which alert letter is SEV-1?",
+          answer: "B",
+          hint: "Active encryption on a production server."
+        },
+        {
+          id: "ir-3.2-q2",
+          question: "Which server is being encrypted?",
+          answer: "FS-PROD-02",
+          hint: "Named in alert B."
+        },
+        {
+          id: "ir-3.2-q3",
+          question: "Which alert is most likely a false positive from authorized activity?",
+          answer: "C",
+          hint: "Internal employee testing."
+        },
+        {
+          id: "ir-3.2-q4",
+          question: "Whose workstation contacted the C2 domain?",
+          answer: "CFO",
+          hint: "Named in alert D."
+        }
+      ]
+    }
   },
   {
     id: "3.3",
