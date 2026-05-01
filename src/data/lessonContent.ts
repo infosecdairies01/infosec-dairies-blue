@@ -22349,14 +22349,20 @@ Incident response doesn't exist in isolation. It integrates with:
       "Incident response integrates with SOC, forensics, threat intelligence, and compliance functions"
     ],
     practicalExercise: {
-      title: "Incident Classification Exercise",
-      description: "Practice classifying security events into the correct incident categories.",
+      title: "Event vs. Incident Triage",
+      description: "Classify a series of observations from the SOC queue and identify the true security incident.",
       steps: [
-        "Review a list of 10 sample security events (failed logins, malware alerts, data access logs)",
-        "Classify each as Event, Adverse Event, or Security Incident",
-        "For each incident, assign a category (malware, unauthorized access, data breach, etc.)",
-        "Justify your classification with specific indicators",
-        "Compare your results with the answer key and identify any misclassifications"
+        "Read the morning shift handover scenario",
+        "Distinguish events, adverse events, and incidents",
+        "Identify the correct incident category",
+        "Answer the lab questions using details from the scenario"
+      ],
+      labScenario: "It's 08:00 on Monday at Acme Corp. The overnight SOC queue shows four items: (1) user 'jdoe' logged into the VPN from Mumbai at 02:14 UTC, (2) the perimeter firewall blocked 1,200 inbound SYN packets to port 3389, (3) endpoint EP-FIN-07 triggered a Defender alert for 'Ransom:Win32/Conti' and the file server FS-PROD-01 now shows 4,300 files renamed with a .conti extension, and (4) a printer rebooted itself at 03:00. Your lead asks you to triage the queue before standup.",
+      labQuestions: [
+        { id: "ir-1.1-q1", question: "Which item is a confirmed Security Incident?", answer: "Item 3 (Conti ransomware on EP-FIN-07)", hint: "Look for a violation of security policy with clear impact." },
+        { id: "ir-1.1-q2", question: "Which incident category does item 3 fall under?", answer: "Malware Infection (Ransomware)", hint: "Check the categories listed in the lesson." },
+        { id: "ir-1.1-q3", question: "Which item is best classified as an Event (not adverse, not an incident)?", answer: "Item 1 (jdoe VPN login)", hint: "A normal observable occurrence with no negative consequence." },
+        { id: "ir-1.1-q4", question: "Which file server is impacted and how many files were affected?", answer: "FS-PROD-01, 4,300 files", hint: "Re-read the ransomware detail in the scenario." }
       ]
     }
   },
