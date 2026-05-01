@@ -17341,6 +17341,36 @@ Link rules to attack techniques:
       "Document rules with logic, tuning guidance, and response procedures",
       "Balance detection sensitivity with false positive rate"
     ],
+    practicalExercise: {
+      title: "Write a Threshold Detection Rule",
+      description: "Design a rule to detect impossible travel logins.",
+      steps: [
+        "Read the scenario",
+        "Identify the rule type and threshold",
+        "Answer the questions"
+      ],
+      labScenario: "User `alice@corp.com` logs into Microsoft 365 from New York at 09:00 UTC, then from Singapore at 09:30 UTC. The physical distance makes travel in 30 minutes impossible. You need a SIEM rule that flags any user logging in from two countries within 1 hour.",
+      labQuestions: [
+        {
+          id: "6.2-q1",
+          question: "What detection rule type best fits this scenario (matching patterns across events)?",
+          answer: "correlation",
+          hint: "It links multiple related events."
+        },
+        {
+          id: "6.2-q2",
+          question: "What is the common name for this attack pattern?",
+          answer: "impossible travel",
+          hint: "It's in the scenario title."
+        },
+        {
+          id: "6.2-q3",
+          question: "Which MITRE ATT&CK tactic does a stolen credential login map to?",
+          answer: "initial access",
+          hint: "Attacker is gaining a foothold."
+        }
+      ]
+    }
   },
   {
     id: "6.3",
