@@ -18989,13 +18989,39 @@ Without NSM, the organization might only discover the breach weeks later during 
       "Collection, detection, and analysis form the three pillars of NSM"
     ],
     practicalExercise: {
-      title: "Map Your NSM Data Sources",
-      description: "Identify the NSM data sources available in a typical enterprise environment.",
+      title: "NSM Data Source Triage",
+      description: "Use the NSM data types to investigate a suspected intrusion.",
       steps: [
-        "List all network segments in a hypothetical corporate environment (DMZ, internal, guest)",
-        "For each segment, identify what NSM data types could be collected",
-        "Determine optimal sensor placement for each segment",
-        "Document which tools would generate each data type (Zeek for session, Suricata for alerts, tcpdump for PCAP)"
+        "Read the scenario carefully",
+        "Match each finding to the correct NSM data type",
+        "Answer the questions using only the scenario details"
+      ],
+      labScenario: "Your NSM platform alerts on workstation WKS-MKT-09 at 02:14 UTC. Suricata fires an alert tagged 'ET MALWARE Possible C2 Beacon'. Zeek session data shows WKS-MKT-09 connecting to 185.220.101.45 on port 443 every 60 seconds for the last 4 hours, each session transferring exactly 1.2 KB. A full packet capture stored on the sensor preserves every byte of those sessions. Endpoint EDR has not generated any alert for this host yet.",
+      labQuestions: [
+        {
+          id: "1.1-q1",
+          question: "Which Suricata alert tag fired for WKS-MKT-09?",
+          answer: "ET MALWARE Possible C2 Beacon",
+          hint: "Look at the Suricata alert text in the scenario."
+        },
+        {
+          id: "1.1-q2",
+          question: "What is the beacon interval observed in Zeek session data?",
+          answer: "60 seconds",
+          hint: "The scenario states how often the connection repeats."
+        },
+        {
+          id: "1.1-q3",
+          question: "Which external IP is WKS-MKT-09 communicating with?",
+          answer: "185.220.101.45",
+          hint: "The destination IP is given in the Zeek session details."
+        },
+        {
+          id: "1.1-q4",
+          question: "Which NSM data type would let you reconstruct the exact bytes sent in each beacon?",
+          answer: "full packet capture",
+          hint: "The scenario mentions data 'preserves every byte'."
+        }
       ]
     },
     additionalResources: [
@@ -19110,12 +19136,38 @@ ICMP carries diagnostic messages but is frequently weaponized:
     ],
     practicalExercise: {
       title: "Protocol Anomaly Identification",
-      description: "Analyze sample traffic logs and identify protocol violations.",
+      description: "Use protocol knowledge to spot suspicious behavior in captured traffic.",
       steps: [
-        "Open a sample PCAP in Wireshark and filter for TCP conversations",
-        "Identify any abnormal TCP flag combinations (SYN+FIN, NULL, XMAS)",
-        "Filter for DNS traffic and look for high-entropy domain names or TXT queries",
-        "Examine HTTP traffic for suspicious User-Agent strings or non-standard methods"
+        "Review the captured traffic in the scenario",
+        "Match each finding to the protocol it abuses",
+        "Answer based only on what the scenario shows"
+      ],
+      labScenario: "An NSM analyst reviews a 10-minute capture from the data-center sensor. They observe: (1) host 10.10.5.22 sending TCP packets to 198.51.100.7 with both the SYN and FIN flags set; (2) repeated DNS TXT record queries to 'a8f3c.update.badc2.net' returning 480-byte responses; (3) outbound HTTP requests to evil-cdn.io using the User-Agent string 'curl/7.68.0' from a workstation that normally runs only Chrome; (4) SNMP traffic on UDP port 161 carrying the community string 'public' in cleartext.",
+      labQuestions: [
+        {
+          id: "1.2-q1",
+          question: "Which abnormal TCP flag combination did host 10.10.5.22 send?",
+          answer: "SYN+FIN",
+          hint: "Two flags should never appear together in a normal handshake."
+        },
+        {
+          id: "1.2-q2",
+          question: "Which DNS record type is being abused for likely tunneling?",
+          answer: "TXT",
+          hint: "The scenario names the record type used for large 480-byte responses."
+        },
+        {
+          id: "1.2-q3",
+          question: "Which suspicious User-Agent string was seen on a Chrome-only workstation?",
+          answer: "curl/7.68.0",
+          hint: "Look at the HTTP request details."
+        },
+        {
+          id: "1.2-q4",
+          question: "Which UDP port carried the cleartext SNMP community string?",
+          answer: "161",
+          hint: "The scenario lists the SNMP port directly."
+        }
       ]
     }
   },
@@ -19407,14 +19459,39 @@ Analyze → Expert Information highlights protocol violations, retransmissions, 
       "tshark provides command-line analysis for large-scale PCAP processing"
     ],
     practicalExercise: {
-      title: "Wireshark Filter Mastery",
-      description: "Practice writing filters to isolate specific traffic patterns.",
+      title: "Wireshark Triage Walkthrough",
+      description: "Use Wireshark filters and statistics to triage a suspicious capture.",
       steps: [
-        "Download a sample PCAP from malware-traffic-analysis.net",
-        "Use display filters to isolate all DNS queries",
-        "Follow a TCP stream to reconstruct an HTTP session",
-        "Use Statistics → Conversations to find the top talkers",
-        "Check Expert Information for any protocol anomalies"
+        "Read the Wireshark findings in the scenario",
+        "Translate each finding into the right filter or menu option",
+        "Answer the questions using only the values shown"
+      ],
+      labScenario: "You open the file 'incident-2026-04-30.pcapng' in Wireshark. The capture covers 30 minutes from sensor SPAN-DC-01. You apply the display filter 'dns' and see 4,812 DNS queries from a single host, 10.20.4.18, all going to the resolver 8.8.8.8. Statistics → Conversations shows 10.20.4.18 is the top talker with 612 MB of HTTP traffic. You right-click an HTTP packet and choose 'Follow → TCP Stream' to reconstruct a session that uploads a file named 'payroll_2026.zip' to the host upload.evilshare.io. Expert Information flags 47 TCP retransmissions on that same conversation.",
+      labQuestions: [
+        {
+          id: "2.1-q1",
+          question: "Which display filter did you apply to isolate the 4,812 DNS queries?",
+          answer: "dns",
+          hint: "The scenario states the exact filter used."
+        },
+        {
+          id: "2.1-q2",
+          question: "Which internal host is the top talker in the capture?",
+          answer: "10.20.4.18",
+          hint: "Statistics → Conversations identifies it."
+        },
+        {
+          id: "2.1-q3",
+          question: "Which Wireshark feature was used to reconstruct the upload session?",
+          answer: "Follow TCP Stream",
+          hint: "The scenario mentions a right-click menu option."
+        },
+        {
+          id: "2.1-q4",
+          question: "What filename was uploaded to upload.evilshare.io?",
+          answer: "payroll_2026.zip",
+          hint: "The reconstructed stream shows the file name."
+        }
       ]
     }
   },
@@ -19636,12 +19713,38 @@ Key fields to analyze:
     ],
     practicalExercise: {
       title: "DNS Threat Detection Lab",
-      description: "Analyze DNS logs to identify tunneling and DGA activity.",
+      description: "Investigate suspicious DNS activity captured by Zeek.",
       steps: [
-        "Calculate the entropy of subdomain strings in a DNS log sample",
-        "Identify domains with unusually high query volumes (>100/hour)",
-        "Find TXT record queries and evaluate their response sizes",
-        "Look for NXDomain clustering that may indicate DGA activity"
+        "Read the Zeek dns.log findings carefully",
+        "Identify which patterns indicate tunneling vs DGA",
+        "Answer using only the values shown in the scenario"
+      ],
+      labScenario: "Zeek dns.log entries from sensor SENS-EAST show host 10.30.7.42 generating DNS activity over the last hour: 1,840 queries to subdomains of 'tun.exfilzone.com', each subdomain 60+ characters of random base32 (e.g. 'k7m2p9q3r1s8t4u6v0w5x2y9z1a3b7c4.tun.exfilzone.com'), all returning TXT records of 240 bytes. In parallel, the same host issues 612 queries to randomly-generated 12-character domains under .top, of which 598 return NXDOMAIN. The internal DNS resolver baseline for this host is normally under 200 queries per hour.",
+      labQuestions: [
+        {
+          id: "2.3-q1",
+          question: "Which parent domain is being used for likely DNS tunneling?",
+          answer: "tun.exfilzone.com",
+          hint: "Look at the suffix shared by the long random subdomains."
+        },
+        {
+          id: "2.3-q2",
+          question: "Which DNS record type is carrying the 240-byte responses?",
+          answer: "TXT",
+          hint: "The scenario names the record type for the large responses."
+        },
+        {
+          id: "2.3-q3",
+          question: "How many of the 612 .top queries returned NXDOMAIN, indicating DGA?",
+          answer: "598",
+          hint: "The NXDOMAIN count is given directly."
+        },
+        {
+          id: "2.3-q4",
+          question: "Which internal host is generating all of this suspicious DNS activity?",
+          answer: "10.30.7.42",
+          hint: "The source IP appears at the start of the scenario."
+        }
       ]
     }
   },
@@ -19881,13 +19984,38 @@ Document all Indicators of Compromise (IOCs):
     ],
     practicalExercise: {
       title: "Full PCAP Investigation",
-      description: "Analyze a sample PCAP from start to finish using the methodology above.",
+      description: "Walk through a complete PCAP investigation from initial alert to summary.",
       steps: [
-        "Download a challenge PCAP from malware-traffic-analysis.net",
-        "Run the initial statistics commands to get a capture overview",
-        "Investigate DNS queries for suspicious domains",
-        "Examine HTTP objects for malicious files",
-        "Build a complete timeline and write an incident summary"
+        "Read each artifact found in the PCAP",
+        "Identify the delivery, payload, C2 and exfil stages",
+        "Answer the questions using only details from the scenario"
+      ],
+      labScenario: "You analyze the file 'incident-042.pcap' (size 184 MB, 412,330 packets, capture window 09:12-09:47 UTC). Initial statistics show host 10.50.1.27 is the top internal talker. DNS queries reveal the host resolved 'cdn-update-microsoft.support' to 91.243.59.10. An HTTP GET request downloaded 'invoice.doc' (212 KB, MD5 a1b2c3d4e5f60718293a4b5c6d7e8f90) from that server. Two minutes later, 10.50.1.27 began HTTPS sessions to 91.243.59.10:443 every 30 seconds, each 1.4 KB. At 09:41 UTC, a single 64 MB upload to the same host completed in 90 seconds.",
+      labQuestions: [
+        {
+          id: "2.5-q1",
+          question: "Which suspicious domain did host 10.50.1.27 resolve at the start of the incident?",
+          answer: "cdn-update-microsoft.support",
+          hint: "Look at the DNS query in the scenario."
+        },
+        {
+          id: "2.5-q2",
+          question: "What is the filename of the malicious document downloaded over HTTP?",
+          answer: "invoice.doc",
+          hint: "The HTTP GET object name is shown."
+        },
+        {
+          id: "2.5-q3",
+          question: "What is the MD5 hash of the downloaded document?",
+          answer: "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+          hint: "The hash is given alongside the file size."
+        },
+        {
+          id: "2.5-q4",
+          question: "How large was the exfiltration upload that completed at 09:41 UTC?",
+          answer: "64 MB",
+          hint: "The scenario states the upload size."
+        }
       ]
     }
   },
@@ -20189,13 +20317,38 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET any (
     ],
     practicalExercise: {
       title: "Write Custom Detection Rules",
-      description: "Create Suricata rules for specific threat scenarios.",
+      description: "Build a Suricata rule from a real threat brief.",
       steps: [
-        "Write a rule to detect HTTP POST requests to '/gate.php' or '/panel.php'",
-        "Create a DNS detection rule for queries containing '.onion.' in the domain",
-        "Write a TLS rule using JA3 fingerprinting for a known malware family",
-        "Add threshold logic to a port scan detection rule",
-        "Test your rules against a sample PCAP using suricata -r"
+        "Read the threat intel brief in the scenario",
+        "Identify the protocol, port, content match and SID",
+        "Answer the questions using only the brief"
+      ],
+      labScenario: "Threat intel reports a new commodity stealer named 'NightOwl'. Analysts confirm: every infected host sends an HTTP POST request from any source port to TCP port 80, targeting the URI '/gate.php' on attacker-controlled web servers. The HTTP body always contains the static string 'owl_id=' followed by the victim ID. Your team agrees to deploy a Suricata alert with the message 'NightOwl Stealer C2 Check-in' and assign SID 2026041 in the local rule file local.rules. The rule should fire on traffic from $HOME_NET to $EXTERNAL_NET.",
+      labQuestions: [
+        {
+          id: "3.2-q1",
+          question: "Which HTTP method should the Suricata rule match for NightOwl C2?",
+          answer: "POST",
+          hint: "The brief specifies the HTTP method."
+        },
+        {
+          id: "3.2-q2",
+          question: "Which URI path is targeted by the malware check-in?",
+          answer: "/gate.php",
+          hint: "The brief gives the exact URI path."
+        },
+        {
+          id: "3.2-q3",
+          question: "Which static content string appears in every POST body?",
+          answer: "owl_id=",
+          hint: "Look at the body content described in the brief."
+        },
+        {
+          id: "3.2-q4",
+          question: "Which SID should be assigned to the new rule?",
+          answer: "2026041",
+          hint: "The team agreed on a specific SID number."
+        }
       ]
     }
   },
