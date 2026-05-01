@@ -19459,14 +19459,39 @@ Analyze → Expert Information highlights protocol violations, retransmissions, 
       "tshark provides command-line analysis for large-scale PCAP processing"
     ],
     practicalExercise: {
-      title: "Wireshark Filter Mastery",
-      description: "Practice writing filters to isolate specific traffic patterns.",
+      title: "Wireshark Triage Walkthrough",
+      description: "Use Wireshark filters and statistics to triage a suspicious capture.",
       steps: [
-        "Download a sample PCAP from malware-traffic-analysis.net",
-        "Use display filters to isolate all DNS queries",
-        "Follow a TCP stream to reconstruct an HTTP session",
-        "Use Statistics → Conversations to find the top talkers",
-        "Check Expert Information for any protocol anomalies"
+        "Read the Wireshark findings in the scenario",
+        "Translate each finding into the right filter or menu option",
+        "Answer the questions using only the values shown"
+      ],
+      labScenario: "You open the file 'incident-2026-04-30.pcapng' in Wireshark. The capture covers 30 minutes from sensor SPAN-DC-01. You apply the display filter 'dns' and see 4,812 DNS queries from a single host, 10.20.4.18, all going to the resolver 8.8.8.8. Statistics → Conversations shows 10.20.4.18 is the top talker with 612 MB of HTTP traffic. You right-click an HTTP packet and choose 'Follow → TCP Stream' to reconstruct a session that uploads a file named 'payroll_2026.zip' to the host upload.evilshare.io. Expert Information flags 47 TCP retransmissions on that same conversation.",
+      labQuestions: [
+        {
+          id: "2.1-q1",
+          question: "Which display filter did you apply to isolate the 4,812 DNS queries?",
+          answer: "dns",
+          hint: "The scenario states the exact filter used."
+        },
+        {
+          id: "2.1-q2",
+          question: "Which internal host is the top talker in the capture?",
+          answer: "10.20.4.18",
+          hint: "Statistics → Conversations identifies it."
+        },
+        {
+          id: "2.1-q3",
+          question: "Which Wireshark feature was used to reconstruct the upload session?",
+          answer: "Follow TCP Stream",
+          hint: "The scenario mentions a right-click menu option."
+        },
+        {
+          id: "2.1-q4",
+          question: "What filename was uploaded to upload.evilshare.io?",
+          answer: "payroll_2026.zip",
+          hint: "The reconstructed stream shows the file name."
+        }
       ]
     }
   },
