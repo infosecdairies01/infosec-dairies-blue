@@ -11813,6 +11813,42 @@ grep "UFW BLOCK" /var/log/syslog | awk '{print $12}' | cut -d= -f2 | sort | uniq
       "Package manager logs show software installations and removals",
       "AppArmor/SELinux denials indicate blocked malicious behavior"
     ],
+    practicalExercise: {
+      title: "Hunt Persistence in System Logs",
+      description: "Use Linux system and cron logs to find attacker persistence.",
+      steps: [
+        "Read the log snippets",
+        "Identify the persistence technique",
+        "Answer with short keywords"
+      ],
+      labScenario: "On a suspected compromised Linux web server you find: in /var/log/cron a new entry runs '/tmp/.update.sh' every 5 minutes as root; in /var/log/dpkg.log a recent install of 'netcat-openbsd'; in /var/log/syslog repeated AppArmor 'DENIED' messages for the apache2 profile trying to execute /bin/bash; and in /var/log/kern.log iptables 'BLOCK' messages showing outbound traffic to 185.220.101.7 on port 4444.",
+      labQuestions: [
+        {
+          id: "3.3-q1",
+          question: "Which log file revealed the malicious scheduled job?",
+          answer: "cron",
+          hint: "Stored under /var/log/ and tracks scheduled tasks."
+        },
+        {
+          id: "3.3-q2",
+          question: "What suspicious tool was recently installed via the package manager?",
+          answer: "netcat",
+          hint: "Common reverse shell utility."
+        },
+        {
+          id: "3.3-q3",
+          question: "What security control blocked apache from spawning a shell?",
+          answer: "AppArmor",
+          hint: "Mandatory access control system on Ubuntu/Debian."
+        },
+        {
+          id: "3.3-q4",
+          question: "What port is associated with the blocked outbound connection?",
+          answer: "4444",
+          hint: "Common Metasploit/reverse shell port in the kernel log."
+        }
+      ]
+    }
   },
   {
     id: "3.4",
