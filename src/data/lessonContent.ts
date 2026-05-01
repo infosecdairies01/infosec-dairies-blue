@@ -12221,14 +12221,39 @@ Document all IOCs:
       "IOC extraction is critical for blocking and hunting"
     ],
     practicalExercise: {
-      title: "Write the Incident Report",
-      description: "Create a formal incident report from this investigation.",
+      title: "Linux Web Server Compromise Investigation",
+      description: "Correlate auth, web, and system logs to map a full attack.",
       steps: [
-        "Write an executive summary",
-        "Document the attack chain (MITRE ATT&CK mapping)",
-        "List all IOCs with context",
-        "Provide remediation steps",
-        "Suggest detection improvements"
+        "Read the multi-source log scenario",
+        "Identify each phase of the intrusion",
+        "Provide short answers"
+      ],
+      labScenario: "A Linux web server is suspected of being compromised. In Apache access.log you see GET requests with '../../etc/passwd' from 45.77.10.20, then a POST to /upload.php uploading 'shell.php', then GET /uploads/shell.php?cmd=id. In auth.log: 'Accepted publickey for www-data'. In /var/log/cron: a new job '@reboot /usr/bin/python3 /tmp/.bd.py'. In syslog: a new systemd service 'sysmonitor.service' was enabled.",
+      labQuestions: [
+        {
+          id: "3.5-q1",
+          question: "What initial attack technique is shown by the '../../etc/passwd' request?",
+          answer: "path traversal",
+          hint: "Also known as directory traversal."
+        },
+        {
+          id: "3.5-q2",
+          question: "What type of malicious file did the attacker upload?",
+          answer: "web shell",
+          hint: "shell.php executed via cmd= parameter."
+        },
+        {
+          id: "3.5-q3",
+          question: "Name ONE persistence mechanism used by the attacker.",
+          answer: "cron",
+          hint: "Either the @reboot cron job or the new systemd service is acceptable."
+        },
+        {
+          id: "3.5-q4",
+          question: "What is the attacker's source IP?",
+          answer: "45.77.10.20",
+          hint: "Seen in the Apache access log entries."
+        }
       ]
     }
   },
