@@ -10465,13 +10465,39 @@ Always correlate events! A single 4624 tells you someone logged in. Combine with
       "Always correlate multiple event types for complete visibility"
     ],
     practicalExercise: {
-      title: "Event ID Flash Cards",
-      description: "Create flash cards to memorize the top 15 critical Event IDs.",
+      title: "Critical Event ID Triage",
+      description: "Identify the right Windows Event ID for each suspicious activity.",
       steps: [
-        "Write Event ID on one side, description on the other",
-        "Practice identifying events by ID",
-        "Test yourself on logon types",
-        "Quiz a colleague on the events"
+        "Read the scenario",
+        "Match each behavior to its Event ID",
+        "Provide just the numeric ID"
+      ],
+      labScenario: "Reviewing a compromised Windows server, you see four suspicious activities in the Security log: (1) an attacker successfully logged in after multiple failed attempts, (2) a new local user account was created, (3) the user was added to the Administrators group, and (4) the Security event log itself was cleared to hide tracks. You need to confirm the Event ID associated with each action.",
+      labQuestions: [
+        {
+          id: "2.2-q1",
+          question: "What Event ID indicates a successful logon?",
+          answer: "4624",
+          hint: "The most common authentication success event."
+        },
+        {
+          id: "2.2-q2",
+          question: "What Event ID is logged when a new user account is created?",
+          answer: "4720",
+          hint: "Account management event in the 47xx range."
+        },
+        {
+          id: "2.2-q3",
+          question: "What Event ID indicates a member was added to a security-enabled group?",
+          answer: "4732",
+          hint: "Group membership change event."
+        },
+        {
+          id: "2.2-q4",
+          question: "What Event ID is logged when the audit log is cleared?",
+          answer: "1102",
+          hint: "A four-digit ID outside the 4xxx range."
+        }
       ]
     }
   },
