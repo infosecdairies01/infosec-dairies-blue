@@ -14537,6 +14537,36 @@ earliest=-24h
       "REX extracts data from unstructured text using regex",
       "SORT, DEDUP, and HEAD/TAIL organize and limit results"
     ],
+    practicalExercise: {
+      title: "Filter Failed Logins for One User",
+      description: "Build a filtered SIEM query to isolate suspicious activity.",
+      steps: [
+        "Read the scenario",
+        "Decide which filters narrow results to the right user and event",
+        "Answer the questions"
+      ],
+      labScenario: "An analyst needs to find all failed Windows logins (EventCode=4625) for user `j.smith` in the last 24 hours, showing only the time, source IP, and workstation. The index is `wineventlog`.",
+      labQuestions: [
+        {
+          id: "3.2-q1",
+          question: "Which Windows EventCode represents a failed logon?",
+          answer: "4625",
+          hint: "Check the scenario."
+        },
+        {
+          id: "3.2-q2",
+          question: "Which command limits the displayed columns to only time, IP, and workstation?",
+          answer: "table",
+          hint: "Used to pick specific fields for output."
+        },
+        {
+          id: "3.2-q3",
+          question: "Which boolean operator joins `EventCode=4625` AND `user=j.smith` in the filter?",
+          answer: "AND",
+          hint: "Both conditions must be true."
+        }
+      ]
+    }
   },
   {
     id: "3.3",
