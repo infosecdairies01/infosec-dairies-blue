@@ -19136,12 +19136,38 @@ ICMP carries diagnostic messages but is frequently weaponized:
     ],
     practicalExercise: {
       title: "Protocol Anomaly Identification",
-      description: "Analyze sample traffic logs and identify protocol violations.",
+      description: "Use protocol knowledge to spot suspicious behavior in captured traffic.",
       steps: [
-        "Open a sample PCAP in Wireshark and filter for TCP conversations",
-        "Identify any abnormal TCP flag combinations (SYN+FIN, NULL, XMAS)",
-        "Filter for DNS traffic and look for high-entropy domain names or TXT queries",
-        "Examine HTTP traffic for suspicious User-Agent strings or non-standard methods"
+        "Review the captured traffic in the scenario",
+        "Match each finding to the protocol it abuses",
+        "Answer based only on what the scenario shows"
+      ],
+      labScenario: "An NSM analyst reviews a 10-minute capture from the data-center sensor. They observe: (1) host 10.10.5.22 sending TCP packets to 198.51.100.7 with both the SYN and FIN flags set; (2) repeated DNS TXT record queries to 'a8f3c.update.badc2.net' returning 480-byte responses; (3) outbound HTTP requests to evil-cdn.io using the User-Agent string 'curl/7.68.0' from a workstation that normally runs only Chrome; (4) SNMP traffic on UDP port 161 carrying the community string 'public' in cleartext.",
+      labQuestions: [
+        {
+          id: "1.2-q1",
+          question: "Which abnormal TCP flag combination did host 10.10.5.22 send?",
+          answer: "SYN+FIN",
+          hint: "Two flags should never appear together in a normal handshake."
+        },
+        {
+          id: "1.2-q2",
+          question: "Which DNS record type is being abused for likely tunneling?",
+          answer: "TXT",
+          hint: "The scenario names the record type used for large 480-byte responses."
+        },
+        {
+          id: "1.2-q3",
+          question: "Which suspicious User-Agent string was seen on a Chrome-only workstation?",
+          answer: "curl/7.68.0",
+          hint: "Look at the HTTP request details."
+        },
+        {
+          id: "1.2-q4",
+          question: "Which UDP port carried the cleartext SNMP community string?",
+          answer: "161",
+          hint: "The scenario lists the SNMP port directly."
+        }
       ]
     }
   },
