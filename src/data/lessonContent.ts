@@ -23283,6 +23283,43 @@ Before removal, you must find every way the attacker can return:
       "When in doubt, rebuild from clean media rather than attempting to clean a compromised system",
       "KRBTGT reset is required whenever Active Directory domain compromise is confirmed"
     ],
+    practicalExercise: {
+      title: "Eradicating a Persistent Foothold",
+      description: "Identify what must be removed to fully evict the attacker.",
+      steps: [
+        "Read the scenario",
+        "List each persistence mechanism mentioned",
+        "Decide between cleaning and rebuilding",
+        "Answer the questions"
+      ],
+      labScenario: "On compromised web server WEB-DMZ-01 you found a webshell at /var/www/html/help.php, a new local account named svc_update, an SSH key added to /root/.ssh/authorized_keys, and a cron job running every 10 minutes calling /tmp/.x. The attacker also dumped LSASS on a Windows DC and pass-the-hash was observed. Initial access was an unpatched Log4j vulnerability.",
+      labQuestions: [
+        {
+          id: "ir-5.1-q1",
+          question: "What is the filename of the webshell?",
+          answer: "help.php",
+          hint: "Found under /var/www/html/."
+        },
+        {
+          id: "ir-5.1-q2",
+          question: "What is the name of the backdoor account?",
+          answer: "svc_update",
+          hint: "Listed in the scenario."
+        },
+        {
+          id: "ir-5.1-q3",
+          question: "Which AD account must be reset twice because the DC was compromised?",
+          answer: "KRBTGT",
+          hint: "Required after domain compromise."
+        },
+        {
+          id: "ir-5.1-q4",
+          question: "Which vulnerability provided initial access?",
+          answer: "Log4j",
+          hint: "Stated at the end of the scenario."
+        }
+      ]
+    }
   },
   {
     id: "5.2",
