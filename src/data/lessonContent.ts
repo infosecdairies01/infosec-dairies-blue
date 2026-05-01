@@ -23000,6 +23000,43 @@ Short-term containment focuses on **immediately stopping the attacker's ability 
       "Never power off a compromised system before capturing volatile memory",
       "EDR isolation is preferred over physical disconnection as it maintains management access"
     ],
+    practicalExercise: {
+      title: "Containing an Active Beacon",
+      description: "Decide the right short-term containment actions for an active C2 beacon.",
+      steps: [
+        "Read the scenario carefully",
+        "Identify the affected host and attacker IP",
+        "Choose containment that preserves evidence",
+        "Answer the questions"
+      ],
+      labScenario: "Your EDR shows host WKS-HR-14 beaconing every 60 seconds to attacker IP 203.0.113.45 over HTTPS. The user is on PTO and the laptop is in the office, plugged in. Memory has not been captured yet. The CISO wants the beacon stopped within 10 minutes but also wants forensic evidence preserved.",
+      labQuestions: [
+        {
+          id: "ir-4.1-q1",
+          question: "Which host needs to be contained?",
+          answer: "WKS-HR-14",
+          hint: "Named in the scenario."
+        },
+        {
+          id: "ir-4.1-q2",
+          question: "Which attacker IP should be blocked at the firewall?",
+          answer: "203.0.113.45",
+          hint: "The destination of the beacon."
+        },
+        {
+          id: "ir-4.1-q3",
+          question: "What containment action preserves evidence and stops the beacon? (one word)",
+          answer: "EDR isolation",
+          hint: "Network-isolates the host but keeps management access."
+        },
+        {
+          id: "ir-4.1-q4",
+          question: "What must you capture before any action that could disrupt running processes?",
+          answer: "memory",
+          hint: "Volatile data lost on shutdown."
+        }
+      ]
+    }
   },
   {
     id: "4.2",
