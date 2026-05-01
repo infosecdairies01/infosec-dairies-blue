@@ -15294,6 +15294,37 @@ index=security EventCode=4625
       "Group by multiple fields for detailed breakdowns",
       "Aggregation is essential for detecting patterns like brute force attacks"
     ],
+    practicalExercise: {
+      title: "Detect Brute Force with Aggregation",
+      description: "Use stats to count failed logins per source IP and spot the attacker.",
+      steps: [
+        "Review the scenario data",
+        "Decide which command counts events per IP",
+        "Identify the attacking IP",
+        "Answer the questions"
+      ],
+      labScenario: "In the last hour, your SIEM shows EventCode=4625 (failed logon) counts grouped by src_ip: 10.0.0.5 = 3 failures, 10.0.0.8 = 2 failures, 198.51.100.77 = 412 failures, 192.168.1.20 = 1 failure. Your threshold for brute force is 50 failures per hour.",
+      labQuestions: [
+        {
+          id: "4.1-q1",
+          question: "Which IP address is conducting a brute force attack?",
+          answer: "198.51.100.77",
+          hint: "It vastly exceeds the threshold."
+        },
+        {
+          id: "4.1-q2",
+          question: "Which SIEM command groups and counts events per field (e.g., per src_ip)?",
+          answer: "stats",
+          hint: "Standard aggregation command."
+        },
+        {
+          id: "4.1-q3",
+          question: "Which command would you use to plot these failures over time?",
+          answer: "timechart",
+          hint: "Creates time-series visualizations."
+        }
+      ]
+    }
   },
   {
     id: "4.2",
