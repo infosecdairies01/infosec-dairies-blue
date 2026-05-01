@@ -12394,6 +12394,37 @@ Normalized Fields:
       { title: "Gartner SIEM Magic Quadrant", type: "article" },
       { title: "SANS SIEM Guide", type: "documentation" }
     ],
+    practicalExercise: {
+      title: "SIEM Coverage Gap Analysis",
+      description: "Identify what a SIEM should cover in a small SOC environment.",
+      steps: [
+        "Read the scenario carefully",
+        "Identify which log sources are missing",
+        "Match SIEM capabilities to business needs",
+        "Answer the questions"
+      ],
+      labScenario: "A 200-employee company just deployed a SIEM. It collects firewall and Windows server logs only. Last week, an attacker phished an employee, logged into Microsoft 365, and exfiltrated files from a cloud share. The SOC saw nothing in the SIEM. Management asks why the SIEM missed it and what to add.",
+      labQuestions: [
+        {
+          id: "1.1-q1",
+          question: "Which critical log source was missing that would have shown the phished login?",
+          answer: "cloud",
+          hint: "Think about where the attacker actually logged in."
+        },
+        {
+          id: "1.1-q2",
+          question: "What SIEM core capability connects events from email, endpoint, and cloud to spot the full attack?",
+          answer: "correlation",
+          hint: "It links related events across sources."
+        },
+        {
+          id: "1.1-q3",
+          question: "Name one compliance benefit a SIEM provides through long-term log storage.",
+          answer: "retention",
+          hint: "Regulators require keeping logs for a set period."
+        }
+      ]
+    }
   },
   {
     id: "1.2",
