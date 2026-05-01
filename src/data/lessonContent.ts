@@ -23634,6 +23634,43 @@ The incident report is the permanent record of what happened, what was done, and
       "Separate observed facts from analytical conclusions",
       "Recommendations should be categorized by timeframe: immediate, short-term, and long-term"
     ],
+    practicalExercise: {
+      title: "Drafting the Incident Report",
+      description: "Pull the right facts from the case notes into the report sections.",
+      steps: [
+        "Read the scenario",
+        "Match each fact to the correct report section",
+        "Keep numbers and times precise",
+        "Answer the questions"
+      ],
+      labScenario: "Incident INC-2026-041 was declared SEV-2. A phishing email was delivered at 2026-04-22 08:32 UTC, the user clicked at 08:45 UTC, a Cobalt Strike beacon started at 08:46 UTC, and containment completed at 11:15 UTC. 3 servers and 12 user accounts were affected. No regulated data was exposed. The root cause was a missing email attachment sandbox.",
+      labQuestions: [
+        {
+          id: "ir-6.2-q1",
+          question: "What incident ID is being reported?",
+          answer: "INC-2026-041",
+          hint: "Top of the scenario."
+        },
+        {
+          id: "ir-6.2-q2",
+          question: "What severity was assigned?",
+          answer: "SEV-2",
+          hint: "Stated in the first sentence."
+        },
+        {
+          id: "ir-6.2-q3",
+          question: "How many servers were affected?",
+          answer: "3",
+          hint: "Be precise — number, not 'several'."
+        },
+        {
+          id: "ir-6.2-q4",
+          question: "What was the root cause?",
+          answer: "missing email attachment sandbox",
+          hint: "Stated at the end of the scenario."
+        }
+      ]
+    }
   },
   {
     id: "6.3",
