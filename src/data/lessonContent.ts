@@ -20323,6 +20323,43 @@ filebeat.inputs:
       "Threshold types (limit, threshold, both) control alert frequency",
       "A structured triage workflow prevents alert fatigue"
     ],
+    practicalExercise: {
+      title: "Tune a Noisy Suricata Rule",
+      description: "Reduce alert fatigue by analyzing a noisy rule and applying suppression.",
+      steps: [
+        "Read the alert volume in the scenario",
+        "Identify the source of the false positives",
+        "Decide the right tuning action",
+        "Answer the questions"
+      ],
+      labScenario: "Your Suricata sensor generated 4,820 alerts in the last 24 hours from rule SID 2013030 'ET POLICY curl User-Agent Outbound'. Investigation shows 4,710 of those alerts came from internal monitoring host 10.20.5.12 hitting api.internal.corp every 60 seconds for health checks. The remaining 110 alerts are from various workstations and require review.",
+      labQuestions: [
+        {
+          id: "3.3-q1",
+          question: "Which Suricata SID is generating the noise?",
+          answer: "2013030",
+          hint: "Listed at the start of the scenario."
+        },
+        {
+          id: "3.3-q2",
+          question: "Which internal source IP accounts for the false positives?",
+          answer: "10.20.5.12",
+          hint: "The monitoring host named in the scenario."
+        },
+        {
+          id: "3.3-q3",
+          question: "Which destination host is the monitoring traffic targeting?",
+          answer: "api.internal.corp",
+          hint: "Stated in the health check description."
+        },
+        {
+          id: "3.3-q4",
+          question: "How many alerts remain for analyst review after suppressing the monitoring host?",
+          answer: "110",
+          hint: "Total minus the false positives."
+        }
+      ]
+    }
   },
   {
     id: "3.4",
@@ -20794,6 +20831,49 @@ Document each hunt with:
       "Data exfiltration detection uses volume asymmetry and protocol tunneling indicators",
       "Documenting hunts as playbooks ensures repeatable, systematic hunting"
     ],
+    practicalExercise: {
+      title: "Hunt a Beacon in Zeek Logs",
+      description: "Use Zeek conn.log patterns to identify a C2 beacon.",
+      steps: [
+        "Review the beaconing pattern in the scenario",
+        "Identify the suspicious host and destination",
+        "Calculate the beacon interval",
+        "Answer the questions"
+      ],
+      labScenario: "While hunting in conn.log, you find host 192.168.10.45 making 1,440 connections in 24 hours to external IP 185.220.101.7 on port 443. Each connection lasts ~2 seconds and transfers exactly 512 bytes outbound and 128 bytes inbound. The connections occur every 60 seconds with negligible jitter. SSL log shows a self-signed certificate with CN 'cloudsync.io'.",
+      labQuestions: [
+        {
+          id: "4.3-q1",
+          question: "Which internal host is exhibiting beaconing behavior?",
+          answer: "192.168.10.45",
+          hint: "The source IP in the scenario."
+        },
+        {
+          id: "4.3-q2",
+          question: "What is the destination IP of the suspected C2 server?",
+          answer: "185.220.101.7",
+          hint: "External IP listed in the conn.log finding."
+        },
+        {
+          id: "4.3-q3",
+          question: "What is the beacon interval in seconds?",
+          answer: "60",
+          hint: "Stated as the connection frequency."
+        },
+        {
+          id: "4.3-q4",
+          question: "What CN is presented in the self-signed SSL certificate?",
+          answer: "cloudsync.io",
+          hint: "Listed in the SSL log."
+        },
+        {
+          id: "4.3-q5",
+          question: "Which destination port is the beacon using?",
+          answer: "443",
+          hint: "Standard HTTPS port stated in the scenario."
+        }
+      ]
+    }
   },
   {
     id: "4.4",
@@ -21159,6 +21239,49 @@ Attackers choose protocols likely to pass through firewalls:
       "DNS-based C2 uses high query volumes and encoded subdomain labels",
       "Multi-layered detection (JA3 + timing + certificates) reduces evasion success"
     ],
+    practicalExercise: {
+      title: "Investigate DNS-Based C2",
+      description: "Detect data exfiltration over DNS by analyzing query patterns.",
+      steps: [
+        "Read the DNS log summary in the scenario",
+        "Identify the suspicious domain and host",
+        "Decide which indicator confirms tunneling",
+        "Answer the questions"
+      ],
+      labScenario: "Your Zeek dns.log shows host 10.50.2.18 making 2,340 DNS queries to subdomains of 'updates-cdn.click' in the last hour. Each query name is 58 characters long and looks like 'a7f9k2m8.b3xq.updates-cdn.click'. Response type is TXT with 220-byte payloads. No other internal host queries this domain. The corporate DNS resolver did not block it because the domain is only 6 hours old.",
+      labQuestions: [
+        {
+          id: "5.2-q1",
+          question: "Which internal host is performing the suspicious DNS activity?",
+          answer: "10.50.2.18",
+          hint: "Source IP in the dns.log."
+        },
+        {
+          id: "5.2-q2",
+          question: "What is the parent domain being abused for tunneling?",
+          answer: "updates-cdn.click",
+          hint: "Named in the scenario."
+        },
+        {
+          id: "5.2-q3",
+          question: "How many DNS queries did the host make in the last hour?",
+          answer: "2340",
+          hint: "Total query count."
+        },
+        {
+          id: "5.2-q4",
+          question: "Which DNS record type is being used to carry the payload?",
+          answer: "TXT",
+          hint: "Listed as the response type."
+        },
+        {
+          id: "5.2-q5",
+          question: "How old (in hours) is the abused domain?",
+          answer: "6",
+          hint: "Stated at the end of the scenario."
+        }
+      ]
+    }
   },
   {
     id: "5.3",
@@ -21380,6 +21503,55 @@ Network-based DLP can inspect content for:
       "DNS exfiltration encodes data in subdomain labels and is detectable through query analysis",
       "Cloud storage exfiltration is harder to detect but SSL SNI reveals destinations"
     ],
+    practicalExercise: {
+      title: "Spot Off-Hours Data Exfiltration",
+      description: "Identify a large outbound transfer hidden in off-hours traffic.",
+      steps: [
+        "Review the conn.log summary",
+        "Identify the host and destination involved",
+        "Confirm the volume asymmetry",
+        "Answer the questions"
+      ],
+      labScenario: "Reviewing yesterday's conn.log you find host 172.16.4.88 (workstation belonging to user 'r.patel') established a single SSL connection to 198.51.100.205 at 02:47 UTC lasting 38 minutes. The connection uploaded 4.2 GB and downloaded only 18 MB. SSL SNI shows 'mega.nz'. The user's normal working hours are 09:00-18:00 IST, and there is no business justification on file for using mega.nz.",
+      labQuestions: [
+        {
+          id: "5.4-q1",
+          question: "Which internal host performed the transfer?",
+          answer: "172.16.4.88",
+          hint: "Source IP in conn.log."
+        },
+        {
+          id: "5.4-q2",
+          question: "Which user owns that workstation?",
+          answer: "r.patel",
+          hint: "Stated next to the host."
+        },
+        {
+          id: "5.4-q3",
+          question: "What external destination IP received the data?",
+          answer: "198.51.100.205",
+          hint: "Listed in the connection record."
+        },
+        {
+          id: "5.4-q4",
+          question: "What SNI value reveals the cloud storage service used?",
+          answer: "mega.nz",
+          hint: "From the SSL log."
+        },
+        {
+          id: "5.4-q5",
+          question: "How much data was uploaded during the session?",
+          answer: "4.2 GB",
+          hint: "The asymmetric upload volume."
+        },
+        {
+          id: "5.4-q6",
+          question: "At what UTC time did the connection start?",
+          answer: "02:47",
+          hint: "Off-hours timestamp."
+        }
+      ]
+    }
   },
 
   // Module 6: Practical NSM Operations
@@ -21635,6 +21807,55 @@ tshark -r evidence.pcap -Y "dns && ip.src==10.0.1.50" \\
       "File extraction from PCAPs preserves malware samples and stolen documents",
       "Forensic reports must reference specific evidence for every claim"
     ],
+    practicalExercise: {
+      title: "Reconstruct an Intrusion Timeline",
+      description: "Build a chronological timeline from PCAP and Zeek evidence.",
+      steps: [
+        "Read each evidence item in the scenario",
+        "Order events by timestamp",
+        "Identify the IOCs",
+        "Answer the questions"
+      ],
+      labScenario: "You are reviewing evidence from compromised host 10.10.7.22. Zeek http.log shows a download of 'invoice.doc' (SHA256: a91f...c4) from 91.219.236.18 at 13:02 UTC. At 13:04 UTC conn.log records a new outbound HTTPS session from 10.10.7.22 to 45.77.65.211:8443. At 13:11 UTC dns.log shows queries for 'auth.payroll-helpdesk.net'. At 14:30 UTC files.log records a 1.8 GB upload to the same destination. The PCAP was hashed (MD5: 7e3b...91) and stored in evidence locker E-2049.",
+      labQuestions: [
+        {
+          id: "6.2-q1",
+          question: "Which host is the subject of the investigation?",
+          answer: "10.10.7.22",
+          hint: "Compromised host named in the scenario."
+        },
+        {
+          id: "6.2-q2",
+          question: "What was the name of the malicious document downloaded?",
+          answer: "invoice.doc",
+          hint: "Listed in http.log."
+        },
+        {
+          id: "6.2-q3",
+          question: "What IP delivered the malicious document?",
+          answer: "91.219.236.18",
+          hint: "Source of the download in http.log."
+        },
+        {
+          id: "6.2-q4",
+          question: "What C2 IP and port did the host beacon to?",
+          answer: "45.77.65.211:8443",
+          hint: "From conn.log at 13:04 UTC."
+        },
+        {
+          id: "6.2-q5",
+          question: "Which domain was queried after initial compromise?",
+          answer: "auth.payroll-helpdesk.net",
+          hint: "From dns.log at 13:11 UTC."
+        },
+        {
+          id: "6.2-q6",
+          question: "What is the evidence locker ID for the PCAP?",
+          answer: "E-2049",
+          hint: "Stated at the end of the scenario."
+        }
+      ]
+    }
   },
   {
     id: "6.3",
