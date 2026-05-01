@@ -11593,14 +11593,39 @@ grep "to group" /var/log/auth.log
       "PAM logs record authentication across all services"
     ],
     practicalExercise: {
-      title: "Auth Log Analysis",
-      description: "Analyze a sample auth.log file for security events.",
+      title: "Linux Auth Log Investigation",
+      description: "Hunt brute force and privilege escalation in /var/log/auth.log.",
       steps: [
-        "Count total failed SSH logins",
-        "Identify the top 5 source IPs for failed logins",
-        "Find any successful logins after failed attempts",
-        "List all sudo commands run as root",
-        "Identify any new user accounts created"
+        "Read the auth.log scenario",
+        "Identify attacker behavior",
+        "Provide concise answers"
+      ],
+      labScenario: "In /var/log/auth.log you see 312 'Failed password for root' entries from IP 198.51.100.7 over 8 minutes, followed by 'Accepted password for backup from 198.51.100.7'. Minutes later: 'sudo: backup : user NOT in sudoers ; COMMAND=/bin/bash', then 'useradd: new user: name=helper, UID=0, GID=0', and finally 'session opened for user helper'.",
+      labQuestions: [
+        {
+          id: "3.2-q1",
+          question: "Which user account did the attacker successfully log in as?",
+          answer: "backup",
+          hint: "Look at the 'Accepted password' line."
+        },
+        {
+          id: "3.2-q2",
+          question: "What does 'NOT in sudoers' indicate the attacker was attempting?",
+          answer: "privilege escalation",
+          hint: "Trying to run a command they aren't allowed to."
+        },
+        {
+          id: "3.2-q3",
+          question: "What is suspicious about the new user 'helper'?",
+          answer: "UID 0",
+          hint: "Its UID/GID matches the root user."
+        },
+        {
+          id: "3.2-q4",
+          question: "What is the source IP of the attack?",
+          answer: "198.51.100.7",
+          hint: "Same IP appears in failed and accepted login lines."
+        }
       ]
     }
   },
