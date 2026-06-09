@@ -32748,6 +32748,38 @@ AUTOMATE:                    HUMAN DECISION:
       "Malware playbooks should validate, enrich, contain, investigate, and escalate in sequence",
       "Automate data gathering and known-bad blocking; keep human decisions for impact assessment"
     ],
+    practicalExercise: {
+      title: "Design a Phishing SOAR Playbook",
+      description: "Map a real phishing alert to a SOAR playbook, deciding which steps to automate vs. escalate.",
+      steps: [
+        "List every step from alert ingestion to closure",
+        "Tag each step as AUTO, HUMAN, or CONDITIONAL",
+        "Define enrichment APIs and required inputs",
+        "Set scoring thresholds for automated containment vs analyst review",
+        "Define rollback and idempotency safeguards"
+      ],
+      labScenario: "Your SOAR (Splunk SOAR) receives a phishing alert from the email gateway. The alert contains: sender email, message-id, subject, body text, attached URLs, file hashes. Available integrations: VirusTotal, URLScan.io, GreyNoise, Microsoft 365 (graph API to purge mail), Palo Alto Panorama (block URL/IP), CrowdStrike (host containment), Jira (ticketing), Slack (notifications). Current MTTR for phishing is 47 minutes per analyst. Leadership wants this reduced to under 10 minutes for low/medium-severity cases. VIP user list and finance team list are available as lookup tables.",
+      labQuestions: [
+        {
+          id: "salp-10.2-q1",
+          question: "Which step should remain a HUMAN decision even at full automation maturity?",
+          answer: "Containment of a VIP user's mailbox or host",
+          hint: "Automated actions on executives carry significant business risk."
+        },
+        {
+          id: "salp-10.2-q2",
+          question: "What property ensures the playbook can safely re-run after a transient API failure?",
+          answer: "Idempotency",
+          hint: "Re-running should produce the same end state, not create duplicates."
+        },
+        {
+          id: "salp-10.2-q3",
+          question: "Which enrichment source best confirms whether a sender IP is opportunistic vs targeted?",
+          answer: "GreyNoise",
+          hint: "It distinguishes internet-wide noise from targeted activity."
+        }
+      ]
+    },
   },
   {
     id: "10.3",
