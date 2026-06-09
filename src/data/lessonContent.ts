@@ -31293,6 +31293,38 @@ Convert hunting findings into automated detections to catch the same technique i
       "Document every hunt with hypothesis, methodology, and findings",
       "Operationalize findings by creating new automated detection rules"
     ],
+    practicalExercise: {
+      title: "Run a Hypothesis-Driven Hunt",
+      description: "Plan and execute a structured hunt for malicious WMI persistence across the enterprise.",
+      steps: [
+        "Write a one-sentence hypothesis tied to a MITRE ATT&CK sub-technique",
+        "Identify required data sources and the search query",
+        "Apply frequency/stack analysis to find rare combinations",
+        "Investigate top outliers and validate findings",
+        "Convert confirmed TTPs into a SIEM detection rule"
+      ],
+      labScenario: "Threat intel reports that FIN12 is increasingly using WMI Event Subscriptions (T1546.003) for persistence in ransomware staging. Your environment has 4,200 Windows endpoints reporting Sysmon Event IDs 19 (WmiEventFilter), 20 (WmiEventConsumer), and 21 (WmiEventConsumerToFilter). A baseline search over the last 30 days returns 87 endpoints with Event ID 20 entries. Stacking on the `Destination` field shows: `CommandLineEventConsumer` with `powershell.exe -nop -w hidden -enc <base64>` appears on only 2 hosts (DEV-LT-19 and HR-LT-08), both created within the last 5 days. All other endpoints use legitimate SCCM or Defender consumers.",
+      labQuestions: [
+        {
+          id: "salp-8.3-q1",
+          question: "Which analytic technique surfaced the malicious consumers from the noise?",
+          answer: "Stack counting",
+          hint: "Counting how often each value appears and looking at the rarest entries."
+        },
+        {
+          id: "salp-8.3-q2",
+          question: "Which Sysmon event ID is most useful for detecting this persistence technique?",
+          answer: "20",
+          hint: "It captures the creation of the WMI event consumer itself."
+        },
+        {
+          id: "salp-8.3-q3",
+          question: "What is the right next step after confirming both hosts are compromised?",
+          answer: "Escalate to IR and operationalize a detection",
+          hint: "Hunting findings should generate both a response action and a new rule."
+        }
+      ]
+    },
   },
   {
     id: "8.4",
