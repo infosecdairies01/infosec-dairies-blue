@@ -31790,6 +31790,38 @@ Known: Malware detected at 14:34
       "Correlate file system, event log, registry, and network timestamps",
       "Always work in UTC and document your pivot points"
     ],
+    practicalExercise: {
+      title: "Build a Super Timeline of an Intrusion",
+      description: "Use a plaso super timeline to reconstruct the sequence of an intrusion from initial access through data staging.",
+      steps: [
+        "Identify the known pivot event and convert it to UTC",
+        "Define a tight time window around the pivot",
+        "Correlate filesystem MFT, Windows event logs, registry, and prefetch entries",
+        "Reconstruct the attack chain in chronological order",
+        "Produce a clean timeline export for the incident report"
+      ],
+      labScenario: "Plaso super timeline from CFO-LT-04 (Sarah Chen). Known pivot: at 2026-03-11 14:22:17 UTC, EDR alerted on credential dumping. Working backward, the timeline shows: 13:58:02 prefetch entry for `OUTLOOK.EXE`, 13:58:44 file creation `C:\\Users\\schen\\AppData\\Local\\Temp\\Q1_Bonus_List.xlsm`, 13:59:11 MS Office MRU registry write referencing that file, 14:01:33 prefetch for `POWERSHELL.EXE`, 14:01:34 file creation `C:\\Users\\schen\\AppData\\Roaming\\update.exe`, 14:01:38 Run key registry write `HKCU\\...\\Run\\WinUpdate = update.exe`, 14:22:17 MFT entry for `lsass.dmp` (180MB) in `C:\\Users\\Public\\`, 14:25:02 prefetch for `7Z.EXE`, 14:26:11 file creation `lsass.7z` (44MB).",
+      labQuestions: [
+        {
+          id: "salp-9.3-q1",
+          question: "What was the initial access vector based on the timeline?",
+          answer: "Malicious Excel macro",
+          hint: "Look at the file extension that was created right before PowerShell ran."
+        },
+        {
+          id: "salp-9.3-q2",
+          question: "Which artifact proves the attacker established persistence?",
+          answer: "Run key registry entry",
+          hint: "HKCU Run keys execute the referenced binary at every user logon."
+        },
+        {
+          id: "salp-9.3-q3",
+          question: "What is the purpose of the 7z.exe activity at the end of the timeline?",
+          answer: "Compressing stolen credentials for exfiltration",
+          hint: "Compressing a lsass dump is a classic pre-exfil staging step."
+        }
+      ]
+    },
   },
   {
     id: "9.4",
