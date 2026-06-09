@@ -29247,6 +29247,38 @@ Complete end-to-end phishing incident handling.
       "After credential compromise: reset, revoke, check forwarding",
       "Always update detection rules post-incident"
     ],
+    practicalExercise: {
+      title: "Phishing Incident End-to-End",
+      description: "Execute the full phishing response playbook on a credential-harvesting campaign targeting the finance team.",
+      steps: [
+        "Capture and preserve original email evidence",
+        "Identify all recipients and who clicked or submitted credentials",
+        "Contain the URL, sender, and any compromised accounts",
+        "Eradicate the email from all mailboxes",
+        "Document IOCs and update detections"
+      ],
+      labScenario: "At 11:32 UTC, 6 finance users received an email from `accounts-payable@dropb0x-secure.com` (note the zero) titled 'Pending Vendor Invoice - Action Required'. The email links to `https://dropb0x-secure.com/o365/login.php`, a pixel-perfect Microsoft 365 login clone hosted on a domain registered 3 days ago. Proxy logs show 2 users (j.patel and r.singh) submitted POST requests to /login.php. Within 30 minutes, both accounts created Outlook forwarding rules sending all mail with 'invoice' or 'wire' to `archive.relay@protonmail.com`, and j.patel sent an email to the CFO requesting a $48,000 wire transfer change.",
+      labQuestions: [
+        {
+          id: "salp-5.4-q1",
+          question: "Which containment action is highest priority for the two compromised users?",
+          answer: "Revoke active sessions and reset passwords",
+          hint: "Just resetting the password doesn't kill existing tokens."
+        },
+        {
+          id: "salp-5.4-q2",
+          question: "What persistence mechanism did the attacker establish post-compromise?",
+          answer: "Inbox forwarding rule",
+          hint: "Check for mail flow rules that exfiltrate sensitive messages."
+        },
+        {
+          id: "salp-5.4-q3",
+          question: "Which BEC pattern is the wire transfer request an example of?",
+          answer: "Vendor payment redirection",
+          hint: "The attacker is leveraging the compromised account to change payment details."
+        }
+      ]
+    },
   },
   {
     id: "6.1",
