@@ -30744,6 +30744,38 @@ index=aws sourcetype=aws:cloudtrail eventName="PutBucketPolicy"
       "Correlate GuardDuty findings with CloudTrail for full context",
       "First response: disable keys, revoke sessions, rotate credentials"
     ],
+    practicalExercise: {
+      title: "Investigate a Leaked AWS Access Key",
+      description: "Use CloudTrail and GuardDuty findings to scope and contain a compromised IAM access key.",
+      steps: [
+        "Pivot on the access key ID across CloudTrail events",
+        "Identify all API calls made from the attacker IP",
+        "Determine what resources the attacker created or modified",
+        "Execute containment: disable keys, revoke sessions, revert changes",
+        "Identify the leak source to prevent recurrence"
+      ],
+      labScenario: "GuardDuty finding `UnauthorizedAccess:IAMUser/MaliciousIPCaller.Custom` triggered at 04:12 UTC for access key `AKIAIOSFODNN7EXAMPLE` belonging to IAM user `ci-deployer`. Source IP `198.51.100.77` is on your custom threat list. CloudTrail shows from this IP: `ListBuckets`, `GetObject` on `s3://prod-backups-2024/` (842 objects, 18GB transferred), `CreateUser` for `ci-deployer-backup`, `AttachUserPolicy` attaching `AdministratorAccess`, and `StopLogging` on the primary CloudTrail trail. The legitimate `ci-deployer` key was found this morning in a public GitHub commit pushed yesterday at 22:40 UTC by a contractor.",
+      labQuestions: [
+        {
+          id: "salp-7.2-q1",
+          question: "Which CloudTrail event is the most critical defense-evasion action to remediate first?",
+          answer: "StopLogging",
+          hint: "Once logging is off, you lose visibility into further attacker activity."
+        },
+        {
+          id: "salp-7.2-q2",
+          question: "What persistence mechanism did the attacker establish?",
+          answer: "Backdoor IAM user with AdministratorAccess",
+          hint: "Even after rotating the original key, the attacker still has access through this."
+        },
+        {
+          id: "salp-7.2-q3",
+          question: "What preventive control would have stopped this scenario at the source?",
+          answer: "Pre-commit secret scanning",
+          hint: "Tools like git-secrets, trufflehog, or GitHub push protection scan commits before they're pushed."
+        }
+      ]
+    },
   },
   {
     id: "7.3",
