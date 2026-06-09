@@ -29416,6 +29416,38 @@ Reports serve technical teams, management, legal, and compliance.
       "Map to MITRE ATT&CK techniques",
       "Reports serve multiple audiences"
     ],
+    practicalExercise: {
+      title: "Draft an Incident Report",
+      description: "Convert raw investigation notes from a ransomware near-miss into a structured incident report suitable for executives and legal.",
+      steps: [
+        "Outline the executive summary in under 150 words",
+        "Construct a UTC timeline from the provided artifacts",
+        "Defang all IOCs and provide context for each",
+        "Map observed behavior to MITRE ATT&CK techniques",
+        "Write 3 short-term and 2 long-term recommendations"
+      ],
+      labScenario: "Investigation notes for incident IR-2026-0142: On 2026-05-22 at 03:14 UTC, EDR detected `vssadmin.exe delete shadows /all /quiet` on FILE-SRV-03 from process `svchost.exe` (PID 4412, parent: `explorer.exe`, user: t.rogers). Network logs show 03:09 UTC outbound to 185.220.101.45:8443 (Cobalt Strike beacon JA3 a0e9...). Initial access: t.rogers opened `Invoice_April.docm` (SHA256 9c4f...e21) from a phishing email at 02:51 UTC. EDR auto-isolated the host at 03:14 UTC. No encryption occurred. Affected systems: 1 file server (no data exfil confirmed). Business impact: 22-minute file share outage during isolation.",
+      labQuestions: [
+        {
+          id: "salp-6.3-q1",
+          question: "What is the correct defanged form of the C2 IP?",
+          answer: "185[.]220[.]101[.]45",
+          hint: "Replace each dot in the IP with [.] to make it safe to paste in documents."
+        },
+        {
+          id: "salp-6.3-q2",
+          question: "Which MITRE technique does the vssadmin command map to?",
+          answer: "T1490 Inhibit System Recovery",
+          hint: "Deleting volume shadow copies is a hallmark of ransomware preparation."
+        },
+        {
+          id: "salp-6.3-q3",
+          question: "Which detail belongs in the Executive Summary rather than Technical Analysis?",
+          answer: "22-minute file share outage",
+          hint: "Executives care about business impact, not Sysmon event IDs."
+        }
+      ]
+    },
   },
   {
     id: "6.4",
