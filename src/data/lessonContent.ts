@@ -33593,6 +33593,38 @@ Remediation SLAs by Risk Priority:
       "CISA KEV catalog flags actively exploited CVEs that need immediate attention",
       "Effective risk scoring multiplies CVSS by exploitation probability, asset value, and exposure"
     ],
+    practicalExercise: {
+      title: "Risk-Rank a Vulnerability Backlog",
+      description: "Re-prioritize a backlog of 5 CVEs using CVSS, EPSS, KEV status, asset criticality, and exposure.",
+      steps: [
+        "Collect CVSS Base, EPSS, and KEV status for each CVE",
+        "Score asset criticality (1-3) and external exposure (1-2)",
+        "Apply the risk formula CVSS × EPSS_W × Asset × Exposure",
+        "Map each result to the SLA tier",
+        "Justify any deviation from raw CVSS ordering"
+      ],
+      labScenario: "Backlog snapshot. (1) CVE-2024-3400 PAN-OS RCE: CVSS 10.0, EPSS 0.97, KEV YES, host = internet-facing GP portal (asset 3, exposure 2). (2) CVE-2023-23397 Outlook NTLM: CVSS 9.8, EPSS 0.62, KEV YES, host = CFO laptop (asset 3, exposure 1). (3) CVE-2024-21413 Outlook: CVSS 9.8, EPSS 0.04, KEV NO, host = developer workstation (asset 1, exposure 1). (4) CVE-2024-26169 Win Kernel EoP: CVSS 7.8, EPSS 0.35, KEV YES, host = internal file server (asset 2, exposure 1). (5) CVE-2024-1086 Linux nf_tables: CVSS 7.8, EPSS 0.05, KEV YES, host = isolated lab VM (asset 1, exposure 1). EPSS weight: <0.1=1.0, 0.1-0.5=1.5, 0.5-0.8=2.0, >0.8=2.5.",
+      labQuestions: [
+        {
+          id: "salp-11.3-q1",
+          question: "Which CVE should be remediated first by risk score?",
+          answer: "CVE-2024-3400 PAN-OS",
+          hint: "Calculate 10.0 × 2.5 × 3 × 2 and compare against the others."
+        },
+        {
+          id: "salp-11.3-q2",
+          question: "Which CVE deprioritizes despite a CVSS of 9.8?",
+          answer: "CVE-2024-21413 Outlook",
+          hint: "Low EPSS, no KEV listing, and a low-value asset reduce the real risk."
+        },
+        {
+          id: "salp-11.3-q3",
+          question: "Why does CVE-2024-1086 score lower than CVE-2024-26169 despite both being KEV-listed?",
+          answer: "Lower asset criticality and EPSS",
+          hint: "The lab VM is isolated and the EPSS score is much lower."
+        }
+      ]
+    },
   },
   {
     id: "11.4",
