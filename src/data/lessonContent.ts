@@ -28608,6 +28608,38 @@ File → Export Objects → HTTP to extract downloaded files.
       "Statistics tools reveal beaconing and anomalies",
       "Handle extracted files in sandbox only"
     ],
+    practicalExercise: {
+      title: "PCAP Triage: Suspected C2 Beaconing",
+      description: "Analyze a 30-minute packet capture from a compromised workstation to confirm C2 activity and extract IOCs.",
+      steps: [
+        "Apply a display filter to isolate traffic to/from the suspect host",
+        "Use Statistics → Conversations to identify top external talkers",
+        "Use I/O Graphs to check for regular intervals indicating beaconing",
+        "Follow TCP Stream on the suspicious flow to inspect payload",
+        "Export the IP, port, and User-Agent as IOCs"
+      ],
+      labScenario: "Workstation WS-FIN-12 (10.10.20.55) has been flagged by the EDR for unusual outbound traffic. You receive a 30-minute PCAP. After filtering with `ip.addr == 10.10.20.55 && !(ip.addr == 10.0.0.0/8)`, you observe 180 small HTTPS connections to 91.219.236.18:443 — roughly one every 10 seconds, each transferring ~2KB. The TLS Client Hello uses SNI `cdn-update.azureedge-svc.net` (a typosquat of azureedge.net). Following one TCP stream shows non-standard JA3 fingerprint `a0e9f5d64349fb13191bc781f81f42e1` previously linked to Cobalt Strike.",
+      labQuestions: [
+        {
+          id: "salp-2.4-q1",
+          question: "Which Wireshark feature best confirms beaconing intervals?",
+          answer: "I/O Graphs",
+          hint: "You need a visualization of packet/connection counts over time."
+        },
+        {
+          id: "salp-2.4-q2",
+          question: "What is the most suspicious aspect of the SNI value observed?",
+          answer: "Typosquatting",
+          hint: "Compare the SNI string to legitimate Microsoft Azure CDN domains."
+        },
+        {
+          id: "salp-2.4-q3",
+          question: "Which artifact should you pivot on to find other infected hosts?",
+          answer: "JA3 hash",
+          hint: "It uniquely fingerprints the client TLS stack used by the malware."
+        }
+      ]
+    },
   },
   {
     id: "3.1",
