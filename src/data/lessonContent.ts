@@ -28765,6 +28765,38 @@ File renames > 50 in 5 min with extensions like .encrypted, .locked
       "Whitelisting and cool-downs reduce noise",
       "Rules need ongoing tuning"
     ],
+    practicalExercise: {
+      title: "Design a Multi-Stage Correlation Rule",
+      description: "Build a correlation rule that detects an external brute-force attack followed by a successful login and immediate privileged action.",
+      steps: [
+        "Identify the log sources required (auth, AD, endpoint)",
+        "Define the sequence of events and time windows",
+        "Add suppression conditions to filter known service accounts",
+        "Map the rule to MITRE ATT&CK techniques",
+        "Define severity, response actions, and tuning checkpoints"
+      ],
+      labScenario: "Splunk receives Windows Security logs from all domain controllers. Over the last 24 hours, you observed: at 02:14 UTC, 47 failed logons (Event ID 4625) for user `svc-backup` from source IP 45.83.64.12 (Bulgaria). At 02:19 UTC, a successful logon (4624, LogonType 10/RDP) for the same user from the same IP. At 02:23 UTC, `svc-backup` was added to the Domain Admins group (Event ID 4728). The account is normally used for nightly Veeam backups from internal IP 10.50.10.20 only.",
+      labQuestions: [
+        {
+          id: "salp-3.2-q1",
+          question: "Which event ID sequence best captures this attack chain?",
+          answer: "4625 then 4624 then 4728",
+          hint: "Failed logons, then successful logon, then privileged group change."
+        },
+        {
+          id: "salp-3.2-q2",
+          question: "What suppression condition would eliminate the legitimate backup activity?",
+          answer: "Whitelist source IP 10.50.10.20",
+          hint: "Service accounts often have known legitimate source IPs."
+        },
+        {
+          id: "salp-3.2-q3",
+          question: "Which ATT&CK tactic does adding a user to Domain Admins represent?",
+          answer: "Privilege Escalation",
+          hint: "Think about what the attacker gains by modifying group membership."
+        }
+      ]
+    },
   },
   {
     id: "3.3",
