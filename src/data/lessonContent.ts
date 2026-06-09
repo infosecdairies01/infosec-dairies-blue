@@ -28608,6 +28608,38 @@ File → Export Objects → HTTP to extract downloaded files.
       "Statistics tools reveal beaconing and anomalies",
       "Handle extracted files in sandbox only"
     ],
+    practicalExercise: {
+      title: "PCAP Triage: Suspected C2 Beaconing",
+      description: "Analyze a 30-minute packet capture from a compromised workstation to confirm C2 activity and extract IOCs.",
+      steps: [
+        "Apply a display filter to isolate traffic to/from the suspect host",
+        "Use Statistics → Conversations to identify top external talkers",
+        "Use I/O Graphs to check for regular intervals indicating beaconing",
+        "Follow TCP Stream on the suspicious flow to inspect payload",
+        "Export the IP, port, and User-Agent as IOCs"
+      ],
+      labScenario: "Workstation WS-FIN-12 (10.10.20.55) has been flagged by the EDR for unusual outbound traffic. You receive a 30-minute PCAP. After filtering with `ip.addr == 10.10.20.55 && !(ip.addr == 10.0.0.0/8)`, you observe 180 small HTTPS connections to 91.219.236.18:443 — roughly one every 10 seconds, each transferring ~2KB. The TLS Client Hello uses SNI `cdn-update.azureedge-svc.net` (a typosquat of azureedge.net). Following one TCP stream shows non-standard JA3 fingerprint `a0e9f5d64349fb13191bc781f81f42e1` previously linked to Cobalt Strike.",
+      labQuestions: [
+        {
+          id: "salp-2.4-q1",
+          question: "Which Wireshark feature best confirms beaconing intervals?",
+          answer: "I/O Graphs",
+          hint: "You need a visualization of packet/connection counts over time."
+        },
+        {
+          id: "salp-2.4-q2",
+          question: "What is the most suspicious aspect of the SNI value observed?",
+          answer: "Typosquatting",
+          hint: "Compare the SNI string to legitimate Microsoft Azure CDN domains."
+        },
+        {
+          id: "salp-2.4-q3",
+          question: "Which artifact should you pivot on to find other infected hosts?",
+          answer: "JA3 hash",
+          hint: "It uniquely fingerprints the client TLS stack used by the malware."
+        }
+      ]
+    },
   },
   {
     id: "3.1",
@@ -28733,6 +28765,38 @@ File renames > 50 in 5 min with extensions like .encrypted, .locked
       "Whitelisting and cool-downs reduce noise",
       "Rules need ongoing tuning"
     ],
+    practicalExercise: {
+      title: "Design a Multi-Stage Correlation Rule",
+      description: "Build a correlation rule that detects an external brute-force attack followed by a successful login and immediate privileged action.",
+      steps: [
+        "Identify the log sources required (auth, AD, endpoint)",
+        "Define the sequence of events and time windows",
+        "Add suppression conditions to filter known service accounts",
+        "Map the rule to MITRE ATT&CK techniques",
+        "Define severity, response actions, and tuning checkpoints"
+      ],
+      labScenario: "Splunk receives Windows Security logs from all domain controllers. Over the last 24 hours, you observed: at 02:14 UTC, 47 failed logons (Event ID 4625) for user `svc-backup` from source IP 45.83.64.12 (Bulgaria). At 02:19 UTC, a successful logon (4624, LogonType 10/RDP) for the same user from the same IP. At 02:23 UTC, `svc-backup` was added to the Domain Admins group (Event ID 4728). The account is normally used for nightly Veeam backups from internal IP 10.50.10.20 only.",
+      labQuestions: [
+        {
+          id: "salp-3.2-q1",
+          question: "Which event ID sequence best captures this attack chain?",
+          answer: "4625 then 4624 then 4728",
+          hint: "Failed logons, then successful logon, then privileged group change."
+        },
+        {
+          id: "salp-3.2-q2",
+          question: "What suppression condition would eliminate the legitimate backup activity?",
+          answer: "Whitelist source IP 10.50.10.20",
+          hint: "Service accounts often have known legitimate source IPs."
+        },
+        {
+          id: "salp-3.2-q3",
+          question: "Which ATT&CK tactic does adding a user to Domain Admins represent?",
+          answer: "Privilege Escalation",
+          hint: "Think about what the attacker gains by modifying group membership."
+        }
+      ]
+    },
   },
   {
     id: "3.3",
@@ -29183,6 +29247,38 @@ Complete end-to-end phishing incident handling.
       "After credential compromise: reset, revoke, check forwarding",
       "Always update detection rules post-incident"
     ],
+    practicalExercise: {
+      title: "Phishing Incident End-to-End",
+      description: "Execute the full phishing response playbook on a credential-harvesting campaign targeting the finance team.",
+      steps: [
+        "Capture and preserve original email evidence",
+        "Identify all recipients and who clicked or submitted credentials",
+        "Contain the URL, sender, and any compromised accounts",
+        "Eradicate the email from all mailboxes",
+        "Document IOCs and update detections"
+      ],
+      labScenario: "At 11:32 UTC, 6 finance users received an email from `accounts-payable@dropb0x-secure.com` (note the zero) titled 'Pending Vendor Invoice - Action Required'. The email links to `https://dropb0x-secure.com/o365/login.php`, a pixel-perfect Microsoft 365 login clone hosted on a domain registered 3 days ago. Proxy logs show 2 users (j.patel and r.singh) submitted POST requests to /login.php. Within 30 minutes, both accounts created Outlook forwarding rules sending all mail with 'invoice' or 'wire' to `archive.relay@protonmail.com`, and j.patel sent an email to the CFO requesting a $48,000 wire transfer change.",
+      labQuestions: [
+        {
+          id: "salp-5.4-q1",
+          question: "Which containment action is highest priority for the two compromised users?",
+          answer: "Revoke active sessions and reset passwords",
+          hint: "Just resetting the password doesn't kill existing tokens."
+        },
+        {
+          id: "salp-5.4-q2",
+          question: "What persistence mechanism did the attacker establish post-compromise?",
+          answer: "Inbox forwarding rule",
+          hint: "Check for mail flow rules that exfiltrate sensitive messages."
+        },
+        {
+          id: "salp-5.4-q3",
+          question: "Which BEC pattern is the wire transfer request an example of?",
+          answer: "Vendor payment redirection",
+          hint: "The attacker is leveraging the compromised account to change payment details."
+        }
+      ]
+    },
   },
   {
     id: "6.1",
@@ -29320,6 +29416,38 @@ Reports serve technical teams, management, legal, and compliance.
       "Map to MITRE ATT&CK techniques",
       "Reports serve multiple audiences"
     ],
+    practicalExercise: {
+      title: "Draft an Incident Report",
+      description: "Convert raw investigation notes from a ransomware near-miss into a structured incident report suitable for executives and legal.",
+      steps: [
+        "Outline the executive summary in under 150 words",
+        "Construct a UTC timeline from the provided artifacts",
+        "Defang all IOCs and provide context for each",
+        "Map observed behavior to MITRE ATT&CK techniques",
+        "Write 3 short-term and 2 long-term recommendations"
+      ],
+      labScenario: "Investigation notes for incident IR-2026-0142: On 2026-05-22 at 03:14 UTC, EDR detected `vssadmin.exe delete shadows /all /quiet` on FILE-SRV-03 from process `svchost.exe` (PID 4412, parent: `explorer.exe`, user: t.rogers). Network logs show 03:09 UTC outbound to 185.220.101.45:8443 (Cobalt Strike beacon JA3 a0e9...). Initial access: t.rogers opened `Invoice_April.docm` (SHA256 9c4f...e21) from a phishing email at 02:51 UTC. EDR auto-isolated the host at 03:14 UTC. No encryption occurred. Affected systems: 1 file server (no data exfil confirmed). Business impact: 22-minute file share outage during isolation.",
+      labQuestions: [
+        {
+          id: "salp-6.3-q1",
+          question: "What is the correct defanged form of the C2 IP?",
+          answer: "185[.]220[.]101[.]45",
+          hint: "Replace each dot in the IP with [.] to make it safe to paste in documents."
+        },
+        {
+          id: "salp-6.3-q2",
+          question: "Which MITRE technique does the vssadmin command map to?",
+          answer: "T1490 Inhibit System Recovery",
+          hint: "Deleting volume shadow copies is a hallmark of ransomware preparation."
+        },
+        {
+          id: "salp-6.3-q3",
+          question: "Which detail belongs in the Executive Summary rather than Technical Analysis?",
+          answer: "22-minute file share outage",
+          hint: "Executives care about business impact, not Sysmon event IDs."
+        }
+      ]
+    },
   },
   {
     id: "6.4",
@@ -30616,6 +30744,38 @@ index=aws sourcetype=aws:cloudtrail eventName="PutBucketPolicy"
       "Correlate GuardDuty findings with CloudTrail for full context",
       "First response: disable keys, revoke sessions, rotate credentials"
     ],
+    practicalExercise: {
+      title: "Investigate a Leaked AWS Access Key",
+      description: "Use CloudTrail and GuardDuty findings to scope and contain a compromised IAM access key.",
+      steps: [
+        "Pivot on the access key ID across CloudTrail events",
+        "Identify all API calls made from the attacker IP",
+        "Determine what resources the attacker created or modified",
+        "Execute containment: disable keys, revoke sessions, revert changes",
+        "Identify the leak source to prevent recurrence"
+      ],
+      labScenario: "GuardDuty finding `UnauthorizedAccess:IAMUser/MaliciousIPCaller.Custom` triggered at 04:12 UTC for access key `AKIAIOSFODNN7EXAMPLE` belonging to IAM user `ci-deployer`. Source IP `198.51.100.77` is on your custom threat list. CloudTrail shows from this IP: `ListBuckets`, `GetObject` on `s3://prod-backups-2024/` (842 objects, 18GB transferred), `CreateUser` for `ci-deployer-backup`, `AttachUserPolicy` attaching `AdministratorAccess`, and `StopLogging` on the primary CloudTrail trail. The legitimate `ci-deployer` key was found this morning in a public GitHub commit pushed yesterday at 22:40 UTC by a contractor.",
+      labQuestions: [
+        {
+          id: "salp-7.2-q1",
+          question: "Which CloudTrail event is the most critical defense-evasion action to remediate first?",
+          answer: "StopLogging",
+          hint: "Once logging is off, you lose visibility into further attacker activity."
+        },
+        {
+          id: "salp-7.2-q2",
+          question: "What persistence mechanism did the attacker establish?",
+          answer: "Backdoor IAM user with AdministratorAccess",
+          hint: "Even after rotating the original key, the attacker still has access through this."
+        },
+        {
+          id: "salp-7.2-q3",
+          question: "What preventive control would have stopped this scenario at the source?",
+          answer: "Pre-commit secret scanning",
+          hint: "Tools like git-secrets, trufflehog, or GitHub push protection scan commits before they're pushed."
+        }
+      ]
+    },
   },
   {
     id: "7.3",
@@ -31133,6 +31293,38 @@ Convert hunting findings into automated detections to catch the same technique i
       "Document every hunt with hypothesis, methodology, and findings",
       "Operationalize findings by creating new automated detection rules"
     ],
+    practicalExercise: {
+      title: "Run a Hypothesis-Driven Hunt",
+      description: "Plan and execute a structured hunt for malicious WMI persistence across the enterprise.",
+      steps: [
+        "Write a one-sentence hypothesis tied to a MITRE ATT&CK sub-technique",
+        "Identify required data sources and the search query",
+        "Apply frequency/stack analysis to find rare combinations",
+        "Investigate top outliers and validate findings",
+        "Convert confirmed TTPs into a SIEM detection rule"
+      ],
+      labScenario: "Threat intel reports that FIN12 is increasingly using WMI Event Subscriptions (T1546.003) for persistence in ransomware staging. Your environment has 4,200 Windows endpoints reporting Sysmon Event IDs 19 (WmiEventFilter), 20 (WmiEventConsumer), and 21 (WmiEventConsumerToFilter). A baseline search over the last 30 days returns 87 endpoints with Event ID 20 entries. Stacking on the `Destination` field shows: `CommandLineEventConsumer` with `powershell.exe -nop -w hidden -enc <base64>` appears on only 2 hosts (DEV-LT-19 and HR-LT-08), both created within the last 5 days. All other endpoints use legitimate SCCM or Defender consumers.",
+      labQuestions: [
+        {
+          id: "salp-8.3-q1",
+          question: "Which analytic technique surfaced the malicious consumers from the noise?",
+          answer: "Stack counting",
+          hint: "Counting how often each value appears and looking at the rarest entries."
+        },
+        {
+          id: "salp-8.3-q2",
+          question: "Which Sysmon event ID is most useful for detecting this persistence technique?",
+          answer: "20",
+          hint: "It captures the creation of the WMI event consumer itself."
+        },
+        {
+          id: "salp-8.3-q3",
+          question: "What is the right next step after confirming both hosts are compromised?",
+          answer: "Escalate to IR and operationalize a detection",
+          hint: "Hunting findings should generate both a response action and a new rule."
+        }
+      ]
+    },
   },
   {
     id: "8.4",
@@ -31598,6 +31790,38 @@ Known: Malware detected at 14:34
       "Correlate file system, event log, registry, and network timestamps",
       "Always work in UTC and document your pivot points"
     ],
+    practicalExercise: {
+      title: "Build a Super Timeline of an Intrusion",
+      description: "Use a plaso super timeline to reconstruct the sequence of an intrusion from initial access through data staging.",
+      steps: [
+        "Identify the known pivot event and convert it to UTC",
+        "Define a tight time window around the pivot",
+        "Correlate filesystem MFT, Windows event logs, registry, and prefetch entries",
+        "Reconstruct the attack chain in chronological order",
+        "Produce a clean timeline export for the incident report"
+      ],
+      labScenario: "Plaso super timeline from CFO-LT-04 (Sarah Chen). Known pivot: at 2026-03-11 14:22:17 UTC, EDR alerted on credential dumping. Working backward, the timeline shows: 13:58:02 prefetch entry for `OUTLOOK.EXE`, 13:58:44 file creation `C:\\Users\\schen\\AppData\\Local\\Temp\\Q1_Bonus_List.xlsm`, 13:59:11 MS Office MRU registry write referencing that file, 14:01:33 prefetch for `POWERSHELL.EXE`, 14:01:34 file creation `C:\\Users\\schen\\AppData\\Roaming\\update.exe`, 14:01:38 Run key registry write `HKCU\\...\\Run\\WinUpdate = update.exe`, 14:22:17 MFT entry for `lsass.dmp` (180MB) in `C:\\Users\\Public\\`, 14:25:02 prefetch for `7Z.EXE`, 14:26:11 file creation `lsass.7z` (44MB).",
+      labQuestions: [
+        {
+          id: "salp-9.3-q1",
+          question: "What was the initial access vector based on the timeline?",
+          answer: "Malicious Excel macro",
+          hint: "Look at the file extension that was created right before PowerShell ran."
+        },
+        {
+          id: "salp-9.3-q2",
+          question: "Which artifact proves the attacker established persistence?",
+          answer: "Run key registry entry",
+          hint: "HKCU Run keys execute the referenced binary at every user logon."
+        },
+        {
+          id: "salp-9.3-q3",
+          question: "What is the purpose of the 7z.exe activity at the end of the timeline?",
+          answer: "Compressing stolen credentials for exfiltration",
+          hint: "Compressing a lsass dump is a classic pre-exfil staging step."
+        }
+      ]
+    },
   },
   {
     id: "9.4",
@@ -32524,6 +32748,38 @@ AUTOMATE:                    HUMAN DECISION:
       "Malware playbooks should validate, enrich, contain, investigate, and escalate in sequence",
       "Automate data gathering and known-bad blocking; keep human decisions for impact assessment"
     ],
+    practicalExercise: {
+      title: "Design a Phishing SOAR Playbook",
+      description: "Map a real phishing alert to a SOAR playbook, deciding which steps to automate vs. escalate.",
+      steps: [
+        "List every step from alert ingestion to closure",
+        "Tag each step as AUTO, HUMAN, or CONDITIONAL",
+        "Define enrichment APIs and required inputs",
+        "Set scoring thresholds for automated containment vs analyst review",
+        "Define rollback and idempotency safeguards"
+      ],
+      labScenario: "Your SOAR (Splunk SOAR) receives a phishing alert from the email gateway. The alert contains: sender email, message-id, subject, body text, attached URLs, file hashes. Available integrations: VirusTotal, URLScan.io, GreyNoise, Microsoft 365 (graph API to purge mail), Palo Alto Panorama (block URL/IP), CrowdStrike (host containment), Jira (ticketing), Slack (notifications). Current MTTR for phishing is 47 minutes per analyst. Leadership wants this reduced to under 10 minutes for low/medium-severity cases. VIP user list and finance team list are available as lookup tables.",
+      labQuestions: [
+        {
+          id: "salp-10.2-q1",
+          question: "Which step should remain a HUMAN decision even at full automation maturity?",
+          answer: "Containment of a VIP user's mailbox or host",
+          hint: "Automated actions on executives carry significant business risk."
+        },
+        {
+          id: "salp-10.2-q2",
+          question: "What property ensures the playbook can safely re-run after a transient API failure?",
+          answer: "Idempotency",
+          hint: "Re-running should produce the same end state, not create duplicates."
+        },
+        {
+          id: "salp-10.2-q3",
+          question: "Which enrichment source best confirms whether a sender IP is opportunistic vs targeted?",
+          answer: "GreyNoise",
+          hint: "It distinguishes internet-wide noise from targeted activity."
+        }
+      ]
+    },
   },
   {
     id: "10.3",
@@ -33337,6 +33593,38 @@ Remediation SLAs by Risk Priority:
       "CISA KEV catalog flags actively exploited CVEs that need immediate attention",
       "Effective risk scoring multiplies CVSS by exploitation probability, asset value, and exposure"
     ],
+    practicalExercise: {
+      title: "Risk-Rank a Vulnerability Backlog",
+      description: "Re-prioritize a backlog of 5 CVEs using CVSS, EPSS, KEV status, asset criticality, and exposure.",
+      steps: [
+        "Collect CVSS Base, EPSS, and KEV status for each CVE",
+        "Score asset criticality (1-3) and external exposure (1-2)",
+        "Apply the risk formula CVSS × EPSS_W × Asset × Exposure",
+        "Map each result to the SLA tier",
+        "Justify any deviation from raw CVSS ordering"
+      ],
+      labScenario: "Backlog snapshot. (1) CVE-2024-3400 PAN-OS RCE: CVSS 10.0, EPSS 0.97, KEV YES, host = internet-facing GP portal (asset 3, exposure 2). (2) CVE-2023-23397 Outlook NTLM: CVSS 9.8, EPSS 0.62, KEV YES, host = CFO laptop (asset 3, exposure 1). (3) CVE-2024-21413 Outlook: CVSS 9.8, EPSS 0.04, KEV NO, host = developer workstation (asset 1, exposure 1). (4) CVE-2024-26169 Win Kernel EoP: CVSS 7.8, EPSS 0.35, KEV YES, host = internal file server (asset 2, exposure 1). (5) CVE-2024-1086 Linux nf_tables: CVSS 7.8, EPSS 0.05, KEV YES, host = isolated lab VM (asset 1, exposure 1). EPSS weight: <0.1=1.0, 0.1-0.5=1.5, 0.5-0.8=2.0, >0.8=2.5.",
+      labQuestions: [
+        {
+          id: "salp-11.3-q1",
+          question: "Which CVE should be remediated first by risk score?",
+          answer: "CVE-2024-3400 PAN-OS",
+          hint: "Calculate 10.0 × 2.5 × 3 × 2 and compare against the others."
+        },
+        {
+          id: "salp-11.3-q2",
+          question: "Which CVE deprioritizes despite a CVSS of 9.8?",
+          answer: "CVE-2024-21413 Outlook",
+          hint: "Low EPSS, no KEV listing, and a low-value asset reduce the real risk."
+        },
+        {
+          id: "salp-11.3-q3",
+          question: "Why does CVE-2024-1086 score lower than CVE-2024-26169 despite both being KEV-listed?",
+          answer: "Lower asset criticality and EPSS",
+          hint: "The lab VM is isolated and the EPSS score is much lower."
+        }
+      ]
+    },
   },
   {
     id: "11.4",
