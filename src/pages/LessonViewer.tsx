@@ -31,7 +31,7 @@ const courseBackgrounds: Record<string, string> = {
   "malware-analysis": malwareAnalysisBg,
 };
 
-const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; questions: LabQuestion[] }) => {
+const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; questions?: LabQuestion[] }) => {
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
   const [showHint, setShowHint] = useState<Record<string, boolean>>({});
