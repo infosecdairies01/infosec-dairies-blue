@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, Component, ReactNode } from "react";
 import { Link, useParams, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { 
@@ -30,6 +30,38 @@ const courseBackgrounds: Record<string, string> = {
   "detection-engineering": detectionEngineeringBg,
   "malware-analysis": malwareAnalysisBg,
 };
+
+class PracticalExerciseErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("PracticalExerciseErrorBoundary caught an error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="mt-6 p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <HelpCircle className="w-4 h-4 text-orange-400" />
+            <h4 className="text-sm font-semibold text-orange-400 uppercase tracking-wider">Exercise Unavailable</h4>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            The practical exercise for this lesson could not be loaded due to an unexpected data issue. Please review the lesson content and try again later.
+          </p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; questions?: LabQuestion[] }) => {
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
@@ -610,6 +642,7 @@ const LessonViewer = () => {
 
                   {/* Practical Exercise */}
                   {lessonContent.practicalExercise && (
+                    <PracticalExerciseErrorBoundary>
                     <div className="mt-8 p-6 rounded-xl bg-secondary/5 border border-secondary/20">
                       <div className="flex items-center gap-2 mb-4">
                         <FlaskConical className="w-5 h-5 text-secondary" />
@@ -634,6 +667,7 @@ const LessonViewer = () => {
                       {/* Interactive Lab Questions */}
                       <LabQuestionsSection scenario={lessonContent.practicalExercise.labScenario} questions={lessonContent.practicalExercise.labQuestions} />
                     </div>
+                    </PracticalExerciseErrorBoundary>
                   )}
 
                   {/* Additional Resources */}
