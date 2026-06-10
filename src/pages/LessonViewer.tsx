@@ -68,6 +68,25 @@ const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; quest
     return matchCount >= Math.min(2, keywords.length) || user.includes(correct.substring(0, 20).toLowerCase());
   };
 
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="mt-6 p-4 rounded-lg bg-cyan-500/5 border border-cyan-500/20">
+        <div className="flex items-center gap-2 mb-2">
+          <HelpCircle className="w-4 h-4 text-cyan-400" />
+          <h4 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">Scenario Lab</h4>
+        </div>
+        {scenario ? (
+          <>
+            <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-2">Scenario</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{scenario}</p>
+          </>
+        ) : (
+          <p className="text-sm text-muted-foreground">Interactive lab questions for this exercise are coming soon. Review the steps above to complete the practical exercise.</p>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="mt-6 space-y-4">
       <div className="flex items-center gap-2 mb-2">
