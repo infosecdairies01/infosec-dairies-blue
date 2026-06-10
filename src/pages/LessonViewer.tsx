@@ -642,6 +642,7 @@ const LessonViewer = () => {
 
                   {/* Practical Exercise */}
                   {lessonContent.practicalExercise && (
+                    <PracticalExerciseErrorBoundary>
                     <div className="mt-8 p-6 rounded-xl bg-secondary/5 border border-secondary/20">
                       <div className="flex items-center gap-2 mb-4">
                         <FlaskConical className="w-5 h-5 text-secondary" />
