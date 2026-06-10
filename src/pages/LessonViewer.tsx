@@ -31,7 +31,7 @@ const courseBackgrounds: Record<string, string> = {
   "malware-analysis": malwareAnalysisBg,
 };
 
-const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; questions: LabQuestion[] }) => {
+const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; questions?: LabQuestion[] }) => {
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
   const [showHint, setShowHint] = useState<Record<string, boolean>>({});
@@ -67,6 +67,25 @@ const LabQuestionsSection = ({ scenario, questions }: { scenario?: string; quest
     const matchCount = keywords.filter(kw => user.includes(kw)).length;
     return matchCount >= Math.min(2, keywords.length) || user.includes(correct.substring(0, 20).toLowerCase());
   };
+
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="mt-6 p-4 rounded-lg bg-cyan-500/5 border border-cyan-500/20">
+        <div className="flex items-center gap-2 mb-2">
+          <HelpCircle className="w-4 h-4 text-cyan-400" />
+          <h4 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">Scenario Lab</h4>
+        </div>
+        {scenario ? (
+          <>
+            <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-2">Scenario</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{scenario}</p>
+          </>
+        ) : (
+          <p className="text-sm text-muted-foreground">Interactive lab questions for this exercise are coming soon. Review the steps above to complete the practical exercise.</p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="mt-6 space-y-4">
@@ -599,21 +618,21 @@ const LessonViewer = () => {
                         </h3>
                       </div>
                       <p className="text-muted-foreground mb-4">{lessonContent.practicalExercise.description}</p>
-                      <ol className="space-y-2 mb-6">
-                        {lessonContent.practicalExercise.steps.map((step, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-muted-foreground">
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-secondary/20 text-secondary text-sm flex items-center justify-center">
-                              {idx + 1}
-                            </span>
-                            <span>{step}</span>
-                          </li>
-                        ))}
-                      </ol>
+                      {lessonContent.practicalExercise.steps && lessonContent.practicalExercise.steps.length > 0 && (
+                        <ol className="space-y-2 mb-6">
+                          {lessonContent.practicalExercise.steps.map((step, idx) => (
+                            <li key={idx} className="flex items-start gap-3 text-muted-foreground">
+                              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-secondary/20 text-secondary text-sm flex items-center justify-center">
+                                {idx + 1}
+                              </span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      )}
 
                       {/* Interactive Lab Questions */}
-                      {lessonContent.practicalExercise.labQuestions && lessonContent.practicalExercise.labQuestions.length > 0 && (
-                        <LabQuestionsSection scenario={lessonContent.practicalExercise.labScenario} questions={lessonContent.practicalExercise.labQuestions} />
-                      )}
+                      <LabQuestionsSection scenario={lessonContent.practicalExercise.labScenario} questions={lessonContent.practicalExercise.labQuestions} />
                     </div>
                   )}
 
