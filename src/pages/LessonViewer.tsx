@@ -667,6 +667,7 @@ const LessonViewer = () => {
                       {/* Interactive Lab Questions */}
                       <LabQuestionsSection scenario={lessonContent.practicalExercise.labScenario} questions={lessonContent.practicalExercise.labQuestions} />
                     </div>
+                    </PracticalExerciseErrorBoundary>
                   )}
 
                   {/* Additional Resources */}
