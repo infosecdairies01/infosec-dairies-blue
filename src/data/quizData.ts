@@ -4,6 +4,12 @@ export interface QuizQuestion {
   options: string[];
   correctAnswer: number;
   explanation: string;
+  /** Optional scenario block rendered as monospace context above the question (logs, alerts, PCAP, etc.). */
+  scenario?: string;
+  /** Optional tags shown as small chips (e.g. MITRE tactic, tool, difficulty). */
+  tags?: string[];
+  /** Optional difficulty for filtering/balance. */
+  difficulty?: "easy" | "medium" | "hard";
 }
 
 export interface QuizData {
