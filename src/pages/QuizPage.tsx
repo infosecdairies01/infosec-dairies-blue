@@ -253,7 +253,32 @@ const QuizPage = () => {
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
                 
                 <div className="pl-4">
-                  <h3 className="text-lg font-semibold text-foreground mb-6">
+                  {currentQuestion.tags && currentQuestion.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {currentQuestion.difficulty && (
+                        <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded border ${
+                          currentQuestion.difficulty === 'hard'
+                            ? 'border-red-500/30 text-red-300 bg-red-500/5'
+                            : currentQuestion.difficulty === 'medium'
+                            ? 'border-amber-500/30 text-amber-300 bg-amber-500/5'
+                            : 'border-emerald-500/30 text-emerald-300 bg-emerald-500/5'
+                        }`}>
+                          {currentQuestion.difficulty}
+                        </span>
+                      )}
+                      {currentQuestion.tags.map((tag) => (
+                        <span key={tag} className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded border border-white/10 text-muted-foreground bg-white/[0.02]">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {currentQuestion.scenario && (
+                    <pre className="mb-5 p-4 rounded-lg bg-black/40 border border-white/[0.08] text-xs leading-relaxed text-muted-foreground whitespace-pre-wrap font-mono overflow-x-auto">
+{currentQuestion.scenario}
+                    </pre>
+                  )}
+                  <h3 className="text-lg font-semibold text-foreground mb-6 whitespace-pre-wrap">
                     {currentQuestion.question}
                   </h3>
 
