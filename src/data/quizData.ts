@@ -26,190 +26,190 @@ export const quizzes: QuizData[] = [
   {
     quizId: "q1",
     courseId: "soc-fundamentals",
-    title: "SOC Fundamentals Quiz",
-    description: "Test your understanding of SOC operations, team roles, and basic workflows.",
-    passingScore: 70,
-    timeLimit: 20,
+    title: "SOC Operations: Triage & Decision Making",
+    description: "Scenario-driven assessment covering SOC roles, escalation logic, metrics, and shift-handover decisions a Tier 1 analyst faces daily.",
+    passingScore: 75,
+    timeLimit: 25,
     questions: [
       {
         id: "q1-1",
-        question: "What is the primary mission of a Security Operations Center (SOC)?",
+        difficulty: "easy",
+        tags: ["SOC Roles", "Escalation"],
+        scenario: "07:42 — You are the only Tier 1 analyst on shift. The SIEM fires three alerts within 30 seconds:\n  1) Brute-force lockout on a service account (low confidence)\n  2) EDR: suspicious child process spawned by winword.exe on FIN-HR-04\n  3) Failed login from a corporate VPN IP for the CFO\nA Tier 2 responder is online; the SOC Manager is in a meeting.",
+        question: "Which alert should you triage FIRST, and what is the correct first action?",
         options: [
-          "To develop new software applications",
-          "To detect, analyze, and respond to cybersecurity incidents",
-          "To manage the company's IT infrastructure",
-          "To train employees on computer basics"
+          "Alert 1 — reset the service account password immediately to stop the brute force.",
+          "Alert 2 — isolate FIN-HR-04 via EDR while you investigate the parent/child chain.",
+          "Alert 3 — call the CFO to verify the login before doing anything else.",
+          "Work them in the order they arrived to maintain queue discipline."
         ],
         correctAnswer: 1,
-        explanation: "The SOC's primary mission is to detect, analyze, and respond to cybersecurity incidents using technology and defined processes."
+        explanation: "Alert 2 has the highest potential impact: an Office process spawning a suspicious child is a classic macro/maldoc execution pattern (T1566.001 → T1059). Containment via EDR isolation buys time without destroying evidence. Alert 1 looks like a misconfigured service, Alert 3 is a single failed login. Resetting the service password (A) destroys context; calling the CFO first (C) wastes minutes during a possible active intrusion; FIFO triage (D) ignores severity — the cardinal sin of Tier 1."
       },
       {
         id: "q1-2",
-        question: "What does MTTD stand for in SOC metrics?",
+        difficulty: "medium",
+        tags: ["Metrics", "MTTD", "MTTR"],
+        scenario: "Monthly SOC report:\n  • Avg time from log ingestion → alert fired: 4 min\n  • Avg time from alert fired → analyst acknowledges: 38 min\n  • Avg time from acknowledgement → containment: 22 min\n  • Avg time from containment → full recovery: 6 hours",
+        question: "Which metric is the SOC's biggest weakness, and which control most directly improves it?",
         options: [
-          "Maximum Time To Deploy",
-          "Mean Time To Detect",
-          "Minimum Time To Destroy",
-          "Mean Time To Document"
+          "MTTD — invest in more detection rules and threat intel feeds.",
+          "MTTA (acknowledgement) — review staffing levels, alert routing, and on-call rotations.",
+          "MTTR — buy a faster EDR with auto-isolation.",
+          "Recovery time — improve backup restoration speed."
         ],
         correctAnswer: 1,
-        explanation: "MTTD stands for Mean Time To Detect - the average time it takes to identify a security threat after it enters the environment."
+        explanation: "Detection only took 4 minutes, but alerts sat unacknowledged for 38 minutes — that is a Mean Time To Acknowledge (MTTA) problem, almost always rooted in coverage gaps, noisy queues, or poor paging. Adding more rules (A) makes MTTA worse. Faster EDR (C) helps containment, not acknowledgement. Backups (D) address an entirely different phase."
       },
       {
         id: "q1-3",
-        question: "Which SOC tier is responsible for initial alert triage?",
+        difficulty: "medium",
+        tags: ["Tiering", "Handover"],
+        scenario: "You (T1) have spent 35 minutes on an alert: a user reportedly clicked a phishing link and entered credentials. You confirmed the URL is malicious (VT 12/90), pulled mail headers, and disabled the account. The user mentions \"a weird popup asked me to run a PowerShell command — I did.\"",
+        question: "What is the correct next step?",
         options: [
-          "Tier 3 - Senior Analyst",
-          "Tier 2 - Incident Responder",
-          "Tier 1 - SOC Analyst",
-          "SOC Manager"
+          "Close the case as contained — the account is disabled and the URL is blocked.",
+          "Reset the user's password and reimage the workstation yourself to save time.",
+          "Escalate to Tier 2 with a written handover: indicators, timeline, actions taken, and the new PowerShell execution detail.",
+          "Email the user asking exactly what command they ran, then wait for their reply."
         ],
         correctAnswer: 2,
-        explanation: "Tier 1 SOC Analysts are on the front lines, responsible for monitoring alerts and performing initial triage."
+        explanation: "The phishing case has just expanded into possible host compromise (T1059.001 PowerShell). Tier 1 stops at suspected endpoint execution and hands off — but only with a structured handover so Tier 2 doesn't restart the investigation. Closing (A) is negligent; performing reimage yourself (B) breaks tiering and forensic chain of custody; waiting on the user (D) lets the attacker progress."
       },
       {
         id: "q1-4",
-        question: "What is SIEM an acronym for?",
+        difficulty: "easy",
+        tags: ["SOC Models"],
+        scenario: "A 400-person fintech runs business hours 09:00–18:00 IST. Compliance requires 24×7 monitoring, but the security budget supports only 3 internal analysts.",
+        question: "Which SOC model best fits these constraints?",
         options: [
-          "Security Information and Event Management",
-          "System Integration and Event Monitoring",
-          "Secure Internet and Email Management",
-          "Server Infrastructure and Endpoint Monitoring"
+          "In-house 24×7 SOC — hire 5 more analysts to cover all shifts.",
+          "Fully outsourced MSSP — terminate the internal team.",
+          "Hybrid SOC — internal team owns business hours and tuning; MSSP covers nights/weekends.",
+          "Virtual SOC with no dedicated staff — rely on automation only."
         ],
-        correctAnswer: 0,
-        explanation: "SIEM stands for Security Information and Event Management - the central platform for log aggregation and security alerting."
+        correctAnswer: 2,
+        explanation: "Hybrid is the standard fit for mid-size orgs needing 24×7 coverage without the headcount for it. Internal staff retain context and tuning ownership; the MSSP provides eyes-on-glass after hours. (A) blows the budget; (B) loses institutional knowledge; (D) ignores that automation alone cannot triage novel incidents."
       },
       {
         id: "q1-5",
-        question: "Which of the following is NOT a core function of a SOC?",
+        difficulty: "medium",
+        tags: ["SIEM", "Alert Quality"],
+        scenario: "Your SIEM rule \"Multiple Failed Logons\" fires 1,200 times/day. Investigation shows ~95% are from a vulnerability scanner and 4% from a misconfigured monitoring agent. Real incidents account for <1%.",
+        question: "What is the BEST response?",
         options: [
-          "Continuous Monitoring",
-          "Software Development",
-          "Incident Response",
-          "Threat Intelligence"
+          "Delete the rule — the signal is too noisy to be useful.",
+          "Tune the rule: exclude the scanner and monitoring agent source IPs/accounts, and lower the threshold for everything else.",
+          "Add a second analyst to the queue so all 1,200 alerts get reviewed.",
+          "Increase the threshold from 5 failures to 500 so the rule rarely fires."
         ],
         correctAnswer: 1,
-        explanation: "Software Development is not a core SOC function. The SOC focuses on monitoring, detection, response, and threat intelligence."
+        explanation: "Allow-list known benign sources so the remaining signal is investigable — this preserves the detection while killing the noise. Deleting (A) loses a valid detection. Throwing analysts at noise (C) is the textbook cause of SOC burnout. Crudely raising the threshold (D) makes real brute-force attempts invisible."
       },
       {
         id: "q1-6",
-        question: "What type of SOC model combines internal staff with external managed services?",
+        difficulty: "hard",
+        tags: ["Severity", "Business Context"],
+        scenario: "Two alerts at the same time:\n  A) Ransomware-style mass file rename on a developer's laptop (offline backups exist; user is on PTO).\n  B) Unusual outbound TLS to a newly-registered domain from the payment-processing server (handles live card transactions).",
+        question: "Which incident is HIGHER severity for the business, and why?",
         options: [
-          "Internal SOC",
-          "Virtual SOC",
-          "Hybrid SOC",
-          "Managed SOC"
+          "A — ransomware is always P1 regardless of host.",
+          "A — file encryption is irreversible without backups.",
+          "B — a payment server beaconing to a new domain risks PCI scope, data exfiltration, and regulatory exposure even if dwell time is short.",
+          "Both are equal; severity is determined only by the detection rule's confidence score."
         ],
         correctAnswer: 2,
-        explanation: "A Hybrid SOC combines an internal team with external MSSP services, often used for 24/7 coverage."
+        explanation: "Severity is impact × likelihood in business context, not the scariness of the alert name. Ransomware on a single offline-backed laptop with no active user is recoverable. A payment server contacting a newly-registered domain is a textbook C2/exfil pattern against a PCI-scoped asset — potential cardholder data loss and regulatory fines. (A)/(B) over-weight the malware label; (D) ignores asset criticality entirely."
       },
       {
         id: "q1-7",
-        question: "What is EDR?",
+        difficulty: "medium",
+        tags: ["Playbooks", "Process"],
+        scenario: "Your SOC has no playbook for \"suspected insider data theft.\" An alert fires: a departing employee downloaded 8 GB from SharePoint to a personal device 2 hours ago.",
+        question: "What is the appropriate Tier 1 response?",
         options: [
-          "Email Detection and Response",
-          "Endpoint Detection and Response",
-          "External Data Repository",
-          "Event Driven Reporting"
+          "Take no action — without a playbook, you have no authority to investigate.",
+          "Improvise: disable the account, wipe the device, and email HR.",
+          "Follow the closest applicable playbook (data exfiltration / account misuse), document every deviation, and immediately notify the SOC lead and HR/Legal.",
+          "Open a low-severity ticket and wait for a playbook to be written."
         ],
-        correctAnswer: 1,
-        explanation: "EDR stands for Endpoint Detection and Response - technology that provides visibility and response capabilities on endpoints."
+        correctAnswer: 2,
+        explanation: "Real SOCs never have a playbook for every scenario. Use the closest playbook as a scaffold, document deviations for post-incident review, and pull in HR/Legal early because insider cases have employment-law and evidence implications. (A) and (D) are negligent; (B) skips legal — wiping a personal device or unilaterally acting on a departing employee can create liability."
       },
       {
         id: "q1-8",
-        question: "Which characteristic is essential for a SOC analyst?",
+        difficulty: "hard",
+        tags: ["False Positive vs True Positive"],
+        scenario: "EDR alert: \"Credential dumping behavior on DC01\" — LSASS access by procdump.exe.\nFurther context: the change ticket CHG-4471 shows the AD team scheduled a memory capture for performance troubleshooting in this exact window. The user account matches a domain admin on the ticket.",
+        question: "How do you classify and close this alert?",
         options: [
-          "Ability to work in isolation",
-          "Curiosity and attention to detail",
-          "Preference for routine tasks only",
-          "Avoidance of documentation"
+          "True Positive — any LSASS access is credential dumping; isolate DC01 immediately.",
+          "False Positive — close with no notes since the change ticket explains it.",
+          "Benign True Positive (or \"True Positive — Authorized\"): the behavior really happened and is malicious-looking, but is authorized; document the ticket reference, validate the executing user, and tune to suppress for future approved windows.",
+          "Unknown — escalate to Tier 3 because LSASS is too risky to judge."
         ],
-        correctAnswer: 1,
-        explanation: "Successful SOC analysts need curiosity (always asking why) and attention to detail (small anomalies can indicate big threats)."
+        correctAnswer: 2,
+        explanation: "This is the classic Benign True Positive (BTP). The detection worked correctly — the activity matches credential dumping — but it is authorized. Closing as plain FP (B) destroys the audit trail and lets a real attacker hide behind future \"change windows.\" Always: verify the ticket, verify the user identity, document, and add a time-boxed tuning suppression. (A) ignores context; (D) escalates unnecessarily."
       },
       {
         id: "q1-9",
-        question: "What is the purpose of a shift handover in SOC operations?",
+        difficulty: "medium",
+        tags: ["Logging", "Visibility"],
+        scenario: "During an investigation you need to know which process opened a specific outbound TCP connection on a Windows host 3 days ago. The host forwards: Security log, Application log, System log. EDR retention is 24 hours.",
+        question: "What is the MOST likely outcome and the correct lesson learned?",
         options: [
-          "To assign blame for incidents",
-          "To ensure continuity and prevent dropped incidents",
-          "To reduce the number of analysts",
-          "To delete old alerts"
+          "The Security log will show the process — Windows logs process-to-network mapping by default.",
+          "You will not recover this data; the gap is missing Sysmon (Event ID 3) and insufficient EDR telemetry retention. Recommend deploying Sysmon and extending EDR retention to ≥30 days.",
+          "Pull the firewall log — it always includes the originating process name.",
+          "Reconstruct from DNS logs — DNS responses include the process that requested them."
         ],
         correctAnswer: 1,
-        explanation: "Shift handovers ensure smooth transitions and continuity of operations, preventing incidents from being dropped between shifts."
+        explanation: "Out-of-the-box Windows does NOT log process→network mapping. Sysmon Event ID 3 is the standard control; without it, and with only 24h EDR retention, the data is gone. Firewall logs (C) see source IP/port, not process name. DNS responses (D) carry no process attribution. Recognizing telemetry gaps is a core SOC competency — the lesson is more important than the failed lookup."
       },
       {
         id: "q1-10",
-        question: "What does SOAR stand for?",
+        difficulty: "hard",
+        tags: ["Communication", "Stakeholders"],
+        scenario: "You are 90 minutes into an active incident. The CEO walks into the SOC and asks: \"Are we breached? Should I call the board?\"",
+        question: "What is the correct response?",
         options: [
-          "Security Operations and Reporting",
-          "System Orchestration and Response",
-          "Security Orchestration, Automation, and Response",
-          "Secure Operations and Risk"
+          "\"Yes, we're breached — start calling the board now.\" — be decisive.",
+          "\"No, everything is under control.\" — avoid panicking leadership.",
+          "\"We have a confirmed intrusion on two endpoints. Scope is still being determined; no evidence of data exfiltration yet. Next update in 30 minutes. The Incident Commander, not me, should drive board notification timing.\" — facts + scope + ETA + correct routing.",
+          "\"I can't comment, please email the SOC inbox.\" — follow strict process."
         ],
         correctAnswer: 2,
-        explanation: "SOAR stands for Security Orchestration, Automation, and Response - platforms that automate repetitive security tasks."
+        explanation: "Executives need three things: what is known, what is unknown, and when the next update is coming. Overstating (A) triggers premature regulatory disclosures; understating (B) destroys trust if proven wrong; refusing to communicate (D) drives executives to make decisions without you. Always route formal notifications through the Incident Commander to preserve a single source of truth."
       },
       {
         id: "q1-11",
-        question: "When should a Tier 1 analyst immediately escalate an alert?",
+        difficulty: "medium",
+        tags: ["Shift Handover"],
+        scenario: "End of your night shift. Open items:\n  • INC-204: ongoing phishing investigation, awaiting email gateway logs (ETA 09:00)\n  • INC-208: contained ransomware on one host, eradication pending\n  • 14 alerts in the triage queue, oldest is 11 minutes old",
+        question: "Which handover entry is BEST for INC-208?",
         options: [
-          "When they're unsure about any alert",
-          "Only at the end of their shift",
-          "When confirmed malware execution or active data exfiltration is detected",
-          "Never - Tier 1 should handle everything"
+          "\"INC-208 — ransomware host, handled.\"",
+          "\"INC-208 — host LAPTOP-22 isolated 03:14 IST via CrowdStrike. Hash a1b2... matches Lockbit variant in TI feed. User account disabled. Eradication (reimage + AD password reset) pending; ticket assigned to endpoint team. No lateral movement observed in last 4h. Action for day shift: confirm reimage complete and re-enable account after MFA reset.\"",
+          "\"INC-208 — see ticket for details.\"",
+          "\"INC-208 — ransomware. Day shift please take over.\""
         ],
-        correctAnswer: 2,
-        explanation: "Immediate escalation is required for confirmed malware execution, active data exfiltration, ransomware, or compromised privileged accounts."
+        correctAnswer: 1,
+        explanation: "A good handover is self-contained: what happened, what is done, what is pending, who owns it, and what the next shift must do. Vague entries (A/C/D) force the next analyst to restart the investigation — exactly the failure mode SOC handovers exist to prevent."
       },
       {
         id: "q1-12",
-        question: "What is a TIP in the context of SOC tools?",
+        difficulty: "hard",
+        tags: ["Threat Intel", "Pyramid of Pain"],
+        scenario: "A threat-intel partner shares three indicators tied to APT-X:\n  1) IP address 45.142.x.x (C2 server, observed last week)\n  2) SHA-256 of a custom loader DLL\n  3) TTP: scheduled task named \"OneDriveSync\" calling rundll32 with a .log extension",
+        question: "Per the Pyramid of Pain, which indicator gives you the MOST durable detection value, and what should you do with it?",
         options: [
-          "Threat Intelligence Platform",
-          "Technical Integration Point",
-          "Triage Information Protocol",
-          "Targeted Intrusion Prevention"
+          "The IP — block it at the perimeter; attackers rarely change IPs.",
+          "The file hash — add it to EDR blocklist; hashes never change.",
+          "The TTP — write a behavioral detection (scheduled task + rundll32 + .log extension); attackers can rotate IPs and recompile binaries cheaply but changing their tradecraft is expensive.",
+          "All three are equally durable; ingest them as-is into the SIEM."
         ],
-        correctAnswer: 0,
-        explanation: "TIP stands for Threat Intelligence Platform - tools that aggregate and operationalize threat intelligence for SOC use."
-      },
-      {
-        id: "q1-13",
-        question: "Which document should an analyst create when handing over their shift?",
-        options: [
-          "Performance review",
-          "Shift handover summary with active incidents and pending items",
-          "Company newsletter",
-          "Training certificate"
-        ],
-        correctAnswer: 1,
-        explanation: "A proper shift handover summary includes statistics, active incidents, pending items, and situational awareness notes."
-      },
-      {
-        id: "q1-14",
-        question: "What is the role of a Tier 2 analyst?",
-        options: [
-          "Only monitoring dashboards",
-          "Deep-dive investigation of escalated alerts and containment",
-          "Managing the SOC budget",
-          "Writing company policies"
-        ],
-        correctAnswer: 1,
-        explanation: "Tier 2 analysts perform deeper investigation of escalated alerts, including containment actions and incident documentation."
-      },
-      {
-        id: "q1-15",
-        question: "What is MTTR in SOC metrics?",
-        options: [
-          "Maximum Time To Report",
-          "Mean Time To Respond",
-          "Minimum Time To Recover",
-          "Mean Time To Review"
-        ],
-        correctAnswer: 1,
-        explanation: "MTTR stands for Mean Time To Respond - the average time taken to respond to and begin addressing a security incident."
+        correctAnswer: 2,
+        explanation: "David Bianco's Pyramid of Pain ranks indicators by how painful they are for the adversary to change. Hashes and IPs are trivially rotated; TTPs require re-tooling. The IP and hash still go into the SIEM/EDR (low cost, short-term win), but the high-value, long-lived detection is the behavioral one. (A)/(B) understate adversary agility; (D) misses the entire point of the model."
       }
     ]
   },
