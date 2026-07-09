@@ -4134,785 +4134,1099 @@ export const quizzes: QuizData[] = [
     ]
   },
   {
-    quizId: "ir-q1",
-    courseId: "incident-response",
-    title: "IR Foundations & Frameworks",
-    description: "Test your knowledge of incident response fundamentals, the NIST lifecycle, SANS PICERL, and IR team structure.",
-    passingScore: 70,
-    timeLimit: 20,
-    questions: [
-      {
-        id: "ir-q1-1",
-        question: "What distinguishes a security incident from a security event?",
-        options: [
-          "Security events are exclusively triggered by active external threat actors, whereas incidents can only be initiated by internal staff members.",
-          "An event always implies a critical system-wide service disruption with financial loss, whereas an incident only involves minor login alerts.",
-          "An incident is a violation or imminent threat of violation of computer security policies, acceptable use policies, or standard security practices.",
-          "Security incidents are logged automatically by network security tools, whereas security events require a manual classification by a Tier-3 analyst."
-        ],
-        correctAnswer: 2,
-        explanation: "A security incident is defined as a violation or imminent threat of violation of computer security policies, acceptable use policies, or standard security practices."
-      },
-      {
-        id: "ir-q1-2",
-        question: "What are the four phases of the NIST SP 800-61 incident response lifecycle?",
-        options: [
-          "Preparation, Detection & Analysis, Containment/Eradication/Recovery, and Post-Incident Activity, operating as a continuous lifecycle loop.",
-          "Identify, Protect, Detect, and Respond, which represent the baseline operational functions defined in the NIST Cybersecurity Framework.",
-          "System Assessment, Threat Containment, Rapid Vulnerability Remediation, and Regulatory Reporting to appropriate governing agencies.",
-          "Initial Detection, Root Cause Investigation, Technical Mitigation, and System Auditing to ensure complete regulatory compliance."
-        ],
-        correctAnswer: 0,
-        explanation: "NIST SP 800-61 defines four continuous phases: Preparation, Detection & Analysis, Containment/Eradication/Recovery, and Post-Incident Activity."
-      },
-      {
-        id: "ir-q1-3",
-        question: "How does SANS PICERL differ from NIST regarding containment, eradication, and recovery?",
-        options: [
-          "SANS PICERL groups containment, eradication, and recovery into a single phase to speed up the hands-on response process for analysts.",
-          "SANS PICERL completely excludes the eradication phase, focusing only on containment of infected hosts and rapid system recovery.",
-          "SANS PICERL requires that recovery be completed before eradication of malware can begin, prioritizing business continuity over security.",
-          "SANS PICERL treats containment, eradication, and recovery as three distinct, individual phases with separate objectives and actions."
-        ],
-        correctAnswer: 3,
-        explanation: "SANS PICERL treats Containment, Eradication, and Recovery as three separate phases, whereas NIST groups them into a single phase."
-      },
-      {
-        id: "ir-q1-4",
-        question: "What does 'R' stand for in a RACI matrix?",
-        options: [
-          "Reporting, representing the team member responsible for writing the final incident investigation report for executive review.",
-          "Responsible, representing the individual or team who actually performs the hands-on technical work to complete the specific task.",
-          "Reviewing, representing the quality assurance lead who checks the technical correctness of the completed incident response steps.",
-          "Recovering, representing the systems administrator responsible for restoring servers and services back to their production state."
-        ],
-        correctAnswer: 1,
-        explanation: "In a RACI matrix, R stands for Responsible, which is the person or team tasked with executing the work to complete the action item."
-      },
-      {
-        id: "ir-q1-5",
-        question: "Which IR team model uses a core team augmented by on-call specialists?",
-        options: [
-          "A Centralized IR Team, which has a dedicated, full-time staff handling all security incidents across every regional office.",
-          "An Outsourced Retainer Model, where an external third-party cybersecurity firm handles all aspects of incident response on-demand.",
-          "A Hybrid or Virtual Team model, which maintains a core group of IR staff augmented by on-call subject matter specialists when needed.",
-          "A Distributed IR Team, where separate, independent response teams are permanently assigned to individual business departments."
-        ],
-        correctAnswer: 2,
-        explanation: "A Hybrid or Virtual Team model maintains a core team of security professionals augmented by on-call specialists from other departments."
-      },
-      {
-        id: "ir-q1-6",
-        question: "What is the average dwell time reported by industry studies?",
-        options: [
-          "Under 24 hours, as modern security orchestration and automated response tools isolate compromised hosts almost instantly.",
-          "Between 3 to 7 days, reflecting the time it takes for security analysts to notice suspicious lateral movement across domains.",
-          "Approximately 30 to 45 days, typically ending when external threat intelligence feeds alert the organization to data leaks.",
-          "Over 200 days, indicating the significant amount of time an attacker remains undetected inside the target network environment."
-        ],
-        correctAnswer: 3,
-        explanation: "Industry reports show average dwell times exceeding 200 days, demonstrating how long attackers can remain undetected."
-      },
-      {
-        id: "ir-q1-7",
-        question: "Which framework is NOT an IR framework but essential for understanding adversary TTPs?",
-        options: [
-          "NIST SP 800-61, which outlines standard guidelines and lifecycle phases for establishing an effective incident response program.",
-          "The MITRE ATT&CK framework, which provides a comprehensive, structured knowledge base of real-world adversary tactics and techniques.",
-          "ISO/IEC 27035, which defines international standards and structured processes for information security incident management.",
-          "The SANS PICERL model, which serves as a step-by-step handbook containing six distinct phases for responding to cyber incidents."
-        ],
-        correctAnswer: 1,
-        explanation: "MITRE ATT&CK is a structured database of adversary behaviors (tactics, techniques, and procedures) rather than a formal IR framework."
-      },
-      {
-        id: "ir-q1-8",
-        question: "What is the primary purpose of the NIST Post-Incident Activity phase?",
-        options: [
-          "To facilitate continuous improvement by documenting lessons learned and feeding them back into the Preparation phase.",
-          "To initiate legal prosecution against the threat actors and share raw forensic evidence directly with law enforcement.",
-          "To complete technical system restoration, rotate compromised credentials, and return all servers to production status.",
-          "To notify regulatory compliance bodies about personal data breaches and issue public statements to media outlets."
-        ],
-        correctAnswer: 0,
-        explanation: "The NIST Post-Incident Activity phase focuses on holding lessons-learned meetings to feed improvements back into the Preparation phase."
-      },
-      {
-        id: "ir-q1-9",
-        question: "Organizations without formal IR capability face approximately how much higher breach costs?",
-        options: [
-          "Around 10% to 15% higher costs, primarily driven by minor delays in patching vulnerabilities and restoring database servers.",
-          "Roughly 25% to 30% higher costs, mostly consisting of public relations fees and regulatory compliance fines from auditors.",
-          "Approximately 60% to 65% higher costs, due to longer detection times, widespread containment delays, and inefficient recovery.",
-          "Nearly 90% to 95% higher costs, leading directly to bankruptcy for the majority of affected enterprise organizations."
-        ],
-        correctAnswer: 2,
-        explanation: "Studies show that organizations without a formal IR plan or team face about 63% higher breach costs due to prolonged detection and response times."
-      },
-      {
-        id: "ir-q1-10",
-        question: "Which stakeholder handles breach notification and regulatory compliance?",
-        options: [
-          "The Legal and General Counsel team, who manage regulatory notification deadlines, external liability, and privilege concerns.",
-          "The Human Resources department, who focus on employee disciplinary actions and internal communications regarding the breach.",
-          "The IT Operations group, who are responsible for implementing system patches, resetting passwords, and restoring data backups.",
-          "The Public Relations and Communications lead, who drafts statements for news outlets and coordinates client-facing notices."
-        ],
-        correctAnswer: 0,
-        explanation: "The Legal and General Counsel team coordinates regulatory notifications, handles liability, and maintains attorney-client privilege."
-      }
-    ]
+      quizId: "ir-q1",
+      courseId: "incident-response",
+      title: "IR Foundations & Frameworks",
+      description: "Scenario-based assessment of NIST SP 800-61r2, SANS PICERL, and IR team structures under real-world pressure.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "ir-q1-1",
+              difficulty: "easy",
+              tags: [
+                  "NIST",
+                  "Event vs Incident"
+              ],
+              scenario: "At 02:14 UTC your SIEM fires: 'EventID 4625 x38 for svc_backup from 10.14.3.9 in 90s'. The account is not locked out, no data has moved, and no policy has been violated yet.",
+              question: "Under NIST SP 800-61r2, is this an event or an incident, and why?",
+              options: [
+                  "Incident — any authentication failure is a policy violation",
+                  "Event — an observable occurrence; it becomes an incident only when it violates or imminently threatens a security policy",
+                  "Incident — service accounts must never fail authentication",
+                  "Event — because it happened outside business hours"
+              ],
+              correctAnswer: 1,
+              explanation: "NIST defines an event as any observable occurrence. It escalates to an incident when it violates (or imminently threatens) confidentiality, integrity, availability, AUP, or standard practices. Failed logins alone are events until context (e.g., password spray, later success) crosses that line."
+          },
+          {
+              id: "ir-q1-2",
+              difficulty: "easy",
+              tags: [
+                  "NIST Lifecycle"
+              ],
+              scenario: "A junior analyst confirms ransomware on a file server, immediately reimages it, then asks what to do next.",
+              question: "Which NIST phase did the analyst skip, and what is the consequence?",
+              options: [
+                  "Skipped Preparation — no impact on this case",
+                  "Skipped Containment & evidence collection — root cause, scope, and lateral movement can no longer be reconstructed",
+                  "Skipped Recovery — the server should have stayed offline longer",
+                  "Skipped Lessons Learned — only affects reporting"
+              ],
+              correctAnswer: 1,
+              explanation: "NIST places Containment/Eradication/Recovery after evidence-preserving analysis. Reimaging before triage destroys memory, event logs, and artifacts needed to identify patient zero and the blast radius, guaranteeing re-compromise via the same vector."
+          },
+          {
+              id: "ir-q1-3",
+              difficulty: "medium",
+              tags: [
+                  "SANS PICERL",
+                  "Containment"
+              ],
+              scenario: "A crypto-miner is beaconing from 47 Linux hosts across three subnets. Business asks: 'Just block the C2 IP at the firewall — done, right?'",
+              question: "How does SANS PICERL distinguish short-term vs long-term containment here?",
+              options: [
+                  "Short-term = block C2 IP to stop bleeding; long-term = patch the exploited service, rotate keys, harden images, then rebuild",
+                  "Short-term and long-term are the same action performed twice",
+                  "Long-term containment means leaving the malware running to study it",
+                  "Short-term containment means notifying customers"
+              ],
+              correctAnswer: 0,
+              explanation: "Short-term containment stops active harm quickly (block IP, isolate VLAN). Long-term containment applies durable fixes (patch, credential rotation, golden image) so eradication and recovery don't just restore the vulnerable state."
+          },
+          {
+              id: "ir-q1-4",
+              difficulty: "medium",
+              tags: [
+                  "Team Structure",
+                  "CSIRT"
+              ],
+              scenario: "Your 24x7 SOC triages alerts but every confirmed intrusion is handed off to a small forensics team that also builds detections and negotiates with legal.",
+              question: "Which structural weakness will surface first under a major incident?",
+              options: [
+                  "Nothing — this is the recommended NIST model",
+                  "Role conflict and burnout: the same team cannot simultaneously respond, engineer detections, and manage legal/comms at incident tempo",
+                  "SOC analysts should also negotiate with legal",
+                  "Forensics teams should own tier-1 triage"
+              ],
+              correctAnswer: 1,
+              explanation: "Mature IR separates responders, detection engineers, forensic/malware analysts, and comms/legal liaisons. Overloading one team creates decision bottlenecks, evidence errors, and analyst attrition — the #1 predictor of blown SLAs during real incidents."
+          },
+          {
+              id: "ir-q1-5",
+              difficulty: "medium",
+              tags: [
+                  "RACI",
+                  "Decision Rights"
+              ],
+              scenario: "During an active ransomware event, the CISO, IT Director, and General Counsel each issue conflicting containment orders in Slack within 10 minutes.",
+              question: "Which artifact prevents this failure mode?",
+              options: [
+                  "A larger Slack channel",
+                  "A pre-approved RACI matrix + declared Incident Commander with unambiguous decision authority",
+                  "More SIEM dashboards",
+                  "A press release template"
+              ],
+              correctAnswer: 1,
+              explanation: "IR needs a single Incident Commander with pre-authorized decision rights, backed by a RACI. Without it, tempo collapses into consensus-seeking during the exact minutes attackers exploit. This is why NIST 'Preparation' includes governance, not just tooling."
+          },
+          {
+              id: "ir-q1-6",
+              difficulty: "medium",
+              tags: [
+                  "Preparation",
+                  "Jump Kit"
+              ],
+              scenario: "Your responder arrives on-site and finds the compromised network is fully segmented from the internet. They cannot download tools.",
+              question: "Which Preparation-phase item would have prevented this delay?",
+              options: [
+                  "A written IR policy",
+                  "An offline, versioned jump kit (write-blocker, imager, trusted binaries, sysinternals, memory acquisition, known-good OS) on removable media",
+                  "A larger SIEM license",
+                  "A vendor MSSP contract"
+              ],
+              correctAnswer: 1,
+              explanation: "Jump kits are a Preparation deliverable: pre-vetted, offline tools + trusted binaries so responders operate in hostile/air-gapped networks without introducing supply-chain risk or waiting on procurement."
+          },
+          {
+              id: "ir-q1-7",
+              difficulty: "hard",
+              tags: [
+                  "Chain of Custody",
+                  "Legal"
+              ],
+              scenario: "An analyst copies suspicious files off the victim host with SMB drag-and-drop, emails them to a colleague, and later legal asks whether these can be used in court.",
+              question: "What is the most defensible answer?",
+              options: [
+                  "Yes — copies are always admissible",
+                  "Likely no — no write-blocker, no hash-verified image, no documented chain of custody; evidentiary weight is severely degraded",
+                  "Yes — as long as antivirus scanned them",
+                  "No — digital evidence is never admissible"
+              ],
+              correctAnswer: 1,
+              explanation: "Legally usable evidence requires forensically sound acquisition (write-blocked or verified imaging), cryptographic hashing before/after, and an unbroken chain of custody log (who/when/why/where). Casual SMB copies break all three."
+          },
+          {
+              id: "ir-q1-8",
+              difficulty: "hard",
+              tags: [
+                  "Severity Classification"
+              ],
+              scenario: "Same malware family detonates on: (A) an isolated marketing laptop, (B) a domain controller, (C) a PCI cardholder-data segment host.",
+              question: "Under a standard severity model, why do these get different severities despite identical malware?",
+              options: [
+                  "They shouldn't — malware family sets severity",
+                  "Severity is business-impact driven: asset criticality, data classification, and blast radius dominate — not the malware family",
+                  "The DC is always the lowest because it's well-monitored",
+                  "PCI hosts are always lowest severity"
+              ],
+              correctAnswer: 1,
+              explanation: "Severity models (e.g., FIRST CVSS-BT, internal tiers) weight asset criticality, data sensitivity (PCI/PHI/PII), lateral pivot potential, and recoverability. Identical TTPs on a DC or PCI host imply enterprise-wide compromise or regulated breach exposure — not comparable to a standalone laptop."
+          },
+          {
+              id: "ir-q1-9",
+              difficulty: "hard",
+              tags: [
+                  "Third Parties",
+                  "MSSP"
+              ],
+              scenario: "Your MSSP detects the alert but escalates 47 minutes late because their SLA is 'best effort during business hours' and the incident began at 03:00.",
+              question: "Which Preparation gap does this expose?",
+              options: [
+                  "None — MSSPs are always best-effort",
+                  "Contractual: SLAs, escalation trees, on-call rosters, and joint runbooks were never tested end-to-end at 3am",
+                  "Technical: the SIEM was misconfigured",
+                  "Legal: no press release template existed"
+              ],
+              correctAnswer: 1,
+              explanation: "Preparation includes vendor governance: measurable SLAs, 24x7 escalation trees, quarterly tabletop with the MSSP, and joint runbooks. Untested contracts are the single most common cause of late external escalations."
+          },
+          {
+              id: "ir-q1-10",
+              difficulty: "hard",
+              tags: [
+                  "Framework Comparison"
+              ],
+              scenario: "Leadership asks: 'Should we adopt NIST 800-61r2 or SANS PICERL as our IR framework?'",
+              question: "What is the most accurate answer?",
+              options: [
+                  "NIST — it is legally required",
+                  "SANS — because it has 6 phases instead of 4",
+                  "Either — they are conceptually equivalent (Prep / Detect+Analyze / Contain-Eradicate-Recover / Post-Incident); pick one, tailor playbooks, and be consistent",
+                  "Neither — build your own from scratch"
+              ],
+              correctAnswer: 2,
+              explanation: "NIST's 4 phases and SANS's 6 phases (PICERL) cover the same lifecycle at different granularities. Regulators care that you follow *a* recognized framework consistently and can evidence it — not which one."
+          }
+      ]
   },
   {
-    quizId: "ir-q2",
-    courseId: "incident-response",
-    title: "Preparation & Readiness",
-    description: "Test your knowledge of IR planning, communication, toolkit preparation, and tabletop exercises.",
-    passingScore: 70,
-    timeLimit: 20,
-    questions: [
-      {
-        id: "ir-q2-1",
-        question: "What is the correct hierarchy of IR documentation?",
-        options: [
-          "Incident Playbooks serve as the high-level policy, which then maps directly to technical IR Plans, which finally dictate internal department Policies.",
-          "An overarching Security Policy establishes authority, which guides the tactical Incident Response Plan, which then references step-by-step Playbooks.",
-          "The technical Incident Response Plan defines overall corporate governance, which is supported by internal Security Policies and simple command-line guides.",
-          "A step-by-step Playbook defines general corporate security policies, which directly dictate the tactical plans and executive notification procedures."
-        ],
-        correctAnswer: 1,
-        explanation: "Policy establishes high-level authority; Plan outlines the strategic response structure; Playbooks provide specific, step-by-step technical instructions."
-      },
-      {
-        id: "ir-q2-2",
-        question: "Why should IR teams use out-of-band communication during an incident?",
-        options: [
-          "Out-of-band communication is significantly cheaper to deploy and maintain compared to standard corporate email and collaboration suites.",
-          "It completely bypasses the need for formal document retention policies, allowing the incident response team to communicate in secret.",
-          "The primary corporate network and communication channels may be monitored or compromised by the adversary during an active intrusion.",
-          "Standard corporate communications are too slow and lack the necessary encryption keys required to transmit sensitive forensic hashes."
-        ],
-        correctAnswer: 2,
-        explanation: "If the corporate network is compromised, attackers might monitor standard communication channels (e.g., Slack, email) to track the IR team's actions."
-      },
-      {
-        id: "ir-q2-3",
-        question: "Under GDPR, what is the breach notification timeline?",
-        options: [
-          "Within 72 hours of the organization becoming aware of the personal data breach, unless the breach is unlikely to result in a risk to individuals.",
-          "Within 24 hours of the initial detection of any security alert on an endpoint, regardless of whether personal data was accessed or exfiltrated.",
-          "Within 7 business days of completing the entire technical forensic investigation and determining the exact identity of the threat actor.",
-          "Within 30 calendar days of notifying the affected users, allowing the organization ample time to remediate all compromised credentials."
-        ],
-        correctAnswer: 0,
-        explanation: "GDPR Article 33 requires notifying the supervisory authority within 72 hours of becoming aware of a personal data breach."
-      },
-      {
-        id: "ir-q2-4",
-        question: "What is the primary purpose of a write blocker?",
-        options: [
-          "To encrypt the target evidence drive immediately during the acquisition phase to prevent unauthorized access by third parties.",
-          "To compress forensic image files dynamically, allowing them to fit onto smaller destination storage drives during acquisition.",
-          "To accelerate the overall data transfer rate between the source evidence drive and the forensic workstation running the imaging software.",
-          "To prevent the host computer's operating system from writing any data to the source storage media, preserving cryptographic evidence integrity."
-        ],
-        correctAnswer: 3,
-        explanation: "Write blockers physically or logically prevent write requests to the source drive, ensuring no evidence is modified during the forensic imaging process."
-      },
-      {
-        id: "ir-q2-5",
-        question: "In a tabletop exercise, what is an 'inject'?",
-        options: [
-          "A type of malicious code injected into running memory spaces by threat actors during a simulated cyber attack on corporate infrastructure.",
-          "A pre-scripted scenario update introduced by the facilitator to add new information, obstacles, or escalations to the simulation.",
-          "A specific technical tool used by the red team to simulate network intrusion, lateral movement, or data exfiltration in real-time.",
-          "A formal report document summarizing the actions taken by participants at the end of the tabletop exercise for executive review."
-        ],
-        correctAnswer: 1,
-        explanation: "Injects are scripted updates (e.g., 'a customer reports their data leaked') delivered during a tabletop exercise to guide the scenario and test response protocols."
-      },
-      {
-        id: "ir-q2-6",
-        question: "Which tool is designed for rapid triage artifact collection?",
-        options: [
-          "KAPE (Kroll Artifact Parser and Extractor), which targets and copies key forensic artifacts like registry hives and event logs.",
-          "Wireshark, which is primarily used to capture and analyze live packet data flowing across local network interfaces in real-time.",
-          "Nmap (Network Mapper), which is designed for network discovery, port scanning, and identifying active hosts and running services.",
-          "Burp Suite, which is an integrated web application security testing tool used to intercept, analyze, and modify HTTP requests."
-        ],
-        correctAnswer: 0,
-        explanation: "KAPE is a triage tool that targets specific configuration files and metadata artifacts, copying them rapidly before full disk imaging is needed."
-      },
-      {
-        id: "ir-q2-7",
-        question: "How often should an IR jump bag be validated?",
-        options: [
-          "Only immediately after a major security incident has occurred, in order to restock cables and verify that all software licenses are valid.",
-          "Once every calendar year, as part of the organization's standard annual security audit and compliance verification process.",
-          "Whenever a new version of forensic imaging software is officially released by vendors, to ensure the latest patches are installed.",
-          "On a strict monthly schedule for tools and updates, combined with quarterly simulation exercises to verify operational deployment readiness."
-        ],
-        correctAnswer: 3,
-        explanation: "Jump bags must be checked monthly to ensure batteries are charged, software is updated, and cables are present, and tested quarterly in exercises."
-      },
-      {
-        id: "ir-q2-8",
-        question: "A SEV-1 incident includes which of the following?",
-        options: [
-          "Minor policy violations, such as an employee accessing unauthorized streaming websites or using unapproved software on workstations.",
-          "A localized malware infection detected on a single, isolated development server that has no connection to the production domain.",
-          "An active ransomware outbreak spreading across domain controllers or confirmed exfiltration of highly sensitive corporate data.",
-          "Unconfirmed, suspicious outbound traffic alerts generated by firewall rules that require further analysis by Tier-1 SOC analysts."
-        ],
-        correctAnswer: 2,
-        explanation: "SEV-1 represents the highest severity tier, involving widespread critical business disruption, active data exfiltration, or ransomware spreading."
-      },
-      {
-        id: "ir-q2-9",
-        question: "What is the most common finding from tabletop exercises?",
-        options: [
-          "A critical lack of technical forensic analysis software and hardware tools required to perform memory and registry parsing.",
-          "Unclear or outdated escalation paths, communication bottlenecks, and confusion regarding which stakeholder has decision-making authority.",
-          "A deficiency in industry certifications among the senior members of the incident response team and IT operations department.",
-          "Insufficient cybersecurity budgets allocated for purchasing redundant backup storage hardware and server virtualization systems."
-        ],
-        correctAnswer: 1,
-        explanation: "Tabletop exercises regularly reveal process-oriented issues: outdated emergency contacts, unclear escalation criteria, or confusion about who approves containment."
-      },
-      {
-        id: "ir-q2-10",
-        question: "Why establish attorney-client privilege for IR communications?",
-        options: [
-          "To protect the sensitive details and findings of the internal incident investigation from discovery during subsequent civil litigation.",
-          "To completely bypass state and federal regulatory breach notification requirements, ensuring the incident remains entirely secret.",
-          "To avoid documenting any technical details or timelines of the breach, thereby saving administrative time for the IR analysts.",
-          "To restrict access to the organization's incident response plan, preventing employees from reviewing internal security policies."
-        ],
-        correctAnswer: 0,
-        explanation: "Establishing attorney-client privilege helps ensure that sensitive investigation reports and communications are protected from legal discovery."
-      }
-    ]
+      quizId: "ir-q2",
+      courseId: "incident-response",
+      title: "IR Policy, Plans & Playbooks",
+      description: "Scenario-based questions on the policy/plan/playbook hierarchy, communications, legal holds, and playbook design.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "ir-q2-1",
+              difficulty: "easy",
+              tags: [
+                  "Policy vs Plan vs Playbook"
+              ],
+              scenario: "Your auditor finds three documents: (1) a 2-page executive charter granting the CSIRT authority to disconnect any asset, (2) a 40-page IR plan describing lifecycle, roles, and metrics, (3) a 6-page ransomware runbook with exact commands.",
+              question: "Map each to Policy / Plan / Playbook.",
+              options: [
+                  "1=Playbook, 2=Policy, 3=Plan",
+                  "1=Policy, 2=Plan, 3=Playbook",
+                  "1=Plan, 2=Playbook, 3=Policy",
+                  "All three are policies"
+              ],
+              correctAnswer: 1,
+              explanation: "Policy grants authority and sets intent (short, exec-signed). Plan operationalizes policy (roles, lifecycle, metrics). Playbooks are scenario-specific step-by-step procedures. Each layer changes at a different cadence and needs different reviewers."
+          },
+          {
+              id: "ir-q2-2",
+              difficulty: "easy",
+              tags: [
+                  "Playbook Design"
+              ],
+              scenario: "Your ransomware playbook reads: 'The analyst should investigate the affected system and take appropriate action.'",
+              question: "What is wrong with this instruction?",
+              options: [
+                  "Nothing — analysts need flexibility",
+                  "It is not a playbook step — no decision criteria, owner, action, tool, or expected artifact; it cannot be executed under pressure",
+                  "It should be in the policy instead",
+                  "It should be longer"
+              ],
+              correctAnswer: 1,
+              explanation: "Effective playbook steps are executable: trigger, decision criteria, actor role, exact command/tool, expected output, and next-step branch. Vague prose collapses at 3am when the on-call has 90 seconds to act."
+          },
+          {
+              id: "ir-q2-3",
+              difficulty: "medium",
+              tags: [
+                  "Communications Plan"
+              ],
+              scenario: "Mid-incident, an engineer posts screenshots of attacker C2 traffic in the company-wide #general Slack channel.",
+              question: "Which control should have prevented this?",
+              options: [
+                  "A ban on Slack",
+                  "A pre-defined communications plan: dedicated out-of-band incident channel, named spokespeople, and a 'need-to-know' rule",
+                  "A stricter firewall",
+                  "Nothing — transparency is good"
+              ],
+              correctAnswer: 1,
+              explanation: "IR comms plans define who talks, where, and to whom. Attackers monitor Slack/Teams after credential theft; leaked TTPs let them pivot, wipe, or accelerate. Out-of-band, need-to-know channels are non-negotiable."
+          },
+          {
+              id: "ir-q2-4",
+              difficulty: "medium",
+              tags: [
+                  "Out-of-Band"
+              ],
+              scenario: "During an AD compromise the team coordinates in Microsoft Teams — which uses the same compromised AD for auth.",
+              question: "Why is this a critical mistake?",
+              options: [
+                  "It isn't — Teams is encrypted",
+                  "The attacker with AD control can read, join, or lock the response channel; comms must move to an out-of-band, independently-authenticated channel (e.g., Signal, phone bridge)",
+                  "Teams is too slow",
+                  "It violates GDPR"
+              ],
+              correctAnswer: 1,
+              explanation: "If the attacker owns the auth plane (AD, IdP, SSO), any tool that trusts it is compromised. Every mature IR plan pre-provisions an out-of-band bridge (Signal group, PSTN conference, standalone accounts) with printed contact rosters."
+          },
+          {
+              id: "ir-q2-5",
+              difficulty: "medium",
+              tags: [
+                  "Legal Hold"
+              ],
+              scenario: "Two days into a suspected insider data-theft case, an admin runs the scheduled 30-day log rotation and wipes proxy/DNS logs for the suspect window.",
+              question: "Which Preparation-phase control failed?",
+              options: [
+                  "Backups",
+                  "Legal-hold / preservation procedure — once litigation is reasonably anticipated, routine deletion must be suspended for relevant custodians and systems",
+                  "Firewall rules",
+                  "MFA"
+              ],
+              correctAnswer: 1,
+              explanation: "Legal hold (litigation hold) is a documented procedure to freeze retention on relevant data the moment an incident with legal exposure is identified. Its absence can lead to spoliation sanctions and destroys the case."
+          },
+          {
+              id: "ir-q2-6",
+              difficulty: "medium",
+              tags: [
+                  "Tabletop Exercises"
+              ],
+              scenario: "You've had an IR plan for 3 years. You've never run a tabletop.",
+              question: "What is the most likely first failure in a real event?",
+              options: [
+                  "SIEM crashes",
+                  "Coordination failure — unknown escalation paths, missing phone numbers, unclear authority, untested vendor SLAs",
+                  "The malware is undetected",
+                  "The firewall fails open"
+              ],
+              correctAnswer: 1,
+              explanation: "Post-incident reviews consistently show the first casualty of unexercised plans is coordination, not tooling. Tabletops surface stale contacts, ambiguous authority, and missing playbook branches before an adversary does."
+          },
+          {
+              id: "ir-q2-7",
+              difficulty: "hard",
+              tags: [
+                  "Playbook Structure"
+              ],
+              scenario: "You're designing a phishing playbook. Which structure best supports on-call analysts?",
+              question: "Pick the strongest design.",
+              options: [
+                  "One monolithic 40-page document",
+                  "Trigger → Triage (inputs, decision tree) → Containment (exact actions per system) → Eradication → Recovery → Comms → Evidence checklist → Metrics — all fitting on printable cards",
+                  "A single decision tree with no actions",
+                  "A policy statement only"
+              ],
+              correctAnswer: 1,
+              explanation: "Executable playbooks are structured around the lifecycle with explicit inputs/outputs at each stage, embedded decision criteria, and pre-authored artifacts (comms templates, evidence checklists). Printable/segmentable so they survive tool outages."
+          },
+          {
+              id: "ir-q2-8",
+              difficulty: "hard",
+              tags: [
+                  "Authority",
+                  "Kill Switch"
+              ],
+              scenario: "Ransomware is spreading. The on-call analyst wants to null-route the affected /24, but nobody knows who can authorize it at 03:00.",
+              question: "Which policy element is missing?",
+              options: [
+                  "A stricter password policy",
+                  "Pre-authorized emergency actions ('break-glass') delegated in policy to the on-call IC — with defined guardrails and post-hoc review",
+                  "A new SIEM",
+                  "A patch policy"
+              ],
+              correctAnswer: 1,
+              explanation: "Mature IR policies pre-authorize specific containment actions (isolate host, block IP range, disable account) to named roles under defined conditions, with mandatory post-action review. Otherwise every incident stalls waiting for a VP callback."
+          },
+          {
+              id: "ir-q2-9",
+              difficulty: "hard",
+              tags: [
+                  "Regulatory Notification"
+              ],
+              scenario: "You confirm exfiltration of EU customer PII at 09:00 Monday. Legal asks how quickly you must notify.",
+              question: "What does GDPR Article 33 require, and what does the plan need to support it?",
+              options: [
+                  "30 days — no plan needed",
+                  "Without undue delay and within 72 hours of becoming aware — the plan must define 'awareness', evidence timestamps, decision authority, and DPA contact procedure",
+                  "24 hours — via press release",
+                  "Only if fine is likely"
+              ],
+              correctAnswer: 1,
+              explanation: "GDPR Art. 33 mandates supervisory-authority notification within 72 hours of awareness (unless unlikely to risk rights/freedoms). The IR plan must define 'awareness', maintain evidentiary timestamps, and pre-identify the DPA notification path — this is a Preparation deliverable."
+          },
+          {
+              id: "ir-q2-10",
+              difficulty: "hard",
+              tags: [
+                  "Playbook Lifecycle"
+              ],
+              scenario: "Your ransomware playbook still references a decommissioned EDR product.",
+              question: "Which governance control is missing?",
+              options: [
+                  "Larger playbook",
+                  "Versioning + a scheduled review cadence (e.g., quarterly + after every incident + after tool changes) with an owner",
+                  "More screenshots",
+                  "Executive signature"
+              ],
+              correctAnswer: 1,
+              explanation: "Playbooks decay faster than any other IR artifact because tools, teams, and threats change monthly. Governance requires named owners, versioning, and a triggered-review policy (change control, post-incident, threat evolution) — otherwise responders execute fiction."
+          }
+      ]
   },
   {
-    quizId: "ir-q3",
-    courseId: "incident-response",
-    title: "Detection & Analysis",
-    description: "Test your understanding of detection sources, triage, indicator analysis, and root cause analysis.",
-    passingScore: 70,
-    timeLimit: 20,
-    questions: [
-      {
-        id: "ir-q3-1",
-        question: "In the Pyramid of Pain, which indicator is HARDEST for attackers to change?",
-        options: [
-          "Cryptographic hash values, such as MD5 or SHA-256 signatures, which uniquely identify specific malware binary files.",
-          "Host IP addresses, which are frequently used by command and control servers to direct traffic from compromised endpoints.",
-          "Registered domain names, which threat actors use to dynamically resolve network paths for their active payloads.",
-          "Tactics, Techniques, and Procedures (TTPs), which represent the fundamental behavioral methodologies used by the attacker."
-        ],
-        correctAnswer: 3,
-        explanation: "TTPs (Tactics, Techniques, and Procedures) are at the apex of the Pyramid of Pain because changing behavior requires completely re-engineering tools."
-      },
-      {
-        id: "ir-q3-2",
-        question: "What is the difference between an IOC and an IOA?",
-        options: [
-          "IOCs are behavioral threat-hunting patterns mapped to systems, whereas IOAs are static file signatures found during forensic imaging.",
-          "IOCs are static forensic evidence left after an compromise, whereas IOAs represent real-time behavioral patterns during an attack.",
-          "IOAs are much more specific technical rules that describe network protocols, whereas IOCs are high-level business risk definitions.",
-          "There is no actual distinction between the two concepts, as both terms are used interchangeably by all Tier-1 security analysts."
-        ],
-        correctAnswer: 1,
-        explanation: "IOCs (Indicators of Compromise) are reactive artifacts left behind (e.g., hashes). IOAs (Indicators of Attack) are proactive, focusing on behavioral patterns during an ongoing attack."
-      },
-      {
-        id: "ir-q3-3",
-        question: "What response time SLA is expected for SEV-1 initial response?",
-        options: [
-          "Under 1 hour to complete the initial triage assessment and schedule a follow-up briefing with department managers.",
-          "Approximately 30 minutes, allowing the on-call analyst to log into the corporate network and start forensic capture.",
-          "Within 15 minutes of alert generation, with mandatory operational updates delivered every 30 minutes until containment.",
-          "Within 4 hours, which provides sufficient time to verify the alert scope and establish secure out-of-band channels."
-        ],
-        correctAnswer: 2,
-        explanation: "SEV-1 represents a critical security incident, requiring a strict 15-minute initial response SLA to mitigate potential damage."
-      },
-      {
-        id: "ir-q3-4",
-        question: "The 5 Whys technique aims to identify:",
-        options: [
-          "The systemic, organizational, or architectural failure that allowed the security incident to occur in the first place.",
-          "The specific individual or system administrator who committed the configuration error leading to the active intrusion.",
-          "Five separate attack vectors that could potentially be exploited by threat actors to compromise corporate servers.",
-          "Five separate mitigation controls that must be implemented during the eradication phase to prevent future breaches."
-        ],
-        correctAnswer: 0,
-        explanation: "The 5 Whys technique drills down past immediate symptoms to identify the root cause, which is often a systemic or process failure."
-      },
-      {
-        id: "ir-q3-5",
-        question: "Which source often FIRST detects BEC attacks?",
-        options: [
-          "Automated SIEM rules correlating active directory authentication logs with external network traffic volume spikes.",
-          "EDR agents running on executive workstations, which generate alerts for unauthorized PowerShell script executions.",
-          "User reports from employees who receive suspicious emails requesting credential verification or urgent wire transfers.",
-          "Network Security Monitoring tools that analyze unusual HTTP traffic headers originating from corporate email portals."
-        ],
-        correctAnswer: 2,
-        explanation: "Business Email Compromise (BEC) attacks often bypass technical controls, meaning user vigilance and reports are frequently the first detection point."
-      },
-      {
-        id: "ir-q3-6",
-        question: "What is 'anchoring bias' in incident triage?",
-        options: [
-          "Prioritizing security alerts originating from specific, trusted network segments over those from standard user domains.",
-          "Fixating on the first hypothesis formulated about an incident and ignoring subsequent evidence that contradicts it.",
-          "Limiting the investigation to standard business hours due to a lack of available security operations team members.",
-          "Focusing exclusively on high-severity SIEM alerts while completely disregarding lower-priority informational events."
-        ],
-        correctAnswer: 1,
-        explanation: "Anchoring bias occurs when an investigator relies too heavily on the first piece of information received, blinding them to other possibilities."
-      },
-      {
-        id: "ir-q3-7",
-        question: "In a fishbone diagram, 'missing EDR coverage' falls under which category?",
-        options: [
-          "People, representing the training gaps and resource shortages within the security operations and system admin teams.",
-          "Process, representing the lack of defined policies and procedures for auditing corporate software asset deployments.",
-          "Policy, representing the absence of explicit corporate mandates regarding endpoint security logging and agent compliance.",
-          "Technology, representing the lack of necessary endpoint detection agents deployed on the affected network segments."
-        ],
-        correctAnswer: 3,
-        explanation: "Missing EDR coverage is a Technology contributing factor in a cause-and-effect (fishbone) root cause analysis diagram."
-      },
-      {
-        id: "ir-q3-8",
-        question: "What is the target MTTD for a high-performing IR team?",
-        options: [
-          "Under 1 hour from initial compromise, leveraging advanced artificial intelligence and automated playbook responses.",
-          "Under 24 hours, compared to the industry average of over 200 days for standard enterprise security architectures.",
-          "Less than 7 calendar days, which allows sufficient time for manual log review and deep-dive packet capture analysis.",
-          "Within 30 calendar days, which meets standard compliance and auditing requirements for most financial corporations."
-        ],
-        correctAnswer: 1,
-        explanation: "High-performing incident response organizations aim for a Mean Time to Detect (MTTD) of under 24 hours to minimize attacker dwell time."
-      },
-      {
-        id: "ir-q3-9",
-        question: "Which correlation technique groups events by time window?",
-        options: [
-          "Entity correlation, which tracks activity associated with a specific user account, hostname, or IP address.",
-          "TTP mapping, which matches detected behaviors to known adversary profiles documented in the MITRE ATT&CK database.",
-          "Temporal correlation, which groups security events based on a defined time window to build a chronological timeline.",
-          "Behavioral correlation, which uses machine learning models to detect anomalies in standard employee activity patterns."
-        ],
-        correctAnswer: 2,
-        explanation: "Temporal correlation groups events occurring within the same time frame to help analysts reconstruct the sequence of attack steps."
-      },
-      {
-        id: "ir-q3-10",
-        question: "Impact assessment during triage evaluates which triad?",
-        options: [
-          "The CIA triad, evaluating the extent of unauthorized access (C), data modification (I), and service disruption (A).",
-          "The PPT triad, analyzing the availability of skilled people, optimized processes, and appropriate response technology.",
-          "The DRR triad, tracking the time elapsed during the initial detection, technical response, and final recovery phases.",
-          "The RTV triad, quantifying the operational risk, active external threats, and unpatched system vulnerabilities."
-        ],
-        correctAnswer: 0,
-        explanation: "Incident impact is assessed across the Confidentiality, Integrity, and Availability (CIA) triad to determine response priority."
-      }
-    ]
+      quizId: "ir-q3",
+      courseId: "incident-response",
+      title: "Detection & Initial Triage",
+      description: "Scenario-based triage: separating signal from noise, prioritization, and first-hour analyst decisions.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "ir-q3-1",
+              difficulty: "easy",
+              tags: [
+                  "Triage",
+                  "Prioritization"
+              ],
+              scenario: "Queue at 09:00: (A) EDR: 'mimikatz.exe' string on DC01, (B) 12,000 failed logins for one user in 5m, (C) proxy: 400MB upload from finance host to unknown domain, (D) AV cleaned an EICAR test file.",
+              question: "Which do you triage first and why?",
+              options: [
+                  "D — recent AV activity",
+                  "A — credential theft tooling on a Tier-0 asset (DC) is highest blast radius",
+                  "B — brute force is always critical",
+                  "C — data always matters most"
+              ],
+              correctAnswer: 1,
+              explanation: "Prioritization is (impact × likelihood). Credential-theft tooling on a domain controller implies potential enterprise-wide compromise via Kerberos/DCSync — dwarfs a brute force (mitigated by lockout) or a single exfil alert that will still be there in 10 minutes."
+          },
+          {
+              id: "ir-q3-2",
+              difficulty: "easy",
+              tags: [
+                  "Signal vs Noise"
+              ],
+              scenario: "A rule alerts on every PowerShell execution. You get 4,000 hits/day and confirmed incidents are missed in the queue.",
+              question: "Which detection principle is violated?",
+              options: [
+                  "None — more alerts is safer",
+                  "Precision — high-volume/low-precision detections cause alert fatigue and mask true positives; refine with parent process, command-line, user context, or convert to hunt telemetry",
+                  "Recall — the rule should fire more",
+                  "Encryption — logs should be encrypted"
+              ],
+              correctAnswer: 1,
+              explanation: "Detection quality is measured by precision (TP / (TP+FP)) and recall. High-recall/low-precision rules become noise. Tighten with context (unusual parent, encoded/obfuscated, off-hours, non-admin user) or downgrade to hunting telemetry."
+          },
+          {
+              id: "ir-q3-3",
+              difficulty: "medium",
+              tags: [
+                  "Alert Enrichment"
+              ],
+              scenario: "You receive: 'EDR: suspicious PowerShell on WKS-4471 by user jsmith at 14:02 UTC'. Nothing else.",
+              question: "What enrichment do you fetch before deciding?",
+              options: [
+                  "Only the raw command line",
+                  "Parent/grandparent process, full decoded command line, user role/asset criticality, geo/VPN of session, recent auth for user, prior similar alerts, hash reputation, related network events in ±10m",
+                  "Just the hostname",
+                  "Only the alert count"
+              ],
+              correctAnswer: 1,
+              explanation: "Triage is enrichment-driven: process ancestry (WINWORD→POWERSHELL is very different from EXPLORER→POWERSHELL), decoded arguments, identity context, historical baseline, and correlated network activity turn a single string into a defensible verdict."
+          },
+          {
+              id: "ir-q3-4",
+              difficulty: "medium",
+              tags: [
+                  "True/False Positive"
+              ],
+              scenario: "Alert: 'psexec.exe on FS-03'. Investigation shows it was run by the IT admin during a documented change window from their jumpbox.",
+              question: "Correct classification?",
+              options: [
+                  "False Positive",
+                  "True Positive - Benign (behavior detected accurately but expected/authorized) — feed back into tuning as an allowlist, not a rule deletion",
+                  "False Negative",
+                  "Incident"
+              ],
+              correctAnswer: 1,
+              explanation: "The rule correctly detected the behavior — that's not a false positive. It is a benign true positive; the correct action is scoped suppression (this admin, jumpbox, change window) so future rule fidelity is preserved."
+          },
+          {
+              id: "ir-q3-5",
+              difficulty: "medium",
+              tags: [
+                  "Pyramid of Pain"
+              ],
+              scenario: "Your IOC feed adds 200 new adversary IPs weekly. You block them at the firewall. Detections still miss the actor.",
+              question: "Which model explains the gap?",
+              options: [
+                  "Cyber Kill Chain",
+                  "Pyramid of Pain — IPs/hashes are trivial for the adversary to change; detecting TTPs (behavioral) causes durable pain",
+                  "MITRE D3FEND only",
+                  "STRIDE"
+              ],
+              correctAnswer: 1,
+              explanation: "Bianco's Pyramid of Pain: hash/IP/domain indicators are cheap to rotate; tools are harder; TTPs are hardest and most durable. Detection strategy should be layered but weighted toward behavior (ATT&CK-aligned) for real friction."
+          },
+          {
+              id: "ir-q3-6",
+              difficulty: "medium",
+              tags: [
+                  "First Hour"
+              ],
+              scenario: "A True Positive intrusion is confirmed at 14:02. What are the first-hour minimum artifacts to preserve before any remediation?",
+              question: "Pick the strongest checklist.",
+              options: [
+                  "Reimage immediately",
+                  "Volatile-first triage: memory image, running process list, netstat/conntrack, current logons, autoruns, recent event logs, EDR timeline export, DNS/proxy for host — with hashes and timestamps",
+                  "Only screenshots",
+                  "Only the malware sample"
+              ],
+              correctAnswer: 1,
+              explanation: "Order of volatility (RFC 3227) drives triage: RAM, network state, logged-on users, and ephemeral artifacts vanish first. Capture these before containment actions that reboot, disconnect, or reimage."
+          },
+          {
+              id: "ir-q3-7",
+              difficulty: "hard",
+              tags: [
+                  "Base-Rate Fallacy"
+              ],
+              scenario: "An ML detection is 99% accurate. It alerts once per 10,000 events. Your environment produces 5M events/day.",
+              question: "How many false positives per day should you expect, and what's the analyst lesson?",
+              options: [
+                  "~50 — accuracy is fine",
+                  "~4,995 FPs/day (0.01% of ~5M) if the true positive rate is ~1/10,000 — 'accuracy' is the wrong metric; measure precision and analyst-hours-per-TP",
+                  "Zero — 99% is perfect",
+                  "500 — but they self-resolve"
+              ],
+              correctAnswer: 1,
+              explanation: "The base-rate fallacy: at very low incident prevalence, even a highly 'accurate' classifier drowns analysts in false positives. Detection ROI is measured in precision, analyst minutes per TP, and mean-time-to-triage — not headline accuracy."
+          },
+          {
+              id: "ir-q3-8",
+              difficulty: "hard",
+              tags: [
+                  "Correlation"
+              ],
+              scenario: "Three low-severity alerts in the same 20 minutes on one host: (1) Office spawns cmd.exe, (2) new scheduled task, (3) outbound to a newly-registered domain.",
+              question: "Correct triage move?",
+              options: [
+                  "Close each as low",
+                  "Treat as a correlated intrusion chain (Initial Access → Persistence → C2); escalate as High and preserve volatile evidence immediately",
+                  "Wait for a 4th alert",
+                  "Ignore — Office spawning cmd is normal"
+              ],
+              correctAnswer: 1,
+              explanation: "Individually low, together they trace a kill-chain progression on a single asset within a short window. Correlation (host+user+time) upgrades severity and is the whole point of a SIEM/XDR layer over point tools."
+          },
+          {
+              id: "ir-q3-9",
+              difficulty: "hard",
+              tags: [
+                  "Cognitive Bias"
+              ],
+              scenario: "An analyst decides it's benign in the first 30 seconds and then only cites evidence that supports 'benign', dismissing contradicting artifacts.",
+              question: "Which bias is this and what's the mitigation?",
+              options: [
+                  "Anchoring — ignore it",
+                  "Confirmation bias — mitigate with structured analytic techniques (ACH, red-team review, mandatory 'what would prove me wrong?' step)",
+                  "Availability bias — resolved by more caffeine",
+                  "Not a bias — normal triage"
+              ],
+              correctAnswer: 1,
+              explanation: "Confirmation bias is the leading cognitive failure in triage. Mitigations include structured techniques (Analysis of Competing Hypotheses), peer review on TP/FP calls, and forcing a disconfirming-evidence step in the playbook."
+          },
+          {
+              id: "ir-q3-10",
+              difficulty: "hard",
+              tags: [
+                  "Escalation Criteria"
+              ],
+              scenario: "A Tier-1 analyst sits on a suspicious alert for 45 minutes 'to investigate a little more' before escalating.",
+              question: "Which governance control is missing?",
+              options: [
+                  "None — analyst discretion is best",
+                  "Time-boxed escalation criteria: explicit triggers (evidence of persistence, credential theft, DC/PCI/PHI asset, exfil, etc.) plus a hard time cap on tier-1 handling",
+                  "Larger monitors",
+                  "More SIEM licenses"
+              ],
+              correctAnswer: 1,
+              explanation: "Escalation must be deterministic: named triggers and a maximum tier-1 dwell before automatic hand-off. Analyst hesitation is the single largest contributor to elevated MTTD/MTTR."
+          }
+      ]
   },
   {
-    quizId: "ir-q4",
-    courseId: "incident-response",
-    title: "Containment Strategies",
-    description: "Test your knowledge of containment, evidence preservation, and decision-making frameworks.",
-    passingScore: 70,
-    timeLimit: 20,
-    questions: [
-      {
-        id: "ir-q4-1",
-        question: "Why should you NEVER power off a compromised system before capturing memory?",
-        options: [
-          "Powering off the physical machine permanently damages internal storage platters and disrupts backup server synchronizations.",
-          "Powering off destroys critical volatile evidence residing in RAM, such as active network connections and running processes.",
-          "Modern operating systems will fail to boot successfully if the system is shut down improperly during an active intrusion.",
-          "A manual shutdown immediately executes pre-programmed dead man switches configured by the attacker to wipe the local hard drive."
-        ],
-        correctAnswer: 1,
-        explanation: "RAM contains highly volatile evidence (running processes, network connections, memory-only malware) that is completely lost upon power-off."
-      },
-      {
-        id: "ir-q4-2",
-        question: "How many times must KRBTGT be reset to remediate Golden Ticket attacks?",
-        options: [
-          "Only once, which immediately invalidates all active Kerberos tickets and forces every domain user to change their passwords.",
-          "Three times sequentially over a 48-hour period, allowing enough time for every domain controller to sync the password history.",
-          "Twice, with a minimum 12-hour gap, to ensure that the old password hash is completely purged from all domain controllers.",
-          "Resetting KRBTGT is optional, as simply disabling the account achieves the exact same security outcome during remediation."
-        ],
-        correctAnswer: 2,
-        explanation: "The KRBTGT account password must be reset twice to invalidate tickets generated with both the current and the previous password hash."
-      },
-      {
-        id: "ir-q4-3",
-        question: "What is a DNS sinkhole used for during containment?",
-        options: [
-          "To redirect malicious domain resolution requests to a controlled IP address, blocking C2 and identifying other infected hosts.",
-          "To accelerate standard DNS resolution queries for the internal incident response team during hands-on network investigations.",
-          "To completely block all outbound UDP port 53 traffic, forcing endpoints to use secure, encrypted DNS over HTTPS resolvers.",
-          "To decrypt DNS payloads dynamically using custom security certificates installed on local gateways and proxy servers."
-        ],
-        correctAnswer: 0,
-        explanation: "DNS sinkholes redirect queries for known malicious domains to a local, monitored server, preventing C2 traffic and exposing compromised hosts."
-      },
-      {
-        id: "ir-q4-4",
-        question: "In the order of volatility, which should be collected FIRST?",
-        options: [
-          "Local hard drive disk contents, which contain persistent operating system files and installed application logs.",
-          "Centralized syslog servers and firewall connection logs, which capture long-term activity across network segments.",
-          "Running physical memory (RAM), which holds extremely volatile operational data and is destroyed upon system shutdown.",
-          "Offsite archival backup media, which provides historic system states and is protected from modification by attackers."
-        ],
-        correctAnswer: 2,
-        explanation: "Per RFC 3227, RAM is highly volatile and must be collected first. Disk contents and archived logs are persistent and can be imaged later."
-      },
-      {
-        id: "ir-q4-5",
-        question: "When is monitoring preferred over immediate isolation?",
-        options: [
-          "When destructive ransomware is actively spreading across server subnets and encrypting shared directory locations.",
-          "When the threat actor is currently dormant, and you need to gather intelligence on their scope, tools, and objectives.",
-          "When database logs confirm that sensitive customer records are actively being exfiltrated to external IP addresses.",
-          "When legal compliance mandates that no containment actions are allowed until a complete forensic report is published."
-        ],
-        correctAnswer: 1,
-        explanation: "If the attacker is dormant, brief monitoring can help the IR team identify all compromised systems and credentials before containing them simultaneously."
-      },
-      {
-        id: "ir-q4-6",
-        question: "Chain of custody documentation includes:",
-        options: [
-          "Only the final cryptographic hash value of the evidence drive, generated using MD5 or SHA-256 validation algorithms.",
-          "Only the name of the forensic analyst who conducted the triage process and the specific date the case was officially closed.",
-          "A simple technical description of the compromised host machine along with the corresponding internal ticket tracking number.",
-          "A comprehensive log of the collector's name, timestamps, forensic tools used, storage locations, and every transfer of possession."
-        ],
-        correctAnswer: 3,
-        explanation: "Chain of custody documentation is a sequential log tracking who collected, accessed, and transferred evidence to ensure admissibility in court."
-      },
-      {
-        id: "ir-q4-7",
-        question: "Why is coordinated simultaneous containment important?",
-        options: [
-          "It prevents the attacker from detecting localized containment efforts and rapidly pivoting to alternative backdoors.",
-          "It significantly reduces the total number of technical analysis tools required by the incident response team during triage.",
-          "It allows the IT help desk to automate password resets and system updates across unrelated department networks easily.",
-          "It ensures that the final incident report is completed more rapidly by simplifying the overall documentation workflow."
-        ],
-        correctAnswer: 0,
-        explanation: "Containing systems one-by-one tips off the attacker, allowing them to activate hidden persistence mechanisms or speed up destruction."
-      },
-      {
-        id: "ir-q4-8",
-        question: "Which containment method maintains management connectivity while isolating endpoints?",
-        options: [
-          "Disabling local network interface cards (NICs) via administrative tools, which stops all inbound and outbound traffic.",
-          "Assigning the endpoint to a dead, non-routing containment VLAN that completely blocks all internal and external paths.",
-          "EDR network isolation, which blocks all network traffic except for the secure management connection to the EDR console.",
-          "Configuring local windows firewall rules to reject all packets matching port 443 while allowing SMB traffic internally."
-        ],
-        correctAnswer: 2,
-        explanation: "EDR isolation isolates the endpoint from the network but leaves the EDR agent's channel open, allowing analysts to run remote triage and collect logs."
-      },
-      {
-        id: "ir-q4-9",
-        question: "Which hash algorithms should verify forensic images?",
-        options: [
-          "Both MD5 and SHA-256, providing dual validation to satisfy standard legal requirements and prevent hash collisions.",
-          "MD5 only, as it is the fastest algorithm and is universally accepted by all local and international law enforcement agencies.",
-          "SHA-1 only, which is highly optimized for verifying large files without causing delays during the forensic acquisition phase.",
-          "CRC32 checksums, which are specifically designed to detect network transmission errors rather than malicious file tampering."
-        ],
-        correctAnswer: 0,
-        explanation: "Using a combination of algorithms (MD5 and SHA-256) is standard forensic practice to prove that no alteration occurred during imaging."
-      },
-      {
-        id: "ir-q4-10",
-        question: "What should always happen before issuing a litigation hold?",
-        options: [
-          "The incident response team must fully complete the technical investigation and publish the final root cause analysis report.",
-          "The security operations manager must notify local law enforcement agencies and provide them with all collected firewall logs.",
-          "The security lead must consult with legal counsel to determine the exact data preservation scope and regulatory requirements.",
-          "The IT operations department must immediately power off all affected endpoints to ensure that log files are not overwritten."
-        ],
-        correctAnswer: 2,
-        explanation: "Legal counsel must guide the litigation hold to define what data needs preservation, ensuring compliance and preventing destruction of evidence."
-      }
-    ]
+      quizId: "ir-q4",
+      courseId: "incident-response",
+      title: "Containment, Eradication & Recovery",
+      description: "Scenario-based CER decisions: isolation strategy, eradication depth, and safe recovery under business pressure.",
+      passingScore: 70,
+      timeLimit: 25,
+      questions: [
+          {
+              id: "ir-q4-1",
+              difficulty: "easy",
+              tags: [
+                  "Network Isolation"
+              ],
+              scenario: "A workstation is beaconing to known C2. The user is a C-level exec on a video call.",
+              question: "Best containment action?",
+              options: [
+                  "Nothing until the call ends",
+                  "EDR network-contain (allow EDR management, block all else) — preserves forensic state, stops C2, avoids full reboot; then coordinate with the exec",
+                  "Reimage immediately",
+                  "Power off the laptop"
+              ],
+              correctAnswer: 1,
+              explanation: "EDR network containment is precisely designed for this: severs adversary access while retaining volatile artifacts and EDR telemetry, unlike a hard power-off (destroys RAM) or reimage (destroys evidence and re-creates conflict with the exec)."
+          },
+          {
+              id: "ir-q4-2",
+              difficulty: "easy",
+              tags: [
+                  "Credential Rotation"
+              ],
+              scenario: "You confirm an attacker had SYSTEM on a domain-joined server for 6 hours.",
+              question: "Which credentials must you consider potentially compromised?",
+              options: [
+                  "Only the local admin",
+                  "Every credential exposed to that host: local accounts, cached domain creds, service accounts running on it, Kerberos tickets, and any account that authenticated during the window",
+                  "Only the last-logged-in user",
+                  "None if AV is clean"
+              ],
+              correctAnswer: 1,
+              explanation: "SYSTEM on a Windows host can extract LSASS, DPAPI, cached creds, and Kerberos TGTs. Assume every credential material *present or arriving* during the compromise window is exposed — rotate broadly and force TGT refresh."
+          },
+          {
+              id: "ir-q4-3",
+              difficulty: "medium",
+              tags: [
+                  "Short vs Long Containment"
+              ],
+              scenario: "Ransomware detected on 8 hosts in one VLAN. Business begs you not to isolate the VLAN because it hosts revenue-critical apps.",
+              question: "How do you decide?",
+              options: [
+                  "Always isolate immediately",
+                  "Weigh spread velocity vs revenue impact using pre-approved thresholds; if spread is active, isolate now — pre-approved authority avoids case-by-case debate mid-incident",
+                  "Never isolate revenue systems",
+                  "Ask on Twitter"
+              ],
+              correctAnswer: 1,
+              explanation: "Containment decisions are business-risk calls that must be pre-authorized in policy with thresholds (spread rate, asset class, data classification). Mid-incident negotiation is the failure mode ransomware operators depend on."
+          },
+          {
+              id: "ir-q4-4",
+              difficulty: "medium",
+              tags: [
+                  "Eradication Depth"
+              ],
+              scenario: "You remove the malware binary and its scheduled task. Two days later the host beacons again.",
+              question: "Which eradication step was skipped?",
+              options: [
+                  "Antivirus scan",
+                  "Full persistence sweep + root-cause remediation: WMI subs, services, drivers, DLL hijacks, run keys, RMM tools, valid accounts, and the *initial access vector* itself",
+                  "Reboot",
+                  "Password change on the admin only"
+              ],
+              correctAnswer: 1,
+              explanation: "Adversaries plant multiple persistence mechanisms (services, WMI, scheduled tasks, run keys, RMM, valid accounts, driver-level). Eradication must enumerate all of them AND close the initial-access vector, or re-compromise is near-certain."
+          },
+          {
+              id: "ir-q4-5",
+              difficulty: "medium",
+              tags: [
+                  "Golden Ticket"
+              ],
+              scenario: "You confirm the attacker extracted the krbtgt hash from a DC three weeks ago.",
+              question: "What eradication step is mandatory?",
+              options: [
+                  "Reboot the DC",
+                  "Double krbtgt password reset (twice, with wait for replication and ticket lifetime in between) to invalidate all forgeable golden tickets",
+                  "Rotate the affected user's password",
+                  "Disable SMBv1"
+              ],
+              correctAnswer: 1,
+              explanation: "krbtgt compromise = full Kerberos forgery capability (golden tickets, valid for the ticket lifetime, up to 10 years by default). The documented remediation is two sequential krbtgt resets separated by replication + max ticket lifetime."
+          },
+          {
+              id: "ir-q4-6",
+              difficulty: "medium",
+              tags: [
+                  "Backup Recovery"
+              ],
+              scenario: "You restore from a backup taken 5 days before detection.",
+              question: "What must you verify before returning to production?",
+              options: [
+                  "That the backup boots",
+                  "That the backup pre-dates initial compromise (not just detection), is malware-free, patches the exploited vector, and enters a monitored quarantine before full trust",
+                  "Nothing — backups are trusted",
+                  "That the backup is the newest available"
+              ],
+              correctAnswer: 1,
+              explanation: "Dwell time is usually much longer than time-to-detection. The correct backup pre-dates *initial* compromise, is verified malware-free, is patched for the entry vector, and gets extra monitoring during a probation window."
+          },
+          {
+              id: "ir-q4-7",
+              difficulty: "hard",
+              tags: [
+                  "Root Cause"
+              ],
+              scenario: "Recovery is complete. Post-incident, someone asks: 'What was the root cause?' The team answers: 'Malware got in.'",
+              question: "Why is this insufficient?",
+              options: [
+                  "It isn't",
+                  "'Malware got in' is the symptom. Root cause is the systemic gap that allowed it (unpatched Exchange CVE, missing MFA, allowed macro from external sender, exposed RDP, unmonitored service account) — only fixing that prevents recurrence",
+                  "Malware is always the root cause",
+                  "Root cause analysis is optional"
+              ],
+              correctAnswer: 1,
+              explanation: "Root cause is the systemic failure (control gap, misconfiguration, process defect) that enabled the intrusion. Without naming it, remediation is cosmetic and re-compromise metrics will show it within weeks."
+          },
+          {
+              id: "ir-q4-8",
+              difficulty: "hard",
+              tags: [
+                  "Watch & Learn vs Contain"
+              ],
+              scenario: "You detect a sophisticated actor doing recon. Executives want to 'watch and learn' to gather intel; legal wants immediate containment.",
+              question: "Which framing is correct?",
+              options: [
+                  "Always watch — intel is priceless",
+                  "This is a governance decision requiring pre-defined authority: 'monitor mode' only under written approval, hard time-box, defined exit criteria, and continuous safety review — otherwise contain",
+                  "Always contain immediately",
+                  "Ask the attacker to stop"
+              ],
+              correctAnswer: 1,
+              explanation: "Extended monitoring carries real risk (spread, exfil, liability). It requires pre-authorized written approval, containment tripwires, and continuous risk reassessment. Absent that governance, the default must be containment."
+          },
+          {
+              id: "ir-q4-9",
+              difficulty: "hard",
+              tags: [
+                  "Ransomware Recovery"
+              ],
+              scenario: "Ransomware has encrypted 40% of file shares. Backups exist. Business asks whether they should also pay 'as insurance'.",
+              question: "What is the most defensible advisory?",
+              options: [
+                  "Always pay",
+                  "Pay decisions carry OFAC/sanctions risk, no delivery guarantee, tax on future targets, and no assurance of eradication — decision is legal/executive with counsel; technically, prioritize proven, tested restore from clean backups",
+                  "Never document",
+                  "Pay only in crypto"
+              ],
+              correctAnswer: 1,
+              explanation: "Payment is a legal/executive decision with sanctions (OFAC), insurance, disclosure, and re-victimization implications. IR's role is to enable a clean, tested restore path AND close the initial vector so payment (if made) doesn't just fund the next attack on you."
+          },
+          {
+              id: "ir-q4-10",
+              difficulty: "hard",
+              tags: [
+                  "Recovery Validation"
+              ],
+              scenario: "Systems are 'recovered'. Someone asks how you know the environment is clean.",
+              question: "What is a defensible validation?",
+              options: [
+                  "AV scan returned clean",
+                  "Multi-signal validation: fresh IOC sweep, retro-hunt against last 30–90 days of telemetry, EDR re-baseline, network egress review, identity anomaly monitoring, tabletop-style red-team probes, plus a defined heightened-monitoring period",
+                  "Users report no issues",
+                  "The malware family scanner shows nothing"
+              ],
+              correctAnswer: 1,
+              explanation: "Recovery validation is a program, not a single scan: IOC + behavior sweeps across historical telemetry, identity checks, egress review, and an explicit heightened-monitoring window before declaring the incident closed."
+          }
+      ]
   },
   {
-    quizId: "ir-q5",
-    courseId: "incident-response",
-    title: "Eradication & Recovery",
-    description: "Test your knowledge of malware removal, system restoration, validation, and business resumption.",
-    passingScore: 70,
-    timeLimit: 20,
-    questions: [
-      {
-        id: "ir-q5-1",
-        question: "When should you REBUILD rather than clean a system?",
-        options: [
-          "Only when the hardware is outdated or the software licensing fees have expired, requiring a clean corporate installation.",
-          "When rootkits are detected, domain controllers are compromised, or the exact scope of the intrusion cannot be verified.",
-          "Whenever any standard malware or adware signatures are detected on local workstations by default antivirus scans.",
-          "Only when regulatory compliance auditors explicitly demand a system rebuild in their official annual report findings."
-        ],
-        correctAnswer: 1,
-        explanation: "If rootkits are present, domain controllers are compromised, or the entry point/scope is uncertain, cleaning is unreliable; you must rebuild."
-      },
-      {
-        id: "ir-q5-2",
-        question: "Which persistence mechanism achieves fileless execution via WMI?",
-        options: [
-          "Registry Run Keys, which automatically execute static binary paths during the Windows system startup and logon sequence.",
-          "Scheduled Tasks, which run executable files from the local storage disk at regular pre-configured time intervals.",
-          "WMI Event Subscriptions, which trigger malicious scripts in response to system events without writing files to the disk.",
-          "DLL Hijacking, which abuses the Windows DLL search order to load malicious files instead of legitimate system libraries."
-        ],
-        correctAnswer: 2,
-        explanation: "WMI Event Subscriptions (specifically Event Consumers) execute actions in response to system triggers without needing a file on disk."
-      },
-      {
-        id: "ir-q5-3",
-        question: "What is the correct phased restoration order?",
-        options: [
-          "Workstations first to restore user productivity, followed by critical business databases, and finally core infrastructure servers.",
-          "Core infrastructure services first, followed by critical business systems, then workstations, and finally non-critical servers.",
-          "All servers and workstations simultaneously to minimize downtime and ensure the business resume operations as fast as possible.",
-          "Non-critical development systems first to test the restoration process before modifying active production infrastructure."
-        ],
-        correctAnswer: 1,
-        explanation: "Restoration must start with core services (DNS, AD) so that subsequent business systems and workstations can authenticate and function."
-      },
-      {
-        id: "ir-q5-4",
-        question: "What must happen BEFORE reconnecting a restored system?",
-        options: [
-          "Notify all internal users and stakeholders that the system is online and request them to verify their application data.",
-          "Complete the final incident investigation report and distribute it to executive management for final sign-off.",
-          "Hold the official post-incident lessons learned meeting and compile the action items checklist for the IT security team.",
-          "Apply all outstanding security patches, install EDR agents, configure enhanced logging, and run a complete malware scan."
-        ],
-        correctAnswer: 3,
-        explanation: "Before exposing a restored system to the network, you must secure it (patch, install EDR, scan) to prevent immediate re-compromise."
-      },
-      {
-        id: "ir-q5-5",
-        question: "How long should enhanced monitoring continue post-incident?",
-        options: [
-          "Exactly 1 week, which is sufficient time to confirm that the immediate malware alert has been resolved on the endpoint.",
-          "Approximately 2 weeks, allowing the security operations team to verify that the standard firewall rules are blocking threats.",
-          "For 30 to 90 days, to detect any missed persistence mechanisms or attempts by the attacker to regain access to the network.",
-          "At least 6 months, which is required by standard compliance audits to prove that the organization has mitigated the risk."
-        ],
-        correctAnswer: 2,
-        explanation: "Enhanced monitoring should persist for 30-90 days to catch dormant backdoors or recurring attacker attempts to re-enter."
-      },
-      {
-        id: "ir-q5-6",
-        question: "What distinguishes business resumption from technical recovery?",
-        options: [
-          "There is no actual difference, as both terms refer to restoring compromised servers and updating software applications.",
-          "Recovery focuses on restoring system functionality; resumption focuses on business processes and employee productivity.",
-          "Resumption must always be completed first, before any technical recovery or forensic database analysis can be initiated.",
-          "Technical recovery is owned by the business units, while business resumption is handled solely by the IT infrastructure team."
-        ],
-        correctAnswer: 1,
-        explanation: "Technical recovery brings servers/networks online. Business resumption ensures business workflows function and users are productive."
-      },
-      {
-        id: "ir-q5-7",
-        question: "Which re-compromise sign requires IMMEDIATE escalation?",
-        options: [
-          "Connections to previously blocked attacker infrastructure originating from new, uninfected endpoints on the network.",
-          "A temporary increase in help desk tickets reporting slow network speeds or minor login issues after credential rotation.",
-          "Standard automated backup failures on secondary servers that require routine troubleshooting by the sysadmin team.",
-          "Normal login events occurring during standard business hours from users who recently changed their corporate passwords."
-        ],
-        correctAnswer: 0,
-        explanation: "New hosts connecting to known attacker infrastructure indicates that the attacker is still active and has other backdoor channels."
-      },
-      {
-        id: "ir-q5-8",
-        question: "When restoring from backup, what must NOT be skipped?",
-        options: [
-          "Restoring the most recent database backup file, regardless of when the initial compromise occurred in the network.",
-          "Restoring the files directly to the original, compromised hardware before any security updates have been applied.",
-          "Notifying all corporate users to log into their applications before the final database verification is completed.",
-          "Verifying that the backup file predates the compromise and scanning the restored data for hidden malware signatures."
-        ],
-        correctAnswer: 3,
-        explanation: "Backups taken after the initial compromise may contain malware or persistence mechanisms. Always verify timestamps and scan."
-      },
-      {
-        id: "ir-q5-9",
-        question: "What marks formal transition from IR to normal operations?",
-        options: [
-          "The moment all compromised systems are restored to the network and users can access their standard applications.",
-          "The official publication of the technical incident report and its distribution to the security operations team.",
-          "Formal executive sign-off, confirming that leadership has reviewed the response and accepted the residual risks.",
-          "The end of the enhanced monitoring period, typically occurring 30 days after the initial containment of the threat."
-        ],
-        correctAnswer: 2,
-        explanation: "Executive sign-off formally transitions the organization back to normal operations, acknowledging that the incident is closed and residual risk is accepted."
-      },
-      {
-        id: "ir-q5-10",
-        question: "A common business resumption challenge is:",
-        options: [
-          "Complex application dependencies that block workflows even when individual servers are fully online and functional.",
-          "Having too many IT personnel available to troubleshoot issues, leading to conflicting configurations on servers.",
-          "Workstations running too fast after security updates, causing synchronization issues with older legacy databases.",
-          "Users adapting too quickly to new security controls, reducing the overall workload on the IT support help desk."
-        ],
-        correctAnswer: 0,
-        explanation: "Even if individual servers are recovered, complex inter-dependencies between applications can prevent business workflows from functioning."
-      }
-    ]
+      quizId: "ir-q5",
+      courseId: "incident-response",
+      title: "Digital Forensics & Evidence Handling",
+      description: "Scenario-based DFIR: acquisition, chain of custody, memory/disk artifacts, and defensible analysis.",
+      passingScore: 70,
+      timeLimit: 25,
+      questions: [
+          {
+              id: "ir-q5-1",
+              difficulty: "easy",
+              tags: [
+                  "Order of Volatility",
+                  "RFC 3227"
+              ],
+              scenario: "You arrive at a running suspect host. You can only capture one artifact class before shutdown.",
+              question: "Which do you capture first per RFC 3227?",
+              options: [
+                  "Disk image",
+                  "Memory (RAM) — highest volatility; contains process state, encryption keys, network connections, injected code, and cleartext creds lost on power-off",
+                  "Registry export",
+                  "Event logs"
+              ],
+              correctAnswer: 1,
+              explanation: "Order of volatility (RFC 3227): CPU/registers → RAM → network state → running processes → disk → archival. Memory captures ephemeral evidence (keys, injected code, LSASS) that vanishes at shutdown."
+          },
+          {
+              id: "ir-q5-2",
+              difficulty: "easy",
+              tags: [
+                  "Hashing",
+                  "Integrity"
+              ],
+              scenario: "You image a 2 TB drive. What must you record to prove integrity later?",
+              question: "Correct answer?",
+              options: [
+                  "File size only",
+                  "Cryptographic hash (SHA-256 recommended) of source and image, computed with a write-blocker in place, logged with acquirer, timestamp, tool, and version",
+                  "MD5 without documentation",
+                  "Nothing — the imaging tool handles it"
+              ],
+              correctAnswer: 1,
+              explanation: "Evidentiary integrity requires pre- and post-acquisition hashes (SHA-256), write-blocking, and a full acquisition log (who/when/tool/version). MD5 alone is discouraged; undocumented hashes are worthless in dispute."
+          },
+          {
+              id: "ir-q5-3",
+              difficulty: "medium",
+              tags: [
+                  "Chain of Custody"
+              ],
+              scenario: "An imaged drive moves: analyst A → evidence locker → analyst B → external counsel. No log is kept.",
+              question: "What is the consequence?",
+              options: [
+                  "None if the hash matches",
+                  "Chain of custody is broken; opposing counsel can challenge admissibility and weight — even valid hashes cannot cure missing custody",
+                  "Only affects criminal cases",
+                  "The evidence is auto-destroyed"
+              ],
+              correctAnswer: 1,
+              explanation: "Chain of custody is a documented, unbroken trail (who had it, when, why, where, how transferred). Hashes prove file integrity, not custody integrity. Both are required for defensible use."
+          },
+          {
+              id: "ir-q5-4",
+              difficulty: "medium",
+              tags: [
+                  "Memory Forensics",
+                  "Volatility"
+              ],
+              scenario: "In a memory image you see: explorer.exe → cmd.exe → powershell.exe → rundll32.exe with a suspicious network connection, and an injected private memory region in lsass.exe.",
+              question: "What is the most likely finding?",
+              options: [
+                  "Benign IT activity",
+                  "Interactive intrusion with credential access (LSASS injection consistent with mimikatz-style dumping) — priority artifact for triage",
+                  "Automated software update",
+                  "Antivirus scan"
+              ],
+              correctAnswer: 1,
+              explanation: "Interactive process ancestry from explorer, unusual rundll32 network activity, and RWX-injected regions in LSASS are classic credential-access patterns. Volatility/Volatility3 plugins (malfind, hollowfind, ldrmodules, netscan) confirm."
+          },
+          {
+              id: "ir-q5-5",
+              difficulty: "medium",
+              tags: [
+                  "Disk Artifacts"
+              ],
+              scenario: "You need to prove a user opened a specific file on a Windows 10 host.",
+              question: "Which artifact set is most defensible?",
+              options: [
+                  "Recycle bin only",
+                  "MFT + $LogFile/$UsnJrnl + Shellbags + LNK files + Jumplists + Prefetch + RecentDocs + browser/Office MRU — corroborate across multiple artifact classes",
+                  "The file's last-modified time only",
+                  "System reboot log"
+              ],
+              correctAnswer: 1,
+              explanation: "Windows records user activity across many artifact classes. Defensible attribution corroborates across MFT, USN, Shellbags, LNK/Jumplists, Prefetch, and application MRUs — no single artifact is sufficient."
+          },
+          {
+              id: "ir-q5-6",
+              difficulty: "medium",
+              tags: [
+                  "Timeline Analysis"
+              ],
+              scenario: "You need to reconstruct 'what happened between 14:00 and 14:30' on a Windows server.",
+              question: "Best approach?",
+              options: [
+                  "Guess from AV logs",
+                  "Build a super-timeline (e.g., Plaso/log2timeline) combining MFT, event logs, registry, prefetch, browser, EDR, and network logs — normalized to UTC",
+                  "Read the AV log only",
+                  "Rely on user memory"
+              ],
+              correctAnswer: 1,
+              explanation: "Super-timelines fuse artifact classes into one time-ordered view (UTC), which is the only way to reconstruct attacker sequencing across process, filesystem, registry, and network layers."
+          },
+          {
+              id: "ir-q5-7",
+              difficulty: "hard",
+              tags: [
+                  "Anti-Forensics"
+              ],
+              scenario: "An attacker cleared Windows event logs (EID 1102). You need to reconstruct activity.",
+              question: "Which sources survive log clearing?",
+              options: [
+                  "None",
+                  "USN journal, $LogFile, prefetch, shimcache/amcache, registry hives (SYSTEM, SOFTWARE, NTUSER), EDR/SIEM copies, network telemetry (Zeek/firewall/proxy), and backup event logs — plus the 1102 event itself is forensically valuable",
+                  "Only the current event log",
+                  "Only the recycle bin"
+              ],
+              correctAnswer: 1,
+              explanation: "Windows leaves parallel records outside the security log: filesystem journals, execution artifacts (Prefetch, Amcache, Shimcache), registry, and remote/EDR copies. Central log forwarding + EDR are the strongest anti-anti-forensics investments."
+          },
+          {
+              id: "ir-q5-8",
+              difficulty: "hard",
+              tags: [
+                  "Cloud Forensics"
+              ],
+              scenario: "The compromised asset is an AWS EC2 instance. The IR team's laptop-forensics playbook doesn't apply.",
+              question: "What is the correct cloud-native approach?",
+              options: [
+                  "SSH in and run tools live",
+                  "Snapshot EBS volumes, capture memory via SSM/agent, isolate via security-group swap, preserve CloudTrail/GuardDuty/VPC Flow, then analyze from a forensics VPC — no live changes on the victim",
+                  "Terminate the instance first",
+                  "Wait for AWS support"
+              ],
+              correctAnswer: 1,
+              explanation: "Cloud DFIR uses provider primitives: EBS snapshots (immutable, hash-verified), memory capture via SSM/agent, network isolation via SG replacement, and control-plane logs (CloudTrail/GuardDuty/Flow Logs) — investigation happens in an isolated forensics VPC, not on the victim."
+          },
+          {
+              id: "ir-q5-9",
+              difficulty: "hard",
+              tags: [
+                  "Malware Triage"
+              ],
+              scenario: "You recover a suspicious PE. Detonating on a personal laptop feels fastest.",
+              question: "Why is that wrong?",
+              options: [
+                  "It's fine if AV is on",
+                  "Malware must be handled in an isolated, instrumented sandbox (network-isolated or C2-simulated, snapshotted VM) with proper handling procedures — laptop detonation risks infection, data loss, and evidence contamination",
+                  "Personal laptops are safer",
+                  "Only .exe files are dangerous"
+              ],
+              correctAnswer: 1,
+              explanation: "Analysis requires isolated, instrumented environments (Cuckoo/Any.Run/CAPE, snapshotted VMs, INetSim/FakeNet) with defined handling procedures. Ad-hoc detonation risks host infection, C2 callback, evidence contamination, and legal exposure."
+          },
+          {
+              id: "ir-q5-10",
+              difficulty: "hard",
+              tags: [
+                  "Attribution"
+              ],
+              scenario: "After analysis, someone asks: 'Which nation-state actor did this?'",
+              question: "What is the most defensible response?",
+              options: [
+                  "Name a group publicly",
+                  "Attribution is high-confidence only with converging evidence (TTPs, infrastructure, code lineage, timing/geopolitics, human intel) and is generally beyond a single victim's dataset — report observed behavior mapped to ATT&CK; leave named-actor attribution to vendors/government",
+                  "Blame the loudest headline group",
+                  "Refuse to write anything"
+              ],
+              correctAnswer: 1,
+              explanation: "Defensible attribution combines TTPs, infrastructure, code overlap, tradecraft, and non-technical signals. Most enterprises lack the datasets. Reports should describe behavior/ATT&CK mapping; named-actor claims belong to specialized vendors and government."
+          }
+      ]
   },
   {
-    quizId: "ir-q6",
-    courseId: "incident-response",
-    title: "Post-Incident Activities",
-    description: "Test your knowledge of lessons learned, report writing, metrics, and continuous improvement.",
-    passingScore: 70,
-    timeLimit: 20,
-    questions: [
-      {
-        id: "ir-q6-1",
-        question: "What is the fundamental principle of a blameless post-mortem?",
-        options: [
-          "Ensuring that no single employee is held responsible or receives disciplinary action, regardless of negligence.",
-          "Focusing on identifying and remediating systemic or process vulnerabilities rather than assigning individual blame.",
-          "Restricting post-incident meeting attendance exclusively to executive leadership and external corporate legal counsel.",
-          "Avoiding any formal written documentation or timelines to prevent the findings from being discovered in lawsuits."
-        ],
-        correctAnswer: 1,
-        explanation: "Blameless post-mortems build a culture of safety by focusing on how the system failed and how to improve it, not who to blame."
-      },
-      {
-        id: "ir-q6-2",
-        question: "When should lessons learned meetings be held?",
-        options: [
-          "Within 24 hours of the initial containment, while the technical incident responders are actively wrapping up investigations.",
-          "Exactly one month after the incident occurred, allowing the security operations team to gather all outstanding metrics.",
-          "Within 2 weeks of closing the incident, ensuring that all details are fresh in the minds of the participants.",
-          "Only during the standard annual security review, along with other compliance checks and general policy updates."
-        ],
-        correctAnswer: 2,
-        explanation: "Lessons learned meetings should occur within 2 weeks of resolution, when details are still fresh but the team has had time to rest."
-      },
-      {
-        id: "ir-q6-3",
-        question: "Every action item should include:",
-        options: [
-          "A single designated owner, a specific target deadline, and clearly defined success criteria for completion.",
-          "A detailed description of the vulnerability, along with estimated budgets and expected return on investment.",
-          "Written approval from the Chief Executive Officer, confirming that department funds have been allocated.",
-          "A list of multiple team members who will work on it together, with no specific individual held accountable."
-        ],
-        correctAnswer: 0,
-        explanation: "To ensure accountability, each action item from a lessons learned meeting must have one owner, a deadline, and clear success criteria."
-      },
-      {
-        id: "ir-q6-4",
-        question: "Which metric measures total attacker presence time?",
-        options: [
-          "Mean Time to Detect (MTTD), measuring the average time elapsed between initial compromise and alert generation.",
-          "Mean Time to Respond (MTTR), measuring the average time required to contain a threat after it is detected.",
-          "Dwell Time, representing the total time duration from the initial system compromise until complete eradication.",
-          "Mean Time to Escalate (MTTE), measuring the average time taken to transition an alert from Tier-1 to Tier-3."
-        ],
-        correctAnswer: 2,
-        explanation: "Dwell time measures the complete duration of an attacker's presence in the environment, from initial entry to final eradication."
-      },
-      {
-        id: "ir-q6-5",
-        question: "The Executive Summary of an incident report should contain:",
-        options: [
-          "A complete list of all network indicators of compromise and forensic registry paths discovered during analysis.",
-          "A non-technical summary of the incident, including business impact, major actions, and key recommendations.",
-          "Detailed mappings of every attacker behavior directly to the corresponding MITRE ATT&CK sub-technique codes.",
-          "A comprehensive description of the forensic imaging software and methodology used by the response analysts."
-        ],
-        correctAnswer: 1,
-        explanation: "The Executive Summary is designed for leadership; it must use non-technical language to explain what happened, the impact, and high-level fixes."
-      },
-      {
-        id: "ir-q6-6",
-        question: "What does 're-compromise rate' measure?",
-        options: [
-          "How frequently the same threat actor successfully regains access due to incomplete or ineffective eradication.",
-          "The total number of new security incidents recorded across all corporate departments during a fiscal year.",
-          "The average frequency of software patches and configuration updates applied to production database servers.",
-          "The percentage of false positive alerts generated by endpoint detection rules that require manual review."
-        ],
-        correctAnswer: 0,
-        explanation: "Re-compromise rate tracks how often an organization is hit by the same threat because the root cause or backdoor was not fully resolved."
-      },
-      {
-        id: "ir-q6-7",
-        question: "If MTTD is trending up, invest in:",
-        options: [
-          "Hiring additional hands-on incident handlers to manage the queue of active alerts and write post-mortem reports.",
-          "More robust eradication tools, such as automated system rebuilding software and remote host scanning agents.",
-          "Better detection capabilities, such as SIEM correlation rules, EDR agent coverage, and threat intelligence feeds.",
-          "Faster backup systems and offsite storage arrays to speed up the recovery of compromised database servers."
-        ],
-        correctAnswer: 2,
-        explanation: "MTTD is Mean Time to Detect. If it's rising, it means detection is taking longer, so the organization needs better detection capabilities."
-      },
-      {
-        id: "ir-q6-8",
-        question: "What timestamp format should incident reports use?",
-        options: [
-          "The local timezone of the specific forensic analyst who is authoring the final incident investigation report.",
-          "Coordinated Universal Time (UTC), to prevent confusion when correlating events across different physical locations.",
-          "Eastern Standard Time (EST) or Eastern Daylight Time (EDT), as it is the standard timezone for financial systems.",
-          "The specific timezone of the local server where the initial compromise or malicious activity was first logged."
-        ],
-        correctAnswer: 1,
-        explanation: "Using UTC is crucial in incident reporting to align events across different systems and geographic locations without timezone confusion."
-      },
-      {
-        id: "ir-q6-9",
-        question: "At which maturity level does IR become metrics-driven?",
-        options: [
-          "Developing (Level 2), where the organization begins defining basic roles and document templates for response.",
-          "Defined (Level 3), where standard incident response processes are documented and integrated across departments.",
-          "Optimizing (Level 5), where automated playbooks and self-healing systems handle the majority of security alerts.",
-          "Managed (Level 4), featuring metrics-driven continuous improvement and integration of advanced threat intelligence."
-        ],
-        correctAnswer: 3,
-        explanation: "At Level 4 (Managed), the incident response capability is quantitatively managed using metrics to drive continuous improvement."
-      },
-      {
-        id: "ir-q6-10",
-        question: "'Deploy EDR on uncovered systems' is which improvement category?",
-        options: [
-          "Detection improvement, focused on refining SIEM search rules and parsing new network security logging sources.",
-          "Process improvement, focused on updating standard operating playbooks and escalation paths for active threats.",
-          "Technology improvement, focused on deploying new security tools and expanding agent coverage across endpoints.",
-          "People improvement, focused on providing training courses and certifications for incident handling personnel."
-        ],
-        correctAnswer: 2,
-        explanation: "Deploying tools or expanding coverage represents a Technology improvement, as opposed to Process (playbooks/escalation) or People (training)."
-      }
-    ]
-  },
+      quizId: "ir-q6",
+      courseId: "incident-response",
+      title: "Post-Incident, Metrics & Continuous Improvement",
+      description: "Scenario-based post-incident: blameless reviews, reporting, metrics that matter, and turning incidents into durable improvement.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "ir-q6-1",
+              difficulty: "easy",
+              tags: [
+                  "Blameless Post-Mortem"
+              ],
+              scenario: "In the lessons-learned meeting, the CIO opens with: 'Whose fault was this?'",
+              question: "How should the facilitator reframe?",
+              options: [
+                  "Answer with a name",
+                  "Redirect to a blameless format: 'Which decisions made sense with the information available, and which system/process changes would make the right decision easier next time?'",
+                  "Cancel the meeting",
+                  "Blame the vendor"
+              ],
+              correctAnswer: 1,
+              explanation: "Blameless reviews (Google/Etsy tradition) surface systemic root causes because participants stop defending themselves. Naming individuals kills future candor, guarantees repeat incidents, and produces action items nobody will own honestly."
+          },
+          {
+              id: "ir-q6-2",
+              difficulty: "easy",
+              tags: [
+                  "Timing"
+              ],
+              scenario: "When should the lessons-learned meeting occur?",
+              question: "Best window and why?",
+              options: [
+                  "Immediately after containment while adrenaline is high",
+                  "Within ~2 weeks of closure — recent enough for accurate recall, distant enough for perspective and a written timeline",
+                  "During the next annual audit",
+                  "Never — retros are optional"
+              ],
+              correctAnswer: 1,
+              explanation: "Two weeks balances recall fidelity with reflection. Immediate reviews mix trauma with analysis; delayed reviews lose context and momentum on action items."
+          },
+          {
+              id: "ir-q6-3",
+              difficulty: "medium",
+              tags: [
+                  "Action Items"
+              ],
+              scenario: "The retro produces 22 action items. Six months later, 3 are done and the rest are 'in progress'.",
+              question: "Which structural fix helps most?",
+              options: [
+                  "Cancel retros",
+                  "Every action item requires a named single owner, a deadline, clear acceptance criteria, and a monthly review with executive visibility — tracked like any other engineering commitment",
+                  "Add more action items",
+                  "Assign to 'the team'"
+              ],
+              correctAnswer: 1,
+              explanation: "Action items without owner/deadline/acceptance/executive visibility are wishes. Program-level tracking (with escalation) is what turns lessons into durable improvement — this is the difference between mature and cosmetic post-mortems."
+          },
+          {
+              id: "ir-q6-4",
+              difficulty: "medium",
+              tags: [
+                  "Metrics",
+                  "MTTD/MTTR"
+              ],
+              scenario: "Your MTTD is trending upward for two quarters.",
+              question: "Where do you invest?",
+              options: [
+                  "Faster containment tools",
+                  "Detection coverage and quality: ATT&CK gap analysis, telemetry coverage (endpoint/identity/cloud), rule precision, threat-informed hunting, tuning of noisy rules",
+                  "More marketing",
+                  "Reduce logging"
+              ],
+              correctAnswer: 1,
+              explanation: "MTTD is bounded by what you can see and how well you can see it. Fix telemetry gaps, ATT&CK coverage, and detection quality (precision/recall) before adding response horsepower — you cannot respond to what you cannot detect."
+          },
+          {
+              id: "ir-q6-5",
+              difficulty: "medium",
+              tags: [
+                  "Dwell Time"
+              ],
+              scenario: "Which metric best captures 'how long the attacker had free run of the environment'?",
+              question: "Pick and justify.",
+              options: [
+                  "MTTR",
+                  "Dwell time — initial compromise to eradication; the single most business-relevant intrusion metric because it correlates with blast radius, exfil volume, and cost",
+                  "Alert count",
+                  "MTBF"
+              ],
+              correctAnswer: 1,
+              explanation: "Dwell time (compromise → eradication) integrates detection AND response effectiveness and is the metric most correlated with breach cost and scope. Industry reports (Mandiant, IBM) track it as the north-star."
+          },
+          {
+              id: "ir-q6-6",
+              difficulty: "medium",
+              tags: [
+                  "Executive Reporting"
+              ],
+              scenario: "You draft an incident report starting with: 'On host WKS-4471 we observed rundll32.exe executing a DLL from %AppData%…'",
+              question: "What's wrong for the executive summary?",
+              options: [
+                  "Nothing",
+                  "Executive Summary must be business-language: what happened, business impact, data involved, actions taken, current status, top recommendations — technical detail belongs later in the report",
+                  "Add more commands",
+                  "Remove all timestamps"
+              ],
+              correctAnswer: 1,
+              explanation: "Executive summaries answer: what, so-what, now-what — in business terms. Technical detail lives in the analysis section for the technical audience. Mixing the two loses both audiences."
+          },
+          {
+              id: "ir-q6-7",
+              difficulty: "hard",
+              tags: [
+                  "Re-compromise Rate"
+              ],
+              scenario: "Six months after the incident, the same threat actor is back via a different but related vector.",
+              question: "What does this indicate and how do you measure it?",
+              options: [
+                  "Bad luck",
+                  "Incomplete eradication or unaddressed root cause. Track 're-compromise rate' (repeat intrusions by same actor/vector/family within a defined window) as a leading indicator of eradication quality",
+                  "Attacker skill",
+                  "Nothing measurable"
+              ],
+              correctAnswer: 1,
+              explanation: "Re-compromise rate is the sharpest measure of eradication + root-cause quality. Rising rate = you're treating symptoms. It should be reviewed alongside MTTD/MTTR/dwell."
+          },
+          {
+              id: "ir-q6-8",
+              difficulty: "hard",
+              tags: [
+                  "Timestamps",
+                  "Correlation"
+              ],
+              scenario: "Different systems in your report show times in EST, IST, and UTC. Correlating events becomes error-prone.",
+              question: "What standard should reports use?",
+              options: [
+                  "Analyst's local time",
+                  "All timestamps in UTC (ISO 8601, e.g., 2026-01-14T14:02:31Z); optionally show local time in parentheses. Enforce clock sync (NTP) as a Preparation requirement",
+                  "Local time of each server",
+                  "Whatever the SIEM shows"
+              ],
+              correctAnswer: 1,
+              explanation: "UTC + ISO 8601 is the only defensible standard for multi-system, multi-region correlation and legal reporting. Reliable time also requires enforced NTP/PTP across sources — a Preparation-phase control."
+          },
+          {
+              id: "ir-q6-9",
+              difficulty: "hard",
+              tags: [
+                  "Improvement Categories"
+              ],
+              scenario: "Retro produces: (a) 'Deploy EDR to 400 uncovered Linux hosts', (b) 'Add krbtgt rotation playbook branch', (c) 'Train Tier-1 on Kerberos abuse'.",
+              question: "Classify each into People / Process / Technology.",
+              options: [
+                  "All Technology",
+                  "a = Technology (coverage), b = Process (playbook), c = People (training) — a healthy retro produces items across all three categories",
+                  "All Process",
+                  "Only People matters"
+              ],
+              correctAnswer: 1,
+              explanation: "Balanced improvement portfolios span People, Process, and Technology. Retros dominated by one category (usually 'buy a tool') indicate weak root-cause analysis and predict recurrence."
+          },
+          {
+              id: "ir-q6-10",
+              difficulty: "hard",
+              tags: [
+                  "Maturity"
+              ],
+              scenario: "Leadership asks: 'When do we become a metrics-driven IR program?'",
+              question: "Best framing?",
+              options: [
+                  "When we buy a dashboard",
+                  "At CMMI Level 4 (Quantitatively Managed): processes are defined (Level 3), instrumented, and *decisions* are driven by measured performance — the shift is behavioral, not tooling",
+                  "When we hire more analysts",
+                  "Never — IR can't be measured"
+              ],
+              correctAnswer: 1,
+              explanation: "CMMI Level 4 requires that processes exist (Level 3) AND that quantitative data drives management decisions. Dashboards without decision authority ≠ metrics-driven. The distinguishing behavior is: 'we changed X because the metric said Y'."
+          }
+      ]
+  }
   {
     quizId: "th-q1",
     courseId: "threat-hunting",
