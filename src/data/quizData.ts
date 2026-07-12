@@ -5226,8 +5226,8 @@ export const quizzes: QuizData[] = [
               explanation: "CMMI Level 4 requires that processes exist (Level 3) AND that quantitative data drives management decisions. Dashboards without decision authority ≠ metrics-driven. The distinguishing behavior is: 'we changed X because the metric said Y'."
           }
       ]
-  }
-  {
+   },
+   {
     quizId: "th-q1",
     courseId: "threat-hunting",
     title: "Hunting Methodology & Frameworks",
