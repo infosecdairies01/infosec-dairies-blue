@@ -6192,1031 +6192,960 @@ export const quizzes: QuizData[] = [
     quizId: "de-q1",
     courseId: "detection-engineering",
     title: "Detection Fundamentals",
-    description: "Test your understanding of detection philosophy, coverage models, and alert quality.",
+    description: "Scenario-based mastery of detection philosophy, coverage models, and alert quality.",
     passingScore: 70,
     timeLimit: 15,
     questions: [
-      { id: "de-q1-1", question: "What is the most durable type of detection on the detection spectrum?", options: ["Hash-based detections matching specific static MD5 or SHA256 string signatures of known files", "Signature-based rules checking for specific byte patterns within static program executables", "Behavioral-based indicators that track common system changes like registry key additions", "Anomaly-based detections utilizing statistical baselines of normal user activity patterns"], correctAnswer: 3, explanation: "Anomaly-based detections using statistical baselines are the most durable, lasting years compared to hash-based detections that last hours." },
-      { id: "de-q1-2", question: "What is the 'assume breach' principle in detection engineering?", options: ["Assume adversaries have already penetrated defenses and validate controls through proactive detection", "Assume all enterprise software applications contain critical vulnerabilities that cannot be patched", "Assume breaches are completely unavoidable and thus stop investing in traditional perimeter defense", "Assume every single low-severity console alert represents a major network security breach event"], correctAnswer: 0, explanation: "Assume breach means building detections that validate whether controls are working, not just blocking at the perimeter." },
-      { id: "de-q1-3", question: "What is a good target false positive rate for a high-fidelity detection?", options: ["Below fifty percent to allow analysts ample time for manual sorting and review of event logs", "Below thirty percent to keep general SOC dashboard statistics looking positive for leadership", "Below five percent to prevent alert fatigue and ensure analysts trust the actionability of alerts", "Below fifteen percent to maintain a balanced ratio between true security alerts and false alarms"], correctAnswer: 2, explanation: "High-fidelity detections should have a FP rate below 5% — analysts must trust alerts to be actionable." },
-      { id: "de-q1-4", question: "What does 'detection as a product' mean?", options: ["Selling custom detection rules commercially to external security operations centers and firms", "Applying software engineering practices like version control, testing, and lifecycle management", "Using exclusively commercial, pre-packaged security vendor rules that require zero custom tuning", "Focusing detection development efforts solely on identifying hardware and physical asset failures"], correctAnswer: 1, explanation: "Detection as a product applies software engineering practices: requirements, testing, version control, and lifecycle management." },
-      { id: "de-q1-5", question: "Why are behavior-based detections preferred over IOC-based detections?", options: ["Behaviors are more durable, as attackers easily change static IOCs but changing TTPs is very costly", "Behavioral rules are significantly easier to design and require far fewer resources than simple IOCs", "They are guaranteed to produce zero false positive alerts during complex software update cycles", "They require significantly less log storage and processing power to evaluate in SIEM consoles"], correctAnswer: 0, explanation: "Behaviors (TTPs) sit at the top of the Pyramid of Pain — changing tradecraft is far more costly for adversaries than rotating IOCs." },
-      { id: "de-q1-6", question: "What is the primary cost of false positives in a SOC?", options: ["Excessive database storage and license cost consumption caused by archiving large volumes of logs", "Wasted network bandwidth from transferring unnecessary event telemetry from endpoints to SIEM", "Increased software licensing fees paid to security vendors based on alert volume metrics on system", "Analyst fatigue and alert blindness, directly leading to critical real security threats being missed"], correctAnswer: 3, explanation: "False positives cause analyst fatigue and alert blindness, directly leading to missed real threats." },
-      { id: "de-q1-7", question: "What framework is most commonly used to map detection coverage?", options: ["NIST Cybersecurity Framework (CSF) for establishing high-level organizational security baselines", "ISO 27001 standard documentation to meet compliance requirements for external security auditors", "MITRE ATT&CK matrix to map adversary techniques and systematically identify detection coverage gaps", "CIS Controls list to audit basic system security configurations and user account permissions"], correctAnswer: 2, explanation: "MITRE ATT&CK maps adversary techniques and is the standard framework for measuring detection coverage." },
-      { id: "de-q1-8", question: "What should you verify BEFORE writing any detection rule?", options: ["Obtain formal budget approval for potential SIEM license expansion from corporate finance leaders", "Verify that the necessary log source is actively enabled, ingested, and normalized in the SIEM", "Ensure that similar detection rules have not been written by external security community forums", "Obtain written approval from the director of security operations to deploy a new monitoring rule"], correctAnswer: 1, explanation: "No data = no detection. Always verify the log source is enabled, ingested into SIEM, and normalized before writing rules." },
-      { id: "de-q1-9", question: "What is the '5-day rule' for noisy detections?", options: ["Disable a rule immediately if it generates more than 5 false positives per day for 5 straight days", "Review and rewrite every active production detection rule systematically every five working days", "Deploy newly written detection rules in alert-only staging environments for precisely five days", "Require every detection analyst to write and deploy a minimum of five new detection rules per day"], correctAnswer: 0, explanation: "The 5-day rule prevents persistent noise: disable immediately and schedule a rewrite rather than letting noise accumulate." },
-      { id: "de-q1-10", question: "What is the detection engineering lifecycle order?", options: ["Deploy rule to production, run verification tests, design query logic, gather logging requirements", "Write search queries, deploy rules, and archive documentation without performing validation tests", "Identify requirements, design logic, develop rules, perform testing, deploy, operate, and retire", "Test system controls, build automated pipelines, ship rules to production, and monitor console alerts"], correctAnswer: 2, explanation: "The full lifecycle is: Requirements → Design → Development → Testing → Deployment → Operations → Retirement." }
+      {
+        id: "de-q1-1",
+        difficulty: "easy",
+        tags: ["Detection Spectrum", "Pyramid of Pain"],
+        scenario: "Leadership asks why last quarter's shiny new hash-block feed stopped catching the same actor within a week, while your Sysmon behavior rule for 'lsass access from non-Microsoft binary' has fired against three unrelated intrusions in six months.",
+        question: "Which detection type is the most durable investment?",
+        options: [
+          "Hash-based signatures — precise and easy to share",
+          "Behavior/anomaly detections on TTPs — attackers pay a real cost to change tradecraft, while IOCs rotate hourly",
+          "Static string signatures in binaries",
+          "Pure IP/domain blocklists"
+        ],
+        correctAnswer: 1,
+        explanation: "Pyramid of Pain: TTPs and behaviors sit at the top — costly and slow to change. Hashes and IPs are trivially rotated."
+      },
+      {
+        id: "de-q1-2",
+        difficulty: "easy",
+        tags: ["Assume Breach"],
+        scenario: "A VP argues detection engineering is a waste because 'the EDR and firewall already block everything'.",
+        question: "How do you frame the 'assume breach' counter-argument?",
+        options: [
+          "Preventive controls always fail eventually; detections validate that controls work and catch the residual — you cannot manage what you cannot see",
+          "Agree and disband the team",
+          "Buy more preventive tools",
+          "Only monitor the perimeter"
+        ],
+        correctAnswer: 0,
+        explanation: "Assume-breach assumes prevention will fail at some layer; detections continuously test controls and provide the signal to respond."
+      },
+      {
+        id: "de-q1-3",
+        difficulty: "medium",
+        tags: ["Alert Quality", "FP Rate"],
+        scenario: "A new rule fires 400 times a day; ~380 are benign admin activity. Analysts start auto-closing everything tagged with that rule name within 72 hours.",
+        question: "What is the correct fidelity target and immediate action?",
+        options: [
+          "Leave it — volume proves coverage",
+          "High-fidelity alerting rules should sit below ~5% FP; tune, add exclusions, or downgrade to a hunt/audit stream before the rule name becomes untrusted",
+          "Raise severity to force attention",
+          "Silence the rule permanently"
+        ],
+        correctAnswer: 1,
+        explanation: "Alert fatigue destroys trust. Rules over the FP budget must be tuned, split, or demoted to lower-tier telemetry — never left noisy."
+      },
+      {
+        id: "de-q1-4",
+        difficulty: "medium",
+        tags: ["Detection-as-Product"],
+        scenario: "Your team ships rules from analyst laptops directly to prod. There is no changelog, no owner, and no test — the same 'PowerShell EncodedCommand' rule exists in three copies with different logic.",
+        question: "What does 'detection as a product' actually require?",
+        options: [
+          "Nothing changes — just document more",
+          "Requirements → design → peer review → tests (unit + atomic) → CI/CD deploy → owner + SLA + tuning cadence + retirement criteria, all under version control",
+          "Buy vendor rules only",
+          "Let each analyst own their own rules"
+        ],
+        correctAnswer: 1,
+        explanation: "Detection-as-product borrows SWE discipline: versioning, review, tests, owners, and lifecycle — not one-off scripts."
+      },
+      {
+        id: "de-q1-5",
+        difficulty: "medium",
+        tags: ["Prerequisite Data"],
+        scenario: "A team lead demands a T1055 (Process Injection) detection by Friday. Sysmon is deployed but Event IDs 8 and 10 are excluded in config; EDR API access is not funded.",
+        question: "What is the correct first move?",
+        options: [
+          "Write the rule anyway; ship silent",
+          "Stop — no telemetry = no detection. Fix the data gap first (enable Sysmon 8/10 or fund EDR), then design the analytic; document the visibility gap and its ATT&CK coverage impact",
+          "Approximate with successful logon events",
+          "Buy a threat intel feed"
+        ],
+        correctAnswer: 1,
+        explanation: "Rules without underlying telemetry are theatre. Fix or acknowledge the visibility gap before writing the analytic."
+      },
+      {
+        id: "de-q1-6",
+        difficulty: "medium",
+        tags: ["Coverage Model"],
+        scenario: "Your CISO wants a single slide showing where you can and cannot detect adversary behavior.",
+        question: "Which framework and artifact answers this best?",
+        options: [
+          "NIST CSF maturity radar",
+          "MITRE ATT&CK Navigator layer showing validated + tuned detections per (sub-)technique, colored by confidence, filtered to your threat model",
+          "PCI DSS checklist",
+          "OWASP Top 10"
+        ],
+        correctAnswer: 1,
+        explanation: "ATT&CK Navigator is the industry-standard coverage artifact — but only meaningful when limited to validated, tuned, threat-relevant detections."
+      },
+      {
+        id: "de-q1-7",
+        difficulty: "medium",
+        tags: ["Noisy Rule Policy"],
+        scenario: "A production rule generated >5 FPs/day for five consecutive days. It has an owner but no tuning has occurred.",
+        question: "What does a healthy noisy-rule policy do?",
+        options: [
+          "Wait a quarter and revisit",
+          "Auto-disable (or move to audit-only) on breach of the FP budget, open a tuning ticket to the owner with SLA, and require re-validation before re-enable",
+          "Delete the rule silently",
+          "Ignore — analysts will learn"
+        ],
+        correctAnswer: 1,
+        explanation: "Policy-driven auto-suppression protects analyst trust and forces the owner to rework or retire the rule."
+      },
+      {
+        id: "de-q1-8",
+        difficulty: "hard",
+        tags: ["Precision vs Recall"],
+        scenario: "You must choose between (A) a broad rule catching 95% of variants with 30% FP, or (B) a narrow rule catching 60% with 2% FP, both for the same T-code. Response tier is Tier 1 with SOAR auto-triage.",
+        question: "What is the right pattern?",
+        options: [
+          "Only ship A",
+          "Ship both in layers: B as high-fidelity alerting; A as low-fidelity hunt/audit stream feeding enrichment and periodic review — never rely on one rule for one technique",
+          "Only ship B",
+          "Merge into one medium rule"
+        ],
+        correctAnswer: 1,
+        explanation: "Layered detections trade precision and recall across tiers instead of forcing one rule to do both jobs."
+      },
+      {
+        id: "de-q1-9",
+        difficulty: "hard",
+        tags: ["Validation"],
+        scenario: "Your ATT&CK layer shows 74% coverage. A red team runs Atomic Red Team on 40 techniques you claim to cover; only 22 alert.",
+        question: "What is the honest read?",
+        options: [
+          "Coverage is fine on paper",
+          "Untested coverage is fiction — recompute the layer to only count detections that pass current atomic/purple-team validation, and treat the delta as a program KPI",
+          "Blame the red team",
+          "Delete the failing rules"
+        ],
+        correctAnswer: 1,
+        explanation: "Coverage without continuous validation is a vanity metric. Validated coverage is the number that matters."
+      },
+      {
+        id: "de-q1-10",
+        difficulty: "hard",
+        tags: ["Lifecycle"],
+        scenario: "You are drafting the team's SDLC for detections.",
+        question: "What is the correct end-to-end lifecycle?",
+        options: [
+          "Write → ship → forget",
+          "Requirements (threat + data) → design → develop → test (unit, atomic, purple) → deploy via CI/CD → operate (tune, own, SLA) → retire (superseded, obsolete, or ineffective)",
+          "Buy → deploy → audit yearly",
+          "Alert → investigate → close"
+        ],
+        correctAnswer: 1,
+        explanation: "A real detection SDLC covers cradle-to-grave, including deliberate retirement — rules that never die become tech debt."
+      }
     ]
   },
   {
     quizId: "de-q2",
     courseId: "detection-engineering",
     title: "SIGMA Rules",
-    description: "Assess your knowledge of SIGMA syntax, modifiers, and rule conversion.",
+    description: "Scenario-based knowledge of SIGMA syntax, modifiers, conversion, and portability.",
     passingScore: 70,
     timeLimit: 15,
     questions: [
-      { id: "de-q2-1", question: "What format are SIGMA rules written in?", options: ["Extensible Markup Language (XML) format designed for structured system configurations", "YAML Ain't Markup Language (YAML) format designed for human readability and code tracking", "JavaScript Object Notation (JSON) format optimized for high-speed API data exchanges", "Tom's Obvious Minimal Language (TOML) format optimized for simple application settings"], correctAnswer: 1, explanation: "SIGMA rules use YAML format, making them human-readable and version-control friendly." },
-      { id: "de-q2-2", question: "What is the purpose of the 'logsource' field in SIGMA?", options: ["Define the specific output format and destination SIEM repository for generated rule alerts", "Configure the severity levels and prioritization metrics applied to triggered analyst alerts", "Specify the developer's name, rule release version, and licensing conditions of the rule", "Define the target dataset category and operating system product that generated the event logs"], correctAnswer: 3, explanation: "The logsource field abstracts the data source using category (process_creation) and product (windows), enabling vendor-neutral rules." },
-      { id: "de-q2-3", question: "What does the SIGMA modifier 'endswith' do?", options: ["Applies a wildcard matching modifier to evaluate if fields terminate with a specific string", "Marks the end of the SIGMA rule definition block and prevents any further rule processing", "Initiates a count modifier tracking the total number of line endings in parsed telemetry", "Terminates the active connection between the endpoint collection agent and target SIEM pool"], correctAnswer: 0, explanation: "The endswith modifier performs a suffix match — e.g., Image|endswith: '\\powershell.exe' matches any path ending with that string." },
-      { id: "de-q2-4", question: "How do you exclude false positives in a SIGMA rule?", options: ["Delete the entire detection rule immediately from the production git repository to stop noise", "Ignore the generated alerts in the SOC console and wait for automated cleanup script cycles", "Define an exclusion filter selection block and apply a 'not' conditional statement in rules", "Send an automated email notification to the SOC manager requesting manual system updates"], correctAnswer: 2, explanation: "Define a filter selection containing FP patterns, then use 'condition: selection and not filter' to exclude them." },
-      { id: "de-q2-5", question: "What tool converts SIGMA rules to SIEM-specific queries?", options: ["Wireshark packet analyzer application used for capturing and inspecting raw network flows", "The pySigma parser engine and sigma-cli utility converting rules to target SIEM queries", "Nmap port scanner used for mapping active hosts, open ports, and running services on network", "Volatility memory analysis framework used for extracting forensic artifacts from RAM dumps"], correctAnswer: 1, explanation: "pySigma (sigma-cli) converts SIGMA rules to Splunk SPL, Elastic KQL, Sentinel KQL, and other SIEM query languages." },
-      { id: "de-q2-6", question: "What does 'condition: 1 of selection*' mean?", options: ["Triggers the rule if any selection block matching the wildcard pattern is successfully met", "Evaluates only the first defined selection block in the rule and ignores remaining criteria", "Requires exactly one matching event occurrence across all defined selection criteria blocks", "Instructs the converter engine to select a single random query field for SIEM translation"], correctAnswer: 0, explanation: "'1 of selection*' means any selection whose name starts with 'selection' can trigger the rule — useful for multiple variants." },
-      { id: "de-q2-7", question: "What is a SIGMA processing pipeline?", options: ["An automated database backup process that archives cold historical log events to cloud pools", "A standard network communication protocol designed for transferring logs between remote segments", "A transformation configuration mapping generic SIGMA field names to target SIEM schema fields", "A software CI/CD pipeline executing linting and unit validation tests for detection scripts"], correctAnswer: 2, explanation: "Processing pipelines map SIGMA's generic field names to SIEM-specific fields (e.g., Image → process.executable in ECS)." },
-      { id: "de-q2-8", question: "How does SIGMA handle aggregation?", options: ["SIGMA is a static query format and does not support any aggregation functions or operators", "Delegates all mathematical aggregation processes to external command-line scripting tools", "Restricts aggregation functions exclusively to the paid enterprise versions of the converter", "Supports count() and sum() operators combined with timeframe parameters inside conditions"], correctAnswer: 3, explanation: "SIGMA supports aggregation functions like count() with timeframes — e.g., 'count(user) by src_ip > 10' in a 5m window." },
-      { id: "de-q2-9", question: "What does the 'tags' field in SIGMA typically contain?", options: ["Hypertext Markup Language (HTML) tags used for structuring browser display formats of alerts", "Standardized MITRE ATT&CK tactic and technique IDs utilized for mapping detection coverage", "Operating system file tags used by local filesystems to categorize user-accessible documents", "Network boundary firewall tags indicating which security zones allow outbound traffic flows"], correctAnswer: 1, explanation: "Tags map to ATT&CK techniques (e.g., attack.t1059.001) and tactics (e.g., attack.execution) for coverage mapping." },
-      { id: "de-q2-10", question: "What is SigmaHQ?", options: ["A commercial cyber security corporation specializing in custom automated detection products", "A vendor-specific SIEM appliance designed for hosting large-scale corporate event databases", "The official open-source community repository hosting thousands of curated SIGMA rules", "An international certification body defining standards for cyber defense engineering programs"], correctAnswer: 2, explanation: "SigmaHQ is the official open-source repository containing thousands of community-maintained SIGMA detection rules." }
+      {
+        id: "de-q2-1",
+        difficulty: "easy",
+        tags: ["SIGMA Basics"],
+        scenario: "Your org runs Splunk in HQ, Elastic in EU, and Sentinel in the cloud tenant. Leadership wants one detection language shared across all three.",
+        question: "Why is SIGMA the right authoring layer?",
+        options: [
+          "SIGMA is a vendor-neutral YAML format that compiles to Splunk SPL, Elastic KQL/EQL, and KQL — you author once, convert per backend",
+          "SIGMA runs on the endpoint",
+          "SIGMA replaces the SIEM engine",
+          "SIGMA is an EDR agent"
+        ],
+        correctAnswer: 0,
+        explanation: "SIGMA is a portable authoring format. Backends (sigmac / pysigma) translate to the target SIEM query language."
+      },
+      {
+        id: "de-q2-2",
+        difficulty: "easy",
+        tags: ["logsource"],
+        scenario: "You paste a rule with `logsource: { category: process_creation, product: windows }` but it converts to a Sysmon query in one env and to Security 4688 in another.",
+        question: "What is the role of logsource?",
+        options: [
+          "Cosmetic",
+          "It declares the abstract event class; backend field-mapping config translates it to the correct data source and field names per environment",
+          "It fixes the raw index name",
+          "It is only documentation"
+        ],
+        correctAnswer: 1,
+        explanation: "logsource is the abstract contract; the backend + field mapping decides which product/index/fields fulfil it (Sysmon 1 vs Security 4688)."
+      },
+      {
+        id: "de-q2-3",
+        difficulty: "medium",
+        tags: ["Modifiers"],
+        scenario: "You want to match any Image path ending in `\\powershell.exe` OR `\\pwsh.exe`, case-insensitively.",
+        question: "Which SIGMA construction is correct?",
+        options: [
+          "Regex only",
+          "`Image|endswith:` with a YAML list of both values — a list under one field is implicit OR, and `endswith` is case-insensitive by default",
+          "`Image|all:` with the list",
+          "`Image|startswith:` with the list"
+        ],
+        correctAnswer: 1,
+        explanation: "Lists imply OR; `|endswith` handles the suffix match cleanly. `|all` would require both suffixes on the same value (impossible)."
+      },
+      {
+        id: "de-q2-4",
+        difficulty: "medium",
+        tags: ["Condition Logic"],
+        scenario: "Your detection has three selection blocks: `selection_proc`, `selection_cmd`, `filter_signed`. You want proc AND cmd, minus signed binaries.",
+        question: "Which condition line implements that?",
+        options: [
+          "`selection_proc or selection_cmd`",
+          "`all of selection_*`",
+          "`selection_proc and selection_cmd and not filter_signed`",
+          "`1 of selection_*`"
+        ],
+        correctAnswer: 2,
+        explanation: "Explicit boolean logic gives precise control. `all of` would incorrectly include the filter as a required match."
+      },
+      {
+        id: "de-q2-5",
+        difficulty: "medium",
+        tags: ["False Positives Field"],
+        scenario: "A reviewer rejects your rule because the `falsepositives` field says 'None known'. You've never tested it in a real environment.",
+        question: "Why does the reviewer care?",
+        options: [
+          "SIGMA won't compile",
+          "'None known' is a red flag — the field must list plausible benign causes (admin tooling, backup agents, MECM) so downstream teams can pre-tune before deploy",
+          "It affects performance",
+          "It changes severity"
+        ],
+        correctAnswer: 1,
+        explanation: "`falsepositives` is a contract with downstream users. Empty or 'None' signals untested, un-tuned detections."
+      },
+      {
+        id: "de-q2-6",
+        difficulty: "medium",
+        tags: ["Portability Pitfalls"],
+        scenario: "Your rule uses `CommandLine|contains: 'Invoke-Mimikatz'`. It fires in Splunk but not in Sentinel.",
+        question: "What is the most common cause?",
+        options: [
+          "Sentinel is broken",
+          "Field mapping mismatch — Sentinel may expose the command line under `ProcessCommandLine` (DeviceProcessEvents) rather than `CommandLine`; the backend config must map the SIGMA field to the vendor field",
+          "Case sensitivity of YAML",
+          "The rule needs to be recompiled hourly"
+        ],
+        correctAnswer: 1,
+        explanation: "Portability lives or dies on field mappings. Fix the pysigma pipeline, not the rule."
+      },
+      {
+        id: "de-q2-7",
+        difficulty: "hard",
+        tags: ["Rule Correlation"],
+        scenario: "You need to alert only when a suspicious child process spawns from Word AND a network connection follows from the child within 30 seconds.",
+        question: "How do you express this in modern SIGMA?",
+        options: [
+          "One flat selection block",
+          "Two rules chained via a SIGMA correlation rule (type: temporal) with a timespan and grouping (e.g., by host + parent PID)",
+          "Regex on the command line",
+          "SIGMA does not support correlation"
+        ],
+        correctAnswer: 1,
+        explanation: "SIGMA now supports correlation rules (event_count, value_count, temporal). Use temporal with grouping keys and a timespan."
+      },
+      {
+        id: "de-q2-8",
+        difficulty: "hard",
+        tags: ["Pipeline Modifiers"],
+        scenario: "You must ship one SIGMA rule for Windows Sysmon and a second for Windows Security 4688 without maintaining two YAML files.",
+        question: "How do you achieve this?",
+        options: [
+          "Copy the YAML twice",
+          "Author once against abstract logsource; use pysigma processing pipelines to emit backend-specific queries per data source (Sysmon vs Security), including field renames and value transforms",
+          "Use two rule engines",
+          "SIGMA cannot handle both"
+        ],
+        correctAnswer: 1,
+        explanation: "Processing pipelines let one abstract rule fan out to multiple data sources without duplicating YAML."
+      },
+      {
+        id: "de-q2-9",
+        difficulty: "hard",
+        tags: ["Community Rule Hygiene"],
+        scenario: "You import 900 community SIGMA rules straight into prod. Alert volume 10x's overnight and the SOC revolts.",
+        question: "What was the missing step?",
+        options: [
+          "Community rules must be treated as candidates: filter by level, map to your telemetry, test in shadow/audit mode, tune with local filters, then promote per your normal lifecycle",
+          "Delete all community rules",
+          "Raise severity thresholds only",
+          "Turn off SIGMA"
+        ],
+        correctAnswer: 0,
+        explanation: "Community rules are drafts for your environment — you own tuning, testing, and promotion."
+      },
+      {
+        id: "de-q2-10",
+        difficulty: "hard",
+        tags: ["Governance"],
+        scenario: "Auditors ask how you know a rule in prod matches the reviewed YAML.",
+        question: "What is the defensible answer?",
+        options: [
+          "Trust the analyst",
+          "Rules live in Git; CI/CD converts + deploys with a signed commit hash; the deployed query in the SIEM carries the rule ID and commit hash in metadata so any drift is detectable",
+          "Screenshots in a wiki",
+          "Manual annual review"
+        ],
+        correctAnswer: 1,
+        explanation: "Traceability from Git commit to deployed query is the audit-defensible model; drift detection is a first-class concern."
+      }
     ]
   },
   {
     quizId: "de-q3",
     courseId: "detection-engineering",
     title: "YARA Signatures",
-    description: "Quiz on YARA rule structure, pattern matching, and conditions.",
+    description: "Scenario-based YARA authorship: strings, hex, conditions, and operational deployment.",
     passingScore: 70,
     timeLimit: 15,
     questions: [
-      { id: "de-q3-1", question: "What are the three main sections of a YARA rule?", options: ["Header definition block, execution body sequence, and final rule footer lines", "Metadata section (meta), search pattern strings (strings), and match logic (condition)", "Input log mappings, data normalization processor, and output alert channel rules", "Descriptive rule name, search query patterns, and automated security alert actions"], correctAnswer: 1, explanation: "YARA rules consist of meta (metadata), strings (patterns to match), and condition (logic determining a match)." },
-      { id: "de-q3-2", question: "What does the YARA modifier 'wide' do?", options: ["Broadens the matching criteria scope so the YARA rule applies to a wider set of files", "Expands the scanning search width limits to identify obfuscated signature matches", "Extends the logical evaluation condition to allow flexible boolean operator combinations", "Instructs the scanner engine to search for UTF-16 double-byte encoded character strings"], correctAnswer: 3, explanation: "The 'wide' modifier matches UTF-16 encoded strings, which is how Windows often stores text internally." },
-      { id: "de-q3-3", question: "What does 'uint16(0) == 0x5A4D' check in a YARA condition?", options: ["Validates if the target binary is a Windows PE executable checking for the MZ header", "Measures the overall file size footprint to filter out large system archive containers", "Counts the frequency of a specific ASCII string pattern appearing inside the file body", "Checks if the binary initiates outbound network sessions on predefined admin ports"], correctAnswer: 0, explanation: "0x5A4D is the MZ magic number at offset 0, indicating a Windows PE executable file." },
-      { id: "de-q3-4", question: "What does the YARA 'xor' modifier do?", options: ["Encrypts the entire YARA rule logic using a secure, custom XOR mathematical operation", "Applies a logical exclusive OR operation across all defined condition evaluation steps", "Instructs the scanner to automatically check for XOR-rotated variations of a string", "Disables the target search string entirely during scans if a known debugger is running"], correctAnswer: 2, explanation: "The xor modifier generates all (or specified range) XOR-rotated variants, detecting simple obfuscation automatically." },
-      { id: "de-q3-5", question: "What does high entropy (>7.5) in a PE section indicate?", options: ["Normal text content, consisting primarily of standard ASCII character strings", "Highly compressed, packed, or encrypted content, which is common in malware binaries", "An empty or uninitialized section structure writing zero-byte sequences to system disks", "Standard compiler debug information and symbols embedded inside legitimate software"], correctAnswer: 1, explanation: "Entropy above 7.5 strongly indicates packed, encrypted, or compressed content — common in malware." },
-      { id: "de-q3-6", question: "Which YARA module is used to analyze PE file structure?", options: ["The specialized PE module, providing access to headers, sections, imports, and exports", "The default math module, used for calculating section entropy and statistical offsets", "The ELF module, designed for parsing Executable and Linkable Format binaries on Linux", "The cryptographic hash module, generating MD5, SHA1, and SHA256 file fingerprints"], correctAnswer: 0, explanation: "The pe module provides access to PE headers, sections, imports, exports, and signature information." },
-      { id: "de-q3-7", question: "What is the purpose of hex wildcards (??) in YARA strings?", options: ["Act as rule comment markers instructing the compiler to skip evaluation of specific strings", "Indicate compilation syntax errors that should be resolved before deploying the signature", "Represent a wildcard byte placeholder that matches any value at that specific position", "Define individual section boundary boundaries inside the parsed program executable format"], correctAnswer: 2, explanation: "Hex wildcards (??) match any byte, handling variable opcodes or data within otherwise fixed byte patterns." },
-      { id: "de-q3-8", question: "How should YARA rules be optimized for production scanning?", options: ["Rely exclusively on complex regular expression strings to capture variable threat formats", "Scan every single file on system disks regardless of file sizes or directory locations", "Disable all external parser modules and logical string operators to speed up scan times", "Apply string offset anchors, define strict filesize limits, and avoid heavy regex rules"], correctAnswer: 3, explanation: "Optimized rules use 'at 0' anchors, filesize limits, and simple patterns to minimize scan time at scale." },
-      { id: "de-q3-9", question: "What does '#suspicious_api > 5' check in a YARA condition?", options: ["Measures the character length of the target string variables defined in the rule", "Validates whether the specific string occurs more than five times in the target file", "Locates the exact byte offset address where the target string pattern is found in file", "Defines the priority ranking level used to sort triggered signatures in the console"], correctAnswer: 1, explanation: "The # operator counts string occurrences — #suspicious_api > 5 checks if the string appears more than 5 times." },
-      { id: "de-q3-10", question: "What is the recommended naming convention for YARA rules?", options: ["Assigning random alphanumeric identifier strings to prevent exposing rule scope to threat actors", "Using simple sequential numeric names to track rules in the order they were created by analysts", "Using structured names like APT_Group_Technique_Description.yar for organized management", "Naming rules solely based on creation timestamps to meet compliance audit requirements"], correctAnswer: 2, explanation: "Descriptive naming like APT_Group_Technique_Description.yar enables quick identification and organized rule management." }
+      {
+        id: "de-q3-1",
+        difficulty: "easy",
+        tags: ["Use Case"],
+        scenario: "IR pulls a memory image and 12,000 dropped files from a compromised host and needs to know which are malicious.",
+        question: "What is YARA's primary role here?",
+        options: [
+          "Network IDS",
+          "Pattern-based scanning of files, processes, and memory using strings, hex, and boolean conditions to classify and family-attribute samples",
+          "Log parsing",
+          "Endpoint policy enforcement"
+        ],
+        correctAnswer: 1,
+        explanation: "YARA is the standard tool for classifying files and memory against known family signatures during triage and hunts."
+      },
+      {
+        id: "de-q3-2",
+        difficulty: "easy",
+        tags: ["Rule Structure"],
+        scenario: "A junior analyst writes a rule with only `strings:` and no `condition:` — it won't compile.",
+        question: "What are the mandatory sections of a YARA rule?",
+        options: [
+          "Only strings",
+          "`rule` name + `condition` — strings/meta are optional but condition is required and defines the boolean match",
+          "meta only",
+          "imports only"
+        ],
+        correctAnswer: 1,
+        explanation: "`condition` is the required decision logic. `strings` and `meta` are optional; imports enable modules."
+      },
+      {
+        id: "de-q3-3",
+        difficulty: "medium",
+        tags: ["String Types"],
+        scenario: "You need to match a variable-length attacker banner that starts with `MZ`, contains an arbitrary 2–8 byte gap, then ends with `Kernel32.dll`.",
+        question: "Which string form fits best?",
+        options: [
+          "Plain text string",
+          "Hex string with a jump like `4D 5A [2-8] 4B 65 72 6E 65 6C 33 32 2E 64 6C 6C`",
+          "Regex only",
+          "wide + ascii text"
+        ],
+        correctAnswer: 1,
+        explanation: "Hex strings with jumps `[a-b]` handle variable-length gaps that plain strings cannot express cleanly."
+      },
+      {
+        id: "de-q3-4",
+        difficulty: "medium",
+        tags: ["Modifiers"],
+        scenario: "Your rule for a PowerShell dropper misses samples where strings are UTF-16 (as in .NET) and hits nothing when strings are lowercased.",
+        question: "Which modifier combination fixes both?",
+        options: [
+          "`nocase`",
+          "`wide ascii nocase` on the string — matches both encodings and case variants",
+          "`fullword` only",
+          "`base64` only"
+        ],
+        correctAnswer: 1,
+        explanation: "`wide` covers UTF-16, `ascii` keeps single-byte matches, `nocase` handles case; combine as needed."
+      },
+      {
+        id: "de-q3-5",
+        difficulty: "medium",
+        tags: ["Condition Logic"],
+        scenario: "You want the rule to fire only if at least 3 of your 8 unique strings are present AND the file is a PE.",
+        question: "Which condition is correct?",
+        options: [
+          "`any of them`",
+          "`3 of ($s*) and uint16(0) == 0x5A4D`",
+          "`all of them`",
+          "`filesize < 1MB`"
+        ],
+        correctAnswer: 1,
+        explanation: "`N of ($s*)` gives the k-of-n logic; the MZ magic check confirms PE. Boolean AND ties them."
+      },
+      {
+        id: "de-q3-6",
+        difficulty: "medium",
+        tags: ["Performance"],
+        scenario: "A rule with three short 2-byte strings and a broad regex runs against 50M files and drags the fleet.",
+        question: "What is the performance guidance?",
+        options: [
+          "Add more strings",
+          "Prefer long (≥4 byte) anchored strings, avoid unbounded regex, gate expensive checks behind cheap ones (e.g., magic bytes / filesize) in the condition — order matters",
+          "Run against memory only",
+          "Increase timeout"
+        ],
+        correctAnswer: 1,
+        explanation: "Short strings and greedy regex explode search space. Cheap gates first, expensive checks second is the standard optimization."
+      },
+      {
+        id: "de-q3-7",
+        difficulty: "hard",
+        tags: ["PE Module"],
+        scenario: "You want to detect a family by imphash and by a specific export name, without depending on strings.",
+        question: "How do you express this?",
+        options: [
+          "Strings only",
+          "`import \"pe\"` then in condition: `pe.imphash() == \"...\" or pe.exports(\"DllRegisterServer\")`",
+          "Regex on the raw bytes",
+          "YARA cannot inspect PE metadata"
+        ],
+        correctAnswer: 1,
+        explanation: "The `pe` module exposes imphash, exports, sections, resources — invaluable for family-level detections."
+      },
+      {
+        id: "de-q3-8",
+        difficulty: "hard",
+        tags: ["Memory Scanning"],
+        scenario: "You need to detect an in-memory Cobalt Strike beacon whose on-disk loader is unique per victim.",
+        question: "What is the right approach?",
+        options: [
+          "Scan disk only",
+          "Author process-memory YARA against beacon config structures (e.g., known static struct offsets, magic constants) and run via EDR/live-response — memory reveals what disk hides",
+          "Rely on hash blocking",
+          "Turn off scanning"
+        ],
+        correctAnswer: 1,
+        explanation: "Fileless / reflectively-loaded implants only exist in memory. Memory YARA (via EDR, Volatility, or agent) is the correct plane."
+      },
+      {
+        id: "de-q3-9",
+        difficulty: "hard",
+        tags: ["Rule Hygiene"],
+        scenario: "A shared YARA repo has 2,500 rules; ~40% never match anything; another 5% match every OS binary.",
+        question: "What does healthy rule lifecycle look like?",
+        options: [
+          "Ship everything",
+          "Track per-rule hit and FP telemetry; require `meta:` with author, reference, date, hash, and TLP; retire stale rules and quarantine noisy ones with the same discipline as SIEM detections",
+          "Delete the repo",
+          "Freeze all rules"
+        ],
+        correctAnswer: 1,
+        explanation: "YARA rules are code and deserve the same telemetry, review, and retirement discipline as SIEM detections."
+      },
+      {
+        id: "de-q3-10",
+        difficulty: "hard",
+        tags: ["Deployment"],
+        scenario: "You want the same YARA ruleset scanning uploads at the mail gateway, files at the endpoint, and memory of running processes.",
+        question: "What is the correct operational model?",
+        options: [
+          "Different rules per plane",
+          "Author once; tag rules with intended scan surface (`disk`, `memory`, `mail`) and version them in Git; distribution pipeline pushes the right subset to each engine (EDR, ICAP proxy, mail gateway) with performance-appropriate tuning",
+          "Only scan endpoints",
+          "Only scan mail"
+        ],
+        correctAnswer: 1,
+        explanation: "One source of truth with tag-based fan-out avoids drift and keeps engines aligned."
+      }
     ]
   },
   {
     quizId: "de-q4",
     courseId: "detection-engineering",
     title: "Log Source Mastery",
-    description: "Test your knowledge of Windows, Linux, network, and cloud log sources.",
+    description: "Scenario-based knowledge of Windows, Linux, network, and cloud telemetry.",
     passingScore: 70,
     timeLimit: 15,
     questions: [
-      { id: "de-q4-1", question: "Which Windows Event ID indicates a successful logon?", options: ["Event ID 4625 — indicating a failed user authentication attempt on the local machine", "Event ID 4624 — indicating a successful logon session with type and source details", "Event ID 4688 — indicating process creation events with full command-line arguments", "Event ID 4698 — indicating a new scheduled task created under administrator rights"], correctAnswer: 1, explanation: "Event ID 4624 logs successful authentication events with logon type, source, and account details." },
-      { id: "de-q4-2", question: "Why is Sysmon essential for Windows detection?", options: ["It is pre-installed on all Windows installations and active by default out of the box", "It fully replaces the native Windows event log service and local security databases", "It is configured exclusively to record system error events and kernel panic warnings", "It logs process command lines, file hashes, registry edits, and network connections"], correctAnswer: 3, explanation: "Sysmon captures process command lines, hashes, network connections, and parent-child relationships that native auditing misses." },
-      { id: "de-q4-3", question: "Which Sysmon event ID detects DLL side-loading?", options: ["Sysmon Event ID 7 (Image Loaded) — logging DLL loads with hash and signature details", "Sysmon Event ID 1 (Process Creation) — logging new process executions on the endpoint", "Sysmon Event ID 3 (Network Connection) — logging outbound TCP/UDP network connections", "Sysmon Event ID 10 (ProcessAccess) — logging cross-process handle access operations"], correctAnswer: 0, explanation: "Sysmon Event ID 7 logs DLL/image loads with hash and signature information, enabling DLL side-loading detection." },
-      { id: "de-q4-4", question: "What Zeek log file captures DNS queries?", options: ["conn.log — containing basic IP connection metadata, protocol ports, and session lengths", "http.log — recording web requests, response codes, user agents, and requested hostnames", "dns.log — capturing all resolved domain names, query types, and corresponding responses", "ssl.log — logging certificate details, TLS versions, and established session handshakes"], correctAnswer: 2, explanation: "Zeek's dns.log captures all DNS queries and responses with full detail for DNS-based threat detection." },
-      { id: "de-q4-5", question: "Which cloud log source records all AWS API calls?", options: ["VPC Flow Logs — documenting all internal and external network packet traffic directions", "AWS CloudTrail — logging every API call and console operation in the cloud account", "AWS CloudWatch — monitoring real-time server resource utilization and event metrics", "S3 Server Access Logs — tracking access requests made to individual storage buckets"], correctAnswer: 1, explanation: "AWS CloudTrail records every API call made in the AWS account, essential for cloud security detection." },
-      { id: "de-q4-6", question: "What is the purpose of log normalization?", options: ["Translating different raw log structures and fields into a single standardized schema", "Automatically deleting duplicate log entries to conserve database indexing storage space", "Compressing historical log datasets to accelerate query execution times in consoles", "Applying encryption algorithms to event records to prevent unauthorized access on disk"], correctAnswer: 0, explanation: "Normalization maps different field names (SourceIP, src_ip, srcaddr) to a common schema (source.ip) for cross-source correlation." },
-      { id: "de-q4-7", question: "What does ECS stand for in the context of log normalization?", options: ["Enterprise Control System — a compliance security benchmark for internal networks", "Event Classification Standard — a vendor benchmark defining standard alert severity", "Elastic Common Schema — a normalized naming system for consistent field mappings", "Endpoint Collection Service — a proprietary service used to harvest workstation logs"], correctAnswer: 2, explanation: "ECS (Elastic Common Schema) provides standardized field names for consistent log normalization across sources." },
-      { id: "de-q4-8", question: "Which Linux log file records SSH authentication events?", options: ["/var/log/messages — logging general system activity and non-critical daemon events", "/var/log/kern.log — capturing low-level Linux kernel processing and driver events", "/var/log/boot.log — recording hardware startup initialization and service load status", "/var/log/auth.log — logging user authentication events, session starts, and SSH logs"], correctAnswer: 3, explanation: "/var/log/auth.log (Debian/Ubuntu) or /var/log/secure (RHEL) records all authentication events including SSH." },
-      { id: "de-q4-9", question: "What type of cloud detection identifies logins from geographically impossible locations?", options: ["Distributed Denial of Service (DDoS) detection tracking high-volume packet traffic", "Impossible travel detection flagging logins from distant locations in short intervals", "Brute force attack detection identifying repetitive authentication failure signatures", "Data Loss Prevention (DLP) monitoring to block unauthorized uploads to cloud sites"], correctAnswer: 1, explanation: "Impossible travel flags logins from distant locations in impossibly short timeframes, indicating credential compromise." },
-      { id: "de-q4-10", question: "What does log enrichment add to raw events?", options: ["Injecting more raw logs to increase total event volume indexed by target databases", "Compressing telemetry events at source nodes before they traverse network channels", "Adding context like IP geolocation, user roles, threat intelligence, and asset value", "Applying encryption algorithms to event records to prevent unauthorized access on disk"], correctAnswer: 2, explanation: "Enrichment adds reputation, geolocation, asset criticality, and user context — transforming raw logs into actionable intelligence." }
+      {
+        id: "de-q4-1",
+        difficulty: "easy",
+        tags: ["Windows Process Creation"],
+        scenario: "Your Windows Security channel logs 4688 without command line. You need parent + child + command line + hashes for a T1059 detection.",
+        question: "What is the standard fix?",
+        options: [
+          "Enable 'Include command line' via GPO — but Sysmon Event ID 1 gives richer fields (ParentImage, CommandLine, Hashes, IntegrityLevel, User) and is the preferred source",
+          "Rely on 4688 as-is",
+          "Turn off Sysmon",
+          "Use Application log"
+        ],
+        correctAnswer: 0,
+        explanation: "4688 with command-line auditing is a floor; Sysmon 1 is the ceiling and the industry standard for process creation."
+      },
+      {
+        id: "de-q4-2",
+        difficulty: "easy",
+        tags: ["Sysmon"],
+        scenario: "You inherit a Sysmon deployment using the default config. Coverage looks great on paper but hunts miss image loads and DNS.",
+        question: "What is the root cause?",
+        options: [
+          "Sysmon can't log DNS",
+          "The default config is minimal — production deployments use a curated config (e.g., SwiftOnSecurity / Olaf Hartong) tuned to enable EIDs like 7 (ImageLoad), 22 (DNS), 8/10 (injection) with exclusions",
+          "GPO must be reapplied",
+          "Sysmon needs re-installing"
+        ],
+        correctAnswer: 1,
+        explanation: "Sysmon's power lives in its config; without a curated, tuned config you're logging almost nothing useful."
+      },
+      {
+        id: "de-q4-3",
+        difficulty: "medium",
+        tags: ["Linux auditd"],
+        scenario: "You need to detect a reverse shell child of sshd on Linux servers.",
+        question: "Which telemetry stack is standard and what do you need?",
+        options: [
+          "syslog only",
+          "auditd (or auditbeat / eBPF-based agents like Falco / Elastic Defend) with rules on `execve` and parent tracking — capture uid, ppid, comm, exe, and command args",
+          "netstat cron",
+          "dmesg"
+        ],
+        correctAnswer: 1,
+        explanation: "auditd/eBPF is the Linux equivalent of Sysmon; execve + parent chain is the analog of Windows process creation."
+      },
+      {
+        id: "de-q4-4",
+        difficulty: "medium",
+        tags: ["Network"],
+        scenario: "Your NDR sees encrypted TLS 1.3 to a rare domain from a workstation and you want a rule.",
+        question: "Which artifact set is most useful?",
+        options: [
+          "Payload strings",
+          "Zeek / Suricata metadata: SNI, JA3/JA3S, JA4, cert issuer, ASN, first-seen domain age, beacon interval — behavior over payload",
+          "Full packet payload",
+          "DHCP leases"
+        ],
+        correctAnswer: 1,
+        explanation: "Encrypted traffic forces analytics onto metadata; JA3/JA4, SNI, cert, and timing carry the signal."
+      },
+      {
+        id: "de-q4-5",
+        difficulty: "medium",
+        tags: ["DNS"],
+        scenario: "You need to detect DNS tunneling and DGA C2 from workstations that only resolve via corporate resolvers.",
+        question: "Which log path is best?",
+        options: [
+          "Endpoint hosts file",
+          "Resolver query logs (Windows DNS Analytical, BIND query log, Cloud DNS logs) with query type, name, response code, and requester — enables entropy, length, NXDOMAIN, and TXT-volume analytics",
+          "Only egress firewall port 53 counts",
+          "TCP SYN logs"
+        ],
+        correctAnswer: 1,
+        explanation: "Resolver logs are the authoritative DNS telemetry; endpoint-only visibility misses cached and forwarded queries."
+      },
+      {
+        id: "de-q4-6",
+        difficulty: "medium",
+        tags: ["Cloud Control Plane"],
+        scenario: "An IAM user's access key is used from a new country to enumerate S3 buckets and create a new IAM user.",
+        question: "Which log source detects this end-to-end?",
+        options: [
+          "VPC Flow Logs only",
+          "AWS CloudTrail (management events) — captures API calls, source IP, user agent, principal, and MFA context across the account",
+          "S3 access logs only",
+          "GuardDuty only"
+        ],
+        correctAnswer: 1,
+        explanation: "CloudTrail is the control-plane audit log; VPC flow / S3 access logs cover data plane and are complementary."
+      },
+      {
+        id: "de-q4-7",
+        difficulty: "hard",
+        tags: ["Identity"],
+        scenario: "You must catch OAuth consent phishing and illicit app grants in Microsoft 365.",
+        question: "Which logs and events matter most?",
+        options: [
+          "Mailbox audit only",
+          "Entra ID (Azure AD) sign-in and audit logs + M365 Unified Audit Log — specifically `Consent to application`, `Add service principal`, `Add app role assignment` — plus MailItemsAccessed for post-consent exfil",
+          "Sysmon on Exchange",
+          "Firewall logs"
+        ],
+        correctAnswer: 1,
+        explanation: "OAuth abuse lives in the identity plane, not the mailbox. Consent and service principal events are the tell."
+      },
+      {
+        id: "de-q4-8",
+        difficulty: "hard",
+        tags: ["Kubernetes"],
+        scenario: "You need to detect a pod exec into a production namespace by a service account.",
+        question: "Which telemetry is authoritative?",
+        options: [
+          "Container stdout",
+          "Kubernetes API audit logs (`pods/exec` verb) plus workload runtime telemetry (Falco / eBPF) for the in-container execve — control plane + runtime together",
+          "Node dmesg",
+          "kube-proxy iptables"
+        ],
+        correctAnswer: 1,
+        explanation: "K8s audit logs record the API intent; runtime agents confirm what actually executed inside the container."
+      },
+      {
+        id: "de-q4-9",
+        difficulty: "hard",
+        tags: ["Normalization"],
+        scenario: "Your team maintains 40 unique parsers, and the same field (user) appears as `user`, `usr`, `AccountName`, `subject.user.name` across sources.",
+        question: "What is the correct fix?",
+        options: [
+          "Rename in every rule",
+          "Adopt a common schema (ECS, OCSF, or vendor CIM) at ingest so detections query normalized fields; ownership of parsers and schema is a first-class detection-engineering concern",
+          "Force all sources to change field names",
+          "Only use raw logs"
+        ],
+        correctAnswer: 1,
+        explanation: "Detections at scale require a shared schema (ECS/OCSF/CIM). Normalization is not optional infrastructure."
+      },
+      {
+        id: "de-q4-10",
+        difficulty: "hard",
+        tags: ["Data Quality"],
+        scenario: "A weekend patch drops Sysmon event volume 60%. No alerts changed.",
+        question: "What detection-engineering practice would have caught this before Monday?",
+        options: [
+          "Nothing — that's IT's job",
+          "Data-source health monitoring: per-source EPS baselines with anomaly alerts on drops, heartbeat detections (canary events), and dashboards owned by the detection team",
+          "Add more rules",
+          "Wait for an incident"
+        ],
+        correctAnswer: 1,
+        explanation: "Silent telemetry failure is one of the most damaging failure modes. Detection teams must own data-source health."
+      }
     ]
   },
   {
     quizId: "de-q5",
     courseId: "detection-engineering",
     title: "Detection-as-Code",
-    description: "Assess your understanding of version control, CI/CD, and testing for detections.",
+    description: "Scenario-based version control, CI/CD, and testing for detections.",
     passingScore: 70,
     timeLimit: 15,
     questions: [
-      { id: "de-q5-1", question: "Why should detection rules be stored in Git?", options: ["Because storing detections in version control is popular among modern DevOps startups", "For change history tracking, pull request reviews, instant rollbacks, and team collaboration", "Because local database storage on central SIEM consoles is highly unstable and prone to loss", "To automatically encrypt the query logic and prevent junior analysts from viewing rule code"], correctAnswer: 1, explanation: "Git provides change history, pull request reviews, instant rollback, team collaboration, and CI/CD automation." },
-      { id: "de-q5-2", question: "What is Atomic Red Team?", options: ["A boutique commercial penetration testing corporation that designs customized adversary tests", "A specific proprietary software product used to automate vulnerability scans on web portals", "A hardware firewall ruleset designed to block outbound lateral movement on network hosts", "An open-source framework of small, focused adversary emulation tests mapped to MITRE ATT&CK"], correctAnswer: 3, explanation: "Atomic Red Team provides pre-built, small attack tests for each ATT&CK technique to validate that detections fire correctly." },
-      { id: "de-q5-3", question: "What should a detection CI/CD pipeline include?", options: ["Perform linting, schema validation, query translation, rule testing, and staged deployment", "Configure firewall permissions, verify remote agent access, and upload backup database sets", "Trigger console notifications, update compliance checklists, and execute manual script runs", "Initiate local system restarts, verify database storage sizes, and run basic performance test"], correctAnswer: 0, explanation: "A complete pipeline covers YAML linting, schema validation, SIEM conversion, TP/FP testing, staged deployment, and monitoring." },
-      { id: "de-q5-4", question: "What is a 'quality gate' in a detection pipeline?", options: ["A boundary network firewall rule that prevents unauthorized access to internal SIEM clusters", "A software license verification protocol checking if database indexing limits have been hit", "A pipeline verification checkpoint blocking deployment if quality criteria are not fully met", "A manual paper validation form that must be physically signed off by security directors"], correctAnswer: 2, explanation: "Quality gates enforce standards: valid syntax, required fields, passing TP tests, and approved reviews before deployment." },
-      { id: "de-q5-5", question: "How often should critical detections be validated?", options: ["Annually to coincide with standard corporate security compliance audit preparation schedules", "Daily to ensure critical detection paths are still functional and have not experienced drift", "Quarterly to align with scheduled system maintenance operations and major platform releases", "Monthly to balance analyst resource availability with continuous system security monitoring"], correctAnswer: 1, explanation: "Critical detections (credential theft, ransomware) should be validated daily to ensure they still fire correctly." },
-      { id: "de-q5-6", question: "What is a True Negative (TN) test for a detection?", options: ["Verifying that benign baseline corporate activity does not trigger false positive alert paths", "Testing the detection rule against modified attack scripts that should trigger alert paths", "Auditing network interface configurations to confirm that local logging agents are running", "Deleting corrupted rules from production systems and recording successful deletion outputs"], correctAnswer: 0, explanation: "TN tests run benign activity similar to the attack pattern and verify the detection correctly stays silent." },
-      { id: "de-q5-7", question: "What is the benefit of Infrastructure as Code for SIEM?", options: ["Significantly accelerating backend database query execution speeds and indexing capacities", "Substantially lowering annual software license subscription costs paid to security vendors", "Ensuring repeatable deployments, audit trails, and consistent staging/prod configurations", "Providing more visually engaging and interactive dashboards for security management review"], correctAnswer: 2, explanation: "IaC enables rebuilding entire SIEM configurations from code, audit trails, and consistent dev/staging/production environments." },
-      { id: "de-q5-8", question: "What branching strategy works best for detection rules?", options: ["Committing all code changes directly to the main production branch without performing reviews", "Assigning a single isolated static git branch to each individual security analyst permanently", "Creating random branch names daily to track unstructured edits and temporary debug operations", "Using feature branches with formal pull request reviews before merging code to main production"], correctAnswer: 3, explanation: "Feature branches (feature/detect-kerberoasting) with PR reviews ensure quality before merging to staging and production." },
-      { id: "de-q5-9", question: "What should happen automatically when a detection is deployed?", options: ["Perform no automated actions, allowing analyst staff to discover new alerts during consoles", "Alert the SOC console, generate a task for playbook updates, and refresh coverage mappings", "Immediately delete old or deprecated correlation rules from the SIEM search configuration", "Initiate an automatic reboot process of all local endpoint agent systems on the subnet segment"], correctAnswer: 1, explanation: "Automated notifications keep the SOC informed, playbook tickets ensure documentation, and dashboards reflect current coverage." },
-      { id: "de-q5-10", question: "How does purple teaming relate to detection testing?", options: ["They are separate corporate operations with no direct communication channels or common tools", "Purple teaming completely replaces the requirement for dedicated custom detection engineering", "Red team simulates TTPs, blue team verifies detections, and uncovered gaps drive development", "Purple teaming focuses exclusively on verifying high-level compliance benchmarks for audits"], correctAnswer: 2, explanation: "Purple teaming directly validates detections: red executes, blue validates, gaps are identified, and new detections are built." }
+      {
+        id: "de-q5-1",
+        difficulty: "easy",
+        tags: ["Version Control"],
+        scenario: "A rule breaks prod and no one can say who changed it, when, or why.",
+        question: "What is the minimum Detection-as-Code baseline?",
+        options: [
+          "Wiki page of rules",
+          "All rules in Git with PR review, signed commits, changelog, and one owner per rule — history + accountability + rollback in one system",
+          "Shared drive of YAMLs",
+          "Screenshots of the UI"
+        ],
+        correctAnswer: 1,
+        explanation: "Git + PR review + owners gives you traceability, review, and rollback — the foundation of everything else."
+      },
+      {
+        id: "de-q5-2",
+        difficulty: "easy",
+        tags: ["CI"],
+        scenario: "A PR adds a new SIGMA rule with a syntax error. It merges anyway.",
+        question: "What CI step was missing?",
+        options: [
+          "None",
+          "Lint + schema validation + backend conversion (sigma → SPL/KQL) as required checks on every PR — nothing merges red",
+          "Manual review only",
+          "Post-merge tests"
+        ],
+        correctAnswer: 1,
+        explanation: "Lint, schema, and conversion must be required PR checks; humans are unreliable for syntax."
+      },
+      {
+        id: "de-q5-3",
+        difficulty: "medium",
+        tags: ["Unit Tests"],
+        scenario: "You want to verify a new rule fires on a malicious sample event and does NOT fire on a benign lookalike.",
+        question: "Which test pattern implements this?",
+        options: [
+          "Live prod testing",
+          "Table-driven unit tests: fixtures of `should_match` and `should_not_match` events run through the rule engine in CI; a change that breaks a fixture fails the build",
+          "Copy to a sandbox and eyeball",
+          "Skip — analysts will notice"
+        ],
+        correctAnswer: 1,
+        explanation: "Fixture-based positive/negative tests catch regressions before deploy and document expected behavior."
+      },
+      {
+        id: "de-q5-4",
+        difficulty: "medium",
+        tags: ["Atomic Testing"],
+        scenario: "You want to prove the rule alerts against a real technique execution on a real endpoint.",
+        question: "What tool/pattern is standard?",
+        options: [
+          "Manual demo",
+          "Atomic Red Team (or Caldera) executes the technique on a lab host; automation asserts the expected alert fired within an SLA — closing the 'writes fine, doesn't detect' gap",
+          "Send an email to the SOC",
+          "Run nmap"
+        ],
+        correctAnswer: 1,
+        explanation: "Atomic Red Team gives repeatable technique execution; automated assertion turns it into a regression test."
+      },
+      {
+        id: "de-q5-5",
+        difficulty: "medium",
+        tags: ["Environments"],
+        scenario: "Every new rule immediately goes to prod. Bad rules take down analyst dashboards.",
+        question: "What environment topology is correct?",
+        options: [
+          "Prod only",
+          "Dev → Staging (shadow / audit-only against prod data) → Prod, with promotion gated by tests and a soak period; noisy rules never reach analyst queues",
+          "Two prods",
+          "Prod with feature flags only"
+        ],
+        correctAnswer: 1,
+        explanation: "Shadow/audit staging against real prod data is the safe path from author to alerting."
+      },
+      {
+        id: "de-q5-6",
+        difficulty: "medium",
+        tags: ["Metadata Contract"],
+        scenario: "PRs land with rules that have no severity, no ATT&CK mapping, and no owner.",
+        question: "How do you enforce a metadata contract?",
+        options: [
+          "Ask nicely",
+          "Schema-validate `meta:` fields (id, author, owner, severity, ATT&CK ID, data source, tests) as a required CI check — merges blocked if missing",
+          "Post-merge audits",
+          "Ignore metadata"
+        ],
+        correctAnswer: 1,
+        explanation: "Schema-enforced metadata is the only reliable way to keep rule quality high at scale."
+      },
+      {
+        id: "de-q5-7",
+        difficulty: "hard",
+        tags: ["Change Control"],
+        scenario: "A rule change is emergency-deployed in the SIEM UI to stop an active incident and never makes it back to Git.",
+        question: "What is the disciplined recovery?",
+        options: [
+          "Leave it",
+          "Post-incident, reconcile SIEM state with Git (drift diff), commit the change with the incident ticket link, and add a policy that UI-only edits expire (auto-revert) or auto-open a PR",
+          "Delete the change",
+          "Blame the responder"
+        ],
+        correctAnswer: 1,
+        explanation: "Emergency changes are legitimate; silent drift is not. Reconciliation + auto-PR keeps Git the source of truth."
+      },
+      {
+        id: "de-q5-8",
+        difficulty: "hard",
+        tags: ["Secrets & Data"],
+        scenario: "A PR adds a rule with a real customer domain and an internal IP range hardcoded in the YAML.",
+        question: "What controls prevent this?",
+        options: [
+          "Post-hoc scrubbing",
+          "Pre-commit + CI secret/PII scanners plus a policy that environment-specific values live in per-env config, not rule bodies — rules stay portable and safe to share",
+          "Manual review only",
+          "Ignore"
+        ],
+        correctAnswer: 1,
+        explanation: "Detections travel between orgs and repos; environment coupling and secrets must be externalized."
+      },
+      {
+        id: "de-q5-9",
+        difficulty: "hard",
+        tags: ["Deployment"],
+        scenario: "A CI pipeline deploys 300 rules per week across Splunk, Sentinel, and Elastic.",
+        question: "What deployment pattern is safest?",
+        options: [
+          "Deploy all at once",
+          "Progressive rollout: canary rule set to a subset of the fleet/index, monitor FP and volume dashboards for a soak window, then fan out; auto-rollback on FP-budget breach",
+          "Nightly cron restart",
+          "Manual per rule"
+        ],
+        correctAnswer: 1,
+        explanation: "Canaries + auto-rollback keep detection pipelines safe at scale, mirroring SWE deployment discipline."
+      },
+      {
+        id: "de-q5-10",
+        difficulty: "hard",
+        tags: ["Governance"],
+        scenario: "Auditors ask: 'prove that every deployed detection has been reviewed and tested'.",
+        question: "What evidence trail satisfies this?",
+        options: [
+          "Trust us",
+          "Git PR history with required reviewers, CI logs of lint/convert/unit/atomic tests, deployment logs signed by the pipeline identity, and rule metadata carrying the commit hash — a full chain from author to fire",
+          "Wiki minutes",
+          "Sample screenshots"
+        ],
+        correctAnswer: 1,
+        explanation: "Full author-to-deploy provenance is the defensible answer and is a natural output of Detection-as-Code."
+      }
     ]
   },
   {
     quizId: "de-q6",
     courseId: "detection-engineering",
     title: "Detection Operations",
-    description: "Quiz on tuning, metrics, coverage mapping, and detection lifecycle management.",
+    description: "Scenario-based tuning, metrics, coverage mapping, and lifecycle management.",
     passingScore: 70,
     timeLimit: 15,
     questions: [
-      { id: "de-q6-1", question: "How long should a detection run in alert-only mode before production?", options: ["Exactly one full calendar day to confirm if any database query syntax syntax errors occur", "Between one and two weeks to observe false positive alert patterns and perform proper tuning", "Precisely three calendar months to capture seasonal baseline variations across the enterprise", "No alert-only staging period is needed; new rules should be directly pushed to production"], correctAnswer: 1, explanation: "1-2 weeks in alert-only mode allows observation of FP patterns and tuning before enabling full alerting." },
-      { id: "de-q6-2", question: "What is 'detection decay'?", options: ["The gradual reduction in execution speeds of target search queries in SIEM databases", "The physical degradation of system hard drives and long-term storage array components", "The overall packet transmission latency increases observed on remote endpoint nodes", "Detections losing effectiveness over time due to environment drift and actor changes"], correctAnswer: 3, explanation: "Detection decay occurs as environments change, adversaries evolve, data sources drift, and configurations shift." },
-      { id: "de-q6-3", question: "What ATT&CK coverage percentage indicates a mature detection program?", options: ["Fifty to seventy percent coverage of priority techniques mapped to corporate models", "Ten to twenty percent coverage focusing exclusively on remote administrative systems", "Twenty to thirty percent coverage representing basic baseline visibility for audits", "One hundred percent coverage of all defined matrix behaviors and tactical pathways"], correctAnswer: 0, explanation: "Mature programs achieve 50-70% coverage of priority techniques. 100% is unrealistic; 20-30% is average." },
-      { id: "de-q6-4", question: "What is the coverage scoring for 'IOC-based only, easily evaded'?", options: ["Score 0 (None) — indicating that no logs are collected and no rules are configured", "Score 2 (Partial) — representing basic signature rules that detect common parameters", "Score 1 (Minimal) — indicating simple static indicators that are easily evaded by actors", "Score 3 (Good) — representing robust, behavioral detections covering full TTP ranges"], correctAnswer: 2, explanation: "Score 1 (Minimal) means only IOC-based detection exists — it's easily evaded and needs behavioral detection." },
-      { id: "de-q6-5", question: "When should a detection rule be retired?", options: ["Rules should never be retired from the system to maintain maximum historic coverage records", "When the technique is irrelevant, replaced by better rules, or data sources are retired", "Precisely thirty days after the initial production deployment date of the detection rule", "Immediately when the specific detection analyst who originally authored the query leaves"], correctAnswer: 1, explanation: "Retire when: technique irrelevant, better replacement exists, data source deprecated, or persistent FPs despite tuning." },
-      { id: "de-q6-6", question: "What is 'layered coverage' in detection engineering?", options: ["Deploying multiple detection rules for one technique across distinct log data sources", "Setting up redundant primary and secondary SIEM application servers on the segment", "Configuring Layer 7 protocol analysis rules exclusively on perimeter network gateways", "Scheduling multiple overlapping analyst shift rotations to ensure continuous console care"], correctAnswer: 0, explanation: "Layered coverage means having multiple detections for the same technique across different data sources — if one fails, others still detect." },
-      { id: "de-q6-7", question: "What is a healthy detection engineering velocity?", options: ["Deploying a single production detection rule per year to minimize console alert volumes", "Developing and deploying more than one hundred custom rules per day using automation tools", "Shipping between 8 and 12 tuned, validated production rules to the SIEM repository monthly", "Writing custom detection rules exclusively during active network security incident events"], correctAnswer: 2, explanation: "8-12 new production detections per month, combined with 15-20 tuned and 2-5 retired, represents healthy velocity." },
-      { id: "de-q6-8", question: "What should a detection health check verify?", options: ["Evaluating the overall rate of false positive alerts generated on the central console", "Checking the code syntax of search queries to confirm formatting guidelines are met", "Updating coverage mapping charts to reflect recently published threat research blogs", "Verifying the rule is firing, accurate, needed, performant, and has current playbooks"], correctAnswer: 3, explanation: "Health checks verify five dimensions: firing (not broken), accurate (TP works), needed (relevant), performant (fast), documented (current)." },
-      { id: "de-q6-9", question: "How often should a full detection audit be performed?", options: ["Weekly to match standard SOC operational alert review cycles and coordinate adjustments", "Annually to systematically audit the entire rule repository and retire outdated queries", "Monthly to track the progress of ongoing detection development projects and pipelines", "Quarterly to synchronize with scheduled updates to corporate threat modeling profiles"], correctAnswer: 1, explanation: "Full detection inventory audits should occur annually, while alert quality is reviewed weekly and coverage assessed quarterly." },
-      { id: "de-q6-10", question: "At which maturity level does a detection engineering program use CI/CD pipelines and testing?", options: ["Level 1 (Ad-hoc) — where detections are written manually directly into production consoles", "Level 2 (Defined) — where basic query templates are documented in central shared spaces", "Level 3 (Managed) — featuring automated CI/CD pipelines, unit testing, and rule metrics", "Level 5 (Leading) — where artificial intelligence models generate all code configurations"], correctAnswer: 2, explanation: "Level 3 (Managed) features CI/CD pipelines, automated testing, and metrics-driven detection engineering." }
-    ]
-  },
-  // ==================== MALWARE ANALYSIS FUNDAMENTALS ====================
-  {
-    quizId: "ma-q1",
-    courseId: "malware-analysis",
-    title: "Malware Landscape & Lab Setup",
-    description: "Test your knowledge of malware categories, threat actors, and safe analysis environments.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "ma-q1-1", question: "Which malware type self-replicates across networks without requiring user interaction?", options: ["A virus that attaches to host executable files and spreads when the infected program is executed", "A trojan disguised as legitimate software that relies on social engineering to trick users into running it", "A worm that propagates autonomously by exploiting network vulnerabilities without needing a host file", "A rootkit that modifies operating system internals to conceal its presence from security tools"], correctAnswer: 2, explanation: "Worms propagate autonomously by exploiting network vulnerabilities, unlike viruses that need a host program or trojans that rely on social engineering." },
-      { id: "ma-q1-2", question: "What distinguishes a wiper from ransomware?", options: ["Wipers permanently destroy data with no recovery mechanism, making them more destructive than ransomware", "Ransomware permanently destroys all data, while wipers merely encrypt it and demand a payment key", "Wipers only target Linux kernel files, while ransomware exclusively focuses on Windows NTFS partitions", "Wipers require manual user execution, while ransomware typically spreads automatically via network shares"], correctAnswer: 0, explanation: "Wipers are designed to permanently destroy data. NotPetya masqueraded as ransomware but was actually a wiper with no functional decryption." },
-      { id: "ma-q1-3", question: "In a RaaS ecosystem, what role do Initial Access Brokers (IABs) play?", options: ["Developing the ransomware encryption engine and C2 infrastructure and licensing it to criminal affiliates", "Negotiating ransom payment amounts with victims and managing cryptocurrency transactions for affiliates", "Selling compromised credentials, VPN access, and persistent footholds to ransomware affiliate operators", "Providing bulletproof C2 server hosting infrastructure and domain registration services for ransomware groups"], correctAnswer: 2, explanation: "IABs specialize in gaining initial access to organizations and selling that access to ransomware affiliates who carry out the attacks." },
-      { id: "ma-q1-4", question: "Which VM distribution is specifically designed for Windows-based malware analysis?", options: ["REMnux — a Linux-based distro optimized for reverse engineering and analyzing malicious code artifacts", "Kali Linux — a Debian-based penetration testing distribution with a wide range of offensive security tools", "FlareVM — a Windows-based Mandiant distribution pre-installed with debuggers, disassemblers, and PE tools", "SIFT Workstation — a SANS forensic investigation platform designed for digital evidence acquisition"], correctAnswer: 2, explanation: "FlareVM by Mandiant is a Windows-based distribution that installs analysis tools like x64dbg, Ghidra, and PE-bear on a Windows VM." },
-      { id: "ma-q1-5", question: "Why should malware analysis VMs use host-only networking?", options: ["To improve CPU allocation and analysis throughput by eliminating hypervisor-level network overhead", "To prevent malware from reaching the real internet, blocking live C2 communication and outbound spreading", "To enable cloud sandbox API integration and allow automated telemetry submission to vendor platforms", "To permit secure RDP access for distributed team collaboration on shared analysis workloads remotely"], correctAnswer: 1, explanation: "Host-only networking isolates VMs so malware cannot reach the internet, preventing accidental infections and C2 communication with real infrastructure." },
-      { id: "ma-q1-6", question: "What service does REMnux's INetSim provide in a malware analysis lab?", options: ["Automated binary-based malware classification using pre-trained neural network signature identification", "Simulated internet services (DNS, HTTP, SMTP) so malware behaves as if connected to the real internet", "Real-time threat intelligence feeds pulling fresh indicators from open-source community sharing platforms", "Virtual machine lifecycle management enabling automated snapshot creation, revert, and clone operations"], correctAnswer: 1, explanation: "INetSim simulates DNS, HTTP, SMTP, and other internet services so malware behaves as if it has internet connectivity in an isolated environment." },
-      { id: "ma-q1-7", question: "What is the standard password used for malware sample ZIP archives?", options: ["'malware' — a simple keyword used by some early researchers but not universally adopted as the standard", "'password123' — the most frequently seen password in credential breaches from corporate environments", "'infected' — the community-standard password for distributing password-protected malware sample archives", "'analysis' — a descriptive keyword used by some sandbox vendors for protecting sample distribution zips"], correctAnswer: 2, explanation: "The convention is to use 'infected' as the password for password-protected ZIP archives containing malware samples." },
-      { id: "ma-q1-8", question: "Which platform is a community-driven malware sample repository by abuse.ch?", options: ["VirusTotal — a Google-owned multi-engine scanning service for file, URL, and domain reputation lookups", "Hybrid Analysis — a free automated behavioral sandbox from CrowdStrike for public malware submissions", "MalwareBazaar — abuse.ch's free community repository where researchers share and download malware samples", "ANY.RUN — an interactive cloud sandbox allowing real-time analyst-controlled malware execution sessions"], correctAnswer: 2, explanation: "MalwareBazaar by abuse.ch is a free, community-driven repository where researchers share and download malware samples." },
-      { id: "ma-q1-9", question: "What should you always do before executing malware in your analysis VM?", options: ["Update the OS to ensure all security patches and antivirus definitions are fully current before analysis", "Take a clean VM snapshot so you can instantly revert to a pristine state after each analysis session", "Connect the VM to the internet to allow the malware to reach its C2 for full behavioral observation", "Disable all host firewalls and endpoint security tools to prevent interference with malware execution"], correctAnswer: 1, explanation: "Taking a snapshot before execution ensures you can revert to a clean state after analysis, preventing contamination between sessions." },
-      { id: "ma-q1-10", question: "Which threat actor category typically uses the most sophisticated custom malware?", options: ["Hacktivists pursuing political goals using primarily commodity tools, public exploits, and script attacks", "Script kiddies running pre-built exploit kits and downloaded malware tools without deep technical knowledge", "State-sponsored APT groups with vast resources enabling zero-day exploits, custom tooling, and persistence", "Financially motivated eCrime groups using RaaS platforms, dark web forums, and commodity access brokers"], correctAnswer: 2, explanation: "State-sponsored APT groups have significant resources, enabling custom tooling, zero-day exploits, and sophisticated operational security." }
-    ]
-  },
-  {
-    quizId: "ma-q2",
-    courseId: "malware-analysis",
-    title: "Static Analysis Techniques",
-    description: "Assess your understanding of file identification, string analysis, PE headers, and packing detection.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "ma-q2-1", question: "What are the magic bytes (hex) for a Windows PE executable?", options: ["50 4B — the ZIP archive magic bytes found at the start of compressed file containers", "4D 5A (MZ) — the DOS header signature identifying Windows Portable Executable files", "7F 45 4C 46 — the ELF magic bytes identifying Linux Executable and Linkable Format binaries", "25 50 44 46 — the PDF magic bytes found at the beginning of Portable Document Format files"], correctAnswer: 1, explanation: "4D 5A (MZ) is the DOS header signature for PE executables. 50 4B is ZIP, 7F 45 4C 46 is ELF, and 25 50 44 46 is PDF." },
-      { id: "ma-q2-2", question: "What does ssdeep provide that SHA256 cannot?", options: ["Significantly faster computation speeds enabling real-time scanning of large file repositories", "Fuzzy matching that identifies similar files even when minor byte-level modifications are present", "Cryptographic collision resistance ensuring two files cannot produce the same hash output value", "Digital signature validation confirming whether a binary was signed by a trusted certificate authority"], correctAnswer: 1, explanation: "ssdeep generates fuzzy hashes that can identify similar files even with minor modifications, unlike cryptographic hashes which change completely with any alteration." },
-      { id: "ma-q2-3", question: "What does an imphash identify?", options: ["The symmetric encryption algorithm embedded within the binary's resource section for payload decryption", "Malware samples built with the same import table, linking them to a common builder or toolkit origin", "The specific Windows operating system version targeted by the binary at compile and link time", "Network communication patterns encoded in the binary's embedded configuration and C2 address list"], correctAnswer: 1, explanation: "Import hash (imphash) generates a hash of the imported functions, so samples from the same malware builder or toolkit share identical imphash values." },
-      { id: "ma-q2-4", question: "What tool recovers obfuscated strings that basic extraction misses?", options: ["The built-in 'strings' command that extracts printable ASCII and Unicode sequences from binary files", "FLOSS (FLARE Obfuscated String Solver), which automatically deobfuscates runtime-decoded strings", "The standard 'file' command that identifies file types from magic bytes and header metadata", "'hexdump' utility that displays raw byte content in hexadecimal and ASCII side-by-side for review"], correctAnswer: 1, explanation: "FLOSS (FireEye Labs Obfuscated String Solver) automatically deobfuscates runtime-decoded and stack-constructed strings." },
-      { id: "ma-q2-5", question: "In PE analysis, what does high section entropy (>7.0) indicate?", options: ["The binary carries a valid digital signature from a trusted vendor certificate authority chain", "The section content is likely encrypted, compressed, or packed, concealing the original code from analysis", "The binary imports a very large number of Windows API functions across multiple system DLLs", "The binary was compiled in debug mode with full symbol tables and source-level debug information"], correctAnswer: 1, explanation: "Entropy above 7.0 (near random) strongly suggests the section content is encrypted, compressed, or packed, hiding the original code." },
-      { id: "ma-q2-6", question: "Which PE import combination strongly suggests process injection?", options: ["CreateFileA combined with ReadFile for reading target process executable content from disk storage", "VirtualAllocEx + WriteProcessMemory + CreateRemoteThread — the classic remote process injection sequence", "RegSetValueEx combined with RegCreateKeyEx for writing persistence entries to Windows Registry hives", "InternetOpenA combined with HttpSendRequest for establishing outbound HTTP communication with servers"], correctAnswer: 1, explanation: "This classic injection sequence allocates memory in another process, writes code there, and creates a remote thread to execute it." },
-      { id: "ma-q2-7", question: "What does Detect It Easy (DiE) primarily identify?", options: ["Specific malware family classifications by matching behavioral indicators against known threat databases", "Packers, compilers, protectors, and build tools used to create or obfuscate a target binary file", "Embedded network protocol implementations and C2 communication schemas in the binary's data section", "Cryptographic algorithm implementations embedded within the binary for config decryption at runtime"], correctAnswer: 1, explanation: "DiE analyzes binary signatures to identify packers (UPX, Themida), compilers, and protectors used on the executable." },
-      { id: "ma-q2-8", question: "A PE file with very few imports (only LoadLibrary and GetProcAddress) likely indicates what?", options: ["A minimal utility program that only needs basic file I/O and string-processing system calls to function", "A packed or dynamically-resolving binary that resolves all API calls at runtime to hide capabilities", "A managed .NET application that relies on the CLR runtime rather than native Windows API imports", "A Windows kernel driver that uses native NT system calls instead of standard Win32 API function imports"], correctAnswer: 1, explanation: "Minimal imports with LoadLibrary/GetProcAddress suggest the binary dynamically resolves API calls at runtime to hide its true capabilities from static analysis." },
-      { id: "ma-q2-9", question: "How do you unpack a UPX-packed binary?", options: ["Load the binary into Ghidra and use the decompiler to reconstruct the original unpacked source code", "Run 'upx -d sample.exe' — UPX provides a built-in decompression command to restore the original binary", "Set breakpoints in x64dbg at the OEP and manually dump the process memory after unpacking completes", "Run FLOSS against the packed binary to extract obfuscated strings from the compressed data section"], correctAnswer: 1, explanation: "UPX provides a built-in decompression command (upx -d) that restores the original binary, making it one of the easiest packers to handle." },
-      { id: "ma-q2-10", question: "What does a PE Rich header hash help identify?", options: ["The malware family classification by matching the hash against known threat intelligence repositories", "The build environment and toolchain, linking samples compiled with the same development environment", "The specific target operating system version the binary was compiled and optimized to execute on", "The hardcoded C2 server address or domain used by the malware for command and control communication"], correctAnswer: 1, explanation: "The Rich header records the compiler and linker versions used, linking samples compiled with the same development environment." }
-    ]
-  },
-  {
-    quizId: "ma-q3",
-    courseId: "malware-analysis",
-    title: "Dynamic & Behavioral Analysis",
-    description: "Test your sandbox, process monitoring, and network capture skills.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "ma-q3-1", question: "Which sandbox allows real-time interactive analysis with manual clicking?", options: ["Cuckoo Sandbox — an open-source automated analysis platform running malware in isolated guest VMs", "ANY.RUN — an interactive cloud sandbox where analysts click through installers and dialogs in real-time", "VirusTotal Sandbox — Google's automated scanning service providing multi-engine behavioral reports", "Joe Sandbox Cloud — an enterprise-grade automated sandbox producing deep technical behavioral reports"], correctAnswer: 1, explanation: "ANY.RUN provides an interactive mode where analysts can click through dialogs and installers in real-time during analysis." },
-      { id: "ma-q3-2", question: "How does malware commonly detect it's running in a virtual machine?", options: ["Measuring CPU benchmark timing to detect slower virtual processor execution speeds", "Checking VM-specific registry keys, MAC address prefixes, and hardware identifiers like BIOS strings", "Measuring the size of critical Windows system files against expected authentic baseline values", "Sampling the display resolution and color depth settings commonly configured inside sandbox VMs"], correctAnswer: 1, explanation: "Malware checks VM-specific registry keys (VMware, VirtualBox), MAC address prefixes, and hardware identifiers to detect virtualization." },
-      { id: "ma-q3-3", question: "What Sysinternals tool captures real-time filesystem, registry, and process activity?", options: ["Process Hacker — an open-source task manager showing detailed process memory and thread information", "Process Monitor (ProcMon) — captures real-time filesystem, registry, and process activity with filtering", "Autoruns — enumerates all auto-starting locations to identify persistence mechanisms on Windows systems", "TCPView — displays active TCP and UDP connections and the processes that own each network socket"], correctAnswer: 1, explanation: "Process Monitor captures detailed real-time filesystem, registry, process, and thread activity with powerful filtering." },
-      { id: "ma-q3-4", question: "In Process Hacker, what does RWX memory permissions in a process indicate?", options: ["Normal application behavior where code regions are mapped executable and data regions are writable", "Possible injected shellcode — RWX combines read, write, and execute, which legitimate code rarely needs", "A read-only mapped data section containing constants or resource strings loaded from the binary", "Kernel mode memory access indicating a driver or privileged system component is active in the process"], correctAnswer: 1, explanation: "Read-Write-Execute (RWX) memory regions are suspicious because legitimate code rarely needs all three permissions — it often indicates injected shellcode." },
-      { id: "ma-q3-5", question: "What tool takes registry snapshots before and after malware execution?", options: ["Regshot — takes two registry snapshots and compares them to reveal all changes made during execution", "ProcMon — filters real-time registry events by process and records registry reads and write operations", "Autoruns — scans auto-start registry locations to enumerate persistence mechanisms at system startup", "RegRipper — extracts and parses Windows registry hive artifacts for offline forensic examination"], correctAnswer: 0, explanation: "Regshot takes two registry snapshots and compares them, revealing all keys and values added, modified, or deleted during execution." },
-      { id: "ma-q3-6", question: "What does FakeNet-NG do in a malware analysis environment?", options: ["Scans all files on disk using multiple antivirus engines and reports detected signatures to the analyst", "Intercepts and locally simulates DNS, HTTP, SMTP, and other network services for isolated malware analysis", "Monitors system CPU and memory utilization during malware execution to detect resource abuse patterns", "Decompiles network-facing binary components and extracts embedded C2 protocol grammar definitions"], correctAnswer: 1, explanation: "FakeNet-NG intercepts all network traffic and simulates DNS, HTTP, SMTP, and other services so malware operates as if connected to the internet." },
-      { id: "ma-q3-7", question: "Which Wireshark filter shows only DNS queries?", options: ["'tcp.port == 53' — filters for TCP traffic on port 53 but misses DNS over UDP connections", "'dns' — the display filter matching all DNS protocol traffic including queries and response records", "'http.request' — filters only HTTP GET and POST request packets for web traffic inspection", "'ip.proto == 17' — filters all UDP datagrams but includes non-DNS UDP traffic on other ports"], correctAnswer: 1, explanation: "The 'dns' display filter shows all DNS traffic including queries and responses, useful for identifying C2 domains and DGA patterns." },
-      { id: "ma-q3-8", question: "What network pattern indicates C2 beaconing?", options: ["Random burst traffic with irregular timing patterns and variable packet sizes across sessions", "Regular interval connections with slight jitter, indicating automated periodic check-in to a C2 server", "A single large outbound data transfer suggesting a one-time exfiltration event to an external server", "Exclusively outbound UDP traffic on ephemeral ports with no corresponding inbound response packets"], correctAnswer: 1, explanation: "C2 beaconing shows regular check-in intervals (e.g., every 60 seconds) with slight random jitter to avoid detection." },
-      { id: "ma-q3-9", question: "svchost.exe spawned by a non-services.exe parent process is a sign of what?", options: ["Normal Windows behavior since svchost.exe can be legitimately started by any system management process", "A malicious process masquerading as svchost — legitimate svchost is always spawned by services.exe", "Windows Update downloading patches, which sometimes requires launching a dedicated svchost instance", "A hardware driver installation process that creates a temporary svchost subprocess during device setup"], correctAnswer: 1, explanation: "Legitimate svchost.exe is always spawned by services.exe. Any other parent indicates a malicious process impersonating svchost." },
-      { id: "ma-q3-10", question: "Which API sequence indicates classic process injection?", options: ["CreateFile → ReadFile → CloseHandle — standard file I/O operations for reading data from disk storage", "OpenProcess → VirtualAllocEx → WriteProcessMemory → CreateRemoteThread — the classic injection sequence", "RegOpenKeyEx → RegSetValueEx → RegCloseKey — standard Windows Registry read and write operations", "WSAStartup → connect → send → recv — standard Winsock API sequence for TCP client communication"], correctAnswer: 1, explanation: "This sequence opens a target process, allocates memory in it, writes shellcode, and creates a thread to execute it — the classic injection pattern." }
-    ]
-  },
-  {
-    quizId: "ma-q4",
-    courseId: "malware-analysis",
-    title: "Document & Script Malware",
-    description: "Evaluate your ability to analyze macro-based documents, PDFs, and script threats.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "ma-q4-1", question: "Which VBA subroutine name causes automatic execution when a Word document is opened?", options: ["Sub Main() — a generic entry point used in standalone VBA applications not triggered automatically", "Sub AutoOpen() — a VBA auto-execution trigger that runs macros automatically when the document opens", "Sub Initialize() — a custom initialization routine that must be explicitly called by the host application", "Sub OnLoad() — a non-standard subroutine name not recognized as an auto-trigger by Microsoft Office"], correctAnswer: 1, explanation: "AutoOpen() and Document_Open() are VBA auto-execution triggers that run macros automatically when the document is opened." },
-      { id: "ma-q4-2", question: "What tool extracts and analyzes VBA macros from Office documents?", options: ["pdf-parser — a Python tool for analyzing PDF structure, objects, and embedded JavaScript payloads", "olevba (part of oletools) — extracts VBA macros, flags suspicious patterns, and deobfuscates strings", "FLOSS — a tool for recovering obfuscated and runtime-decoded strings from compiled binary executables", "Wireshark — a network protocol analyzer for capturing and dissecting live or recorded network traffic"], correctAnswer: 1, explanation: "olevba (part of oletools) extracts VBA macros, identifies suspicious patterns, and attempts automatic deobfuscation." },
-      { id: "ma-q4-3", question: "What VBA obfuscation technique uses Chr(80) & Chr(111) & Chr(119)?", options: ["Base64 encoding splitting the string into encoded chunks decoded at runtime using StrConv calls", "XOR encryption applying a single-byte key to each character value in the target string data", "Character code concatenation building strings from ASCII codes to evade static string-based detection", "String reversal storing the string backwards and calling StrReverse before passing it to Shell calls"], correctAnswer: 2, explanation: "Chr() converts ASCII codes to characters, building strings character-by-character to avoid string-based detection (Chr(80)&Chr(111)&Chr(119) = 'Pow')." },
-      { id: "ma-q4-4", question: "Which PDF object type triggers automatic code execution on document open?", options: ["/Encrypt — specifies the encryption dictionary defining the security handler and password protection", "/OpenAction — specifies JavaScript or URI actions to execute automatically when the PDF is opened", "/Metadata — stores XML document metadata including author, title, and creation date information", "/Pages — the root node of the page tree defining the total number of pages in the PDF document"], correctAnswer: 1, explanation: "/OpenAction specifies actions to execute automatically when the PDF is opened, commonly used to trigger JavaScript payloads." },
-      { id: "ma-q4-5", question: "What tool safely emulates VBA macro execution without opening Office?", options: ["ViperMonkey — emulates VBA macro execution, revealing shell commands and URLs without running Office", "oletools — a suite of tools for analyzing OLE2 file formats and extracting embedded macro content", "pdf-parser — a command-line tool for parsing PDF object structures and extracting embedded streams", "CyberChef — a web-based data transformation tool for decoding Base64, XOR, and other encodings"], correctAnswer: 0, explanation: "ViperMonkey emulates VBA macro execution, revealing shell commands, downloaded URLs, and dropped files without running Office applications." },
-      { id: "ma-q4-6", question: "In PowerShell deobfuscation, what should you replace IEX with for safe analysis?", options: ["Remove-Item — a cmdlet for deleting files and registry keys that would destroy evidence on the system", "Write-Output — prints the decoded command to the console instead of executing it, revealing the payload", "Set-Variable — stores the decoded string in a named variable without executing or printing its content", "Start-Process — launches a new process that would execute the decoded payload in a child context"], correctAnswer: 1, explanation: "Replacing IEX (Invoke-Expression) with Write-Output prints the decoded command instead of executing it, safely revealing the payload." },
-      { id: "ma-q4-7", question: "What is HTML smuggling?", options: ["Embedding malicious macros directly inside HTML email body sections to bypass attachment filtering", "Using JavaScript in HTML to construct and trigger payload downloads client-side, bypassing email gateways", "Hiding malware inside HTML comment blocks that are extracted and executed by a custom browser plugin", "Using HTML forms with hidden fields to exfiltrate user credentials to attacker-controlled web servers"], correctAnswer: 1, explanation: "HTML smuggling uses JavaScript to construct malicious payloads (via atob, Blob, createObjectURL) in the browser, bypassing email gateway scanning." },
-      { id: "ma-q4-8", question: "How are malicious LNK files typically disguised?", options: ["Disguised as Windows Update packages with Microsoft-signed digital certificate metadata attached", "Using folder icons from shell32.dll with innocent names like 'Important Documents' to trick victims", "Disguised as system font installation files with .ttf extensions renamed to match standard Windows fonts", "Disguised as TLS certificate files with .cer extensions pointing to malicious code execution paths"], correctAnswer: 1, explanation: "Malicious LNK files use folder icons from shell32.dll and names like 'Important Documents' to trick users into clicking." },
-      { id: "ma-q4-9", question: "What tool safely analyzes malicious JScript files?", options: ["Node.js — a JavaScript runtime that would fully execute the malicious script in a live environment", "box-js — a sandbox that safely emulates WScript/JScript, extracting URLs, dropped files, and commands", "Babel — a JavaScript transpiler that converts modern JS syntax to older versions for compatibility", "V8 debugger — Google's JavaScript engine debugger that executes live code in a limited context"], correctAnswer: 1, explanation: "box-js is a JavaScript sandbox that safely emulates WScript/JScript execution, extracting URLs, dropped files, and shell commands." },
-      { id: "ma-q4-10", question: "What typically comes inside an ISO file delivered via HTML smuggling?", options: ["Password-encrypted PDF documents containing embedded macro payloads for further stage execution", "A malicious LNK shortcut paired with a DLL payload executed via rundll32 for stealthy execution", "Linux ELF executables that target cross-platform environments and Windows Subsystem for Linux", "Malicious browser extension packages targeting Chrome or Edge for credential harvesting operations"], correctAnswer: 1, explanation: "HTML-smuggled ISO containers typically contain a malicious LNK shortcut that executes a co-located DLL via rundll32." }
-    ]
-  },
-  {
-    quizId: "ma-q5",
-    courseId: "malware-analysis",
-    title: "Reverse Engineering Fundamentals",
-    description: "Test your knowledge of assembly, Ghidra, debugging, and C2 protocol analysis.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "ma-q5-1", question: "What does the x86 instruction 'XOR EAX, EAX' accomplish?", options: ["Encrypts the contents of the EAX register using a symmetric XOR key stored in a second register", "Sets the EAX register to zero — XORing any value with itself always produces a zero result", "Copies the current value of EAX into a designated memory location for temporary stack storage", "Performs a bitwise comparison of EAX with zero and sets the CPU flags register accordingly"], correctAnswer: 1, explanation: "XOR-ing a register with itself always produces zero. This is the standard pattern for zeroing registers because it's faster than MOV EAX, 0." },
-      { id: "ma-q5-2", question: "In x64 Windows calling convention, which register holds the first function argument?", options: ["RAX — used as the return value register in Windows x64 calling convention after a function call", "RCX — holds the first argument in the Windows x64 fastcall convention (RCX, RDX, R8, R9)", "RDX — holds the second function argument in Windows x64, not the first argument position", "RDI — the first argument register in Linux System V AMD64 ABI, not the Windows calling convention"], correctAnswer: 1, explanation: "x64 Windows (fastcall) passes the first four arguments in RCX, RDX, R8, R9. Linux System V uses RDI, RSI, RDX, RCX." },
-      { id: "ma-q5-3", question: "What does Ghidra's decompiler provide?", options: ["Real-time network traffic capture and protocol decoding for analyzing binary C2 communication", "C-like pseudocode reconstructed from binary disassembly, dramatically speeding up code analysis", "Automated sandbox execution environment for safely running suspicious binaries in an isolated space", "Automated encrypted string decryption using brute-force key recovery against known cipher patterns"], correctAnswer: 1, explanation: "Ghidra's decompiler converts assembly instructions back into readable C-like pseudocode, dramatically speeding up analysis." },
-      { id: "ma-q5-4", question: "What technique should you use aggressively while analyzing code in Ghidra?", options: ["Running the sample in the Ghidra scripting console to observe dynamic runtime behavior in context", "Renaming functions and variables as you understand them to make the decompiled code progressively readable", "Deleting unneeded or dead code sections to reduce complexity in the Ghidra listing view display", "Patching binary instructions in-place to redirect execution flow toward the malware's decryption stub"], correctAnswer: 1, explanation: "Renaming functions (FUN_00401000 → decrypt_config) and variables as you understand them makes the decompiled code progressively more readable." },
-      { id: "ma-q5-5", question: "In x64dbg, what does F7 do?", options: ["Step Over — executes the current instruction but skips into function calls without tracing inside", "Step Into — follows execution into called functions, allowing you to trace through nested code paths", "Run to Cursor — executes all instructions up to the cursor position and then pauses there", "Toggle Breakpoint — sets or removes a software breakpoint at the currently selected instruction"], correctAnswer: 1, explanation: "F7 steps into function calls, following execution into the called function. F8 steps over, treating the call as a single instruction." },
-      { id: "ma-q5-6", question: "Why are hardware breakpoints preferred when debugging packed malware?", options: ["Hardware breakpoints execute faster because they bypass the software INT3 interrupt dispatch overhead", "They use CPU debug registers, surviving self-modifying code and remaining invisible to anti-debug checks", "They can intercept and log outbound network packets to identify the malware's C2 communication flow", "Hardware breakpoints are supported exclusively on Linux systems and require kernel debug mode enabled"], correctAnswer: 1, explanation: "Hardware breakpoints use CPU debug registers, so they survive code modification and aren't detectable by common anti-debugging techniques." },
-      { id: "ma-q5-7", question: "What x64dbg plugin defeats most anti-debugging techniques automatically?", options: ["OllyDump — a process dumper plugin used to extract and dump packed executables from memory", "ScyllaHide — patches PEB flags and NTDLL hooks to defeat IsDebuggerPresent and timing anti-debug checks", "IDA Sync — a plugin synchronizing IDA Pro analysis databases with running x64dbg debug sessions", "x64dbg Automation — a scripting engine allowing basic automated stepping through code sequences"], correctAnswer: 1, explanation: "ScyllaHide patches PEB flags, timing functions, and NTDLL hooks to automatically defeat IsDebuggerPresent, NtQueryInformationProcess, and timing checks." },
-      { id: "ma-q5-8", question: "What is the most common encryption method used by malware for C2 communication?", options: ["AES-256 — a symmetric block cipher used in sophisticated ransomware for file and config encryption", "RSA-2048 — an asymmetric cipher used to protect session keys in hybrid ransomware encryption schemes", "XOR — the most common malware encryption due to its extreme simplicity and easy implementation", "Blowfish — a symmetric block cipher occasionally used by older malware families for config encryption"], correctAnswer: 2, explanation: "XOR encryption is the most common in malware due to simplicity — it's trivially reversible but effective enough against basic detection." },
-      { id: "ma-q5-9", question: "What is a Domain Generation Algorithm (DGA)?", options: ["A domain registrar algorithm for automatically purchasing and renewing legitimate domain names", "Malware code generating pseudo-random C2 domain names using date-based seeds for resilient communication", "A DNSSEC security protocol cryptographically signing DNS zone records to prevent spoofing attacks", "A technique encrypting outbound DNS query strings to prevent network monitoring from detecting C2 traffic"], correctAnswer: 1, explanation: "DGAs generate pseudo-random domain names using seeds like dates, allowing malware to find C2 servers even if known domains are taken down." },
-      { id: "ma-q5-10", question: "When malware calls LoadLibraryA + GetProcAddress repeatedly, what is it doing?", options: ["Loading encrypted configuration files from disk resources and decrypting them into working memory buffers", "Dynamically resolving API functions at runtime to hide true capabilities from the static import table", "Performing anti-debugging checks by inspecting PEB flags and querying NtQueryInformationProcess results", "Installing Windows device drivers by dynamically loading kernel module DLLs through the service manager"], correctAnswer: 1, explanation: "Dynamic API resolution loads DLLs and resolves function addresses at runtime, hiding the malware's true capabilities from the import table." }
-    ]
-  },
-  {
-    quizId: "ma-q6",
-    courseId: "malware-analysis",
-    title: "Reporting & Threat Intelligence",
-    description: "Assess your malware reporting, IOC extraction, and attribution skills.",
-    passingScore: 70,
-    timeLimit: 15,
-    questions: [
-      { id: "ma-q6-1", question: "Which IOC type is considered 'atomic' (easily searchable)?", options: ["Behavioral patterns describing adversary actions and techniques that are difficult to search directly", "File hashes and IP addresses — simple, atomic values directly queryable in SIEM and threat intel tools", "MITRE ATT&CK technique identifiers mapping observed behaviors to the standardized adversary framework", "Attack timeline reconstructions showing the chronological sequence of adversary actions during incidents"], correctAnswer: 1, explanation: "Atomic indicators like file hashes, IPs, and domains are simple, searchable values that can be directly queried in security tools." },
-      { id: "ma-q6-2", question: "What format is the industry standard for machine-readable threat intelligence?", options: ["CSV — a simple flat-file format suitable for basic IOC lists but lacking structured relationship support", "STIX 2.1 — the standard JSON-based format for expressing and sharing structured cyber threat intelligence", "XML — a verbose structured markup language used in older threat intel formats like OpenIOC and IODEF", "YAML — a human-readable data format used in SIGMA rules but not the standard for threat intelligence"], correctAnswer: 1, explanation: "STIX (Structured Threat Information Expression) 2.1 is the standard JSON-based format for expressing and sharing cyber threat intelligence." },
-      { id: "ma-q6-3", question: "What protocol enables automated IOC sharing between organizations?", options: ["SMTP — the email transfer protocol used for sending notifications but not structured IOC sharing", "TAXII — the transport protocol for automated machine-to-machine STIX threat intelligence exchange", "SNMP — a network management protocol for monitoring device health and configuration status remotely", "LDAP — a directory access protocol for authenticating users and querying Active Directory resources"], correctAnswer: 1, explanation: "TAXII (Trusted Automated Exchange of Intelligence Information) is the transport protocol for sharing STIX-formatted threat intelligence." },
-      { id: "ma-q6-4", question: "In a YARA rule, what does 'uint16(0) == 0x5A4D' check?", options: ["Validates the total byte size of the file to filter out files that are too large or too small to match", "Confirms the file is a Windows PE executable by verifying the MZ magic bytes at file offset zero", "Checks if the string encoding used in the file is UTF-16LE by examining the BOM at offset zero", "Counts the number of PE sections in the file to detect abnormally high or low section count values"], correctAnswer: 1, explanation: "This condition checks that the first two bytes are 0x4D5A (MZ in little-endian), confirming the file is a PE executable." },
-      { id: "ma-q6-5", question: "What should a malware analysis report's executive summary focus on?", options: ["Detailed assembly-level code analysis showing disassembled function logic and register state changes", "A non-technical risk assessment covering what the malware does, the risk level, and recommended actions", "A complete listing of all extracted IOCs including hashes, IPs, domains, mutexes, and registry keys", "Tool configuration details and analysis environment specifications for report reproducibility verification"], correctAnswer: 1, explanation: "Executive summaries are for non-technical leadership and should focus on what the malware does, the risk level, and recommended actions." },
-      { id: "ma-q6-6", question: "Which framework maps malware behaviors to standardized tactics and techniques?", options: ["NIST CSF — a risk management framework defining Identify, Protect, Detect, Respond, and Recover functions", "MITRE ATT&CK — maps adversary behaviors to standardized tactics and techniques for reporting and defense", "ISO 27001 — an international standard defining requirements for information security management systems", "OWASP — a web application security framework focused on web vulnerabilities rather than adversary TTPs"], correctAnswer: 1, explanation: "MITRE ATT&CK maps observed adversary behaviors to standardized tactics, techniques, and procedures, providing a shared language for threat reporting." },
-      { id: "ma-q6-7", question: "What YARA string modifier matches both ASCII and UTF-16LE encodings?", options: ["nocase — makes the string match case-insensitively but only applies to ASCII-encoded characters", "fullword — ensures the string is preceded and followed by non-alphanumeric boundary characters", "ascii wide — matches the string in both ASCII and UTF-16LE encoding formats used on Windows systems", "base64 — decodes and matches strings that have been Base64-encoded inside the target binary file"], correctAnswer: 2, explanation: "Using both 'ascii' and 'wide' modifiers on a string ensures it matches whether encoded as ASCII or UTF-16LE (common in Windows)." },
-      { id: "ma-q6-8", question: "For attribution, what confidence level requires multiple independent technical overlaps?", options: ["Low — based on a single shared indicator like an IP address with no additional corroborating evidence", "Medium — requires multiple independent overlaps like code similarity AND infrastructure reuse together", "High — the attribution confidence level also requiring operational consistency and historical precedent", "Confirmed — the highest confidence requiring physical or legal evidence of the identified threat actor"], correctAnswer: 1, explanation: "Medium confidence requires multiple technical overlaps such as code similarity AND infrastructure reuse. High adds operational and historical consistency." },
-      { id: "ma-q6-9", question: "What tool compares two binaries for shared functions at the code level?", options: ["ssdeep — a fuzzy hashing tool that compares overall file similarity based on byte-level content blocks", "BinDiff — compares binary executables at the function level to identify shared code between samples", "YARA — a pattern-matching tool used to classify malware families based on string and byte signatures", "CyberChef — a web-based data transformation tool for encoding, decoding, and formatting data values"], correctAnswer: 1, explanation: "BinDiff compares binary executables at the function level, identifying shared code between samples to link them to the same author or family." },
-      { id: "ma-q6-10", question: "What does passive DNS data reveal about threat actor infrastructure?", options: ["Reconstructed malware source code recovered from decompiled binary executables and debug artifacts", "Historical domain-to-IP mappings exposing infrastructure reuse patterns across different threat campaigns", "Symmetric encryption keys recovered from captured network traffic using known-plaintext attack methods", "Victim organization identities derived from DNS lookup patterns and query volume correlation analysis"], correctAnswer: 1, explanation: "Passive DNS records historical domain resolutions, revealing when domains pointed to which IPs and identifying infrastructure overlap between campaigns." }
-    ]
-  },
-  // SOC ANALYST LEARNING PATH QUIZZES
-  {
-    quizId: "sap-q1",
-    courseId: "soc-analyst-path",
-    title: "SOC Analyst Foundations Quiz",
-    description: "Test your understanding of the SOC analyst role, maturity models, and compliance.",
-    passingScore: 70,
-    timeLimit: 20,
-    questions: [
-      { id: "sap-q1-1", question: "What is the primary purpose of a SOC maturity model?", options: ["To rank security analysts based on their ticket closing speed and determine annual salary adjustments.", "To assess and systematically mature SOC capabilities across people, processes, technology, and governance.", "To evaluate and select the most cost-effective SIEM vendor during the procurement phase.", "To automatically generate regulatory compliance certificates required for external audits."], correctAnswer: 1, explanation: "SOC maturity models assess capabilities across People, Process, Technology, Services, and Governance." },
-      { id: "sap-q1-2", question: "GDPR requires breach notification within how many hours?", options: ["A personal data breach must be reported to the supervisory authority within 24 hours of discovery.", "A personal data breach must be reported to the supervisory authority within 48 hours of discovery.", "A personal data breach must be reported to the supervisory authority within 72 hours of discovery.", "A personal data breach must be reported to the supervisory authority within 96 hours of discovery."], correctAnswer: 2, explanation: "GDPR mandates 72-hour breach notification to supervisory authority." },
-      { id: "sap-q1-3", question: "What is the minimum log retention under PCI-DSS?", options: ["A minimum of 6 months, with all network and system logs immediately searchable in the hot storage tier.", "A minimum of 1 year, with at least 3 months of logs immediately available for active query and analysis.", "A minimum of 3 years, with all historical audit records archived on offline read-only backup media.", "A minimum of 7 years, to comply with federal tax and financial record retention regulations."], correctAnswer: 1, explanation: "PCI-DSS requires 1 year retention with 3 months immediately available." },
-      { id: "sap-q1-4", question: "Which NIST CSF functions are the SOC's primary focus?", options: ["Identify and Protect, focusing on asset inventories, vulnerability scans, and system hardening rules.", "Detect and Respond, focusing on active security monitoring, threat detection, and incident containment.", "Recover and Govern, focusing on server restoration backups and organizational policy alignment.", "Protect and Recover, focusing on firewall rules, multi-factor authentication, and disaster recovery."], correctAnswer: 1, explanation: "Detect and Respond are the primary SOC functions in NIST CSF." },
-      { id: "sap-q1-5", question: "How many alerts should a typical L1 analyst triage per shift?", options: ["Between 5 and 10 high-priority alerts, allowing for deep forensic host and memory analysis per ticket.", "Between 10 and 20 alerts, representing a highly tuned or small-scale security environment.", "Between 30 and 60 alerts, balancing initial triage depth with overall queue coverage efficiency.", "Between 100 and 200 alerts, requiring rapid closing of alerts without performing any investigation."], correctAnswer: 2, explanation: "A typical L1 analyst targets 30-60 alerts per shift." },
-      { id: "sap-q1-6", question: "What percentage of alerts should typically be escalated?", options: ["Between 1% and 3%, representing a highly optimized SIEM with virtually zero false positive alerts.", "Between 5% and 15%, representing the standard escalation rate of validated alerts from L1 to L2.", "Between 25% and 35%, indicating that L1 analysts require significant training in basic triage.", "Between 50% and 60%, showing that the initial correlation rules generate too many true positives."], correctAnswer: 1, explanation: "Typically 5-15% of alerts are escalated from L1 to L2." },
-      { id: "sap-q1-7", question: "What compliance framework addresses healthcare data?", options: ["PCI-DSS, which is the mandatory global security standard for protecting payment cardholder databases.", "SOX (Sarbanes-Oxley), regulating financial reporting integrity and disclosures for public companies.", "HIPAA, which mandates the protection and privacy of Protected Health Information (PHI/ePHI).", "GDPR, which protects the general personal data and privacy of all European Union citizens."], correctAnswer: 2, explanation: "HIPAA addresses protection of healthcare data (ePHI)." },
-      { id: "sap-q1-8", question: "SOX compliance applies to which organizations?", options: ["Healthcare providers and medical facilities processing patient health and billing records.", "Publicly traded companies, ensuring the integrity of financial reporting and internal control systems.", "Educational institutions and universities receiving federal funding or research grants.", "Non-profit organizations and registered charities operating international relief programs."], correctAnswer: 1, explanation: "SOX applies to publicly traded companies." },
-      { id: "sap-q1-9", question: "What is the relationship between compliance and security?", options: ["They are completely identical concepts, and achieving compliance guarantees absolute network security.", "Compliance represents the security ceiling, defining the maximum possible defensive maturity level.", "Compliance is the baseline floor, while true security goes beyond checklists to mitigate actual threats.", "Security is entirely unnecessary if an organization is fully compliant with external audit standards."], correctAnswer: 2, explanation: "Compliance is the minimum — true security goes beyond regulatory requirements." },
-      { id: "sap-q1-10", question: "What should you do with an investigation VM after analyzing malware?", options: ["Keep using the active VM for subsequent malware analysis to save setup and system boot time.", "Revert the VM to a clean, isolated snapshot to prevent cross-contamination of samples.", "Share the active VM state file with colleagues to let them review memory artifacts locally.", "Connect the virtual machine to the production network to update antivirus signature databases."], correctAnswer: 1, explanation: "Always revert to clean snapshot after malware analysis." },
-      { id: "sap-q1-11", question: "What is the first step in alert triage?", options: ["Immediately block the source IP address at the perimeter firewall interface to stop traffic.", "Escalate the ticket to Tier 2 and notify senior management of a validated security breach.", "Review alert details, metadata, and associated logs to assess the scope and context of the event.", "Run a full forensic disk image and memory capture of the affected workstation to preserve evidence."], correctAnswer: 2, explanation: "First review alert details and initial assessment before any action." },
-      { id: "sap-q1-12", question: "What is the purpose of shift handover?", options: ["To evaluate the performance metrics and ticket resolution speeds of individual incoming analysts.", "To ensure operational continuity by communicating ongoing incidents, active alerts, and pending tasks.", "To submit a formal daily report directly to the Chief Information Security Officer for review.", "To assign blame for any unresolved alerts remaining in the queue from the outgoing shift."], correctAnswer: 1, explanation: "Handovers ensure smooth transitions and prevent dropped incidents." },
-      { id: "sap-q1-13", question: "Which tool is essential for a SOC analyst's toolkit?", options: ["Photoshop, used to generate visual network diagrams and flowcharts for auditing committees.", "VirusTotal, used to analyze file hashes, domain names, IP addresses, and malicious URLs.", "Microsoft Word, used to draft security policies and long-term compliance procedures.", "Social media monitoring dashboards to check general industry news and technology trends."], correctAnswer: 1, explanation: "VirusTotal is essential for analyzing hashes, URLs, IPs, and domains." },
-      { id: "sap-q1-14", question: "How many SOC-CMM maturity levels exist?", options: ["The SOC-CMM model defines 3 maturity levels: Initial, Managed, and Defined capabilities.", "The SOC-CMM model defines 4 maturity levels: Initial, Repeatable, Defined, and Managed capabilities.", "The SOC-CMM model defines 5 maturity levels: Initial, Repeatable, Defined, Managed, and Optimizing.", "The SOC-CMM model defines 6 maturity levels: from Level 0 (Incomplete) to Level 5 (Optimizing)."], correctAnswer: 3, explanation: "SOC-CMM has 6 levels (0-5): Incomplete through Optimizing." },
-      { id: "sap-q1-15", question: "What does PCI-DSS Requirement 10 mandate?", options: ["Conducting quarterly external penetration tests of all internet-facing systems and host subnets.", "Tracking and monitoring all access to network resources and cardholder data system components.", "Performing background checks on all employees who have administrative system access privileges.", "Installing physical access locks and biometric scanners at all data center entry doors."], correctAnswer: 1, explanation: "Req 10 mandates tracking and monitoring all access to network resources and cardholder data." }
-    ]
-  },
-  {
-    quizId: "sap-q2",
-    courseId: "soc-analyst-path",
-    title: "Network Traffic Analysis Quiz",
-    description: "Evaluate your TCP/IP analysis, DNS threats, and packet inspection skills.",
-    passingScore: 75,
-    timeLimit: 20,
-    questions: [
-      { id: "sap-q2-1", question: "What indicates a SYN scan?", options: ["A SYN packet followed by an ACK response, then immediate FIN closure from client.", "A SYN packet followed by a SYN-ACK response, then client sends RST without final ACK.", "FIN, PSH, and URG flags set simultaneously in a single incoming packet header.", "An ACK packet sent directly to a closed port, generating a destination unreachable log."], correctAnswer: 1, explanation: "SYN scan sends SYN, receives SYN-ACK, sends RST without completing handshake." },
-      { id: "sap-q2-2", question: "What indicates C2 beaconing?", options: ["Random outbound connections to a large volume of different external IP addresses.", "Outbound connections at regular intervals with consistent data sizes to the same IP.", "A high volume of concurrent downloads from major content delivery network (CDN) hosts.", "Standard recurring DNS resolution requests directed to public Google DNS servers."], correctAnswer: 1, explanation: "C2 beaconing shows regular timing with consistent packet sizes to the same destination." },
-      { id: "sap-q2-3", question: "Windows systems typically use what TTL value?", options: ["A standard default TTL value of 32, indicating a short local network lifespan.", "A standard default TTL value of 64, which is typical for Linux and macOS systems.", "A standard default TTL value of 128, which is the default for Windows OS networking.", "A standard default TTL value of 255, commonly used by network routers and switches."], correctAnswer: 2, explanation: "Windows uses TTL=128, Linux uses TTL=64." },
-      { id: "sap-q2-4", question: "What is DNS tunneling?", options: ["Encrypting local DNS traffic using DNS over HTTPS (DoH) to bypass proxy logging.", "Encoding data in DNS query subdomain labels to bypass firewall monitoring.", "Blocking malicious domain resolutions at the local recursive DNS server level.", "Establishing a secure VPN tunnel using DNS port 53 for standard web browsing."], correctAnswer: 1, explanation: "DNS tunneling encodes data in subdomain labels to communicate covertly." },
-      { id: "sap-q2-5", question: "What indicates DGA malware?", options: ["Normal browsing traffic showing sequential requests to standard websites.", "A high volume of NXDomain responses from a single host resolving random domains.", "Misconfigured local DNS server IPs generating timeout logs in the event viewer.", "High network bandwidth usage caused by large file downloads over port 80 or 443."], correctAnswer: 1, explanation: "DGA generates many domains, most of which don't resolve (NXDomain)." },
-      { id: "sap-q2-6", question: "What does fast-flux DNS involve?", options: ["Rapid rotation of IP addresses for a single domain name using very low TTL values.", "Slow DNS resolution times caused by network congestion and packet loss.", "Assigning static IP addresses to a domain to ensure high availability.", "Caching DNS resolutions locally on client systems to optimize performance."], correctAnswer: 0, explanation: "Fast-flux rapidly rotates IPs (every 30-60s) using very low TTL." },
-      { id: "sap-q2-7", question: "Which User-Agent is suspicious?", options: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0", "Python-urllib/3.8, indicating automated scripts rather than interactive user browsing.", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15", "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/121.0."], correctAnswer: 1, explanation: "Python-urllib indicates automated scripting, unusual for normal browsing." },
-      { id: "sap-q2-8", question: "Wireshark filter for HTTP POST requests?", options: ["http.post — which is a simplified but invalid filter string in modern Wireshark.", "http.request.method == \"POST\" — which specifically filters for HTTP POST operations.", "tcp.method == POST — which attempts to filter TCP flags rather than HTTP protocol fields.", "filter.http.post — an incorrect syntax that fails to parse in the filter engine."], correctAnswer: 1, explanation: "The correct filter is http.request.method == \"POST\"." },
-      { id: "sap-q2-9", question: "What is JA3 fingerprinting used for?", options: ["Identifying the specific file formats of downloaded email attachments.", "Creating unique hashes of TLS client hello parameters to identify client software.", "Cracking local user passwords by auditing password hashes in the database.", "Analyzing the structure of DNS queries to detect domain generation algorithms."], correctAnswer: 1, explanation: "JA3 fingerprints TLS client hellos to identify specific malware families." },
-      { id: "sap-q2-10", question: "Which port is used for SMB lateral movement?", options: ["Port 22, which is the standard port for Secure Shell (SSH) remote command line.", "Port 80, used for unencrypted HTTP web traffic and proxy configurations.", "Port 443, used for encrypted HTTPS communication and TLS connections.", "Port 445, used for Server Message Block (SMB) file sharing and lateral movement."], correctAnswer: 3, explanation: "Port 445 (SMB) is commonly used for lateral movement and ransomware." },
-      { id: "sap-q2-11", question: "What DNS indicator suggests tunneling?", options: ["Short, standard queries directed to internal Active Directory DNS servers.", "Unusually long subdomain labels containing random, high-entropy characters.", "Standard A record queries returning single public IP address resolutions.", "DNS requests occurring exclusively during standard corporate business hours."], correctAnswer: 1, explanation: "DNS tunneling creates long, high-entropy subdomain labels." },
-      { id: "sap-q2-12", question: "How to follow a TCP conversation in Wireshark?", options: ["Navigating to Edit > Preferences and enabling the TCP conversation option.", "Right-clicking a packet and selecting Follow > TCP Stream from the context menu.", "Opening the Statistics menu and selecting the general Conversations panel.", "Running the Analyze > Stream command-line tool in the terminal window."], correctAnswer: 1, explanation: "Right-click a packet and Follow → TCP Stream reconstructs the conversation." },
-      { id: "sap-q2-13", question: "What does XMAS scan send?", options: ["A single SYN packet designed to prompt a standard connection response.", "An ACK packet alone to check for active firewall filtering policies.", "A packet with the FIN, PSH, and URG flags set, lighting up like a tree.", "A completely empty TCP packet header containing no operational flag settings."], correctAnswer: 2, explanation: "XMAS scan sets FIN, PSH, and URG flags — unusual combination for evasion." },
-      { id: "sap-q2-14", question: "Purpose of proxy log analysis in SOC?", options: ["Monitoring general employee productivity and tracking physical desk attendance.", "Detecting web-based threats, unauthorized data exfiltration, and C2 channels.", "Analyzing local network bandwidth speeds and identifying connection delays.", "Managing disk storage space and setting automated log rotation schedules."], correctAnswer: 1, explanation: "Proxy logs detect web threats, data exfiltration, and C2 communication." },
-      { id: "sap-q2-15", question: "What is a DGA domain characteristic?", options: ["Long, meaningful words combined in predictable dictionary sequences.", "High entropy domain names consisting of random-looking alphanumeric strings.", "Domains resolving exclusively to static, well-known CDN host IP addresses.", "Domains that utilize standard corporate naming conventions and patterns."], correctAnswer: 1, explanation: "DGA domains have high entropy (random-looking characters) like xkq8r3m2p.com." }
-    ]
-  },
-  {
-    quizId: "sap-q3",
-    courseId: "soc-analyst-path",
-    title: "SIEM Mastery Assessment",
-    description: "Test SIEM queries, correlation rules, and dashboard skills.",
-    passingScore: 75,
-    timeLimit: 25,
-    questions: [
-      { id: "sap-q3-1", question: "What function counts unique values in SIEM?", options: ["The count() function, which returns the total number of matching log events.", "The sum() function, which calculates the arithmetic sum of a specific field.", "The dc() / distinct_count() function, which counts the number of unique field values.", "The avg() function, which calculates the average value of a numeric field."], correctAnswer: 2, explanation: "dc() counts unique values, useful for finding hosts accessed by a single IP." },
-      { id: "sap-q3-2", question: "Best approach to designing correlation rules?", options: ["Start with the available log sources and write rules based on what fields are present.", "Start with a specific MITRE ATT&CK technique, understand behavior, then map to log sources.", "Copy default rules from online repositories and import them directly without tuning.", "Focus exclusively on single-event rules to keep the SIEM processing resource usage low."], correctAnswer: 1, explanation: "Threat-informed design starts with the attack technique, then maps to data sources." },
-      { id: "sap-q3-3", question: "Why is multi-event correlation better?", options: ["It generates a higher volume of alerts to ensure the security queue is never empty.", "It reduces false positives by requiring multiple related conditions to be met.", "It is significantly easier to write and maintain than simple single-event rules.", "It uses far fewer SIEM database resources and speeds up search performance."], correctAnswer: 1, explanation: "Multiple conditions produce higher confidence alerts." },
-      { id: "sap-q3-4", question: "Process chain indicating macro attack?", options: ["explorer.exe spawning chrome.exe, representing standard user-initiated web browsing.", "winword.exe spawning cmd.exe or powershell.exe, indicating malicious document execution.", "svchost.exe spawning services.exe, which is the normal system service host start sequence.", "lsass.exe spawning csrss.exe, indicating standard Windows credential storage operations."], correctAnswer: 1, explanation: "Office apps spawning CLI tools indicates macro execution." },
-      { id: "sap-q3-5", question: "Max panels for a SOC dashboard?", options: ["2 to 4 panels, which is too sparse and fails to show critical operational metrics.", "8 to 10 panels, providing sufficient key metrics without causing cognitive overload.", "20 to 30 panels, which tracks every minor event but causes extreme alert fatigue.", "As many as possible to fill the screen space and showcase complex visualization widgets."], correctAnswer: 1, explanation: "Limit to 8-10 panels to prevent information overload." },
-      { id: "sap-q3-6", question: "First step in log source onboarding?", options: ["Writing correlation rules and alerts for the new device before logs start arriving.", "Installing the log forwarder agent on all endpoints and servers in production.", "Identifying the log source, understanding its event format, and assessing log volume.", "Creating complex visualization dashboards to showcase the new data to stakeholders."], correctAnswer: 2, explanation: "First identify the device, events, format, and expected volume." },
-      { id: "sap-q3-7", question: "What is field normalization?", options: ["Deleting unused fields from log entries to save storage space in the SIEM index.", "Mapping diverse vendor-specific fields to a common naming schema like CIM or ECS.", "Encrypting sensitive field values like usernames and IP addresses in the database.", "Reducing the total number of logs by filtering out events that don't match rules."], correctAnswer: 1, explanation: "Normalization maps source-specific fields to unified schema for cross-source correlation." },
-      { id: "sap-q3-8", question: "How to handle high FP rate on a rule?", options: ["Deleting the rule immediately from the active queue to keep false positive counts low.", "Instructing analysts to ignore the alerts or auto-close them without investigation.", "Adding whitelists for authorized activity, adjusting thresholds, and adding context.", "Filing a support ticket to blame the SIEM vendor for poor default detection quality."], correctAnswer: 2, explanation: "Tune with whitelists, adjusted thresholds, and context conditions." },
-      { id: "sap-q3-9", question: "What makes a dashboard 'actionable'?", options: ["Using highly colorful charts and advanced 3D visual formats to attract attention.", "Including drill-down links that let analysts click panels to run detailed searches.", "Displaying a large number of data points and raw events directly on a single page.", "Implementing complex visualizations that require specialized training to interpret."], correctAnswer: 1, explanation: "Actionable dashboards allow clicking any panel to drill into underlying data." },
-      { id: "sap-q3-10", question: "SIEM query detecting RDP lateral movement?", options: ["Counting distinct target systems per source IP for RDP connections (logon type 10).", "Counting the total number of successful logins across all domain controllers.", "Searching for failed password attempts on public-facing remote desktop portals.", "Filtering network connection logs by unrecognized browser user agent strings."], correctAnswer: 0, explanation: "Count distinct target hosts per source IP for RDP (logon type 10)." },
-      { id: "sap-q3-11", question: "What is a cool-down period?", options: ["The time required for the SIEM database servers to cool down during scheduled maintenance.", "A suppression window that prevents repeated alerts for the same condition within a time frame.", "The scheduled time between security rule updates and signature feed synchronizations.", "The maximum idle timeout period before a SOC analyst is logged out of the console."], correctAnswer: 1, explanation: "Cool-downs suppress repeated alerts for the same condition within a time window." },
-      { id: "sap-q3-12", question: "What to validate after log source onboarding?", options: ["Verifying only that events are being received by the collector service without errors.", "Validating correct timestamps, accurate field parsing, searchability, and zero gaps.", "Checking that field names match standard documentation formatting guides.", "Testing that the network connection is active between the source and the SIEM."], correctAnswer: 1, explanation: "Validate timestamps, field parsing, volume, searchability, and absence of gaps." },
-      { id: "sap-q3-13", question: "First query optimization technique?", options: ["Using regular expressions (regex) for all search terms to ensure exact matches.", "Applying narrow time windows and specific index or source filters early in the query.", "Removing all filters to scan the entire database for any possible indicators of threat.", "Searching all available indices simultaneously without specifying target directories."], correctAnswer: 1, explanation: "Filter early to reduce data the SIEM needs to process." },
-      { id: "sap-q3-14", question: "Ransomware detection rule is based on?", options: ["A sudden spike in outbound network traffic volume to unrecognized external IP addresses.", "A high rate of file renames or modifications containing known ransomware extensions.", "Unusual login patterns on domain controllers during non-business hours.", "An increase in the volume of inbound emails containing zip file attachments."], correctAnswer: 1, explanation: "Detect rapid file renames (>50 in 5 min) with extensions like .encrypted, .locked." },
-      { id: "sap-q3-15", question: "What is baseline deviation used for?", options: ["Setting up the initial SIEM configuration and defining the default database schema.", "Detecting anomalous activity by comparing current metrics to established historical norms.", "Automatically deleting old logs that exceed the standard retention policy timeframe.", "Creating new user accounts and assigning roles based on corporate directory groups."], correctAnswer: 1, explanation: "Baseline deviation compares current behavior to historical averages for anomaly detection." }
-    ]
-  },
-  {
-    quizId: "sap-q4",
-    courseId: "soc-analyst-path",
-    title: "Endpoint Investigation Quiz",
-    description: "Assess endpoint forensics on Windows and Linux.",
-    passingScore: 70,
-    timeLimit: 20,
-    questions: [
-      { id: "sap-q4-1", question: "Expected parent of svchost.exe?", options: ["explorer.exe, which manages the graphical user interface and taskbar component.", "winlogon.exe, which handles user logon session creation and security controls.", "services.exe, which is the Service Control Manager responsible for background services.", "csrss.exe, which handles the user-mode console window and thread creation."], correctAnswer: 2, explanation: "svchost.exe should always be a child of services.exe." },
-      { id: "sap-q4-2", question: "What are LOLBins?", options: ["Malware categories that specifically target local system backup repositories.", "Legitimate Windows operating system binaries that are abused by threat actors.", "Logging binaries used by SIEM forwarders to collect event log entries.", "Linux commands used to perform administrative tasks and check system states."], correctAnswer: 1, explanation: "LOLBins are legitimate tools (certutil, mshta) abused for malicious purposes." },
-      { id: "sap-q4-3", question: "Common persistence registry key?", options: ["HKLM\\HARDWARE, which contains hardware configuration and processor device listings.", "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run, which executes programs at logon.", "HKCU\\Console, which stores custom settings for console window rendering.", "HKLM\\SAM, which stores local user account security and password hashes."], correctAnswer: 1, explanation: "Run keys auto-start programs listed there." },
-      { id: "sap-q4-4", question: "What is process hollowing?", options: ["Deleting a process entirely from the active process tree to hide its execution.", "Creating a suspended legitimate process and replacing its memory with malicious code.", "Running a specialized executable designed to scan for empty memory regions.", "Monitoring active memory spaces to detect unauthorized thread allocations."], correctAnswer: 1, explanation: "Process hollowing replaces legitimate process memory with malicious code." },
-      { id: "sap-q4-5", question: "Linux command for network connections with PIDs?", options: ["ls -la, which lists all directory files with their permissions and owner details.", "ss -tnp, which displays active TCP connections with their associated process PIDs.", "cat /etc/passwd, which displays the list of local user accounts on the system.", "df -h, which displays disk space usage statistics in human-readable format."], correctAnswer: 1, explanation: "ss -tnp shows TCP connections with associated process IDs." },
-      { id: "sap-q4-6", question: "Volatility plugin for injected code?", options: ["pslist, which lists active processes by traversing the double-linked active list.", "netscan, which identifies open network connections and active sockets in memory.", "malfind, which scans for injected code and suspicious RWX memory permissions.", "hivelist, which displays registry hives loaded in the physical memory dump."], correctAnswer: 2, explanation: "malfind finds suspicious RWX memory regions and PE headers." },
-      { id: "sap-q4-7", question: "Why capture memory before shutdown?", options: ["Because physical memory is non-volatile and can be recovered easily later.", "Because volatile data like network connections and running processes is lost on reboot.", "Because capturing memory is significantly faster than executing a system shutdown.", "To save disk storage space by compressing active system files during retrieval."], correctAnswer: 1, explanation: "Running processes, connections, and decrypted data disappear on shutdown." },
-      { id: "sap-q4-8", question: "Linux persistence through user login?", options: ["/var/log/syslog, which records general system alerts and service status events.", "/home/user/.bashrc, which executes custom commands every time a new shell opens.", "/etc/hostname, which stores the local system computer name definition.", "/boot/grub/grub.cfg, which configures the bootloader options and default kernel."], correctAnswer: 1, explanation: ".bashrc executes every bash shell — attackers add malicious commands." },
-      { id: "sap-q4-9", question: "PAGE_EXECUTE_READWRITE indicates?", options: ["Normal system behavior representing standard data storage permissions in RAM.", "A strong indicator of potential code injection since memory is both writable and executable.", "A kernel-level protection policy designed to prevent buffer overflow attacks.", "Standard memory corruption indicating hardware failure or device driver bugs."], correctAnswer: 1, explanation: "RWX permissions are unusual and often indicate injected shellcode." },
-      { id: "sap-q4-10", question: "Find recently modified PHP files?", options: ["ls /var/www, which lists the contents of the main web server root directory.", "find /var/www -name '*.php' -mtime -7, finding PHP files changed in the last week.", "grep php /etc/passwd, searching for users associated with the PHP service account.", "cat index.php, which displays the source code of the main home page file."], correctAnswer: 1, explanation: "find with -mtime -7 finds PHP files modified in last 7 days for web shell detection." },
-      { id: "sap-q4-11", question: "Tool showing ALL Windows autostart locations?", options: ["Process Monitor, which captures real-time file system, registry, and process activity.", "Process Explorer, displaying active process trees and loaded DLL structures.", "Autoruns, which displays all autostart locations including Run keys, tasks, and services.", "TCPView, showing real-time network connections associated with active process IDs."], correctAnswer: 2, explanation: "Autoruns shows every autostart location including Run keys, services, tasks, drivers, WMI." },
-      { id: "sap-q4-12", question: "Key indicator of certutil abuse?", options: ["Installing new digital certificates to verify software signature integrity.", "Using -urlcache -split -f parameters to download malicious payloads from external URLs.", "Viewing local certificate stores to check for expired cryptographic keys.", "Verifying the hash values of system files against trusted signature databases."], correctAnswer: 1, explanation: "certutil with -urlcache -split -f downloading from external URLs is common LOLBin abuse." },
-      { id: "sap-q4-13", question: "pslist vs psscan comparison reveals?", options: ["Determining the total memory usage and pagefile allocation of active processes.", "Identifying hidden or unlinked processes created by advanced rootkits.", "Listing the files accessed by each process during their execution lifecycle.", "Measuring the network bandwidth consumed by active system services."], correctAnswer: 1, explanation: "psscan scans all memory while pslist uses active lists — differences reveal hidden processes." },
-      { id: "sap-q4-14", question: "WMI persistence namespace?", options: ["root/default, which hosts general system event classes and properties.", "root/subscription, which contains event consumers and triggers for persistence.", "root/cimv2, representing the main corporate information model namespace.", "root/security, which handles administrative authorization and access permissions."], correctAnswer: 1, explanation: "root/subscription contains WMI event subscriptions for fileless persistence." },
-      { id: "sap-q4-15", question: "First triage step on compromised Linux server?", options: ["Perform an immediate system reboot to clear any active memory compromises.", "Review active processes, network connections, and logged-in users before actions.", "Reinstall the operating system immediately using a clean installation template.", "Delete all system logs to prevent threat actors from covering their tracks."], correctAnswer: 1, explanation: "Check ps auxf, ss -tnp, and last/w before any remediation." }
-    ]
-  },
-
-  {
-    quizId: "sap-q5",
-    courseId: "soc-analyst-path",
-    title: "Phishing & Email Analysis Quiz",
-    description: "Validate email header analysis and phishing response skills.",
-    passingScore: 75,
-    timeLimit: 20,
-    questions: [
-      { id: "sap-q5-1", question: "Email headers should be read in which order?", options: ["Top to bottom, showing the chronological path from the sender's client to the recipient.", "Bottom to top, since the oldest delivery hops and sending client details are at the bottom.", "Alphabetically by header field names, grouping all SPF, DKIM, and DMARC status fields.", "By header category, grouping all routing entries first, followed by content attributes."], correctAnswer: 1, explanation: "Bottom-to-top — oldest entries are at the bottom." },
-      { id: "sap-q5-2", question: "What does SPF verify?", options: ["The cryptographic signature of the email body and subject line contents.", "Whether the sending server's IP address is authorized in the sender domain's DNS SPF record.", "The SSL/TLS certificate validity of the incoming receiving mail gateway.", "Whether the recipient's email address is valid in the destination Active Directory."], correctAnswer: 1, explanation: "SPF verifies that the sending IP is authorized for the sender's domain." },
-      { id: "sap-q5-3", question: "Strong BEC/phishing indicator in headers?", options: ["A valid, passing DKIM signature matching the sender's apparent domain exactly.", "A mismatch between the visible 'From' header address and the technical 'Reply-To' address.", "A passing SPF check matching the sending IP address to the sender's company domain.", "A standard, recognized X-Mailer header name such as Microsoft Outlook or Exchange."], correctAnswer: 1, explanation: "Mismatched From and Reply-To means replies go to attacker's address." },
-      { id: "sap-q5-4", question: "Tool for extracting VBA macros?", options: ["Wireshark, which reconstructs network streams and exports objects from captures.", "olevba (from the oletools suite), designed to parse and extract VBA macro code.", "Nmap, which scans ports and identifies services running on a remote system.", "Autoruns, which lists startup locations and registry run persistence keys."], correctAnswer: 1, explanation: "olevba extracts and analyzes VBA macros from Office documents." },
-      { id: "sap-q5-5", question: "Why use ISO/IMG as attachments?", options: ["Providing better file compression rates than standard ZIP or RAR formats.", "Bypassing Windows Mark-of-the-Web (MOTW) security controls on files inside the archive.", "Being easier to create using default built-in Windows command-line utility tools.", "Producing significantly smaller file sizes to bypass attachment limit alerts."], correctAnswer: 1, explanation: "Files inside ISO don't get MOTW flag, allowing execution without warnings." },
-      { id: "sap-q5-6", question: "What is HTML smuggling?", options: ["Hiding malicious HTML code within standard JPG or PNG image file payloads.", "Using JavaScript in HTML files to reconstruct and download Base64-encoded payloads locally.", "Compressing HTML codes using custom formats that bypass network monitoring proxies.", "Blocking HTML attachments from loading in the user's default browser console."], correctAnswer: 1, explanation: "HTML smuggling uses JavaScript to decode and auto-download Base64 payloads." },
-      { id: "sap-q5-7", question: "First action with suspicious URL?", options: ["Clicking the link directly in an isolated browser sandbox to test its response.", "Defanging the URL by modifying its format (e.g. hxxp://) to prevent accidental execution.", "Sharing the raw link in corporate chat groups to ask other analysts for opinions.", "Blocking the domain immediately at the perimeter firewall level without checking."], correctAnswer: 1, explanation: "Always defang URLs first to prevent accidental clicking." },
-      { id: "sap-q5-8", question: "What is a homoglyph attack?", options: ["Using visually identical characters from different character sets to spoof domain names.", "Encrypting domain names in database records to prevent search indexing.", "Registering expired domain names that previously had positive reputation scores.", "Creating extremely long domain names that exceed the standard DNS query length limits."], correctAnswer: 0, explanation: "Homoglyphs use visually similar characters (Cyrillic 'а' vs Latin 'a')." },
-      { id: "sap-q5-9", question: "After credentials entered on phishing page?", options: ["Monitoring active log queues for any subsequent logon alerts from that account.", "Resetting the password, revoking active sessions, and checking for inbox forwarding rules.", "Sending a warning email to the affected user advising them to change their security settings.", "Waiting for 24 hours to confirm whether any unauthorized logins actually occur."], correctAnswer: 1, explanation: "Immediate reset, session revocation, and forwarding rule check are critical." },
-      { id: "sap-q5-10", question: "AutoOpen in VBA indicates?", options: ["Specifying that the document file itself auto-opens when system starts.", "Ensuring the VBA macro script runs automatically when the document is opened.", "Enabling automatic file saving and backup procedures within the application.", "Checking for software updates automatically when the application is launched."], correctAnswer: 1, explanation: "AutoOpen() executes VBA code automatically when the document is opened." },
-      { id: "sap-q5-11", question: "What to do with phishing beyond reported email?", options: ["Deleting the single reported email from the user's mailbox and closing the ticket.", "Searching for and purging matching phishing emails from all corporate mailboxes.", "Ignoring similar emails unless additional users file reports in the ticketing queue.", "Forwarding the email back to the IT helpdesk for standard desktop sorting."], correctAnswer: 1, explanation: "Search for and purge all instances across all mailboxes." },
-      { id: "sap-q5-12", question: "What does DMARC combine?", options: ["Combining local antivirus engines and network perimeter firewall policies.", "Leveraging both SPF and DKIM checks to define domain authentication policies.", "Combining digital encryption algorithms and document signature protocols.", "Integrating recursive DNS server settings and secure HTTP gateway rules."], correctAnswer: 1, explanation: "DMARC combines SPF and DKIM for policy-level authentication." },
-      { id: "sap-q5-13", question: "What determines phishing severity?", options: ["The specific hour of the day when the email was sent or received by servers.", "A combination of recipient count, click status, payload type, and target department sensitivity.", "The total character count and file size of the incoming email attachment.", "The geographical country of origin where the sending IP address is registered."], correctAnswer: 1, explanation: "Severity considers recipient count, clicks, payload type, and target sensitivity." },
-      { id: "sap-q5-14", question: "Why check email forwarding rules after compromise?", options: ["Improving network email delivery speeds and optimizing mail gateway queues.", "Detecting attackers setting up forwarding rules to maintain email access after password resets.", "Checking disk storage limits and cleaning up old database archive folders.", "Enforcing corporate compliance guidelines for remote workers and branch offices."], correctAnswer: 1, explanation: "Forwarding rules let attackers keep receiving emails even after password change." },
-      { id: "sap-q5-15", question: "Purpose of certificate transparency logs?", options: ["Verifying local SSL/TLS configurations on internal database servers.", "Monitoring public certificate records to discover newly registered domains for phishing.", "Revoking compromised certificates at the local Active Directory domain controller level.", "Generating new cryptographic certificates for internal corporate web applications."], correctAnswer: 1, explanation: "CT logs reveal all certificates for a domain, discovering related phishing infrastructure." }
-    ]
-  },
-  {
-    quizId: "sap-q6",
-    courseId: "soc-analyst-path",
-    title: "Incident Handling Final Exam",
-    description: "Comprehensive exam on incident handling, reporting, and evidence.",
-    passingScore: 80,
-    timeLimit: 35,
-    questions: [
-      { id: "sap-q6-1", question: "Correct evidence collection order?", options: ["Disk image acquisition first, followed by memory capture and network traffic logs.", "Memory contents first, followed by network status, running processes, disk files, and backups.", "System backups first, followed by raw disk blocks and finally volatile RAM memory.", "Network connection state first, followed by local disk files and memory storage blocks."], correctAnswer: 1, explanation: "Most volatile to least: Memory → Network → Processes → Disk → Backups." },
-      { id: "sap-q6-2", question: "Hash algorithm for evidence integrity?", options: ["MD5, which is fast to compute but suffers from high collision vulnerability rates.", "CRC32, which is designed exclusively for network checksum verification.", "SHA-256, which provides a high-entropy, collision-resistant signature for forensic validation.", "Base64, which is an encoding format rather than a cryptographic hashing algorithm."], correctAnswer: 2, explanation: "SHA256 is the standard for evidence hashing in legal proceedings." },
-      { id: "sap-q6-3", question: "Blameless PIR focuses on?", options: ["Identifying the specific employee who caused the security incident for disciplinary action.", "Focusing on identifying system, process, and training gaps to improve future response capability.", "Ensuring that the security operations team is absolved of any legal or financial liability.", "Reducing headcount and security tool budgets based on incident performance logs."], correctAnswer: 1, explanation: "Focus on process improvements, not individual blame." },
-      { id: "sap-q6-4", question: "Active ransomware on multiple systems is?", options: ["Priority Level 4 (P4) Low, representing a localized system alert requiring minor desk attention.", "Priority Level 3 (P3) Medium, requiring investigation during standard business hours.", "Priority Level 2 (P2) High, requiring containment actions within the next business day.", "Priority Level 1 (P1) Critical, demanding immediate, 24/7 response and containment actions."], correctAnswer: 3, explanation: "Active ransomware encryption is Critical (P1) requiring immediate response." },
-      { id: "sap-q6-5", question: "Executive summary should contain?", options: ["A highly technical log breakdown detailing specific registry values and malware code offsets.", "A high-level, non-technical summary of what happened, business impact, and containment status.", "A long list of Indicators of Compromise (IOCs) such as file hashes and IP addresses.", "A comprehensive inventory list of all security software licenses owned by the firm."], correctAnswer: 1, explanation: "Executive summaries are for non-technical stakeholders." },
-      { id: "sap-q6-6", question: "Why not analyze original evidence?", options: ["Analyzing original evidence is significantly slower than working on copy images.", "Direct analysis on original media risks modification, destroying legal admissibility.", "Original evidence disks are always encrypted and must be decrypted via copies.", "Specialized recovery tools can only execute scans on virtualized copy file formats."], correctAnswer: 1, explanation: "Working on copies preserves integrity for legal proceedings." },
-      { id: "sap-q6-7", question: "PIRs must produce?", options: ["A report assigning blame and identifying team members responsible for failures.", "Specific, actionable recommendations with assigned owners and realistic deadlines.", "A general qualitative evaluation of team morale and operational workloads.", "A formal budget request submitted directly to the board of directors for security tools."], correctAnswer: 1, explanation: "Concrete action items with owners and deadlines are essential." },
-      { id: "sap-q6-8", question: "Incident reports should use which timezone?", options: ["The local timezone where the incident analyst is physically working on tickets.", "UTC (Coordinated Universal Time), to eliminate timezone confusion across geo-locations.", "Eastern Standard Time (EST), which is the standard regulatory timezone for audits.", "The apparent timezone of the adversary's originating command and control (C2) server."], correctAnswer: 1, explanation: "UTC eliminates timezone confusion across geographic locations." },
-      { id: "sap-q6-9", question: "When uncertain about severity?", options: ["Wait for additional data and events to confirm the threat before modifying priority.", "Classify the incident as low priority to avoid generating unnecessary alert paging noise.", "Escalate the incident up to a higher severity level to ensure immediate review.", "Ask a colleague on social media channels for their informal opinion on the alert type."], correctAnswer: 2, explanation: "Escalate UP — delays in critical incidents cause more damage than false alarms." },
-      { id: "sap-q6-10", question: "Chain of custody must include?", options: ["A simple description of the hardware asset and the date it was collected.", "A detailed record tracking who handled the evidence, when, and every transfer with signatures.", "The cryptographic hash value of the evidence files and the serial number of the disk.", "The name of the investigating analyst and their corresponding corporate ID number."], correctAnswer: 1, explanation: "Track every interaction for legal admissibility." },
-      { id: "sap-q6-11", question: "Key metric after PIR improvements?", options: ["The total number of review meetings held and the count of slides in the report.", "The recurrence rate of the same incident type within a specified post-remediation timeframe.", "The volume of email communication sent to stakeholders during the containment phase.", "The overall satisfaction score of external compliance auditors during review sessions."], correctAnswer: 1, explanation: "Recurrence rate measures whether improvements were effective." },
-      { id: "sap-q6-12", question: "IOCs in reports should be?", options: ["Kept live and clickable to allow stakeholders to test connections themselves.", "Defanged (e.g. hxxp://, [.]com) to prevent accidental execution or navigation.", "Encrypted in password-protected zip archives to comply with data privacy policies.", "Hidden entirely from the main text body and listed only in secure database logs."], correctAnswer: 1, explanation: "Defanged IOCs prevent accidental clicks on malicious links." },
-      { id: "sap-q6-13", question: "How to balance threat and impact in classification?", options: ["Focus exclusively on the complexity and technical skill level of the threat agent.", "Focus exclusively on the dollar value of the affected server hardware components.", "Using a matrix combining threat severity (technical force) and business impact (downtime).", "Marking all incoming alerts as critical to ensure immediate response from all teams."], correctAnswer: 2, explanation: "Use a matrix: High threat + High impact = P1." },
-      { id: "sap-q6-14", question: "P1 incident response time?", options: ["Within 24 hours, to allow analysts to complete their daily shifts and write reports.", "Within 4 hours, which matches standard SLA agreements for external hosting providers.", "Within 1 hour, allowing time for initial triage and console alert query validation.", "Within 15 minutes, requiring immediate triage and activation of response playbooks."], correctAnswer: 3, explanation: "Critical incidents require immediate response within 15 minutes." },
-      { id: "sap-q6-15", question: "Most damaging PIR anti-pattern?", options: ["PIR meetings lasting longer than 60 minutes due to deep discussion on findings.", "Creating a culture of blame and identifying scapegoats rather than correcting processes.", "Generating more than 5 action items from a single incident post-mortem review.", "Scheduling conflicts that delay the review session for up to a week after resolution."], correctAnswer: 1, explanation: "Blaming individuals kills reporting culture." },
-      { id: "sap-q6-16", question: "Should dead ends be documented in reports?", options: ["Never, as they make the security team look incompetent and waste reader time.", "Always, as documenting dead ends prevents other analysts from repeating failed steps.", "Only if explicitly requested by external compliance auditing firms or executives.", "Stored exclusively in informal chat logs rather than the official final incident report."], correctAnswer: 1, explanation: "Dead ends prevent others from repeating unsuccessful investigation steps." },
-      { id: "sap-q6-17", question: "Monitor compromised accounts for how long?", options: ["A minimum of 24 hours, to verify that the initial containment blocks are working.", "A minimum of 72 hours, to detect any delayed persistence mechanisms or secondary access.", "A minimum of 1 week, which matches standard network backup rotation schedules.", "A minimum of 1 month, to ensure compliance with general financial logging standards."], correctAnswer: 1, explanation: "Monitor at least 72 hours for delayed unauthorized access." },
-      { id: "sap-q6-18", question: "PIRs should be mandatory for?", options: ["Priority Level 1 (Critical) incidents only, due to the high workload of security teams.", "All P1 (Critical) and P2 (High) incidents, to ensure systemic improvements are captured.", "Only when explicitly requested by corporate legal counsel or human resources.", "Never, as post-incident reviews do not directly assist in active threat containment."], correctAnswer: 1, explanation: "Mandatory for all P1 and P2 incidents for systematic improvement." },
-      { id: "sap-q6-19", question: "Report recommendations should include?", options: ["Short-term technical fixes only, such as patching the single compromised host system.", "A comprehensive mix of short-term mitigation, long-term architecture, process, and training.", "A detailed list of recommended hardware security tools and software brands to purchase.", "Nothing, if the incident has been successfully resolved and the host is reimaged."], correctAnswer: 1, explanation: "Comprehensive recommendations cover immediate, long-term, process, and training needs." },
-      { id: "sap-q6-20", question: "Ultimate goal of the IR lifecycle?", options: ["Closing alerts in the queue as quickly as possible to meet average triage metrics.", "Feeding lessons learned back into the loop to continuously improve detection and response.", "Avoiding organization-wide audits and regulatory penalties through minimal logging.", "Reducing the workload of Tier 1 analysts by disabling highly sensitive SIEM rules."], correctAnswer: 1, explanation: "The IR lifecycle feeds lessons learned into continuous improvement." }
-    ]
-  },
-  {
-    quizId: "sap-q7",
-    courseId: "soc-analyst-path",
-    title: "Cloud Security Monitoring Quiz",
-    description: "Test your cloud security knowledge across AWS, Azure, and container environments.",
-    passingScore: 75,
-    timeLimit: 20,
-    questions: [
-      { id: "sap-q7-1", question: "In the shared responsibility model, who is ALWAYS responsible for data security?", options: ["The cloud provider, who owns the physical host server hardware and network infrastructure.", "The customer, who always retains ownership and responsibility for their data and access.", "Both customer and provider equally, regardless of the deployment model selected.", "Determined exclusively by the specific service level agreement (SLA) contract terms."], correctAnswer: 1, explanation: "Customers always own their data security regardless of cloud model (IaaS/PaaS/SaaS)." },
-      { id: "sap-q7-2", question: "What AWS service logs all API calls?", options: ["GuardDuty, which provides managed threat detection alerts based on log feeds.", "CloudTrail, which records a comprehensive history of API calls made in the AWS account.", "CloudWatch, which monitors system performance metrics and aggregates application logs.", "Inspector, which scans EC2 instances for software vulnerabilities and policy exposures."], correctAnswer: 1, explanation: "CloudTrail records every API call made in an AWS account for auditing and investigation." },
-      { id: "sap-q7-3", question: "What does the CloudTrail event 'StopLogging' indicate?", options: ["A routine maintenance log generated automatically during AWS backend service updates.", "A critical indicator of defense evasion, suggesting an attacker is attempting to cover tracks.", "A standard log rotation event triggered when log files exceed size limit thresholds.", "An informational event indicating the AWS account is scheduled for closure."], correctAnswer: 1, explanation: "StopLogging is a critical indicator of defense evasion — attackers disable logging to hide activity." },
-      { id: "sap-q7-4", question: "What is the #1 cloud security threat according to CSA?", options: ["Distributed Denial of Service (DDoS) attacks targeting public cloud service endpoints.", "Cloud infrastructure misconfiguration, such as exposed storage buckets and open ports.", "Malicious insider threats deliberately stealing corporate intellectual property.", "Zero-day software exploits targeting hypervisors and virtualization technologies."], correctAnswer: 1, explanation: "Misconfiguration (public S3 buckets, open security groups) is the most common cloud security issue." },
-      { id: "sap-q7-5", question: "What does 'impossible travel' detection identify?", options: ["Identifying user accounts traveling between office locations during standard shifts.", "Flagging user authentication from geographically distant locations within an impossible timeframe.", "Detecting the usage of commercial VPN services or anonymizing proxy networks.", "Identifying changes in the local operating system time zone settings on client devices."], correctAnswer: 1, explanation: "Impossible travel flags when a user authenticates from two distant locations faster than physically possible." },
-      { id: "sap-q7-6", question: "Which Azure log tracks user sign-in activity?", options: ["Azure Activity Log, tracking resource modification and subscription-level changes.", "Azure AD Sign-in Logs, recording all authentication attempts with location and risk context.", "Azure NSG Flow Logs, capturing network IP traffic metadata passing through gateways.", "Azure Diagnostic Logs, recording system performance and application-level errors."], correctAnswer: 1, explanation: "Azure AD Sign-in Logs record all authentication attempts with location, device, and risk information." },
-      { id: "sap-q7-7", question: "Why is running containers as root dangerous?", options: ["It causes high system memory utilization and CPU bottlenecks on the host server.", "If an attacker escapes the container, they gain full root privileges on the host system.", "It prevents standard application logs from being forwarded to the central SIEM queue.", "It causes network routing conflicts and port binding issues inside the container stack."], correctAnswer: 1, explanation: "If an attacker escapes a root container, they have root access to the underlying host system." },
-      { id: "sap-q7-8", question: "What tool provides open-source runtime detection for containers?", options: ["kube-bench, which audits Kubernetes clusters against CIS hardening benchmarks.", "Falco, which detects anomalous runtime behavior and threat events in containers.", "Trivy, which scans container images for software vulnerabilities and configuration bugs.", "Clair, designed to analyze container layers and flag known CVE exposures."], correctAnswer: 1, explanation: "Falco detects runtime threats in containers like unexpected shell access, network connections, and file modifications." },
-      { id: "sap-q7-9", question: "What M365 operation indicates possible email compromise persistence?", options: ["MailItemsAccessed events, indicating standard reading of emails by authorized users.", "Creation of new inbox rules configured to forward sensitive emails to external addresses.", "FileDownloaded events, tracking standard downloading of attachments from OneDrive.", "UserLoggedIn events, showing recurring logins from standard employee workstations."], correctAnswer: 1, explanation: "Creating inbox forwarding rules allows attackers to maintain access to emails even after password reset." },
-      { id: "sap-q7-10", question: "What GuardDuty finding indicates crypto mining?", options: ["UnauthorizedAccess, indicating failed login attempts on EC2 instance ports.", "Recon:PortProbe, flagging external port scanning activity targeting the instance.", "CryptoCurrency:EC2/BitcoinTool, indicating active mining tools running on the host.", "Trojan:DNSExfiltration, indicating a potential malware beaconing connection via DNS."], correctAnswer: 2, explanation: "GuardDuty specifically detects cryptocurrency mining activity on EC2 instances." },
-      { id: "sap-q7-11", question: "First response to compromised AWS access keys?", options: ["Deleting the entire IAM user account immediately, regardless of active services.", "Deactivating the compromised access keys and revoking all active user sessions.", "Changing the login password of the affected IAM user in the management console.", "Stopping all EC2 instances and database services in the affected AWS region."], correctAnswer: 1, explanation: "Immediately disable compromised access keys and revoke active sessions to stop unauthorized access." },
-      { id: "sap-q7-12", question: "What Kubernetes resource gives full cluster access?", options: ["A Kubernetes pod resource running with privileged security context settings.", "A Service account designed to manage load balancer routing configurations.", "The cluster-admin ClusterRole, which grants unrestricted access to all resources.", "A ConfigMap containing database passwords and API keys in cleartext format."], correctAnswer: 2, explanation: "The cluster-admin ClusterRole grants unrestricted access to all resources in the Kubernetes cluster." },
-      { id: "sap-q7-13", question: "What is OAuth app consent phishing?", options: ["Intercepting and stealing OAuth access tokens during network transmission.", "Tricking users into granting malicious OAuth applications broad access to their accounts.", "Launching a direct exploit attack against the corporate OAuth authorization server.", "Exploiting expired OAuth tokens that have not been properly invalidated by systems."], correctAnswer: 1, explanation: "Attackers create malicious OAuth apps that request broad permissions (mail.read, files.readwrite) via consent phishing." },
-      { id: "sap-q7-14", question: "Which cloud detection monitors for public storage exposure?", options: ["Monitoring sudden anomalies in outbound network data transfer volume levels.", "Continuous monitoring of S3 bucket policies and Blob access levels for public access.", "Analyzing local client system DNS logs for requests to storage service domains.", "Configuring host CPU utilization alerts on database backup server systems."], correctAnswer: 1, explanation: "Monitoring bucket/container policies for public access prevents accidental data exposure." },
-      { id: "sap-q7-15", question: "What does VPC Flow Logs capture?", options: ["Full application payloads and packet content passing through the VPC network.", "IP network traffic metadata including source/destination IPs, ports, and action details.", "User authentication logs and access request histories on virtual machines.", "Database query strings and file transfer metadata from storage services."], correctAnswer: 1, explanation: "VPC Flow Logs capture network traffic metadata including source/destination IPs, ports, and allow/deny actions." }
-    ]
-  },
-  {
-    quizId: "sap-q8",
-    courseId: "soc-analyst-path",
-    title: "Threat Intelligence & Hunting Quiz",
-    description: "Assess threat intel lifecycle, IOC management, and hunting methodology skills.",
-    passingScore: 75,
-    timeLimit: 20,
-    questions: [
-      { id: "sap-q8-1", question: "How many phases are in the threat intelligence lifecycle?", options: ["The threat intelligence lifecycle consists of 4 basic steps focusing on collection.", "The threat intelligence lifecycle consists of 5 steps aligning with the standard ITIL framework.", "The threat intelligence lifecycle consists of 6 phases: Planning through Feedback.", "The threat intelligence lifecycle consists of 7 phases including defensive containment."], correctAnswer: 2, explanation: "The 6 phases: Planning & Direction, Collection, Processing, Analysis, Dissemination, Feedback." },
-      { id: "sap-q8-2", question: "What is STIX?", options: ["A network routing protocol designed to secure external communication channels.", "A structured XML/JSON language used to share cyber threat intelligence details.", "A centralized SIEM platform that aggregates security logs from multiple hosts.", "An encryption standard defining key exchange rules for virtual private networks."], correctAnswer: 1, explanation: "STIX (Structured Threat Information eXpression) is the standard JSON format for threat intelligence." },
-      { id: "sap-q8-3", question: "What does TAXII provide?", options: ["A threat analysis methodology focusing on adversary capability matrices.", "An application-layer protocol designed to automate the transport of STIX data.", "A container sandboxing technology used to analyze untrusted software samples.", "A vulnerability scanning tool that audits network devices for open ports."], correctAnswer: 1, explanation: "TAXII defines how STIX data is shared between organizations via REST APIs." },
-      { id: "sap-q8-4", question: "Typical IOC expiration for IP addresses?", options: ["A short period of 7 days, to capture extremely rapid dynamic host changes.", "A standard period of 30 days, before evaluating if the IP was reassigned.", "A long period of 1 year, to build historical threat databases for queries.", "IP indicators never expire and should remain blocked permanently in firewalls."], correctAnswer: 1, explanation: "IP addresses change frequently — 30 days is a typical expiration before they may be reassigned to legitimate use." },
-      { id: "sap-q8-5", question: "What distinguishes threat hunting from detection?", options: ["Threat hunting utilizes advanced AI tools, while detection relies on basic scripts.", "Threat hunting is proactive and hypothesis-driven; detection is reactive to alerts.", "Threat hunting is entirely automated; detection requires manual analyst triage.", "Detection is focused on host investigation; threat hunting is only for networks."], correctAnswer: 1, explanation: "Hunting proactively searches for threats that bypass automated detections, while detection waits for alerts." },
-      { id: "sap-q8-6", question: "A hunting hypothesis should be?", options: ["Vague and broad, to cover any potential anomaly in network connection logs.", "Specific, testable, and based on threat intelligence or ATT&CK coverage gaps.", "Structured to always be confirmed by the data, validating security efforts.", "Based exclusively on analyst intuition without referring to log structures."], correctAnswer: 1, explanation: "Good hypotheses are specific, testable with available data, and based on threat intelligence or ATT&CK gaps." },
-      { id: "sap-q8-7", question: "What is 'stacking' in threat hunting?", options: ["Building redundant server infrastructure to prevent system outages during attacks.", "Frequency analysis, counting event occurrences to isolate rare anomalies (long tail).", "Layering multiple firewall systems at the network perimeter trust boundaries.", "Aggregating multiple log sources into a single database search index."], correctAnswer: 1, explanation: "Stacking counts occurrences and sorts by frequency — rare values at the bottom often indicate threats." },
-      { id: "sap-q8-8", question: "How to detect C2 beaconing?", options: ["Run a full file signature scan using local antiviruses and compare hash values to threat databases.", "Analyze network connection logs for consistent time intervals and low variation or jitter values.", "Monitor host CPU utilization metrics and alert on sustained processing spikes over a 24-hour period.", "Scan external host firewalls weekly for open service ports and unauthorized interface listeners."], correctAnswer: 1, explanation: "C2 beaconing has regular intervals with low jitter (variation), which is detectable through statistical analysis." },
-      { id: "sap-q8-9", question: "What is tactical threat intelligence?", options: ["High-level risk trends and competitor intelligence reports designed specifically for executive boards.", "Geopolitical analysis and macroeconomic security threat profiles for multinational operations planning.", "Long-term security budget planning templates and hardware vendor lifecycle assessment reports.", "Actionable indicators of compromise and adversary TTPs used for immediate detection by SOC analysts."], correctAnswer: 3, explanation: "Tactical intelligence includes specific IOCs and TTPs that analysts can immediately use for detection." },
-      { id: "sap-q8-10", question: "What should a hunt report always include?", options: ["A simple list of discovered system vulnerabilities and threat indicators without context details.", "A comprehensive document detailing the hypothesis, data sources, methodology, findings, and remediation steps.", "An exclusive collection of firewall IP block lists to be deployed directly on perimeter gateways.", "A high-level executive presentation focusing solely on project status and general security budgets."], correctAnswer: 1, explanation: "Complete hunt reports document the hypothesis, data sources, methodology, findings, and operationalized detections." },
-      { id: "sap-q8-11", question: "What is 'long tail analysis'?", options: ["A monitoring technique that tracks the duration of long-running active background process executions.", "An analysis method focusing on the rare 2% of network events that fall outside common top-talker lists.", "Measuring average network latency and packet delivery delays across segmented logical subnetworks.", "A compliance auditing strategy used to determine long-term database log retention policy guidelines."], correctAnswer: 1, explanation: "Long tail analysis focuses on rare events (the 2%) that fall outside common patterns — where threats often hide." },
-      { id: "sap-q8-12", question: "Best source for hunting hypotheses?", options: ["Random guessing based on current security events and recent analyst operational hunches.", "Vendor marketing brochures highlighting automated threat detection capabilities of products.", "Actionable threat intelligence reports and identified MITRE ATT&CK coverage gaps in the environment.", "General security discussions and threat rumors shared on public social media channels and chats."], correctAnswer: 2, explanation: "Threat intelligence and MITRE ATT&CK coverage gaps provide evidence-based starting points for hunts." },
-      { id: "sap-q8-13", question: "What indicates 3+ standard deviations in data transfer?", options: ["A standard, expected daily variation in network traffic volume that fits within default baselines.", "A system configuration error resulting in duplicate packet transmissions on the network interface.", "A scheduled high-volume database backup operation executing during standard off-peak maintenance hours.", "A statistically significant anomaly that warrants immediate investigation for potential exfiltration."], correctAnswer: 3, explanation: "3+ standard deviations from the mean is statistically unusual and warrants investigation for data exfiltration." },
-      { id: "sap-q8-14", question: "How often should baselines be rebuilt?", options: ["Every calendar month, to account for organic network changes while keeping detections relevant.", "Every calendar year, to coincide with standard corporate security policy and audit reviews.", "Only following a major security incident or network breach to document the post-compromise state.", "Baselines should remain static and never be modified after their initial configuration phase."], correctAnswer: 0, explanation: "Monthly baseline rebuilds account for organic changes while keeping detection relevant." },
-      { id: "sap-q8-15", question: "What should hunting findings be converted into?", options: ["Deleted immediately to clean up database search indexes and optimize disk storage constraints.", "Manual checks scheduled for execution by security analysts during standard daily triage shifts.", "Automated detection rules deployed in the SIEM for continuous monitoring of the environment.", "Formal compliance reports stored in GRC archives without active implementation in security tools."], correctAnswer: 2, explanation: "Operationalizing findings into automated detection rules ensures the same technique is caught in the future." }
-    ]
-  },
-  {
-    quizId: "sap-q9",
-    courseId: "soc-analyst-path",
-    title: "Digital Forensics Assessment",
-    description: "Evaluate disk forensics, timeline analysis, and anti-forensics detection skills.",
-    passingScore: 75,
-    timeLimit: 25,
-    questions: [
-      { id: "sap-q9-1", question: "Correct order of the forensic process?", options: ["Collection of data first, followed by technical Analysis, and finally general Identification.", "Analysis of systems first, followed by Preservation of logs, and final Presentation.", "Identification of sources, Preservation, Collection, Analysis, and final Presentation of evidence.", "Presentation of reports first, followed by Collection and Analysis of system data."], correctAnswer: 2, explanation: "The forensic process follows: Identification → Preservation → Collection → Analysis → Presentation." },
-      { id: "sap-q9-2", question: "Most volatile evidence type?", options: ["Disk data blocks and local database files stored on static storage partitions.", "CPU registers and physical memory (RAM) contents, which disappear on shutdown.", "System backup tapes and archived database records stored in separate locations.", "Log files generated by syslog and other application services written to disk."], correctAnswer: 1, explanation: "CPU registers and memory are the most volatile — they're lost in seconds when power is removed." },
-      { id: "sap-q9-3", question: "What hash algorithm is standard for evidence integrity?", options: ["MD5, which is fast to compute but suffers from high collision vulnerability rates.", "CRC32, which is designed exclusively for network checksum verification.", "SHA-256, which provides a high-entropy, collision-resistant signature for forensic validation.", "Base64, which is an encoding format rather than a cryptographic hashing algorithm."], correctAnswer: 2, explanation: "SHA-256 is the forensic standard for evidence integrity verification in legal proceedings." },
-      { id: "sap-q9-4", question: "What is the NTFS Master File Table ($MFT)?", options: ["A disk encryption key used to encrypt the entire host partition volume.", "A database containing detailed metadata for every single file on the NTFS volume.", "A network routing table mapping local hosts to their physical switch interfaces.", "A memory allocation table tracking RAM allocations for running applications."], correctAnswer: 1, explanation: "The $MFT stores metadata (timestamps, size, location, permissions) for every file and directory on NTFS." },
-      { id: "sap-q9-5", question: "How to detect timestomping?", options: ["Checking the file size and comparing it to average standard templates.", "Comparing the $STANDARD_INFORMATION (easily modified) and $FILE_NAME timestamps.", "Running a full signature antivirus scan on the folder containing target files.", "Reviewing the file extension type and matching it to known bad execution signatures."], correctAnswer: 1, explanation: "$SI timestamps are easily modified but $FN timestamps are harder to change — discrepancy indicates timestomping." },
-      { id: "sap-q9-6", question: "What Windows Event ID indicates Security log was cleared?", options: ["Event ID 4624, which tracks successful user logon session creation on the host.", "Event ID 4688, logging process creation events and parent command line executions.", "Event ID 1102, which is generated when the Windows Security audit log is manually cleared.", "Event ID 7045, logging the installation of a new background service on Windows."], correctAnswer: 2, explanation: "Event ID 1102 is generated when the Windows Security audit log is cleared." },
-      { id: "sap-q9-7", question: "What is a super timeline?", options: ["A very long timeline tracking the history of all projects in the security department.", "A timeline combining metadata timestamps from 100+ distinct system artifact sources.", "A project management timeline tracking the schedule of security controls updates.", "A real-time database stream visualizing active alerts in the SIEM dashboard."], correctAnswer: 1, explanation: "A super timeline merges timestamps from file system, event logs, registry, browser, and more into one view." },
-      { id: "sap-q9-8", question: "What tool creates super timelines?", options: ["Wireshark, which reconstructs network streams and exports files from captures.", "Plaso (log2timeline), which extracts timestamps from 100+ sources to build timelines.", "Nmap, which scans ports and identifies remote operating system versions.", "Burp Suite, which intercepts HTTP requests and audits web application security."], correctAnswer: 1, explanation: "Plaso (log2timeline) extracts timestamps from 100+ sources and creates comprehensive super timelines." },
-      { id: "sap-q9-9", question: "What survives secure file deletion?", options: ["The complete file data contents, remaining fully intact in unallocated clusters.", "Nothing at all, as secure deletion overwrites all sectors multiple times.", "USN Journal records of the change, and Prefetch logs of the deletion tool execution.", "Only the original filename, remaining in its parent directory index blocks."], correctAnswer: 2, explanation: "USN Journal records the deletion event, and Prefetch records execution of the deletion tool." },
-      { id: "sap-q9-10", question: "What is an Alternate Data Stream (ADS)?", options: ["A backup network protocol used to mirror log files to redundant database indices.", "A hidden data stream attached to an NTFS file to hide payloads from standard view.", "A compressed file format used to save disk space on database backup servers.", "An encryption algorithm defining key exchange rules for virtual containers."], correctAnswer: 1, explanation: "NTFS ADS allows hiding data within existing files — attackers use them to conceal malicious payloads." },
-      { id: "sap-q9-11", question: "What should you NEVER do with original evidence?", options: ["Generate hash values for the evidence files and document system properties.", "Take physical photographs of the evidence and record serial numbers.", "Perform direct analysis on original media, which risks modifying evidence logs.", "Create working copies of the evidence and verify hashes before beginning analysis."], correctAnswer: 2, explanation: "Always create working copies — analyzing original evidence risks modification that destroys legal admissibility." },
-      { id: "sap-q9-12", question: "What does the $UsnJrnl artifact record?", options: ["Detailed user login and logoff session events on domain controllers.", "File system changes including creations, deletions, renames, and modifications.", "Network connections and connection duration statistics for host interfaces.", "Registry configuration updates and security settings changes across the OS."], correctAnswer: 1, explanation: "The USN (Update Sequence Number) Journal records all file system changes including creates, deletes, and renames." },
-      { id: "sap-q9-13", question: "Best approach for timeline analysis?", options: ["Starting from the absolute beginning of log history records and working forward.", "Pivoting from known compromise events and expanding the timeline window outward.", "Limiting the timeline review window exclusively to the last 24 hours of logs.", "Randomly selecting log samples from different directories to check for anomalies."], correctAnswer: 1, explanation: "Pivot from known events (malware detection, alert time) and expand outward to build the full picture." },
-      { id: "sap-q9-14", question: "How does fileless malware evade disk forensics?", options: ["Encrypting the entire physical disk partition to prevent access to directories.", "Executing and running entirely in volatile system memory (RAM) without writing files.", "Using extremely small file sizes that fall below the scan thresholds of tools.", "Hiding file structures inside protected operating system system folders."], correctAnswer: 1, explanation: "Fileless malware loads and executes in memory, leaving no traditional file-based artifacts for disk forensics." },
-      { id: "sap-q9-15", question: "Key principle of anti-forensics detection?", options: ["Threat actors always succeed in completely wiping all evidence from systems.", "The act of destroying evidence (clearing logs, timestomping) leaves its own traces.", "Forensic evidence cannot be recovered once any secure deletion tool runs.", "Only highly advanced proprietary software tools can detect anti-forensic actions."], correctAnswer: 1, explanation: "The act of destroying evidence (clearing logs, timestomping, secure deletion) creates new artifacts that analysts can find." }
-    ]
-  },
-  {
-    quizId: "sap-q10",
-    courseId: "soc-analyst-path",
-    title: "Security Automation & SOAR Quiz",
-    description: "Test your SOAR platform knowledge, playbook design, and API integration skills.",
-    passingScore: 75,
-    timeLimit: 20,
-    questions: [
-      { id: "sap-q10-1", question: "What does SOAR stand for?", options: ["Security Operations and Response, managing alert queues and analyst desk workloads.", "Security Orchestration, Automation, and Response, integrating tools and workflows.", "System Orchestration and Remediation, focusing on patch management and backups.", "Security Operations Automated Runbooks, which is a legacy brand name for SOAR."], correctAnswer: 1, explanation: "SOAR = Security Orchestration, Automation, and Response — combining tool integration, task automation, and incident response." },
-      { id: "sap-q10-2", question: "What is the recommended first step when implementing SOAR?", options: ["Automating all containment and host blocking rules immediately on day one.", "Starting with alert enrichment automation to accelerate analyst triage decisions safely.", "Replacing all tier 1 security analysts with automated response bots and scripts.", "Deploying the most complex, expensive orchestration platform available in the market."], correctAnswer: 1, explanation: "Starting with enrichment is low-risk and high-value — it speeds up analyst decisions without risk of automated blocking mistakes." },
-      { id: "sap-q10-3", question: "What HTTP status code indicates API rate limiting?", options: ["HTTP 401 Unauthorized, indicating missing or invalid API authentication keys.", "HTTP 403 Forbidden, indicating the key does not have permissions for the resource.", "HTTP 429 Too Many Requests, indicating the client has exceeded rate limits.", "HTTP 503 Service Unavailable, indicating the API server is down for maintenance."], correctAnswer: 2, explanation: "HTTP 429 indicates the client has sent too many requests — implement retry with backoff when received." },
-      { id: "sap-q10-4", question: "In a phishing response playbook, what should happen BEFORE automated blocking?", options: ["Sending an automated notification email warning the user of security violations.", "Extracting and enriching email indicators (IPs, URLs, hashes) to confirm threat status.", "Purging the email from all corporate user mailboxes without performing analysis.", "Resetting active password credentials for all users who received the email."], correctAnswer: 1, explanation: "IOC extraction and enrichment must confirm the email is malicious before automated blocking to avoid disrupting legitimate communications." },
-      { id: "sap-q10-5", question: "What is the primary benefit of idempotent playbooks?", options: ["Ensuring that the orchestration playbook runs faster by utilizing compressed libraries.", "Designing actions to be safe to execute multiple times without causing side effects.", "Reducing system memory usage during the execution of automation scripts.", "Eliminating the need for software testing before deploying to production systems."], correctAnswer: 1, explanation: "Idempotent playbooks produce the same result regardless of how many times they run — critical for reliability in automated security response." },
-      { id: "sap-q10-6", question: "Which Python library is essential for making HTTP requests to security APIs?", options: ["pandas, which is used for data analysis, manipulation, and structured tables.", "requests, which is the standard library used to execute HTTP API calls in Python.", "matplotlib, which generates charts and graphical visualizations of log metrics.", "numpy, which provides support for large multi-dimensional arrays and math formulas."], correctAnswer: 1, explanation: "The requests library is the standard for HTTP API calls in Python — used for VirusTotal, CrowdStrike, and other security tool integrations." },
-      { id: "sap-q10-7", question: "What metric best measures SOAR effectiveness?", options: ["The total number of playbooks created and stored in the security repository.", "The reduction in Mean Time to Respond (MTTR) for automated incident types.", "The raw volume of API calls executed daily by the orchestration engine.", "The number of distinct third-party security tool integrations configured."], correctAnswer: 1, explanation: "MTTR reduction directly measures how automation speeds up incident response — the core goal of SOAR implementation." },
-      { id: "sap-q10-8", question: "When should a SOAR playbook escalate to a human analyst?", options: ["Never, as the main goal of SOAR is to achieve complete, hands-off automation.", "When the situation requires qualitative judgment on business impact or is novel.", "Only during standard corporate business hours when Tier 2 analysts are online.", "Immediately after every single automated enrichment action is completed."], correctAnswer: 1, explanation: "Automation handles known scenarios; humans make judgment calls on business impact, novel threats, and high-risk containment decisions." },
-      { id: "sap-q10-9", question: "What authentication method is most secure for API integrations?", options: ["Hardcoding administrative API keys directly inside the automation source code files.", "OAuth 2.0 with token refresh and secure credential storage in a secrets vault.", "Basic authentication sending credentials in cleartext over unencrypted HTTP channels.", "Sharing static passwords among multiple integration services and developer teams."], correctAnswer: 1, explanation: "OAuth 2.0 with vault-stored secrets provides secure, auditable, and rotatable authentication for API integrations." },
-      { id: "sap-q10-10", question: "How can SOC automation reduce alert fatigue?", options: ["Disabling highly sensitive correlation rules to prevent alert queue paging.", "Auto-closing known false positives and enriching remaining alerts with context.", "Consolidating all security tools into a single database search portal.", "Increasing analyst headcount to distribute the workload of alert reviews."], correctAnswer: 1, explanation: "Automation filters noise by auto-closing known false positives and enriching real alerts, letting analysts focus on genuine threats." }
-    ]
-  },
-  {
-    quizId: "sap-q11",
-    courseId: "soc-analyst-path",
-    title: "Vulnerability Management Quiz",
-    description: "Assess vulnerability scanning, CVSS scoring, and remediation workflow knowledge.",
-    passingScore: 75,
-    timeLimit: 20,
-    questions: [
-      { id: "sap-q11-1", question: "What is the correct order of the vulnerability management lifecycle?", options: ["Patching host systems first, followed by scanning for bugs and writing reports.", "Discover/Scan systems, Assess severity, Prioritize, Remediate/Patch, and Verify.", "Scanning vulnerabilities first, fixing them immediately, and archiving logs.", "Writing executive reports first, followed by scanning and remediation updates."], correctAnswer: 1, explanation: "The VM lifecycle is continuous: Discover/Scan → Assess/Classify → Prioritize/Plan → Remediate/Patch → Verify/Report." },
-      { id: "sap-q11-2", question: "What does CVSS stand for?", options: ["Common Vulnerability Scanning System — a tool for running automated audits.", "Common Vulnerability Scoring System — a standardized framework for rating severity.", "Cyber Vulnerability Security Score — a qualitative scoring metric used by firewalls.", "Critical Vulnerability Status System — a database tracking missing patches."], correctAnswer: 1, explanation: "CVSS = Common Vulnerability Scoring System — a standardized framework for rating vulnerability severity on a 0-10 scale." },
-      { id: "sap-q11-3", question: "A vulnerability has CVSS 6.1 but EPSS 0.85. How should you prioritize it?", options: ["Assign low remediation priority because the CVSS score is only in the moderate range.", "Assign high priority because EPSS indicates a high probability of exploitation in the wild.", "Ignore the vulnerability entirely as it does not meet the CVSS critical score threshold.", "Wait for the vendor to release an updated software patch before scheduling remediation."], correctAnswer: 1, explanation: "EPSS 0.85 means 85% chance of exploitation in 30 days — this overrides the moderate CVSS score and demands urgent attention." },
-      { id: "sap-q11-4", question: "What is the advantage of credentialed vulnerability scans over unauthenticated?", options: ["Executing scans significantly faster, minimizing network bandwidth consumption.", "Providing deep visibility into installed software, configurations, and patch status.", "Reducing operational disruptions and avoiding triggering security alarms.", "Eliminating the requirement for active network connections to target endpoints."], correctAnswer: 1, explanation: "Credentialed scans log into systems to check installed patches, software versions, and configurations — far more accurate than external probing." },
-      { id: "sap-q11-5", question: "What is CISA KEV?", options: ["A commercial vulnerability scanning engine focusing on cloud platforms.", "A catalog of Known Exploited Vulnerabilities requiring urgent prioritization.", "An online calculator used to determine custom CVSS environmental scores.", "An automated patch management tool that deploys updates to host databases."], correctAnswer: 1, explanation: "CISA KEV (Known Exploited Vulnerabilities) catalogs CVEs actively exploited in the wild — any CVE on the list demands immediate priority." },
-      { id: "sap-q11-6", question: "When patching is not possible, what should be implemented?", options: ["Accept the risk silently without implementing any additional security measures.", "Implement compensating controls like network segmentation, WAF rules, and monitoring.", "Decommission the affected systems and delete them from the active IT inventory.", "Disable all network access for the system, making it completely offline permanently."], correctAnswer: 1, explanation: "Compensating controls (segmentation, virtual patching, monitoring) reduce risk when direct patching isn't feasible — plus documented risk acceptance." },
-      { id: "sap-q11-7", question: "What is Attack Surface Management?", options: ["Managing firewall access lists and configuring perimeter security group rules.", "Continuous discovery, inventory, and monitoring of all internet-facing assets.", "Conducting regular security awareness training sessions for corporate employees.", "Deploying and managing antivirus software agents across all local endpoint devices."], correctAnswer: 1, explanation: "ASM continuously discovers, inventories, and monitors all external-facing assets including shadow IT and third-party services." },
-      { id: "sap-q11-8", question: "What is the typical remediation SLA for a critical vulnerability?", options: ["A standard timeframe of 90 days, allowing for testing cycles.", "A standard timeframe of 30 days, matching monthly patch deployment schedules.", "An urgent timeframe of 24-48 hours, especially if actively exploited in the wild.", "A long timeframe of 1 year, aligned with standard annual regulatory audits."], correctAnswer: 2, explanation: "Critical vulnerabilities (actively exploited, remote code execution) typically require remediation within 24-48 hours." },
-      { id: "sap-q11-9", question: "How should vulnerability risk be communicated to executives?", options: ["Sharing raw CVSS base score tables and technical vulnerability descriptions.", "Translating technical risk to business impact: downtime, compliance fines, and costs.", "Forwarding the complete, raw PDF scan report directly to executive mailboxes.", "Only discussing vulnerability status when explicitly asked during annual reviews."], correctAnswer: 1, explanation: "Executives need business context: customer impact, financial risk, regulatory consequences — not technical CVSS details." },
-      { id: "sap-q11-10", question: "What tool is commonly used for open-source vulnerability scanning?", options: ["Nessus, which is a commercial vulnerability scanner owned by Tenable.", "Qualys, which provides cloud-based vulnerability management subscription services.", "OpenVAS (Greenbone), which is a comprehensive open-source vulnerability scanner.", "CrowdStrike Falcon, which provides EDR and endpoint asset protection solutions."], correctAnswer: 2, explanation: "OpenVAS (now Greenbone Community Edition) is the leading open-source vulnerability scanner with 80,000+ NVTs." }
-    ]
-  },
-  {
-    quizId: "sap-q12",
-    courseId: "soc-analyst-path",
-    title: "Advanced Attack Techniques Exam",
-    description: "Evaluate AD attacks, lateral movement, ransomware analysis, and purple team skills.",
-    passingScore: 80,
-    timeLimit: 30,
-    questions: [
-      { id: "sap-q12-1", question: "What Windows Event ID indicates a Kerberos service ticket request (Kerberoasting)?", options: ["Event ID 4624, logging successful logon authentication sessions on Windows hosts.", "Event ID 4769, logging Kerberos service ticket requests (TGS) with RC4 encryption.", "Event ID 7045, logging the installation of a new background service on systems.", "Event ID 1102, which is generated when the Security audit log is manually cleared."], correctAnswer: 1, explanation: "Event ID 4769 logs Kerberos service ticket operations — RC4 encryption type (0x17) from a single account requesting many tickets indicates Kerberoasting." },
-      { id: "sap-q12-2", question: "In a Pass-the-Hash attack, what does the attacker use to authenticate?", options: ["The plaintext password of the user, cracked using external offline tools.", "The NTLM password hash directly, bypassing the need for the plaintext password.", "A forged Kerberos ticket containing custom domain admin group identifiers.", "An active session cookie intercepted during unencrypted web communications."], correctAnswer: 1, explanation: "PtH uses the NTLM hash as-is for authentication — NTLM protocol accepts the hash without needing the plaintext password." },
-      { id: "sap-q12-3", question: "What is a DCSync attack?", options: ["Synchronizing directory clocks on Domain Controllers to prevent timing errors.", "Impersonating Domain Controller replication requests to extract password hashes.", "Syncing local DNS server caches to resolve domain name queries faster.", "Synchronizing Active Directory user directories with cloud identity platforms."], correctAnswer: 1, explanation: "DCSync uses replication protocol permissions to request password hashes from a Domain Controller — detected via Event ID 4662." },
-      { id: "sap-q12-4", question: "Which Windows Event ID records service installation (PsExec detection)?", options: ["Event ID 4624, which tracks successful local and remote user login events.", "Event ID 4688, logging process creation events and parent process command lines.", "Event ID 7045, logging new service installations (e.g. PSEXESVC on the system).", "Event ID 4769, tracking Kerberos ticket requests and authentication tickets."], correctAnswer: 2, explanation: "Event ID 7045 records new service installation — PsExec creates the PSEXESVC service on target machines." },
-      { id: "sap-q12-5", question: "What is the first indicator of ransomware pre-encryption activity?", options: ["The initial appearance of the ransom note text file on user desktop screens.", "Commands deleting Volume Shadow Copies (vssadmin delete shadows) to block recovery.", "The mass modification and file renaming activity occurring in directory folders.", "A sudden increase in outbound network connection volume to external IP addresses."], correctAnswer: 1, explanation: "Attackers delete Volume Shadow Copies before encryption — detecting 'vssadmin delete shadows' is an early warning to prevent encryption." },
-      { id: "sap-q12-6", question: "What was the primary attack vector in the SolarWinds supply chain attack?", options: ["Targeted spear-phishing emails containing malicious document macro payloads.", "A compromised software build system injecting a backdoor into legitimate updates.", "Exploiting vulnerable remote VPN gateways to gain initial access to networks.", "Deploying infected USB drives at the organization's physical corporate offices."], correctAnswer: 1, explanation: "Attackers compromised SolarWinds' build system to inject the SUNBURST backdoor into legitimate Orion software updates." },
-      { id: "sap-q12-7", question: "How does deception technology help detect lateral movement?", options: ["Blocking all network connections that originate from unrecognized source IP addresses.", "Deploying decoy credentials, files, and systems that alert on any interaction.", "Encrypting all network communications to prevent traffic inspection by threat agents.", "Accelerating user authentication processes across Active Directory domain networks."], correctAnswer: 1, explanation: "Decoy credentials, shares, and systems have no legitimate use — any interaction is a high-confidence indicator of malicious activity." },
-      { id: "sap-q12-8", question: "What behavioral indicator suggests zero-day document exploitation?", options: ["A user opening a large PDF document from an unrecognized external email sender.", "A Microsoft Office application spawning command interpreters like cmd.exe or PowerShell.", "An email gateway logging an incoming message containing an encrypted zip attachment.", "A PDF document requiring administrative privileges to display graphic components."], correctAnswer: 1, explanation: "Office apps should never spawn command interpreters — Word/Excel launching cmd.exe or PowerShell strongly indicates exploit payload execution." },
-      { id: "sap-q12-9", question: "What is the purpose of Atomic Red Team?", options: ["A commercial penetration testing service providing annual threat modeling audits.", "A framework of small, focused tests mapped to MITRE ATT&CK to validate detections.", "A host-based antivirus agent that blocks malicious program execution in real time.", "A structured threat intelligence feed providing real-time indicators of compromise."], correctAnswer: 1, explanation: "Atomic Red Team provides small, focused test cases for each ATT&CK technique — enabling repeatable detection validation." },
-      { id: "sap-q12-10", question: "In a purple team exercise scorecard, what three levels should be tracked per technique?", options: ["Fast, Medium, and Slow execution speeds of defensive alerts and response times.", "Logged (visibility), Alerted (detection), and Blocked (prevention) categories.", "Red, Yellow, and Green priority levels assigned to corporate host systems.", "Low, Medium, and High severity ratings tracking overall threat vulnerabilities."], correctAnswer: 1, explanation: "Track whether each technique was Logged (visibility), Alerted (detection), and Blocked (prevention) to measure detection maturity." },
-      { id: "sap-q12-11", question: "What percentage of ransomware victims who pay are targeted again?", options: ["Approximately 10% of victims who pay are targeted in a subsequent attack.", "Approximately 30% of victims who pay suffer repeat ransomware encryption events.", "Approximately 80% of organizations that pay ransom are attacked a second time.", "0%, as threat groups maintain strict honor codes to ensure payment credibility."], correctAnswer: 2, explanation: "Studies show approximately 80% of organizations that pay ransom are attacked again — payment signals willingness to pay." },
-      { id: "sap-q12-12", question: "What is dependency confusion in supply chain attacks?", options: ["Developer confusion regarding software library version numbers and updates.", "Tricking build managers into pulling malicious public packages instead of private ones.", "Importing too many redundant third-party libraries inside web applications.", "A software compiler error caused by mismatched runtime version dependencies."], correctAnswer: 1, explanation: "Dependency confusion publishes malicious packages on public registries with the same name as internal packages — build systems may prefer the public version." },
-      { id: "sap-q12-13", question: "What defense prevents Golden Ticket attacks?", options: ["Configuring strict network firewall access list rules on perimeter gateways.", "Rotating the KRBTGT account password twice, separated by at least 12 hours.", "Deploying the most recent security signature updates to host-based antiviruses.", "Implementing strict logical network segmentation to isolate domain subnets."], correctAnswer: 1, explanation: "Golden Tickets are forged using the KRBTGT hash — rotating it twice invalidates all existing tickets including forged ones." },
-      { id: "sap-q12-14", question: "How do you detect WMI-based lateral movement?", options: ["Checking network perimeter firewall traffic logs for failed connections.", "Monitoring the wmiprvse.exe process spawning command interpreters like cmd.exe.", "Reviewing email gateway logs for incoming phishing messages and attachments.", "Analyzing recursive DNS server query logs for high-entropy dynamic domains."], correctAnswer: 1, explanation: "Remote WMI execution causes wmiprvse.exe to spawn child processes — unexpected children like cmd.exe or PowerShell indicate lateral movement." },
-      { id: "sap-q12-15", question: "What is the average dwell time for modern ransomware before encryption?", options: ["A very short timeframe of a few minutes, executing immediately upon initial compromise.", "A timeframe of 5 to 14 days, during which operators steal credentials and exfiltrate data.", "A long timeframe of 6 months, establishing deep stealthy persistence in the network.", "An intermediate timeframe of 1 hour, allowing for localized host scans."], correctAnswer: 1, explanation: "Modern ransomware operators spend 5-14 days in the network performing reconnaissance, credential theft, and data exfiltration before encrypting." }
-    ]
-  },
-  {
-    quizId: "sap-q13",
-    courseId: "soc-analyst-path",
-    title: "SOC Analyst Certification Exam",
-    description: "Comprehensive final exam covering all 12 modules. You must pass this exam with 80% or higher to earn your SOC Analyst Learning Path certificate.",
-    passingScore: 80,
-    timeLimit: 90,
-    questions: [
-      { id: "sap-q13-1", question: "In the SOC-CMM model, which level indicates processes are documented, standardized, and measured?", options: ["Level 1 – Initial: processes are ad-hoc, undocumented, and unpredictable with high reliance on individual heroics.", "Level 2 – Managed: processes are defined at project levels but active tracking is limited to critical incidents.", "Level 3 – Defined: processes are documented and standardized across the entire organization but lack metrics.", "Level 4 – Quantitatively Managed: processes are measured with KPIs and managed using data-driven decisions."], correctAnswer: 3, explanation: "Level 4 (Quantitatively Managed) means processes are measured with KPIs and managed using data-driven decisions." },
-      { id: "sap-q13-2", question: "A SOC analyst discovers a breach involving EU citizen data. Under GDPR, what is the maximum notification window to the supervisory authority?", options: ["The organization is required to notify the supervisory authority within 24 hours of validating the breach.", "The organization is required to notify the supervisory authority within 48 hours of completing containment.", "The organization is required to notify the supervisory authority within 72 hours of becoming aware of it.", "The organization is required to notify the supervisory authority within 7 days of identifying the compromise."], correctAnswer: 2, explanation: "GDPR Article 33 requires notification within 72 hours of becoming aware of a personal data breach." },
-      { id: "sap-q13-3", question: "What is the primary difference between a L1 and L2 SOC analyst?", options: ["L2 analysts operate advanced EDR tooling while L1 analysts are restricted to passive firewall log viewers.", "L1 analysts perform initial alert triage while L2 analysts conduct deeper investigation and containment.", "L2 analysts focus exclusively on GRC compliance audits while L1 analysts handle technical alert queues.", "L1 analysts write custom SIEM detection rules while L2 analysts focus entirely on hardware maintenance."], correctAnswer: 1, explanation: "L1 analysts perform initial alert triage and escalation, while L2 analysts conduct deeper investigation, threat correlation, and containment." },
-      { id: "sap-q13-4", question: "During packet analysis, you observe a TCP connection with SYN, SYN-ACK, then RST. What does this indicate?", options: ["A successful TCP handshake establishing a persistent session between the active client and server endpoints.", "A half-open or stealth port scan where the scanner sends a RST packet instead of completing the handshake.", "A classic FIN scan designed to identify active listening services on the target without sending SYN flags.", "A standard network connection timeout caused by high routing latency or firewall packet drops on ports."], correctAnswer: 1, explanation: "SYN → SYN-ACK → RST is a classic half-open (stealth) port scan — the scanner sends RST instead of completing the handshake." },
-      { id: "sap-q13-5", question: "Which DNS record type is commonly abused for data exfiltration via DNS tunneling?", options: ["A records, which map hostname text directly to standard IPv4 address structures on the network.", "MX records, which identify the designated mail exchange servers authorized to accept incoming emails.", "TXT records, which can carry arbitrary text payloads, making them ideal for encoding exfiltrated data.", "SOA records, containing administrative details about the authoritative zone properties and timings."], correctAnswer: 2, explanation: "TXT records can carry arbitrary text data, making them ideal for DNS tunneling and data exfiltration." },
-      { id: "sap-q13-6", question: "You see HTTP traffic with unusually long GET parameters containing Base64-encoded strings. What attack technique should you suspect?", options: ["SQL injection, attempting to bypass input sanitization and execute queries on backend databases.", "C2 beaconing via HTTP, embedding encoded command strings inside URL fields to evade detection.", "Cross-site scripting, attempting to inject malicious client-side script code into trusted web pages.", "Directory traversal, targeting web server input vulnerabilities to access restricted system files."], correctAnswer: 1, explanation: "C2 (Command and Control) beacons often embed encoded commands in HTTP GET parameters to blend with normal web traffic." },
-      { id: "sap-q13-7", question: "In Splunk SPL, what does the 'stats dc(src_ip) as unique_sources by dest_port' query calculate?", options: ["The total volume of outbound network traffic transmitted through each active port over the time window.", "Count of distinct source IP addresses connecting to each specific destination port in the dataset.", "The average network connection duration calculated across all logical subnets in the organization.", "The total number of failed user login authentication attempts grouped by domain controller hosts."], correctAnswer: 1, explanation: "dc() counts distinct values — this query finds how many unique source IPs connected to each destination port, useful for detecting port scans." },
-      { id: "sap-q13-8", question: "A SIEM correlation rule triggers when 5+ failed logins from the same IP are followed by a successful login within 10 minutes. What attack does this detect?", options: ["A spear-phishing attack attempting to harvest credentials using spoofed corporate login portals.", "A brute-force or password-spraying attempt that succeeded in identifying a valid credential pair.", "Lateral movement, where an attacker leverages compromised active sessions to access internal hosts.", "Privilege escalation, attempting to elevate user permissions from local accounts to domain admins."], correctAnswer: 1, explanation: "Multiple failures followed by success is the classic signature of a successful brute-force or password-spraying attack." },
-      { id: "sap-q13-9", question: "What is the biggest risk of overly sensitive SIEM correlation rules?", options: ["Completely missing real, stealthy attacks that bypass basic correlation thresholds.", "Alert fatigue leading to analysts ignoring or auto-closing alerts, potentially missing real threats.", "Significant increases in database log storage and ingestion costs on cloud SIEM platforms.", "Severely degraded search execution speed and query performance across active user dashboards."], correctAnswer: 1, explanation: "Overly sensitive rules generate excessive false positives, causing alert fatigue — analysts start ignoring or auto-closing alerts, missing real threats." },
-      { id: "sap-q13-10", question: "Which Windows registry key is commonly used by malware for persistence via auto-start?", options: ["HKLM\\SYSTEM\\CurrentControlSet, which stores device driver configurations and active system services.", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run, which executes program payloads at user logon.", "HKLM\\SOFTWARE\\Classes, mapping file extensions to application associations and handler systems.", "HKCU\\Control Panel\\Desktop, defining client workstation desktop background images and structures."], correctAnswer: 1, explanation: "The Run/RunOnce keys under CurrentVersion execute programs at user logon — a top persistence mechanism for malware." },
-      { id: "sap-q13-11", question: "You find a suspicious process with PID 4892 spawned by PowerShell. Which Windows Event ID would log this process creation?", options: ["Event ID 4624, logging successful logon authentication sessions on local and remote systems.", "Event ID 4688, logging process creation details including parent command line and user context.", "Event ID 7045, logging new service installations (e.g. background execution drivers) on Windows.", "Event ID 1102, which is generated when the Security audit log is manually cleared by users."], correctAnswer: 1, explanation: "Event ID 4688 (Process Creation) logs new process details including parent process, command line, and user context." },
-      { id: "sap-q13-12", question: "On Linux, an attacker adds a cron job for persistence. Where would you find it?", options: ["/etc/passwd, which lists local user accounts, user IDs, and default shell locations.", "/var/log/auth.log, recording user authentication events and privilege escalation history.", "/etc/crontab and user-specific configuration files stored under /var/spool/cron/ directories.", "/proc/meminfo, displaying real-time system memory usage, buffers, and swap statistics."], correctAnswer: 2, explanation: "Cron persistence is found in /etc/crontab, /etc/cron.d/, and user-specific files under /var/spool/cron/." },
-      { id: "sap-q13-13", question: "An email passes SPF but fails DKIM. The 'From' header shows company.com but 'Return-Path' shows attacker.xyz. What is this?", options: ["A legitimate email sent from external marketing partners utilizing approved relay servers.", "An SPF-aligned spoofing attempt where the sending IP matches SPF records of the spoofed domain.", "A domain impersonation attack using custom Return-Path values to bypass basic SPF checks.", "A DMARC pass event confirming alignment between both cryptographic and routing domain headers."], correctAnswer: 2, explanation: "The attacker configured SPF for their domain (attacker.xyz) but spoofed the visible 'From' header — DKIM failure and mismatched domains confirm spoofing." },
-      { id: "sap-q13-14", question: "You receive a phishing email with a .html attachment. What is the most likely attack technique?", options: ["A macro-based malware delivery method targeting vulnerabilities inside Microsoft Word documents.", "HTML smuggling using JavaScript within the attachment to assemble and execute malicious payloads.", "A man-in-the-browser attack injecting malicious script components directly into active browsers.", "A DNS poisoning attack designed to redirect the victim user to credential harvesting servers."], correctAnswer: 1, explanation: "HTML smuggling uses JavaScript in .html attachments to reconstruct and download malicious payloads, bypassing email gateway file-type scanning." },
-      { id: "sap-q13-15", question: "During a ransomware incident, what is the FIRST action an analyst should take?", options: ["Pay the demanded ransom immediately using digital currency to prevent database exposure.", "Wipe and rebuild affected host operating systems from backup images without delay.", "Isolate the compromised system from the network immediately to prevent lateral spread.", "Notify external media outlets and compliance regulators regarding the potential data breach."], correctAnswer: 2, explanation: "Immediate network isolation prevents lateral spread while preserving evidence for investigation." },
-      { id: "sap-q13-16", question: "What is the correct order of the NIST incident response lifecycle?", options: ["Detect immediate system threats, Contain affected endpoints, Eradicate malware, and Recover host systems.", "Preparation, Detection & Analysis, Containment/Eradication/Recovery, and Post-Incident lessons learned.", "Identify assets, Protect systems, Detect network anomalies, Respond to indicators, and Recover databases.", "Triage incoming alert queues, Investigate indicators, Remediate security gaps, and Close the ticket."], correctAnswer: 1, explanation: "NIST SP 800-61 defines four phases: Preparation → Detection & Analysis → Containment/Eradication/Recovery → Post-Incident Activity." },
-      { id: "sap-q13-17", question: "Chain of custody documentation must include all EXCEPT:", options: ["A detailed list of all investigators who physically or logically handled the evidence files.", "The precise timestamps of when the evidence was transferred or accessed by security analysts.", "The analyst's personal opinion regarding the guilt or motives of the suspected threat agent.", "Cryptographic hash values of digital evidence to verify bit-for-bit integrity and soundness."], correctAnswer: 2, explanation: "Chain of custody tracks who, when, where, and integrity (hashes) — personal opinions have no place in evidence documentation." },
-      { id: "sap-q13-18", question: "An AWS CloudTrail log shows 'DeleteTrail' API call from an unfamiliar IAM user. What is the severity?", options: ["Low severity, representing a routine automated log clean-up event performed by administrative services.", "Medium severity, indicating a potential configuration update that requires standard review and validation.", "Critical severity, representing defense evasion as attackers disable logging to cover active tracks.", "Informational severity, indicating the CloudTrail service was scheduled for routine maintenance windows."], correctAnswer: 2, explanation: "Deleting CloudTrail is a critical indicator of an attacker attempting to disable logging and cover their tracks." },
-      { id: "sap-q13-19", question: "In Azure, which log source records sign-in activity including MFA status and conditional access results?", options: ["Azure Activity Logs, which capture subscription-level operations and resource modification events.", "Azure AD Sign-in Logs, recording authentication metadata, user location details, and MFA status.", "Azure Resource Logs, tracking data plane operations within specific configured storage services.", "Azure NSG Flow Logs, capturing network IP traffic metadata passing through virtual gateway systems."], correctAnswer: 1, explanation: "Azure AD Sign-in Logs capture authentication events including MFA challenges, conditional access policy results, and sign-in risk." },
-      { id: "sap-q13-20", question: "A Kubernetes pod is running with 'privileged: true' security context. Why is this a critical finding?", options: ["The container consumes significantly more host memory resources and can cause service performance drops.", "The container has unrestricted access to the host kernel, enabling container escape to the host node.", "The container is isolated from internal network routing and cannot connect to other cluster services.", "The container completely bypasses the cluster's ingress configurations and local load balancing rules."], correctAnswer: 1, explanation: "Privileged containers have unrestricted host access — an attacker inside can escape to the host node and compromise the cluster." },
-      { id: "sap-q13-21", question: "What is the difference between strategic and tactical threat intelligence?", options: ["Strategic intelligence is designed for technical SOC analysts, while tactical is focused on executives.", "Strategic TI informs high-level business risk decisions; tactical TI provides actionable IOCs to defenders.", "They are identical threat intelligence terms that are used interchangeably across security standards.", "Strategic TI relies entirely on automated feeds, while tactical TI requires manual research extraction."], correctAnswer: 1, explanation: "Strategic TI informs executive risk decisions (trends, actor motivations); tactical TI provides actionable IOCs and TTPs for SOC analysts." },
-      { id: "sap-q13-22", question: "In a hypothesis-driven hunt, you hypothesize 'attackers are using living-off-the-land binaries.' Which data source is MOST relevant?", options: ["External perimeter firewall connection logs tracking outbound TCP traffic volume on standard web ports.", "Endpoint process creation logs (like Event ID 4688) containing complete command-line configurations.", "Physical badge access logs monitoring employee movements in secure server rooms and office buildings.", "DHCP server lease duration records showing IP address assignments to wireless client hosts on network."], correctAnswer: 1, explanation: "LOLBin hunting requires process creation logs (Sysmon Event 1 / Windows 4688) with full command-line recording to spot abuse of legitimate tools." },
-      { id: "sap-q13-23", question: "What STIX object type represents an adversary group like APT29?", options: ["STIX Indicator, containing patterns used to detect the presence of cyber threat actor activities.", "STIX Intrusion Set, representing a grouped set of adversary behaviors, TTPs, and shared targets.", "STIX Observed Data, capturing raw threat log metadata observed on local host network interfaces.", "STIX Course of Action, detailing recommendations and response actions to remediate active threats."], correctAnswer: 1, explanation: "Intrusion Set represents a named threat actor group with associated TTPs, motivations, and attributed campaigns." },
-      { id: "sap-q13-24", question: "During disk imaging, the hash of the image differs from the original. What does this mean?", options: ["The image copy is correct, as hash signatures naturally vary based on storage size and timestamp details.", "The copy process modified or corrupted evidence data, making the image forensically unsound for court.", "The destination evidence drive is encrypted, which blocks the hash calculation tool from completing.", "This is normal behavior for large SSD storage drives due to automatic sector wear-leveling actions."], correctAnswer: 1, explanation: "Hash mismatch means the forensic image is not a bit-for-bit copy — it cannot be used as evidence and must be re-imaged." },
-      { id: "sap-q13-25", question: "You find $STANDARD_INFORMATION timestamps showing 2024 but $FILE_NAME timestamps showing 2025 on the same file. What does this indicate?", options: ["A normal system update behavior where different timestamp attributes record distinct file actions.", "Timestomping, suggesting an attacker modified $STANDARD_INFORMATION timestamps to bypass timeline review.", "A file system corruption error caused by sudden system power drops or disk sector write failures.", "A standard time zone difference conversion error occurring between regional domain controller servers."], correctAnswer: 1, explanation: "$SI timestamps are easily modified by tools like Timestomp, but $FN timestamps are harder to forge — discrepancy proves manipulation." },
-      { id: "sap-q13-26", question: "An alert fires for outbound DNS requests to a domain with high entropy. Network logs show 500+ TXT queries in 10 minutes. Endpoint logs show powershell.exe spawning nslookup. What is happening?", options: ["A normal DNS query resolution pattern generated by local client browsers loading complex web assets.", "DNS-based data exfiltration, where PowerShell is abusing nslookup to encode and tunnel data outwards.", "A DNS cache poisoning attempt targeting recursive name resolution servers in the local area network.", "A standard DNSSEC validation check executing to verify digital signatures of authoritative zone files."], correctAnswer: 1, explanation: "High-entropy domains + excessive TXT queries + PowerShell launching nslookup = classic DNS tunneling exfiltration pattern." },
-      { id: "sap-q13-27", question: "During an investigation, you need to prove that a specific user account accessed sensitive files at 3 AM. Which THREE evidence sources would you correlate?", options: ["Windows Security Event ID 4663 (file access) + 4624 (successful logon) + external VPN connection logs.", "Perimeter firewall traffic logs + recursive DNS query records + DHCP IP address lease assignment history.", "Incoming email logs + physical office badge access records + corporate mobile phone call history logs.", "Host antivirus alert notifications + web proxy logs + local network printer queue transaction records."], correctAnswer: 0, explanation: "Windows Security Event ID 4663 (file access) + 4624 (successful logon) + external VPN connection logs." },
-      { id: "sap-q13-28", question: "A SIEM alert shows a service account making API calls to AWS S3 at 2 AM. CloudTrail shows ListBuckets followed by GetObject on sensitive data. The account has no recent legitimate usage. Your FIRST action?", options: ["Delete the service account immediately across the identity management portal to stop access pathways.", "Investigate the calling IP address, verify if credentials are compromised, and isolate the access keys.", "Ignore the alert, as corporate service accounts routinely execute automated background utility tasks.", "Contact local news outlets and regulators to report a verified corporate cloud storage database breach."], correctAnswer: 1, explanation: "Investigate first — identify the calling IP, check for key compromise, then isolate. Don't delete (destroys evidence) or ignore (could be active breach)." },
-      { id: "sap-q13-29", question: "You're writing an incident report for a phishing attack that led to credential theft and lateral movement. Which section is MOST important for preventing recurrence?", options: ["The executive summary section summarizing threat impact details in high-level non-technical language.", "The comprehensive chronological timeline tracking every analyst triage and containment response action.", "The lessons learned and recommendations section detailing system hardening controls and process updates.", "The appendix containing raw threat indicators of compromise such as malicious hashes and domain lists."], correctAnswer: 2, explanation: "Lessons learned drive organizational improvement — recommending MFA, email filtering, and user training prevents future similar attacks." },
-      { id: "sap-q13-30", question: "Rank the following evidence by volatility (most volatile first): (1) RAM contents, (2) Swap/pagefile, (3) Disk image, (4) Network connections", options: ["Network connections (4) first, followed by RAM (1), then Swap/pagefile (2), and finally Disk image (3).", "RAM contents (1) first, followed by Network connections (4), then Swap/pagefile (2), and Disk image (3).", "Disk image (3) first, followed by Swap/pagefile (2), then RAM contents (1), and Network connections (4).", "Swap/pagefile (2) first, followed by Disk image (3), then Network connections (4), and RAM contents (1)."], correctAnswer: 1, explanation: "Per RFC 3227 order of volatility: RAM (seconds) → Network connections (seconds) → Swap (persistent but overwritten) → Disk (most stable)." }
-    ]
-  },
-  // NETWORK SECURITY MONITORING — FINAL CERTIFICATION EXAM
-  {
-    quizId: "nsm-q7",
-    courseId: "network-security-monitoring",
-    title: "NSM Certification Exam",
-    description: "Comprehensive final exam covering all 6 modules. You must pass with 80% or higher to earn your Network Security Monitoring certificate.",
-    passingScore: 80,
-    timeLimit: 60,
-    questions: [
-      { id: "nsm-q7-1", question: "What is the primary difference between IDS and IPS?", options: ["IDS sits inline to actively drop unauthorized traffic, whereas IPS operates out-of-band to monitor logs and send email notifications.", "IDS operates entirely on end-user workstations, whereas IPS is deployed on perimeter firewalls and local routers only.", "IDS monitors network traffic and generates alerts, whereas IPS actively blocks malicious packets in the inline traffic flow.", "IDS and IPS are completely identical technologies that use different names for licensing and marketing purposes."], correctAnswer: 2, explanation: "IDS passively monitors and alerts; IPS sits inline and actively blocks or drops malicious traffic." },
-      { id: "nsm-q7-2", question: "Which Wireshark filter shows only HTTP POST requests?", options: ["http.request.method == \"POST\"", "http.request.method == \"GET\"", "tcp.port == 80 && http", "http contains \"POST\""], correctAnswer: 0, explanation: "http.request.method == \"POST\" filters specifically for HTTP POST requests in Wireshark." },
-      { id: "nsm-q7-3", question: "In a TCP three-way handshake, what flags are exchanged?", options: ["SYN, followed by ACK, and finally FIN for closing", "RST, followed by SYN, and finally ACK", "FIN, followed by FIN-ACK, and finally ACK", "SYN, followed by SYN-ACK, and finally ACK"], correctAnswer: 3, explanation: "The three-way handshake is: Client sends SYN → Server responds SYN-ACK → Client sends ACK." },
-      { id: "nsm-q7-4", question: "What does a Suricata rule with 'action: drop' do differently from 'action: alert'?", options: ["The drop action logs the packets to a separate file, while alert outputs them directly to the SIEM dashboard.", "The drop action silently discards the packet inline, while alert only generates a log notification.", "The drop action terminates the entire TCP connection, while alert redirects the traffic to a honeypot.", "The drop action encrypts the payload of the packet, while alert logs the payload in cleartext format."], correctAnswer: 1, explanation: "In IPS mode, 'drop' blocks the packet and generates an alert; 'alert' only generates the notification without blocking." },
-      { id: "nsm-q7-5", question: "Which Suricata keyword inspects the HTTP URI path?", options: ["The content keyword, which checks the entire raw packet payload", "The pcre keyword, which uses regular expressions on the packet header", "The http_uri keyword, which targets specifically the URI path component", "The flow keyword, which tracks the state and direction of the connection"], correctAnswer: 2, explanation: "http_uri matches against the URI path component of HTTP requests, enabling precise URL-based detection." },
-      { id: "nsm-q7-6", question: "What is the primary purpose of Zeek's conn.log?", options: ["To log metadata for every network connection including duration, bytes, and state", "To record full HTTP request and response payloads including file transfers", "To store raw packet captures in PCAP format for deep inspection", "To track specific user credentials and authentication attempts on the network"], correctAnswer: 0, explanation: "conn.log records connection-level metadata: source/dest IPs, ports, protocol, duration, bytes transferred, and connection state." },
-      { id: "nsm-q7-7", question: "You observe DNS queries for random 32-character subdomains of a single domain. What technique is this?", options: ["DNS round-robin load balancing for distributing incoming traffic to multiple servers", "Standard CDN resolution for accelerating content delivery to local endpoints", "DNSSEC validation for securing name resolution requests with cryptographic signatures", "DNS tunneling used for command and control (C2) channels or unauthorized data exfiltration"], correctAnswer: 3, explanation: "Random long subdomains indicate DNS tunneling — data is encoded in subdomain labels to bypass traditional security controls." },
-      { id: "nsm-q7-8", question: "What BPF filter captures only traffic on port 443?", options: ["port 443 — captures both TCP and UDP traffic on port 443", "tcp port 443 — captures only TCP traffic on port 443", "dst port 443 — captures only outbound traffic to port 443", "port == 443 — uses standard programming operators for filtering"], correctAnswer: 0, explanation: "'port 443' captures both TCP and UDP traffic to/from port 443. Use 'tcp port 443' for TCP only." },
-      { id: "nsm-q7-9", question: "In Zeek's ssl.log, what does the 'validation_status' field indicate?", options: ["The cipher suite strength and key exchange bit length used in the session", "The TLS protocol version negotiated between the client and the server", "The duration of the initial SSL/TLS cryptographic handshake phase", "Whether the server certificate chain was successfully validated by Zeek"], correctAnswer: 3, explanation: "validation_status shows if Zeek could validate the certificate chain — 'ok' means valid, failures may indicate self-signed or expired certs." },
-      { id: "nsm-q7-10", question: "What network behavior indicates lateral movement via SMB?", options: ["Frequent HTTPS connections to unrecognized external IP addresses over port 443", "High volume of DNS queries to public DNS resolvers in a short time frame", "An internal host connecting to port 445 on multiple internal hosts sequentially", "Continuous ICMP echo requests to the default gateway from a single host"], correctAnswer: 2, explanation: "Sequential SMB (port 445) connections from one internal host to many others indicates lateral movement or SMB-based worm propagation." },
-      { id: "nsm-q7-11", question: "What Wireshark feature reconstructs transferred files from packet captures?", options: ["Using advanced display filters to isolate file transfer protocols like FTP and TFTP", "Export Objects (File > Export Objects) to extract files from supported protocols", "Analyzing the Statistics panel to identify file sizes and transfer rates", "Adjusting protocol preferences to automatically dump file contents to disk"], correctAnswer: 1, explanation: "Export Objects extracts files transferred over HTTP, SMB, TFTP, and other protocols directly from the pcap." },
-      { id: "nsm-q7-12", question: "A Suricata rule uses 'threshold: type both, track by_src, count 10, seconds 60'. What does this mean?", options: ["Alert once and suppress further alerts for 60 seconds after 10 matches from a source", "Generate an alert for every single matching packet without any rate limiting", "Block the source IP address completely after observing 10 matching packets", "Log only every 10th packet matching the rule to optimize disk space usage"], correctAnswer: 0, explanation: "Type 'both' combines threshold (require N matches) and limit (suppress duplicates) — alert once per 60s window after 10 matches from same source." },
-      { id: "nsm-q7-13", question: "What is JA3 fingerprinting used for?", options: ["Identifying the specific file formats of downloaded email attachments", "Analyzing the structure of DNS queries to detect domain generation algorithms", "Validating the integrity of SSL certificates against external databases", "Creating unique hashes of TLS client hello parameters to identify client software"], correctAnswer: 3, explanation: "JA3 hashes TLS client hello fields (version, ciphers, extensions) creating a fingerprint that identifies the client application regardless of IP." },
-      { id: "nsm-q7-14", question: "You see regular outbound connections every 300 seconds to the same external IP on port 8443. What is this pattern?", options: ["Normal user web browsing behavior during standard business hours", "Command and Control (C2) beaconing with a fixed 5-minute interval", "Automated email synchronization check by the local mail client", "Standard network time synchronization using the NTP protocol"], correctAnswer: 1, explanation: "Regular interval connections (beaconing) to a fixed external IP on a non-standard port is a strong indicator of C2 communication." },
-      { id: "nsm-q7-15", question: "Which Zeek log would help identify a DNS amplification attack?", options: ["conn.log — containing general network metadata and connection summaries", "http.log — recording request methods, user agents, and response codes", "dns.log — showing large TXT or ANY responses directed to spoofed source IPs", "ssl.log — capturing certificate details, validation status, and TLS versions"], correctAnswer: 2, explanation: "DNS amplification uses large responses (TXT/ANY) directed at spoofed victim IPs — dns.log shows query types and response sizes." },
-      { id: "nsm-q7-16", question: "What is the purpose of network tap vs SPAN port?", options: ["Network tap provides a lossless full-duplex copy; SPAN may drop packets under load", "Network taps and SPAN ports are completely identical in performance and architecture", "SPAN port provides a more reliable copy because it is implemented in hardware", "Network tap only works for wireless networks, while SPAN is for wired networks"], correctAnswer: 0, explanation: "Network taps provide passive, lossless, full-duplex copies. SPAN ports can drop packets under high load and may miss errors." },
-      { id: "nsm-q7-17", question: "How do you detect ICMP tunneling in network traffic?", options: ["Monitoring for ICMP type 8 (echo request) packets exclusively on the network", "Checking for ICMP type 0 (echo reply) packets coming from the default gateway", "Reviewing ICMP TTL values to detect routing loops and packet delivery failures", "Unusually large ICMP payloads or high-frequency echo requests with varying data"], correctAnswer: 3, explanation: "ICMP tunneling embeds data in echo request/reply payloads — look for abnormally large payloads or high volumes of ICMP with varied data." },
-      { id: "nsm-q7-18", question: "What does Zeek's 'notice.log' record?", options: ["Detailed connection summaries for every single network transaction", "Complete DNS resolution queries and responses seen on monitored links", "High-level security-relevant events and anomalies flagged by Zeek scripts", "MD5 and SHA-256 hashes of all files transferred over the network"], correctAnswer: 2, explanation: "notice.log captures security-relevant findings like self-signed certs, SSL errors, scan detection, and custom notices from Zeek scripts." },
-      { id: "nsm-q7-19", question: "In Wireshark, how do you follow the full conversation of a TCP stream?", options: ["Applying a display filter based on the source and destination IP addresses", "Right-clicking a packet and choosing Follow > TCP Stream from the menu", "Opening the Statistics menu and selecting the Conversations option", "Exporting the entire packet capture file in CSV format for analysis"], correctAnswer: 1, explanation: "Follow TCP Stream reconstructs the entire conversation between client and server, showing data in both directions." },
-      { id: "nsm-q7-20", question: "What makes encrypted traffic analysis challenging for NSM?", options: ["Payloads are opaque, requiring metadata analysis (JA3, certs, timing, volume) instead", "Encrypted traffic is completely impossible to monitor or analyze in any way", "Encrypted traffic always uses non-standard ports that bypass sensors", "It requires significantly higher processing power than unencrypted traffic"], correctAnswer: 0, explanation: "Encrypted payloads can't be inspected, so analysts rely on metadata: JA3 fingerprints, certificate details, connection timing, and data volumes." },
-      { id: "nsm-q7-21", question: "A host suddenly generates traffic to 1000+ unique destination IPs on port 445 in 2 minutes. What is this?", options: ["A normal enterprise-wide file sharing or database replication operation", "A scheduled backup job saving files to a centralized storage array", "A load balancing mechanism distributing traffic across web servers", "An active SMB-based worm propagation attempt or aggressive network scanning"], correctAnswer: 3, explanation: "Rapid connections to many IPs on port 445 indicates SMB-based worm propagation (like WannaCry) or aggressive network scanning." },
-      { id: "nsm-q7-22", question: "What Suricata keyword matches on file content extracted from network streams?", options: ["The content keyword, which searches raw packet payloads indiscriminately", "The http_uri keyword, which inspects the requested web resource path", "The filedata keyword, which matches on reassembled files from network streams", "The flow keyword, which tracks the connection state and directionality"], correctAnswer: 2, explanation: "filedata matches on reassembled file content from HTTP, SMTP, and other protocols — used for detecting malicious file transfers." },
-      { id: "nsm-q7-23", question: "How does TLS certificate pinning affect network security monitoring?", options: ["It makes decryption and payload analysis much easier for security tools", "It prevents decryption proxies from intercepting traffic, creating visibility gaps", "It has absolutely no impact on network security monitoring workflows", "It improves the overall quality and depth of firewall traffic logs"], correctAnswer: 1, explanation: "Certificate pinning rejects certificates not matching the expected pin, preventing TLS inspection proxies from intercepting — creating blind spots." },
-      { id: "nsm-q7-24", question: "What is the significance of TTL values in network forensics?", options: ["TTL reveals hop count and can detect spoofed packets or traceroute scanning", "TTL values measure the overall network bandwidth and latency of a link", "TTL indicates the encryption strength and protocol version of a packet", "TTL specifies the maximum file size that can be transmitted over a link"], correctAnswer: 0, explanation: "TTL decrements per hop — unusual TTL values can reveal spoofed source IPs, traceroute scanning, or MITM positioning." },
-      { id: "nsm-q7-25", question: "You capture traffic showing HTTP requests with 'User-Agent: Mozilla/4.0 (compatible; MSIE 6.0)' from a Windows 11 machine. What does this suggest?", options: ["A standard user browsing the web using modern default applications", "A legacy business application that requires Internet Explorer to function", "A standard web browser downgrade performed by the network administrator", "Malware using a hardcoded outdated User-Agent string for C2 communication"], correctAnswer: 3, explanation: "IE6 User-Agent from Windows 11 is impossible legitimately — malware often uses hardcoded outdated User-Agent strings in C2 communication." },
-      { id: "nsm-q7-26", question: "What is the advantage of full packet capture (PCAP) over flow data (NetFlow)?", options: ["Full packet capture uses significantly less storage space than flow data", "PCAP is much faster to process and analyze than NetFlow summaries", "PCAP preserves complete payload content for deep inspection and evidence", "PCAP is easier to store long-term due to automatic compression algorithms"], correctAnswer: 2, explanation: "PCAP captures entire packets including payloads, enabling content inspection, file extraction, and forensic evidence — NetFlow only records metadata." },
-      { id: "nsm-q7-27", question: "How would you detect DNS over HTTPS (DoH) being used to bypass DNS monitoring?", options: ["Monitoring standard DNS traffic on port 53 for encrypted queries", "Identifying connections to known DoH resolver IPs or analyzing JA3 fingerprints", "Blocking all outbound HTTPS traffic to prevent encrypted communication", "Reviewing local system event logs for DNS client service modifications"], correctAnswer: 1, explanation: "DoH encrypts DNS in HTTPS — detect by monitoring connections to known DoH providers or identifying DoH-specific JA3 fingerprints." },
-      { id: "nsm-q7-28", question: "What network evidence would indicate a successful SQL injection attack?", options: ["HTTP responses containing database error messages or bulk data dumps", "A sudden spike in standard HTTP GET requests to the home page", "High volume of DNS queries to unrecognized external domains", "ICMP destination unreachable packets from the web server host"], correctAnswer: 0, explanation: "Successful SQLi shows in HTTP responses — database errors, unexpected data structures, or unusually large response bodies containing exfiltrated data." },
-      { id: "nsm-q7-29", question: "In a SOC workflow, when should you escalate a network alert to an incident?", options: ["Immediately upon receiving any alert in the queue to save triage time", "Only when the SIEM platform automatically marks the alert as critical", "Never, as all alerts should be investigated and closed by L1 analysts", "When corroborated by multiple data sources confirming malicious activity and impact"], correctAnswer: 3, explanation: "Escalate when investigation confirms the alert with additional evidence (endpoint, identity, threat intel) and there's actual or potential business impact." },
-      { id: "nsm-q7-30", question: "What is the best practice for sensor placement in a segmented network?", options: ["Placing a single network sensor at the network perimeter boundary only", "Deploying network sensors only on critical servers and active directories", "Sensors at each trust boundary — perimeter, DMZ, and critical segments", "Installing one sensor per floor in a physical office building deployment"], correctAnswer: 2, explanation: "Sensors at each trust boundary provide visibility into north-south (perimeter) and east-west (lateral) traffic across all network segments." }
-    ]
-  },
-  // INCIDENT RESPONSE FUNDAMENTALS — FINAL CERTIFICATION EXAM
-  {
-    quizId: "ir-q7",
-    courseId: "incident-response",
-    title: "IR Certification Exam",
-    description: "Comprehensive final exam covering all 6 modules. You must pass with 80% or higher to earn your Incident Response Fundamentals certificate.",
-    passingScore: 80,
-    timeLimit: 60,
-    questions: [
       {
-        id: "ir-q7-1",
-        question: "What are the four phases of the NIST SP 800-61 incident response lifecycle?",
+        id: "de-q6-1",
+        difficulty: "easy",
+        tags: ["Tuning Cadence"],
+        scenario: "Rules are 'done' when merged. No one revisits them.",
+        question: "What operational rhythm keeps detections healthy?",
         options: [
-          "Identify the initial indicators, Protect active database systems, Detect lateral movement, and Respond to security events.",
-          "Preparation for potential incidents, Detection & Analysis of activity, Containment/Eradication/Recovery, and Post-Incident Activity.",
-          "Plan the response strategy, Do the technical configuration updates, Check the network stability, and Act to remediate threats.",
-          "Triage incoming SIEM alerts, Investigate compromised endpoint devices, Remediate security gaps, and Close the investigation ticket."
+          "Yearly audit",
+          "Weekly triage of top-N noisy rules + monthly review of low/no-fire rules + quarterly coverage review — tuning is a continuous program, not a one-off",
+          "Never — rules are static",
+          "Only on incident"
         ],
         correctAnswer: 1,
-        explanation: "NIST SP 800-61 defines: Preparation → Detection & Analysis → Containment/Eradication/Recovery → Post-Incident Activity."
+        explanation: "Detection health decays constantly; regular tuning cadences prevent noise and blind spots."
       },
       {
-        id: "ir-q7-2",
-        question: "What is the SANS six-step IR process?",
+        id: "de-q6-2",
+        difficulty: "easy",
+        tags: ["Alert Triage Metrics"],
+        scenario: "Leadership asks 'how good are our detections?' You have no numbers.",
+        question: "Which minimum metric set proves detection quality?",
         options: [
-          "Preparation, Identification, Containment, Eradication, Recovery, and Lessons Learned, representing SANS PICERL framework.",
-          "Planning, Execution of controls, Review of findings, Closing the ticket, Reporting to management, and Archiving raw logs.",
-          "Detection of anomalies, Analysis of indicators, Containment of hosts, Removal of malware, Restoration of data, and Reporting.",
-          "Alerting on events, Triage of the queue, Investigation of threats, Fixing vulnerabilities, Testing systems, and Documentation."
-        ],
-        correctAnswer: 0,
-        explanation: "SANS PICERL: Preparation → Identification → Containment → Eradication → Recovery → Lessons Learned."
-      },
-      {
-        id: "ir-q7-3",
-        question: "During preparation, what is the primary purpose of a tabletop exercise?",
-        options: [
-          "To test corporate network bandwidth limitations and verify that server backup storage speeds meet recovery requirements.",
-          "To train new junior employees on standard command-line tools and how to parse windows registry hives during an investigation.",
-          "To audit the organization's compliance with industry-standard frameworks and verify that all software licenses are active.",
-          "To walk through hypothetical incident scenarios, allowing key stakeholders to identify process gaps and test communication channels."
-        ],
-        correctAnswer: 3,
-        explanation: "Tabletop exercises simulate incidents to test response procedures, identify weaknesses, and improve team coordination without real-world impact."
-      },
-      {
-        id: "ir-q7-4",
-        question: "An analyst receives an alert for a potential ransomware infection. What should they do FIRST?",
-        options: [
-          "Immediately format the local system drive and restore the operating system from the most recent centralized network backup.",
-          "Verify the alert's accuracy and assess the overall scope of the infection before taking any disruptive containment actions.",
-          "Contact the threat actor via Tor to negotiate ransom payments and prevent the immediate release of encrypted corporate data.",
-          "Notify the Chief Executive Officer directly and issue a public press release regarding the active network compromise."
+          "Only alert count",
+          "Per-rule: true-positive rate, false-positive rate, MTTD, MTTR, dispositioned outcomes, and rules-per-incident contribution — quality, not just volume",
+          "Only rule count",
+          "SIEM license usage"
         ],
         correctAnswer: 1,
-        explanation: "Always verify and assess first — determine if the alert is a true positive, identify affected systems, and understand scope before acting."
+        explanation: "Detection quality is measured by outcomes (TP/FP, MTTD/MTTR, incident contribution), not authoring throughput."
       },
       {
-        id: "ir-q7-5",
-        question: "What is the difference between short-term and long-term containment?",
+        id: "de-q6-3",
+        difficulty: "medium",
+        tags: ["ATT&CK Coverage"],
+        scenario: "Two orgs claim '90% ATT&CK coverage'. Yours is 55%.",
+        question: "What is the skeptical, actionable frame?",
         options: [
-          "There is no functional difference between the two, as both terms refer to the same set of standard network firewall rules.",
-          "Short-term containment is reserved for minor security incidents, whereas long-term containment is only used for SEV-1 breaches.",
-          "Short-term containment limits immediate threat spread (e.g., isolating a host), while long-term containment hardens systems during recovery.",
-          "Long-term containment means ignoring the active incident to gather intelligence, while short-term requires immediately disabling NICs."
-        ],
-        correctAnswer: 2,
-        explanation: "Short-term containment stops immediate damage (e.g., network isolation). Long-term containment applies sustained hardening (e.g., routing changes)."
-      },
-      {
-        id: "ir-q7-6",
-        question: "What evidence should be collected FIRST based on order of volatility?",
-        options: [
-          "Running physical memory (RAM), which contains active network connections, running processes, and temporary decryption keys.",
-          "A bit-by-bit hard drive image of the compromised workstation, which contains persistent file structures and operating systems.",
-          "Centralized windows event log databases and firewall traffic logs stored on secondary servers located in the local datacenter.",
-          "Registry hive backup files and system configuration files stored in persistent directories on the affected local workstation."
-        ],
-        correctAnswer: 0,
-        explanation: "RAM is highly volatile and is completely lost on reboot. Per RFC 3227, memory must be captured before persistent storage like hard drives."
-      },
-      {
-        id: "ir-q7-7",
-        question: "During eradication, what must you do after removing malware from a compromised system?",
-        options: [
-          "Immediately reconnect the server to the corporate network to restore normal business operations and minimize employee downtime.",
-          "Delete all user directories and local databases on the server to ensure that no encrypted or suspicious files are left behind.",
-          "Reinstall the operating system from a generic, unpatched ISO file without verifying if the entry point has been closed.",
-          "Verify complete malware removal, patch the exploited vulnerability, and validate that no active persistence mechanisms remain."
-        ],
-        correctAnswer: 3,
-        explanation: "After removal: verify clean state, patch the entry point, check for backdoors/persistence, and validate before returning to production."
-      },
-      {
-        id: "ir-q7-8",
-        question: "What is the primary purpose of an incident severity classification matrix?",
-        options: [
-          "To assign blame to specific departments or system administrators for configuration errors that led to the security incident.",
-          "To prioritize response resources consistently based on business impact, system criticality, scope, and data sensitivity.",
-          "To track employee response times and calculate annual performance bonuses for members of the security operations team.",
-          "To calculate insurance claim payouts and determine the organization's legal liability under international privacy laws."
+          "Buy more tools",
+          "Coverage numbers are meaningless without: which sub-techniques + platforms are counted, whether detections are validated (atomic / purple), FP-tuned, in prod, and matched to your threat model — compare methodology first",
+          "Delete the layer",
+          "Match by any means"
         ],
         correctAnswer: 1,
-        explanation: "Severity matrices ensure consistent prioritization — critical incidents (data breach, ransomware) get immediate resources; low-severity get scheduled response."
+        explanation: "Validated, tuned, threat-relevant coverage is the honest metric; raw percentages are vanity."
       },
       {
-        id: "ir-q7-9",
-        question: "When communicating during a major incident, who should serve as the single point of contact for external parties?",
+        id: "de-q6-4",
+        difficulty: "medium",
+        tags: ["Threat-Model Prioritization"],
+        scenario: "You have finite hours and 300 open detection ideas.",
+        question: "How do you prioritize?",
         options: [
-          "Any available security analyst who is actively participating in the technical forensic investigation on the network.",
-          "The Chief Executive Officer directly, to ensure that the organization's stock price and brand image are protected.",
-          "A designated incident commander or communications lead, to ensure consistent messaging and prevent conflicting statements.",
-          "The IT operations help desk, as they are most familiar with receiving calls from external clients and internal users."
-        ],
-        correctAnswer: 2,
-        explanation: "A designated communications lead ensures consistent messaging, prevents conflicting statements, and manages stakeholder expectations."
-      },
-      {
-        id: "ir-q7-10",
-        question: "What legal consideration is critical when collecting evidence from a cloud environment?",
-        options: [
-          "Data jurisdiction, as cloud evidence may span multiple physical locations and legal jurisdictions with differing privacy laws.",
-          "Cloud evidence admissibility, since digital files collected from virtual systems are rarely accepted by state court systems.",
-          "Bandwidth usage fees, as downloading massive virtual machine disk images can significantly increase cloud hosting expenses.",
-          "Local state guidelines, which are the only rules that apply to security incidents regardless of where data is hosted."
-        ],
-        correctAnswer: 0,
-        explanation: "Cloud data may reside in multiple countries with different privacy laws (GDPR, CCPA) — understand jurisdictional requirements before collection."
-      },
-      {
-        id: "ir-q7-11",
-        question: "What makes a forensic image 'forensically sound'?",
-        options: [
-          "It is heavily compressed using proprietary algorithms to save storage space and resides on a secure public cloud bucket.",
-          "It is created under direct supervision of local law enforcement officers and stored on an encrypted partition in the lab.",
-          "It contains only selected system directories and files that have been manually verified as safe by a certified investigator.",
-          "Hash verification matches the original, write-blocking is verified during imaging, and a complete chain of custody is logged."
-        ],
-        correctAnswer: 3,
-        explanation: "Forensic soundness requires verified hash match (SHA-256), write-blocking during acquisition, and documented chain of custody."
-      },
-      {
-        id: "ir-q7-12",
-        question: "During a BEC (Business Email Compromise) incident, what is the FIRST containment action?",
-        options: [
-          "De-provision the entire corporate email server to prevent any further inbound or outbound communications.",
-          "Reset compromised user credentials and immediately terminate all active OAuth sessions and application tokens.",
-          "Send a mass email warning to all company employees requesting them to verify their recent financial transactions.",
-          "Format the primary domain controller and restore Active Directory databases from the most recent weekly backup file."
+          "First come first served",
+          "Score by threat-to-org relevance (CTI + industry) × likelihood × current detection gap × feasibility (data available, effort) — highest score first, groomed weekly",
+          "Loudest voice wins",
+          "Only build easy ones"
         ],
         correctAnswer: 1,
-        explanation: "Immediately reset passwords and revoke OAuth tokens/sessions to prevent further unauthorized access before the attacker can pivot."
+        explanation: "A scored, groomed backlog turns detection engineering into a threat-driven program rather than a queue."
       },
       {
-        id: "ir-q7-13",
-        question: "What is the purpose of IOC (Indicator of Compromise) sharing during incident response?",
+        id: "de-q6-5",
+        difficulty: "medium",
+        tags: ["FP Tuning"],
+        scenario: "A rule for 'PowerShell -EncodedCommand' fires constantly on legitimate MECM operations from three known hosts.",
+        question: "What is the correct tuning path?",
         options: [
-          "To demonstrate the incident response team's capabilities and attract media attention to the organization's security program.",
-          "To satisfy strict compliance checklists mandated by regulatory boards during annual information security audits.",
-          "To enable other organizations to proactively detect and block the same threat, improving collective cyber defense.",
-          "To keep threat indicators strictly confidential, sharing them only with internal employees under non-disclosure agreements."
-        ],
-        correctAnswer: 2,
-        explanation: "Sharing IOCs (hashes, IPs, domains) via ISACs, STIX/TAXII enables peer organizations to proactively detect and block the same threat."
-      },
-      {
-        id: "ir-q7-14",
-        question: "What should a post-incident review (lessons learned) meeting focus on?",
-        options: [
-          "Identifying process improvements, timeline accuracy, communication gaps, and detection enhancements in a blameless setting.",
-          "Assigning blame to specific system administrators or security operations analysts for failing to block the initial attack.",
-          "Drafting public statements for the media and coordinating customer compensation programs with the finance department.",
-          "Checking off compliance checkboxes to verify that the organization has satisfied international security regulations."
-        ],
-        correctAnswer: 0,
-        explanation: "Blameless post-incident reviews focus on what happened, what worked, what didn't, and actionable improvements to prevent recurrence."
-      },
-      {
-        id: "ir-q7-15",
-        question: "An attacker uses stolen credentials to access a VPN. What log sources confirm this?",
-        options: [
-          "Email server traffic logs and outbound web proxy logs generated by standard corporate workstations during business hours.",
-          "Physical security badge logs and server room temperature logs monitored by the facilities department in real-time.",
-          "Endpoint anti-malware logs showing signature detection events and host-based intrusion prevention system blocks.",
-          "Correlated VPN authentication logs, Active Directory authentication logs, and endpoint logs from the host computer."
-        ],
-        correctAnswer: 3,
-        explanation: "Correlate VPN auth logs (login time, IP), AD logs (credential validation), and endpoint logs (source machine activity) to confirm credential abuse."
-      },
-      {
-        id: "ir-q7-16",
-        question: "What is 'scope creep' in incident response and how do you prevent it?",
-        options: [
-          "A slow increase in the number of active alerts, which is prevented by disabling lower-priority SIEM correlation rules.",
-          "Investigation expanding beyond the initial incident boundary; prevented by clear scoping and regular hypothesis reviews.",
-          "A gradual increase in the budget required to purchase forensic analysis tools, prevented by strict financial oversight.",
-          "Attackers slowly moving laterally across different subnets, prevented by immediately disabling all network switches."
+          "Disable the rule",
+          "Add a narrow, documented exclusion (host + parent process + user + signing context) inside the rule; log the exclusion in the rule metadata with an expiry review date",
+          "Widen the rule",
+          "Raise severity"
         ],
         correctAnswer: 1,
-        explanation: "Scope creep wastes resources investigating unrelated issues. Define incident boundaries early and regularly reassess to stay focused."
+        explanation: "Targeted, documented, expiring exclusions preserve detection value while cutting noise — blanket disable is a coverage loss."
       },
       {
-        id: "ir-q7-17",
-        question: "When is it appropriate to involve law enforcement in an incident?",
+        id: "de-q6-6",
+        difficulty: "medium",
+        tags: ["Feedback Loop"],
+        scenario: "Analysts triage 5,000 alerts/week but their dispositions never reach detection engineering.",
+        question: "What operational glue fixes this?",
         options: [
-          "Never, as sharing internal security details with police increases company liability and compromises client confidentiality.",
-          "For every single security event, including minor login failures and false positive antivirus alerts, as a legal safeguard.",
-          "When criminal activity is suspected, data breach laws require notification, or to comply with evidence preservation orders.",
-          "Only when a nation-state APT group is confirmed to have accessed internal database systems containing corporate trade secrets."
-        ],
-        correctAnswer: 2,
-        explanation: "Involve law enforcement for criminal activity, when legally required (breach notification), or when you need legal authority (subpoenas, preservation orders)."
-      },
-      {
-        id: "ir-q7-18",
-        question: "What metric measures the average time from detection to containment?",
-        options: [
-          "Mean Time to Detect (MTTD), which measures the average duration from the initial compromise until the alert is generated.",
-          "Mean Time to Respond (MTTR), which measures the average duration from the initial alert until the system is fully clean.",
-          "Mean Time to Fail (MTTF), which measures the average operational reliability of hardware devices under standard load.",
-          "Mean Time to Contain (MTTC), which tracks the average duration between the initial alert verification and threat containment."
-        ],
-        correctAnswer: 3,
-        explanation: "MTTC measures the average time from detecting an incident to successfully containing it — a key IR efficiency metric."
-      },
-      {
-        id: "ir-q7-19",
-        question: "During recovery, what must be verified before bringing systems back to production?",
-        options: [
-          "Only that the physical machine boots successfully and the local operating system registers no hardware failures.",
-          "That the malware was removed, vulnerabilities patched, credentials rotated, and enhanced security monitoring is active.",
-          "That user passwords have been updated to at least sixteen characters and the daily database backup has completed.",
-          "That all endpoints on the same subnet have been powered off and the external firewall has been set to block all ports."
+          "Email summaries",
+          "Structured dispositions (TP/FP/benign-true) written back into the alert, aggregated per rule into a dashboard the detection team owns — closes the loop from triage to tuning",
+          "SOC keeps notes in Slack",
+          "Ignore triage data"
         ],
         correctAnswer: 1,
-        explanation: "Before production return: confirm eradication complete, patch applied, persistence removed, enhanced monitoring active, and baseline restored."
+        explanation: "Structured feedback from triage is the fuel for tuning. Without it, detection engineering is blind."
       },
       {
-        id: "ir-q7-20",
-        question: "What is the role of threat intelligence in incident response?",
+        id: "de-q6-7",
+        difficulty: "hard",
+        tags: ["Retirement"],
+        scenario: "A rule has not fired in 18 months; its underlying technique is now covered by two better rules and an EDR native detection.",
+        question: "What is the mature move?",
         options: [
-          "Threat intelligence is not relevant to IR, as it is only useful for configuring perimeter firewalls and IDS rules.",
-          "It completely replaces the need for internal host forensics by providing pre-built list of compromised IP addresses.",
-          "It provides context on adversary TTPs, maps active campaigns, predicts next actions, and assists in severity scoping.",
-          "It automatically remediates compromised endpoints by deploying signature blocks directly to local antivirus agents."
-        ],
-        correctAnswer: 2,
-        explanation: "TI maps incidents to known threat actors/campaigns, predicts attacker behavior, provides additional IOCs, and helps determine incident severity."
-      },
-      {
-        id: "ir-q7-21",
-        question: "A phishing email delivered a trojan that established persistence. Order the IR actions correctly:",
-        options: [
-          "Detect the initial compromise, contain by isolating the host, eradicate the malware and persistence, and recover the system.",
-          "Eradicate the threat from the server, contain the local subnet, and detect the entry point by checking email logs.",
-          "Recover all data from backups, notify affected users, and then investigate the endpoint to find the initial backdoor.",
-          "Monitor the system for thirty days, report the findings to the CEO, and then delete the compromised email accounts."
-        ],
-        correctAnswer: 0,
-        explanation: "Follow the lifecycle: detect the compromise, contain by isolating, eradicate malware and persistence mechanisms, then recover with hardening."
-      },
-      {
-        id: "ir-q7-22",
-        question: "What is a 'jump bag' in IR preparation?",
-        options: [
-          "A lightweight backpack containing emergency supplies and medical kits used during physical facility evacuations.",
-          "A virtual machine directory containing clean operating system images for rapid deployment to staging servers.",
-          "An emergency contact list containing phone numbers for all local and international law enforcement agencies.",
-          "A pre-packed kit containing write blockers, forensic storage drives, cables, and analysis software for rapid deployment."
-        ],
-        correctAnswer: 3,
-        explanation: "Jump bags contain physical and digital tools (write blockers, forensic drives, documentation templates) for rapid on-site response."
-      },
-      {
-        id: "ir-q7-23",
-        question: "How should you handle conflicting indicators during analysis — some pointing to true positive, others to false positive?",
-        options: [
-          "Close the investigation ticket immediately as a false positive to avoid wasting incident handler hours on low risk events.",
-          "Idenitfy the source process and immediately request a company-wide password reset as a precaution.",
-          "Gather additional evidence from multiple independent sources to reach a high-confidence determination on the threat.",
-          "Rely on a random selection process to decide whether to contain the affected system or close the ticket in the queue."
-        ],
-        correctAnswer: 2,
-        explanation: "When indicators conflict, expand your data sources — check additional logs, threat intel, and endpoint telemetry to build confidence before deciding."
-      },
-      {
-        id: "ir-q7-24",
-        question: "What Windows artifacts prove an executable ran on a system?",
-        options: [
-          "The simple existence of the executable file within a user directory, regardless of creation date or file size.",
-          "Prefetch files, Shimcache registry keys, Amcache entries, BAM/DAM logs, and UserAssist keys within user profiles.",
-          "Standard antivirus scan history logs showing that a file was quarantined or flagged as potentially unwanted.",
-          "Registry Run keys and scheduled task configuration files that are designed to execute programs in the future."
+          "Keep it forever — 'just in case'",
+          "Retire it: mark superseded, link to replacement, archive in Git with rationale — retirement is a first-class step in the detection lifecycle",
+          "Duplicate it to another SIEM",
+          "Raise its severity"
         ],
         correctAnswer: 1,
-        explanation: "Multiple artifacts independently prove execution: Prefetch (run count/timestamps), Shimcache, Amcache (SHA1 hash), and UserAssist (GUI programs)."
+        explanation: "Rules that never fire cost review time and dilute metrics. Deliberate retirement keeps the ruleset lean and honest."
       },
       {
-        id: "ir-q7-25",
-        question: "What is the biggest risk of not conducting lessons learned after an incident?",
+        id: "de-q6-8",
+        difficulty: "hard",
+        tags: ["Purple Teaming"],
+        scenario: "You want continuous evidence that deployed detections actually catch real technique execution.",
+        question: "Which program design delivers this?",
         options: [
-          "Repeating the same operational mistakes, leaving detection gaps unaddressed, and failing to improve response plans.",
-          "Losing professional industry certifications for the incident handlers and receiving fines from compliance auditors.",
-          "Decreased computer system processing speeds and database synchronization delays due to unoptimized security logging.",
-          "Having the threat actor launch another attack using completely different tools and techniques that cannot be detected."
-        ],
-        correctAnswer: 0,
-        explanation: "Without lessons learned, organizations repeat failures — the same attack vectors succeed again, detection gaps persist, and response doesn't improve."
-      },
-      {
-        id: "ir-q7-26",
-        question: "During a supply chain compromise, what makes containment uniquely challenging?",
-        options: [
-          "These attacks are extremely rare and only affect a single, isolated development server with no domain connection.",
-          "The malicious code is encrypted using advanced RSA algorithms that cannot be decrypted without the private keys.",
-          "You can simply block the vendor's IP address and terminate their credentials without affecting business operations.",
-          "The malicious code is embedded within trusted, legitimately signed software updates, blending with normal operations."
-        ],
-        correctAnswer: 3,
-        explanation: "Supply chain compromises embed in trusted software with valid signatures, making detection and containment complex — blocking the vendor disrupts operations."
-      },
-      {
-        id: "ir-q7-27",
-        question: "What information MUST an incident report's executive summary contain?",
-        options: [
-          "Every raw cryptographic hash value and network indicator of compromise discovered during the host-based analysis.",
-          "The names and credentials of all incident handling staff members who participated in the technical investigation.",
-          "High-level business impact, affected scope, timeline summary, and key remediations in non-technical language.",
-          "A detailed manual step-by-step description of the forensic imaging software and registry parsing tools utilized."
-        ],
-        correctAnswer: 2,
-        explanation: "Executive summaries communicate business impact, affected scope, high-level timeline, and actionable recommendations for leadership decision-making."
-      },
-      {
-        id: "ir-q7-28",
-        question: "How do you determine if an incident is a data breach requiring notification?",
-        options: [
-          "Every security incident is classified as a data breach, requiring immediate public statements and notification.",
-          "Assess if regulated data (PII, PHI, financial) was accessed or exfiltrated, per applicable state and federal laws.",
-          "Only if the stolen data has been confirmed as sold on dark web forums or leaked publicly on hacker repositories.",
-          "Ask the threat actor directly via email if they successfully accessed or copied sensitive database records."
+          "Annual red team only",
+          "Continuous, automated purple teaming: scheduled Atomic Red Team / Caldera scenarios per (sub-)technique, results compared to expected alerts, drift shown on the coverage dashboard",
+          "Vendor demos",
+          "Manual tabletop"
         ],
         correctAnswer: 1,
-        explanation: "A breach requiring notification depends on data type (PII/PHI), access vs exfiltration evidence, and applicable regulations (GDPR, HIPAA, state laws)."
+        explanation: "Continuous validation converts coverage from a claim to a measurement — and catches silent regressions from data or rule changes."
       },
       {
-        id: "ir-q7-29",
-        question: "What is the purpose of creating an incident timeline?",
+        id: "de-q6-9",
+        difficulty: "hard",
+        tags: ["Postmortems"],
+        scenario: "A breach dwelt 45 days. Two detections were in place for the initial-access technique but neither fired.",
+        question: "What does a rigorous detection postmortem produce?",
         options: [
-          "To reconstruct the sequence of events, understand the attack progression, and identify gaps in security detection.",
-          "To justify the number of analyst hours billed to the corporate client and track employee shift schedules.",
-          "To satisfy external compliance auditors during annual reviews and prevent fine assessments for minor incidents.",
-          "To fill out administrative paperwork required by the legal department before closing the investigation ticket."
+          "Punish the author",
+          "Blameless review: reconstruct the technique, replay events against the rule, identify why it missed (data gap, logic gap, tuning error), assign a specific fix (data, rule, test) with an owner and SLA, and add a regression fixture",
+          "Delete both rules",
+          "No action"
         ],
-        correctAnswer: 0,
-        explanation: "Timelines reveal attack progression, dwell time, detection delays, and response effectiveness — essential for root cause analysis and improvement."
+        correctAnswer: 1,
+        explanation: "Every missed detection is a lesson. Structured postmortems turn incidents into permanent test cases and coverage gains."
       },
       {
-        id: "ir-q7-30",
-        question: "An incident involves a compromised service account with access to 50+ systems. What containment strategy is appropriate?",
+        id: "de-q6-10",
+        difficulty: "hard",
+        tags: ["Program KPIs"],
+        scenario: "Your detection program is scored only on 'rules shipped per quarter'.",
+        question: "What KPI mix actually reflects program value?",
         options: [
-          "Disable all fifty host systems immediately, shutting down the network to prevent any further lateral movement.",
-          "Ignore the service account credentials, as these accounts are not critical to Domain Controller security operations.",
-          "Rotate account credentials immediately, audit all systems accessed, and establish enhanced monitoring for that account.",
-          "Simply reset the password without conducting any logs review or check for persistent backdoors on local hosts."
+          "Ship more rules",
+          "Validated ATT&CK coverage delta, MTTD/MTTR improvement, FP rate of shipped detections, % rules with owners + tests, rules retired, and incident contribution rate — outcomes and quality, not activity",
+          "Only rule count",
+          "Only alert volume"
         ],
-        correctAnswer: 2,
-        explanation: "Rotate credentials immediately, audit all accessed systems for signs of compromise, and add monitoring — don't just reset password (attacker may have installed backdoors)."
+        correctAnswer: 1,
+        explanation: "Activity metrics are gameable. Outcome + quality KPIs (coverage, MTTD, FP rate, contribution) resist gaming and drive real program maturity."
       }
-    ]
-  },
-  // THREAT HUNTING FUNDAMENTALS — FINAL CERTIFICATION EXAM
-  {
-    quizId: "th-q7",
-    courseId: "threat-hunting",
-    title: "Threat Hunting Certification Exam",
-    description: "Comprehensive final exam covering all 6 modules. You must pass with 80% or higher to earn your Threat Hunting Fundamentals certificate.",
-    passingScore: 80,
-    timeLimit: 60,
-    questions: [
-      { id: "th-q7-1", question: "What fundamentally distinguishes threat hunting from traditional detection?", options: ["Threat hunting requires a significantly larger budget and utilizes more automated vendor tooling", "Hunting is proactive and hypothesis-driven, whereas traditional detection is reactive and alert-driven", "There is no functional difference in practice, as both processes rely on the exact same endpoint logs", "Traditional detection exclusively focuses on cloud systems, while hunting is limited to internal servers"], correctAnswer: 1, explanation: "Hunting proactively searches for threats without alerts, using hypotheses. Detection relies on pre-built rules to generate alerts reactively." },
-      { id: "th-q7-2", question: "In the Hunting Maturity Model (HMM), what characterizes Level 3 (Innovative)?", options: ["The organization has no active threat hunting capability and relies entirely on external security vendors", "Hunters only utilize commercial threat intelligence feeds and run pre-packaged security vendor playbooks", "Security hunters develop custom data analysis techniques and automate repetitive operational hunt procedures", "The program focuses exclusively on compliance audit checklists rather than active network defense hunting"], correctAnswer: 2, explanation: "HMM Level 3 organizations develop original analytical methods, automate repetitive hunts, and contribute to community knowledge." },
-      { id: "th-q7-3", question: "What is the Pyramid of Pain and why is it important for hunting?", options: ["A basic vulnerability scoring system used to rank the severity of newly discovered zero-day software exploits", "A compliance and regulatory framework defining key security controls for protecting sensitive database records", "A training methodology used to evaluate the technical skills and certification paths of junior SOC analysts", "Ranks indicator types by adversary cost to change, showing that hunting behavioral TTPs forces the highest cost"], correctAnswer: 3, explanation: "The Pyramid of Pain shows that hunting for TTPs (top) is far more impactful than IOC matching (bottom) — attackers easily change hashes/IPs but struggle to change tactics." },
-      { id: "th-q7-4", question: "You hypothesize APT actors are using scheduled tasks for persistence. What data do you hunt?", options: ["Windows Event ID 4698 logging scheduled task creation events and schtasks.exe command-line process creation logs", "Boundary firewall connection logs tracking outbound network traffic to known malicious command and control IPs", "Domain controller DNS resolution logs recording lookup requests for anomalous external domain names from hosts", "Email gateway server logs tracking inbound messages containing suspicious attachment patterns or macro scripts"], correctAnswer: 0, explanation: "Event ID 4698 logs scheduled task creation details. Also hunt for schtasks.exe in process creation logs with suspicious command-line arguments." },
-      { id: "th-q7-5", question: "What is a LOLBin and why are they challenging to detect?", options: ["A family of specialized fileless malware designed to bypass standard signature-based antivirus applications", "Legitimate operating system binaries abused for malicious tasks, blending in with normal administrative activity", "A critical software vulnerability affecting older legacy systems that cannot be patched by administrators", "An encrypted network communication protocol used by attackers to establish secure command and control sessions"], correctAnswer: 1, explanation: "Living-off-the-Land Binaries (LOLBins) like powershell, certutil, mshta are legitimate tools abused by attackers — hard to detect because they're expected on systems." },
-      { id: "th-q7-6", question: "How do you build a hunt hypothesis from MITRE ATT&CK?", options: ["Randomly selecting a list of adversary techniques from the matrix and executing generic search queries on endpoints", "Attempting to hunt for every single technique in the framework simultaneously using automated vendor templates", "Selecting a technique relevant to your threat model, identifying data sources, and defining anomalous behaviors", "Focusing exclusively on the most popular techniques reported by security media articles and compliance audits"], correctAnswer: 2, explanation: "Map your threat model to ATT&CK techniques, identify relevant data sources (process, network, file), and define baseline vs anomalous behavior." },
-      { id: "th-q7-7", question: "What is the 'noise reduction' technique in threat hunting?", options: ["Disabling low-priority security alerts on SIEM consoles to prevent analysts from experiencing alert fatigue", "Reducing the overall volume of log collection by disabling process auditing on critical internal servers", "Ignoring false positive detections generated by legacy security tools during routine software deployment cycles", "Filtering out known-good baseline activities to isolate and surface anomalous behaviors for deep investigation"], correctAnswer: 3, explanation: "Stack known-good patterns (legitimate processes, normal users, expected schedules) and filter them out to surface anomalous behavior for investigation." },
-      { id: "th-q7-8", question: "You discover that certutil.exe downloaded a file from an external URL. Is this malicious?", options: ["Highly suspicious — certutil is a LOLBin commonly abused for file downloads; investigate the context and URL", "Always malicious — legitimate administrative operations never utilize certutil.exe for utility execution tasks", "Always legitimate — certutil.exe is an essential operating system utility that regularly retrieves user updates", "Only suspicious if the execution is initiated by an administrative account rather than standard system users"], correctAnswer: 0, explanation: "certutil -urlcache -f is a known LOLBin technique (T1105). Investigate who ran it, what URL, what was downloaded, and the broader context." },
-      { id: "th-q7-9", question: "What statistical technique helps identify C2 beaconing in network data?", options: ["Simple counting of connection volumes to identify the absolute busiest destination IP addresses on segment", "Analyzing inter-connection time intervals for low jitter to identify automated, regular contact periodicity", "Checking packet sizes and protocol header flags to confirm the presence of encrypted payload structures", "Looking at destination port numbers to identify sessions initiated on non-standard administrative ports"], correctAnswer: 1, explanation: "C2 beacons have regular timing intervals. Calculate the standard deviation of connection intervals — low jitter indicates automated beaconing." },
-      { id: "th-q7-10", question: "How does threat intelligence enhance hunt hypotheses?", options: ["It completely replaces the need for hypotheses by telling analysts exactly where active threats are running", "It only adds public indicator hashes and IP address blocklists to the perimeter firewall configuration rules", "Provides detailed adversary TTPs, known behaviors, and campaign context to focus hunts on relevant threats", "It is not useful for threat hunting, as intelligence feeds are primarily designed for reactive alert sorting"], correctAnswer: 2, explanation: "TI provides context on active threat actors targeting your sector, their preferred TTPs, and specific IOCs to prioritize and focus hunt activities." },
-      { id: "th-q7-11", question: "What is 'stacking' in hunt analysis?", options: ["Combining multiple vendor security tools together to process a single unified event stream on local servers", "Layering multiple exclusion filters in the SIEM console to reduce the number of active alerts for analysts", "Building a complex technology architecture containing several nested database layers and log storage pools", "Aggregating values and sorting by frequency to isolate rare outliers, also known as least-frequency analysis"], correctAnswer: 3, explanation: "Stacking groups values (process names, parent-child relationships, DNS queries) by frequency — rare items (bottom of the stack) deserve investigation." },
-      { id: "th-q7-12", question: "You're hunting for credential dumping. Which data sources are MOST relevant?", options: ["Process access to lsass.exe (Sysmon Event 10), NTDS.dit file access, and suspicious SAM registry hive queries", "Web proxy access logs tracking HTTP/HTTPS connections and external file uploads to public storage sites", "Physical badge reader logs tracking employee entries and exits from secure data center server facilities", "Email gateway logs showing inbound phishing messages and attachments targeting human resources departments"], correctAnswer: 0, explanation: "Credential dumping targets lsass.exe memory (Mimikatz), NTDS.dit (domain), and SAM registry hives. Sysmon Event 10 logs process access to these." },
-      { id: "th-q7-13", question: "What makes a good hunt hypothesis?", options: ["Being as broad and generalized as possible to capture any potential anomalous activity across the enterprise", "Being specific, testable, aligned with actor TTPs, and supportable by the data sources currently collected", "Relying primarily on analyst intuition and gut feelings without referencing threat models or structured data", "Focusing exclusively on blocking known indicators of compromise like static IP addresses and file hashes"], correctAnswer: 1, explanation: "Good hypotheses are specific (one technique), testable (data sources exist), threat-informed (relevant to your environment), and falsifiable." },
-      { id: "th-q7-14", question: "How do you hunt for DLL sideloading?", options: ["Scanning all local system directories for known malware file signatures and reporting any matches to SOC", "Monitoring inbound and outbound network connections for anomalous protocol usage or unexpected port mapping", "Hunting for signed executables loading DLLs from user-writable paths or unsigned DLLs in system directories", "Reviewing active system administrator accounts and verifying their specific folder access rights on servers"], correctAnswer: 2, explanation: "DLL sideloading abuses DLL search order — hunt for signed EXEs loading unsigned DLLs, or DLLs loading from non-standard directories." },
-      { id: "th-q7-15", question: "What is the difference between IOC-based and TTP-based hunting?", options: ["They are completely identical concepts and can be used interchangeably in hunt planning documentation", "TTP-based hunting is significantly easier to execute and automate than searching for static indicators", "IOC-based hunting is more effective at identifying novel, undocumented adversary campaigns and techniques", "IOC hunting matches static indicators like hashes, while TTP hunting seeks behavioral patterns of activity"], correctAnswer: 3, explanation: "IOC hunting is narrow and easily evaded (change hash = evade). TTP hunting finds behavioral patterns that persist across campaigns regardless of specific IOCs." },
-      { id: "th-q7-16", question: "You find PowerShell executing encoded commands (-enc) at 3 AM from a service account. What is your assessment?", options: ["Highly suspicious — immediately decode the command and investigate the service account activity context", "Normal automated maintenance behavior commonly observed during scheduled updates across internal networks", "Ignore the event, as service accounts are typically trusted to run administrative tasks without auditing", "Propose blocking all PowerShell executions across the entire organization to prevent further operations"], correctAnswer: 0, explanation: "Encoded PowerShell from a service account at unusual hours is a strong indicator. Decode the command, investigate the account, and check for lateral movement." },
-      { id: "th-q7-17", question: "What is the purpose of documenting hunt findings even when no threats are found?", options: ["It is a waste of analyst time and resources if no active threats or security exposures are discovered", "Validates security posture, highlights visibility gaps, refines baselines, and guides future hypotheses", "Only positive findings should be logged, as negative results do not demonstrate security program value", "It is strictly a regulatory compliance requirement for financial audits and serves no defensive purpose"], correctAnswer: 1, explanation: "Negative results are valuable — they prove you checked, identify logging gaps, improve baselines, and help prioritize future hunts." },
-      { id: "th-q7-18", question: "How do you detect process injection techniques during a hunt?", options: ["Comparing file sizes of standard system binaries in System32 against known Microsoft baseline hashes", "Checking user authentication events to confirm that administrative sessions are not active at night", "Monitoring for processes accessing other processes' memory (Sysmon Event 8/10 or CreateRemoteThread calls)", "Analyzing external-facing firewall connection logs for high volumes of outbound web traffic to new IPs"], correctAnswer: 2, explanation: "Process injection involves writing to and executing in another process — Sysmon Event 8 (CreateRemoteThread) and Event 10 (ProcessAccess) capture these." },
-      { id: "th-q7-19", question: "What is the value of hunting in cloud environments (AWS/Azure/GCP)?", options: ["Cloud environments are secure by default, so hunting is only needed for legacy on-premises applications", "It is not technically possible to perform active threat hunting in cloud infrastructure due to API limits", "Cloud hunting uses the exact same techniques, data sources, and correlation rules as on-premises hosts", "Rich cloud API logs like CloudTrail enable hunting for anomalous resource creation and access abuse"], correctAnswer: 3, explanation: "Cloud environments generate detailed API logs, enabling hunts for unusual API calls, privilege escalation, unauthorized access patterns, and misconfigurations." },
-      { id: "th-q7-20", question: "What converts a successful hunt finding into an ongoing detection?", options: ["Translating the hunt query logic into a tuned SIEM correlation rule or Sigma signature for continuous alerts", "Nothing, as threat hunts are designed to be single, isolated exercises that do not affect active engineering", "Drafting a quick email to the security team outlining the indicators of compromise found during the hunt", "Writing a long PDF report and submitting it to executive leadership for manual approval and archiving"], correctAnswer: 0, explanation: "Successful hunts should be operationalized — convert the search logic into SIGMA/SIEM rules, test against historical data, tune for false positives, and deploy." },
-      { id: "th-q7-21", question: "You're hunting in network metadata and find a host making HTTPS connections to an IP with a self-signed certificate every 30 minutes. Assessment?", options: ["Standard network HTTPS communication that can be ignored since the traffic payload is fully encrypted", "Potential C2 beaconing — self-signed certificate, regular intervals, and direct IP connection are key signs", "A minor certificate misconfiguration on a legitimate vendor website that does not present security risk", "Standard content delivery network behavior designed to optimize asset loading speeds for local clients"], correctAnswer: 1, explanation: "Regular interval + self-signed cert + direct IP (no SNI/domain) is classic C2. Investigate the host, check process making connections, and analyze timing patterns." },
-      { id: "th-q7-22", question: "What is 'threat-informed defense' and how does it relate to hunting?", options: ["Collecting all available threat data feeds and importing them into perimeter firewall blocklists weekly", "A specific proprietary security product designed to automate all internal incident response procedures", "Focusing defense plans on real adversary behaviors, with hunts validating that those controls are working", "A regulatory compliance framework designed to audit corporate risk models and internal system baselines"], correctAnswer: 2, explanation: "Threat-informed defense uses real adversary intelligence to prioritize security. Hunts validate that defenses actually detect the prioritized TTPs." },
-      { id: "th-q7-23", question: "How do you hunt for data exfiltration via cloud storage services?", options: ["Proposing to block all cloud storage services entirely across the organization to prevent outbound access", "Checking email attachment metadata to identify if sensitive files were sent to external personal accounts", "Monitoring network traffic volume on non-standard ports to detect hidden encrypted tunnels from database", "Auditing cloud API logs for large outbound transfers and tracking unauthorized cloud synchronization tools"], correctAnswer: 3, explanation: "Hunt for unusual cloud storage API usage, large file uploads, cloud sync tools running from unexpected users/machines, and outbound data volume anomalies." },
-      { id: "th-q7-24", question: "What is the role of automation in mature threat hunting programs?", options: ["Automating data gathering, baseline enrichment, and routine searches to free analysts for creative hunts", "Completely replacing human threat hunters with automated machine learning detection models and alerting", "Automation has no practical role, as hunting relies entirely on creative manual investigation of events", "Running simple alert classification playbooks to speed up the closure of low-priority security incidents"], correctAnswer: 0, explanation: "Automation handles repetitive tasks (data gathering, enrichment, scheduled hunts) while humans focus on creative hypothesis development and complex analysis." },
-      { id: "th-q7-25", question: "You discover WMI event subscriptions created on 5 servers at the same time. What does this indicate?", options: ["Routine administrative activity related to standard system monitoring agent deployments on the network", "Highly suspicious coordinated persistence mechanism deployed across systems — initiate incident response", "A transient WMI subsystem error that can be safely resolved by restarting the affected server services", "An expected operating system update configuration pushing new settings to internal server infrastructure"], correctAnswer: 1, explanation: "Simultaneous WMI event subscription creation across multiple servers suggests automated persistence deployment — a strong indicator of coordinated compromise." },
-      { id: "th-q7-26", question: "What metrics should a hunt team track?", options: ["Only track the total number of critical threats and active malware infections discovered during a hunt", "The total hours spent on active investigation and number of security tools utilized in each campaign", "Hunts completed, unique findings discovered, new detections built, visibility gaps found, and ATT&CK mapping", "The total number of outgoing security status updates sent to team leads and administrative managers"], correctAnswer: 2, explanation: "Track hunt volume, finding rates, detection conversions, gaps discovered, ATT&CK coverage improvements — these demonstrate program value and guide priorities." },
-      { id: "th-q7-27", question: "How does YARA complement threat hunting?", options: ["It completely replaces the need for proactive hunting by automating all system intrusion analysis tasks", "It acts as a primary email gateway scanner to intercept phishing messages containing malicious links", "It monitors network interface traffic for anomalous protocol usage and alerts on suspicious behaviors", "Enables pattern-based scanning of files and system memory for specific malware indicators during hunts"], correctAnswer: 3, explanation: "YARA rules define pattern-based signatures (strings, hex, conditions) to scan files, memory, and processes during endpoint hunts for known malware families." },
-      { id: "th-q7-28", question: "What challenge does 'living off the cloud' present compared to traditional LOLBins?", options: ["Attackers abuse trusted SaaS platforms for C2, blending malicious traffic with legitimate business traffic", "It presents no actual challenge, as cloud-based network traffic is decrypted and inspected by firewalls", "It is significantly easier to detect because cloud service IPs are static and easily matched to feeds", "It only affects servers hosted in external public cloud instances and does not impact internal clients"], correctAnswer: 0, explanation: "Living off the cloud uses legitimate SaaS platforms for C2/exfiltration — traffic to these domains is expected, making detection extremely challenging." },
-      { id: "th-q7-29", question: "When should hunt results be shared with the broader security team?", options: ["Only during periodic annual security audits to prevent internal exposure of critical detection gaps", "Immediately for active security threats, and regularly to share new baselines and detection logic rules", "Exclusively when directly requested by engineering managers or external compliance audit inspectors", "Never, as hunt findings are highly sensitive and should remain restricted to the threat hunt analysts"], correctAnswer: 1, explanation: "Share active threats immediately for response. Regular sharing of findings, baselines, and detection recommendations improves the entire security program." },
-      { id: "th-q7-30", question: "What is the ideal relationship between threat hunting and detection engineering?", options: ["They are separate and isolated departments that do not share any data sources, tools, or event logs", "They form a linear process where threat hunts are performed first and then permanently retired from use", "A continuous loop where hunts feed detections, and engineering gaps inform the next threat hunting cycle", "Threat hunting completely replaces detection engineering by automating all alert analysis processes"], correctAnswer: 2, explanation: "Hunting and detection engineering form a virtuous cycle — hunt findings become new detections, and detection blind spots generate new hunt hypotheses." }
     ]
   },
   // DETECTION ENGINEERING BASICS — FINAL CERTIFICATION EXAM
