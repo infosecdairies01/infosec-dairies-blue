@@ -7189,6 +7189,967 @@ export const quizzes: QuizData[] = [
       { id: "de-q7-30", question: "You need to detect a new zero-day technique with no known signatures. What approach do you take?", options: ["Wait for third-party security vendors to release standard signatures for perimeter controls", "Block all incoming network traffic at boundaries until vendor patches are officially issued", "Build behavioral detections matching the technique's actions rather than static indicators", "Ignore the threat vector entirely until official software security updates are deployed"], correctAnswer: 2, explanation: "Zero-days lack signatures. Detect the behavior — what the exploit does (process creation, file drops, network callbacks) rather than what the exploit looks like." }
     ]
   },
+  // ===================== Malware Analysis Fundamentals =====================
+  {
+    quizId: "ma-q1",
+    courseId: "malware-analysis",
+    title: "Malware Landscape & Lab Setup",
+    description: "Scenario-based mastery of malware categories, threat actor motivations, and safe analysis environments.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "ma-q1-1",
+        difficulty: "easy",
+        tags: ["Taxonomy", "Ransomware"],
+        scenario: "Helpdesk reports 40 workstations across three departments now show a .locked extension on shared documents and a README_DECRYPT.txt on every desktop. No lateral tooling has been observed yet, but file shares are mass-renaming.",
+        question: "Which malware category best describes this behavior?",
+        options: [
+          "Rootkit — kernel-mode hiding",
+          "Ransomware — mass file encryption with an extortion note",
+          "Adware — browser popups",
+          "Keylogger — credential capture"
+        ],
+        correctAnswer: 1,
+        explanation: "Mass renaming with a new extension plus a ransom/decrypt note on every host is the defining behavior of ransomware."
+      },
+      {
+        id: "ma-q1-2",
+        difficulty: "easy",
+        tags: ["Threat Actors"],
+        scenario: "A sample avoids execution on hosts whose locale is Russian, Ukrainian, or Belarusian, and its C2 traffic peaks during Moscow business hours.",
+        question: "What motivation profile does this most likely fit?",
+        options: [
+          "State-sponsored APT focused on Western defense",
+          "Eastern-European cybercrime crew geofencing CIS to reduce local law-enforcement attention",
+          "Hacktivist collective",
+          "Insider threat"
+        ],
+        correctAnswer: 1,
+        explanation: "CIS-locale exits and Moscow business-hour C2 are classic tradecraft of Eastern-European eCrime groups avoiding local prosecution."
+      },
+      {
+        id: "ma-q1-3",
+        difficulty: "medium",
+        tags: ["Lab Isolation"],
+        scenario: "Your new analyst spins up FlareVM on their laptop, snapshots it, and detonates a sample — but leaves the VM NIC on 'Bridged' so 'Wireshark works'.",
+        question: "What is the critical mistake?",
+        options: [
+          "FlareVM should be run bare-metal",
+          "Bridged networking places the guest on the corporate LAN — the sample can beacon, scan, or spread; use host-only + INetSim/FakeNet",
+          "Snapshots corrupt static analysis",
+          "Wireshark cannot capture inside a VM"
+        ],
+        correctAnswer: 1,
+        explanation: "Analysis lab networking must be isolated (host-only, internal, or air-gapped) with simulated services. Bridged mode is an incident waiting to happen."
+      },
+      {
+        id: "ma-q1-4",
+        difficulty: "medium",
+        tags: ["Sample Handling", "Chain of Custody"],
+        scenario: "A partner emails you a suspected loader as a plain .exe attachment. You need to store it in the team repo and share hashes with intel peers.",
+        question: "Which handling procedure is correct?",
+        options: [
+          "Rename to .txt and store on the network share",
+          "Zip with a password (typically 'infected'), record SHA256 + source + received date, store in the malware zoo with restricted ACL",
+          "Detonate first, then decide whether to keep it",
+          "Forward the original email to distribution lists"
+        ],
+        correctAnswer: 1,
+        explanation: "Password-protected archives prevent accidental execution and AV quarantine. Hashes and provenance preserve chain of custody."
+      },
+      {
+        id: "ma-q1-5",
+        difficulty: "medium",
+        tags: ["REMnux", "FlareVM"],
+        scenario: "The team standardises on two VMs: one Windows with FlareVM, one Linux with REMnux, on an internal-only vSwitch.",
+        question: "What is REMnux primarily used for in this pipeline?",
+        options: [
+          "Running Windows PE samples natively",
+          "Providing Linux-based reversing, network emulation (INetSim), and document/script triage tools",
+          "Hosting the ticketing system",
+          "Signing YARA rules"
+        ],
+        correctAnswer: 1,
+        explanation: "REMnux ships INetSim, oletools, pdf-parser, radare2 and dozens of triage utilities — it plays the 'internet' and script analysis role opposite FlareVM."
+      },
+      {
+        id: "ma-q1-6",
+        difficulty: "medium",
+        tags: ["Wipers"],
+        scenario: "A destructive payload overwrites the MBR with junk and writes random bytes across every logical volume with no ransom note or key exchange.",
+        question: "Which category applies?",
+        options: [
+          "Ransomware with a broken payment flow",
+          "Wiper — destruction is the objective; the ransom framing (if any) is a cover story",
+          "Rootkit",
+          "Banking trojan"
+        ],
+        correctAnswer: 1,
+        explanation: "No recoverable key, MBR destruction, and random overwrites are hallmark wiper behavior (NotPetya, HermeticWiper, WhisperGate)."
+      },
+      {
+        id: "ma-q1-7",
+        difficulty: "hard",
+        tags: ["VM Detection", "Anti-Analysis"],
+        scenario: "A sample runs benignly on your analysis VM but detonates on physical hardware in a partner lab. Static review shows checks for VMware Tools services, specific MAC OUIs, and CPU vendor strings.",
+        question: "What is the sample doing and what is the fix?",
+        options: [
+          "It is corrupt — try a new copy",
+          "Anti-VM / sandbox evasion; harden the VM (patch tools artefacts, spoof MAC, use bare-metal or a hardened hypervisor profile)",
+          "It requires a GPU",
+          "The internet is required — enable bridged"
+        ],
+        correctAnswer: 1,
+        explanation: "Sample checks common virtualization artefacts to avoid analysts. Hide them or use bare-metal detonation."
+      },
+      {
+        id: "ma-q1-8",
+        difficulty: "hard",
+        tags: ["MalwareBazaar", "OPSEC"],
+        scenario: "You pull a fresh loader from MalwareBazaar for research and plan to detonate against live C2 to map infrastructure.",
+        question: "Which OPSEC concern is most important?",
+        options: [
+          "MalwareBazaar bans research use",
+          "Beaconing from your corporate egress attributes you to the actor and may tip them off — use a dedicated, attributable-safe egress (VPN/VPS) or a fully offline sim",
+          "The sample will refuse to run outside the origin country",
+          "Hashes on MalwareBazaar are always wrong"
+        ],
+        correctAnswer: 1,
+        explanation: "Live-fire malware research from corporate IP space burns attribution and may retaliate. Use disposable egress or emulate the C2 offline."
+      },
+      {
+        id: "ma-q1-9",
+        difficulty: "hard",
+        tags: ["Rootkits", "Bootkits"],
+        scenario: "IR finds a signed .sys driver loaded before Defender starts, and PatchGuard telemetry shows kernel callback tampering. Standard EDR queries return 'no such process'.",
+        question: "What class of threat and what is the reliable response?",
+        options: [
+          "User-mode adware — remove via Add/Remove Programs",
+          "Kernel rootkit/bootkit — trust host telemetry is compromised; boot from clean media, image offline, rebuild",
+          "PUP — ignore",
+          "Fileless script — kill PowerShell"
+        ],
+        correctAnswer: 1,
+        explanation: "Kernel-level compromise invalidates on-host tooling. Offline forensics and full rebuild are the only trustworthy path."
+      },
+      {
+        id: "ma-q1-10",
+        difficulty: "hard",
+        tags: ["Legal", "Sharing"],
+        scenario: "An analyst wants to upload a customer-provided sample to VirusTotal to enrich. The sample was captured from a regulated client environment.",
+        question: "What is the correct call?",
+        options: [
+          "Upload immediately — sharing is caring",
+          "Check contract / data-handling agreement first; VT is public and the sample (and any embedded secrets, filenames, or config) becomes searchable — prefer private sandboxes or hash-only lookups when in doubt",
+          "Rename the file then upload",
+          "Encrypt with a password and upload"
+        ],
+        correctAnswer: 1,
+        explanation: "Uploaded samples are shared with the VT community/enterprise partners and are effectively permanent. Regulated data requires explicit authorisation or hash-only queries."
+      }
+    ]
+  },
+  {
+    quizId: "ma-q2",
+    courseId: "malware-analysis",
+    title: "Static Analysis Techniques",
+    description: "Scenario-based mastery of file identification, strings, PE structure, and packing detection.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "ma-q2-1",
+        difficulty: "easy",
+        tags: ["File ID", "Hashing"],
+        scenario: "An analyst has 400 suspicious files pulled from an email quarantine and needs to quickly cluster near-duplicates so that only unique families get deep analysis.",
+        question: "Which hashing scheme fits best?",
+        options: [
+          "MD5 — exact match only",
+          "ssdeep / TLSH fuzzy hashing — clusters files with similar content even after minor changes",
+          "CRC32 — collision-prone",
+          "Base64 — not a hash"
+        ],
+        correctAnswer: 1,
+        explanation: "Fuzzy hashes (ssdeep, TLSH) tolerate small mutations and are ideal for triaging variants of the same family."
+      },
+      {
+        id: "ma-q2-2",
+        difficulty: "easy",
+        tags: ["Strings"],
+        scenario: "`strings` output on a suspected loader shows almost nothing readable — no URLs, no API names, just garbled bytes and high-entropy runs.",
+        question: "Most likely explanation?",
+        options: [
+          "The binary is empty",
+          "Strings are packed/encoded/encrypted — run FLOSS or unpack first",
+          "Windows binaries have no strings",
+          "The file is a text file"
+        ],
+        correctAnswer: 1,
+        explanation: "Missing readable strings + high entropy strongly implies packing or string obfuscation. FLOSS can decode common stackstring/XOR patterns."
+      },
+      {
+        id: "ma-q2-3",
+        difficulty: "medium",
+        tags: ["PE Imports"],
+        scenario: "PE import table shows only `LoadLibraryA`, `GetProcAddress`, `VirtualAlloc`, and `VirtualProtect` — nothing else.",
+        question: "What does this tell you?",
+        options: [
+          "The binary is a benign shell",
+          "Classic dynamic API resolution — real capabilities are hidden until runtime; expect in-memory unpacking",
+          "The file is corrupt",
+          "It is a .NET assembly"
+        ],
+        correctAnswer: 1,
+        explanation: "A minimal import table plus LoadLibrary/GetProcAddress is the signature of runtime API resolution used by packers and shellcode loaders."
+      },
+      {
+        id: "ma-q2-4",
+        difficulty: "medium",
+        tags: ["Entropy", "Packing"],
+        scenario: "PE-bear reports a `.text` section with entropy 7.9/8.0 and raw size ≈ virtual size, while `.rsrc` is normal at 4.1.",
+        question: "What is the finding?",
+        options: [
+          "Normal compiled code",
+          "The code section is packed/encrypted — plan for unpacking (dump on OEP or use x64dbg + Scylla)",
+          "The file is signed",
+          "Compiler optimisation"
+        ],
+        correctAnswer: 1,
+        explanation: "Entropy near 8.0 in the executable section is the canonical packed-code indicator."
+      },
+      {
+        id: "ma-q2-5",
+        difficulty: "medium",
+        tags: ["Imphash", "Clustering"],
+        scenario: "Two samples with completely different SHA256 hashes share the same imphash and identical Rich header.",
+        question: "What can you infer?",
+        options: [
+          "Nothing — imphash is meaningless",
+          "Likely built from the same toolchain / project; strong pivot for family clustering and hunting",
+          "They are definitely identical",
+          "One is a decoy"
+        ],
+        correctAnswer: 1,
+        explanation: "Imphash + Rich header collisions indicate shared build environment/import order — a durable pivot for family and campaign clustering."
+      },
+      {
+        id: "ma-q2-6",
+        difficulty: "medium",
+        tags: ["Timestamps"],
+        scenario: "A sample's PE compilation timestamp reads `1992-06-19 22:22:17` — before the tooling it uses existed.",
+        question: "Best interpretation?",
+        options: [
+          "The file is 30 years old",
+          "Timestamp forgery — common actor tradecraft; do not use as truth, but keep as an IOC pivot across the campaign",
+          "The clock was wrong at build time",
+          "PE files have no timestamp"
+        ],
+        correctAnswer: 1,
+        explanation: "Timestomping is trivial and common. Impossible values still cluster campaigns because actors reuse them."
+      },
+      {
+        id: "ma-q2-7",
+        difficulty: "hard",
+        tags: ["UPX", "Unpacking"],
+        scenario: "Detect It Easy flags UPX; sections are `UPX0` (empty raw) and `UPX1` (packed). `upx -d` fails with 'not packed by UPX'.",
+        question: "What is happening and how do you unpack?",
+        options: [
+          "The file is not packed",
+          "UPX signature was modified (common trick); run in a debugger, break on tail-jump after unpack stub, dump memory, fix IAT with Scylla",
+          "Delete the UPX sections",
+          "Use `strings` to recover it"
+        ],
+        correctAnswer: 1,
+        explanation: "Modified UPX headers defeat the built-in unpacker. Dynamic unpacking via OEP breakpoint + memory dump + IAT reconstruction is the reliable route."
+      },
+      {
+        id: "ma-q2-8",
+        difficulty: "hard",
+        tags: ["Overlay"],
+        scenario: "Raw file size on disk is 2.4 MB but the PE headers only describe the first 480 KB.",
+        question: "What is the extra data and why does it matter?",
+        options: [
+          "Padding — ignore",
+          "PE overlay — often the encrypted second-stage payload or configuration; carve and analyse separately",
+          "Digital signature only",
+          "Compiler debug info"
+        ],
+        correctAnswer: 1,
+        explanation: "Data appended past the PE image is the overlay. Loaders routinely store encrypted payloads/configs there."
+      },
+      {
+        id: "ma-q2-9",
+        difficulty: "hard",
+        tags: ["Code Signing"],
+        scenario: "A dropper is Authenticode-signed by a small legitimate company you have never heard of. Signature validates.",
+        question: "Best analytic stance?",
+        options: [
+          "Signed = safe — close the ticket",
+          "Treat as compromised / abused code-signing cert; report to the CA, revocation may be needed, and hunt other samples signed by the same subject",
+          "Signature has no meaning",
+          "Rebuild the certificate"
+        ],
+        correctAnswer: 1,
+        explanation: "Stolen or abused signing certs are a recurring supply-chain tradecraft. Signature validity is not a trust decision on its own."
+      },
+      {
+        id: "ma-q2-10",
+        difficulty: "hard",
+        tags: ["Resources"],
+        scenario: "PE `.rsrc` contains a 900 KB `RT_RCDATA` entry with entropy 7.95 that is not referenced by any visible resource-loading code.",
+        question: "Most probable role?",
+        options: [
+          "Application icons",
+          "Encrypted embedded payload/config decrypted at runtime — extract, guess the key from surrounding code, decrypt statically if possible",
+          "Localization strings",
+          "Version metadata"
+        ],
+        correctAnswer: 1,
+        explanation: "High-entropy RCDATA blobs are a favourite hiding place for stage-2 payloads and encrypted C2 configuration."
+      }
+    ]
+  },
+  {
+    quizId: "ma-q3",
+    courseId: "malware-analysis",
+    title: "Dynamic & Behavioral Analysis",
+    description: "Scenario-based mastery of sandboxing, process/registry monitoring, network capture, and API tracing.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "ma-q3-1",
+        difficulty: "easy",
+        tags: ["Sandbox"],
+        scenario: "A junior detonates the sample in the corporate sandbox and reports 'nothing happened'. Procmon shows only 12 seconds of execution before exit.",
+        question: "Most likely reason?",
+        options: [
+          "Malware is broken",
+          "Sandbox evasion — sleep/timing checks, missing user activity, or VM artefacts caused early exit; extend run time, simulate user, and mask artefacts",
+          "Sandbox is offline",
+          "AV cleaned it"
+        ],
+        correctAnswer: 1,
+        explanation: "Short-duration 'benign' runs frequently indicate evasion; mitigate with time acceleration, user simulation, and hardened sandbox profiles."
+      },
+      {
+        id: "ma-q3-2",
+        difficulty: "easy",
+        tags: ["Procmon"],
+        scenario: "You need to see every file, registry, and process operation the sample performs, with filters for the parent PID.",
+        question: "Which tool is the right fit?",
+        options: [
+          "Wireshark",
+          "Sysinternals Process Monitor (Procmon) with a PID filter and a PML capture",
+          "Ghidra",
+          "PE-bear"
+        ],
+        correctAnswer: 1,
+        explanation: "Procmon is the canonical live-events tool for filesystem, registry, and process activity — critical for behavioural triage."
+      },
+      {
+        id: "ma-q3-3",
+        difficulty: "medium",
+        tags: ["Registry Persistence"],
+        scenario: "Regshot diff after detonation shows a new value under `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run` pointing to `%APPDATA%\\svchost.exe`.",
+        question: "What technique and IOC?",
+        options: [
+          "Legitimate Windows Update",
+          "Registry Run Key persistence (T1547.001); IOC = the fake svchost path and the Run value name",
+          "Scheduled task",
+          "DLL side-loading"
+        ],
+        correctAnswer: 1,
+        explanation: "Run keys are the most common userland persistence; the value and path are high-quality IOCs and detection opportunities."
+      },
+      {
+        id: "ma-q3-4",
+        difficulty: "medium",
+        tags: ["FakeNet", "INetSim"],
+        scenario: "You want to see the sample's C2 URLs, HTTP verbs, User-Agent, and any downloaded stage without letting it actually reach the internet.",
+        question: "Which tool combination is designed for this?",
+        options: [
+          "Wireshark alone on a real network",
+          "FakeNet-NG or INetSim on the analysis VM — intercept DNS/HTTP/TLS, serve canned responses, and log everything",
+          "Only host firewall rules",
+          "Airplane mode"
+        ],
+        correctAnswer: 1,
+        explanation: "FakeNet-NG/INetSim spoof the internet at the network layer so malware happily beacons and reveals its protocol without egress risk."
+      },
+      {
+        id: "ma-q3-5",
+        difficulty: "medium",
+        tags: ["Process Tree"],
+        scenario: "Process Hacker tree shows `winword.exe → cmd.exe → powershell.exe -enc <base64> → rundll32.exe`.",
+        question: "How do you read this chain?",
+        options: [
+          "Normal Office update",
+          "Macro-borne execution chain: Office spawning cmd/PowerShell with encoded command, then rundll32 for injection/second stage — high-confidence malicious",
+          "User error",
+          "Windows telemetry"
+        ],
+        correctAnswer: 1,
+        explanation: "Office → cmd/PowerShell → rundll32 is one of the highest-signal malicious chains and a standard detection anchor."
+      },
+      {
+        id: "ma-q3-6",
+        difficulty: "medium",
+        tags: ["API Monitor"],
+        scenario: "You suspect process hollowing but need proof. Which API sequence would confirm it?",
+        question: "Pick the tell-tale sequence:",
+        options: [
+          "OpenFile → ReadFile → CloseHandle",
+          "CreateProcess(SUSPENDED) → NtUnmapViewOfSection → VirtualAllocEx → WriteProcessMemory → SetThreadContext → ResumeThread",
+          "RegOpenKey → RegQueryValue → RegCloseKey",
+          "socket → connect → send → recv"
+        ],
+        correctAnswer: 1,
+        explanation: "That exact sequence is the process-hollowing recipe (T1055.012) and can be traced with API Monitor / ETW."
+      },
+      {
+        id: "ma-q3-7",
+        difficulty: "hard",
+        tags: ["TLS", "MITM"],
+        scenario: "Sample beacons over HTTPS to a hardcoded domain and pins its own certificate — mitmproxy handshakes fail.",
+        question: "Best move to still read the traffic?",
+        options: [
+          "Give up",
+          "Patch the pinning check in the binary (or hook the cert-validation API) so mitmproxy's CA is accepted, or extract keys via SSLKEYLOGFILE / API hooks",
+          "Use plain HTTP",
+          "Turn off Wireshark"
+        ],
+        correctAnswer: 1,
+        explanation: "Certificate pinning must be defeated in the client — patch, hook, or extract session keys — to inspect TLS-protected C2."
+      },
+      {
+        id: "ma-q3-8",
+        difficulty: "hard",
+        tags: ["Injection"],
+        scenario: "The sample writes bytes into `explorer.exe` via `WriteProcessMemory` and executes them with `CreateRemoteThread`. Explorer then makes network calls the sample never made.",
+        question: "What is this technique?",
+        options: [
+          "DLL side-loading",
+          "Classic Remote Thread Injection (T1055) — malicious code runs under a trusted process to blend with normal user activity",
+          "COM hijack",
+          "Named-pipe IPC"
+        ],
+        correctAnswer: 1,
+        explanation: "WriteProcessMemory + CreateRemoteThread into a legitimate process is textbook remote-thread injection; attribution of network activity to the host process is the goal."
+      },
+      {
+        id: "ma-q3-9",
+        difficulty: "hard",
+        tags: ["Beacon"],
+        scenario: "Wireshark shows the sample sending a 132-byte HTTPS POST to the same URL every 60±5 seconds with no user interaction.",
+        question: "How do you characterise this?",
+        options: [
+          "User browsing",
+          "C2 beaconing with jitter — perfect candidate for JA3/JA3S fingerprinting, interval hunting, and Suricata detection",
+          "Software update",
+          "NTP traffic"
+        ],
+        correctAnswer: 1,
+        explanation: "Fixed-size periodic POSTs with jitter are the signature of C2 beacons; timing + TLS fingerprints are strong detection anchors."
+      },
+      {
+        id: "ma-q3-10",
+        difficulty: "hard",
+        tags: ["Anti-Debug"],
+        scenario: "Inside x64dbg the sample immediately exits, but detonated without the debugger it runs normally. Static review shows a call to `IsDebuggerPresent` and `NtQueryInformationProcess(ProcessDebugPort)`.",
+        question: "Correct remediation?",
+        options: [
+          "Recompile the sample",
+          "Anti-debug checks — patch/hook the return values, use ScyllaHide or similar plugins, then continue analysis",
+          "Use only static analysis forever",
+          "Reboot"
+        ],
+        correctAnswer: 1,
+        explanation: "Anti-debug APIs are defeated by patching the checks or using plugins (ScyllaHide, TitanHide) that transparently spoof the results."
+      }
+    ]
+  },
+  {
+    quizId: "ma-q4",
+    courseId: "malware-analysis",
+    title: "Document & Script Malware",
+    description: "Scenario-based mastery of macro, PDF, PowerShell, and modern delivery vectors.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "ma-q4-1",
+        difficulty: "easy",
+        tags: ["Macros"],
+        scenario: "A user forwards `Invoice_Feb.docm` that asks to 'Enable Content'. IR needs to know what the macro does without opening it in Word.",
+        question: "Which tool is the right first step?",
+        options: [
+          "Word in Safe Mode",
+          "olevba (oletools) — dump and triage the VBA project statically",
+          "Notepad",
+          "Any.Run only"
+        ],
+        correctAnswer: 1,
+        explanation: "olevba parses the OLE container, prints VBA source, and flags AutoExec / Suspicious / IOC patterns — the standard first pass."
+      },
+      {
+        id: "ma-q4-2",
+        difficulty: "easy",
+        tags: ["PDF"],
+        scenario: "A PDF triggers alerts but Adobe Reader shows a blank page. You need to enumerate objects and any JavaScript.",
+        question: "Best tool?",
+        options: [
+          "olevba",
+          "pdf-parser / peepdf — enumerate objects, streams, /JS, /JavaScript, /OpenAction, /Launch",
+          "Ghidra",
+          "Regshot"
+        ],
+        correctAnswer: 1,
+        explanation: "pdf-parser and peepdf inspect the PDF object graph and flag active-content keys used to auto-execute payloads."
+      },
+      {
+        id: "ma-q4-3",
+        difficulty: "medium",
+        tags: ["PowerShell"],
+        scenario: "The macro launches: `powershell -nop -w hidden -enc <long base64>`.",
+        question: "Correct triage step?",
+        options: [
+          "Run it and see",
+          "Base64-decode the payload (offline), then iteratively deobfuscate — expect further layers of compression/XOR/IEX",
+          "Ignore — encoded means safe",
+          "Report the base64 as the IOC and stop"
+        ],
+        correctAnswer: 1,
+        explanation: "Encoded PowerShell almost always wraps additional obfuscation; decoding is a peeled onion, not a single step."
+      },
+      {
+        id: "ma-q4-4",
+        difficulty: "medium",
+        tags: ["AutoExec"],
+        scenario: "olevba flags `AutoOpen` and `Document_Open` subs, plus `Shell` and `URLDownloadToFile` calls.",
+        question: "What is the delivery pattern?",
+        options: [
+          "Benign template",
+          "Auto-executing macro downloader — opens on document open, fetches a second stage, and executes it",
+          "Digital signature",
+          "Mail merge"
+        ],
+        correctAnswer: 1,
+        explanation: "AutoOpen/Document_Open + download + Shell is the classic macro-dropper chain."
+      },
+      {
+        id: "ma-q4-5",
+        difficulty: "medium",
+        tags: ["HTML Smuggling"],
+        scenario: "A phishing email links to an HTML page. Opening it in a browser reassembles a Base64 blob in JavaScript and offers the user a ZIP to save — the payload never traversed the proxy as an executable.",
+        question: "Technique name?",
+        options: [
+          "Reflected XSS",
+          "HTML Smuggling (T1027.006) — client-side reassembly bypasses content inspection at the perimeter",
+          "SQL Injection",
+          "Server-side template injection"
+        ],
+        correctAnswer: 1,
+        explanation: "HTML smuggling delivers payloads by constructing them in-browser from encoded strings, bypassing gateway file-type controls."
+      },
+      {
+        id: "ma-q4-6",
+        difficulty: "medium",
+        tags: ["LNK"],
+        scenario: "A ZIP contains `Report.pdf.lnk`. LECmd shows the target is `%SystemRoot%\\System32\\cmd.exe /c powershell -w hidden -c ...`.",
+        question: "What is the malicious shortcut abusing?",
+        options: [
+          "Nothing — LNK is harmless",
+          "Weaponised shortcut executes PowerShell/cmd while displaying a PDF-like name and icon; standard 2022+ initial-access vector",
+          "Windows update path",
+          "PDF rendering bug"
+        ],
+        correctAnswer: 1,
+        explanation: "Post-macro-crackdown, LNKs became the go-to first-stage — they can run arbitrary commands while looking like documents."
+      },
+      {
+        id: "ma-q4-7",
+        difficulty: "hard",
+        tags: ["ViperMonkey"],
+        scenario: "The VBA is heavily obfuscated with `Chr()` chains and dynamic string building; olevba prints noise. You need to see the effective commands and URLs.",
+        question: "Best next tool?",
+        options: [
+          "Manual grep",
+          "ViperMonkey (or oletools' `mraptor` + emulation) — emulate the VBA to resolve dynamic strings and expose IOCs",
+          "Compile with VBA IDE",
+          "Detonate in Word"
+        ],
+        correctAnswer: 1,
+        explanation: "ViperMonkey emulates VBA execution and prints deobfuscated strings — ideal for macros hiding IOCs behind arithmetic."
+      },
+      {
+        id: "ma-q4-8",
+        difficulty: "hard",
+        tags: ["PDF JS"],
+        scenario: "pdf-parser dumps a compressed `/JS` stream. After `zlib`-inflate it contains `unescape('%75...')` and `app.launchURL(...)` calls.",
+        question: "What is happening?",
+        options: [
+          "Standard form validation",
+          "JavaScript-based exploit / redirector staged inside the PDF; deobfuscate the unescape payload and enumerate URLs as IOCs",
+          "Digital signature",
+          "Font subsetting"
+        ],
+        correctAnswer: 1,
+        explanation: "Compressed obfuscated JS in a PDF is a classic delivery pattern — decode and extract URLs, shellcode, or CVE targets."
+      },
+      {
+        id: "ma-q4-9",
+        difficulty: "hard",
+        tags: ["AMSI"],
+        scenario: "PowerShell payload contains `[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)`.",
+        question: "What is this?",
+        options: [
+          "Benign reflection",
+          "AMSI bypass — disables in-memory script scanning so later stages run undetected; strong malicious indicator",
+          "Just error handling",
+          "PSReadLine config"
+        ],
+        correctAnswer: 1,
+        explanation: "Setting `amsiInitFailed` disables AMSI scanning in the current process — a well-known offensive primitive."
+      },
+      {
+        id: "ma-q4-10",
+        difficulty: "hard",
+        tags: ["Container Formats"],
+        scenario: "Recent campaigns deliver `.iso`, `.img`, `.vhd` attachments containing an LNK and a hidden DLL.",
+        question: "Why this container choice?",
+        options: [
+          "Larger files bypass AV",
+          "Mounted volumes bypass Mark-of-the-Web on inner files, so SmartScreen/Protected View do not fire — key initial-access evasion",
+          "ISO files auto-execute",
+          "Random preference"
+        ],
+        correctAnswer: 1,
+        explanation: "MOTW is not propagated onto files inside mounted ISO/IMG/VHD volumes on older configurations, defeating a critical safety net."
+      }
+    ]
+  },
+  {
+    quizId: "ma-q5",
+    courseId: "malware-analysis",
+    title: "Reverse Engineering Fundamentals",
+    description: "Scenario-based mastery of x86 basics, Ghidra, debugging, and C2 protocol RE.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "ma-q5-1",
+        difficulty: "easy",
+        tags: ["x86", "Calling Convention"],
+        scenario: "In a 32-bit stdcall function you see arguments pushed right-to-left, then `call`, and the callee ends with `ret 0Ch`.",
+        question: "What does `ret 0Ch` tell you?",
+        options: [
+          "The function returned 12",
+          "Callee cleans 12 bytes (3 args) from the stack — confirms stdcall",
+          "Ret failed",
+          "Compiler error"
+        ],
+        correctAnswer: 1,
+        explanation: "`ret N` pops N bytes after returning — characteristic of stdcall where the callee cleans the stack."
+      },
+      {
+        id: "ma-q5-2",
+        difficulty: "easy",
+        tags: ["Ghidra"],
+        scenario: "You right-click a function in Ghidra and want to see every location that calls it.",
+        question: "Which feature helps?",
+        options: [
+          "Byte viewer",
+          "References → Show References to (cross-references)",
+          "Bookmarks",
+          "Comment listing"
+        ],
+        correctAnswer: 1,
+        explanation: "Xrefs are the RE workhorse for navigating call graphs and understanding how a function is used."
+      },
+      {
+        id: "ma-q5-3",
+        difficulty: "medium",
+        tags: ["Decompiler"],
+        scenario: "Ghidra's decompiler shows a loop XOR-ing each byte of a buffer with `0x37` before a `send` call.",
+        question: "What is the buffer's purpose?",
+        options: [
+          "Random noise",
+          "Trivially obfuscated C2 payload — recover plaintext by XOR 0x37 offline and treat 0x37 as a family IOC",
+          "Compression",
+          "Hashing"
+        ],
+        correctAnswer: 1,
+        explanation: "Single-byte XOR is one of the most common lightweight C2 obfuscations; recognising it turns opaque traffic into readable protocol."
+      },
+      {
+        id: "ma-q5-4",
+        difficulty: "medium",
+        tags: ["Breakpoints"],
+        scenario: "You want to break the instant the unpacked code runs, without stepping through the unpack stub instruction-by-instruction.",
+        question: "Best breakpoint strategy?",
+        options: [
+          "Software BP at entry point",
+          "Memory-access breakpoint on the newly allocated RWX region (or hardware BP on the tail-jump target)",
+          "Break on every syscall",
+          "Break on ExitProcess"
+        ],
+        correctAnswer: 1,
+        explanation: "RWX memory pages allocated at runtime almost always host the unpacked code; breaking on execute of that region catches OEP cleanly."
+      },
+      {
+        id: "ma-q5-5",
+        difficulty: "medium",
+        tags: ["API Hashing"],
+        scenario: "Instead of import strings, the sample loops modules in the PEB, hashes each export name, and compares against constants like `0x726774c` .",
+        question: "What is this and how do you resolve it?",
+        options: [
+          "Random noise",
+          "API hashing — recover API names by hashing exports of common DLLs with the same algorithm and matching constants (or use Capa/HashDB)",
+          "String obfuscation",
+          "Compiler bug"
+        ],
+        correctAnswer: 1,
+        explanation: "API hashing hides imports from static analysis. Tools like HashDB reverse the constants to API names quickly."
+      },
+      {
+        id: "ma-q5-6",
+        difficulty: "medium",
+        tags: ["DGA"],
+        scenario: "The sample seeds a PRNG from the current UTC date and generates 128 domain candidates per day under `.top` and `.xyz`.",
+        question: "What is this and what is the operational value?",
+        options: [
+          "Random typos",
+          "Domain Generation Algorithm — RE the seed/algorithm to pre-compute domains and sinkhole/block ahead of the actor",
+          "DNS bug",
+          "CDN behaviour"
+        ],
+        correctAnswer: 1,
+        explanation: "Reversing DGAs lets defenders pre-register or block domains before the actor uses them — high-value defensive output."
+      },
+      {
+        id: "ma-q5-7",
+        difficulty: "hard",
+        tags: ["Custom Crypto"],
+        scenario: "RE reveals a modified RC4 keystream (extra rotation step) used to encrypt C2 traffic.",
+        question: "Best analytic path to a decryptor?",
+        options: [
+          "Give up",
+          "Port the exact algorithm from the disassembly to Python, extract the key from the sample or handshake, and decrypt captured PCAP",
+          "Try AES first",
+          "Brute-force MD5"
+        ],
+        correctAnswer: 1,
+        explanation: "Custom crypto is usually still deterministic; reimplement precisely, recover the key, and decrypt collected traffic."
+      },
+      {
+        id: "ma-q5-8",
+        difficulty: "hard",
+        tags: ["Config Extraction"],
+        scenario: "You want automated, at-scale extraction of C2 URLs, campaign IDs, and mutex names from every future build of this family.",
+        question: "Best deliverable?",
+        options: [
+          "Manual analysis every time",
+          "A config extractor script (e.g., Python with pefile/unicorn) plus a YARA rule to trigger it — feeds intel automatically",
+          "Post on Twitter",
+          "Only track hashes"
+        ],
+        correctAnswer: 1,
+        explanation: "Family-level config extractors + YARA are the durable RE output that scales into TI and detection pipelines."
+      },
+      {
+        id: "ma-q5-9",
+        difficulty: "hard",
+        tags: ["Anti-Debug"],
+        scenario: "`INT 2Dh` inside a `__try` block causes the debugger to catch an exception the malware expects the OS to handle silently.",
+        question: "What is this and the mitigation?",
+        options: [
+          "Compiler artefact",
+          "Anti-debug via structured exception handling — pass the exception to the app or use ScyllaHide's SEH options",
+          "Random opcode",
+          "Interrupt vector table"
+        ],
+        correctAnswer: 1,
+        explanation: "Debuggers change how exceptions surface. Malware weaponises this; pass-through or plugin mitigation is required."
+      },
+      {
+        id: "ma-q5-10",
+        difficulty: "hard",
+        tags: ["Rich Header"],
+        scenario: "During attribution work you notice two families share an identical Rich Header @Comp.ID sequence though they otherwise look different.",
+        question: "What can you responsibly infer?",
+        options: [
+          "Same author for sure",
+          "Shared build environment (same Visual Studio toolchain + libs) — a strong campaign/cluster pivot, not conclusive attribution",
+          "Random",
+          "One copied the header on purpose (never happens)"
+        ],
+        correctAnswer: 1,
+        explanation: "Rich Header collisions imply shared toolchains and are excellent clustering pivots; attribution needs corroborating evidence."
+      }
+    ]
+  },
+  {
+    quizId: "ma-q6",
+    courseId: "malware-analysis",
+    title: "Reporting & Threat Intelligence",
+    description: "Scenario-based mastery of IOC extraction, YARA, reporting, and attribution.",
+    passingScore: 70,
+    timeLimit: 15,
+    questions: [
+      {
+        id: "ma-q6-1",
+        difficulty: "easy",
+        tags: ["IOCs"],
+        scenario: "Analysis is complete and you must hand SOC something actionable within the hour.",
+        question: "Which minimum set do you ship first?",
+        options: [
+          "A screenshot of Ghidra",
+          "SHA256, C2 domains/IPs/URLs, mutex names, key registry paths — as a machine-readable list (CSV/STIX/MISP)",
+          "The whole Ghidra project",
+          "A blog post"
+        ],
+        correctAnswer: 1,
+        explanation: "Fast IOC delivery in a machine-readable format is the first defender need — everything else can follow."
+      },
+      {
+        id: "ma-q6-2",
+        difficulty: "easy",
+        tags: ["YARA"],
+        scenario: "You extract three unique 24-byte constant strings and a distinctive imphash from the sample.",
+        question: "How should a durable YARA rule combine them?",
+        options: [
+          "Match any single string",
+          "AND the three strings inside a section-size/PE condition — reduce false positives while keeping family coverage",
+          "Match on file size only",
+          "Match on filename"
+        ],
+        correctAnswer: 1,
+        explanation: "Combining multiple discriminative strings with structural conditions gives durable, low-FP family rules."
+      },
+      {
+        id: "ma-q6-3",
+        difficulty: "medium",
+        tags: ["Report Structure"],
+        scenario: "You are writing the analysis report for a mixed audience: SOC, IR lead, and the CISO.",
+        question: "Best structure?",
+        options: [
+          "One long chronological log",
+          "Executive summary → Impact/scope → IOCs → Behaviour → ATT&CK mapping → Detections/hunts → Appendices",
+          "Only assembly listings",
+          "Only screenshots"
+        ],
+        correctAnswer: 1,
+        explanation: "Layered structure lets each reader stop where their need is met while preserving technical depth in appendices."
+      },
+      {
+        id: "ma-q6-4",
+        difficulty: "medium",
+        tags: ["STIX", "TAXII"],
+        scenario: "You must push IOCs to a partner ISAC in a format their platform will ingest automatically.",
+        question: "Standard to use?",
+        options: [
+          "PDF only",
+          "STIX 2.1 objects (Indicator, Malware, Relationship) delivered over TAXII 2.1",
+          "Word document",
+          "Facebook post"
+        ],
+        correctAnswer: 1,
+        explanation: "STIX/TAXII is the industry standard for machine-readable intel exchange across ISACs and MISP/TIP tooling."
+      },
+      {
+        id: "ma-q6-5",
+        difficulty: "medium",
+        tags: ["ATT&CK Mapping"],
+        scenario: "Sample uses PowerShell with encoded commands, creates a Run key, and injects code into explorer.exe.",
+        question: "Correct ATT&CK mapping?",
+        options: [
+          "T1059.001 (PowerShell) + T1547.001 (Run Keys) + T1055 (Process Injection)",
+          "T1078 only",
+          "T1190 only",
+          "No mapping needed"
+        ],
+        correctAnswer: 0,
+        explanation: "Accurate technique tagging (with sub-techniques) drives coverage analysis, detection engineering, and executive reporting."
+      },
+      {
+        id: "ma-q6-6",
+        difficulty: "medium",
+        tags: ["IOC Quality"],
+        scenario: "Peer wants you to publish a shared-hosting IP (`104.21.x.x`, CDN) as a blocklist IOC.",
+        question: "How do you push back?",
+        options: [
+          "Publish it — more is better",
+          "CDN/shared-hosting IPs are low-fidelity and cause outages; publish the domain/URL/JA3 or scope the IP tightly with time/context",
+          "Publish IP and block CDN entirely",
+          "Ignore and publish"
+        ],
+        correctAnswer: 1,
+        explanation: "IOC quality > quantity. Shared-hosting IPs generate collateral damage; higher-fidelity artefacts are safer."
+      },
+      {
+        id: "ma-q6-7",
+        difficulty: "hard",
+        tags: ["Attribution"],
+        scenario: "You want to link this campaign to a known actor. You have: shared C2 infra, code overlap with a prior kit, and identical operator TTPs, but no confession.",
+        question: "How do you word attribution?",
+        options: [
+          "Definitive attribution to Group X",
+          "Assess with moderate/high confidence overlap with Group X's tradecraft, listing the concrete overlaps and the caveats (false-flag potential, tooling reuse)",
+          "Refuse to attribute",
+          "Blame a nation-state"
+        ],
+        correctAnswer: 1,
+        explanation: "Analytic Standards (ICD 203) call for confidence-scored language with sourcing — never absolutes on partial evidence."
+      },
+      {
+        id: "ma-q6-8",
+        difficulty: "hard",
+        tags: ["YARA — FPs"],
+        scenario: "Your YARA rule fires against Notepad++, Sysinternals, and Steam updates.",
+        question: "Root cause and fix?",
+        options: [
+          "YARA is broken",
+          "Strings are too generic (RTL library / installer boilerplate); tighten conditions with PE metadata, section entropy, and multi-string AND",
+          "Delete the rule",
+          "Raise the severity"
+        ],
+        correctAnswer: 1,
+        explanation: "FP cascades usually mean the strings match compiler/runtime artefacts. Add structural conditions and combine multiple unique strings."
+      },
+      {
+        id: "ma-q6-9",
+        difficulty: "hard",
+        tags: ["Diamond Model"],
+        scenario: "You need a compact model to describe the intrusion for the intel report: who, using what, targeting whom, over which infrastructure.",
+        question: "Which framework fits?",
+        options: [
+          "OWASP Top 10",
+          "The Diamond Model of Intrusion Analysis (Adversary, Capability, Infrastructure, Victim)",
+          "PCI DSS",
+          "ISO 27001"
+        ],
+        correctAnswer: 1,
+        explanation: "The Diamond Model is the canonical intel structure and pairs well with ATT&CK for reporting."
+      },
+      {
+        id: "ma-q6-10",
+        difficulty: "hard",
+        tags: ["TLP"],
+        scenario: "Your report contains partner-provided samples and identifies a victim. You need to share with the sector ISAC but not the open community.",
+        question: "Correct handling marking?",
+        options: [
+          "TLP:CLEAR",
+          "TLP:AMBER (or AMBER+STRICT) — restricted to member organisations on a need-to-know basis",
+          "TLP:GREEN publicly",
+          "No marking needed"
+        ],
+        correctAnswer: 1,
+        explanation: "TLP:AMBER limits sharing to members of an organisation/community on a need-to-know basis, protecting victim/source data."
+      }
+    ]
+  },
   // MALWARE ANALYSIS FUNDAMENTALS — FINAL CERTIFICATION EXAM
   {
     quizId: "ma-q7",
