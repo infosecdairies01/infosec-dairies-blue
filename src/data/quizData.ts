@@ -8420,1050 +8420,1170 @@ export const quizzes: QuizData[] = [
   {
     quizId: "cf-q1",
     courseId: "cybersecurity-frameworks",
-    title: "Cybersecurity Governance Quiz",
-    description: "Test your understanding of governance principles, GRC, and security policies.",
+    title: "Governance & GRC: Decisions Under Pressure",
+    description: "Scenario-driven assessment on governance structures, policy hierarchy, risk ownership, and how GRC decisions get made in a real organization.",
     passingScore: 70,
     timeLimit: 20,
     questions: [
-      { id: "cf-q1-1", question: "What is the primary purpose of cybersecurity governance?", options: ["To install firewalls and antivirus tools on all endpoint devices in the environment", "To write custom code for internal security tools and penetration testing scripts", "To align the security strategy with business objectives and ensure accountability", "To monitor network traffic and analyze packets for potential security alerts"], correctAnswer: 2, explanation: "Cybersecurity governance ensures that security efforts are strategically aligned with and support the organization's business goals." },
-      { id: "cf-q1-2", question: "Who holds ultimate accountability for cybersecurity risk in an organization?", options: ["The Board of Directors, who holds ultimate fiduciary responsibility for risk oversight", "The IT help desk, who handles user password resets and local desktop support", "The CISO, who manages the day-to-day security operations and threat responses", "The SOC analyst, who triages incoming SIEM alerts and monitors dashboards"], correctAnswer: 0, explanation: "The Board of Directors holds ultimate fiduciary responsibility for cybersecurity risk oversight." },
-      { id: "cf-q1-3", question: "What does GRC stand for?", options: ["General Risk Criteria, which defines standard scoring levels for vulnerabilities", "Global Regulatory Controls, which represents cross-border security compliance standards", "Guided Response Coordination, which defines incident management procedures", "Governance, Risk, and Compliance — three interconnected management disciplines"], correctAnswer: 3, explanation: "GRC stands for Governance, Risk, and Compliance — three interconnected disciplines for managing organizational risk." },
-      { id: "cf-q1-4", question: "Which document type is mandatory and approved by senior management?", options: ["Guidelines, which provide optional recommendations for configuring system security", "Policies, which are high-level, mandatory statements establishing security rules", "Procedures, which detail step-by-step instructions for performing operations", "Recommendations, which outline best practices suggested by external auditors"], correctAnswer: 1, explanation: "Policies are high-level, mandatory statements approved by senior management that set the direction for security." },
-      { id: "cf-q1-5", question: "What is the difference between risk appetite and risk tolerance?", options: ["They are completely identical terms that can be used interchangeably in reports", "Tolerance represents a significantly higher risk level than the defined appetite", "Appetite is the overall willingness to accept risk; tolerance is the acceptable deviation", "Appetite applies exclusively to financial risks, while tolerance applies to technical risks"], correctAnswer: 2, explanation: "Risk appetite is the overall level of risk an organization is willing to accept, while risk tolerance is the acceptable deviation from that appetite." },
-      { id: "cf-q1-6", question: "Why should the CISO NOT report to the CIO?", options: ["It creates a potential conflict of interest between IT operations and security", "Chief Information Security Officers do not need to report to any executive officer", "Chief Information Officers are not qualified to understand any security concepts", "It violates mandatory requirements defined in the GDPR compliance standard"], correctAnswer: 0, explanation: "When the CISO reports to the CIO, there's a conflict of interest — the CIO may prioritize IT speed over security, undermining independent oversight." },
-      { id: "cf-q1-7", question: "What role is mandatory under GDPR for certain organizations?", options: ["Chief Technology Officer, who oversees software development and technology stacks", "Security Operations Manager, who manages the daily alert queues in the SOC", "Risk Analyst, who performs quantitative assessments and updates the risk register", "Data Protection Officer (DPO), who monitors compliance and advises on privacy"], correctAnswer: 3, explanation: "GDPR requires a Data Protection Officer for organizations that systematically monitor individuals or process special category data at scale." },
-      { id: "cf-q1-8", question: "What is the correct documentation hierarchy from highest to lowest?", options: ["Procedures defining steps → Standards detailing rules → Policies stating goals", "Guidelines recommending paths → Procedures defining steps → Standards detailing rules", "Policies stating goals → Standards detailing rules → Procedures defining steps", "Standards detailing rules → Policies stating goals → Guidelines recommending paths"], correctAnswer: 2, explanation: "The hierarchy is Policies (what) → Standards (how specifically) → Procedures (step-by-step) → Guidelines (recommendations)." },
-      { id: "cf-q1-9", question: "What is a Security Steering Committee?", options: ["A developer team that writes all security code and configures system firewalls", "A cross-functional body providing governance oversight and strategic alignment", "An external auditing firm that conducts annual compliance and safety reviews", "A vendor management team that negotiates contracts and purchase orders for tools"], correctAnswer: 1, explanation: "A Security Steering Committee is a cross-functional governance body that includes the CISO, CIO, legal, HR, and business leaders for security oversight." },
-      { id: "cf-q1-10", question: "Which statement about compliance is correct?", options: ["An organization can be fully compliant with standards and still be insecure", "Achieving compliance guarantees that an organization is completely secure", "Compliance represents the maximum possible ceiling of organizational security", "Compliance is entirely optional for all organizations regardless of sector"], correctAnswer: 0, explanation: "Compliance provides a baseline (the floor), but organizations can be fully compliant with a standard and still have security gaps." },
-      { id: "cf-q1-11", question: "What should an effective security policy include?", options: ["Only technical configuration details and command-line instructions for servers", "Just a list of prohibited employee activities and corresponding penalty amounts", "Employee salary structures and detailed benefit guides for human resources", "Purpose, scope, policy statements, roles, enforcement, and review history"], correctAnswer: 3, explanation: "Effective policies include purpose, scope, policy statements, roles & responsibilities, enforcement, related documents, and review history." },
-      { id: "cf-q1-12", question: "How often should security policies be reviewed at minimum?", options: ["Every five years to account for long-term technological developments", "Annually, or whenever significant changes occur in the business environment", "Only after a major security breach has compromised the internal network", "Monthly to capture every minor software update deployed in the infrastructure"], correctAnswer: 1, explanation: "Security policies should be reviewed at minimum annually, or whenever significant changes occur in the threat landscape or business environment." },
-      { id: "cf-q1-13", question: "What is the difference between a Risk Owner and a Control Owner?", options: ["They are completely identical roles with different titles in the organization", "Control Owner holds significantly more authority and budget than the Risk Owner", "Risk Owner is accountable for the risk; Control Owner maintains the control", "Risk Owner only works during active incidents to coordinate responses"], correctAnswer: 2, explanation: "The Risk Owner (typically a business leader) is accountable for a specific risk, while the Control Owner (technical lead) implements and maintains the control." },
-      { id: "cf-q1-14", question: "Which GRC platform is designed for continuous compliance monitoring?", options: ["Drata or Vanta, which automate evidence collection and check controls", "Microsoft Word or Google Docs for editing manual compliance documents offline", "Slack or Microsoft Teams for communicating about compliance status internally", "Jira or Trello for managing task boards and tracking audit schedules manually"], correctAnswer: 0, explanation: "Platforms like Drata and Vanta are designed for continuous compliance monitoring, automated evidence collection, and audit readiness." },
-      { id: "cf-q1-15", question: "What is the biggest benefit of integrated GRC?", options: ["It completely eliminates all cybersecurity risks and vulnerability exposures", "It replaces the need for hiring a dedicated security operations team", "It automatically installs patches and updates for all system software packages", "It provides a single source of truth for controls and risks with unified reporting"], correctAnswer: 3, explanation: "Integrated GRC provides a single source of truth, unified reporting to leadership, and efficient use of resources across governance, risk, and compliance." }
+      {
+        id: "cf-q1-1",
+        difficulty: "medium",
+        tags: ["Governance", "Org Structure"],
+        scenario: "Org chart (current):\n  CEO\n   └── CIO ──── CISO (dotted line to Audit Committee)\n         └── Infrastructure, App Dev, Service Desk\n\nQ3 finding: The CISO delayed a critical patch window twice because the CIO prioritised an ERP go-live. An internal auditor flags the reporting line as a governance weakness.",
+        question: "What is the auditor's core objection to this structure?",
+        options: [
+          "The CISO lacks the technical certifications required to sit at the same level as the CIO",
+          "Security assurance is reporting to the function it is meant to assure, creating a conflict of interest",
+          "Dotted-line reporting to an Audit Committee is prohibited by ISO 27001 Clause 5",
+          "The CISO should report to the Service Desk manager for faster incident escalation"
+        ],
+        correctAnswer: 1,
+        explanation: "Governance requires independence of assurance. When the CISO reports into the CIO, IT delivery pressure can override security decisions — exactly what happened with the patch window. Remediation is a solid line to the CEO/Board or Audit Committee. ISO 27001 does not prohibit dotted lines; the issue is independence, not certification."
+      },
+      {
+        id: "cf-q1-2",
+        difficulty: "easy",
+        tags: ["Policy Hierarchy"],
+        scenario: "Four documents are submitted for the annual review cycle:\n  A) \"All remote access MUST use company-approved multi-factor authentication.\"\n  B) \"MFA tokens must be TOTP RFC 6238, 6-digit, 30-second period.\"\n  C) \"Step 1: open the IAM console. Step 2: select Enrol Device...\"\n  D) \"Where possible, prefer hardware keys over phone-based TOTP.\"",
+        question: "Which document is the Standard?",
+        options: [
+          "Document A — it uses the mandatory word MUST",
+          "Document B — it specifies the exact technical parameters that make the policy enforceable",
+          "Document C — it is written for the person performing the task",
+          "Document D — it defines the desired end state"
+        ],
+        correctAnswer: 1,
+        explanation: "Policy (A) = the mandatory 'what'. Standard (B) = the specific, measurable technical requirement. Procedure (C) = the step-by-step 'how'. Guideline (D) = optional recommendation ('where possible', 'prefer'). Auditors test standards because they are the layer that is objectively measurable."
+      },
+      {
+        id: "cf-q1-3",
+        difficulty: "medium",
+        tags: ["Risk Appetite", "Board Reporting"],
+        scenario: "Board-approved statement:\n  Risk appetite: \"We accept up to $2M annualised loss exposure from cyber risk.\"\n  Risk tolerance: \"No single risk may exceed $400K; total may vary +/- 10% quarter to quarter.\"\n\nCurrent register: total exposure $2.1M, with one legacy-EDI risk rated at $650K.",
+        question: "Which statement correctly describes the breach?",
+        options: [
+          "Nothing is breached — $2.1M is within the +/-10% tolerance band",
+          "Only the total is breached; the individual risk is irrelevant to the board",
+          "The per-risk tolerance is breached ($650K > $400K) even though the $2.1M total is inside the 10% band",
+          "Both appetite and tolerance are breached because any figure above $2M is a violation"
+        ],
+        correctAnswer: 2,
+        explanation: "$2.1M is 5% over $2M, inside the +/-10% tolerance band, so the aggregate is acceptable. But the legacy-EDI risk at $650K exceeds the $400K per-risk ceiling — a tolerance breach that must be escalated and treated regardless of the healthy aggregate. Appetite is the target; tolerance defines the acceptable deviation around it."
+      },
+      {
+        id: "cf-q1-4",
+        difficulty: "hard",
+        tags: ["Risk Ownership", "Accountability"],
+        scenario: "Risk register entry RSK-114:\n  Risk: Customer PII in the legacy CRM is unencrypted at rest.\n  Business unit: Sales Operations (VP: R. Mehta)\n  Control: database TDE, to be implemented by the Platform Engineering team (lead: J. Okafor)\n  Status: Platform Engineering has deprioritised TDE for two quarters.",
+        question: "Who is accountable for the residual risk remaining open, and what is the correct escalation?",
+        options: [
+          "J. Okafor — the control owner is accountable, and Sales Operations should file a ticket",
+          "R. Mehta — the risk owner is accountable and must either fund/escalate the control or formally accept the residual risk",
+          "The CISO — all unresolved security risks default to the CISO's personal accountability",
+          "Nobody — the risk auto-transfers to Platform Engineering once a control is assigned"
+        ],
+        correctAnswer: 1,
+        explanation: "Accountability for a risk cannot be delegated with the control. R. Mehta (risk owner, the business leader who bears the consequence) must drive funding/escalation or sign a documented risk acceptance with an expiry date. J. Okafor is responsible for implementing and operating the control, not for the business decision to leave the risk open."
+      },
+      {
+        id: "cf-q1-5",
+        difficulty: "medium",
+        tags: ["Compliance vs Security"],
+        scenario: "Audit result: 100% of PCI-DSS requirements passed in March.\nJune: attacker enters via a third-party marketing SaaS with a shared admin credential, pivots to a segment that was declared out of scope, and exfiltrates 40K records.",
+        question: "What does this outcome most directly illustrate?",
+        options: [
+          "The audit was fraudulent — a compliant environment cannot be breached",
+          "Compliance is a point-in-time floor scoped to defined boundaries, not a continuous guarantee of security",
+          "PCI-DSS is an obsolete standard and should be replaced with ISO 27001",
+          "Third-party SaaS is never in scope for any security framework"
+        ],
+        correctAnswer: 1,
+        explanation: "Compliance validates a defined scope at a moment in time. The two failure modes here are classic: drift after the assessment date, and risk living just outside the declared scope boundary. Mature programmes address this with continuous control monitoring and third-party risk management rather than annual snapshots."
+      },
+      {
+        id: "cf-q1-6",
+        difficulty: "easy",
+        tags: ["GDPR", "Roles"],
+        scenario: "A 900-employee ad-tech firm builds profiles from behavioural tracking across millions of EU users. Leadership asks whether they need any specific governance role beyond the existing CISO.",
+        question: "Which role is legally required here, and why?",
+        options: [
+          "A Data Protection Officer, because the core activity is large-scale systematic monitoring of data subjects",
+          "A Chief Technology Officer, because GDPR requires technical leadership for privacy",
+          "No additional role — the CISO can satisfy every GDPR obligation by default",
+          "A Data Protection Officer, but only after the first regulatory complaint is filed"
+        ],
+        correctAnswer: 0,
+        explanation: "GDPR Art. 37 mandates a DPO when core activities involve regular and systematic monitoring of data subjects at large scale (or large-scale special-category processing). The DPO must be independent and report to the highest management level — which is also why folding the role into the CISO can create a conflict."
+      },
+      {
+        id: "cf-q1-7",
+        difficulty: "hard",
+        tags: ["Steering Committee", "Program"],
+        scenario: "Security investments keep stalling: Legal blocks a DLP rollout over employee-monitoring concerns, HR is unaware of the insider-threat programme, and Finance rejected the SIEM renewal after seeing only a technical justification.",
+        question: "Which governance mechanism most directly addresses this pattern?",
+        options: [
+          "Hiring more Tier 1 analysts to reduce the alert backlog",
+          "Standing up a cross-functional Security Steering Committee with Legal, HR, Finance and business owners to set and fund priorities",
+          "Purchasing an integrated GRC platform to automate evidence collection",
+          "Rewriting the acceptable use policy with stronger mandatory language"
+        ],
+        correctAnswer: 1,
+        explanation: "The failures are all cross-functional alignment failures, not tooling or staffing failures. A Steering Committee gives Legal, HR and Finance a seat before decisions are made, converts technical asks into business-risk language, and creates a funding path. A GRC platform helps evidence, but it will not unblock Legal's objection."
+      },
+      {
+        id: "cf-q1-8",
+        difficulty: "medium",
+        tags: ["Policy Lifecycle"],
+        scenario: "The remote-access policy header reads:\n  Version 1.0 | Approved: 2019-04-11 | Next review: 2020-04-11\nSince approval the company adopted a zero-trust VPN replacement, moved 70% of workloads to cloud, and acquired two subsidiaries.",
+        question: "What is the primary governance failure, and what is the correct trigger model for review?",
+        options: [
+          "Only the version number is stale; the content is likely still valid",
+          "The policy is unreviewed for years — reviews must be at minimum annual AND event-driven on significant business or threat changes",
+          "Policies should be reviewed monthly to track every configuration change",
+          "The policy only needed review after a confirmed breach"
+        ],
+        correctAnswer: 1,
+        explanation: "A six-year-old policy that predates zero-trust, cloud migration and two acquisitions no longer describes the environment it governs — it is unenforceable and misleads auditors. Best practice is annual review as a floor, plus event-driven review triggered by significant change (M&A, architecture shift, regulation, major incident)."
+      }
     ]
   },
   {
     quizId: "cf-q2",
     courseId: "cybersecurity-frameworks",
-    title: "NIST CSF Assessment",
-    description: "Evaluate your knowledge of the NIST Cybersecurity Framework functions and tiers.",
+    title: "NIST CSF 2.0: Profiles, Tiers & Gap Assessment",
+    description: "Apply the six CSF functions, current/target profiles, and implementation tiers to real assessment decisions.",
     passingScore: 70,
     timeLimit: 20,
     questions: [
-      { id: "cf-q2-1", question: "How many core functions does NIST CSF v2.0 have?", options: ["NIST CSF v2.0 contains 6 core functions, including the newly introduced Govern function", "NIST CSF v2.0 contains 4 core functions, which is the same as the initial draft framework", "NIST CSF v2.0 contains 5 core functions, retaining the classic functions from v1.1", "NIST CSF v2.0 contains 7 core functions, expanding to cover compliance and auditing"], correctAnswer: 0, explanation: "NIST CSF v2.0 has 6 core functions: Govern, Identify, Protect, Detect, Respond, and Recover." },
-      { id: "cf-q2-2", question: "Which function was added in NIST CSF v2.0?", options: ["The Detect function, which focuses on identifying anomalies and security events", "The Protect function, which implements safeguards to ensure delivery of services", "The Recover function, which covers restoring services impaired by an incident", "The Govern function, which addresses risk strategy and supply chain management"], correctAnswer: 3, explanation: "The Govern (GV) function was added in v2.0 to address organizational context, risk strategy, and supply chain risk management." },
-      { id: "cf-q2-3", question: "What year was the original NIST CSF released?", options: ["Released in 2010 under Executive Order 13636 to secure critical infrastructure", "Released in 2018 as part of the v1.1 update to include supply chain risk", "Released in 2014 following extensive collaboration with the private sector", "Released in 2020 to address modern cloud and container security challenges"], correctAnswer: 2, explanation: "NIST CSF v1.0 was released in February 2014 following Executive Order 13636 in 2013." },
-      { id: "cf-q2-4", question: "What is a NIST CSF Profile?", options: ["A user account profile configured in the NIST portal for compliance tracking", "An alignment of CSF outcomes with business needs, risk tolerance, and resources", "A firewall configuration template recommended for enterprise perimeter security", "A specific type of encryption profile used to protect sensitive data transfers"], correctAnswer: 1, explanation: "A Profile represents an organization's alignment with CSF Core based on business needs, risk tolerance, and resources." },
-      { id: "cf-q2-5", question: "What does Tier 3 (Repeatable) indicate?", options: ["Practices are formally approved and expressed as policy, with an organization-wide approach", "There are no formal risk management processes established in the organization", "Risk management practices are ad hoc and rarely documented or updated", "Practices are continuously adaptive based on real-world threat landscape changes"], correctAnswer: 0, explanation: "Tier 3 means risk management practices are formally approved and expressed as policy, with an organization-wide approach." },
-      { id: "cf-q2-6", question: "Which CSF function focuses on safeguards like MFA and encryption?", options: ["The Identify function, which helps understand assets, risks, and roles", "The Detect function, which monitors activity to discover potential threats", "The Recover function, which restores services and systems after a security incident", "The Protect function, which implements access control and data security safeguards"], correctAnswer: 3, explanation: "The Protect (PR) function implements safeguards including access control, data security, training, and platform security." },
-      { id: "cf-q2-7", question: "Is NIST CSF mandatory for private sector organizations?", options: ["Yes, it is a mandatory framework required by federal cybersecurity laws", "Only for organizations with more than 1000 employees globally", "No, it is a voluntary, risk-based framework for private organizations", "Only for healthcare organizations that must comply with HIPAA regulations"], correctAnswer: 2, explanation: "NIST CSF is voluntary for private sector organizations, though many regulators and partners expect or require its adoption." },
-      { id: "cf-q2-8", question: "What is the purpose of a gap analysis in NIST CSF?", options: ["To scan systems and discover software bugs and missing security patches", "To compare current and target profiles to prioritize security improvements", "To test network bandwidth speed and identify congestion points", "To evaluate hiring needs and build a security operations center team"], correctAnswer: 1, explanation: "Gap analysis compares the Current Profile to the Target Profile, revealing areas needing improvement and guiding investment priorities." },
-      { id: "cf-q2-9", question: "Which function covers incident management and response?", options: ["The Respond function, which covers analysis, mitigation, and communications", "The Identify function, which focuses on asset and risk assessment", "The Protect function, which implements baseline security safeguards", "The Govern function, which oversees organizational policy alignment"], correctAnswer: 0, explanation: "The Respond (RS) function covers incident management, analysis, communication, and mitigation actions." },
-      { id: "cf-q2-10", question: "What is the first step in implementing NIST CSF?", options: ["Deploying a SIEM platform to aggregate and correlate all log data", "Hiring a dedicated SOC team to monitor the environment around the clock", "Purchasing cyber insurance to transfer residual risks to a third party", "Securing executive buy-in and defining business objectives for the framework"], correctAnswer: 3, explanation: "The first step is securing executive buy-in — presenting the business case for CSF adoption and assigning a project sponsor." },
-      { id: "cf-q2-11", question: "Does every organization need to reach Tier 4?", options: ["Yes, all organizations must aim to reach Tier 4 to be considered secure", "Only government agencies are required to achieve Tier 4 compliance", "No, the right tier depends on risk, regulations, and resources", "Tier 4 does not exist in the official NIST CSF tiering structure"], correctAnswer: 2, explanation: "Tiers are not maturity levels that every organization must climb. The appropriate tier depends on risk, regulatory requirements, and resources." },
-      { id: "cf-q2-12", question: "What does the Identify function focus on?", options: ["Encrypting sensitive data both at rest and in transit across networks", "Developing an organizational understanding of assets, risks, and capabilities", "Restoring operations and services after a critical system disruption", "Automating incident response playbooks using SOAR integrations"], correctAnswer: 1, explanation: "The Identify (ID) function develops organizational understanding of cybersecurity risk to systems, people, assets, and data." },
-      { id: "cf-q2-13", question: "Which CSF function covers business continuity and disaster recovery?", options: ["The Recover function, which restores services impaired by cybersecurity incidents", "The Protect function, which handles access control and system hardening", "The Detect function, which monitors logs for indicators of compromise", "The Respond function, which coordinates containment and eradication actions"], correctAnswer: 0, explanation: "The Recover (RC) function covers restoring capabilities and services impaired by cybersecurity incidents." },
-      { id: "cf-q2-14", question: "What common implementation mistake should be avoided?", options: ["Securing executive sponsorship and budget before beginning the project", "Conducting a gap analysis comparing current and target profiles", "Creating custom profiles that align with specific business objectives", "Treating the CSF as a checkbox exercise rather than a risk-based approach"], correctAnswer: 3, explanation: "Treating CSF as a checkbox exercise misses the point — it's a risk-based framework, not a compliance checklist." },
-      { id: "cf-q2-15", question: "NIST CSF maps to which other frameworks?", options: ["It maps exclusively to ISO 27001 and does not overlap with other controls", "It maps exclusively to the CIS Controls for technical security baseline hardening", "It maps to ISO 27001, CIS Controls, COBIT, and many other standards", "It does not map to any other security frameworks or regulatory standards"], correctAnswer: 2, explanation: "NIST CSF is designed to be integrative and maps to ISO 27001, CIS Controls, COBIT, PCI-DSS, and many other frameworks." }
+      {
+        id: "cf-q2-1",
+        difficulty: "easy",
+        tags: ["CSF 2.0", "Functions"],
+        scenario: "A 2024 assessment report is built around five function columns: Identify, Protect, Detect, Respond, Recover. The CISO notes that risk-strategy, roles and supply-chain oversight findings had nowhere clean to land.",
+        question: "What changed in CSF 2.0 that resolves this?",
+        options: [
+          "Identify was expanded to absorb all governance outcomes",
+          "A sixth function, GOVERN, was added and sits across the other five as the risk-strategy and oversight layer",
+          "Recover was split into Recover and Restore",
+          "Supply chain was moved into Respond"
+        ],
+        correctAnswer: 1,
+        explanation: "CSF 2.0 introduced GOVERN (GV) — organisational context, risk-management strategy, roles/responsibilities, policy, oversight, and cybersecurity supply-chain risk management. It is not a sixth silo but the wrapper that informs the other five functions."
+      },
+      {
+        id: "cf-q2-2",
+        difficulty: "medium",
+        tags: ["Profiles"],
+        scenario: "Assessment output:\n  Current Profile — DE.CM: partial, ad-hoc log review; RS.MA: no formal IR plan\n  Target Profile — DE.CM: 24x7 monitoring; RS.MA: tested IR plan, quarterly exercises",
+        question: "What is the delta between these two profiles used for?",
+        options: [
+          "It becomes the prioritised, cost-estimated action plan (the roadmap) closing gaps between where you are and where you need to be",
+          "It is submitted to NIST for certification",
+          "It sets the organisation's Implementation Tier automatically",
+          "It replaces the risk register"
+        ],
+        correctAnswer: 0,
+        explanation: "The Current Profile is 'as-is', the Target Profile is 'to-be' driven by business requirements, risk appetite and legal obligations. The gap between them, prioritised and costed, is the action plan. NIST does not certify CSF adoption, and tiers are chosen separately."
+      },
+      {
+        id: "cf-q2-3",
+        difficulty: "hard",
+        tags: ["Tiers"],
+        scenario: "Findings: risk decisions are made per-project with no organisation-wide method; the firm shares indicators with an ISAC and receives them, but does not adapt controls based on that intel; leadership is aware of cyber risk but has no formal risk-informed budgeting process.",
+        question: "Which Implementation Tier best fits?",
+        options: [
+          "Tier 1 (Partial) — because there is no organisation-wide risk method",
+          "Tier 2 (Risk Informed) — risk awareness exists and external participation has begun, but practices are not organisation-wide or adaptive",
+          "Tier 3 (Repeatable) — because formal ISAC participation is present",
+          "Tier 4 (Adaptive) — because threat intelligence is being consumed"
+        ],
+        correctAnswer: 1,
+        explanation: "Tier 2 = risk-informed but not formalised organisation-wide; some external collaboration, informal or irregular. Tier 3 requires organisation-wide policy, formally approved and consistently applied. Tier 4 requires adapting controls continuously from lessons learned and predictive indicators — explicitly absent here. Tiers describe rigour, not a maturity score to maximise."
+      },
+      {
+        id: "cf-q2-4",
+        difficulty: "medium",
+        tags: ["Function Mapping"],
+        scenario: "Four post-incident actions after a ransomware event:\n  1) Restore file services from immutable backups within RTO\n  2) Publish a customer notification and coordinate with counsel\n  3) Add a Sigma rule for the observed vssadmin delete shadows behaviour\n  4) Update the asset inventory with the previously unknown servers found during response",
+        question: "Map actions 1-4 to CSF functions in order.",
+        options: [
+          "Recover, Respond, Detect, Identify",
+          "Respond, Recover, Protect, Identify",
+          "Recover, Recover, Detect, Protect",
+          "Protect, Respond, Detect, Govern"
+        ],
+        correctAnswer: 0,
+        explanation: "Restoration of services = RECOVER (RC.RP). Notification/communications during the incident = RESPOND (RS.CO). New detection content = DETECT (DE.AE/DE.CM). Asset inventory correction = IDENTIFY (ID.AM). Analysts commonly mis-file communications as Recover — CSF places incident communications under Respond."
+      },
+      {
+        id: "cf-q2-5",
+        difficulty: "hard",
+        tags: ["Gap Assessment", "Prioritisation"],
+        scenario: "Gap list with business context:\n  G1: No MFA on internet-facing VPN (exploited by 3 peers this year) — cost $40K\n  G2: No formal cyber insurance review — cost $5K\n  G3: Backup restore never tested; ransomware is top board risk — cost $25K\n  G4: SIEM dashboard aesthetics inconsistent — cost $15K\nBudget available: $70K.",
+        question: "Which funding decision best reflects risk-based CSF prioritisation?",
+        options: [
+          "Fund G2 and G4 first because they are the cheapest to close quickly",
+          "Fund G1 and G3 — highest likelihood x impact against the stated top risk — and defer G2, drop G4",
+          "Split the budget evenly across all four gaps",
+          "Fund G4 first because leadership sees the dashboards"
+        ],
+        correctAnswer: 1,
+        explanation: "CSF prioritisation is driven by risk, not by cost or visibility. G1 addresses an actively exploited access path; G3 validates the recovery capability for the board's top-rated risk — together $65K, inside budget. G2 is low-cost but low-urgency; G4 is cosmetic and delivers no risk reduction."
+      },
+      {
+        id: "cf-q2-6",
+        difficulty: "easy",
+        tags: ["Framework Nature"],
+        scenario: "A vendor markets itself as \"NIST CSF Certified\" and offers to certify your organisation in 30 days for a fee.",
+        question: "What is the correct assessment of this claim?",
+        options: [
+          "Legitimate — NIST maintains an accredited CSF certification body",
+          "Misleading — CSF is a voluntary, outcome-based framework with no official certification; only third-party attestations or self-assessment exist",
+          "Legitimate only for US federal contractors",
+          "Legitimate, because CSF Tier 4 is equivalent to certification"
+        ],
+        correctAnswer: 1,
+        explanation: "NIST CSF is voluntary and non-certifiable — there is no NIST-accredited certification scheme. Organisations self-assess or engage assessors for an attestation of alignment. Certifiable schemes include ISO/IEC 27001 and, for the defence base, CMMC."
+      },
+      {
+        id: "cf-q2-7",
+        difficulty: "medium",
+        tags: ["GOVERN", "Supply Chain"],
+        scenario: "A payroll vendor is breached; your employee data is exposed. Post-mortem shows the contract had no security schedule, no breach-notification SLA, and the vendor was never risk-tiered.",
+        question: "Which CSF 2.0 category most directly covers this failure?",
+        options: [
+          "PR.AC — Identity Management and Access Control",
+          "GV.SC — Cybersecurity Supply Chain Risk Management",
+          "DE.CM — Continuous Monitoring",
+          "RC.CO — Recovery Communications"
+        ],
+        correctAnswer: 1,
+        explanation: "GV.SC is the CSF 2.0 category for supplier risk: establishing supply-chain risk strategy, tiering suppliers, embedding requirements into contracts, and monitoring them over the relationship lifecycle. The absence of contractual security terms and vendor tiering is squarely a GV.SC gap."
+      },
+      {
+        id: "cf-q2-8",
+        difficulty: "medium",
+        tags: ["Informative References"],
+        scenario: "During the gap assessment the team asks: \"CSF tells us the outcome — DE.CM-01 'networks are monitored to find potentially adverse events' — but not what to actually implement.\"",
+        question: "What element of the CSF resolves this, and what does it point to?",
+        options: [
+          "Implementation Tiers, which specify required tooling",
+          "Informative References, which map each subcategory to detailed controls in ISO 27001, CIS Controls, NIST SP 800-53 and similar",
+          "The Target Profile, which lists approved vendors",
+          "The GOVERN function, which defines technical baselines"
+        ],
+        correctAnswer: 1,
+        explanation: "CSF is deliberately outcome-based and technology-neutral. Informative References bridge the outcome to prescriptive control catalogues — e.g. DE.CM subcategories map to NIST SP 800-53 SI-4, CIS Control 13, and ISO 27001 Annex A monitoring controls. This is how CSF coexists with, rather than replaces, other frameworks."
+      }
     ]
   },
   {
     quizId: "cf-q3",
     courseId: "cybersecurity-frameworks",
-    title: "ISO 27001 Quiz",
-    description: "Assess your understanding of ISMS, Annex A controls, and the certification process.",
-    passingScore: 75,
+    title: "ISO/IEC 27001: ISMS, Annex A & Audit Readiness",
+    description: "Certification-focused scenarios on ISMS scope, Statement of Applicability, ISO 27005 risk methodology, and audit findings.",
+    passingScore: 70,
     timeLimit: 20,
     questions: [
-      { id: "cf-q3-1", question: "What does ISMS stand for?", options: ["Internet Security Management System, which secures external network connections", "Information Security Management System — a systematic approach to managing data security", "Integrated Security Monitoring Service, which provides managed threat detection alerts", "Information System Maintenance Standard, which specifies hardware lifecycle procedures"], correctAnswer: 1, explanation: "ISMS stands for Information Security Management System — a systematic approach to managing sensitive information." },
-      { id: "cf-q3-2", question: "How many controls are in ISO 27001:2022 Annex A?", options: ["Annex A contains 114 controls, which is the total from the older 2013 standard version", "Annex A contains 42 controls focused exclusively on technical and database configurations", "Annex A contains 200 controls covering all aspects of physical and logical security", "Annex A contains 93 controls organized into 4 themes in the 2022 standard version"], correctAnswer: 3, explanation: "ISO 27001:2022 reorganized controls into 93 controls across 4 themes, down from 114 in the 2013 version." },
-      { id: "cf-q3-3", question: "What is unique about ISO 27001 compared to other frameworks?", options: ["It is completely free to download and implement without any licensing fees or registration", "It only applies to government agencies and public sector infrastructure entities", "It is the only framework offering formal third-party certification by accredited bodies", "It has absolutely no technical or operational controls listed in its requirements"], correctAnswer: 2, explanation: "ISO 27001 is the only major cybersecurity framework that offers formal third-party certification through accredited audit bodies." },
-      { id: "cf-q3-4", question: "What cycle does ISO 27001 follow?", options: ["The OODA Loop (Observe, Orient, Decide, Act) for rapid incident response decisions", "The Plan-Do-Check-Act (PDCA) cycle for continual improvement of the system", "The Cyber Kill Chain model for tracking adversary progression and actions", "The MITRE ATT&CK framework for mapping threat techniques and coverage"], correctAnswer: 1, explanation: "ISO 27001 is built on the Plan-Do-Check-Act cycle for continual improvement of the ISMS." },
-      { id: "cf-q3-5", question: "What is the Statement of Applicability (SoA)?", options: ["A document listing all 93 controls with applicability decisions and justifications", "A job application template designed specifically for information security roles in a company", "A network topology diagram mapping all asset locations and perimeter boundaries", "An incident response triage report documenting containment actions and outcomes"], correctAnswer: 0, explanation: "The SoA is the most critical ISO 27001 document — it lists all 93 Annex A controls with whether each is applicable, why, and implementation status." },
-      { id: "cf-q3-6", question: "How often must ISO 27001 recertification audits occur?", options: ["Recertification audits must occur every year to verify control compliance", "Recertification audits must occur every 2 years to check internal audit progress", "Recertification audits must occur every 3 years to maintain active certification status", "Recertification audits must occur every 5 years to verify policy alignment"], correctAnswer: 2, explanation: "Full recertification audits occur every 3 years, with annual surveillance audits in between to maintain certification." },
-      { id: "cf-q3-7", question: "Which is NOT one of the four Annex A themes in 2022?", options: ["Organizational controls focusing on policies, roles, and risk management", "People controls focusing on screening, terms of employment, and training", "Financial controls focusing on security budgets and tool procurement costs", "Technological controls focusing on network security and database configurations"], correctAnswer: 2, explanation: "The four themes are Organizational, People, Physical, and Technological. Financial is not an Annex A theme." },
-      { id: "cf-q3-8", question: "What new control in 2022 addresses preventing unauthorized data exfiltration?", options: ["A.8.12 Data Leakage Prevention control introduced in the 2022 standard update", "A.5.1 Policies for Information Security control defining mandatory standards", "A.7.1 Physical Security Perimeter control protecting on-premises data centers", "A.6.1 Screening control verifying candidate backgrounds before employment"], correctAnswer: 0, explanation: "A.8.12 Data Leakage Prevention is one of the 11 new controls in ISO 27001:2022." },
-      { id: "cf-q3-9", question: "What does ALE stand for in quantitative risk analysis?", options: ["Automated Log Evaluation, indicating standard SIEM ingestion and parsing metrics", "Alert Level Escalation, defining threshold values for paging security analysts", "Asset Lifecycle Evaluation, measuring the overall lifespan of server hardware", "Annualized Loss Expectancy, representing the estimated yearly financial risk impact"], correctAnswer: 3, explanation: "ALE (Annualized Loss Expectancy) = SLE × ARO, the core formula for quantitative risk analysis." },
-      { id: "cf-q3-10", question: "What is the Stage 1 audit?", options: ["The final on-site implementation audit where certification decisions are made", "A preliminary documentation review by the auditor to assess ISMS readiness", "A comprehensive penetration test of all external-facing network segments", "An employee training verification review conducted by internal compliance leads"], correctAnswer: 1, explanation: "Stage 1 is the documentation review where auditors assess ISMS documentation and readiness for the Stage 2 implementation audit." },
-      { id: "cf-q3-11", question: "Which ISO standard provides risk assessment guidelines?", options: ["ISO 9001 standard focusing on quality management systems across operations", "ISO 27005 standard providing guidelines for information security risk management", "ISO 14001 standard specifying requirements for environmental management systems", "ISO 22301 standard defining business continuity management system guidelines"], correctAnswer: 1, explanation: "ISO 27005 provides guidelines for information security risk management, supporting ISO 27001's risk assessment requirements." },
-      { id: "cf-q3-12", question: "Can you exclude Annex A controls from your ISMS?", options: ["No, all 93 controls listed in Annex A are strictly mandatory for all organizations", "Yes, you can exclude any controls without providing any reasoning or justification", "Yes, but only with documented, defensible justification in the Statement of Applicability", "Only the external accredited certification auditor can decide which controls to exclude"], correctAnswer: 2, explanation: "Controls can be excluded from the SoA, but only with documented, defensible justification — 'we don't do that' is not sufficient." },
-      { id: "cf-q3-13", question: "What is a nonconformity in an ISO audit?", options: ["A documented deviation or failure to meet a required ISO 27001 standard element", "A positive audit finding indicating full alignment with standard requirements", "A formal suggestion for improvement provided by the auditor to mature controls", "A compliment from the auditor regarding the overall quality of security policies"], correctAnswer: 0, explanation: "A nonconformity is a deviation from standard requirements — either Major (systemic failure) or Minor (isolated issue)." },
-      { id: "cf-q3-14", question: "What are the 3 pillars of information security (CIA)?", options: ["Cost efficiency, Tool integration, and Workflow automation priorities", "Compliance checklists, Asset investigation, and User authentication protocols", "Control enforcement, Identity verification, and Resource access restrictions", "Confidentiality, Integrity, and Availability of sensitive information assets"], correctAnswer: 3, explanation: "The CIA triad — Confidentiality, Integrity, and Availability — are the three fundamental pillars of information security." },
-      { id: "cf-q3-15", question: "Which management review topic is mandatory in ISO 27001?", options: ["Employee birthday celebrations and internal community event schedules", "Status of actions from previous reviews and results of internal audits", "Marketing campaign performance and quarterly sales revenue reports", "Office building renovation plans and physical desk layout configurations"], correctAnswer: 1, explanation: "Management reviews must cover status of previous actions, changes in issues, security performance feedback, audit results, and improvement opportunities." }
+      {
+        id: "cf-q3-1",
+        difficulty: "medium",
+        tags: ["ISMS Scope"],
+        scenario: "Scope statement submitted to the certification body:\n  \"The ISMS covers all information systems supporting the SaaS platform hosted in eu-west-1, including development, operations and support functions in the Dublin office.\"\nThe company also runs an on-prem HR system in Manila that holds employee data and connects to the SaaS SSO tenant.",
+        question: "What is the risk with this scope, from an auditor's perspective?",
+        options: [
+          "No risk — narrow scope is always acceptable if documented",
+          "The Manila HR system interfaces with an in-scope component (SSO), so interfaces and dependencies must be identified and controlled or the scope is not defensible",
+          "ISO 27001 requires all global operations to be in scope without exception",
+          "Scope statements cannot reference cloud regions"
+        ],
+        correctAnswer: 1,
+        explanation: "ISO 27001 Clause 4.3 permits a narrow scope, but requires interfaces and dependencies with out-of-scope parties to be explicitly identified and addressed. An SSO trust path from an out-of-scope system into the ISMS is exactly the kind of dependency an auditor will probe — undeclared, it becomes a nonconformity."
+      },
+      {
+        id: "cf-q3-2",
+        difficulty: "hard",
+        tags: ["Statement of Applicability"],
+        scenario: "SoA extract:\n  A.8.12 Data leakage prevention — Applicable: NO — Justification: \"Not required.\"\n  A.5.7 Threat intelligence — Applicable: YES — Implemented: NO\n  A.8.16 Monitoring activities — Applicable: YES — Implemented: YES (SIEM, 24x7)",
+        question: "Which entry will most likely raise a nonconformity, and why?",
+        options: [
+          "A.8.16, because 24x7 monitoring is not required by ISO 27001",
+          "A.8.12, because an exclusion requires a documented risk-based justification — \"Not required\" is not one",
+          "A.5.7, because applicable controls may never be marked unimplemented",
+          "None — the SoA is complete as written"
+        ],
+        correctAnswer: 1,
+        explanation: "Every Annex A control must be considered, and any exclusion must carry a justification traceable to the risk assessment. \"Not required\" is a bare assertion. A.5.7 marked applicable-but-not-implemented is acceptable provided it appears in the risk treatment plan with an owner and target date."
+      },
+      {
+        id: "cf-q3-3",
+        difficulty: "medium",
+        tags: ["ISO 27005", "Risk"],
+        scenario: "Risk analysis worksheet:\n  Asset: customer database\n  Threat: SQL injection via public API\n  Vulnerability: unparameterised query in legacy endpoint\n  Likelihood: 4/5   Impact: 5/5   Inherent risk: 20\n  Existing control: WAF in detection-only mode\n  Residual risk: 20",
+        question: "What is methodologically wrong here?",
+        options: [
+          "Inherent risk should never be calculated before controls",
+          "Residual risk is unchanged despite an existing control — either the control's (partial) effect must be reflected, or its detection-only mode must be documented as providing zero reduction",
+          "Likelihood and impact must always be equal",
+          "SQL injection is a vulnerability, not a threat"
+        ],
+        correctAnswer: 1,
+        explanation: "ISO 27005 expects residual risk to be the risk remaining after existing controls are accounted for. Copying inherent to residual with an active control listed is either an error or an undocumented judgement that a detect-only WAF provides no mitigation — which is defensible but must be stated, since it drives the treatment decision."
+      },
+      {
+        id: "cf-q3-4",
+        difficulty: "easy",
+        tags: ["Clauses"],
+        scenario: "An auditor says: \"Your Annex A controls look strong, but I am issuing a major nonconformity against Clause 9.\"",
+        question: "What is most likely missing?",
+        options: [
+          "Internal audit programme and/or management review of the ISMS",
+          "Encryption of data at rest",
+          "An asset inventory",
+          "Supplier security agreements"
+        ],
+        correctAnswer: 0,
+        explanation: "Clause 9 is Performance Evaluation: monitoring and measurement, internal audit, and management review. Certification hinges on the management-system clauses (4-10) as much as on Annex A controls — a common failure is strong technical controls with no evidence of internal audit or documented management review."
+      },
+      {
+        id: "cf-q3-5",
+        difficulty: "hard",
+        tags: ["Risk Treatment"],
+        scenario: "Risk: a third-party payment integration could leak card data. Options costed:\n  A) Re-architect to a hosted payment page — $180K, removes the data from your environment\n  B) Purchase cyber insurance covering card-breach costs — $30K/yr\n  C) Tokenise and add monitoring — $60K, reduces likelihood and impact\n  D) Document and accept, sponsored by the CFO",
+        question: "Match each option to the ISO 27005 risk treatment type.",
+        options: [
+          "A=Avoid, B=Share/Transfer, C=Modify/Reduce, D=Retain/Accept",
+          "A=Modify, B=Avoid, C=Retain, D=Share",
+          "A=Share, B=Retain, C=Avoid, D=Modify",
+          "All four are forms of risk modification"
+        ],
+        correctAnswer: 0,
+        explanation: "Removing the data from scope eliminates the risk source = Avoid. Insurance shifts financial consequence to a third party (never accountability) = Share/Transfer. Tokenisation plus monitoring reduces likelihood/impact = Modify. A documented, sponsored decision to live with it = Retain/Accept, which must be formally approved by the risk owner."
+      },
+      {
+        id: "cf-q3-6",
+        difficulty: "medium",
+        tags: ["Certification Lifecycle"],
+        scenario: "Certification timeline: Stage 1 audit completed in March, Stage 2 in May, certificate issued in June 2024.",
+        question: "What happens over the following three years?",
+        options: [
+          "Nothing until a full recertification audit in year three",
+          "Annual surveillance audits in years one and two, then a full recertification audit in year three",
+          "Quarterly surveillance audits every year",
+          "The certificate is permanent once issued"
+        ],
+        correctAnswer: 1,
+        explanation: "The ISO 27001 certificate runs on a three-year cycle: Stage 1 (documentation readiness), Stage 2 (implementation effectiveness), then surveillance audits in years 1 and 2 sampling parts of the ISMS, and a full recertification audit before the three-year expiry."
+      },
+      {
+        id: "cf-q3-7",
+        difficulty: "medium",
+        tags: ["Annex A 2022"],
+        scenario: "A consultant's 2015-era checklist lists 114 controls in 14 domains. Your SoA template lists 93 controls in 4 themes with attributes such as #Preventive, #Confidentiality, #Governance.",
+        question: "What accounts for the difference?",
+        options: [
+          "The SoA template is wrong and must be reverted to 114 controls",
+          "ISO/IEC 27001:2022 restructured Annex A into 93 controls across 4 themes (Organisational, People, Physical, Technological) with attribute tagging, including 11 new controls",
+          "The 93-control set applies only to cloud providers",
+          "Attributes replaced the need for a Statement of Applicability"
+        ],
+        correctAnswer: 1,
+        explanation: "The 2022 revision consolidated 114 controls into 93 across four themes and added 11 new controls including threat intelligence (5.7), cloud services (5.23), data masking (8.11), DLP (8.12) and web filtering (8.23). Attributes aid filtering and mapping; the SoA remains mandatory."
+      },
+      {
+        id: "cf-q3-8",
+        difficulty: "hard",
+        tags: ["Evidence"],
+        scenario: "An auditor asks for evidence that A.5.15 (access control) operates effectively. The team offers: the access control policy PDF, a screenshot of the IAM console, and a statement that reviews \"happen quarterly\".",
+        question: "Why is this evidence insufficient?",
+        options: [
+          "Screenshots are never accepted as audit evidence",
+          "It demonstrates design intent but not operating effectiveness — the auditor needs dated, signed review records with sampled populations and exception remediation over the period",
+          "The policy PDF must be notarised",
+          "Access control effectiveness cannot be audited"
+        ],
+        correctAnswer: 1,
+        explanation: "Auditors test design AND operating effectiveness. A policy shows intent, a screenshot shows a point in time. Operating effectiveness needs a population, a sample, dated review artefacts with approver identity, and evidence that exceptions found were actually remediated across the audit period."
+      }
     ]
   },
   {
     quizId: "cf-q4",
     courseId: "cybersecurity-frameworks",
-    title: "CIS Controls Quiz",
-    description: "Test your knowledge of the 18 CIS Controls and implementation groups.",
+    title: "CIS Controls v8 & Benchmarks in Practice",
+    description: "Implementation Groups, safeguard prioritisation, and CIS Benchmark hardening decisions driven by real environments.",
     passingScore: 70,
     timeLimit: 20,
     questions: [
-      { id: "cf-q4-1", question: "How many CIS Controls are there in version 8?", options: ["There are 10 CIS Controls, down from 15 in the previous framework draft", "There are 14 CIS Controls, focusing on the most critical network segments", "There are 18 CIS Controls organized into three distinct implementation groups", "There are 20 CIS Controls, retaining the exact structure from version 7"], correctAnswer: 2, explanation: "CIS Controls v8 contains 18 controls organized into three implementation groups." },
-      { id: "cf-q4-2", question: "What percentage of ATT&CK techniques does IG1 protect against?", options: ["IG1 protects against approximately 77% of techniques in common cyber attacks", "About 30% of standard techniques used by APTs and state-sponsored actors", "About 50% of advanced credential dumping and lateral movement techniques", "100% of all known and zero-day threat techniques in corporate environments"], correctAnswer: 0, explanation: "IG1 safeguards protect against approximately 77% of MITRE ATT&CK (sub-)techniques used in common attacks." },
-      { id: "cf-q4-3", question: "Which CIS Control focuses on enterprise asset inventory?", options: ["Control 5, which covers Account Management and credential security controls", "Control 10, which focuses on Malware Defenses and endpoint security platforms", "Control 18, which covers Penetration Testing and vulnerability assessment rules", "Control 1, which establishes Inventory and Control of Enterprise Assets"], correctAnswer: 3, explanation: "CIS Control 1: Inventory and Control of Enterprise Assets — knowing what's on your network is the foundation." },
-      { id: "cf-q4-4", question: "What is IG1 also known as?", options: ["Advanced Security, which requires full automation and dedicated threat hunting", "Essential Cyber Hygiene, defining foundational safeguards for all organizations", "Network Defense, focusing on perimeter firewalls and local intrusion prevention", "Penetration Testing, validating operational controls via offensive security"], correctAnswer: 1, explanation: "IG1 is called Essential Cyber Hygiene — the minimum safeguards every organization should implement." },
-      { id: "cf-q4-5", question: "After how many days of inactivity should accounts be disabled per CIS Controls?", options: ["Accounts should be disabled after 15 days of inactivity to prevent local access", "Accounts should be disabled after 30 days of inactivity to minimize license costs", "Accounts should be disabled after 45 days of inactivity per Control 5.3 guidelines", "Accounts should be disabled after 90 days of inactivity for all remote contractors"], correctAnswer: 2, explanation: "CIS Control 5.3 recommends disabling dormant accounts after 45 days of inactivity." },
-      { id: "cf-q4-6", question: "Which CIS Control covers penetration testing?", options: ["Control 18, which covers Penetration Testing to validate overall defenses", "Control 7, which covers Vulnerability Management and scanning workflows", "Control 13, which focuses on Network Monitoring and intrusion detection alerts", "Control 15, which handles Service Provider Management and vendor compliance"], correctAnswer: 0, explanation: "CIS Control 18: Penetration Testing — validating defenses through offensive security testing, part of IG3." },
-      { id: "cf-q4-7", question: "What free tool does CIS provide for benchmarking?", options: ["Nessus, which scans systems for missing patches and vulnerability scores", "Wireshark, which captures and analyzes local network packets for forensics", "Splunk, which aggregates and indexes log data from multiple sources", "CIS-CAT Lite, which assesses system configurations against hardening benchmarks"], correctAnswer: 3, explanation: "CIS-CAT Lite is a free benchmarking tool that assesses system configurations against CIS Benchmarks." },
-      { id: "cf-q4-8", question: "Which Implementation Group includes security awareness training?", options: ["IG1, which establishes the absolute minimum cybersecurity hygiene baseline", "IG2, where basic security awareness and skills training safeguards begin", "IG3, which covers advanced security engineering and threat hunting practices", "It is not included in any of the CIS Controls or implementation groups"], correctAnswer: 1, explanation: "CIS Control 14 (Security Awareness and Skills Training) starts in IG2, with basic awareness safeguards." },
-      { id: "cf-q4-9", question: "What does CIS Control 3 cover?", options: ["Network monitoring and active intrusion prevention across local LANs", "Penetration testing and red team validation exercises to test controls", "Data Protection, including data classification, encryption, and DLP policies", "Email security controls, spam filters, and malicious attachment blocking"], correctAnswer: 2, explanation: "CIS Control 3: Data Protection — classifying and protecting sensitive data through encryption, DLP, and retention policies." },
-      { id: "cf-q4-10", question: "How many safeguards are in IG1?", options: ["There are 56 safeguards that form the essential cyber hygiene baseline", "There are 18 safeguards, representing one core safeguard per CIS Control", "There are 36 safeguards, covering both IG1 and half of the IG2 requirements", "There are 153 safeguards covering all three implementation groups completely"], correctAnswer: 0, explanation: "IG1 contains 56 safeguards that form the essential cyber hygiene baseline for all organizations." },
-      { id: "cf-q4-11", question: "Which CIS Control covers malware defenses?", options: ["Control 4, which covers Secure Configuration of Enterprise Assets and Software", "Control 8, which focuses on Audit Log Management and central SIEM queries", "Control 16, which covers Application Software Security for secure development", "Control 10, which covers Malware Defenses to prevent and detect execution"], correctAnswer: 3, explanation: "CIS Control 10: Malware Defenses — preventing and detecting malware across the enterprise." },
-      { id: "cf-q4-12", question: "What do CIS Benchmarks provide?", options: ["General security advice and high-level strategy recommendations for CISOs", "Prescriptive configuration hardening guides for specific software and platforms", "Marketing benchmarks comparing security spending across different industries", "Job descriptions and skill matrices for hiring security operations staff"], correctAnswer: 1, explanation: "CIS Benchmarks are detailed, step-by-step hardening guides that specify exact configuration settings to secure systems." },
-      { id: "cf-q4-13", question: "What are the two CIS Benchmark profile levels?", options: ["Basic and Advanced security levels depending on the size of the company", "Free and Premium levels of documentation and automated assessment tooling", "Level 1 (Practical) and Level 2 (Defense in Depth) hardening recommendations", "Starter and Enterprise profiles configured in the GRC compliance platform"], correctAnswer: 2, explanation: "Level 1 is practical security with minimal performance impact; Level 2 provides defense in depth for high-security environments." },
-      { id: "cf-q4-14", question: "Which CIS Control requires MFA for externally-exposed applications?", options: ["Control 6, which requires MFA for all remote network and app access pathways", "Control 1, which focuses on maintaining active inventories of physical assets", "Control 4, which covers default password changes and baseline configurations", "Control 12, which handles Network Infrastructure Management and segmentation"], correctAnswer: 0, explanation: "CIS Control 6.5 requires MFA for all externally-exposed enterprise applications and remote network access." },
-      { id: "cf-q4-15", question: "How should organizations typically progress through Implementation Groups?", options: ["Implement all three implementation groups simultaneously to save project time", "Start with the advanced IG3 safeguards and work backward to IG1 controls", "Progression is sequential: implement IG1, then add IG2, and finally add IG3 safeguards", "Implementation Groups are not sequential and can be chosen completely at random"], correctAnswer: 2, explanation: "The typical progression is: Year 1 implement IG1, Year 2 add IG2 safeguards, Year 3 add IG3 — building on the foundation." }
+      {
+        id: "cf-q4-1",
+        difficulty: "medium",
+        tags: ["Implementation Groups"],
+        scenario: "Company profile: 35 employees, no full-time security staff, one IT generalist, handles customer contact data but no regulated data, limited budget.",
+        question: "Which CIS Implementation Group applies, and what does it commit them to?",
+        options: [
+          "IG1 — the essential cyber hygiene baseline, roughly 56 foundational safeguards",
+          "IG2 — because they process customer data of any kind",
+          "IG3 — all 153 safeguards, since partial adoption is not permitted",
+          "None — CIS Controls apply only to enterprises over 500 staff"
+        ],
+        correctAnswer: 0,
+        explanation: "IG1 is defined for small organisations with limited expertise, protecting against unsophisticated commodity attacks — the essential cyber hygiene set. IG2 adds safeguards for organisations with dedicated security staff and regulated/sensitive data; IG3 targets organisations facing targeted attacks. Groups are cumulative: IG2 includes IG1."
+      },
+      {
+        id: "cf-q4-2",
+        difficulty: "easy",
+        tags: ["Control Order"],
+        scenario: "A new security lead proposes starting the programme with Control 13 (Network Monitoring and Defense) and Control 16 (Application Software Security), deferring Controls 1 and 2.",
+        question: "Why is this ordering problematic?",
+        options: [
+          "Controls must be implemented in strict numeric order with no exceptions",
+          "Controls 1 and 2 (inventory of enterprise assets and software) are prerequisites — you cannot monitor, patch or defend what you have not inventoried",
+          "Control 13 is IG3-only and cannot be attempted first",
+          "Controls 16 and 13 are deprecated in v8"
+        ],
+        correctAnswer: 1,
+        explanation: "CIS orders controls by dependency and impact. Asset and software inventory (1 and 2) underpin vulnerability management, configuration, monitoring and response — every downstream control has blind spots proportional to inventory gaps. This is why they remain the first two controls."
+      },
+      {
+        id: "cf-q4-3",
+        difficulty: "hard",
+        tags: ["Benchmarks", "Hardening"],
+        scenario: "The team applies the CIS Benchmark Level 2 profile for Windows Server 2022 directly to production domain controllers on a Friday. Monday: legacy line-of-business app authentication fails, and an internal file share is unreachable.",
+        question: "What was the process failure?",
+        options: [
+          "Level 2 benchmarks are defective and should never be used",
+          "Level 2 is a defence-in-depth profile that can break functionality — it must be piloted in a test environment with exceptions documented before production rollout",
+          "CIS Benchmarks can only be applied to workstations",
+          "The team should have applied Level 3"
+        ],
+        correctAnswer: 1,
+        explanation: "CIS Benchmark Level 1 targets broad, low-impact hardening; Level 2 adds stricter defence-in-depth settings that frequently break legacy applications. Sound practice: baseline in a lab, pilot on a representative ring, document approved exceptions with compensating controls, then stage production — never a direct Friday push to domain controllers."
+      },
+      {
+        id: "cf-q4-4",
+        difficulty: "medium",
+        tags: ["Safeguards", "Mapping"],
+        scenario: "Post-incident, phishing led to credential theft and reuse across three SaaS apps with no MFA. Leadership asks which CIS safeguards would most directly have prevented or contained this.",
+        question: "Which pairing is the strongest answer?",
+        options: [
+          "Control 5/6 (Account and Access Management — MFA, unique credentials) plus Control 14 (Security Awareness Training)",
+          "Control 11 (Data Recovery) plus Control 12 (Network Infrastructure Management)",
+          "Control 3 (Data Protection) plus Control 15 (Service Provider Management) only",
+          "Control 18 (Penetration Testing) alone"
+        ],
+        correctAnswer: 0,
+        explanation: "Credential theft plus reuse is answered by account management and access control safeguards — enforce MFA on all externally accessible and administrative accounts, unique credentials, and centralised identity — reinforced by awareness training to reduce initial click-through. Recovery and pen testing matter but neither prevents or contains this chain."
+      },
+      {
+        id: "cf-q4-5",
+        difficulty: "medium",
+        tags: ["Measurement"],
+        scenario: "Two metrics are proposed to the board for Control 7 (Continuous Vulnerability Management):\n  M1: \"We ran 12 scans this quarter.\"\n  M2: \"Median time to remediate internet-facing critical vulnerabilities: 6 days; 94% within 14-day SLA.\"",
+        question: "Which metric is meaningful and why?",
+        options: [
+          "M1 — scan volume proves programme activity",
+          "M2 — it measures outcome against a risk-based SLA rather than activity",
+          "Both are equivalent measures of the same control",
+          "Neither; vulnerability management cannot be measured quantitatively"
+        ],
+        correctAnswer: 1,
+        explanation: "M1 is an activity metric — running scans says nothing about risk reduction. M2 measures outcome (time-to-remediate) scoped to the highest-risk population (internet-facing critical) against a defined SLA, which is what CIS safeguard measures and board reporting should reflect."
+      },
+      {
+        id: "cf-q4-6",
+        difficulty: "hard",
+        tags: ["IG2/IG3"],
+        scenario: "A 4,000-person biotech with a dedicated SOC and IP that nation-state actors have previously targeted asks whether IG2 is sufficient.",
+        question: "What is the appropriate recommendation?",
+        options: [
+          "IG2 is sufficient — IG3 applies only to government agencies",
+          "IG3, because the organisation faces targeted, sophisticated adversaries; IG3 adds safeguards such as advanced penetration testing, red teaming and deeper application security",
+          "IG1, because the SOC already provides monitoring",
+          "Implementation Groups do not apply once an organisation exceeds 1,000 staff"
+        ],
+        correctAnswer: 1,
+        explanation: "IG selection is driven by threat profile and data sensitivity, not sector. A documented history of targeting by sophisticated actors plus high-value IP places the organisation in IG3, which layers advanced testing, exercise and application-security safeguards on top of the cumulative IG1+IG2 set."
+      },
+      {
+        id: "cf-q4-7",
+        difficulty: "easy",
+        tags: ["Benchmarks vs Controls"],
+        scenario: "An engineer conflates two CIS artefacts: one tells the organisation to \"establish and maintain secure configuration of enterprise assets\", the other gives a 900-page settings list for Ubuntu 22.04.",
+        question: "Which is which?",
+        options: [
+          "The first is a CIS Control/safeguard (what to achieve); the second is a CIS Benchmark (platform-specific how)",
+          "The first is a Benchmark; the second is a safeguard",
+          "Both are Benchmarks at different levels",
+          "Both are safeguards under Control 4"
+        ],
+        correctAnswer: 0,
+        explanation: "CIS Controls and their safeguards state the outcome (Control 4: Secure Configuration). CIS Benchmarks are the prescriptive, platform-specific configuration guides — Windows, Linux distributions, browsers, Kubernetes, cloud providers — that operationalise those outcomes."
+      },
+      {
+        id: "cf-q4-8",
+        difficulty: "medium",
+        tags: ["Exceptions"],
+        scenario: "A benchmark item requires disabling SMBv1. One legacy medical imaging device requires SMBv1 and the vendor will not patch until 2027.",
+        question: "What is the correct handling?",
+        options: [
+          "Disable SMBv1 everywhere and accept the clinical outage",
+          "Silently skip the benchmark item across the estate to keep the device working",
+          "Enforce the setting estate-wide, grant a documented, time-bound exception for that device with compensating controls (isolated VLAN, strict ACLs, enhanced monitoring) and a review date",
+          "Mark Control 4 as not applicable in the SoA"
+        ],
+        correctAnswer: 2,
+        explanation: "Exception management is the mechanism: keep the baseline enforced everywhere it can be, isolate the non-conforming asset, add compensating detection, record the risk owner, and set a review/expiry date tied to the vendor roadmap. Skipping estate-wide converts one device's constraint into an organisation-wide vulnerability."
+      }
     ]
   },
   {
     quizId: "cf-q5",
     courseId: "cybersecurity-frameworks",
-    title: "Risk Management Quiz",
-    description: "Evaluate your understanding of RMF, risk assessment, and third-party risk.",
+    title: "Risk Management: RMF, Assessment & Third Parties",
+    description: "NIST RMF steps, quantitative vs qualitative analysis, treatment decisions, and vendor risk scenarios.",
     passingScore: 70,
     timeLimit: 20,
     questions: [
       {
         id: "cf-q5-1",
-        question: "How many steps are in the NIST Risk Management Framework?",
+        difficulty: "medium",
+        tags: ["NIST RMF"],
+        scenario: "A federal system team completed: categorised the system per FIPS 199, selected a control baseline, and implemented the controls. The AO is now asking what must occur before the system may operate.",
+        question: "Which RMF steps remain, in order?",
         options: [
-          "The framework contains 5 core operational steps focusing exclusively on technical configuration policies.",
-          "The framework defines 6 steps that align with the classic information security lifecycle stages.",
-          "The framework consists of 7 structured steps: Prepare, Categorize, Select, Implement, Assess, Authorize, and Monitor.",
-          "The framework utilizes 8 lifecycle steps designed to cover continuous quantitative threat modeling."
+          "Assess, Authorize, Monitor",
+          "Monitor, Assess, Authorize",
+          "Prepare, Select, Monitor",
+          "Authorize, Assess, Categorize"
         ],
-        correctAnswer: 2,
-        explanation: "NIST RMF has 7 steps: Prepare, Categorize, Select, Implement, Assess, Authorize, and Monitor."
+        correctAnswer: 0,
+        explanation: "RMF sequence is Prepare, Categorize, Select, Implement, Assess, Authorize, Monitor. With implementation complete, an independent assessment produces the SAR, the Authorizing Official grants an ATO based on residual risk, and continuous monitoring sustains the authorisation."
       },
       {
         id: "cf-q5-2",
-        question: "What does ATO stand for?",
+        difficulty: "hard",
+        tags: ["Quantitative Risk"],
+        scenario: "Asset value (AV) of the customer database: $4,000,000\nExposure factor (EF) for a ransomware event: 25%\nAnnual rate of occurrence (ARO): 0.4\nProposed control: immutable backup + segmentation, $150,000/yr, reduces ARO to 0.1",
+        question: "What is the ALE before and after, and is the control justified?",
         options: [
-          "Automated Threat Operations — a SOAR playbook that handles host containment and blocking.",
-          "Authorization to Operate — a senior official's formal decision that a system is authorized to run.",
-          "Advanced Threat Oversight — a compliance committee reviewing high-level security indicators.",
-          "Annual Technical Overview — an external audit verifying physical security and log retention."
+          "ALE before $400K, after $100K — saving $300K for $150K spend, so justified",
+          "ALE before $1M, after $400K — not justified",
+          "ALE before $400K, after $250K — marginal",
+          "ALE cannot be calculated without the SLE"
         ],
-        correctAnswer: 1,
-        explanation: "ATO (Authorization to Operate) is the decision by a senior official that a system is authorized to operate based on acceptable risk."
+        correctAnswer: 0,
+        explanation: "SLE = AV x EF = $4M x 0.25 = $1M. ALE = SLE x ARO = $1M x 0.4 = $400K. After the control, ALE = $1M x 0.1 = $100K. Risk reduction is $300K per year against a $150K annual cost — a positive $150K net benefit, so the control is financially justified."
       },
       {
         id: "cf-q5-3",
-        question: "In the FAIR methodology, what does Risk equal?",
+        difficulty: "medium",
+        tags: ["Qualitative vs Quantitative"],
+        scenario: "Two reports land on the CFO's desk for the same risk:\n  R1: \"Reputational damage from a breach: HIGH severity, MEDIUM likelihood.\"\n  R2: \"Expected annual loss $2.3M (90% CI: $0.8M-$5.1M) based on 10,000 Monte Carlo iterations.\"",
+        question: "Which is the correct characterisation of these two approaches?",
         options: [
-          "Threats multiplied by Vulnerabilities, which defines the classic qualitative risk scoring metric.",
-          "Assets multiplied by Threats, representing the total exposure value of corporate infrastructure.",
-          "Impact multiplied by Probability, which is the standard risk calculation in qualitative frameworks.",
-          "Loss Event Frequency multiplied by Loss Magnitude, providing a quantitative financial risk measure."
+          "R1 is quantitative and R2 is qualitative",
+          "R1 is qualitative — fast and comparative but not directly usable for financial trade-offs; R2 is quantitative — supports cost-benefit decisions but needs credible input data",
+          "R2 is always superior and R1 should never be used",
+          "They are the same method expressed differently"
         ],
-        correctAnswer: 3,
-        explanation: "In FAIR, Risk = Loss Event Frequency × Loss Magnitude, providing a quantitative financial measure of risk."
+        correctAnswer: 1,
+        explanation: "Qualitative (H/M/L) is quick, good for triage and broad coverage, but cannot be summed or compared to control cost. Quantitative (FAIR, Monte Carlo) produces loss distributions usable for budget decisions, at the cost of data quality dependence and effort. Mature programmes use qualitative to triage and quantitative on the top risks."
       },
       {
         id: "cf-q5-4",
-        question: "What percentage of data breaches involve a third party?",
+        difficulty: "hard",
+        tags: ["Third-Party Risk"],
+        scenario: "Vendor intake queue:\n  V1: marketing analytics SaaS, read-only access to anonymised web metrics\n  V2: payroll processor, holds employee PII and bank details, integrated via SFTP\n  V3: office snack supplier, no system access\n  V4: managed IT provider with domain admin credentials into your estate",
+        question: "How should the tiering and assurance depth be assigned?",
         options: [
-          "Approximately 60% of verified data breaches are linked to third-party vendor access or software.",
-          "Approximately 20% of documented data breaches are traced back to vendor vulnerabilities.",
-          "Approximately 40% of enterprise security incidents involve third-party API compromises.",
-          "Approximately 80% of corporate data leakages involve external supply chain software components."
+          "All four get the same 200-question security questionnaire for fairness",
+          "V4 and V2 are critical/high (privileged access, sensitive data) requiring SOC 2 Type II or ISO evidence, contractual security schedules and periodic reassessment; V1 is moderate/lightweight; V3 is out of scope",
+          "V1 is highest risk because it is cloud-hosted",
+          "Tiering should follow annual contract value only"
         ],
-        correctAnswer: 0,
-        explanation: "According to the Ponemon Institute, approximately 60% of data breaches involve a third party."
+        correctAnswer: 1,
+        explanation: "Third-party risk is tiered by data sensitivity, access level and business criticality — not contract value or hosting model. Privileged administrative access (V4) is the highest inherent risk, followed by the sensitive-PII processor (V2). Uniform questionnaires waste effort on V3 and under-scrutinise V4."
       },
       {
         id: "cf-q5-5",
-        question: "Which is NOT a risk treatment strategy?",
+        difficulty: "medium",
+        tags: ["Risk Acceptance"],
+        scenario: "Acceptance record:\n  Risk: unsupported Windows Server 2012 R2 running a billing app\n  Accepted by: Head of Infrastructure\n  Expiry: none stated\n  Compensating controls: none listed\n  Value at risk: $1.8M (exceeds the $400K per-risk tolerance)",
+        question: "Identify the three defects in this acceptance.",
         options: [
-          "Mitigate the risk by implementing technical controls, policies, or physical security measures.",
-          "Transfer the risk to another entity, typically by purchasing comprehensive cyber insurance.",
-          "Ignore the risk entirely by choosing not to document or monitor the identified threat vector.",
-          "Accept the risk formally, ensuring the residual risk level falls within the approved appetite."
+          "It is accepted above tolerance, by a non-business risk owner, with no expiry or compensating controls",
+          "Only the missing expiry date is a defect",
+          "Nothing is wrong — any manager may accept a risk they understand",
+          "The defect is that unsupported software can never be accepted under any circumstances"
         ],
-        correctAnswer: 2,
-        explanation: "The four strategies are Mitigate, Transfer, Avoid, and Accept. 'Ignore' is not a valid risk treatment — even acceptance requires documentation."
+        correctAnswer: 0,
+        explanation: "A valid acceptance requires: approval by the accountable business risk owner at the authority level matching the exposure (this exceeds tolerance, so it should escalate to executive/board level), a documented expiry and review date, and compensating controls that reduce exposure while the risk stands. All three are absent."
       },
       {
         id: "cf-q5-6",
-        question: "What is FIPS 199 used for in RMF?",
+        difficulty: "easy",
+        tags: ["Inherent vs Residual"],
+        scenario: "Register entry: Inherent risk 20 (High). Controls: MFA, network segmentation, EDR. Residual risk 6 (Low). The board asks which number determines whether further action is needed.",
+        question: "Which is correct?",
         options: [
-          "Establishing approved symmetric and asymmetric cryptographic algorithms for protecting data at rest.",
-          "Categorizing information systems into Low, Moderate, or High impact levels for security objectives.",
-          "Defining specific audit procedures and compliance guidelines for external security assessors.",
-          "Configuring continuous network monitoring sensors and defining system alert thresholds."
+          "Residual risk — it reflects exposure after existing controls and is compared against appetite/tolerance",
+          "Inherent risk — it is the worst case and therefore the decision basis",
+          "The average of the two",
+          "Neither; only qualitative ratings can inform board decisions"
         ],
-        correctAnswer: 1,
-        explanation: "FIPS 199 is used in RMF Step 2 to categorize information systems by impact level (Low, Moderate, High) for confidentiality, integrity, and availability."
+        correctAnswer: 0,
+        explanation: "Inherent risk shows how much the control set is doing (useful for justifying continued investment), but treatment decisions are made against residual risk versus appetite and tolerance. Here residual 6 is within a Low band, so monitoring rather than further treatment is appropriate."
       },
       {
         id: "cf-q5-7",
-        question: "What does STRIDE stand for in threat modeling?",
+        difficulty: "hard",
+        tags: ["Concentration Risk"],
+        scenario: "Vendor review shows your primary CRM, your ticketing system, your identity provider and your backup target all run in a single cloud provider's single region. Each vendor individually passed its assessment.",
+        question: "What risk is missed by per-vendor assessment, and what treatment fits?",
         options: [
-          "Security, Testing, Risk assessment, Integration validation, Defensive planning, and Evaluation metrics.",
-          "Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege.",
-          "Standards, Threats, Regulations, Implementation patterns, Detection rule tuning, and Enforcement policies.",
-          "System security, Threat intelligence, Risk mitigation, Incident containment, Data protection, and Eviction."
+          "No risk — each vendor was assessed and passed",
+          "Concentration/systemic risk — a single provider or region outage cascades across critical functions; treat with multi-region or multi-provider design, tested failover, and contractual RTO commitments",
+          "Supply-chain risk is only relevant to hardware manufacturers",
+          "Insurance is the only viable treatment"
         ],
         correctAnswer: 1,
-        explanation: "STRIDE categorizes threats: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege."
+        explanation: "Assessing vendors one at a time hides correlated failure. Aggregating dependencies across the portfolio exposes single points of failure — here, one region hosting identity, backup and core business systems means an outage removes both operation and recovery. Treatment is architectural (diversify, test failover) plus contractual RTO/RPO terms."
       },
       {
         id: "cf-q5-8",
-        question: "What is residual risk?",
+        difficulty: "medium",
+        tags: ["Continuous Monitoring"],
+        scenario: "An ATO was granted 14 months ago. Since then the system added a public API, changed cloud regions, and had two Poor scan results go unreviewed. No reassessment has occurred.",
+        question: "Which RMF step is failing?",
         options: [
-          "The total initial risk exposure before any security controls or mitigation strategies are implemented.",
-          "The risk that remains after security controls and mitigation treatment measures have been applied.",
-          "The risk that was completely eliminated by decommissioning the target system or business process.",
-          "The risk associated with external factors like market changes, independent of system security."
+          "Step 7 — Monitor: ongoing control assessment, change management and status reporting to the AO must keep the authorisation current",
+          "Step 2 — Categorize",
+          "Step 4 — Implement",
+          "Step 1 — Prepare"
         ],
-        correctAnswer: 1,
-        explanation: "Residual risk is the risk that remains after treatment measures have been applied. It must fall within the organization's risk appetite."
-      },
-      {
-        id: "cf-q5-9",
-        question: "What should a risk acceptance form include?",
-        options: [
-          "Only a brief, high-level description of the technical threat and the affected hardware assets.",
-          "Risk ID, description, level, business justification, owner, approval date, and scheduled review date.",
-          "Just the formal signature of the CISO and a list of recommended security tools to purchase.",
-          "A detailed network topology diagram and the most recent vulnerability scan results from the host."
-        ],
-        correctAnswer: 1,
-        explanation: "Risk acceptance forms must document the risk details, justification, compensating controls, risk owner approval, and scheduled review dates."
-      },
-      {
-        id: "cf-q5-10",
-        question: "What is the SIG questionnaire used for?",
-        options: [
-          "Conducting annual employee satisfaction surveys and evaluating internal training effectiveness.",
-          "Assessing third-party vendor security posture using a standardized, industry-accepted tool.",
-          "Documenting step-by-step incident response procedures for containment and system restoration.",
-          "Reviewing secure software development lifecycles and validating source code integrity."
-        ],
-        correctAnswer: 1,
-        explanation: "The SIG (Standardized Information Gathering) questionnaire is a standardized tool for assessing third-party vendor security posture."
-      },
-      {
-        id: "cf-q5-11",
-        question: "Which NIST publication contains security controls for RMF?",
-        options: [
-          "NIST SP 800-37, which outlines the steps of the Risk Management Framework implementation lifecycle.",
-          "NIST SP 800-53, which provides a comprehensive catalog of security and privacy controls for systems.",
-          "NIST SP 800-61, which provides guidelines for establishing incident response capabilities and playbooks.",
-          "NIST SP 800-171, which defines security requirements for protecting controlled unclassified information."
-        ],
-        correctAnswer: 1,
-        explanation: "NIST SP 800-53 Rev. 5 contains over 1,000 security and privacy controls across 20 families used in the RMF."
-      },
-      {
-        id: "cf-q5-12",
-        question: "What contract clause is essential for third-party risk management?",
-        options: [
-          "A non-compete clause preventing the vendor from working with direct business competitors.",
-          "A right to audit clause allowing the organization to assess the vendor's security controls.",
-          "A marketing rights clause defining how each company can use the other's logo on websites.",
-          "A price guarantee clause locking in service rates and licensing costs for the contract duration."
-        ],
-        correctAnswer: 1,
-        explanation: "The right to audit clause allows organizations to assess their vendors' security controls and compliance."
-      },
-      {
-        id: "cf-q5-13",
-        question: "In quantitative risk analysis, what is SLE?",
-        options: [
-          "Security Level Evaluation — a metric determining the maturity score of local endpoint systems.",
-          "Single Loss Expectancy — the monetary loss expected from a single occurrence of a specific risk.",
-          "System Lifecycle Efficiency — a score measuring database response times and uptime statistics.",
-          "Standard Log Entry — a standardized format for representing network connection metadata."
-        ],
-        correctAnswer: 1,
-        explanation: "SLE (Single Loss Expectancy) = Asset Value × Exposure Factor — the expected monetary loss from a single incident."
-      },
-      {
-        id: "cf-q5-14",
-        question: "What is the most effective way to handle a risk that outweighs its business benefit?",
-        options: [
-          "Accept the risk formally, documenting the decision in the corporate risk register for audits.",
-          "Transfer the risk to a third party, typically by purchasing a specialized cyber insurance policy.",
-          "Avoid the risk entirely by eliminating the associated business activity, system, or software.",
-          "Mitigate the risk by implementing technical controls like firewalls, MFA, and access limits."
-        ],
-        correctAnswer: 2,
-        explanation: "Risk avoidance — eliminating the risk source entirely — is appropriate when the risk outweighs the business benefit."
-      },
-      {
-        id: "cf-q5-15",
-        question: "How often should critical vendors be reassessed?",
-        options: [
-          "Only once at the initial contract signing, relying on self-reporting for the remainder of the term.",
-          "Every five years to align with standard long-term software lifecycle and procurement reviews.",
-          "Annually at a minimum, supplemented by continuous monitoring using security rating platforms.",
-          "Never after the initial assessment, unless a public data breach involving the vendor occurs."
-        ],
-        correctAnswer: 2,
-        explanation: "Critical vendors should be reassessed annually, with continuous monitoring via security rating platforms between assessments."
+        correctAnswer: 0,
+        explanation: "RMF is a lifecycle, not a one-time gate. Step 7 (Monitor) requires ongoing assessment of control effectiveness, security impact analysis of changes such as a new public API or region move, and reporting to the AO — who may withdraw or condition the ATO if residual risk drifts."
       }
     ]
   },
   {
     quizId: "cf-q6",
     courseId: "cybersecurity-frameworks",
-    title: "PCI-DSS Quiz",
-    description: "Assess your knowledge of PCI-DSS requirements and compliance processes.",
-    passingScore: 75,
+    title: "PCI-DSS v4.0: Scoping, Segmentation & Audit",
+    description: "Cardholder data environment scoping, SAQ selection, segmentation validation and v4.0 requirement changes.",
+    passingScore: 70,
     timeLimit: 20,
     questions: [
       {
         id: "cf-q6-1",
-        question: "How many requirements does PCI-DSS have?",
+        difficulty: "hard",
+        tags: ["Scoping", "CDE"],
+        scenario: "Network map:\n  VLAN 10 — POS terminals, process card data (CDE)\n  VLAN 20 — jump host used by admins to manage VLAN 10\n  VLAN 30 — corporate laptops, no route to VLAN 10\n  VLAN 40 — Active Directory serving authentication to VLAN 10 and 20",
+        question: "Which VLANs are in PCI scope?",
         options: [
-          "The standard defines 6 high-level goals focusing exclusively on network-level firewalls.",
-          "The standard contains 10 operational requirements for securing cloud payment portals.",
-          "The standard consists of 12 detailed requirements organized into six logical goal areas.",
-          "The standard mandates 15 compliance checks for retail point-of-sale terminal security."
+          "VLAN 10 only",
+          "VLAN 10, 20 and 40 — the CDE plus connected-to/security-impacting systems (jump host and the AD that authenticates into the CDE)",
+          "All four VLANs, because they share the same physical infrastructure",
+          "VLAN 10 and 30"
         ],
-        correctAnswer: 2,
-        explanation: "PCI-DSS contains 12 requirements organized into 6 goals for protecting cardholder data."
+        correctAnswer: 1,
+        explanation: "Scope covers the CDE plus any system that connects to it or could impact its security. The admin jump host is connected-to; Active Directory authenticating CDE systems is security-impacting. VLAN 30 stays out only if segmentation genuinely prevents any route into the CDE — which must be tested, not assumed."
       },
       {
         id: "cf-q6-2",
-        question: "Which cardholder data element must NEVER be stored after authorization?",
+        difficulty: "medium",
+        tags: ["Segmentation Testing"],
+        scenario: "The QSA asks how the merchant validated that VLAN 30 is out of scope. Answer: \"We reviewed the firewall rule export and the rules look correct.\"",
+        question: "Why is this insufficient under PCI-DSS?",
         options: [
-          "Primary Account Number (PAN), which can be stored if encrypted with strong algorithms.",
-          "Cardholder name, which can be stored in cleartext for standard billing purposes.",
-          "Card Verification Value (CVV/CVC), which must never be stored after transaction authorization.",
-          "Expiration date, which can be stored to facilitate recurring subscription billing."
+          "Firewall exports must be provided in PDF form",
+          "Segmentation must be validated by penetration testing at least annually (and after significant changes) — rule review alone does not prove isolation",
+          "Segmentation is not permitted to reduce scope under v4.0",
+          "Only the acquirer may validate segmentation"
         ],
-        correctAnswer: 2,
-        explanation: "CVV/CVC, full track data, and PIN/PIN block must never be stored after authorization, even if encrypted."
+        correctAnswer: 1,
+        explanation: "PCI-DSS requires segmentation effectiveness to be confirmed by penetration testing at least annually and after any significant change to segmentation controls (every six months for service providers). Configuration review can miss misconfigured routes, shared management planes, and forgotten rules."
       },
       {
         id: "cf-q6-3",
-        question: "What is the minimum TLS version required by PCI-DSS?",
+        difficulty: "medium",
+        tags: ["SAQ"],
+        scenario: "An e-commerce merchant fully outsources payment capture: the checkout redirects to the processor's hosted page and the merchant's servers never see or transmit card data.",
+        question: "Which SAQ type generally applies?",
         options: [
-          "TLS 1.0, which is supported for legacy compatibility with older browser versions.",
-          "TLS 1.1, which is allowed under strict security exceptions and compensating controls.",
-          "TLS 1.2, which is the mandatory minimum version for encrypting data in transit.",
-          "TLS 1.3, which is recommended but not yet enforced as the minimum baseline standard."
+          "SAQ A — the smallest question set, for merchants who fully outsource all cardholder data functions to validated third parties",
+          "SAQ D — the full set, required for all e-commerce merchants",
+          "SAQ B — for imprint machines and standalone dial-out terminals",
+          "SAQ C-VT — for virtual terminal only"
         ],
-        correctAnswer: 2,
-        explanation: "PCI-DSS requires TLS 1.2 or higher for all cardholder data transmission."
+        correctAnswer: 0,
+        explanation: "SAQ A applies to card-not-present merchants who have fully outsourced all cardholder data functions, with no electronic storage, processing or transmission on their systems. Note v4.0 tightened SAQ A with script-integrity and page-tampering expectations because of Magecart-style attacks on the merchant's own page."
       },
       {
         id: "cf-q6-4",
-        question: "What is the CDE?",
+        difficulty: "hard",
+        tags: ["v4.0 Changes"],
+        scenario: "A compliance lead compares v3.2.1 evidence with v4.0 requirements and finds gaps around: password length, MFA coverage, automated log review, and payment page script inventory.",
+        question: "Which statement about v4.0 is accurate?",
         options: [
-          "Central Data Engine — the primary database server hosting customer transaction histories.",
-          "Cardholder Data Environment — the people, processes, and systems that handle cardholder data.",
-          "Compliance Documentation Evidence — the repository containing all audit reports and policies.",
-          "Cybersecurity Defense Endpoint — the network security tool monitoring payment gateway hosts."
+          "v4.0 reduced password minimums to 7 characters and removed MFA requirements",
+          "v4.0 raised passwords to 12 characters minimum, extended MFA to all access into the CDE (not just admin/remote), added targeted risk analyses, and required inventory/integrity monitoring of payment page scripts",
+          "v4.0 removed the need for log review entirely in favour of annual attestation",
+          "v4.0 applies only to service providers"
         ],
         correctAnswer: 1,
-        explanation: "The CDE (Cardholder Data Environment) includes all people, processes, and technology that store, process, or transmit cardholder data."
+        explanation: "Key v4.0 shifts: 12-character passwords, MFA for all access into the CDE, the customised approach option supported by targeted risk analyses, automated log-review mechanisms, and requirements 6.4.3/11.6.1 covering payment page scripts and change/tamper detection — a direct response to e-skimming."
       },
       {
         id: "cf-q6-5",
-        question: "Which merchant level requires an annual on-site QSA audit?",
+        difficulty: "medium",
+        tags: ["Storage Rules"],
+        scenario: "A database schema review of the order table finds these columns populated: PAN (encrypted), cardholder name, expiry date, service code, CVV2 (encrypted), and the full track 2 data (encrypted).",
+        question: "Which columns violate PCI-DSS regardless of encryption?",
         options: [
-          "Level 4 merchants, representing small businesses processing under 20,000 annual transactions.",
-          "Level 3 merchants, representing businesses processing between 20,000 and 1 million transactions.",
-          "Level 2 merchants, representing mid-sized businesses processing up to 6 million transactions.",
-          "Level 1 merchants, representing large enterprises processing over 6 million transactions annually."
+          "PAN and expiry date",
+          "CVV2 and full track data — sensitive authentication data must never be stored after authorisation, even encrypted",
+          "Cardholder name only",
+          "None — encryption makes all storage compliant"
         ],
-        correctAnswer: 3,
-        explanation: "Level 1 merchants (>6M transactions/year) require annual on-site assessment by a Qualified Security Assessor (QSA)."
+        correctAnswer: 1,
+        explanation: "Sensitive Authentication Data (full track data, CAV2/CVC2/CVV2/CID, PINs/PIN blocks) must never be retained post-authorisation, encrypted or not. PAN may be stored if rendered unreadable (truncation, tokenisation, strong crypto with key management); name, expiry and service code may be stored subject to protection requirements."
       },
       {
         id: "cf-q6-6",
-        question: "What is the most effective way to reduce PCI scope?",
+        difficulty: "easy",
+        tags: ["Compliance Levels"],
+        scenario: "A merchant processes about 8 million Visa transactions annually and asks what validation it must undergo.",
+        question: "What is the correct answer?",
         options: [
-          "Filing for compliance exemptions based on historical security record and company size.",
-          "Implementing strict network segmentation and tokenization to isolate payment card data.",
-          "Increasing the internal security operations staff to monitor the cardholder data environment.",
-          "Downgrading database servers to run legacy software packages that bypass modern requirements."
+          "Level 1 — annual onsite assessment by a QSA (or internal auditor with officer sign-off) plus quarterly ASV scans",
+          "Level 4 — annual SAQ only",
+          "Level 2 — SAQ plus optional scanning",
+          "No validation required for merchants above 5 million transactions"
         ],
-        correctAnswer: 1,
-        explanation: "Network segmentation isolates the CDE, and tokenization replaces cardholder data with non-sensitive tokens — both dramatically reduce scope."
+        correctAnswer: 0,
+        explanation: "Level 1 is over 6 million transactions per brand per year (or any merchant that has suffered a breach, or is designated by a brand). It requires an annual Report on Compliance from a QSA or qualified internal auditor with officer attestation, plus quarterly external ASV scans."
       },
       {
         id: "cf-q6-7",
-        question: "How often must ASV scans be performed?",
+        difficulty: "hard",
+        tags: ["Compensating Controls"],
+        scenario: "A legacy terminal cannot support the required TLS version. The team proposes a compensating control: place the terminal on a dedicated VLAN with an IPsec tunnel to the processor, restrict by MAC and IP ACL, and log all sessions with daily review.",
+        question: "What must the compensating control worksheet demonstrate for a QSA to accept this?",
         options: [
-          "Monthly, to capture rapid infrastructure changes and software updates in the network.",
-          "Quarterly, by an Approved Scanning Vendor for all external-facing network segments.",
-          "Semi-annually, to coincide with regular internal vulnerability scanning procedures.",
-          "Annually, as part of the preparation for the main compliance assessment and audit."
+          "That the control is cheaper than remediating the terminal",
+          "That there is a documented legitimate constraint, the control meets the intent and rigour of the original requirement, provides a comparable level of defence, and goes above and beyond other PCI requirements",
+          "Only that the risk owner signed it",
+          "That the terminal will be replaced within five years"
         ],
         correctAnswer: 1,
-        explanation: "Approved Scanning Vendor (ASV) external vulnerability scans must be performed quarterly for all compliance levels."
+        explanation: "A compensating control must document the business/technical constraint, meet the intent and rigour of the original requirement, provide comparable defence, and exceed other PCI requirements (a control already required elsewhere cannot double as compensation). It is reassessed annually and is not a permanent exemption."
       },
       {
         id: "cf-q6-8",
-        question: "What PCI-DSS requirement covers access control?",
+        difficulty: "medium",
+        tags: ["Scope Reduction"],
+        scenario: "Leadership wants to cut audit cost. Options: (A) tokenise PANs so the merchant systems only ever hold tokens, (B) add more firewalls inside the CDE, (C) buy cyber insurance, (D) shorten log retention.",
+        question: "Which option genuinely reduces PCI scope?",
         options: [
-          "Requirement 3, which focuses on protecting stored cardholder data through encryption.",
-          "Requirement 7, which mandates restricting access to system components by business need to know.",
-          "Requirement 10, which covers tracking and monitoring all access to network resources.",
-          "Requirement 12, which addresses maintaining a comprehensive information security policy."
+          "A — tokenisation removes PAN from merchant systems, shrinking the CDE and the systems subject to assessment",
+          "B — more firewalls always reduce scope",
+          "C — insurance transfers cost, which reduces assessment burden",
+          "D — less log data means fewer requirements to assess"
         ],
-        correctAnswer: 1,
-        explanation: "Requirement 7: Restrict access to system components and cardholder data by business need to know."
-      },
-      {
-        id: "cf-q6-9",
-        question: "What is SAQ A designed for?",
-        options: [
-          "All merchants processing card transactions regardless of their infrastructure or volume.",
-          "Card-not-present merchants that completely outsource all payment processing to PCI-compliant services.",
-          "Brick-and-mortar retail stores using physical point-of-sale terminals connected via cellular.",
-          "Third-party service providers that store, process, or transmit cardholder data on behalf of clients."
-        ],
-        correctAnswer: 1,
-        explanation: "SAQ A is for card-not-present merchants that fully outsource payment processing — the simplest SAQ with only 22 questions."
-      },
-      {
-        id: "cf-q6-10",
-        question: "What new requirement did PCI-DSS v4.0 add for all CDE access?",
-        options: [
-          "Mandatory annual security awareness training specifically tailored for payment terminal operators.",
-          "Multi-factor authentication (MFA) for all access to the Cardholder Data Environment (CDE).",
-          "Weekly compliance report generation and submission to the card brands and payment processor.",
-          "Stationing physical guards at all entry points to corporate data centers hosting card databases."
-        ],
-        correctAnswer: 1,
-        explanation: "PCI-DSS v4.0 expanded MFA requirements to cover all access to the CDE, not just remote access."
-      },
-      {
-        id: "cf-q6-11",
-        question: "What are the potential fines for PCI-DSS non-compliance?",
-        options: [
-          "A nominal fine ranging from $100 to $500 per incident, assessed by the local merchant bank.",
-          "A fixed penalty between $1,000 and $5,000 per year of non-compliance, set by the card brands.",
-          "Ongoing fines ranging from $5,000 to $100,000 per month, assessed by the payment brands.",
-          "A flat $1 million minimum fine for any compliance failure, regardless of organization size."
-        ],
-        correctAnswer: 2,
-        explanation: "PCI-DSS non-compliance fines range from $5,000 to $100,000 per month until the organization achieves compliance."
-      },
-      {
-        id: "cf-q6-12",
-        question: "What does PCI-DSS Requirement 10 cover?",
-        options: [
-          "Restricting physical access to cardholder data and payment terminal infrastructure.",
-          "Tracking and monitoring all access to network resources and cardholder data system components.",
-          "Developing and maintaining secure systems, applications, and web-facing payment portals.",
-          "Maintaining a comprehensive security policy that addresses information security for all personnel."
-        ],
-        correctAnswer: 1,
-        explanation: "Requirement 10: Log and monitor all access to system components and cardholder data, with audit trails and SIEM."
-      },
-      {
-        id: "cf-q6-13",
-        question: "What is tokenization?",
-        options: [
-          "Generating strong cryptographic keys for symmetric encryption of transaction databases.",
-          "Replacing sensitive cardholder data with a non-sensitive equivalent token with no card value.",
-          "Isolating payment network segments using firewalls to prevent lateral movement of threats.",
-          "Conducting specialized security training for employees handling customer credit card accounts."
-        ],
-        correctAnswer: 1,
-        explanation: "Tokenization replaces cardholder data with a non-sensitive token that has no exploitable value if breached."
-      },
-      {
-        id: "cf-q6-14",
-        question: "How long must PCI-DSS audit logs be retained?",
-        options: [
-          "A minimum of 30 days, to capture immediate security events and active system alerts.",
-          "A minimum of 90 days, which must be immediately available for local system query and analysis.",
-          "A minimum of 12 months, with at least 3 months immediately available for online analysis.",
-          "A minimum of 7 years, to comply with federal tax and financial record retention regulations."
-        ],
-        correctAnswer: 2,
-        explanation: "PCI-DSS requires at least 12 months of audit trail history, with a minimum of 3 months immediately available for analysis."
-      },
-      {
-        id: "cf-q6-15",
-        question: "What is the customized approach in PCI-DSS v4.0?",
-        options: [
-          "A mechanism for small merchants to ignore complex controls by signing a liability waiver form.",
-          "An alternative path to meet objectives by designing custom controls validated by risk analysis.",
-          "A low-cost compliance certification tier designed for startups with low transaction volume.",
-          "A marketing template provided by security vendors to showcase custom firewall configurations."
-        ],
-        correctAnswer: 1,
-        explanation: "The customized approach in v4.0 allows organizations to meet the objective of a requirement using alternative controls justified by risk analysis."
+        correctAnswer: 0,
+        explanation: "Scope is defined by where cardholder data lives, flows and can be reached. Removing the PAN itself (tokenisation, P2PE, hosted payment pages) is the only lever here that shrinks the CDE. Extra internal firewalls may improve security without reducing scope; insurance is irrelevant to scope; reducing retention below requirement 10 minimums is a violation."
       }
     ]
   },
   {
     quizId: "cf-q7",
     courseId: "cybersecurity-frameworks",
-    title: "Data Privacy Regulations Quiz",
-    description: "Test your understanding of GDPR, HIPAA, CCPA, and data protection principles.",
+    title: "Privacy Regulation: GDPR, HIPAA, CCPA & DPIAs",
+    description: "Lawful basis, breach notification clocks, cross-regulation differences, and when a DPIA is mandatory.",
     passingScore: 70,
     timeLimit: 20,
     questions: [
       {
         id: "cf-q7-1",
-        question: "How many principles does GDPR define?",
+        difficulty: "hard",
+        tags: ["GDPR", "Breach Notification"],
+        scenario: "Timeline:\n  Tue 09:00 — SOC detects anomalous export from the customer database\n  Wed 16:30 — IR confirms 120,000 EU records (name, email, hashed password, home address) were exfiltrated\n  Thu 11:00 — Legal begins drafting notification",
+        question: "When does the 72-hour GDPR clock start, and what is the deadline?",
         options: [
-          "GDPR defines 5 privacy concepts that map to the classic OECD guidelines.",
-          "GDPR establishes 7 core principles including lawfulness, minimization, and accountability.",
-          "GDPR lists 10 customer rights concerning automated credit decisions.",
-          "GDPR mandates 12 operational controls for securing personal database storage systems."
+          "At detection (Tue 09:00) — deadline Fri 09:00",
+          "At awareness of the personal data breach (Wed 16:30, when it was confirmed) — supervisory authority notification due by Sat 16:30",
+          "At the start of legal drafting (Thu 11:00)",
+          "There is no deadline if the passwords were hashed"
         ],
         correctAnswer: 1,
-        explanation: "GDPR defines 7 principles: lawfulness/fairness/transparency, purpose limitation, data minimization, accuracy, storage limitation, integrity/confidentiality, and accountability."
+        explanation: "Art. 33 requires notification to the supervisory authority without undue delay and where feasible within 72 hours of becoming aware — awareness means reasonable certainty a personal data breach occurred, i.e. Wed 16:30. Notification may be phased if all facts are not yet known. Data subjects must also be told if high risk to their rights exists (Art. 34)."
       },
       {
         id: "cf-q7-2",
-        question: "Within how many hours must a GDPR breach be reported to authorities?",
+        difficulty: "medium",
+        tags: ["Lawful Basis"],
+        scenario: "A retailer wants to email past customers about new products. It relies on \"legitimate interests\" and provides an unsubscribe link. A separate proposal is to use the same customer data to train a third-party ad-targeting model.",
+        question: "Which assessment is correct?",
         options: [
-          "A personal data breach must be reported within 24 hours of initial threat detection.",
-          "A personal data breach must be reported within 48 hours of completing internal triage.",
-          "A personal data breach must be reported within 72 hours of becoming aware of the event.",
-          "A personal data breach must be reported within 7 days of identifying the compromised database."
+          "Both uses are covered by legitimate interests since the data was lawfully collected",
+          "Direct marketing to existing customers can rest on legitimate interests (subject to an LIA, transparency and opt-out), but sharing data for third-party ad targeting is a materially different purpose likely requiring consent and a purpose-compatibility assessment",
+          "Consent is required for both, always",
+          "Neither requires a lawful basis because the customers already transacted"
         ],
-        correctAnswer: 2,
-        explanation: "GDPR requires breach notification to the supervisory authority within 72 hours of becoming aware of the breach."
+        correctAnswer: 1,
+        explanation: "Lawful basis is per purpose, not per dataset. Recital 47 recognises direct marketing as a possible legitimate interest with a balancing test and opt-out (plus ePrivacy rules on electronic marketing). Repurposing for third-party ad targeting fails compatibility and reasonable-expectation tests, pushing you to consent."
       },
       {
         id: "cf-q7-3",
-        question: "What is the maximum GDPR fine?",
+        difficulty: "medium",
+        tags: ["HIPAA"],
+        scenario: "A hospital contracts a cloud transcription service that processes recorded physician dictations containing patient identifiers.",
+        question: "What must be in place, and what is the vendor's status?",
         options: [
-          "A maximum fine of €1 million, assessed for minor documentation and record-keeping failures.",
-          "A maximum fine of €10 million, applicable to secondary service processors who violate rules.",
-          "A maximum fine of €20 million or 4% of global annual turnover, whichever is higher.",
-          "A maximum fine of €100 million, representing a flat baseline penalty for all enterprise violations."
+          "Nothing extra — cloud vendors are exempt as conduits",
+          "The vendor is a Business Associate; a Business Associate Agreement is required and the vendor is directly liable for Security Rule compliance",
+          "The vendor is a Covered Entity and must file its own NPP",
+          "Only a standard NDA is required"
         ],
-        correctAnswer: 2,
-        explanation: "The maximum GDPR penalty is €20 million or 4% of global annual turnover, whichever is greater."
+        correctAnswer: 1,
+        explanation: "A service that creates, receives, maintains or transmits PHI on behalf of a covered entity is a Business Associate, requiring a BAA. The narrow conduit exception covers mere transmission (like a courier or ISP) without persistent access. Since HITECH, BAs are directly liable for Security Rule requirements and breach notification to the CE."
       },
       {
         id: "cf-q7-4",
-        question: "What does PHI stand for in HIPAA?",
+        difficulty: "hard",
+        tags: ["DPIA"],
+        scenario: "Proposed project: AI-driven video analytics across all store entrances, performing facial recognition to flag previously identified shoplifters, operating continuously in eight EU countries.",
+        question: "Is a DPIA required, and what triggers apply?",
         options: [
-          "Personal Health Information — representing any high-level medical record metadata.",
-          "Protected Health Information — representing individually identifiable health information.",
-          "Private Hospital Index — a standardized category system for healthcare facility assets.",
-          "Public Health Indicator — a metric tracking general community threat vulnerability levels."
+          "No — DPIAs are optional under GDPR",
+          "Yes — systematic monitoring of a publicly accessible area on a large scale, plus processing of biometric special-category data and use of innovative technology; multiple Art. 35(3) triggers apply",
+          "Only if a data subject complains",
+          "Only if the data leaves the EU"
         ],
         correctAnswer: 1,
-        explanation: "PHI stands for Protected Health Information — any individually identifiable health information."
+        explanation: "Art. 35(3) makes a DPIA mandatory for systematic and extensive evaluation, large-scale special-category processing (biometrics), and systematic large-scale monitoring of publicly accessible areas. This project hits all three. If residual high risk remains after mitigation, Art. 36 prior consultation with the supervisory authority is required."
       },
       {
         id: "cf-q7-5",
-        question: "What three types of safeguards does the HIPAA Security Rule require?",
+        difficulty: "medium",
+        tags: ["CCPA/CPRA"],
+        scenario: "A California resident submits a request asking a data broker to stop selling their information and to delete what has been collected. The broker replies that it will comply only if the consumer creates an account and verifies via a paid identity service.",
+        question: "What is wrong with the response?",
         options: [
-          "Network firewalls, Application scanners, and Cloud infrastructure security baselines.",
-          "Administrative policies, Physical access controls, and Technical security safeguards.",
-          "Legal review frameworks, Financial budget auditing, and Operational triage workflows.",
-          "Preventive rule structures, Detective alert sensors, and Corrective host isolation playbooks."
+          "Nothing — verification is always at the business's discretion",
+          "A business cannot require account creation to submit a request, must provide at least two designated methods, cannot charge for exercising rights, and must honour opt-out of sale/sharing including Global Privacy Control signals",
+          "CCPA has no deletion right, only access",
+          "The request is invalid because data brokers are exempt"
         ],
         correctAnswer: 1,
-        explanation: "The HIPAA Security Rule requires Administrative, Physical, and Technical safeguards to protect ePHI."
+        explanation: "CCPA/CPRA prohibits requiring account creation, mandates multiple submission methods, forbids charging or discriminating against consumers who exercise rights, and requires honouring opt-out preference signals such as GPC. Reasonable verification is permitted, but it cannot become a paywall or an account requirement."
       },
       {
         id: "cf-q7-6",
-        question: "What revenue threshold triggers CCPA applicability?",
+        difficulty: "hard",
+        tags: ["Comparison"],
+        scenario: "A US health-tech company serving both US and EU patients asks: which single privacy compliance effort will satisfy everything?",
+        question: "What is the correct guidance?",
         options: [
-          "Annual gross revenues exceeding $10 million, irrespective of data volume or processing scale.",
-          "Annual gross revenues exceeding $25 million, establishing CCPA applicability for corporate entities.",
-          "Annual gross revenues exceeding $50 million, covering large digital service providers.",
-          "Annual gross revenues exceeding $100 million, targeting multinational enterprise organizations."
+          "GDPR compliance automatically satisfies HIPAA and CCPA",
+          "No single regime suffices — GDPR is comprehensive and consent/lawful-basis driven, HIPAA is sector-specific to PHI with its own breach rules, CCPA/CPRA is a consumer-rights regime with sale/sharing opt-outs; controls overlap but obligations differ",
+          "HIPAA is the strictest, so HIPAA compliance covers the rest",
+          "CCPA compliance covers EU residents if they shop online"
         ],
         correctAnswer: 1,
-        explanation: "CCPA applies to businesses with annual gross revenue over $25 million (among other triggers)."
+        explanation: "The regimes differ in scope, triggers and remedies: GDPR applies extraterritorially to EU data subjects with lawful-basis and 72-hour rules; HIPAA governs PHI held by covered entities/BAs with a 60-day individual notification rule; CCPA/CPRA grants opt-out of sale/sharing to California consumers. A unified control framework helps, but obligations must be mapped individually."
       },
       {
         id: "cf-q7-7",
-        question: "What is the 'Right to be Forgotten'?",
+        difficulty: "easy",
+        tags: ["Data Minimisation"],
+        scenario: "A signup form for a newsletter collects: email, full name, date of birth, home address, gender, and employer.",
+        question: "Which GDPR principle is most clearly at risk?",
         options: [
-          "The legal right of consumers to request name changes on public record databases.",
-          "The right to request deletion of personal data under GDPR's right to erasure guidelines.",
-          "The technical process of forcing immediate user password resets and logouts across systems.",
-          "The legal right of employees to request removal of their photos from corporate social channels."
+          "Data minimisation — only data adequate, relevant and limited to the newsletter purpose should be collected",
+          "Integrity and confidentiality",
+          "Accuracy",
+          "Accountability"
         ],
-        correctAnswer: 1,
-        explanation: "The Right to be Forgotten (right to erasure) allows data subjects to request deletion of their personal data under GDPR."
+        correctAnswer: 0,
+        explanation: "Art. 5(1)(c) requires personal data to be adequate, relevant and limited to what is necessary for the purpose. A newsletter needs an email address; date of birth, home address, gender and employer are excess collection that also expands breach impact and retention obligations."
       },
       {
         id: "cf-q7-8",
-        question: "What did CPRA add to California privacy law?",
+        difficulty: "medium",
+        tags: ["Controller vs Processor"],
+        scenario: "Company A decides which customer data to collect and why. Company B hosts and processes it strictly per A's documented instructions. Company B then begins using aggregate customer data to build its own analytics product without A's instruction.",
+        question: "What changes for Company B?",
         options: [
-          "Mandatory criminal penalties for corporate officers who neglect basic database backup plans.",
-          "A 'sensitive personal information' category and the California Privacy Protection Agency.",
-          "Broad international applicability forcing foreign servers to register with state registries.",
-          "Specific blockchain record-keeping rules and distributed ledger protection standards."
+          "Nothing — processors may use data they hold",
+          "By determining its own purpose, B becomes a controller for that processing, taking on full controller obligations and liability, and is in breach of Art. 28 by acting outside documented instructions",
+          "B becomes a joint controller with A automatically for all processing",
+          "B is now exempt from GDPR as an aggregator"
         ],
         correctAnswer: 1,
-        explanation: "CPRA added the 'sensitive personal information' category, created the California Privacy Protection Agency, and strengthened existing rights."
-      },
-      {
-        id: "cf-q7-9",
-        question: "What is a BAA in HIPAA?",
-        options: [
-          "Business Audit Agreement — a document detailing annual regulatory audit schedules.",
-          "Business Associate Agreement — a contract defining vendor security duties for ePHI.",
-          "Breach Assessment Acknowledgment — a report filed after a validated compromise occurs.",
-          "Basic Access Authorization — a template assigning user permission levels in applications."
-        ],
-        correctAnswer: 1,
-        explanation: "A BAA (Business Associate Agreement) is required for any vendor handling ePHI, defining their security obligations."
-      },
-      {
-        id: "cf-q7-10",
-        question: "When must a DPIA be conducted under GDPR?",
-        options: [
-          "For all data processing operations, regardless of scale, impact, or type of data handled.",
-          "When data processing operations present high risk to the rights and freedoms of individuals.",
-          "Only for government and public sector organizations that process census records.",
-          "Only after a verified security breach has compromised personal identification data."
-        ],
-        correctAnswer: 1,
-        explanation: "DPIAs are mandatory when processing is 'likely to result in a high risk' to data subjects' rights and freedoms."
-      },
-      {
-        id: "cf-q7-11",
-        question: "How many US states had comprehensive privacy laws by 2024?",
-        options: [
-          "Only California had enacted a comprehensive state-level consumer privacy law.",
-          "Approximately 5 states, representing early adopters on the west coast and northeast.",
-          "More than 15 states, creating a complex patchwork of regulatory requirements.",
-          "All 50 states had implemented unified consumer privacy frameworks."
-        ],
-        correctAnswer: 2,
-        explanation: "By 2024, 15+ US states had enacted comprehensive privacy laws, creating a complex patchwork of requirements."
-      },
-      {
-        id: "cf-q7-12",
-        question: "What is 'Privacy by Design'?",
-        options: [
-          "Designing beautiful and user-friendly privacy settings menus in web applications.",
-          "Embedding privacy considerations proactively into system architecture from the start.",
-          "A specialized software framework that automates data deletion request workflows.",
-          "A mandatory HIPAA policy document that outlines physical storage design templates."
-        ],
-        correctAnswer: 1,
-        explanation: "Privacy by Design embeds privacy into the design and architecture of systems and business practices from the start."
-      },
-      {
-        id: "cf-q7-13",
-        question: "What breach size triggers HIPAA notification to media?",
-        options: [
-          "Any compromise of Protected Health Information (PHI), regardless of scale or scope.",
-          "A compromise affecting 100 or more individuals, reported within 60 days of detection.",
-          "A compromise affecting 500 or more individuals in a single state or jurisdiction.",
-          "A compromise affecting 1,000 or more individuals, requiring immediate national broadcast."
-        ],
-        correctAnswer: 2,
-        explanation: "HIPAA requires media notification when a breach affects 500 or more individuals in a single state or jurisdiction."
-      },
-      {
-        id: "cf-q7-14",
-        question: "Which GDPR lawful basis is used for processing a purchase order?",
-        options: [
-          "Explicit Consent, where the customer checks a box before making a purchase.",
-          "Contract, where processing is necessary to perform a contract with the individual.",
-          "Legitimate Interests, where the organization balances its interests against user rights.",
-          "Vital Interests, where processing is required to protect the physical life of the individual."
-        ],
-        correctAnswer: 1,
-        explanation: "Processing necessary for contract performance — such as processing a purchase order — uses the 'contract' lawful basis."
-      },
-      {
-        id: "cf-q7-15",
-        question: "How many countries have data protection laws globally?",
-        options: [
-          "Approximately 30 developed nations, mostly concentrated within the European Union.",
-          "Approximately 70 nations, representing primary global financial and technology hubs.",
-          "More than 137 countries, reflecting a strong global trend toward privacy regulation.",
-          "All 195 recognized countries have active, comprehensive privacy law frameworks."
-        ],
-        correctAnswer: 2,
-        explanation: "Over 137 countries have enacted data protection laws, reflecting the global trend toward privacy regulation."
+        explanation: "Controller status follows who determines purposes and means. Art. 28(10) states that a processor which determines purposes for processing is considered a controller for that processing. B is simultaneously in breach of the processing agreement, which requires acting only on documented instructions."
       }
     ]
   },
   {
     quizId: "cf-q8",
     courseId: "cybersecurity-frameworks",
-    title: "SOC 2 & Cloud Security Quiz",
-    description: "Evaluate your knowledge of SOC 2 TSCs and cloud security frameworks.",
+    title: "SOC 2 & Cloud Security Frameworks",
+    description: "Trust Services Criteria, Type I vs Type II evidence, exceptions, and cloud shared-responsibility scenarios.",
     passingScore: 70,
     timeLimit: 20,
     questions: [
       {
         id: "cf-q8-1",
-        question: "How many Trust Service Criteria does SOC 2 have?",
+        difficulty: "medium",
+        tags: ["SOC 2", "Type I vs II"],
+        scenario: "A prospect demands assurance that your controls actually worked over the past year, not just that they exist today. Your last report covered controls \"as of 31 December\".",
+        question: "What do you have, and what do they want?",
         options: [
-          "SOC 2 defines 3 criteria: Confidentiality, Integrity, and Access Control policies.",
-          "SOC 2 defines 5 criteria: Security, Availability, Processing Integrity, Confidentiality, and Privacy.",
-          "SOC 2 defines 7 criteria to align with the standard OSI network security layers.",
-          "SOC 2 defines 10 criteria covering all aspects of software development and accounting."
+          "You have a Type II; they want a Type I",
+          "You have a Type I (design at a point in time); they want a Type II (design and operating effectiveness over a period, typically 3-12 months)",
+          "You have an ISO 27001 certificate; they want a SOC 1",
+          "Both types are point-in-time; the difference is scope"
         ],
         correctAnswer: 1,
-        explanation: "SOC 2 has 5 Trust Service Criteria: Security, Availability, Processing Integrity, Confidentiality, and Privacy."
+        explanation: "Type I attests to the suitability of control design at a specified date. Type II tests operating effectiveness across a review period, with sampling and exception reporting — which is what enterprise buyers require. Many companies issue a Type I first, then a Type II covering the following period."
       },
       {
         id: "cf-q8-2",
-        question: "Which TSC is always required in a SOC 2 report?",
+        difficulty: "hard",
+        tags: ["Trust Services Criteria"],
+        scenario: "A payments-adjacent SaaS is deciding scope. Customers care about uptime commitments in the SLA, accuracy of transaction records, and protection of customer PII. The company also handles no health data.",
+        question: "Which TSC selection is most appropriate?",
         options: [
-          "Availability criteria, verifying system uptime metrics and disaster recovery procedures.",
-          "Privacy criteria, validating compliance with state and international data protection laws.",
-          "Security (Common Criteria), which forms the mandatory foundation of every SOC 2 report.",
-          "Processing Integrity criteria, ensuring databases execute queries accurately without error."
+          "Security only, since it is the mandatory common criteria",
+          "Security (required) plus Availability, Processing Integrity and Confidentiality/Privacy as driven by the SLA, transaction accuracy needs and PII handling",
+          "All five criteria always, regardless of the service",
+          "Privacy only, because PII is involved"
         ],
-        correctAnswer: 2,
-        explanation: "Security (Common Criteria) is always required — it's the foundation included in every SOC 2 report."
+        correctAnswer: 1,
+        explanation: "Security (the common criteria) is mandatory; the other four are elective and should be chosen to match customer commitments. SLA uptime maps to Availability, transaction accuracy to Processing Integrity, PII protection to Confidentiality and/or Privacy. Adding unnecessary criteria increases cost and exception exposure."
       },
       {
         id: "cf-q8-3",
-        question: "What is the minimum observation period for SOC 2 Type II?",
+        difficulty: "medium",
+        tags: ["Exceptions"],
+        scenario: "Your Type II report contains one exception: in 2 of 25 sampled terminations, access was revoked on day 4 rather than within the committed 24 hours. Management response documents root cause and an automated deprovisioning fix.",
+        question: "How should this be interpreted?",
         options: [
-          "An observation period of 1 month, focusing on immediate control configurations.",
-          "An observation period of 3 months, though a 6-to-12-month period is typical in audits.",
-          "An observation period of 6 months, which is required only for financial sector companies.",
-          "An observation period of 12 months, representing a strict regulatory minimum for all audits."
+          "The report is a failure and cannot be shared with customers",
+          "An exception is not automatically a qualified opinion — it is a tested deviation; the auditor forms an opinion on whether controls were effective overall, and the management response matters to reviewers",
+          "Exceptions are removed from the final report before issuance",
+          "Two exceptions out of 25 automatically means an adverse opinion"
         ],
         correctAnswer: 1,
-        explanation: "SOC 2 Type II requires a minimum 3-month observation period, though 6-12 months is typical."
+        explanation: "Type II reports routinely include exceptions. What matters is severity, pervasiveness, whether compensating controls existed, and the credibility of remediation. An unqualified opinion with a small number of documented, remediated exceptions is normal; reviewers read the exception table and management responses closely."
       },
       {
         id: "cf-q8-4",
-        question: "What is the main difference between Type I and Type II?",
+        difficulty: "hard",
+        tags: ["Shared Responsibility"],
+        scenario: "Incident: an S3-equivalent object store bucket holding customer exports was publicly readable for 11 days due to a bucket policy change pushed by your infrastructure team. The provider's control plane logged the change correctly.",
+        question: "Under the shared responsibility model, whose failure is this?",
         options: [
-          "The audit cost only, with Type II being significantly more expensive due to branding.",
-          "Type I evaluates control design at a point in time; Type II tests operating effectiveness over a period.",
-          "Type II is significantly easier to pass because it focuses on policy documentation rather than logs.",
-          "There is no difference in audit procedures; they are identical reports issued under different codes."
+          "The cloud provider's — they should prevent public buckets by default",
+          "The customer's — configuration of storage access, data classification and encryption is customer responsibility; the provider is responsible for security OF the cloud, the customer for security IN the cloud",
+          "Shared equally, so neither party is accountable",
+          "The auditor's, for not catching it"
         ],
         correctAnswer: 1,
-        explanation: "Type I evaluates control design at a specific date, while Type II tests both design and operating effectiveness over a period of time."
+        explanation: "Providers secure the underlying infrastructure, hypervisor and physical layer. Customers own IAM, resource configuration, data classification, encryption choices and monitoring of their own changes. Preventive guardrails (SCPs/policies blocking public access) plus CSPM detection are the customer-side controls that would have prevented or shortened this exposure."
       },
       {
         id: "cf-q8-5",
-        question: "Who can issue a SOC 2 report?",
+        difficulty: "medium",
+        tags: ["CSA CCM", "STAR"],
+        scenario: "A prospective cloud vendor offers a completed CAIQ and claims CSA STAR Level 1.",
+        question: "What does that actually tell you?",
         options: [
-          "Any independent cybersecurity consulting firm or accredited scanning service provider.",
-          "Licensed CPA (Certified Public Accountant) firms that specialize in audit attestation services.",
-          "The internal compliance and IT security team after passing self-assessment criteria.",
-          "Government regulatory agencies such as the SEC or FTC following a compliance audit."
+          "It is an independently audited certification equivalent to ISO 27001",
+          "STAR Level 1 is self-assessment (CAIQ/CCM responses published to the registry) — useful transparency, but not independently verified; Level 2 adds third-party audit",
+          "STAR Level 1 supersedes SOC 2 for cloud providers",
+          "CAIQ is a penetration test report"
         ],
         correctAnswer: 1,
-        explanation: "SOC 2 reports can only be issued by licensed CPA (Certified Public Accountant) firms — it's an attestation, not a certification."
+        explanation: "The CSA Cloud Controls Matrix is the control framework; the CAIQ is the questionnaire mapped to it. STAR Level 1 is self-assessment published to a public registry. Level 2 is third-party certification/attestation (often paired with ISO 27001 or SOC 2). Treat Level 1 as vendor-asserted input to your own assessment."
       },
       {
         id: "cf-q8-6",
-        question: "What does the shared responsibility model define?",
+        difficulty: "medium",
+        tags: ["Complementary Controls"],
+        scenario: "A vendor's SOC 2 report includes a section titled \"Complementary User Entity Controls\" listing items such as: the user entity is responsible for provisioning and reviewing its own user accounts and for configuring SSO enforcement.",
+        question: "What must your organisation do with this section?",
         options: [
-          "How users should share credentials and group account permissions safely within teams.",
-          "The division of security duties between the cloud provider and the customer.",
-          "The scheduling of shared physical workspace and desk usage in co-working offices.",
-          "How open-source software libraries share licensing and modification responsibilities."
+          "Ignore it — it describes the vendor's internal controls",
+          "Treat each CUEC as a control you must implement and evidence on your side; the vendor's opinion assumes these are operating",
+          "Send it back to the vendor for removal",
+          "Use it as proof that the vendor manages your accounts"
         ],
         correctAnswer: 1,
-        explanation: "The shared responsibility model defines what the cloud provider secures (infrastructure) vs. what the customer secures (data, applications, configurations)."
+        explanation: "CUECs are the assumptions the service auditor made about controls at the customer. If you do not implement them, the assurance in the report does not extend to your usage. Mature TPRM programmes extract CUECs from every vendor report and assign owners internally."
       },
       {
         id: "cf-q8-7",
-        question: "In IaaS, who is responsible for OS patching?",
+        difficulty: "easy",
+        tags: ["SOC Report Types"],
+        scenario: "A finance team asks for a report relevant to internal control over financial reporting for your payroll-processing service; your security team offers the SOC 2.",
+        question: "What should be provided instead?",
         options: [
-          "The cloud provider, who maintains the underlying physical hypervisor hosts.",
-          "The customer, who installs, configures, and maintains the guest operating systems.",
-          "No one is responsible, as virtual machines are automatically destroyed and rebuilt.",
-          "The government or external compliance auditing firms who scan the infrastructure."
+          "SOC 1 — designed for controls relevant to user entities' internal control over financial reporting",
+          "SOC 3 — the public summary report",
+          "SOC 2 Type I is the correct financial report",
+          "ISO 27001 certificate"
         ],
-        correctAnswer: 1,
-        explanation: "In IaaS, the customer is responsible for OS patching, application security, and data protection. The provider handles physical and network infrastructure."
+        correctAnswer: 0,
+        explanation: "SOC 1 (SSAE 18) addresses controls relevant to financial reporting and is what auditors of your customers need for ICFR purposes. SOC 2 covers Trust Services Criteria for security and related attributes; SOC 3 is a public, general-use summary of a SOC 2 without detailed testing results."
       },
       {
         id: "cf-q8-8",
-        question: "What is the CSA Cloud Controls Matrix?",
+        difficulty: "hard",
+        tags: ["Cloud Guardrails"],
+        scenario: "Post-incident hardening options for the public bucket exposure:\n  A) Weekly manual configuration review\n  B) Organisation-level policy denying public access, enforced above account admins\n  C) CSPM alerting on public buckets within 5 minutes\n  D) Quarterly awareness training for engineers",
+        question: "Which combination best reflects a preventive-plus-detective control design?",
         options: [
-          "A compliance certification awarded to cloud providers who pass vulnerability checks.",
-          "A cybersecurity control framework with 197 objectives designed for cloud computing.",
-          "A network monitoring tool that aggregates log traffic from multi-cloud environments.",
-          "An encryption standard defining key exchange protocols for container instances."
+          "A and D",
+          "B (preventive guardrail that cannot be bypassed by account admins) plus C (detective control catching drift and exceptions)",
+          "C alone, since detection is sufficient",
+          "D alone, since the root cause was human error"
         ],
         correctAnswer: 1,
-        explanation: "The CCM is a cybersecurity control framework with 197 control objectives across 17 domains designed specifically for cloud computing."
-      },
-      {
-        id: "cf-q8-9",
-        question: "What is the CAIQ?",
-        options: [
-          "Cloud Access Intelligence Query — a standardized database language for logs.",
-          "Consensus Assessments Initiative Questionnaire — documenting cloud security posture.",
-          "Compliance Automated Inspection Queue — a list of pending audits in the GRC system.",
-          "Cloud Audit Internal Qualification — a certification program for cloud security analysts."
-        ],
-        correctAnswer: 1,
-        explanation: "The CAIQ (Consensus Assessments Initiative Questionnaire) is a standardized questionnaire for documenting cloud provider security posture."
-      },
-      {
-        id: "cf-q8-10",
-        question: "What AWS service provides centralized security findings?",
-        options: [
-          "AWS Lambda, which executes serverless code in response to system event triggers.",
-          "AWS Security Hub, which aggregates security findings from multiple services and tools.",
-          "Amazon S3, which provides object storage buckets for database backups and logs.",
-          "AWS CloudFormation, which automates infrastructure deployment using template files."
-        ],
-        correctAnswer: 1,
-        explanation: "AWS Security Hub provides a centralized view of security findings from multiple AWS services and third-party tools."
-      },
-      {
-        id: "cf-q8-11",
-        question: "How many Common Criteria (CC) categories are in SOC 2 Security?",
-        options: [
-          "5 categories focusing on user accounts, encryption, and physical access controls.",
-          "7 categories aligning with the classic COBIT internal auditing frameworks.",
-          "9 categories organized from the Control Environment through Risk Mitigation.",
-          "12 categories covering secure software design, server configuration, and monitoring."
-        ],
-        correctAnswer: 2,
-        explanation: "The Security criteria are organized into 9 CC categories: Control Environment through Risk Mitigation."
-      },
-      {
-        id: "cf-q8-12",
-        question: "What is the typical cost range for a SOC 2 Type II audit?",
-        options: [
-          "Between $5,000 and $10,000 for a comprehensive evaluation and report generation.",
-          "Between $30,000 and $100,000+, depending on scope, complexity, and auditor choices.",
-          "Between $500,000 and $1 million, representing the standard enterprise audit baseline.",
-          "Free, as the AICPA provides self-attestation templates that require no licensing fees."
-        ],
-        correctAnswer: 1,
-        explanation: "SOC 2 Type II audits typically cost between $30K-$100K+, depending on scope and complexity."
-      },
-      {
-        id: "cf-q8-13",
-        question: "Which CSA STAR level involves third-party audit?",
-        options: [
-          "Level 1, which relies on self-assessment and submitting security questionnaires.",
-          "Level 2, which requires an independent third-party assessment or attestation audit.",
-          "Level 3, which involves continuous automated monitoring of cloud control endpoints.",
-          "All levels require third-party audits and formal certification by registered CPAs."
-        ],
-        correctAnswer: 1,
-        explanation: "CSA STAR Level 2 involves independent third-party assessment through CSA STAR Certification or Attestation."
-      },
-      {
-        id: "cf-q8-14",
-        question: "What compliance automation tool helps with SOC 2 readiness?",
-        options: [
-          "Microsoft Word, used to write manual policy documents and checklist templates.",
-          "Vanta, which automates evidence collection and continuously checks system controls.",
-          "Photoshop, used to generate visual network diagrams and reports for auditors.",
-          "Slack, used to message team members about pending compliance tasks and schedules."
-        ],
-        correctAnswer: 1,
-        explanation: "Vanta and similar platforms (Drata, Secureframe) automate evidence collection and continuously monitor controls for SOC 2 readiness."
-      },
-      {
-        id: "cf-q8-15",
-        question: "In SaaS, what does the customer remain responsible for?",
-        options: [
-          "Maintaining physical data center security and server rack access restrictions.",
-          "Patching the hypervisor and guest operating systems running the SaaS application.",
-          "Data classification, identity management, and user access controls in the console.",
-          "Configuring physical network switches and local gateway hardware interfaces."
-        ],
-        correctAnswer: 2,
-        explanation: "Even in SaaS, customers remain responsible for data classification, user access management, and how they use the service."
+        explanation: "Preventive guardrails enforced at the organisation level stop the misconfiguration from being possible, including by privileged account users. CSPM provides the detective layer for anything that slips through (new accounts, exempted resources). Manual review and training reduce but do not bound the risk."
       }
     ]
   },
   {
     quizId: "cf-q9",
     courseId: "cybersecurity-frameworks",
-    title: "MITRE & Cross-Mapping Quiz",
-    description: "Test your ability to map controls across frameworks using ATT&CK and D3FEND.",
-    passingScore: 75,
+    title: "MITRE ATT&CK, D3FEND & Control Cross-Mapping",
+    description: "Threat-informed defence: mapping controls to techniques, coverage analysis, and integrating multiple frameworks.",
+    passingScore: 70,
     timeLimit: 20,
     questions: [
       {
         id: "cf-q9-1",
-        question: "What is the primary purpose of mapping controls to MITRE ATT&CK?",
+        difficulty: "medium",
+        tags: ["ATT&CK", "Coverage"],
+        scenario: "Coverage heatmap extract (Enterprise matrix):\n  Initial Access: 8/10 techniques with detections\n  Execution: 7/12\n  Persistence: 2/19\n  Credential Access: 3/17\n  Exfiltration: 1/9\nThe last three incidents all involved credential theft followed by data staging and exfiltration.",
+        question: "Where should the next quarter's detection engineering effort go, and why?",
         options: [
-          "To generate marketing brochures showcasing general network capability values.",
-          "To identify detection gaps against real adversary techniques in the environment.",
-          "To replace existing compliance standards like ISO 27001 and PCI-DSS completely.",
-          "To onboard and train new employees on basic corporate firewall policy settings."
+          "Initial Access, to push coverage from 8/10 to 10/10",
+          "Credential Access and Exfiltration — lowest coverage on the tactics with demonstrated adversary use against this organisation",
+          "Execution, because it has the most techniques overall",
+          "Spread evenly to make every tactic show 50% coverage"
         ],
         correctAnswer: 1,
-        explanation: "Mapping controls to ATT&CK reveals which adversary techniques your controls can detect, prevent, or mitigate — and where gaps exist."
+        explanation: "Threat-informed defence prioritises by the intersection of low coverage and observed/likely adversary behaviour. Chasing the last two Initial Access techniques adds little marginal risk reduction, while Credential Access and Exfiltration are both weak and proven relevant to this environment's actual incidents."
       },
       {
         id: "cf-q9-2",
-        question: "What does D3FEND stand for?",
+        difficulty: "hard",
+        tags: ["Coverage Fallacy"],
+        scenario: "A dashboard claims 78% ATT&CK coverage. Investigation shows each technique is counted as covered if any single rule references it, several rules are disabled, and 40% have never fired or been validated.",
+        question: "What is the central flaw?",
         options: [
-          "Data Defense Framework for Enterprise Network Defense — a local database standard.",
-          "Detection, Denial, and Disruption Framework Empowering Network Defense.",
-          "Digital Defense for Enterprise Networks and Domains — a federal privacy protocol.",
-          "Dynamic Defense Framework for Endpoint Detection — an EDR optimization guide."
+          "Percentages should be shown to two decimal places",
+          "Coverage counted by rule existence rather than validated detection efficacy overstates defence; coverage must be measured by tested detections with known true-positive behaviour and required telemetry present",
+          "78% is simply too low a target",
+          "ATT&CK should not be used for measurement at all"
         ],
         correctAnswer: 1,
-        explanation: "D3FEND stands for Detection, Denial, and Disruption Framework Empowering Network Defense."
+        explanation: "Binary rule-exists mapping is the classic coverage fallacy. Meaningful measurement requires: the telemetry source exists and is healthy, the rule is enabled and tuned, and its efficacy has been validated (Atomic Red Team, purple team, or adversary emulation) with a confidence rating per technique."
       },
       {
         id: "cf-q9-3",
-        question: "What are the D3FEND tactics?",
+        difficulty: "easy",
+        tags: ["D3FEND"],
+        scenario: "An architect wants a structured vocabulary for the defensive countermeasures being deployed and how they relate to the offensive techniques they counter.",
+        question: "Which MITRE resource fits?",
         options: [
-          "Identify, Protect, Detect, Respond, and Recover — the core framework elements.",
-          "Harden, Detect, Isolate, Deceive, and Evict — representing defensive concepts.",
-          "Plan, Do, Check, and Act — the classic continuous improvement lifecycle stages.",
-          "Scout, Shield, Strike, Secure, and Monitor — the offensive operational lifecycle."
+          "D3FEND — a knowledge graph of defensive techniques and their relationships to offensive techniques and digital artifacts",
+          "ATT&CK Navigator, which is a countermeasure catalogue",
+          "CAR, which lists compliance controls",
+          "Engage, which is a patch management standard"
         ],
-        correctAnswer: 1,
-        explanation: "D3FEND tactics are: Harden (reduce attack surface), Detect (identify activity), Isolate (contain), Deceive (mislead), Evict (remove)."
+        correctAnswer: 0,
+        explanation: "D3FEND catalogues defensive techniques (harden, detect, isolate, deceive, evict) and ties them via digital artifacts to the offensive techniques they counter. ATT&CK Navigator is a visualisation tool for ATT&CK layers; CAR is the Cyber Analytics Repository of detection analytics; Engage covers adversary engagement/denial and deception."
       },
       {
         id: "cf-q9-4",
-        question: "What tool visualizes ATT&CK coverage as a heatmap?",
+        difficulty: "hard",
+        tags: ["Cross-Mapping"],
+        scenario: "Control inventory needs to answer three different audiences:\n  Board: \"Are we improving against the threats that matter?\"\n  Auditor: \"Show me evidence for ISO 27001 Annex A and SOC 2 CC6.\"\n  SOC lead: \"Which techniques can we detect?\"",
+        question: "What integration approach satisfies all three without triplicating work?",
         options: [
-          "Wireshark, which captures and reconstructs network conversations and traffic flows.",
-          "ATT&CK Navigator, which creates visual heatmaps mapping control coverage.",
-          "Nmap, which scans ports and identifies active services running on the subnet.",
-          "Splunk, which aggregates and indexes log files for search and dashboard metrics."
+          "Maintain three separate, independent control lists per audience",
+          "Maintain one authoritative control inventory with mappings to ATT&CK techniques, ISO Annex A, SOC 2 criteria and CSF subcategories, then generate audience-specific views from it",
+          "Adopt only ATT&CK and tell auditors to accept it",
+          "Adopt only ISO 27001 and stop tracking techniques"
         ],
         correctAnswer: 1,
-        explanation: "The ATT&CK Navigator creates visual heatmaps showing control coverage across all tactics and techniques."
+        explanation: "A single control inventory with many-to-many mappings is the standard integration pattern: test a control once, report it many ways. Board gets threat-coverage trend, auditors get framework-mapped evidence, and the SOC gets technique-level detection status — all from the same tested artefacts."
       },
       {
         id: "cf-q9-5",
-        question: "What is the main benefit of cross-framework mapping?",
+        difficulty: "medium",
+        tags: ["Sub-techniques"],
+        scenario: "A detection is mapped to T1566 (Phishing). Analysis of the last 20 incidents shows 14 were T1566.001 (Spearphishing Attachment), 5 were T1566.002 (Link), and 1 was T1566.003 (via Service). The detection only inspects email attachments.",
+        question: "What is the mapping problem?",
         options: [
-          "It makes policy documents longer and more impressive to audit committees.",
-          "It allows one well-implemented control to satisfy multiple framework requirements.",
-          "It completely eliminates the need for external audits and compliance testing.",
-          "It replaces all existing frameworks with a single, simplified cybersecurity checklist."
+          "Mapping to the parent technique overstates coverage; the detection covers T1566.001 only, leaving .002 and .003 unaddressed",
+          "Sub-techniques should never be used in mapping",
+          "T1566 is deprecated in current ATT&CK versions",
+          "The detection should be mapped to a tactic instead of a technique"
         ],
-        correctAnswer: 1,
-        explanation: "Cross-mapping shows that one well-implemented control can satisfy requirements from multiple frameworks simultaneously."
+        correctAnswer: 0,
+        explanation: "Parent-technique mapping hides sub-technique gaps. Precision matters: map to the sub-technique actually covered, then the coverage view honestly shows link-based and service-based phishing as gaps requiring URL detonation and third-party messaging telemetry."
       },
       {
         id: "cf-q9-6",
-        question: "Which MFA control maps to ATT&CK T1078 (Valid Accounts)?",
+        difficulty: "hard",
+        tags: ["Adversary Emulation"],
+        scenario: "The team wants to validate defences against a ransomware affiliate known to use valid accounts for access, WMI for execution, vssadmin for shadow copy deletion, and rclone for exfiltration to cloud storage.",
+        question: "What is the most rigorous validation approach?",
         options: [
-          "Strict network segmentation isolating database servers in distinct VLANS.",
-          "Multi-factor authentication (MFA) protecting administrative access endpoints.",
-          "Implementing AES-256 data encryption for all backup records stored on-premises.",
-          "Continuous log monitoring and SIEM alert generation for failed ping requests."
+          "Run a vulnerability scan of all endpoints",
+          "Build an adversary emulation plan replaying that specific technique chain in a controlled test, and measure detection, alert fidelity and response time at each step",
+          "Ask the EDR vendor whether their product detects ransomware",
+          "Review the SIEM rule list for the word ransomware"
         ],
         correctAnswer: 1,
-        explanation: "MFA directly prevents T1078 (Valid Accounts) by requiring additional authentication factors beyond stolen credentials."
+        explanation: "Emulating the actual technique chain end-to-end tests telemetry, detection logic, alert routing and analyst response together — including the chained detections a real intrusion would trigger. Vendor claims, scans, and keyword rule reviews validate none of these. Atomic tests cover single techniques; emulation plans cover the chain."
       },
       {
         id: "cf-q9-7",
-        question: "What score indicates no ATT&CK technique coverage?",
+        difficulty: "medium",
+        tags: ["Framework Roles"],
+        scenario: "Four artefacts on the programme roadmap: NIST CSF, ISO 27001, CIS Controls v8, MITRE ATT&CK.",
+        question: "Which description of their complementary roles is most accurate?",
         options: [
-          "Score 4, representing high-fidelity detection and automated blocking capabilities.",
-          "Score 2, indicating standard log coverage without active alert configurations.",
-          "Score 1, representing basic alert generation with significant false positive rates.",
-          "Score 0, indicating a complete absence of detection or prevention controls."
+          "They are competing alternatives; pick exactly one",
+          "CSF gives outcome-based structure and board language, ISO 27001 provides a certifiable management system, CIS gives prioritised technical safeguards, ATT&CK provides the adversary-behaviour lens to test whether those controls actually work",
+          "ATT&CK is a compliance standard that replaces ISO 27001",
+          "CIS Controls certify the ISMS while CSF audits it"
         ],
-        correctAnswer: 3,
-        explanation: "Score 0 (red) indicates no coverage — no detection or prevention controls exist for that technique."
+        correctAnswer: 1,
+        explanation: "These operate at different layers: management system (ISO), outcome framework and communication (CSF), prioritised technical implementation (CIS), and threat-behaviour validation (ATT&CK). Mature programmes use all four, mapped together, rather than choosing between them."
       },
       {
         id: "cf-q9-8",
-        question: "What is a unified control catalog?",
+        difficulty: "medium",
+        tags: ["Data Sources"],
+        scenario: "A proposed detection for T1055 (Process Injection) is written, but the environment collects only Windows Security event logs — no Sysmon, no EDR telemetry on the affected server group.",
+        question: "What must happen before the detection can be considered coverage?",
         options: [
-          "A list of all security software packages and hardware assets owned by the firm.",
-          "A single document that maps each control to multiple framework requirements.",
-          "An employee directory listing security team members and their access credentials.",
-          "A raw vulnerability scan report detailing missing software patches across hosts."
+          "Nothing — writing the rule is sufficient to claim coverage",
+          "The required data source must exist first; identify the telemetry gap (Sysmon/EDR process access and image load events), close it, then validate the detection fires",
+          "Map the technique to a compensating ISO control and move on",
+          "Downgrade the technique to out of scope"
         ],
         correctAnswer: 1,
-        explanation: "A unified control catalog documents each control with mappings to all applicable frameworks (NIST CSF, ISO 27001, CIS, PCI-DSS, etc.)."
-      },
-      {
-        id: "cf-q9-9",
-        question: "Which GRC tool automates framework cross-mapping?",
-        options: [
-          "Microsoft Excel, requiring manual input and cell formula configurations.",
-          "Compliance automation platforms like Drata, Vanta, or OneTrust.",
-          "Notepad, used to edit raw text checklists and policy files offline.",
-          "Wireshark, designed to parse network packets and capture credentials."
-        ],
-        correctAnswer: 1,
-        explanation: "GRC tools like Drata, Vanta, and OneTrust automate cross-framework mapping and centralize compliance management."
-      },
-      {
-        id: "cf-q9-10",
-        question: "How does D3FEND complement ATT&CK?",
-        options: [
-          "It completely replaces the ATT&CK framework for offensive operations testing.",
-          "It maps defensive countermeasures directly to ATT&CK offensive threat techniques.",
-          "It is identical to the ATT&CK framework but published under a different agency.",
-          "It works exclusively for network firewalls, ignoring endpoint threat techniques."
-        ],
-        correctAnswer: 1,
-        explanation: "D3FEND provides the defensive counterpart — for each ATT&CK offensive technique, D3FEND lists specific countermeasures."
-      },
-      {
-        id: "cf-q9-11",
-        question: "What should be the first step in building a unified control framework?",
-        options: [
-          "Purchasing an expensive enterprise GRC tool before defining security policies.",
-          "Selecting a primary framework (like NIST CSF or ISO 27001) as the baseline.",
-          "Hiring an external consulting group to write all controls from default templates.",
-          "Implementing every security control immediately across all network segments."
-        ],
-        correctAnswer: 1,
-        explanation: "The first step is choosing a primary framework (usually NIST CSF or ISO 27001) as the foundation to map all others against."
-      },
-      {
-        id: "cf-q9-12",
-        question: "Which framework requirement is unique to GDPR and doesn't overlap with others?",
-        options: [
-          "Maintaining an active inventory of physical and logical corporate IT assets.",
-          "Conducting mandatory Data Protection Impact Assessments (DPIAs) for risky data.",
-          "Enforcing access control restrictions based on business need to know.",
-          "Establishing incident response procedures and playbooks for database breaches."
-        ],
-        correctAnswer: 1,
-        explanation: "DPIAs are a GDPR-specific requirement that doesn't directly overlap with PCI-DSS, SOC 2, or CIS Controls."
-      },
-      {
-        id: "cf-q9-13",
-        question: "What ATT&CK coverage score means high-fidelity detection with automated response?",
-        options: [
-          "Score 1, indicating basic raw log ingestion without parsing or search indexes.",
-          "Score 2, representing parsed logs that analysts can search manually during triage.",
-          "Score 3, indicating high-fidelity detection rules with automated response playbooks.",
-          "Score 4, representing complete theoretical immunity to the adversary technique."
-        ],
-        correctAnswer: 2,
-        explanation: "Score 3 indicates high-fidelity detection with automated response capabilities for an ATT&CK technique."
-      },
-      {
-        id: "cf-q9-14",
-        question: "How should gaps in ATT&CK coverage be prioritized?",
-        options: [
-          "Addressing all identified gaps simultaneously using a chronological queue.",
-          "Prioritizing gaps based on threat prevalence, potential impact, and feasibility.",
-          "Only addressing Tier 1 network perimeter gaps, ignoring host endpoints.",
-          "Ignoring the gaps entirely until an active breach forces remediation."
-        ],
-        correctAnswer: 1,
-        explanation: "Prioritize gaps based on how frequently threat actors use the technique, the potential impact, and the cost/feasibility of implementing detection."
-      },
-      {
-        id: "cf-q9-15",
-        question: "What does a D3FEND knowledge graph connect?",
-        options: [
-          "Only offensive exploits and malware families found on public threat feeds.",
-          "Digital artifacts, defensive techniques, offensive techniques, and technologies.",
-          "Employee user profiles and their corresponding authorization access lists.",
-          "Physical network devices, server racks, and cabling layouts in data centers."
-        ],
-        correctAnswer: 1,
-        explanation: "The D3FEND knowledge graph connects digital artifacts, offensive techniques, defensive countermeasures, and implementing technologies."
+        explanation: "Detection engineering is data-source-first. ATT&CK documents the data sources and components each technique requires; without process-access/image-load telemetry, a T1055 rule can never fire. Honest coverage tracking records the gap as a telemetry deficiency with an owner, rather than as a written rule."
       }
     ]
   },
@@ -9471,369 +9591,189 @@ export const quizzes: QuizData[] = [
     quizId: "cf-q10",
     courseId: "cybersecurity-frameworks",
     title: "Cybersecurity Frameworks Certification Exam",
-    description: "Comprehensive final exam covering all 10 modules. Pass with 80% to earn your certificate.",
+    description: "Comprehensive scenario-based final exam across governance, NIST CSF, ISO 27001, CIS, risk management, PCI-DSS, privacy, SOC 2 and threat-informed defence.",
     passingScore: 80,
     timeLimit: 60,
     questions: [
       {
         id: "cf-q10-1",
-        question: "What is the primary purpose of cybersecurity governance?",
+        difficulty: "medium",
+        tags: ["Governance"],
+        scenario: "A newly appointed CISO inherits: no risk register, policies last reviewed in 2018, an engaged board, and a $1.2M budget.",
+        question: "What is the correct first move?",
         options: [
-          "Continuous network traffic monitoring and automated threat blocking protocols.",
-          "Aligning security with business strategy, managing risks, and ensuring accountability.",
-          "Writing secure source code for internal web applications and databases.",
-          "Securing physical facilities, server rooms, and verifying employee badges."
+          "Purchase a next-generation SIEM to gain visibility immediately",
+          "Establish the risk register and asset inventory to make every subsequent investment risk-justified",
+          "Begin ISO 27001 certification within 30 days",
+          "Run a red team exercise to demonstrate the problem"
         ],
         correctAnswer: 1,
-        explanation: "Governance ensures security efforts strategically support business objectives with clear accountability and oversight."
+        explanation: "Without an asset inventory and risk register, every spend is unjustified and unmeasurable. Establishing the risk baseline creates the language for board reporting, prioritises the roadmap, and makes later certification or tooling decisions defensible."
       },
       {
         id: "cf-q10-2",
-        question: "How many core functions does NIST CSF v2.0 have?",
+        difficulty: "hard",
+        tags: ["NIST CSF"],
+        scenario: "The current profile shows strong Protect and Detect, weak Respond and Recover. A tabletop exercise ends with the team unable to say who authorises taking production offline.",
+        question: "Which CSF outcome family most directly addresses the tabletop failure?",
         options: [
-          "The framework defines 4 core functions focusing on technical controls.",
-          "The framework contains 5 core functions identical to the 1.1 standard draft.",
-          "The framework has 6 core functions: Govern, Identify, Protect, Detect, Respond, and Recover.",
-          "The framework establishes 8 functions covering all quantitative risk modeling."
+          "PR.AC — access control",
+          "RS.MA / GV.RR — incident management with clearly defined roles, responsibilities and decision authority",
+          "ID.AM — asset management",
+          "DE.CM — continuous monitoring"
         ],
-        correctAnswer: 2,
-        explanation: "NIST CSF v2.0 has 6 functions: Govern, Identify, Protect, Detect, Respond, and Recover."
+        correctAnswer: 1,
+        explanation: "The failure is decision authority during response, which lives in Respond (incident management) informed by GOVERN's roles and responsibilities. Technical detection was fine; the gap was governance of the response decision, which is exactly what tabletops are designed to expose."
       },
       {
         id: "cf-q10-3",
-        question: "Which framework offers formal third-party certification?",
+        difficulty: "medium",
+        tags: ["ISO 27001"],
+        scenario: "Certification body finding: \"Objective evidence of management review for the past 12 months could not be produced.\"",
+        question: "What is the likely classification and remedy?",
         options: [
-          "NIST CSF, which is a voluntary risk-based framework for private organizations.",
-          "CIS Controls, which provides prescriptive technical baseline hardening guides.",
-          "ISO 27001, which allows organizations to achieve accredited certification.",
-          "MITRE ATT&CK, which catalogs real-world adversary tactics and techniques."
+          "Observation only — management review is optional",
+          "Nonconformity against Clause 9.3 — schedule and document management reviews with defined inputs and outputs, then evidence corrective action",
+          "Nonconformity against Annex A.5.1 — rewrite the policies",
+          "No action needed until recertification"
         ],
-        correctAnswer: 2,
-        explanation: "ISO 27001 is the only major cybersecurity framework offering formal third-party certification."
+        correctAnswer: 1,
+        explanation: "Clause 9.3 mandates management review at planned intervals with specified inputs (audit results, performance, risk status, improvement opportunities) and documented outputs. Missing 12 months of evidence is a nonconformity requiring root cause analysis and corrective action, not an observation."
       },
       {
         id: "cf-q10-4",
-        question: "What is IG1 in CIS Controls?",
+        difficulty: "hard",
+        tags: ["Risk Quantification"],
+        scenario: "AV = $2.5M, EF = 40%, ARO = 0.5. A control costing $300K/yr reduces EF to 10%.",
+        question: "What is the annual net benefit?",
         options: [
-          "Internet Gateway 1 — a perimeter routing policy for branch offices.",
-          "Implementation Group 1, representing Essential Cyber Hygiene baseline safeguards.",
-          "Investigation Group 1 — a forensic category for small incident triage.",
-          "Incident Grade 1, indicating a low-severity threat in the SIEM queue."
+          "$75,000",
+          "$375,000",
+          "$500,000 loss",
+          "$125,000"
         ],
-        correctAnswer: 1,
-        explanation: "IG1 is Essential Cyber Hygiene — 56 foundational safeguards protecting against ~77% of common ATT&CK techniques."
+        correctAnswer: 0,
+        explanation: "Before: SLE = $2.5M x 0.40 = $1M; ALE = $1M x 0.5 = $500K. After: SLE = $2.5M x 0.10 = $250K; ALE = $250K x 0.5 = $125K. Reduction = $375K. Net benefit = $375K - $300K control cost = $75K per year — positive but thin, so sensitivity of the ARO estimate matters."
       },
       {
         id: "cf-q10-5",
-        question: "What formula calculates Annualized Loss Expectancy?",
+        difficulty: "medium",
+        tags: ["CIS Controls"],
+        scenario: "An organisation with no dedicated security staff wants a defensible starting roadmap in 90 days.",
+        question: "What should the roadmap anchor on?",
         options: [
-          "ALE = SLE + ARO, summing single loss expectancy and annualized occurrence rate.",
-          "ALE = SLE * ARO, multiplying Single Loss Expectancy by Annualized Rate of Occurrence.",
-          "ALE = SLE / ARO, dividing expected loss by the annual rate of occurrence.",
-          "ALE = SLE - ARO, subtracting occurrence rate from the single loss expectancy."
+          "CIS IG1 safeguards, beginning with asset and software inventory, then account/access management and secure configuration",
+          "MITRE ATT&CK full-matrix coverage",
+          "SOC 2 Type II readiness",
+          "A red team engagement followed by IG3 safeguards"
         ],
-        correctAnswer: 1,
-        explanation: "ALE = SLE (Single Loss Expectancy) × ARO (Annualized Rate of Occurrence) is the core quantitative risk formula."
+        correctAnswer: 0,
+        explanation: "IG1 is designed exactly for this profile: essential cyber hygiene achievable with limited expertise. Starting at inventory (Controls 1 and 2) makes every later control measurable. ATT&CK coverage and SOC 2 readiness both presuppose capabilities this organisation does not yet have."
       },
       {
         id: "cf-q10-6",
-        question: "Which PCI-DSS data element must never be stored after authorization?",
+        difficulty: "hard",
+        tags: ["PCI-DSS"],
+        scenario: "During the annual assessment the QSA finds a developer laptop with a CSV export of 4,000 PANs used for debugging a failed batch six months ago.",
+        question: "What are the immediate compliance implications?",
         options: [
-          "The customer's cardholder name, printed on the front of the credit card.",
-          "Primary Account Number (PAN), which must be encrypted if stored long-term.",
-          "Card Verification Value (CVV/CVC) code, used for card-not-present transactions.",
-          "The card's expiration date, printed as month and year in numerical format."
+          "None, since the file was for debugging",
+          "The laptop becomes part of the CDE, the export violates storage/retention and access requirements, the data must be securely deleted, scope and risk reassessed, and the incident handled under the response plan",
+          "Only a documentation update is needed",
+          "The laptop can be excluded by declaring it out of scope"
         ],
-        correctAnswer: 2,
-        explanation: "CVV/CVC, full track data, and PINs must never be stored after transaction authorization."
+        correctAnswer: 1,
+        explanation: "Cardholder data defines scope wherever it lands. An unauthorised PAN export drags the endpoint into the CDE, breaches retention/need-to-know requirements, and triggers secure deletion, scope reassessment and incident handling — plus root-cause work on why production data reached a developer endpoint."
       },
       {
         id: "cf-q10-7",
-        question: "Within how many hours must a GDPR breach be reported?",
+        difficulty: "medium",
+        tags: ["GDPR"],
+        scenario: "A processor discovers a breach affecting a controller's data at 14:00 on Monday.",
+        question: "What is the processor's obligation?",
         options: [
-          "Notifications must be submitted within 24 hours of finding indicators of compromise.",
-          "Notifications must be submitted within 48 hours of escalating the case to Tier 2.",
-          "Notifications must be submitted within 72 hours of becoming aware of the breach.",
-          "Notifications must be submitted within 96 hours of completing database containment."
+          "Notify the supervisory authority within 72 hours directly",
+          "Notify the controller without undue delay; the controller then assesses and notifies the supervisory authority within 72 hours of its awareness",
+          "Notify affected data subjects immediately",
+          "No obligation unless the contract specifies one"
         ],
-        correctAnswer: 2,
-        explanation: "GDPR requires breach notification to the supervisory authority within 72 hours."
+        correctAnswer: 1,
+        explanation: "Art. 33(2) requires the processor to notify the controller without undue delay. The controller owns the assessment and any Art. 33 authority notification and Art. 34 data-subject communication. Processing agreements typically tighten this into a contractual SLA (often 24-48 hours)."
       },
       {
         id: "cf-q10-8",
-        question: "Which SOC 2 TSC is always mandatory?",
+        difficulty: "medium",
+        tags: ["SOC 2"],
+        scenario: "Sales wants a document they can publish on the public website to demonstrate security assurance without disclosing control detail or test results.",
+        question: "Which report is designed for that?",
         options: [
-          "Availability criteria, verifying system redundancy and backup schedules.",
-          "Privacy criteria, validating compliance with consumer data regulations.",
-          "Security (Common Criteria), which must be included in every SOC 2 report.",
-          "Processing Integrity, ensuring systems process transactions without errors."
+          "SOC 3 — a general-use summary report suitable for public distribution",
+          "SOC 2 Type II with a redacted exception table",
+          "SOC 1 Type I",
+          "The ISO 27001 Statement of Applicability"
         ],
-        correctAnswer: 2,
-        explanation: "Security (Common Criteria) is always required in every SOC 2 report."
+        correctAnswer: 0,
+        explanation: "SOC 3 is the general-use public report derived from a SOC 2 examination, containing the auditor's opinion and system description without detailed control testing or results. SOC 2 reports are restricted-use; publishing a redacted one is not the intended distribution model."
       },
       {
         id: "cf-q10-9",
-        question: "What are the four risk treatment strategies?",
+        difficulty: "hard",
+        tags: ["Third-Party Risk"],
+        scenario: "A critical vendor refuses to provide a SOC 2 report or complete a security questionnaire, citing confidentiality, but the business insists the service is irreplaceable within the timeline.",
+        question: "What is the most defensible path?",
         options: [
-          "Plan the mitigation, Do the changes, Check the logs, and Act to enforce.",
-          "Mitigate the risk, Transfer the risk, Avoid the risk, and Accept the risk.",
-          "Identify the assets, Protect the systems, Detect the threats, and Respond.",
-          "Harden the systems, Detect anomalies, Isolate the host, and Evict threats."
+          "Onboard without assessment since the business need is urgent",
+          "Escalate to the risk owner with the assessment gap quantified, negotiate contractual security terms, right-to-audit, breach notification SLA and compensating controls, and document a time-bound risk acceptance",
+          "Refuse the vendor outright regardless of business impact",
+          "Accept the vendor's verbal assurance and note it in the register"
         ],
         correctAnswer: 1,
-        explanation: "The four risk treatment strategies are Mitigate, Transfer, Avoid, and Accept."
+        explanation: "Security's role is to make the risk visible and priced, not to unilaterally veto or silently approve. Quantify the unassessed exposure, push contractual protections and compensating controls (scoped access, monitoring, data minimisation), and require a documented, expiring acceptance signed by the accountable business owner."
       },
       {
         id: "cf-q10-10",
-        question: "What does the shared responsibility model define in cloud computing?",
+        difficulty: "medium",
+        tags: ["ATT&CK"],
+        scenario: "Board question: \"Are we getting better?\" Available metrics: number of alerts, number of rules written, validated technique coverage trend against the top three threat groups targeting the sector, and mean time to detect.",
+        question: "Which pair best answers the board's question?",
         options: [
-          "How cloud computing costs and licensing rates are shared among business departments.",
-          "The division of security responsibilities between the cloud provider and customer.",
-          "The scheduling of shared physical workspace and desk usage in co-working offices.",
-          "How developers share administrative passwords and access keys inside teams."
+          "Alert count and rule count",
+          "Validated technique coverage trend against relevant threat groups, plus mean time to detect",
+          "Rule count alone",
+          "Alert count and number of vendors onboarded"
         ],
         correctAnswer: 1,
-        explanation: "The shared responsibility model defines what the cloud provider secures vs. what the customer secures."
+        explanation: "Boards need outcome and trend, tied to relevant threats. Validated coverage against the adversaries that actually target your sector shows whether defence is improving where it matters; MTTD shows operational effectiveness. Alert and rule counts are activity metrics that can rise while risk gets worse."
       },
       {
         id: "cf-q10-11",
-        question: "How many Annex A controls does ISO 27001:2022 have?",
+        difficulty: "hard",
+        tags: ["Integration"],
+        scenario: "The organisation must satisfy ISO 27001 certification, a customer's SOC 2 requirement, PCI-DSS for a payment channel, and internal CSF reporting — with one small GRC team.",
+        question: "What is the efficient operating model?",
         options: [
-          "ISO 27001 defines 42 controls focused exclusively on IT infrastructure configurations.",
-          "ISO 27001 consists of 93 controls organized into 4 themes in the 2022 update.",
-          "ISO 27001 includes 114 controls, which is the baseline of the legacy 2013 standard.",
-          "ISO 27001 mandates 200 controls covering physical, technological, and accounting rules."
+          "Run four independent compliance programmes with separate evidence repositories",
+          "Build a unified control framework: one control set, mapped to all four schemes, tested once per period with shared evidence and scheme-specific reporting views",
+          "Certify to ISO 27001 only and tell other stakeholders it is equivalent",
+          "Outsource each scheme to a different consultancy"
         ],
         correctAnswer: 1,
-        explanation: "ISO 27001:2022 has 93 controls organized into 4 themes (reduced from 114 in the 2013 version)."
+        explanation: "Overlap between these schemes is substantial (access control, change management, logging, vendor management). A unified control framework with cross-mappings lets you test once and report many times, cutting audit fatigue. Scheme-specific deltas (PCI scoping, ISO clauses 4-10) are then handled as targeted additions."
       },
       {
         id: "cf-q10-12",
-        question: "What HIPAA document must vendors handling ePHI sign?",
+        difficulty: "medium",
+        tags: ["Maturity"],
+        scenario: "Assessment: processes are documented and consistently followed, metrics are collected, but there is no evidence of using metrics to drive improvement or of predictive/adaptive change.",
+        question: "Which maturity level does this describe on a typical five-level model?",
         options: [
-          "Non-Disclosure Agreement (NDA), protecting corporate secrets and database structures.",
-          "Business Associate Agreement (BAA), which defines security obligations for ePHI.",
-          "Employment contract, outlining salary details and human resource policies.",
-          "Privacy notice, describing how customer data is processed on standard websites."
+          "Level 2 — Repeatable",
+          "Level 3/4 boundary — Defined and Managed (measured), but not yet Optimising",
+          "Level 5 — Optimising",
+          "Level 1 — Initial"
         ],
         correctAnswer: 1,
-        explanation: "A BAA is legally required for all business associates handling ePHI."
-      },
-      {
-        id: "cf-q10-13",
-        question: "What is the ATT&CK Navigator used for?",
-        options: [
-          "Routing local network packets between segmented VLAN configurations.",
-          "Creating visual heatmaps of control coverage across threat tactics and techniques.",
-          "Mapping GPS locations of corporate servers and network infrastructure hubs.",
-          "Navigating source code trees in large software repositories and platforms."
-        ],
-        correctAnswer: 1,
-        explanation: "The ATT&CK Navigator creates heatmaps showing detection/prevention coverage across all ATT&CK techniques."
-      },
-      {
-        id: "cf-q10-14",
-        question: "What is NIST CSF Tier 4 called?",
-        options: [
-          "Partial, indicating informal and ad-hoc risk management processes are used.",
-          "Risk Informed, where practices are approved but not integrated organization-wide.",
-          "Repeatable, indicating formal policy and structured, repeatable processes.",
-          "Adaptive, indicating continuous improvement and threat-informed practices."
-        ],
-        correctAnswer: 3,
-        explanation: "Tier 4: Adaptive — risk management is part of organizational culture with continuous, data-driven improvement."
-      },
-      {
-        id: "cf-q10-15",
-        question: "What percentage of breaches involve third parties?",
-        options: [
-          "Approximately 20% of verified breaches are linked directly to vendor compromises.",
-          "Approximately 40% of incidents involve external API integrations or servers.",
-          "Approximately 60% of data breaches involve third-party access or vendor software.",
-          "Approximately 80% of data leakages occur through supply chain service providers."
-        ],
-        correctAnswer: 2,
-        explanation: "Approximately 60% of data breaches involve a third party (Ponemon Institute)."
-      },
-      {
-        id: "cf-q10-16",
-        question: "What is the CCPA revenue threshold?",
-        options: [
-          "Annual gross revenues exceeding $10 million, irrespective of other criteria.",
-          "Annual gross revenues exceeding $25 million, establishing CCPA applicability.",
-          "Annual gross revenues exceeding $50 million, covering large digital service hosts.",
-          "Annual gross revenues exceeding $100 million, targeting global conglomerates."
-        ],
-        correctAnswer: 1,
-        explanation: "CCPA applies to businesses with annual gross revenue over $25 million."
-      },
-      {
-        id: "cf-q10-17",
-        question: "What does D3FEND provide?",
-        options: [
-          "A comprehensive catalog of offensive hacking exploits and malware techniques.",
-          "A knowledge base of cybersecurity countermeasures mapped to ATT&CK techniques.",
-          "Formal compliance certifications for cloud infrastructure and SaaS products.",
-          "Continuous network security monitoring and deep packet capture tools."
-        ],
-        correctAnswer: 1,
-        explanation: "D3FEND provides a knowledge base of cybersecurity countermeasures organized by their relationship to ATT&CK techniques."
-      },
-      {
-        id: "cf-q10-18",
-        question: "What is a Statement of Applicability (SoA)?",
-        options: [
-          "A standard template used when applying for entry-level security jobs.",
-          "A document listing all ISO 27001 controls with applicability and justification.",
-          "A vendor SLA contract defining database response times and performance goals.",
-          "A qualitative risk assessment matrix used during threat modeling sessions."
-        ],
-        correctAnswer: 1,
-        explanation: "The SoA is the most critical ISO 27001 document listing all 93 controls with whether each is applicable and why."
-      },
-      {
-        id: "cf-q10-19",
-        question: "Which STRIDE category relates to unauthorized access elevation?",
-        options: [
-          "Spoofing, which involves impersonating a legitimate user or system identity.",
-          "Tampering, which covers unauthorized modification of database records or files.",
-          "Repudiation, where an attacker denies performing a specific action or transaction.",
-          "Elevation of Privilege, where an attacker gains access rights above their level."
-        ],
-        correctAnswer: 3,
-        explanation: "Elevation of Privilege in STRIDE refers to gaining unauthorized access rights above what was granted."
-      },
-      {
-        id: "cf-q10-20",
-        question: "What is continuous compliance?",
-        options: [
-          "Conducting intense audit preparation during the week preceding the assessment.",
-          "Automated, ongoing monitoring of security controls replacing point-in-time audits.",
-          "Scheduling weekly compliance meetings to discuss policy updates and checklists.",
-          "Collecting evidence manually by taking screenshots of server settings quarterly."
-        ],
-        correctAnswer: 1,
-        explanation: "Continuous compliance uses automated tools for ongoing control monitoring and evidence collection, replacing annual audit scrambles."
-      },
-      {
-        id: "cf-q10-21",
-        question: "How many PCI-DSS requirements are there?",
-        options: [
-          "The standard defines 6 high-level goals for payment infrastructure security.",
-          "The standard contains 10 operational compliance checks for merchant databases.",
-          "The standard consists of 12 detailed requirements organized into six goals.",
-          "The standard mandates 15 technical guidelines for card reader software codes."
-        ],
-        correctAnswer: 2,
-        explanation: "PCI-DSS has 12 requirements organized into 6 goals."
-      },
-      {
-        id: "cf-q10-22",
-        question: "What is the PDCA cycle in ISO 27001?",
-        options: [
-          "Protect the databases, Detect the threat, Contain host, and Analyze impact.",
-          "Plan the security, Do the controls, Check effectiveness, and Act to improve.",
-          "Prepare system configurations, Deploy patches, Control access, and Audit log files.",
-          "Prevent external access, Discover system bugs, Correct issues, and Adapt rules."
-        ],
-        correctAnswer: 1,
-        explanation: "Plan-Do-Check-Act is the continuous improvement cycle that ISO 27001 is built upon."
-      },
-      {
-        id: "cf-q10-23",
-        question: "What is the main benefit of cross-framework mapping?",
-        options: [
-          "It adds complexity and increases the work required to pass annual compliance.",
-          "One well-implemented control satisfies multiple framework requirements simultaneously.",
-          "It eliminates all security frameworks, replacing them with a custom corporate guide.",
-          "It significantly increases the time and costs associated with external audits."
-        ],
-        correctAnswer: 1,
-        explanation: "Cross-mapping shows one control can satisfy multiple framework requirements simultaneously, reducing effort and cost."
-      },
-      {
-        id: "cf-q10-24",
-        question: "What HIPAA breach size triggers media notification?",
-        options: [
-          "Any unauthorized exposure of PHI, regardless of the number of patient records.",
-          "A breach affecting 100 or more patient files, reported within 30 days of discovery.",
-          "A breach affecting 500 or more individuals in a single state or jurisdiction.",
-          "A breach affecting 1,000 or more files, requiring national news broadcast."
-        ],
-        correctAnswer: 2,
-        explanation: "HIPAA requires media notification when a breach affects 500+ individuals in a single state or jurisdiction."
-      },
-      {
-        id: "cf-q10-25",
-        question: "Which metric measures how quickly threats are identified?",
-        options: [
-          "Mean Time to Respond (MTTR), tracking containment and system recovery actions.",
-          "Mean Time to Detect (MTTD), measuring the average time to identify a threat.",
-          "Mean Time to Contain (MTTC), measuring host isolation and firewall blocks.",
-          "Mean Time to Fail (MTTF), calculating hardware lifecycle and reliability rates."
-        ],
-        correctAnswer: 1,
-        explanation: "MTTD (Mean Time to Detect) measures the average time to identify a security threat."
-      },
-      {
-        id: "cf-q10-26",
-        question: "What is residual risk?",
-        options: [
-          "The initial risk score before any mitigation controls are implemented.",
-          "The risk remaining after security controls and treatment measures are applied.",
-          "The threat vector that was completely eliminated by decommissioning hosts.",
-          "The baseline risk score provided by standard vulnerability scanning tools."
-        ],
-        correctAnswer: 1,
-        explanation: "Residual risk is what remains after controls are implemented — it must fall within the organization's risk appetite."
-      },
-      {
-        id: "cf-q10-27",
-        question: "What are CIS Benchmarks?",
-        options: [
-          "General security guidelines and high-level strategical frameworks for executives.",
-          "Prescriptive, technology-specific configuration hardening guides.",
-          "Marketing indices comparing IT budget distribution across sectors.",
-          "Performance benchmark tools that measure server network speed stats."
-        ],
-        correctAnswer: 1,
-        explanation: "CIS Benchmarks are detailed, step-by-step hardening guides specifying exact configuration settings for specific platforms."
-      },
-      {
-        id: "cf-q10-28",
-        question: "In NIST RMF, what is the output of the Authorize step?",
-        options: [
-          "A raw vulnerability scan report detailing missing OS patches across servers.",
-          "An Authorization to Operate (ATO) decision signed by a senior official.",
-          "A complete network topology diagram mapping all active logical segments.",
-          "A certificate verifying that all system users completed security training."
-        ],
-        correctAnswer: 1,
-        explanation: "The Authorize step results in an ATO decision — a senior official's risk-based approval for a system to operate."
-      },
-      {
-        id: "cf-q10-29",
-        question: "What GDPR principle states you should collect only necessary data?",
-        options: [
-          "Accuracy, ensuring all stored personal records are kept correct and updated.",
-          "Purpose Limitation, restricting data usage to the reasons specified to users.",
-          "Data Minimization, mandating that only necessary data is collected for the task.",
-          "Storage Limitation, requiring deletion of records after the purpose is achieved."
-        ],
-        correctAnswer: 2,
-        explanation: "Data Minimization is the principle that organizations should collect only the personal data necessary for the specified purpose."
-      },
-      {
-        id: "cf-q10-30",
-        question: "What certification is recommended for GRC career advancement?",
-        options: [
-          "AWS Certified Solutions Architect, validating cloud infrastructure design skills.",
-          "CISA (Certified Information Systems Auditor) from ISACA for audit roles.",
-          "Project Management Professional (PMP), focused on team workflows and budgets.",
-          "Cisco Certified Network Associate (CCNA), covering routing and switching rules."
-        ],
-        correctAnswer: 1,
-        explanation: "CISA from ISACA is one of the most valued certifications for GRC professionals, covering audit, compliance, and governance."
+        explanation: "Defined (3) means documented and consistently applied; Managed/Measured (4) adds quantitative metrics; Optimising (5) requires those metrics to drive continuous, often predictive improvement. Collecting metrics without acting on them is the classic stall between 4 and 5."
       }
     ]
   },
