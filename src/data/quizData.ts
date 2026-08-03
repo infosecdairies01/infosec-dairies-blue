@@ -25,6 +25,7 @@ export interface QuizData {
 import { sapPart1 } from "@/data/quizzes/sapPart1";
 import { sapPart2 } from "@/data/quizzes/sapPart2";
 import { sapPart3 } from "@/data/quizzes/sapPart3";
+import { sapPart4 } from "@/data/quizzes/sapPart4";
 
 const baseQuizzes: QuizData[] = [
   {
@@ -9783,7 +9784,7 @@ const baseQuizzes: QuizData[] = [
   },
 ];
 
-export const quizzes: QuizData[] = [...baseQuizzes, ...sapPart1, ...sapPart2, ...sapPart3];
+export const quizzes: QuizData[] = [...baseQuizzes, ...sapPart1, ...sapPart2, ...sapPart3, ...sapPart4];
 
 export const getQuizById = (courseId: string, quizId: string): QuizData | undefined => {
   return quizzes.find(q => q.courseId === courseId && q.quizId === quizId);
