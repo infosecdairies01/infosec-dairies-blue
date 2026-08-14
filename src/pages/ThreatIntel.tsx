@@ -1,32 +1,17 @@
 import Navbar from "@/components/Navbar";
 import SOCSidebar from "@/components/soc/SOCSidebar";
-import {
-  Bell,
-  User,
-  Search,
-  ExternalLink,
-  Shield,
-  Globe,
-  Link as LinkIcon,
-  Scan,
-  CheckCircle,
-  Fish,
-  Target,
-  Bug,
-  Key,
-  Satellite,
-  Network,
-  Database,
-  Grid3X3,
-} from "lucide-react";
+import { Bell, User, Search, ExternalLink } from "lucide-react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface Tool {
   name: string;
   description: string;
   url: string;
-  icon: React.ElementType;
-  iconColor: string;
+  /** Official brand logo (favicon/logo endpoint of the vendor's own domain) */
+  logo: string;
+  /** Text fallback shown if the official logo cannot be loaded */
+  fallback: string;
 }
 
 interface ToolCategory {
@@ -42,50 +27,50 @@ const toolCategories: ToolCategory[] = [
         name: "VirusTotal",
         description: "Analyze files, URLs, domains and IPs for threats.",
         url: "https://www.virustotal.com/",
-        icon: Shield,
-        iconColor: "text-blue-400",
+        logo: "https://www.google.com/s2/favicons?domain=virustotal.com&sz=128",
+        fallback: "VT",
       },
       {
         name: "AbuseIPDB",
         description: "Check IP address reputation and abuse reports.",
         url: "https://www.abuseipdb.com/",
-        icon: Globe,
-        iconColor: "text-red-400",
+        logo: "https://www.google.com/s2/favicons?domain=abuseipdb.com&sz=128",
+        fallback: "AI",
       },
       {
         name: "URLhaus",
         description: "Search malicious URLs associated with malware campaigns.",
         url: "https://urlhaus.abuse.ch/",
-        icon: LinkIcon,
-        iconColor: "text-green-400",
+        logo: "https://www.google.com/s2/favicons?domain=urlhaus.abuse.ch&sz=128",
+        fallback: "UH",
       },
       {
         name: "URLScan.io",
         description: "Scan and analyze suspicious URLs and web pages.",
         url: "https://urlscan.io/",
-        icon: Scan,
-        iconColor: "text-cyan-400",
+        logo: "https://www.google.com/s2/favicons?domain=urlscan.io&sz=128",
+        fallback: "US",
       },
       {
         name: "URLVoid",
         description: "Check website reputation across multiple blocklists.",
         url: "https://www.urlvoid.com/",
-        icon: CheckCircle,
-        iconColor: "text-emerald-400",
+        logo: "https://www.google.com/s2/favicons?domain=urlvoid.com&sz=128",
+        fallback: "UV",
       },
       {
         name: "PhishTank",
         description: "Verify and investigate suspected phishing URLs.",
         url: "https://phishtank.org/",
-        icon: Fish,
-        iconColor: "text-orange-400",
+        logo: "https://www.google.com/s2/favicons?domain=phishtank.org&sz=128",
+        fallback: "PT",
       },
       {
         name: "ThreatFox",
         description: "Search IOCs and malware infrastructure.",
         url: "https://threatfox.abuse.ch/",
-        icon: Target,
-        iconColor: "text-rose-400",
+        logo: "https://www.google.com/s2/favicons?domain=threatfox.abuse.ch&sz=128",
+        fallback: "TF",
       },
     ],
   },
@@ -96,15 +81,15 @@ const toolCategories: ToolCategory[] = [
         name: "MalwareBazaar",
         description: "Search malware samples and file hashes.",
         url: "https://bazaar.abuse.ch/",
-        icon: Bug,
-        iconColor: "text-yellow-400",
+        logo: "https://www.google.com/s2/favicons?domain=bazaar.abuse.ch&sz=128",
+        fallback: "MB",
       },
       {
         name: "CrackStation",
         description: "Look up supported password hashes and investigate exposed hashes.",
         url: "https://crackstation.net/",
-        icon: Key,
-        iconColor: "text-slate-400",
+        logo: "https://www.google.com/s2/favicons?domain=crackstation.net&sz=128",
+        fallback: "CS",
       },
     ],
   },
@@ -115,61 +100,79 @@ const toolCategories: ToolCategory[] = [
         name: "AlienVault OTX",
         description: "Explore IOCs, pulses and threat intelligence.",
         url: "https://otx.alienvault.com/",
-        icon: Satellite,
-        iconColor: "text-lime-400",
+        logo: "https://www.google.com/s2/favicons?domain=otx.alienvault.com&sz=128",
+        fallback: "OTX",
       },
       {
         name: "MISP",
         description: "Open-source threat intelligence sharing platform.",
         url: "https://www.misp-project.org/",
-        icon: Network,
-        iconColor: "text-pink-400",
+        logo: "https://www.google.com/s2/favicons?domain=misp-project.org&sz=128",
+        fallback: "MISP",
       },
       {
         name: "OpenCTI",
         description: "Open-source threat intelligence management platform.",
         url: "https://filigran.io/solutions/opencti/",
-        icon: Database,
-        iconColor: "text-indigo-400",
+        logo: "https://www.google.com/s2/favicons?domain=filigran.io&sz=128",
+        fallback: "CTI",
       },
       {
         name: "MITRE ATT&CK",
         description: "Research adversary tactics, techniques and procedures.",
         url: "https://attack.mitre.org/",
-        icon: Grid3X3,
-        iconColor: "text-primary",
+        logo: "https://www.google.com/s2/favicons?domain=attack.mitre.org&sz=128",
+        fallback: "ATT",
       },
     ],
   },
 ];
 
-const ToolCard = ({ tool }: { tool: Tool }) => {
-  const Icon = tool.icon;
+const ToolLogo = ({ tool }: { tool: Tool }) => {
+  const [failed, setFailed] = useState(false);
 
+  return (
+    <div className="shrink-0 w-11 h-11 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center overflow-hidden">
+      {failed ? (
+        <span className="text-[11px] font-semibold tracking-wide text-muted-foreground">
+          {tool.fallback}
+        </span>
+      ) : (
+        <img
+          src={tool.logo}
+          alt={`${tool.name} logo`}
+          loading="lazy"
+          className="w-7 h-7 object-contain"
+          onError={() => setFailed(true)}
+        />
+      )}
+    </div>
+  );
+};
+
+const ToolCard = ({ tool }: { tool: Tool }) => {
   return (
     <a
       href={tool.url}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group flex flex-col rounded-xl border border-white/[0.08] bg-card/25 p-5",
+        "group flex flex-col min-h-[168px] rounded-xl border border-white/[0.08] bg-card/25 p-5",
         "transition-all duration-200 hover:border-primary/30 hover:bg-card/40"
       )}
     >
-      <div className="flex items-start gap-3 mb-3">
-        <div className={cn("shrink-0 p-2 rounded-lg bg-white/[0.04] border border-white/[0.06]", tool.iconColor)}>
-          <Icon className="w-5 h-5" />
-        </div>
-        <h3 className="text-[15px] font-semibold text-foreground leading-tight pt-1.5">
+      <div className="flex items-center gap-3 mb-3">
+        <ToolLogo tool={tool} />
+        <h3 className="text-[15px] font-semibold text-foreground leading-tight">
           {tool.name}
         </h3>
       </div>
 
-      <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">
+      <p className="text-[13px] text-muted-foreground leading-relaxed mb-4 flex-1">
         {tool.description}
       </p>
 
-      <div className="flex items-center gap-1.5 text-sm font-medium text-primary group-hover:text-primary/80 transition-colors">
+      <div className="flex items-center gap-1.5 text-xs font-medium text-primary group-hover:text-primary/80 transition-colors">
         <span>Open Tool</span>
         <ExternalLink className="w-3.5 h-3.5" />
       </div>
@@ -210,14 +213,14 @@ const ThreatIntel = () => {
             </div>
           </header>
 
-          <div className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-10">
+          <div className="flex-1 px-6 py-6 lg:px-10 overflow-auto">
+            <div className="w-[92%] max-w-[1800px] mx-auto space-y-12">
               {toolCategories.map((category) => (
                 <section key={category.title}>
-                  <h2 className="text-base font-semibold text-foreground mb-4">
+                  <h2 className="text-[16px] font-semibold text-foreground mb-5">
                     {category.title}
                   </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {category.tools.map((tool) => (
                       <ToolCard key={tool.name} tool={tool} />
                     ))}
