@@ -121,9 +121,9 @@ const toolCategories: ToolCategory[] = [
       {
         name: "Hatching Triage",
         description: "Analyze suspicious files and URLs in a malware sandbox.",
-        url: "https://tria.ge/",
-        logo: "https://www.google.com/s2/favicons?domain=tria.ge&sz=128",
-        logoFallback: "https://icons.duckduckgo.com/ip3/tria.ge.ico",
+        url: "https://hatching.io/triage/",
+        logo: "https://www.google.com/s2/favicons?domain=hatching.io&sz=128",
+        logoFallback: "https://icons.duckduckgo.com/ip3/hatching.io.ico",
         fallback: "Triage",
       },
       {
