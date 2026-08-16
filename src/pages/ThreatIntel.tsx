@@ -148,14 +148,6 @@ const toolCategories: ToolCategory[] = [
         fallback: "Censys",
       },
       {
-        name: "crt.sh",
-        description: "Search certificate transparency records to discover domains and subdomains.",
-        url: "https://crt.sh/",
-        logo: "https://www.google.com/s2/favicons?domain=crt.sh&sz=128",
-        logoFallback: "https://icons.duckduckgo.com/ip3/crt.sh.ico",
-        fallback: "crt.sh",
-      },
-      {
         name: "DNSDumpster",
         description: "Perform DNS reconnaissance and discover domain infrastructure.",
         url: "https://dnsdumpster.com/",
