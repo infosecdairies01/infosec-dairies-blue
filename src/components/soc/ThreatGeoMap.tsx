@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { WORLD_MAP_PATH } from "@/data/worldMapPath";
 
 interface ThreatSource {
   id: string;
@@ -23,152 +24,223 @@ const threatSources: ThreatSource[] = [
   { id: "8", country: "Romania", code: "RO", lat: 44.4, lng: 26.1, attacks: 53, severity: "Medium", type: "Botnet C2" },
 ];
 
+// HSL values matching the design-token severity scale
+const severityStroke: Record<string, string> = {
+  Critical: "hsl(0 84% 60%)",
+  High: "hsl(25 95% 53%)",
+  Medium: "hsl(48 96% 53%)",
+  Low: "hsl(186 100% 42%)",
+};
+
 const getSeverityColor = (severity: string) => {
   switch (severity) {
-    case "Critical": return { dot: "bg-destructive", ring: "ring-destructive/30", text: "text-destructive" };
-    case "High": return { dot: "bg-orange-500", ring: "ring-orange-500/30", text: "text-orange-400" };
-    case "Medium": return { dot: "bg-yellow-500", ring: "ring-yellow-500/30", text: "text-yellow-400" };
-    default: return { dot: "bg-primary", ring: "ring-primary/30", text: "text-primary" };
+    case "Critical": return { dot: "bg-destructive", text: "text-destructive", chipHover: "hover:border-destructive/30" };
+    case "High": return { dot: "bg-orange-500", text: "text-orange-400", chipHover: "hover:border-orange-500/30" };
+    case "Medium": return { dot: "bg-yellow-500", text: "text-yellow-400", chipHover: "hover:border-yellow-500/30" };
+    default: return { dot: "bg-primary", text: "text-primary", chipHover: "hover:border-primary/30" };
   }
 };
 
-// Convert lat/lng to percentage position on a simplified world map
-const toPosition = (lat: number, lng: number) => ({
-  x: ((lng + 180) / 360) * 100,
-  y: ((90 - lat) / 180) * 100,
+// Equirectangular projection into the 1000x500 map viewBox
+const toPoint = (lat: number, lng: number) => ({
+  x: ((lng + 180) / 360) * 1000,
+  y: ((90 - lat) / 180) * 500,
 });
+
+// Curved arc from source to target, control point lifted above the midpoint
+const arcPath = (sx: number, sy: number, tx: number, ty: number) => {
+  const mx = (sx + tx) / 2;
+  const my = (sy + ty) / 2;
+  const lift = Math.min(Math.hypot(tx - sx, ty - sy) * 0.22, 90);
+  return `M ${sx} ${sy} Q ${mx} ${my - lift} ${tx} ${ty}`;
+};
 
 const ThreatGeoMap = () => {
   const [activeSource, setActiveSource] = useState<string | null>(null);
-  const [pulsePhase, setPulsePhase] = useState(0);
 
-  useEffect(() => {
-    const id = setInterval(() => setPulsePhase((p) => p + 1), 2000);
-    return () => clearInterval(id);
-  }, []);
-
-  // Target location (datacenter)
-  const target = toPosition(38.9, -77.0); // Washington DC
+  // Target datacenter (Washington DC)
+  const target = toPoint(38.9, -77.0);
+  const active = threatSources.find((s) => s.id === activeSource);
 
   return (
-    <div className="relative overflow-hidden rounded-xl bg-card/25 backdrop-blur-lg border border-white/[0.08] p-5 shadow-lg shadow-black/20 transition-all duration-300">
-      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/[0.03] via-transparent to-secondary/[0.02] pointer-events-none" />
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary opacity-50" />
-
-      <div className="relative pl-2">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-sm font-semibold text-foreground">Threat Origins</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">Global attack source distribution</p>
-          </div>
-          <div className="flex items-center gap-3">
-            {["Critical", "High", "Medium", "Low"].map((s) => {
-              const c = getSeverityColor(s);
-              return (
-                <div key={s} className="flex items-center gap-1.5">
-                  <div className={cn("w-2 h-2 rounded-full", c.dot)} />
-                  <span className="text-[9px] text-muted-foreground">{s}</span>
-                </div>
-              );
-            })}
-          </div>
+    <div className="relative overflow-hidden rounded-2xl bg-card/25 backdrop-blur-xl border border-white/[0.08] shadow-2xl transition-all duration-300">
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b border-white/[0.05]">
+        <div className="flex flex-col">
+          <h3 className="text-sm font-semibold text-foreground/90 uppercase tracking-[0.2em] font-mono">
+            Threat Origins
+          </h3>
+          <span className="text-[10px] text-primary/60 font-medium uppercase mt-1 tracking-widest">
+            Real-time global ingestion
+          </span>
         </div>
 
-        {/* Map area */}
-        <div className="relative w-full aspect-[2/1] bg-background/40 rounded-lg border border-white/[0.06] overflow-hidden">
-          {/* Grid overlay */}
-          <div className="absolute inset-0 circuit-pattern opacity-30" />
+        {/* Legend pill */}
+        <div className="flex items-center gap-6 bg-white/[0.03] px-4 py-2 rounded-full border border-white/[0.05]">
+          {["Critical", "High", "Medium", "Low"].map((s) => {
+            const c = getSeverityColor(s);
+            return (
+              <div key={s} className="flex items-center gap-2">
+                <div className={cn("w-2 h-2 rounded-full", c.dot)} />
+                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">
+                  {s === "Medium" ? "Med" : s}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
-          {/* Simplified continent outlines via subtle background */}
-          <div className="absolute inset-0 opacity-[0.06]"
-            style={{
-              background: `
-                radial-gradient(ellipse 18% 12% at 25% 38%, hsl(186 100% 42%) 0%, transparent 100%),
-                radial-gradient(ellipse 8% 16% at 50% 30%, hsl(186 100% 42%) 0%, transparent 100%),
-                radial-gradient(ellipse 12% 10% at 53% 42%, hsl(186 100% 42%) 0%, transparent 100%),
-                radial-gradient(ellipse 20% 14% at 72% 40%, hsl(186 100% 42%) 0%, transparent 100%),
-                radial-gradient(ellipse 6% 14% at 42% 60%, hsl(186 100% 42%) 0%, transparent 100%),
-                radial-gradient(ellipse 8% 8% at 80% 70%, hsl(186 100% 42%) 0%, transparent 100%)
-              `
-            }}
+      {/* Map */}
+      <div className="relative w-full aspect-[2/1] bg-background/40 overflow-hidden">
+        {/* Dot grid */}
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, hsl(0 0% 100% / 0.1) 1px, transparent 0)",
+            backgroundSize: "30px 30px",
+          }}
+        />
+
+        <svg
+          viewBox="0 0 1000 500"
+          preserveAspectRatio="none"
+          className="absolute inset-0 w-full h-full"
+        >
+          {/* Real world landmasses */}
+          <path
+            d={WORLD_MAP_PATH}
+            fill="hsl(215 25% 27%)"
+            fillOpacity="0.35"
+            stroke="hsl(215 25% 40%)"
+            strokeOpacity="0.25"
+            strokeWidth="0.5"
           />
 
-          {/* Target marker (DC) */}
-          <div
-            className="absolute z-20"
-            style={{ left: `${target.x}%`, top: `${target.y}%`, transform: "translate(-50%, -50%)" }}
-          >
-            <div className="w-3 h-3 rounded-full bg-secondary ring-4 ring-secondary/20" />
-          </div>
-
-          {/* Threat sources */}
-          {threatSources.map((source) => {
-            const pos = toPosition(source.lat, source.lng);
-            const colors = getSeverityColor(source.severity);
-            const isActive = activeSource === source.id;
-
+          {/* Attack arcs */}
+          {threatSources.map((s) => {
+            const p = toPoint(s.lat, s.lng);
             return (
-              <div key={source.id}>
-                {/* Connection line */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{ opacity: 0.3 }}>
-                  <line
-                    x1={`${pos.x}%`} y1={`${pos.y}%`}
-                    x2={`${target.x}%`} y2={`${target.y}%`}
-                    stroke={source.severity === "Critical" ? "hsl(0 84% 60%)" : source.severity === "High" ? "hsl(25 95% 53%)" : "hsl(186 100% 42%)"}
-                    strokeWidth="0.5"
-                    strokeDasharray="4 4"
-                    className="animate-pulse"
-                  />
-                </svg>
+              <path
+                key={`arc-${s.id}`}
+                d={arcPath(p.x, p.y, target.x, target.y)}
+                fill="none"
+                stroke={severityStroke[s.severity]}
+                strokeOpacity={activeSource === null || activeSource === s.id ? 0.45 : 0.12}
+                strokeWidth={s.severity === "Critical" ? 1.5 : 1}
+                strokeDasharray="6 4"
+                className="arc-flow transition-opacity duration-300"
+              />
+            );
+          })}
 
-                {/* Source dot */}
-                <div
-                  className="absolute z-20 cursor-pointer group/dot"
-                  style={{ left: `${pos.x}%`, top: `${pos.y}%`, transform: "translate(-50%, -50%)" }}
-                  onMouseEnter={() => setActiveSource(source.id)}
+          {/* Source nodes */}
+          {threatSources.map((s) => {
+            const p = toPoint(s.lat, s.lng);
+            const isActive = activeSource === s.id;
+            return (
+              <g key={`node-${s.id}`}>
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={isActive ? 14 : 9}
+                  fill={severityStroke[s.severity]}
+                  fillOpacity="0.15"
+                  className="transition-all duration-300"
+                />
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={isActive ? 6 : 4}
+                  fill={severityStroke[s.severity]}
+                  stroke="hsl(0 0% 100% / 0.25)"
+                  strokeWidth="0.75"
+                  className="cursor-pointer transition-all duration-300"
+                  onMouseEnter={() => setActiveSource(s.id)}
                   onMouseLeave={() => setActiveSource(null)}
-                >
-                  <div className={cn("w-2.5 h-2.5 rounded-full ring-2 transition-all", colors.dot, colors.ring, isActive && "scale-150")} />
-
-                  {/* Tooltip */}
-                  {isActive && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-card/95 backdrop-blur-lg border border-white/[0.12] rounded-lg shadow-xl z-30 whitespace-nowrap animate-fade-in">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={cn("text-xs font-semibold", colors.text)}>{source.country}</span>
-                        <span className="text-[10px] text-muted-foreground font-mono">{source.code}</span>
-                      </div>
-                      <div className="text-[10px] text-muted-foreground">{source.type}</div>
-                      <div className="text-xs text-foreground font-bold mt-1">{source.attacks} attacks</div>
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white/[0.12]" />
-                    </div>
-                  )}
-                </div>
-              </div>
+                />
+              </g>
             );
           })}
+
+          {/* Target node */}
+          <g transform={`translate(${target.x}, ${target.y})`}>
+            <circle r="14" fill="none" stroke="hsl(84 81% 44%)" strokeWidth="1" className="animate-ping opacity-40" />
+            <circle r="5" fill="hsl(84 81% 44%)" />
+            <circle r="2" fill="hsl(220 40% 6%)" />
+            <text
+              y="-14"
+              textAnchor="middle"
+              className="fill-secondary font-mono uppercase font-bold"
+              fontSize="11"
+            >
+              HQ-DC-01
+            </text>
+          </g>
+        </svg>
+
+        {/* HUD overlay */}
+        <div className="absolute top-4 left-4 p-3 border-l-2 border-primary/50 bg-white/[0.02] backdrop-blur-sm">
+          <div className="text-[9px] text-primary font-mono">LAT: 38.9072° N</div>
+          <div className="text-[9px] text-primary font-mono">LON: 77.0369° W</div>
+          <div className="text-[9px] text-muted-foreground mt-1 uppercase tracking-tighter">
+            Active Node: US-EAST-01
+          </div>
         </div>
 
-        {/* Country list */}
-        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
-          {threatSources.slice(0, 4).map((source) => {
-            const colors = getSeverityColor(source.severity);
-            return (
-              <div
-                key={source.id}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04] transition-colors cursor-pointer"
-                onMouseEnter={() => setActiveSource(source.id)}
-                onMouseLeave={() => setActiveSource(null)}
-              >
-                <div className={cn("w-2 h-2 rounded-full flex-shrink-0", colors.dot)} />
+        {/* Hover tooltip */}
+        {active && (
+          <div
+            className="absolute z-30 px-3 py-2 bg-card/95 backdrop-blur-lg border border-white/[0.12] rounded-lg shadow-xl whitespace-nowrap animate-fade-in pointer-events-none"
+            style={{
+              left: `${(toPoint(active.lat, active.lng).x / 1000) * 100}%`,
+              top: `${(toPoint(active.lat, active.lng).y / 500) * 100}%`,
+              transform: "translate(-50%, calc(-100% - 14px))",
+            }}
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <span className={cn("text-xs font-semibold", getSeverityColor(active.severity).text)}>
+                {active.country}
+              </span>
+              <span className="text-[10px] text-muted-foreground font-mono">{active.code}</span>
+            </div>
+            <div className="text-[10px] text-muted-foreground">{active.type}</div>
+            <div className="text-xs text-foreground font-bold mt-1">{active.attacks} attacks</div>
+          </div>
+        )}
+      </div>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-white/[0.02] border-t border-white/[0.05]">
+        {threatSources.slice(0, 4).map((s) => {
+          const c = getSeverityColor(s.severity);
+          return (
+            <div
+              key={s.id}
+              className={cn(
+                "flex items-center justify-between p-3 bg-white/[0.03] border border-white/[0.05] rounded-xl transition-all cursor-pointer",
+                c.chipHover,
+                activeSource === s.id && "bg-white/[0.06]"
+              )}
+              onMouseEnter={() => setActiveSource(s.id)}
+              onMouseLeave={() => setActiveSource(null)}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className={cn("w-2 h-2 rounded-full flex-shrink-0", c.dot)} />
                 <div className="min-w-0">
-                  <span className="text-[10px] text-foreground font-medium block truncate">{source.country}</span>
-                  <span className="text-[9px] text-muted-foreground">{source.attacks} attacks</span>
+                  <div className="text-xs font-bold text-foreground/90 uppercase font-mono truncate">
+                    {s.country}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground truncate">{s.type}</div>
                 </div>
               </div>
-            );
-          })}
-        </div>
+              <div className="text-right flex-shrink-0">
+                <div className={cn("text-xs font-bold font-mono", c.text)}>{s.attacks}</div>
+                <div className="text-[9px] text-muted-foreground/60 font-medium uppercase">events</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
