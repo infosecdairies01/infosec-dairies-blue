@@ -125,4 +125,15 @@ All colors MUST be HSL.
     background-size: 50px 50px;
     opacity: 0.1;
   }
+
+  /* Slow dash drift for threat arcs — subtle flow toward the target */
+  @keyframes arc-flow {
+    to {
+      stroke-dashoffset: -100;
+    }
+  }
+
+  .arc-flow {
+    animation: arc-flow 24s linear infinite;
+  }
 }
