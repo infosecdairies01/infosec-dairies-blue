@@ -3798,6 +3798,39 @@ First Seen: 2024-01-10
         "Map each phase to MITRE ATT&CK techniques",
         "Extract all indicators of compromise",
         "Write recommended containment and remediation actions"
+      ],
+      labScenario: "Alert 'Potential Data Exfiltration' (High) fired at 14:30 UTC for host WKS-SALES03 (192.168.10.103), user mwilson, with 150 MB sent to 185.234.72.50:443. SIEM pivots show: 09:12 UTC mwilson opened an email attachment 'Invoice_Q1.docm'; 09:13 winword.exe spawned powershell.exe with an encoded command that downloaded a payload; 09:20 a scheduled task 'WindowsUpdateCheck' was created running from C:\\Users\\mwilson\\AppData\\Roaming\\; 11:45 the host authenticated to FS-FINANCE01 with mwilson credentials and read 4,200 files from the finance share; 14:28-14:30 a single TLS session pushed 150 MB to 185.234.72.50, an IP with no prior connections in 30 days and 14/70 malicious detections on VirusTotal.",
+      labQuestions: [
+        {
+          id: "4.5-q1",
+          question: "What was the initial access vector in this attack chain?",
+          answer: "malicious email attachment",
+          hint: "Look at the very first event at 09:12 — what did the user open before any process spawned?"
+        },
+        {
+          id: "4.5-q2",
+          question: "Which process relationship is the strongest indicator of malicious execution?",
+          answer: "winword.exe spawning powershell.exe",
+          hint: "Office applications should never spawn command interpreters."
+        },
+        {
+          id: "4.5-q3",
+          question: "What MITRE ATT&CK technique does the 'WindowsUpdateCheck' entry represent?",
+          answer: "scheduled task persistence",
+          hint: "T1053.005 — the attacker created a task that survives reboot, disguised with a trusted-sounding name."
+        },
+        {
+          id: "4.5-q4",
+          question: "Which host besides WKS-SALES03 must be included in the incident scope?",
+          answer: "FS-FINANCE01",
+          hint: "The 11:45 event shows access to a second system before the data left the network."
+        },
+        {
+          id: "4.5-q5",
+          question: "What is the single most urgent containment action for this incident?",
+          answer: "network isolate WKS-SALES03",
+          hint: "Stop the active exfiltration channel while preserving memory evidence — do not power off the host."
+        },
       ]
     }
   },
