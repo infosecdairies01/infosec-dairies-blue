@@ -484,7 +484,7 @@ export const courses: Course[] = [
         id: "q6",
         title: "Final Certification Exam",
         description: "Comprehensive exam covering all course modules. Required for certification.",
-        questionCount: 50,
+        questionCount: 40,
         passingScore: 80,
         duration: "60 min",
         status: "unlocked",
