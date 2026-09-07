@@ -27,6 +27,7 @@ import { sapPart2 } from "@/data/quizzes/sapPart2";
 import { sapPart3 } from "@/data/quizzes/sapPart3";
 import { sapPart4 } from "@/data/quizzes/sapPart4";
 import { finalExams } from "@/data/quizzes/finalExams";
+import { socFinalExam } from "@/data/quizzes/socFinalExam";
 
 const baseQuizzes: QuizData[] = [
   {
@@ -631,106 +632,6 @@ const baseQuizzes: QuizData[] = [
         ],
         correctAnswer: 1,
         explanation: "Shared/CDN infrastructure + thin internal evidence + weak AV consensus = classic 'alert and enrich,' not 'block.' Confidence scoring across sources prevents self-inflicted outages — a recurring real-world CTI failure mode."
-      }
-    ]
-  },
-  {
-    quizId: "q6",
-    courseId: "soc-fundamentals",
-    title: "Incident Response Decisions",
-    description: "NIST IR lifecycle applied to live incidents — containment, eradication, recovery, lessons learned.",
-    passingScore: 75,
-    timeLimit: 25,
-    questions: [
-      {
-        id: "q6-1",
-        difficulty: "medium",
-        tags: ["Containment"],
-        scenario: "EDR confirms ransomware actively encrypting files on a single workstation, WS-203. Network share \\\\fileserver\\finance is mounted from that host.",
-        question: "What is the CORRECT first containment step?",
-        options: [
-          "Power off WS-203 immediately by pulling its power cable to stop the encryption as fast as possible.",
-          "Reimage WS-203 immediately using the latest golden image to ensure all malicious files are removed.",
-          "Network-isolate WS-203 via EDR (preserves memory for forensics) AND revoke the user's share permissions on \\\\fileserver\\finance.",
-          "Wait until you fully understand the ransomware variant before taking any containment action on the host."
-        ],
-        correctAnswer: 2,
-        explanation: "Network isolation (EDR containment) stops lateral encryption and C2 while preserving volatile evidence — pulling power destroys memory artifacts (keys, injected code). Cutting the user's share rights protects the secondary blast radius."
-      },
-      {
-        id: "q6-2",
-        difficulty: "hard",
-        tags: ["Evidence", "Chain of Custody"],
-        scenario: "You suspect this incident may lead to litigation. You took a triage memory dump and ran several commands on the live host.",
-        question: "What MUST you document for evidence to remain admissible?",
-        options: [
-          "Chain of custody: who collected/handled what, when, tool/version, SHA-256 hashes at collection, storage location, and every transfer signed/dated.",
-          "Nothing — the EDR platform automatically logs all actions and the vendor will provide court-ready reports.",
-          "Just save all the acquired artifact files in a shared drive folder so that the legal team can retrieve them.",
-          "Email the acquired files directly to the legal department so the attorneys have immediate access to the data."
-        ],
-        correctAnswer: 0,
-        explanation: "Admissibility hinges on demonstrable integrity (hashes at collection and at use) and an unbroken chain (every handler, every transfer). Without it, defense counsel will exclude the evidence — and your investigation collapses."
-      },
-      {
-        id: "q6-3",
-        difficulty: "medium",
-        tags: ["NIST Lifecycle"],
-        scenario: "After containment of a webshell on a public web server, you have removed the file, rotated credentials, and restored from backup. Tickets are closed.",
-        question: "What essential NIST phase is being skipped?",
-        options: [
-          "Detection — the team has not properly validated whether the SIEM rule that triggered the initial alert is accurate.",
-          "Containment — the compromised web server should still be network-isolated before any restore is performed.",
-          "Preparation — the incident response plan should be reviewed and updated before any future incidents occur.",
-          "Post-Incident Lessons Learned — RCA of how the webshell arrived, control gaps identified, and runbook updates."
-        ],
-        correctAnswer: 3,
-        explanation: "Skipping post-incident review is the most common immaturity in young IR programs. The webshell got there via an unpatched CVE or a misconfig; closing without RCA guarantees recurrence."
-      },
-      {
-        id: "q6-4",
-        difficulty: "hard",
-        tags: ["Eradication"],
-        scenario: "You eradicated malware on 3 hosts. A week later, the same malware re-appears on host #4 in the same subnet.",
-        question: "What is the MOST likely root cause and the right fix?",
-        options: [
-          "Pure bad luck — simply repeat the exact same eradication procedure on host #4 and close the incident.",
-          "Antivirus signatures were outdated during the initial sweep and failed to detect all copies of the malware.",
-          "Incomplete eradication — missed persistence (task/WMI/credential). Hunt full environment for initial-access vector and all persistence mechanisms before re-eradicating.",
-          "The EDR vendor must be contacted to provide a specialized removal tool before any further action is taken."
-        ],
-        correctAnswer: 2,
-        explanation: "Reinfection nearly always means root cause (initial access) or persistence was missed. Mature IR scopes the full footprint (all hosts, all persistence locations, all credentials touched) before declaring eradication."
-      },
-      {
-        id: "q6-5",
-        difficulty: "medium",
-        tags: ["Communication"],
-        scenario: "30 minutes into a major incident, the CEO walks into the SOC and asks 'is our customer data safe?'",
-        question: "Best response?",
-        options: [
-          "'Yes, everything is fine' — reassure the CEO so they can communicate calmly with the board and avoid panic.",
-          "'We have contained the affected host. Current evidence does not show customer-database access; I will update you in 30 minutes.' — factual, scoped, time-bounded.",
-          "'We do not know yet — we are not ignoring you' — acknowledge the question but defer all details to the legal team.",
-          "Refuse to respond until the full investigation is complete and a formal written report has been reviewed."
-        ],
-        correctAnswer: 1,
-        explanation: "Executive communications during incidents must be factual, scoped to what is known, and include a next-update commitment. Never speculate (false reassurance is reputational suicide); never stonewall (drives parallel un-coordinated action)."
-      },
-      {
-        id: "q6-6",
-        difficulty: "hard",
-        tags: ["Recovery"],
-        scenario: "You restored 12 production servers from backup. The business asks 'can we put them back online now?'",
-        question: "Correct gating criteria before re-connection?",
-        options: [
-          "Yes — backups are inherently clean and restoring from them is sufficient to safely return the servers to production.",
-          "Yes — but only reconnect during a low-traffic maintenance window at night to minimize business impact on users.",
-          "Wait exactly 30 days regardless of findings, as industry standards require a mandatory observation period after compromise.",
-          "Only after: backup verified pre-incident clean, initial-access vector closed, credentials rotated, heightened monitoring deployed, and recovery validated in isolated segment."
-        ],
-        correctAnswer: 3,
-        explanation: "Recovery without closing the root cause and adding heightened monitoring is how organizations get re-owned within days. The five-gate checklist is the IR-team minimum and the basis of every post-incident hardening report."
       }
     ]
   },
@@ -9431,7 +9332,7 @@ const baseQuizzes: QuizData[] = [
 ];
 
 export const quizzes: QuizData[] = [...baseQuizzes, ...sapPart1, ...sapPart2, ...sapPart3, ...sapPart4,
-  ...finalExams];
+  ...finalExams, ...socFinalExam];
 
 export const getQuizById = (courseId: string, quizId: string): QuizData | undefined => {
   return quizzes.find(q => q.courseId === courseId && q.quizId === quizId);
