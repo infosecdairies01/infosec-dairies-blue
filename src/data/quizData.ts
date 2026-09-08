@@ -28,6 +28,7 @@ import { sapPart3 } from "@/data/quizzes/sapPart3";
 import { sapPart4 } from "@/data/quizzes/sapPart4";
 import { finalExams } from "@/data/quizzes/finalExams";
 import { socFinalExam } from "@/data/quizzes/socFinalExam";
+import { logAnalysisFinalExam } from "@/data/quizzes/logAnalysisFinalExam";
 
 const baseQuizzes: QuizData[] = [
   {
