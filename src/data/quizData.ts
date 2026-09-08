@@ -9174,7 +9174,7 @@ const baseQuizzes: QuizData[] = [
 ];
 
 export const quizzes: QuizData[] = [...baseQuizzes, ...sapPart1, ...sapPart2, ...sapPart3, ...sapPart4,
-  ...finalExams, ...socFinalExam];
+  ...finalExams, ...socFinalExam, ...logAnalysisFinalExam];
 
 export const getQuizById = (courseId: string, quizId: string): QuizData | undefined => {
   return quizzes.find(q => q.courseId === courseId && q.quizId === quizId);
