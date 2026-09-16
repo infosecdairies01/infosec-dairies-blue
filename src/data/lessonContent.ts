@@ -12393,7 +12393,359 @@ Firewall logs alone rarely tell the whole story, but they are the fastest way to
     }
   },
 
+  {
+    id: "4.2",
+    courseId: "log-analysis",
+    title: "Proxy & Web Gateway Logs",
+    content: `
+# Proxy & Web Gateway Logs
+
+A secure web gateway records how users and devices access websites. Unlike a firewall, a proxy can reveal the requested domain, full URL, authenticated user, content type, response code, and policy action.
+
+## Fields Analysts Use
+
+| Field | Analyst question |
+|---|---|
+| src_ip / user | Who made the request? |
+| host / url | Where did they connect? |
+| method | Was data retrieved or submitted? |
+| status | Did the server accept the request? |
+| bytes_in / bytes_out | How much data moved? |
+| user_agent | Which browser or program made it? |
+| category / action | How did the gateway classify and handle it? |
+
+## Example
+
+~~~text
+2026-09-16T09:14:22Z user=apatel src=10.20.5.18 method=POST host=cdn-sync.example url=/api/checkin status=200 bytes_out=684 user_agent="python-requests/2.31" action=allowed
+~~~
+
+One event is not proof of compromise. Repeated POST requests at exact intervals, an uncommon domain, a scripted user agent, and consistent small responses together can indicate command-and-control beaconing.
+
+## Investigation Workflow
+
+1. Confirm the user, device, timestamp, and gateway action.
+2. Review domain age, reputation, category, and first-seen time.
+3. Compare the user agent with the device's normal software.
+4. Group requests into time intervals and compare byte counts.
+5. Pivot to DNS, endpoint, and firewall logs before escalating.
+
+## Useful Detection Patterns
+
+- Executable or archive downloads from newly observed domains
+- Direct-to-IP web requests or rare top-level domains
+- Repeated connections with regular timing and similar byte sizes
+- Large outbound POST or PUT requests to file-sharing sites
+- Command-line user agents such as curl, wget, or python-requests on user workstations
+
+Remember that software updaters can also look automated. Validate process, destination, and business context before deciding.
+    `,
+    keyTakeaways: [
+      "Proxy logs connect web activity to a user, device, URL, and action",
+      "Several weak signals together are stronger than one unusual request",
+      "Regular timing and consistent byte sizes can reveal beaconing",
+      "Correlate proxy activity with DNS, endpoint, and firewall evidence"
+    ],
+    practicalExercise: {
+      title: "Investigate Repeating Web Requests",
+      description: "Analyze gateway events for possible command-and-control traffic.",
+      steps: ["Identify the requesting user and host", "Compare timing, destination, and user agent", "Decide the next containment action"],
+      labScenario: "Proxy logs show WKS-23, used by apatel, sending an HTTPS POST to sync-storage.example every 60 seconds from 09:10 to 09:40. Every response is 214 bytes and the user agent is python-requests/2.31. The domain was first seen today and no other company device contacted it. EDR shows python.exe launched from the user's Downloads folder.",
+      labQuestions: [
+        { id: "la-4.2-q1", question: "Which pattern most strongly suggests automated beaconing?", answer: "60-second interval", hint: "Look for regular timing." },
+        { id: "la-4.2-q2", question: "Which user agent indicates a script rather than a normal browser?", answer: "python-requests", hint: "It names a Python HTTP library." },
+        { id: "la-4.2-q3", question: "Which endpoint process should be investigated?", answer: "python.exe", hint: "EDR recorded it launching from Downloads." },
+        { id: "la-4.2-q4", question: "What is the best immediate network action?", answer: "block the domain", hint: "Stop additional connections while the endpoint is investigated." }
+      ]
+    }
+  },
+  {
+    id: "4.3",
+    courseId: "log-analysis",
+    title: "DNS Query Logs",
+    content: `
+# DNS Query Logs
+
+DNS translates names into IP addresses. Its logs often expose an attack before other controls because malware commonly needs DNS to locate infrastructure.
+
+## Essential DNS Fields
+
+| Field | Meaning |
+|---|---|
+| client_ip | Device asking the question |
+| query | Requested domain name |
+| qtype | Record type such as A, AAAA, TXT, or MX |
+| response / rcode | Answer or result such as NOERROR or NXDOMAIN |
+| answers | Returned IP addresses or values |
+| query_length | Size of the requested name |
+
+## Suspicious Patterns
+
+**Domain generation algorithms:** many random-looking domains with high NXDOMAIN rates.  
+**DNS tunneling:** very long, changing subdomains; frequent TXT queries; unusually high volume.  
+**Fast flux:** one domain rapidly resolves to many IP addresses.  
+**New infrastructure:** a first-seen domain queried by only one endpoint immediately before suspicious traffic.
+
+## Example
+
+~~~text
+09:20:01 client=10.20.5.44 qtype=TXT query=aj3k2l9f0a.data-sync.example rcode=NOERROR
+09:20:03 client=10.20.5.44 qtype=TXT query=bm9ybWFsLWRhdGE.data-sync.example rcode=NOERROR
+~~~
+
+Long encoded labels alone are not conclusive: security products and cloud services may use them. Establish frequency, uniqueness, record type, and endpoint context.
+
+## Analyst Workflow
+
+1. Rank clients by query count and NXDOMAIN count.
+2. Find rare domains and unusually long labels.
+3. Group by qtype and investigate unexpected TXT traffic.
+4. Decode suspected Base64 only in a safe analysis environment.
+5. Pivot to the process making the request and any subsequent connection.
+    `,
+    keyTakeaways: [
+      "DNS logs identify the client, requested domain, record type, and result",
+      "High NXDOMAIN rates can reveal automated domain generation",
+      "Long changing labels and repeated TXT queries can indicate tunneling",
+      "Endpoint and network pivots are required to confirm malicious DNS"
+    ],
+    practicalExercise: {
+      title: "Detect a DNS Tunnel",
+      description: "Use DNS fields and behavior to identify covert communication.",
+      steps: ["Compare query length and record type", "Identify the source and suspicious parent domain", "Choose a validation pivot"],
+      labScenario: "DNS logs show host 10.20.8.31 issuing 3,600 TXT queries in 20 minutes to data-gateway.example. Each query contains a different 45- to 60-character subdomain. All other endpoints average fewer than five TXT queries per hour. EDR identifies powershell.exe as the process responsible for the DNS requests.",
+      labQuestions: [
+        { id: "la-4.3-q1", question: "What technique does this activity most likely represent?", answer: "DNS tunneling", hint: "Data can be hidden inside DNS labels." },
+        { id: "la-4.3-q2", question: "Which DNS record type is being abused?", answer: "TXT", hint: "It can carry arbitrary text." },
+        { id: "la-4.3-q3", question: "Which host generated the suspicious queries?", answer: "10.20.8.31", hint: "Use the DNS client field." },
+        { id: "la-4.3-q4", question: "Which process should be investigated on the endpoint?", answer: "powershell.exe", hint: "EDR identifies the requesting process." }
+      ]
+    }
+  },
+  {
+    id: "4.4",
+    courseId: "log-analysis",
+    title: "VPN & Remote Access Logs",
+    content: `
+# VPN & Remote Access Logs
+
+VPN logs show who connected remotely, from where, when, with which device, and whether authentication controls succeeded. They are essential for investigating stolen credentials and unauthorized remote access.
+
+## Important Fields
+
+- Username and authentication result
+- Source public IP and geolocation
+- Assigned internal VPN address
+- Device name, operating system, and posture result
+- MFA result and authentication method
+- Session start, end, duration, and bytes transferred
+
+## High-Value Detection Patterns
+
+| Pattern | Possible explanation |
+|---|---|
+| Many users fail from one IP | Password spraying |
+| One user succeeds from distant countries minutes apart | Impossible travel or shared exit node |
+| Success after many failures | Credential compromise |
+| New device plus MFA change | Account takeover |
+| Overnight session with large transfer | Unauthorized access or exfiltration |
+
+Geolocation is supporting evidence, not proof. Mobile carriers, corporate proxies, and commercial VPNs can make a location appear unusual.
+
+## Triage Workflow
+
+1. Verify whether authentication and MFA succeeded.
+2. Compare source IP, device, time, and location with the user's baseline.
+3. Review failures before the successful session.
+4. Track the assigned internal address in firewall and endpoint logs.
+5. Revoke sessions and reset credentials when compromise is confirmed.
+    `,
+    keyTakeaways: [
+      "VPN logs connect remote identities to public and assigned internal addresses",
+      "MFA, device, location, and time provide essential authentication context",
+      "A success following repeated failures requires urgent review",
+      "Use the assigned VPN IP to continue the investigation internally"
+    ],
+    practicalExercise: {
+      title: "Triage Suspicious Remote Access",
+      description: "Investigate a VPN session for possible account takeover.",
+      steps: ["Review authentication history", "Compare the session with the user's baseline", "Pivot from the assigned VPN address"],
+      labScenario: "At 02:12 UTC, account jlee had 18 failed VPN logins from 203.0.113.88, followed by a success with password-only authentication. The source geolocates to a country never used by jlee, and device LINUX-7F is new. The gateway assigned 10.99.4.27, which then connected to three finance servers over RDP.",
+      labQuestions: [
+        { id: "la-4.4-q1", question: "Which account was likely compromised?", answer: "jlee", hint: "It appears in the failed and successful logins." },
+        { id: "la-4.4-q2", question: "What internal VPN address should be traced?", answer: "10.99.4.27", hint: "The gateway assigned this address." },
+        { id: "la-4.4-q3", question: "Which missing control increased the risk of the successful login?", answer: "MFA", hint: "The session used password-only authentication." },
+        { id: "la-4.4-q4", question: "Which protocol was used to reach the finance servers?", answer: "RDP", hint: "The scenario names the remote desktop protocol." }
+      ]
+    }
+  },
   // Module 5: Log Analysis Techniques
+  {
+    id: "5.1",
+    courseId: "log-analysis",
+    title: "Pattern Recognition & Baseline",
+    content: `
+# Pattern Recognition & Baseline
+
+A baseline describes normal activity for a user, host, service, or network. Analysts use it to find meaningful deviations instead of treating every unusual event as malicious.
+
+## Build a Useful Baseline
+
+Measure behavior over a representative period, usually several business cycles:
+
+- Normal login hours and source locations
+- Common parent-child processes
+- Typical DNS domains and web categories
+- Expected destination ports and data volumes
+- Normal administrative activity and service accounts
+
+## Detection Methods
+
+**Frequency analysis** finds sudden spikes, such as hundreds of failures.  
+**Rare-event analysis** finds values seen on very few systems.  
+**Peer comparison** compares similar users or servers.  
+**Sequence analysis** finds unusual event order, such as document to script interpreter to network connection.
+
+## Avoiding False Positives
+
+Check maintenance windows, new software, travel, role changes, and asset type. A database server and a receptionist laptop need different baselines. Update baselines deliberately, but never allow confirmed malicious activity to become the new normal.
+
+## Beginner Workflow
+
+1. Choose one entity and one measurable behavior.
+2. Define a time window and calculate the normal range.
+3. Identify deviations by count, rarity, timing, or sequence.
+4. Add business and asset context.
+5. Record why the event is benign or escalate it with evidence.
+    `,
+    keyTakeaways: [
+      "A baseline describes expected behavior for a specific entity",
+      "Frequency, rarity, peer, and sequence analysis expose anomalies",
+      "Asset role and business context prevent poor conclusions",
+      "Baselines must be reviewed without learning confirmed attacks as normal"
+    ],
+    practicalExercise: {
+      title: "Find the Baseline Deviation",
+      description: "Compare current activity with a user's established pattern.",
+      steps: ["Define the normal behavior", "Identify each meaningful deviation", "Select the strongest investigation pivot"],
+      labScenario: "For 30 days, finance user rgarcia logged in weekdays between 07:30 and 18:00 from WKS-FIN-12 and transferred 20-80 MB daily. Today the account logged in at 01:47 from WKS-ENG-44, queried 9,200 customer records, and uploaded 2.8 GB to an unapproved storage service. No travel or role change is recorded.",
+      labQuestions: [
+        { id: "la-5.1-q1", question: "Which login time is outside the established baseline?", answer: "01:47", hint: "Normal activity begins at 07:30." },
+        { id: "la-5.1-q2", question: "Which device is unusual for the user?", answer: "WKS-ENG-44", hint: "The user's normal device is WKS-FIN-12." },
+        { id: "la-5.1-q3", question: "What data volume is the major transfer anomaly?", answer: "2.8 GB", hint: "Compare it with the 20-80 MB daily range." },
+        { id: "la-5.1-q4", question: "What should the analyst investigate first: the account or the storage service?", answer: "account", hint: "Multiple identity and behavior deviations point to possible account misuse." }
+      ]
+    }
+  },
+  {
+    id: "5.2",
+    courseId: "log-analysis",
+    title: "Timeline Reconstruction",
+    content: `
+# Timeline Reconstruction
+
+A timeline orders evidence from different systems so analysts can explain what happened before, during, and after an alert.
+
+## Normalize Time First
+
+Sources may use UTC, local time, daylight-saving offsets, or clocks that drift. Preserve the original timestamp, convert a working copy to UTC, record the source timezone, and note known clock differences.
+
+## Core Timeline Fields
+
+| Field | Purpose |
+|---|---|
+| normalized_time | Sort all events consistently |
+| source | Identify the log or sensor |
+| user / host | Track affected entities |
+| action | Describe what occurred |
+| result | Record success, failure, allow, or block |
+| evidence | Preserve the raw event or reference |
+
+## Reconstruction Process
+
+1. Start with the alert timestamp as an anchor.
+2. Search backward for initial access and preparation.
+3. Search forward for persistence, movement, and impact.
+4. Add events from authentication, endpoint, DNS, proxy, and firewall sources.
+5. Mark facts separately from analyst inferences and identify evidence gaps.
+
+## Common Mistakes
+
+Do not sort unnormalized timestamps, assume ingestion time equals event time, or omit failed actions. Failed events can explain attacker intent and often precede a success.
+    `,
+    keyTakeaways: [
+      "Normalize timestamps before ordering events",
+      "Work backward and forward from a reliable anchor event",
+      "Keep observed facts separate from analyst conclusions",
+      "Failed events and missing telemetry are important parts of a timeline"
+    ],
+    practicalExercise: {
+      title: "Reconstruct an Intrusion Timeline",
+      description: "Order evidence from email, endpoint, DNS, and identity logs.",
+      steps: ["Convert all times to UTC", "Order the events", "Identify initial access and persistence"],
+      labScenario: "All normalized times are UTC: email gateway delivered Invoice.docm at 08:41; user mchen opened it at 08:46; Word launched powershell.exe at 08:47; DNS resolved update-check.example at 08:47:12; a new scheduled task named OfficeUpdate was created at 08:49; and the account authenticated to FS-02 at 08:53.",
+      labQuestions: [
+        { id: "la-5.2-q1", question: "What was the first event in the timeline?", answer: "email delivery", hint: "Find the earliest timestamp." },
+        { id: "la-5.2-q2", question: "Which process relationship most strongly indicates execution?", answer: "Word launched PowerShell", hint: "Office applications rarely need to start a script interpreter." },
+        { id: "la-5.2-q3", question: "What persistence mechanism was created?", answer: "scheduled task", hint: "OfficeUpdate survives beyond the original process." },
+        { id: "la-5.2-q4", question: "Which host may represent lateral movement?", answer: "FS-02", hint: "The compromised account authenticated to another system." }
+      ]
+    }
+  },
+  {
+    id: "5.3",
+    courseId: "log-analysis",
+    title: "Correlation Across Sources",
+    content: `
+# Correlation Across Sources
+
+Correlation connects related events that are weak alone but convincing together. A DNS lookup, process start, and allowed connection can reveal a complete execution chain.
+
+## Shared Pivot Fields
+
+- Hostname, device ID, and IP address
+- Username, account ID, and session ID
+- Domain, URL, and destination IP
+- Process ID, parent process, and file hash
+- Normalized timestamp
+
+IP addresses can change through DHCP, NAT, and VPN assignment. Confirm which device owned an address at the relevant time before linking evidence.
+
+## A Practical Correlation Pattern
+
+1. **Identity:** Who authenticated, and was it successful?
+2. **Endpoint:** What process or file appeared?
+3. **DNS:** Which name did the device resolve?
+4. **Network:** Was a connection allowed, and how much data moved?
+5. **Application:** What action did the authenticated user perform?
+
+## Correlation Window
+
+Choose a window suitable for the behavior. Seconds may connect a process to a network request; hours may connect phishing to persistence. A very broad window creates accidental matches.
+
+## Evidence Standard
+
+Document the shared fields that justify every link. State uncertainty when identifiers conflict or telemetry is missing. Correlation supports a conclusion; it does not replace validation.
+    `,
+    keyTakeaways: [
+      "Correlation joins evidence through shared entities and time",
+      "Dynamic IP addresses must be validated against DHCP, NAT, or VPN records",
+      "Use a time window appropriate to the behavior",
+      "Document why events belong to the same activity chain"
+    ],
+    practicalExercise: {
+      title: "Connect a Multi-Source Attack",
+      description: "Pivot across identity, endpoint, DNS, and firewall records.",
+      steps: ["Identify shared fields", "Build the event chain", "Determine the affected identity, host, and destination"],
+      labScenario: "Identity logs show user skhan signing into WKS-77 at 14:03. EDR records outlook.exe creating quote.iso at 14:05 and rundll32.exe launching from the mounted image at 14:06. DNS from WKS-77 resolves api-content.example to 198.51.100.40 at 14:06:08. The firewall allows WKS-77 to 198.51.100.40:443 at 14:06:10.",
+      labQuestions: [
+        { id: "la-5.3-q1", question: "Which user is linked to the activity?", answer: "skhan", hint: "Start with the identity log." },
+        { id: "la-5.3-q2", question: "Which process executed content from the mounted image?", answer: "rundll32.exe", hint: "Use the endpoint event." },
+        { id: "la-5.3-q3", question: "Which domain resolved immediately before the network connection?", answer: "api-content.example", hint: "Use the DNS event." },
+        { id: "la-5.3-q4", question: "Which destination IP did the firewall allow?", answer: "198.51.100.40", hint: "Match the DNS answer with the firewall destination." }
+      ]
+    }
+  },
   {
     id: "5.4",
     courseId: "log-analysis",
