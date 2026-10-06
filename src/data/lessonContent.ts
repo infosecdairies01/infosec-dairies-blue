@@ -12849,6 +12849,264 @@ You will not always have a SIEM. The CLI is your safety net — fast, scriptable
 
   // Module 6: Practical Log Analysis
   {
+    id: "6.1",
+    courseId: "log-analysis",
+    title: "Detecting Brute Force Attacks",
+    content: `
+# Detecting Brute Force Attacks
+
+A brute force attack repeatedly guesses credentials until one works. In logs it appears as a burst of authentication failures, often followed by a success that must be treated as a possible compromise.
+
+## Attack Variants
+
+| Variant | Log pattern |
+|---|---|
+| **Classic brute force** | One source, one account, many failures |
+| **Password spraying** | One source, many accounts, few failures each |
+| **Credential stuffing** | Many accounts, leaked passwords, often distributed IPs |
+| **Distributed brute force** | Many sources targeting one account |
+
+## Key Log Sources and Fields
+
+| Source | Failure | Success |
+|---|---|---|
+| Windows Security | 4625 (Status 0xC000006A bad password, 0xC0000064 unknown user) | 4624 |
+| Domain controller | 4771 Kerberos pre-auth failed, 4776 NTLM validation | 4768 |
+| Linux /var/log/auth.log | "Failed password", "Invalid user" | "Accepted password" |
+| Cloud identity (Entra ID) | Sign-in result code 50126 | Result code 0 |
+| Account lockout | 4740 | — |
+
+## Example Evidence
+
+~~~text
+Sep 16 02:10:01 web01 sshd[2211]: Failed password for root from 198.51.100.77 port 50122 ssh2
+Sep 16 02:10:02 web01 sshd[2213]: Failed password for root from 198.51.100.77 port 50124 ssh2
+... 1,842 similar lines ...
+Sep 16 02:31:47 web01 sshd[4120]: Accepted password for deploy from 198.51.100.77 port 51901 ssh2
+~~~
+
+The failures alone are noise; the **success from the same source** is the incident.
+
+## Detection Queries
+
+~~~text
+# Splunk: failures followed by success from the same source
+index=wineventlog (EventCode=4625 OR EventCode=4624)
+| stats count(eval(EventCode=4625)) as failures count(eval(EventCode=4624)) as successes dc(TargetUserName) as users by IpAddress
+| where failures > 20 AND successes > 0
+
+# Password spray: many users, one source
+index=wineventlog EventCode=4625 | bin _time span=10m
+| stats dc(TargetUserName) as users by _time IpAddress | where users > 15
+~~~
+
+~~~bash
+grep "Failed password" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -rn | head
+~~~
+
+## Analyst Workflow
+
+1. Identify the source IP(s), targeted accounts, and time window.
+2. Classify the pattern: brute force, spray, or stuffing.
+3. Check for **any successful logon** from the same source or for targeted accounts.
+4. If a success exists, review post-logon activity (processes, new sessions, privilege use).
+5. Contain: block the source, reset credentials, revoke sessions, enforce MFA.
+
+## Common False Positives
+
+- Service accounts with expired passwords retrying every minute
+- Users with cached old passwords on mobile devices
+- Vulnerability scanners authorised to test login pages
+    `,
+    keyTakeaways: [
+      "Brute force, spraying, and stuffing produce different failure patterns",
+      "A success after many failures from the same source is the critical signal",
+      "Windows 4625/4624/4740 and Linux auth.log are the core evidence",
+      "Rule out service accounts and stale cached credentials before escalating"
+    ],
+    practicalExercise: {
+      title: "Authentication Attack Investigation",
+      description: "Classify an authentication attack and determine whether any account was compromised.",
+      steps: [
+        "Review the authentication summary",
+        "Classify the attack pattern",
+        "Find the compromised account and the right response"
+      ],
+      labScenario: "Between 01:00 and 01:20 UTC the domain controller logs 312 Event 4625 failures from 203.0.113.25, spread across 104 different user accounts with about 3 attempts each, all using Status 0xC000006A. At 01:18 UTC an Event 4624 logon type 3 succeeds from 203.0.113.25 for account 'jlopez'. Separately, account 'svc_backup' generates one 4625 every 60 seconds from internal host 10.10.4.12 all night.",
+      labQuestions: [
+        { id: "la-6.1-q1", question: "What type of attack is 203.0.113.25 performing?", answer: "Password spraying", hint: "Many accounts, very few attempts per account." },
+        { id: "la-6.1-q2", question: "Which account is likely compromised?", answer: "jlopez", hint: "Look for the 4624 success from the attacking IP." },
+        { id: "la-6.1-q3", question: "What is the most likely explanation for the svc_backup failures?", answer: "Expired or changed password on a service account (false positive)", hint: "Steady internal retries at a fixed interval." },
+        { id: "la-6.1-q4", question: "What should you do first for the compromised account?", answer: "Reset the password, revoke active sessions, and block 203.0.113.25", hint: "Remove attacker access before deeper review." }
+      ]
+    }
+  },
+  {
+    id: "6.2",
+    courseId: "log-analysis",
+    title: "Detecting Lateral Movement",
+    content: `
+# Detecting Lateral Movement
+
+After initial access, attackers move from host to host to reach valuable systems. Lateral movement uses legitimate admin tools, so detection depends on spotting **unusual source-to-destination relationships**.
+
+## Common Techniques and Their Evidence
+
+| Technique (ATT&CK) | Evidence on destination host |
+|---|---|
+| RDP (T1021.001) | 4624 Logon Type 10, TerminalServices logs |
+| SMB / Admin shares (T1021.002) | 4624 Type 3, 5140 share access to ADMIN$ or C$ |
+| PsExec / services (T1569.002) | 7045 new service (PSEXESVC), 4697 |
+| WMI (T1047) | 4688 WmiPrvSE.exe spawning cmd/powershell |
+| WinRM (T1021.006) | wsmprovhost.exe, 4624 Type 3 |
+| Pass-the-Hash (T1550.002) | 4624 Type 3, NTLM, Logon Process NtLmSsp |
+| Explicit credentials | 4648 on the source host |
+
+## Example Evidence
+
+~~~text
+10:42:11 WKS-14  4648 SubjectUser=tnguyen TargetUser=adm_it TargetServer=FS-02
+10:42:12 FS-02   4624 LogonType=3 TargetUser=adm_it IpAddress=10.1.4.14 AuthPackage=NTLM
+10:42:13 FS-02   5140 ShareName=\\\\*\\ADMIN$ IpAddress=10.1.4.14
+10:42:14 FS-02   7045 ServiceName=PSEXESVC ImagePath=%SystemRoot%\\PSEXESVC.exe
+~~~
+
+A workstation using an admin account to install a service on a file server is a classic PsExec chain.
+
+## Detection Approaches
+
+~~~text
+# Splunk: one source logging on to many hosts
+index=wineventlog EventCode=4624 Logon_Type=3
+| stats dc(ComputerName) as hosts values(ComputerName) by IpAddress Account_Name
+| where hosts > 5
+
+# New service installs
+index=wineventlog EventCode=7045 | table _time ComputerName Service_Name Service_File_Name
+~~~
+
+## Analyst Workflow
+
+1. Start from a known compromised host or account.
+2. Find outbound authentications (4648) and remote logons it caused (4624 Type 3/10).
+3. Check destination hosts for service installs, share access, and remote process creation.
+4. Map every hop into a host graph and timeline.
+5. Contain all affected hosts and reset accounts used during movement.
+
+## Baseline Questions
+
+- Do workstations normally connect to other workstations? (Usually no.)
+- Is this admin account normally used from this source?
+- Is NTLM expected where Kerberos is the norm?
+    `,
+    keyTakeaways: [
+      "Lateral movement abuses legitimate tools, so context matters more than signatures",
+      "4624 Type 3/10, 4648, 5140, and 7045 form the core evidence chain",
+      "Workstation-to-workstation and unusual admin logons are strong signals",
+      "Map each hop to scope the incident before containment"
+    ],
+    practicalExercise: {
+      title: "Trace the Attacker's Path",
+      description: "Follow authentication and service events to map lateral movement.",
+      steps: [
+        "Read the event chain",
+        "Identify the technique and hops",
+        "Determine scope and response"
+      ],
+      labScenario: "Compromised workstation WKS-22 (10.2.0.22) records Event 4648 at 14:05 for account 'adm_rsingh' targeting SRV-DB01. At 14:05 SRV-DB01 logs 4624 Logon Type 3 from 10.2.0.22 for adm_rsingh using NTLM, then 5140 access to ADMIN$, then 7045 installing service 'PSEXESVC'. At 14:19 SRV-DB01 (10.2.1.10) logs 4624 Type 10 onto DC01 for adm_rsingh. adm_rsingh normally only logs in from jump host JMP-01.",
+      labQuestions: [
+        { id: "la-6.2-q1", question: "Which tool was most likely used to move to SRV-DB01?", answer: "PsExec", hint: "The service name installed in Event 7045." },
+        { id: "la-6.2-q2", question: "Which logon type indicates the RDP hop to DC01?", answer: "Logon Type 10", hint: "RemoteInteractive logons." },
+        { id: "la-6.2-q3", question: "Why is adm_rsingh usage suspicious?", answer: "It normally only logs in from JMP-01, not from WKS-22", hint: "Compare with the account baseline." },
+        { id: "la-6.2-q4", question: "List the movement path in order.", answer: "WKS-22 -> SRV-DB01 -> DC01", hint: "Follow source and destination for each logon." }
+      ]
+    }
+  },
+  {
+    id: "6.3",
+    courseId: "log-analysis",
+    title: "Detecting Data Exfiltration",
+    content: `
+# Detecting Data Exfiltration
+
+Exfiltration is the unauthorised transfer of data out of the organisation. It is often the final stage of an intrusion and the one with the greatest business impact.
+
+## Common Exfiltration Channels
+
+| Channel (ATT&CK) | Where it shows up |
+|---|---|
+| HTTPS to cloud storage (T1567.002) | Proxy: large POST/PUT to mega, dropbox, file-sharing sites |
+| Exfil over C2 (T1041) | Firewall/NetFlow: steady large outbound to one IP |
+| DNS tunnelling (T1048.003) | DNS: long random subdomains, high TXT query volume |
+| FTP/SCP to external (T1048) | Firewall: outbound 21/22 to unknown hosts |
+| Email (T1114/T1048) | Mail logs: large attachments to personal domains |
+| Removable media (T1052) | EDR/USB logs: mass file copy to USB |
+
+## Indicators in Logs
+
+- **bytes_out much larger than bytes_in** for a single destination
+- Transfers **outside business hours**
+- First-ever connection to a destination followed by large upload
+- **Archive creation** before transfer (7z.exe, rar.exe, Compress-Archive)
+- Mass file reads on a file server (5145 events) by one account
+
+## Example Evidence
+
+~~~text
+02:11 EDR   WKS-31 7z.exe a -pS3cret C:\\Users\\Public\\q3.7z \\\\FS-01\\Finance\\*
+02:24 PROXY 10.3.0.31 PUT https://transfer.example-share.io/upload status=200 bytes_out=4,812,331,008
+02:24 FW    10.3.0.31 -> 198.51.100.90:443 ALLOW bytes_out=4.8GB bytes_in=1.2MB
+~~~
+
+## Detection Queries
+
+~~~text
+# Splunk: top uploaders in the last 24h
+index=proxy method IN (POST,PUT) | stats sum(bytes_out) as out by src_ip dest_host
+| eval out_GB=round(out/1024/1024/1024,2) | where out_GB > 1 | sort - out_GB
+
+# DNS tunnelling: long query names
+index=dns | eval len=len(query) | where len > 60 | stats count by src_ip domain
+~~~
+
+## Analyst Workflow
+
+1. Confirm the volume, destination, and timing of the transfer.
+2. Identify the user, host, and process responsible.
+3. Look backwards for staging: archive creation and bulk file access.
+4. Determine what data left and its sensitivity.
+5. Block the destination, isolate the host, preserve evidence, and notify stakeholders.
+
+## Common False Positives
+
+- Approved backups to cloud storage
+- Software updates and large video calls (mostly inbound, not outbound)
+- Developers pushing large repositories
+    `,
+    keyTakeaways: [
+      "Outbound byte ratio, timing, and destination novelty are key exfil signals",
+      "Staging (archiving, bulk file reads) usually precedes exfiltration",
+      "Check proxy, firewall, DNS, and EDR together to confirm the channel",
+      "Assess data sensitivity early — it drives legal and notification decisions"
+    ],
+    practicalExercise: {
+      title: "Exfiltration Investigation",
+      description: "Correlate endpoint, proxy, and DNS evidence to confirm data theft.",
+      steps: [
+        "Review the multi-source evidence",
+        "Identify staging and the exfiltration channel",
+        "Decide on containment"
+      ],
+      labScenario: "At 23:40 file server FS-HR logs 2,900 Event 5145 reads on \\\\FS-HR\\Payroll by account 'kpatel' from host WKS-58 (10.5.0.58). At 23:52 EDR on WKS-58 shows rar.exe creating C:\\Temp\\backup.rar (3.1 GB). At 00:05 proxy logs show 10.5.0.58 PUT to https://store.fileshare-drop.example/up with bytes_out=3.2 GB; this domain was first seen today. DNS logs from the same host also show 40,000 queries like 'a9f3k2...q8.tnl.example' (70+ characters) since 00:30.",
+      labQuestions: [
+        { id: "la-6.3-q1", question: "Which process staged the data?", answer: "rar.exe", hint: "Look at the archive created on WKS-58." },
+        { id: "la-6.3-q2", question: "Which domain received the HTTPS upload?", answer: "store.fileshare-drop.example", hint: "Proxy PUT with large bytes_out." },
+        { id: "la-6.3-q3", question: "What second exfiltration technique is suggested by the DNS logs?", answer: "DNS tunnelling", hint: "Very long, random subdomains in high volume." },
+        { id: "la-6.3-q4", question: "What containment actions should be taken?", answer: "Isolate WKS-58, block both domains, disable kpatel, and preserve evidence", hint: "Stop both channels and the account." }
+      ]
+    }
+  },
+  {
     id: "6.4",
     courseId: "log-analysis",
     title: "Final Practical Challenge",
