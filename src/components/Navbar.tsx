@@ -55,6 +55,14 @@ const Navbar = () => {
             >
               About
             </Link>
+            <a
+              href="https://mysoclabs.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-secondary"
+            >
+              MySocLabs <span aria-hidden="true">↗</span>
+            </a>
             <Link
               to="/auth"
               className="text-sm font-medium text-[#00ffc8] hover:text-[#7bff81] transition-colors"

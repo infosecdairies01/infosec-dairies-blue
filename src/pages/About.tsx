@@ -1,12 +1,15 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
-import { Shield, Users, Target, BookOpen, Award, Globe } from "lucide-react";
+import { Shield, Users, Target, BookOpen, Award, Globe, ShieldCheck, Globe2, Network, ClipboardCheck, ArrowRight } from "lucide-react";
 
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLElement>(null);
+  const [servicesVisible, setServicesVisible] = useState(false);
+  const servicesRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,6 +30,22 @@ const About = () => {
         observer.unobserve(ref.current);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setServicesVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+
+    const section = servicesRef.current;
+    if (section) observer.observe(section);
+    return () => observer.disconnect();
   }, []);
 
   const values = [
@@ -205,6 +224,50 @@ const About = () => {
               Join Telegram Community
             </a>
           </Card>
+        </div>
+      </section>
+
+      {/* MySocLabs services */}
+      <section ref={servicesRef} className="relative overflow-hidden border-y border-border/70 py-16 md:py-20">
+        <div className="absolute inset-0 circuit-pattern pointer-events-none" aria-hidden="true" />
+        <div className={`container relative mx-auto px-4 transition-all duration-700 ${servicesVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}>
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-10 max-w-3xl">
+              <p className="mb-3 text-sm font-semibold uppercase text-primary">Blueteamers × MySocLabs</p>
+              <h2 className="mb-5 text-3xl font-bold leading-tight md:text-4xl">
+                <span className="gradient-text">Beyond Learning. Into Real-World Cybersecurity.</span>
+              </h2>
+              <p className="text-lg leading-relaxed text-muted-foreground">
+                Behind Blueteamers is MySocLabs, a cybersecurity company focused on helping organizations strengthen their digital security through practical security assessments, penetration testing, and security consulting.
+              </p>
+              <p className="mt-4 leading-relaxed text-muted-foreground">
+                While Blueteamers empowers individuals with hands-on cybersecurity learning, MySocLabs helps businesses identify vulnerabilities, assess risks, and improve their security posture.
+              </p>
+            </div>
+
+            <div className="grid gap-x-8 border-y border-border/70 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { icon: ShieldCheck, label: "Vulnerability Assessment & Penetration Testing (VAPT)" },
+                { icon: Globe2, label: "Web Application Security Testing" },
+                { icon: Network, label: "Network & Infrastructure Security" },
+                { icon: ClipboardCheck, label: "Cybersecurity Consulting" },
+              ].map(({ icon: Icon, label }, index) => (
+                <div key={label} className={`flex items-start gap-3 border-b border-border/60 py-5 transition-all duration-500 sm:border-b-0 ${index > 0 ? "lg:border-l lg:pl-6" : ""} ${servicesVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`} style={{ transitionDelay: `${index * 100}ms` }}>
+                  <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+                  <span className="text-sm font-medium leading-relaxed text-foreground">{label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
+              <p className="max-w-xl text-sm text-muted-foreground">Explore professional security services from the team behind Blueteamers.</p>
+              <Button asChild size="lg" className="group transition-transform hover:-translate-y-0.5">
+                <a href="https://mysoclabs.com" target="_blank" rel="noopener noreferrer">
+                  Explore MySocLabs <ArrowRight className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </a>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 
