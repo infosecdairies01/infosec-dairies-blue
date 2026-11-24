@@ -2236,6 +2236,92 @@ export const courses: Course[] = [
       { id: "cf-r6", title: "NIST CSF Official Site", description: "Official NIST Cybersecurity Framework documentation and resources.", type: "link", url: "https://www.nist.gov/cyberframework" },
     ],
   },
+  {
+    id: "cybersecurity-fundamentals",
+    title: "Cybersecurity Fundamentals",
+    shortTitle: "Cybersecurity Basics",
+    description: "Build a practical foundation in cybersecurity, from core security principles and safe account habits to protecting data, responding to incidents, and recovering services.",
+    difficulty: "easy",
+    duration: "10 hours",
+    price: 499,
+    bgImage: "courses/cybersecurity-frameworks-bg.jpg",
+    modules: [
+      {
+        id: "cyber-1",
+        title: "Security Foundations",
+        quizId: "cyber-q1",
+        lessons: [
+          { id: "cyber-1.1", title: "What Cybersecurity Protects", description: "Learn what security protects and how confidentiality, integrity, and availability guide decisions.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-1.2", title: "Threats, Vulnerabilities, and Risk", description: "Distinguish threats from weaknesses and prioritize risk using likelihood and impact.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-1.3", title: "Security Controls and Defense in Depth", description: "Connect common safeguards to risks and practice building layered protection.", duration: "35 min", status: "unlocked" },
+        ],
+      },
+      {
+        id: "cyber-2",
+        title: "People and Threats",
+        quizId: "cyber-q2",
+        lessons: [
+          { id: "cyber-2.1", title: "Social Engineering and Phishing", description: "Recognize common manipulation tactics and verify unusual requests safely.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-2.2", title: "Malware and Common Attack Paths", description: "Understand common ways incidents begin and how to report suspicious device activity.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-2.3", title: "Building Safe Security Habits", description: "Practice safe communication, verification, and prompt incident reporting.", duration: "35 min", status: "unlocked" },
+        ],
+      },
+      {
+        id: "cyber-3",
+        title: "Identity and Access",
+        quizId: "cyber-q3",
+        lessons: [
+          { id: "cyber-3.1", title: "Identity, Authentication, and Authorization", description: "Understand identities, proof of identity, and permission decisions.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-3.2", title: "Passwords, MFA, and Account Protection", description: "Use unique passwords, MFA, and secure account recovery practices.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-3.3", title: "Least Privilege and Access Reviews", description: "Apply least privilege and review access through role changes and offboarding.", duration: "35 min", status: "unlocked" },
+        ],
+      },
+      {
+        id: "cyber-4",
+        title: "Protecting Devices and Networks",
+        quizId: "cyber-q4",
+        lessons: [
+          { id: "cyber-4.1", title: "Updates and Secure Configuration", description: "Prioritize updates and use supported, securely configured devices.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-4.2", title: "Endpoint Protection and Safe Device Use", description: "Protect endpoints and respond to alerts without destroying useful evidence.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-4.3", title: "Network Basics and Segmentation", description: "Learn how network boundaries and protected remote access reduce exposure.", duration: "30 min", status: "unlocked" },
+        ],
+      },
+      {
+        id: "cyber-5",
+        title: "Data, Web, and Cloud Security",
+        quizId: "cyber-q5",
+        lessons: [
+          { id: "cyber-5.1", title: "Data Classification and Safe Handling", description: "Apply classification rules while storing, sharing, and disposing of information.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-5.2", title: "Web, Email, and Secure Communication", description: "Verify destinations and share sensitive information through approved channels.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-5.3", title: "Cloud Security and Backups", description: "Understand shared cloud responsibilities and validate recovery with restore tests.", duration: "35 min", status: "unlocked" },
+        ],
+      },
+      {
+        id: "cyber-6",
+        title: "Detect, Respond, and Recover",
+        quizId: "cyber-q6",
+        lessons: [
+          { id: "cyber-6.1", title: "Logging and Monitoring Basics", description: "Learn how useful logs and alert review support security investigations.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-6.2", title: "Incident Response: First Steps", description: "Follow a coordinated response flow and preserve relevant evidence.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-6.3", title: "Recovery, Continuity, and Lessons Learned", description: "Practice incident recovery, continuity planning, and follow-up improvements.", duration: "40 min", status: "unlocked" },
+        ],
+      },
+    ],
+    quizzes: [
+      { id: "cyber-q1", title: "Security Foundations Quiz", description: "Apply the CIA triad, risk language, and layered-control concepts.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q2", title: "People and Threats Quiz", description: "Recognize social engineering cues and choose safe verification actions.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q3", title: "Identity and Access Quiz", description: "Check authentication, MFA, least privilege, and account lifecycle decisions.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q4", title: "Device and Network Protection Quiz", description: "Apply patching, endpoint, and network segmentation concepts.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q5", title: "Data and Cloud Security Quiz", description: "Assess data handling, cloud responsibilities, and recovery basics.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q6", title: "Monitoring and Response Quiz", description: "Practice log interpretation, incident reporting, and recovery decisions.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q7", title: "Cybersecurity Fundamentals Certification Exam", description: "Comprehensive scenario-based exam covering all six course modules.", questionCount: 30, passingScore: 80, duration: "60 min", status: "unlocked" },
+    ],
+    resources: [
+      { id: "cyber-r1", title: "CISA Secure Our World", description: "Practical guidance for safer online habits and account protection.", type: "link", url: "https://www.cisa.gov/secure-our-world" },
+      { id: "cyber-r2", title: "NIST Cybersecurity Framework", description: "Official resource for organizing cybersecurity outcomes and priorities.", type: "link", url: "https://www.nist.gov/cyberframework" },
+      { id: "cyber-r3", title: "OWASP Top 10", description: "A reference for common web application security risks.", type: "link", url: "https://owasp.org/www-project-top-ten/" },
+    ],
+  },
 ];
 
 export const getCourseById = (id: string): Course | undefined => {

@@ -15,6 +15,7 @@ import incidentResponseBg from "@/assets/courses/incident-response-bg.jpg";
 import threatHuntingBg from "@/assets/courses/threat-hunting-bg.jpg";
 import detectionEngineeringBg from "@/assets/courses/detection-engineering-bg.jpg";
 import malwareAnalysisBg from "@/assets/courses/malware-analysis-bg.jpg";
+import cybersecurityFrameworksBg from "@/assets/courses/cybersecurity-frameworks-bg.jpg";
 const courseBackgrounds: Record<string, string> = {
   "soc-fundamentals": socFundamentalsBg,
   "log-analysis": logAnalysisBg,
@@ -23,7 +24,8 @@ const courseBackgrounds: Record<string, string> = {
   "incident-response": incidentResponseBg,
   "threat-hunting": threatHuntingBg,
   "detection-engineering": detectionEngineeringBg,
-  "malware-analysis": malwareAnalysisBg
+  "malware-analysis": malwareAnalysisBg,
+  "cybersecurity-fundamentals": cybersecurityFrameworksBg
 };
 const difficultyLabels = {
   easy: "Beginner",

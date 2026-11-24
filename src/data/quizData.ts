@@ -29,6 +29,7 @@ import { sapPart4 } from "@/data/quizzes/sapPart4";
 import { finalExams } from "@/data/quizzes/finalExams";
 import { socFinalExam } from "@/data/quizzes/socFinalExam";
 import { logAnalysisFinalExam } from "@/data/quizzes/logAnalysisFinalExam";
+import { cybersecurityFundamentalsQuizzes } from "@/data/cybersecurityFundamentals";
 
 const baseQuizzes: QuizData[] = [
   {
@@ -9174,7 +9175,7 @@ const baseQuizzes: QuizData[] = [
 ];
 
 export const quizzes: QuizData[] = [...baseQuizzes, ...sapPart1, ...sapPart2, ...sapPart3, ...sapPart4,
-  ...finalExams, ...socFinalExam, ...logAnalysisFinalExam];
+  ...finalExams, ...socFinalExam, ...logAnalysisFinalExam, ...cybersecurityFundamentalsQuizzes];
 
 export const getQuizById = (courseId: string, quizId: string): QuizData | undefined => {
   return quizzes.find(q => q.courseId === courseId && q.quizId === quizId);
