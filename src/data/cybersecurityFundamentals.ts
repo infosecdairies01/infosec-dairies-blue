@@ -604,6 +604,298 @@ Avoid assuming every unreadable file is ransomware. Verify the facts, contain sa
       ],
     },
   },
+  {
+    id: "cyber-7.1",
+    courseId,
+    title: "Email Headers and Sender Verification",
+    content: `# Email Headers and Sender Verification
+
+Email investigations begin with the message as evidence, not with a quick judgment based on its display name. A message can show a familiar name while using a different sending domain or directing replies somewhere unexpected.
+
+## Read the useful fields
+
+- **From** is what the mail client displays; compare the actual address and domain with the expected sender.
+- **Reply-To** may direct a response to a different mailbox. An unexplained mismatch deserves review.
+- **Return-Path** and the **Received** lines show parts of the delivery path. Mail relays can make these fields look unfamiliar, so interpret them with your mail team’s guidance.
+- **SPF, DKIM, and DMARC** results provide authentication signals. A failure is a reason to investigate, not proof by itself; a pass does not make the message safe.
+
+## Verify safely
+
+Compare the message with prior trusted correspondence and the organization's mail records. If it requests a payment, password, or sensitive change, verify using a known contact method that is not supplied in the message. Preserve the original message and its headers in the approved reporting channel. Do not forward suspicious mail broadly or reply to the sender.
+
+### Practice with a synthetic example
+
+
+    From: Payroll Team <payroll@example.invalid>
+    Reply-To: payroll-help@outside.example.invalid
+    Authentication-Results: spf=fail; dkim=none; dmarc=fail
+
+The mismatched reply destination and authentication failures are useful clues to report and validate. They do not identify who sent the message or prove what happened on a recipient’s device.
+`,
+    keyTakeaways: [
+      "Compare the actual sender address and Reply-To, not only the display name.",
+      "SPF, DKIM, and DMARC results are clues that need context.",
+      "Preserve the original message and verify requests through a known channel.",
+    ],
+  },
+  {
+    id: "cyber-7.2",
+    courseId,
+    title: "Safe URL and Attachment Triage",
+    content: `# Safe URL and Attachment Triage
+
+Suspicious links and files should be handled through approved security tools and procedures. A beginner analyst should not open an unexpected attachment on a work device, visit a suspicious link, or upload a private file to an unapproved public service.
+
+## Examine without interacting
+
+Record the message subject, sender, receipt time, recipient, displayed link text, and actual link destination using the approved mail or security console. If you need to share a URL in a ticket, follow local defanging rules so another person cannot accidentally open it. A displayed link can differ from its destination, so do not trust the text alone.
+
+For attachments, note the filename, reported file type, size, and security-tool result. A filename extension can be misleading. If policy permits, an approved analysis tool can calculate a cryptographic hash for comparison with internal records or trusted intelligence. Do not rename, execute, or modify the original evidence as part of basic triage.
+
+## Keep the conclusion proportional
+
+A detection from one source is a lead, not a verdict. Confirm it with mail gateway results, endpoint alerts, and relevant user reports. Follow the response team’s instructions for quarantine or containment, and keep a record of what you inspected and when.
+
+### Safe analyst checklist
+
+1. Preserve the original message in the approved reporting system.
+2. Record the destination and attachment details without opening them.
+3. Use only authorized analysis services for sensitive files.
+4. Report evidence and uncertainty separately.
+`,
+    keyTakeaways: [
+      "Do not open unexpected attachments or visit suspicious links on a work device.",
+      "Record link and file details using approved security tools.",
+      "Use trusted, authorized analysis services and preserve the original evidence.",
+    ],
+  },
+  {
+    id: "cyber-7.3",
+    courseId,
+    title: "Phishing Campaign Scoping and Response",
+    content: `# Phishing Campaign Scoping and Response
+
+One reported message may be part of a wider campaign. A SOC analyst helps establish who received it, whether anyone interacted with it, and whether related account or device alerts exist.
+
+## Scope methodically
+
+Start with the original message and a time range. In the approved mail console, search for matching message identifiers, sender details, subject, and attachment or link indicators. Record the number of recipients and delivery, quarantine, or removal status. Then check reports and endpoint or identity alerts for the same time window. Similarity is useful for finding leads, but a shared subject alone does not prove every message is identical.
+
+## Coordinate the response
+
+Escalate according to the incident process. Mail administrators can remove confirmed campaign messages; identity responders can assess credential exposure; endpoint responders can review suspected file execution. Actions such as account resets or device isolation should follow assigned authority and business-impact guidance. Preserve relevant message and log records before making changes where procedures require it.
+
+### Practical exercise: The duplicate invoice message
+
+At 08:20, an employee reports an unexpected invoice email. The mail console shows the same message ID in 14 mailboxes. Two recipients clicked the link; one also reports an unusual sign-in prompt. No endpoint compromise is confirmed.
+
+1. Establish delivery and interaction scope using approved mail records.
+2. Escalate the unusual sign-in prompt to the identity response owner.
+3. Coordinate message removal and any account action through the approved process.
+4. Record confirmed facts separately from unverified assumptions.
+`,
+    keyTakeaways: [
+      "Search for campaign scope across recipients and related security events.",
+      "A click or alert is a lead to investigate, not proof of compromise.",
+      "Coordinate containment with the responsible teams and document decisions.",
+    ],
+    practicalExercise: {
+      title: "Invoice Email Campaign Triage",
+      description: "Determine the initial scope of a reported phishing message and coordinate safe next steps.",
+      steps: [
+        "Record the report time, message ID, sender, subject, and recipients.",
+        "Check approved mail records for delivery, clicks, and removal status.",
+        "Escalate the unusual sign-in prompt to the identity response owner.",
+        "Document verified facts, outstanding questions, and assigned actions.",
+      ],
+      labScenario: "At 08:20 an employee reports an unexpected invoice email. The same message ID reached 14 mailboxes; two recipients clicked the link, and one reports an unusual sign-in prompt. No endpoint compromise is confirmed.",
+      labQuestions: [
+        { id: "cyber-7.3-lab-1", question: "What records help establish the campaign's initial scope?", answer: "Use approved mail records to identify recipients, delivery or quarantine status, clicks, and the message ID, then correlate relevant identity and endpoint alerts.", hint: "Start with the message ID and recipient activity in the mail console." },
+        { id: "cyber-7.3-lab-2", question: "Who should assess the unusual sign-in prompt?", answer: "Escalate it to the identity response owner for validation and any authorized account action.", hint: "The sign-in signal belongs with the team responsible for identity response." },
+        { id: "cyber-7.3-lab-3", question: "What should the analyst write in the handoff?", answer: "Record verified delivery and click facts, the reported prompt, actions taken, owners, and what remains unconfirmed.", hint: "Separate observed evidence from assumptions." },
+      ],
+    },
+  },
+  {
+    id: "cyber-8.1",
+    courseId,
+    title: "Evidence Integrity and Chain of Custody",
+    content: `# Evidence Integrity and Chain of Custody
+
+Digital evidence is useful only when people can explain where it came from and whether it changed. Follow your organization’s evidence-handling procedure; do not collect more data than the investigation requires or use tools outside your authorization.
+
+## Preserve and document
+
+When an artifact is relevant, record its source, case or ticket reference, collection time and time zone, collector, and the approved method used. Keep the original protected. Where procedure allows analysis, create a working copy and record the relationship between the copy and the source. Limit access to people who need it and use approved storage.
+
+A cryptographic hash is a compact value calculated from file contents. Comparing hashes can help show whether two copies are identical, but a matching hash does not prove that the file is benign or that the original was collected correctly. Record the hash with the artifact and collection notes.
+
+## Maintain a clear trail
+
+Document each transfer, access, and action in the case record. Keep timestamps consistent and note the time zone. If something was changed accidentally, disclose and document it promptly rather than trying to hide or reverse the change. Evidence handling should be reviewable by another analyst.
+`,
+    keyTakeaways: [
+      "Preserve the original and follow the approved evidence process.",
+      "Record source, time zone, collector, method, access, and transfers.",
+      "A hash helps compare contents but does not prove a file is safe or authentic.",
+    ],
+  },
+  {
+    id: "cyber-8.2",
+    courseId,
+    title: "Endpoint Artifacts for Beginners",
+    content: `# Endpoint Artifacts for Beginners
+
+An endpoint investigation combines small pieces of evidence from a device. No single artifact usually explains the full event. Analysts compare records from endpoint protection, operating-system logs, identity systems, and approved file or browser telemetry.
+
+## Common evidence sources
+
+- **Security and sign-in logs** can show account activity, logon type, time, and device context.
+- **Endpoint protection records** can describe detections, process relationships, and actions taken by the tool.
+- **Browser and download records** can help identify when a file or link reached a device.
+- **File metadata** can provide names, sizes, and recorded timestamps, but timestamps may be changed or interpreted differently across systems.
+- **Asset and user records** help confirm who normally uses a device and whether its activity is expected.
+
+## Correlate before concluding
+
+Build a short timeline with the source and time zone for each event. Ask what the record directly shows and what it does not prove. For example, a file appearing in a download record does not by itself prove it executed. A blocked endpoint alert does not establish that no other activity occurred. Preserve relevant evidence and ask the assigned endpoint responder to review anything beyond your role.
+`,
+    keyTakeaways: [
+      "Use several endpoint and identity sources to build context.",
+      "A recorded download is not proof that a file executed.",
+      "Document what each artifact shows and what remains unknown.",
+    ],
+  },
+  {
+    id: "cyber-8.3",
+    courseId,
+    title: "Building a Defensible Incident Timeline",
+    content: `# Building a Defensible Incident Timeline
+
+A timeline organizes evidence so responders can understand sequence, scope, and uncertainty. Normalize timestamps to a common time zone, preserve the original value, and note the source for each event. If two records disagree, record the discrepancy instead of silently choosing one.
+
+## Use a repeatable method
+
+1. Define the question and time window.
+2. Collect approved artifacts from the relevant mail, endpoint, identity, and network sources.
+3. Sort by normalized time while retaining the source timestamp.
+4. Mark each entry as observed, reported, or inferred.
+5. Link each conclusion to its supporting record and identify gaps.
+
+### Practical exercise: A blocked attachment
+
+The mail gateway records delivery at 08:41 UTC. The user reports opening the message at 08:46 UTC. The endpoint tool records an attachment save at 08:48 UTC and a blocked execution alert at 08:50 UTC. The endpoint record uses UTC; the user’s laptop display was set to local time.
+
+Build the sequence, record the time-zone limitation, and avoid claiming that the block proves there was no other activity. Preserve the message and endpoint records under the approved incident process.
+`,
+    keyTakeaways: [
+      "Normalize times but retain original timestamps and time-zone notes.",
+      "Label observations, user reports, and analyst inferences separately.",
+      "Tie each conclusion to a source and document evidence gaps.",
+    ],
+    practicalExercise: {
+      title: "Attachment Event Timeline",
+      description: "Arrange the evidence in time order and distinguish what is known from what needs validation.",
+      steps: [
+        "List each artifact with its source, timestamp, and time zone.",
+        "Normalize the records to UTC while keeping the original values.",
+        "Separate the user report from system-recorded events.",
+        "Record the limits of the blocked-execution alert and any follow-up needed.",
+      ],
+      labScenario: "The mail gateway records delivery at 08:41 UTC. A user reports opening the message at 08:46 local time. Endpoint telemetry records an attachment save at 08:48 UTC and a blocked execution alert at 08:50 UTC. The laptop's time zone is not yet confirmed.",
+      labQuestions: [
+        { id: "cyber-8.3-lab-1", question: "Which event is first in the system records?", answer: "The mail gateway delivery at 08:41 UTC is the earliest recorded event; the user's reported opening time needs time-zone confirmation.", hint: "Compare the recorded UTC events first and keep the user report separate." },
+        { id: "cyber-8.3-lab-2", question: "What time detail must be validated before ordering the user's report?", answer: "Confirm the laptop's local time zone and clock settings, then convert the reported 08:46 time to UTC.", hint: "The user's display was local time, unlike the endpoint records." },
+        { id: "cyber-8.3-lab-3", question: "What does the blocked-execution alert not prove?", answer: "It does not prove there was no other activity or that the entire device is clean; correlate other relevant records and follow the incident process.", hint: "One blocked event is useful evidence, not a complete device assessment." },
+      ],
+    },
+  },
+  {
+    id: "cyber-9.1",
+    courseId,
+    title: "SIEM Basics and Alert Triage",
+    content: `# SIEM Basics and Alert Triage
+
+A Security Information and Event Management (SIEM) system brings records from sources such as endpoints, identity services, mail gateways, and network controls into a searchable workspace. It helps analysts compare events, but it cannot replace source validation or sound judgment.
+
+## Understand the alert
+
+Start by reading the rule name, severity, event time, source system, affected account or host, and the reason the alert fired. Check whether timestamps are normalized and whether key fields are missing. A rule may group several events into one alert; review the underlying records before deciding what happened.
+
+## Triage in a useful order
+
+Confirm that the asset and account are real and in scope. Search a reasonable time window for related events, then compare identity, endpoint, mail, and network context. Record what you searched and what you found. Escalate according to severity and your assigned role. If the alert is benign, document the evidence and route tuning suggestions to the rule owner rather than silently suppressing it.
+
+More alerts do not automatically mean better security. A useful detection has an owner, a clear reason, enough context to investigate, and a defined response path.
+`,
+    keyTakeaways: [
+      "Read the alert and underlying source events before deciding what happened.",
+      "Correlate account, device, mail, and network context using a defined time window.",
+      "Document investigation results and send tuning changes to the rule owner.",
+    ],
+  },
+  {
+    id: "cyber-9.2",
+    courseId,
+    title: "Threat Intelligence and IOC Enrichment",
+    content: `# Threat Intelligence and IOC Enrichment
+
+An indicator of compromise (IOC) is a value such as a file hash, domain, or IP address that may be associated with suspicious activity. Indicators help analysts ask better questions, but they are not verdicts on their own.
+
+## Check context and confidence
+
+Before acting on an indicator, confirm its exact value and type, the source that reported it, when it was observed, and the confidence or supporting evidence. Consider whether it is shared hosting, a common service, or an address that may have changed owners. An old report can be stale; a new report can still be mistaken.
+
+## Pivot safely
+
+Use approved intelligence services and consider data-sharing rules before submitting internal files, URLs, or customer information. Search internal telemetry for the indicator in an appropriate time range. Compare any match with the system, user, process, and business context. Record the source, lookup time, and limitations. Escalate a corroborated match through the incident process; do not block a business-critical destination based only on an unverified public score.
+
+The goal is to connect external reporting with local evidence and make a proportionate decision—not to collect indicators without knowing how they affect the investigation.
+`,
+    keyTakeaways: [
+      "An IOC is a lead that needs source, age, confidence, and local context.",
+      "Check privacy and data-sharing rules before submitting internal artifacts externally.",
+      "Corroborate an indicator in local telemetry before recommending action.",
+    ],
+  },
+  {
+    id: "cyber-9.3",
+    courseId,
+    title: "Correlating a Blue-Team Investigation",
+    content: `# Correlating a Blue-Team Investigation
+
+Blue-team investigations connect events across tools to answer a small set of questions: what is known, what may be affected, what needs to happen next, and who owns each action. A good handoff is concise, evidence-based, and clear about uncertainty.
+
+## Practical exercise: The invoice alert
+
+At 09:02 UTC, a finance user reports an unexpected invoice email. The SIEM shows an unfamiliar sign-in for the same account at 09:11 UTC, an endpoint alert on the user's laptop at 09:14 UTC, and a proxy event to a newly observed domain at 09:16 UTC. The alert sources have not yet been independently validated, and no data theft is confirmed.
+
+Start with the highest-confidence correlated evidence. Validate each event in its source, check whether other recipients or devices are involved, and preserve the relevant message and records. Escalate through the incident process; any account or device containment must follow assigned authority and business-impact guidance. Enrich the domain only through approved services and treat the result as context, not proof. Record a timestamped timeline, actions, owners, and open questions.
+
+Do not claim that the proxy connection proves data exfiltration. State what the record shows and what evidence would be needed to support a stronger conclusion.
+`,
+    keyTakeaways: [
+      "Validate SIEM signals against the source systems and connect related events.",
+      "A suspicious connection does not by itself prove data theft.",
+      "Document a timeline, evidence, uncertainty, owners, and authorized actions.",
+    ],
+    practicalExercise: {
+      title: "Invoice Alert Correlation",
+      description: "Correlate email, identity, endpoint, and proxy signals without overstating the evidence.",
+      steps: [
+        "Build a UTC timeline from the SIEM alert and source records.",
+        "Validate each event and check for additional recipients or affected devices.",
+        "Escalate to the incident owner and request authorized containment decisions.",
+        "Record facts, uncertainties, owners, and next investigative questions.",
+      ],
+      labScenario: "At 09:02 UTC a finance user reports an unexpected invoice email. SIEM alerts show an unfamiliar sign-in at 09:11, an endpoint detection at 09:14, and a proxy connection to a newly observed domain at 09:16. The source events have not been validated and data theft is unconfirmed.",
+      labQuestions: [
+        { id: "cyber-9.3-lab-1", question: "What should the analyst do before treating the alerts as confirmed facts?", answer: "Validate each event in its source system, confirm the account and device context, and preserve the relevant records.", hint: "A SIEM alert summarizes events; check the original source." },
+        { id: "cyber-9.3-lab-2", question: "Does the proxy connection prove that data was stolen?", answer: "No. It shows a connection record; additional validated evidence would be needed to establish data transfer or theft.", hint: "State what the record shows without inferring an unsupported outcome." },
+        { id: "cyber-9.3-lab-3", question: "What belongs in the escalation handoff?", answer: "A UTC timeline, source records, affected user and device, actions taken, uncertainty, scope questions, and assigned owners.", hint: "Give the next responder enough context to continue without restarting the investigation." },
+      ],
+    },
+  },
 ];
 
 const makeQuestion = (
@@ -678,6 +970,36 @@ const moduleQuizzes: QuizData[] = [
       makeQuestion("cyber-q6-4", "Two logs show events three hours apart even though the team believes they happened moments apart.", "What should be checked?", ["Time synchronization and time zone settings", "Whether the usernames are capitalized", "The color of the alert dashboard", "Whether logs can be turned off"], 0, "Consistent time settings are necessary to build accurate event timelines.", ["Logs"]),
     ],
   },
+  {
+    quizId: "cyber-q8", courseId, title: "Phishing and Email Analysis Quiz",
+    description: "Investigate email clues, handle suspicious files safely, and scope a reported campaign.", passingScore: 70, timeLimit: 12,
+    questions: [
+      makeQuestion("cyber-q8-1", "A message displays the name of a known supplier, but its Reply-To domain is unfamiliar and DMARC reports fail.", "What is the best first conclusion?", ["The supplier account is definitely compromised", "The clues warrant validation and reporting; they do not prove the full sender story", "The message is safe because the display name is correct", "Delete the original so no one can click it"], 1, "Header mismatches and authentication failures are useful clues, but they need context and source validation.", ["Email Headers", "Phishing"], "medium"),
+      makeQuestion("cyber-q8-2", "An unexpected invoice email contains a link whose displayed text differs from its destination.", "How should a beginner analyst handle it?", ["Open it in a work browser to see what appears", "Forward it to coworkers for a second opinion", "Record the destination with approved tools and preserve the original message", "Reply to the sender asking for confirmation"], 2, "Use approved tools to record link details without interacting with the suspicious destination.", ["Safe Triage"]),
+      makeQuestion("cyber-q8-3", "A mail search finds 14 copies of one message; two recipients clicked and one reports an unusual sign-in prompt.", "What is the most useful next step?", ["Assume all 14 accounts are compromised", "Delete every account immediately", "Correlate mail activity with identity and endpoint records, then escalate verified findings", "Close the case because only two users clicked"], 2, "Campaign scope and account impact require corroboration across relevant records and the assigned response process.", ["Campaign Scope"], "medium"),
+      makeQuestion("cyber-q8-4", "An analyst is asked to submit an internal attachment to a public scanning service.", "What should the analyst check first?", ["Whether approved policy permits sharing that file and what data it contains", "Whether the file has a descriptive name", "Whether a colleague has used the service before", "Whether the message is less than one day old"], 0, "Internal files may contain sensitive information; follow approved data-sharing rules and tools.", ["Evidence Handling"]),
+    ],
+  },
+  {
+    quizId: "cyber-q9", courseId, title: "Digital Forensics and Evidence Quiz",
+    description: "Apply evidence integrity, endpoint artifact, and timeline reasoning to beginner investigations.", passingScore: 70, timeLimit: 12,
+    questions: [
+      makeQuestion("cyber-q9-1", "A responder needs to review a relevant file while preserving the collected original.", "What approach best protects evidence integrity?", ["Edit the original to remove personal data", "Follow procedure, protect the original, and analyze an approved working copy", "Send the only copy through personal email", "Rename it and discard the collection notes"], 1, "Preserve the original and document an authorized working copy and handling steps.", ["Evidence Integrity"]),
+      makeQuestion("cyber-q9-2", "A hash for a collected file matches the value recorded when the file was acquired.", "What does this support?", ["The file is harmless", "The file came from a specific person", "The compared contents match; it does not establish whether the file is safe", "The whole device has no other suspicious activity"], 2, "A matching hash supports content comparison, not safety, authorship, or complete device status.", ["Forensics"]),
+      makeQuestion("cyber-q9-3", "An endpoint record shows a file was downloaded, but there is no process event confirming it ran.", "What should the report say?", ["The file definitely executed", "The download was recorded; execution is not established by this artifact", "The device is compromised beyond doubt", "The event can be ignored"], 1, "A download record supports arrival on the device but does not prove execution.", ["Endpoint Artifacts"], "medium"),
+      makeQuestion("cyber-q9-4", "A user reports an event at 08:46 local time while endpoint logs use UTC.", "What should the analyst do before ordering events?", ["Assume local time is UTC", "Remove the user report from the timeline", "Convert the time after confirming the device time zone and clock settings", "Change the endpoint log timestamps"], 2, "Confirm the time zone and preserve the original reported and recorded timestamps.", ["Timeline"]),
+    ],
+  },
+  {
+    quizId: "cyber-q10", courseId, title: "SIEM and Blue-Team Investigation Quiz",
+    description: "Triage correlated alerts, validate threat intelligence, and communicate evidence-based findings.", passingScore: 70, timeLimit: 12,
+    questions: [
+      makeQuestion("cyber-q10-1", "A SIEM alert groups a sign-in, endpoint detection, and proxy event for one user within five minutes.", "What is the best triage approach?", ["Treat the alert as proof of data theft", "Review the underlying records, validate account and device context, and build a timeline", "Close it because three products already agree", "Disable all logging to stop duplicate alerts"], 1, "Correlated alerts are a strong lead, but source records and context still need validation.", ["SIEM Triage"], "medium"),
+      makeQuestion("cyber-q10-2", "A public report lists an IP address as suspicious, but its observation date is several years old and it belongs to shared hosting.", "How should the analyst use this indicator?", ["Block it across the organization immediately", "Treat it as context, check recency and local telemetry, and seek corroboration", "Assume every connection to the address is malicious", "Delete any alert that includes it"], 1, "Age, confidence, and shared infrastructure affect an indicator's relevance; corroborate before recommending action.", ["Threat Intelligence"]),
+      makeQuestion("cyber-q10-3", "An alert is closed as benign after review, but the rule repeatedly fires on expected activity.", "What is the appropriate follow-up?", ["Silently suppress the rule", "Document the evidence and send a tuning suggestion to the rule owner", "Tell all users to ignore the alert", "Delete the source logs"], 1, "Detection tuning should be documented and handled by the accountable rule owner.", ["Detection Tuning"]),
+      makeQuestion("cyber-q10-4", "A suspicious connection appears after a reported phishing message, but no transfer evidence is available.", "Which report statement is strongest?", ["Customer data was stolen", "The connection record is confirmed; data theft remains unverified and requires further evidence", "The user is responsible for the incident", "No incident occurred because theft is unconfirmed"], 1, "A defensible report distinguishes observed events from conclusions that lack supporting evidence.", ["Incident Reporting"], "medium"),
+    ],
+  },
 ];
 
 const finalExamQuestions: QuizQuestion[] = [
@@ -702,15 +1024,15 @@ const finalExamQuestions: QuizQuestion[] = [
   makeQuestion("cyber-q7-19", "A security log records a sign-in but omits the time zone and device identity.", "What would most improve its investigative value?", ["Consistent timestamps and enough context to identify the event source", "More decorative charts", "Removing access restrictions", "Shortening all log retention to one day"], 0, "Time alignment and relevant context make records easier to correlate.", ["Logging"]),
   makeQuestion("cyber-q7-20", "A monitoring rule produces hundreds of alerts but rarely identifies actionable activity.", "What should the security team do?", ["Review context, tune the rule, and assign an owner", "Disable all monitoring", "Send every alert to all employees", "Treat each alert as a confirmed incident"], 0, "Monitoring needs context and tuning to create useful, manageable signals.", ["Monitoring"], "medium"),
   makeQuestion("cyber-q7-21", "A user reports that shared files are unreadable and a related unusual-access alert is available.", "What is a strong first response?", ["Notify the designated incident channel and preserve details for responders", "Restore from an unknown USB drive", "Delete the account logs", "Publish the alert publicly"], 0, "Prompt reporting and preservation let the incident team coordinate containment and investigation.", ["Incident Response"]),
-  makeQuestion("cyber-q7-22", "A responder is considering isolating a business system during a suspected incident.", "What should guide the action?", ["The approved response procedure, authority, and potential business impact", "A guess from an unrelated online post", "The desire to remove all evidence", "A user request to disable logging"], 0, "Containment should follow authority and response plans while accounting for impact.", ["Containment"], "medium"),
-  makeQuestion("cyber-q7-23", "Two systems report related activity with timestamps that differ by several hours.", "What should responders check?", ["Clock synchronization and time-zone configuration", "Whether the systems have matching wallpapers", "Whether the logs can be erased", "The length of the device names"], 0, "Consistent clocks help create an accurate event timeline.", ["Incident Investigation"]),
-  makeQuestion("cyber-q7-24", "A service was restored from a backup after an incident.", "What should happen before closing the recovery effort?", ["Validate data, access, and service behavior, then monitor for recurrence", "Assume service startup proves integrity", "Remove monitoring to reduce noise", "Grant broad access to all staff"], 0, "A trusted recovery includes validation and continued monitoring.", ["Recovery"]),
-  makeQuestion("cyber-q7-25", "A business owner says the customer portal can be unavailable for no more than four hours.", "Which planning measure does this describe?", ["Recovery time objective", "Recovery point objective", "Data classification", "Risk acceptance"], 0, "The recovery time objective describes the target time to restore a service.", ["Continuity"]),
-  makeQuestion("cyber-q7-26", "A business can tolerate losing no more than thirty minutes of recent transaction data.", "Which planning measure describes this limit?", ["Recovery point objective", "Recovery time objective", "Mean time to detect", "Access review interval"], 0, "The recovery point objective expresses the acceptable amount of data loss measured in time.", ["Continuity"]),
-  makeQuestion("cyber-q7-27", "A team has completed a response but has not recorded decisions, timelines, or improvements.", "What is the most useful next step?", ["Conduct a documented lessons-learned review with owners and follow-up dates", "Delete the incident record", "Avoid discussing the event", "Blame the first person who reported it"], 0, "A constructive review turns response experience into specific improvements.", ["Lessons Learned"]),
-  makeQuestion("cyber-q7-28", "An employee accidentally shares a restricted file with the wrong recipient.", "What should the employee do?", ["Report it promptly with the recipient, file, and time", "Hide the message and wait", "Send more files to clarify", "Delete the audit trail"], 0, "Fast and factual reporting gives the organization a chance to limit exposure and assess impact.", ["Data Incident"]),
-  makeQuestion("cyber-q7-29", "A team wants one control to protect a critical service, but no single product addresses all its risks.", "Which strategy is most appropriate?", ["Combine suitable preventive, detective, and recovery controls", "Rely on an untested backup alone", "Remove monitoring to simplify operations", "Give all users administrator access"], 0, "Layered controls reduce risk across prevention, detection, and recovery.", ["Defense in Depth"]),
-  makeQuestion("cyber-q7-30", "A manager accepts a medium risk because a change cannot be made this month.", "What should make the decision accountable?", ["Record the rationale, owner, compensating controls, and review date", "Leave it undocumented", "Assume it is permanently resolved", "Remove the asset from inventory"], 0, "Risk acceptance is a managed decision that needs accountability and a future review.", ["Risk Management"], "medium"),
+  makeQuestion("cyber-q7-22", "A message appears to come from a familiar payroll team, but the actual Reply-To is external and authentication checks fail.", "What is the strongest initial assessment?", ["The sender is confirmed to be a criminal", "The clues justify safe validation and reporting, but do not establish the full incident", "The message is trusted because the display name is familiar", "The user should reply to confirm"], 1, "Header signals are leads; preserve and validate the message using approved procedures.", ["Email Analysis"], "medium"),
+  makeQuestion("cyber-q7-23", "A suspicious attachment is reported, and the analyst is asked to learn what it does.", "What is the safest beginner action?", ["Open it on the analyst's work laptop", "Upload it to any public scanning site", "Record its details and use only an approved analysis process", "Rename it and send it to a coworker"], 2, "Use authorized tools and preserve the original; do not execute or share sensitive files without approval.", ["Safe Triage"]),
+  makeQuestion("cyber-q7-24", "A mail search finds the same message in 14 mailboxes, with two clicks and one reported sign-in prompt.", "Which action best scopes the incident?", ["Assume all recipients are compromised", "Correlate recipient activity with identity and endpoint records and escalate confirmed findings", "Close it because most recipients did not click", "Delete all mail records"], 1, "Campaign scope requires checking recipient and related security activity across sources.", ["Campaign Response"], "medium"),
+  makeQuestion("cyber-q7-25", "A collected artifact must be analyzed while its original remains protected.", "What should the analyst do?", ["Edit the original file", "Follow procedure, create an authorized working copy, and record handling details", "Send the only copy through personal email", "Discard the source and keep a screenshot"], 1, "A documented working copy supports analysis while preserving the original evidence.", ["Digital Forensics"]),
+  makeQuestion("cyber-q7-26", "A download record shows a document reached a laptop, but no process event confirms it ran.", "What can the analyst conclude?", ["The document executed successfully", "The record supports a download, but execution is not established", "The entire device is clean", "The event proves data theft"], 1, "Reports should state exactly what each artifact shows and avoid unsupported conclusions.", ["Endpoint Artifacts"]),
+  makeQuestion("cyber-q7-27", "A user report uses local time while endpoint telemetry uses UTC, and the laptop time zone is unknown.", "What should happen before finalizing the timeline?", ["Assume the times match", "Remove the user report", "Confirm the device time zone and clock settings, then normalize while retaining original values", "Change the source logs to UTC"], 2, "Time-zone validation and preservation of original timestamps make a timeline reviewable.", ["Timeline"]),
+  makeQuestion("cyber-q7-28", "A SIEM groups an unfamiliar sign-in, endpoint alert, and proxy event for one user within minutes.", "What is the best next step?", ["Treat the summary as proof of data theft", "Validate underlying records and account/device context, then build a timeline", "Close the case because several tools agree", "Disable all event collection"], 1, "Correlated alerts are useful leads, but source events and context still need validation.", ["SIEM Triage"], "medium"),
+  makeQuestion("cyber-q7-29", "A public report lists an old suspicious IP that is now used by a shared hosting provider.", "How should it influence the investigation?", ["Block every connection immediately", "Treat it as context, check recency and local telemetry, and seek corroboration", "Assume all hosted services are malicious", "Delete alerts that mention it"], 1, "Indicator age, confidence, and shared infrastructure affect its relevance; local evidence matters.", ["Threat Intelligence"]),
+  makeQuestion("cyber-q7-30", "A phishing report is followed by an unfamiliar sign-in, endpoint alert, and proxy connection; no transfer evidence is available.", "Which handoff is most defensible?", ["State that data was stolen", "Close the case because theft is unconfirmed", "Provide a sourced timeline, validated facts, uncertainties, owners, and next questions", "Blame the employee who received the email"], 2, "A strong blue-team handoff communicates evidence and uncertainty without overstating impact.", ["Investigation Handoff"], "medium"),
 ];
 
 export const cybersecurityFundamentalsQuizzes: QuizData[] = [
@@ -719,7 +1041,7 @@ export const cybersecurityFundamentalsQuizzes: QuizData[] = [
     quizId: "cyber-q7",
     courseId,
     title: "Cybersecurity Fundamentals Certification Exam",
-    description: "A scenario-based final assessment covering all six course modules.",
+    description: "A scenario-based final assessment covering all nine course modules.",
     questions: finalExamQuestions,
     passingScore: 80,
     timeLimit: 60,

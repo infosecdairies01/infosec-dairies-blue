@@ -2240,9 +2240,9 @@ export const courses: Course[] = [
     id: "cybersecurity-fundamentals",
     title: "Cybersecurity Fundamentals",
     shortTitle: "Cybersecurity Basics",
-    description: "Build a practical foundation in cybersecurity, from core security principles and safe account habits to protecting data, responding to incidents, and recovering services.",
+    description: "Build a practical foundation in cybersecurity, from core security principles and safe account habits to phishing analysis, digital forensics, SIEM investigations, and incident response.",
     difficulty: "easy",
-    duration: "10 hours",
+    duration: "15 hours",
     price: 499,
     bgImage: "courses/cybersecurity-frameworks-bg.jpg",
     modules: [
@@ -2306,6 +2306,36 @@ export const courses: Course[] = [
           { id: "cyber-6.3", title: "Recovery, Continuity, and Lessons Learned", description: "Practice incident recovery, continuity planning, and follow-up improvements.", duration: "40 min", status: "unlocked" },
         ],
       },
+      {
+        id: "cyber-7",
+        title: "Phishing and Email Analysis",
+        quizId: "cyber-q8",
+        lessons: [
+          { id: "cyber-7.1", title: "Email Headers and Sender Verification", description: "Read sender, reply, and authentication clues without treating one signal as proof.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-7.2", title: "Safe URL and Attachment Triage", description: "Record suspicious link and file details safely using approved tools.", duration: "30 min", status: "unlocked" },
+          { id: "cyber-7.3", title: "Phishing Campaign Scoping and Response", description: "Scope a reported email campaign and coordinate evidence-based next steps.", duration: "35 min", status: "unlocked" },
+        ],
+      },
+      {
+        id: "cyber-8",
+        title: "Digital Forensics and Evidence Handling",
+        quizId: "cyber-q9",
+        lessons: [
+          { id: "cyber-8.1", title: "Evidence Integrity and Chain of Custody", description: "Preserve originals and document how digital evidence is collected and handled.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-8.2", title: "Endpoint Artifacts for Beginners", description: "Compare endpoint, identity, and browser records while noting evidence limits.", duration: "30 min", status: "unlocked" },
+          { id: "cyber-8.3", title: "Building a Defensible Incident Timeline", description: "Normalize timestamps and build a timeline grounded in source records.", duration: "35 min", status: "unlocked" },
+        ],
+      },
+      {
+        id: "cyber-9",
+        title: "SIEM, Threat Intelligence, and Blue-Team Investigation",
+        quizId: "cyber-q10",
+        lessons: [
+          { id: "cyber-9.1", title: "SIEM Basics and Alert Triage", description: "Review underlying events, correlate context, and document alert decisions.", duration: "25 min", status: "unlocked" },
+          { id: "cyber-9.2", title: "Threat Intelligence and IOC Enrichment", description: "Assess indicator age, confidence, privacy, and local evidence before action.", duration: "30 min", status: "unlocked" },
+          { id: "cyber-9.3", title: "Correlating a Blue-Team Investigation", description: "Connect email, identity, endpoint, and network signals in a defensible handoff.", duration: "35 min", status: "unlocked" },
+        ],
+      },
     ],
     quizzes: [
       { id: "cyber-q1", title: "Security Foundations Quiz", description: "Apply the CIA triad, risk language, and layered-control concepts.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
@@ -2314,7 +2344,10 @@ export const courses: Course[] = [
       { id: "cyber-q4", title: "Device and Network Protection Quiz", description: "Apply patching, endpoint, and network segmentation concepts.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
       { id: "cyber-q5", title: "Data and Cloud Security Quiz", description: "Assess data handling, cloud responsibilities, and recovery basics.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
       { id: "cyber-q6", title: "Monitoring and Response Quiz", description: "Practice log interpretation, incident reporting, and recovery decisions.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
-      { id: "cyber-q7", title: "Cybersecurity Fundamentals Certification Exam", description: "Comprehensive scenario-based exam covering all six course modules.", questionCount: 30, passingScore: 80, duration: "60 min", status: "unlocked" },
+      { id: "cyber-q8", title: "Phishing and Email Analysis Quiz", description: "Investigate email clues, handle suspicious files safely, and scope a reported campaign.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q9", title: "Digital Forensics and Evidence Quiz", description: "Apply evidence integrity, endpoint artifact, and timeline reasoning.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q10", title: "SIEM and Blue-Team Investigation Quiz", description: "Triage correlated alerts, validate intelligence, and communicate evidence-based findings.", questionCount: 4, passingScore: 70, duration: "12 min", status: "unlocked" },
+      { id: "cyber-q7", title: "Cybersecurity Fundamentals Certification Exam", description: "Comprehensive scenario-based exam covering all nine course modules.", questionCount: 30, passingScore: 80, duration: "60 min", status: "unlocked" },
     ],
     resources: [
       { id: "cyber-r1", title: "CISA Secure Our World", description: "Practical guidance for safer online habits and account protection.", type: "link", url: "https://www.cisa.gov/secure-our-world" },
